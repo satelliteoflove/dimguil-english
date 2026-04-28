@@ -12,9 +12,10 @@ I'm no longer working on this, though, so somebody else will have to pick up the
 Check out `Findings.md` for a random list of notes. There's a 99% chance I have forgotten some 
 important details, so uhhh yeah.
 
-The `translations` folder contains all the work that has been done so far by the translation  
-team, uploaded with their permission. Thanks to [name removed] for translating and to [name removed] for
-editing!
+The `translations` folder contains all the work that has been done so far by the translation team, 
+uploaded with their permission. The JP strings have been redacted, which means you'll have to 
+dump the original script and cross-reference it with the translated strings yourself.  
+Thanks to [name removed] for translating and to [name removed] for editing!
 
 ### Status
 
