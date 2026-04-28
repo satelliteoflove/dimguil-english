@@ -40,33 +40,36 @@ You'll need to download the following:
 - [Tim2View](https://github.com/lab313ru/tim2view/releases/tag/r90)
 - JRE 21+
 - Wine
-- `dimguil-patcher.zip` from Releases
+- `patcher.jar` from Releases
+- This repo (either clone it or download it as a zip file)
 
 ### Setup
 
-1. Extract `dimguil-patcher.zip` (this will create a folder named `dimguil-patcher`)
+1. If you've downloaded the repo as a zip, extract it (this will create a folder named `dimguil-patcher-main`, rename it
+to `dimguil-patcher`)
 2. Unpack your Dimguil image to a folder named `clean` (md5 of track 1: 9eeb5c508abb23c0e3538108b7755890):
 ```sh
 $ wine psxrip.exe -v "<path-to-dimguil-image>.cue" clean
 ```
 3. Make a copy of the `clean` folder and name it `dirty`, then move both to
-`dimguil-patcher/rips`
+`dimguil-patcher/rips` (create this folder manually)
 4. Launch Tim2View and import `dimguil-patcher/SYSCG_000001_04b_01c.png` (the edited font 
 sheet) into `dimguil-patcher/rips/dirty/dimguil/DATA00/SYSCG.BIN`
-5. Move `psxbuild.exe` and `armips.exe` to `dimguil-patcher/tools`
+5. Move `patcher.jar` to `dimguil-patcher`
+6. Move `psxbuild.exe` and `armips.exe` to `dimguil-patcher/tools` (create this folder manually)
 
 ### Using the tool
 
 Dumping all known text to `out/dumps` (see `sections.json`):
 
 ```sh
-$ java -jar dimguil-patcher.jar dump
+$ java -jar patcher.jar dump
 ```
 
 Encoding the translated strings from the `translations` folder, copying them
 to `rips/dirty` and finally rebuilding the image:
 ```sh
-$ java -jar dimguil-patcher.jar encode-all && ./rebuild.sh
+$ java -jar patcher.jar encode-all && ./rebuild.sh
 ```
 
 You'll find the new image in `rips/dirty`.  
@@ -75,7 +78,7 @@ executing `rebuild.sh` from within `dimguil-patcher`.
 
 Encoding a single string from CLI:
 ```sh
-$ java -jar dimguil-patcher.jar encode-string "<string>" [-compress] 
+$ java -jar patcher.jar encode-string "<string>" [-compress] 
 ```
 
 ### Notes on VWF and compression
