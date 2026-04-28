@@ -46,15 +46,11 @@ bin/
 
 ### Misc
 
-edits/
 rips/
 tools/
-translations/
-config.json
 *.obj
 *.OBJ
 *.dat
 *.DAT
 *.bin
 *.BIN
-*.tbl

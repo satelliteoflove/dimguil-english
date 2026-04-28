@@ -40,16 +40,22 @@ Subtracting an header from the next one will give the length of the string refer
 as to the length you can aim at is `length * 1.5`. You can exceed that limit if it means delivering a better 
 translation, but then you'd have to make sure that the game files do not end up bigger than the originals, meaning 
 other strings will need to be shortened to recover that extra space
-- If short on space, it may be possible to increase the size of some specific files by a little bit (e.g. EVENTMES 
-is expandable by 1KB), but I haven't yet determined if it's completely safe to do so
-- to place ellipses, use the placeholder char `\``
+- You can expand some specific files past their original size by adding `"extendByBytes": <N>` at the top of their 
+translation file, under the `file` field (e.g. `"extendByBytes": 1000` should probably be safe for EVENTMES), but I 
+haven't yet determined if it's *completely* safe to do so (and you likely won't be able to create xdelta 
+patches this way, so only do this if you have no other option)
+- to place ellipses, use the placeholder char `\`` (yeah, I know)
 - use `'` instead of `’`
+- for ancient characters, write `{ancient_<x>}` (e.g. `{ancient_a}`) instead of `{ff35}xx` to achieve correct
+spacing and to use 1 byte instead of 3 per char (see also `tables/codes.tbl`)
 
 There are instances where text cuts off randomly if certain strings are too long. The cutoff point is not exactly 
 deterministic and needs to be figured out on a case-by-case basis. Known instances:
 
-- Boltac's Trading Post: tooltips get truncated earlier the longer the shop name is
+- Boltac's Trading Post: tooltips get truncated earlier the longer the shop name is (rename to "Boltac's Shop" or
+"Boltac's", idk)
 - Spell descriptions: truncated past the 40th or so character when viewing spells at the Edge of Town
-- Book of Reincarnation: 'Throb of the Demon's Heart' cuts off after viewing spells at the Edge of Town
+- Book of Reincarnation: 'Throb of the Demon's Heart' cuts off after viewing spells at the Edge of Town (worked around
+this by renaming the book to "Tome{of}Rebirth" (notice the hacky `{of}` char))
 - Narrator lines (EVENTMES): random cutoff point. One very long string might get printed in its entirety, while 
 another of the same length might get truncated
