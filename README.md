@@ -89,3 +89,23 @@ them to a single byte. For text to look correct in-game, my VWF patches and the 
 sheet need to be applied. Additionally, if you need to add/edit any digraphs, you'll have to make sure 
 that the font sheet, the digraph table in `tables/compression.tbl` and the VWF LUT in `vwf.asm` are
 all synced.
+
+### Native Linux build (this fork)
+
+No Wine needed. Build [armips](https://github.com/Kingcom/armips) and
+[mkpsxiso/dumpsxiso](https://github.com/Lameguy64/mkpsxiso) from source, then:
+
+```sh
+$ dumpsxiso -x rips/clean/dimguil -s rips/clean/dimguil.xml "<Rev 1 image>.cue"
+$ ./scripts/build.sh          # -> rips/iso/dimguil-en.cue
+```
+
+`scripts/build.sh` restores the redacted JP sources into a staging copy of `translations/`
+(so untranslated strings stay Japanese instead of becoming "NA"), imports the font sheet into
+`SYSCG.BIN` (the TIM at 0x400), encodes, assembles `vwf.asm` and rebuilds the image. Set
+`ARMIPS`/`MKPSXISO` if they aren't on your PATH.
+
+Testing and debugging use a headless Python frontend for the Beetle PSX libretro core
+(`scripts/emu.py`): frame stepping, input, screenshots, RAM access and save states. With
+`scripts/beetle-dbg-hooks.patch` applied to beetle-psx-libretro (commit 5718ab9, `make HAVE_HW=0`),
+it also supports watchpoints, PC breakpoints with register dumps and code coverage.

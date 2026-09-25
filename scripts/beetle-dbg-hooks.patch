@@ -1,0 +1,194 @@
+diff --git a/mednafen/psx/cpu.c b/mednafen/psx/cpu.c
+index 35f4f2b..a156446 100644
+--- a/mednafen/psx/cpu.c
++++ b/mednafen/psx/cpu.c
+@@ -138,6 +138,7 @@ static char              cpu_cache_buf[64 * 1024];
+  * PSX_CPU points at, so resolution is identical to the original
+  * implicit `this` access. */
+ #define GPR             s_cpu.GPR_full
++#include "dbg_hooks.h"
+ #define LO              s_cpu.GPR_full[32]
+ #define HI              s_cpu.GPR_full[33]
+ #define BACKED_PC       s_cpu.BACKED_PC
+@@ -518,6 +519,9 @@ static INLINE uint8_t ReadMemory_u8(int32_t *timestamp, uint32_t address)
+    uint8_t ret;
+    int32_t lts;
+ 
++   if (MDFN_UNLIKELY(dbg_active))
++      dbg_on_mem(DBG_READ, address & addr_mask[address >> 29], 1, 0, GPR);
++
+    ReadAbsorb[ReadAbsorbWhich] = 0;
+    ReadAbsorbWhich             = 0;
+ 
+@@ -546,6 +550,9 @@ static INLINE uint16_t ReadMemory_u16(int32_t *timestamp, uint32_t address)
+    uint16_t ret;
+    int32_t lts;
+ 
++   if (MDFN_UNLIKELY(dbg_active))
++      dbg_on_mem(DBG_READ, address & addr_mask[address >> 29], 2, 0, GPR);
++
+    ReadAbsorb[ReadAbsorbWhich] = 0;
+    ReadAbsorbWhich             = 0;
+ 
+@@ -574,6 +581,9 @@ static INLINE uint32_t ReadMemory_u32(int32_t *timestamp, uint32_t address, bool
+    uint32_t ret;
+    int32_t lts;
+ 
++   if (MDFN_UNLIKELY(dbg_active))
++      dbg_on_mem(DBG_READ, address & addr_mask[address >> 29], 4, 0, GPR);
++
+    ReadAbsorb[ReadAbsorbWhich] = 0;
+    ReadAbsorbWhich             = 0;
+ 
+@@ -638,6 +648,8 @@ static INLINE void WriteMemory_IsC_misc(uint32_t address, uint32_t value)
+ 
+ static INLINE void WriteMemory_u8(int32_t *timestamp, uint32_t address, uint32_t value)
+ {
++   if (MDFN_UNLIKELY(dbg_active))
++      dbg_on_mem(DBG_WRITE, address & addr_mask[address >> 29], 1, value, GPR);
+    if (MDFN_LIKELY(!(CP0.SR & 0x10000)))
+    {
+       address &= addr_mask[address >> 29];
+@@ -659,6 +671,8 @@ static INLINE void WriteMemory_u8(int32_t *timestamp, uint32_t address, uint32_t
+ 
+ static INLINE void WriteMemory_u16(int32_t *timestamp, uint32_t address, uint32_t value)
+ {
++   if (MDFN_UNLIKELY(dbg_active))
++      dbg_on_mem(DBG_WRITE, address & addr_mask[address >> 29], 2, value, GPR);
+    if (MDFN_LIKELY(!(CP0.SR & 0x10000)))
+    {
+       address &= addr_mask[address >> 29];
+@@ -680,6 +694,8 @@ static INLINE void WriteMemory_u16(int32_t *timestamp, uint32_t address, uint32_
+ 
+ static INLINE void WriteMemory_u32(int32_t *timestamp, uint32_t address, uint32_t value, bool DS24)
+ {
++   if (MDFN_UNLIKELY(dbg_active))
++      dbg_on_mem(DBG_WRITE, address & addr_mask[address >> 29], 4, value, GPR);
+    if (MDFN_LIKELY(!(CP0.SR & 0x10000)))
+    {
+       address &= addr_mask[address >> 29];
+@@ -735,6 +751,9 @@ static INLINE uint32_t ReadInstruction(int32_t *timestamp, uint32_t address)
+ {
+    uint32_t instr;
+ 
++   if (MDFN_UNLIKELY(dbg_active))
++      dbg_on_exec(address, GPR);
++
+    instr = ICache[(address & 0xFFC) >> 2].Data;
+ 
+    if (ICache[(address & 0xFFC) >> 2].TV != address)
+diff --git a/mednafen/psx/dbg_hooks.h b/mednafen/psx/dbg_hooks.h
+new file mode 100644
+index 0000000..1a1aee3
+--- /dev/null
++++ b/mednafen/psx/dbg_hooks.h
+@@ -0,0 +1,109 @@
++/* Lightweight debugger hooks for scripted reverse engineering.
++ * Included from cpu.c. Exported as retro_dbg_* so link.T keeps them visible.
++ * Everything is gated on dbg_active so the normal path costs one branch. */
++#ifndef DBG_HOOKS_H
++#define DBG_HOOKS_H
++
++#include <stdint.h>
++#include <string.h>
++
++#define DBG_MAX_WATCH 32
++#define DBG_MAX_BP    64
++#define DBG_LOG_MAX   65536
++
++enum { DBG_EXEC = 1, DBG_READ = 2, DBG_WRITE = 4 };
++
++typedef struct {
++   uint32_t type, pc, addr, value, size, seq, ra, pad;
++   uint32_t regs[32];
++} dbg_entry;
++
++static int      dbg_active;
++static uint32_t dbg_cur_pc;
++static uint32_t dbg_seq;
++static uint32_t dbg_nwatch, dbg_nbp;
++static uint32_t dbg_wlo[DBG_MAX_WATCH], dbg_whi[DBG_MAX_WATCH], dbg_wmode[DBG_MAX_WATCH];
++static uint32_t dbg_bp[DBG_MAX_BP];
++static dbg_entry dbg_log[DBG_LOG_MAX];
++static uint32_t dbg_nlog, dbg_dropped;
++static uint8_t  dbg_cov[0x200000 / 4]; /* exec coverage over main RAM, per word */
++static int      dbg_cov_on;
++
++static void dbg_update_active(void)
++{
++   dbg_active = dbg_nwatch || dbg_nbp || dbg_cov_on;
++}
++
++static dbg_entry *dbg_new(uint32_t type)
++{
++   dbg_entry *e;
++   if (dbg_nlog >= DBG_LOG_MAX) { dbg_dropped++; return NULL; }
++   e = &dbg_log[dbg_nlog++];
++   e->type = type;
++   e->pc   = dbg_cur_pc;
++   e->seq  = dbg_seq;
++   return e;
++}
++
++static INLINE void dbg_on_exec(uint32_t pc, const uint32_t *gpr)
++{
++   uint32_t i;
++   dbg_cur_pc = pc;
++   dbg_seq++;
++   if (dbg_cov_on && (pc & 0x1FE00000) == 0)
++      dbg_cov[(pc & 0x1FFFFF) >> 2] = 1;
++   for (i = 0; i < dbg_nbp; i++)
++      if (dbg_bp[i] == pc)
++      {
++         dbg_entry *e = dbg_new(DBG_EXEC);
++         if (e) { e->addr = pc; e->ra = gpr[31]; memcpy(e->regs, gpr, sizeof(e->regs)); }
++         break;
++      }
++}
++
++static INLINE void dbg_on_mem(uint32_t type, uint32_t addr, uint32_t size, uint32_t value, const uint32_t *gpr)
++{
++   uint32_t i, a = addr & 0x1FFFFFFF;
++   for (i = 0; i < dbg_nwatch; i++)
++      if ((dbg_wmode[i] & type) && a + size > dbg_wlo[i] && a < dbg_whi[i])
++      {
++         dbg_entry *e = dbg_new(type);
++         if (e)
++         {
++            e->addr = a; e->size = size; e->value = value; e->ra = gpr[31];
++            memcpy(e->regs, gpr, sizeof(e->regs));
++         }
++         break;
++      }
++}
++
++/* ---- exported API ---- */
++void retro_dbg_clear(void)
++{
++   dbg_nwatch = dbg_nbp = 0; dbg_nlog = dbg_dropped = 0; dbg_cov_on = 0;
++   dbg_update_active();
++}
++/* lo/hi are physical addresses (0x000000-0x1FFFFF = RAM, 0x1F800000 = scratchpad) */
++int retro_dbg_watch(uint32_t lo, uint32_t hi, uint32_t mode)
++{
++   if (dbg_nwatch >= DBG_MAX_WATCH) return 0;
++   dbg_wlo[dbg_nwatch] = lo & 0x1FFFFFFF; dbg_whi[dbg_nwatch] = hi & 0x1FFFFFFF; dbg_wmode[dbg_nwatch] = mode;
++   dbg_nwatch++; dbg_update_active(); return 1;
++}
++int retro_dbg_break(uint32_t pc)
++{
++   if (dbg_nbp >= DBG_MAX_BP) return 0;
++   dbg_bp[dbg_nbp++] = pc; dbg_update_active(); return 1;
++}
++void retro_dbg_coverage(int on)
++{
++   if (on) memset(dbg_cov, 0, sizeof(dbg_cov));
++   dbg_cov_on = on; dbg_update_active();
++}
++const uint8_t *retro_dbg_coverage_data(void) { return dbg_cov; }
++uint32_t retro_dbg_log_count(void) { return dbg_nlog; }
++uint32_t retro_dbg_log_dropped(void) { return dbg_dropped; }
++const dbg_entry *retro_dbg_log_data(void) { return dbg_log; }
++void retro_dbg_log_reset(void) { dbg_nlog = dbg_dropped = 0; }
++
++#endif
