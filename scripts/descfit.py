@@ -4,7 +4,7 @@
 Mirrors the patcher's encoder (tables/dimguil_enc.tbl plus DigraphCompression: greedy
 pairs inside each space-delimited word, the trailing space included) and prices each
 glyph at VWF_LUT[code] + 1 px, read from the built executable (12 px past the table,
-which is what both the main text engine and catalog_vwf.asm do).
+which ends at 0xd7, as in both the main text engine and catalog_vwf.asm).
 
     descfit.py FILE.json [--width 144] [--lines 7] [--budgets BUDGETS.json]
         FILE.json: {"<index>": "text with \\n line breaks", ...}; keys may be
@@ -40,7 +40,7 @@ for line in open(os.path.join(ROOT, 'tables/compression.tbl'), encoding='utf-8')
     line = line.rstrip('\n')
     if len(line) >= 4 and line[2] == '=':
         DIGRAPHS[line[:2]] = int(line[3:], 16)
-LUT = open(EXE, 'rb').read()[VWF_LUT:VWF_LUT + 0xd1]
+LUT = open(EXE, 'rb').read()[VWF_LUT:VWF_LUT + 0xd8]  # through the mi digraph
 NEWLINE = -1
 CONTROL = -2
 

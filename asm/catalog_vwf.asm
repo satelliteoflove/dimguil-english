@@ -11,7 +11,8 @@
 ;
 ; cat_adv recovers c from u,v and advances by VWF_LUT[c] + 1 (Remisse's table at
 ; 0x80060e97, vwf.asm), the same spacing the main text engine uses. Kanji and anything
-; outside the table keep 12px. The pen advances in the draw loop, one or two centering
+; outside the table keep 12px. The table ends with the ma me wa we mo mi digraphs at
+; 0xd2-0xd7, so the bound is 0xd8; stopping at 0xd1 spaced those a pixel short. The pen advances in the draw loop, one or two centering
 ; measures, and the per-glyph measure used for struct widths and line wrapping.
 
 .psx
@@ -40,7 +41,7 @@ cat_adv:
     ori     t9, zero, 12
     divu    t7, t9
     mflo    t7                  ; c
-    sltiu   t9, t7, 0xd1
+    sltiu   t9, t7, 0xd8        ; the table runs to 0xd7 (mi)
     beqz    t9, @@fixed
     lui     t9, 0x8006
     addu    t9, t9, t7

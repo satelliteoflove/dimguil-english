@@ -466,7 +466,7 @@
                 {
                     "length": 233,
                     "source": "NA",
-                    "translation": "A woodcutter's axe adapted\nfor battle. It is so large\nthat great strength is\nneeded to use it well, so only\ncertain races can wield it.{ff40}A strange Eastern flail of\ntwo linked rods.",
+                    "translation": "A woodcutter's axe adapted\nfor battle. It is so large\nthat great strength is\nneeded to use it well, so\nonly certain races can wield\nit.{ff40}A strange Eastern flail of\ntwo linked rods.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -557,7 +557,7 @@
                 {
                     "length": 117,
                     "source": "NA",
-                    "translation": "An attempt to outdo the\nSword of Slashing. Too\nmuch magic was poured in,\nand its power dropped\ninstead. Even so, the magic\nis priced in, so it costs more.",
+                    "translation": "An attempt to outdo the\nSword of Slashing. Too\nmuch magic was poured in,\nand its power dropped\ninstead. Even so, the magic\nis priced in, so it costs\nmore.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -585,7 +585,7 @@
                 {
                     "length": 140,
                     "source": "NA",
-                    "translation": "A two-handed Samurai-only\nblade, named for its power to\nsplit even a helmet in two.\nNo extra attacks, but its\nsheer force is its appeal.\nFoes who see it are said to\nclutch their heads.",
+                    "translation": "A two-handed Samurai-only\nblade, named for its power\nto split even a helmet in\ntwo. No extra attacks, but\nits sheer force is its appeal.\nFoes who see it are said to\nclutch their heads.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -753,7 +753,7 @@
                 {
                     "length": 126,
                     "source": "NA",
-                    "translation": "Despite \"Evil\" in its name,\nthis axe isn't cursed. It's an\nEvil-only axe built for\nbrutality. High attack and\naccuracy, and it shows its\npower if your alignment fits.",
+                    "translation": "Despite \"Evil\" in its name,\nthis axe isn't cursed. It's an\nEvil-only axe built for\nbrutality. High attack and\naccuracy, and it shows its\npower if your alignment\nfits.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -816,7 +816,7 @@
                 {
                     "length": 103,
                     "source": "NA",
-                    "translation": "A very small, short rod. To a\nFaerie it's as big as a spear,\nbut its real power is modest.\nIt does protect against\npetrification.",
+                    "translation": "A very small, short rod. To\na Faerie it's as big as a\nspear, but its real power is\nmodest. It does protect\nagainst petrification.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -991,7 +991,7 @@
                 {
                     "length": 109,
                     "source": "NA",
-                    "translation": "A short sword famed as the\nSamurai's backup weapon. Its\nspecial power raises the\nchance to decapitate. Very\npowerful, and many Samurai\ndual-wield it.",
+                    "translation": "A short sword famed as the\nSamurai's backup weapon.\nIts special power raises the\nchance to decapitate. Very\npowerful, and many Samurai\ndual-wield it.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -1040,7 +1040,7 @@
                 {
                     "length": 85,
                     "source": "NA",
-                    "translation": "A staff effective vs animals\nand beastmen. It also offers\nsome protection, but its base\nattack is pitiful.",
+                    "translation": "A staff effective vs animals\nand beastmen. It also offers\nsome protection, but its\nbase attack is pitiful.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -1103,7 +1103,7 @@
                 {
                     "length": 105,
                     "source": "NA",
-                    "translation": "The strongest weapon a\nFaerie can hold. Double\ndamage vs demons and undead.\nBut it is tiny and said to be\nhard to find.",
+                    "translation": "The strongest weapon a\nFaerie can hold. Double\ndamage vs demons and\nundead. But it is tiny and\nsaid to be hard to find.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -1152,7 +1152,7 @@
                 {
                     "length": 76,
                     "source": "NA",
-                    "translation": "A spear imbued with dark\npower. Unleashing its hidden\npower turns you into a\nMonk. Its great power slays\nfoes outright.",
+                    "translation": "A spear imbued with dark\npower. Unleashing its\nhidden power turns you into\na Monk. Its great power\nslays foes outright.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -1222,7 +1222,7 @@
                 {
                     "length": 89,
                     "source": "NA",
-                    "translation": "Little protection, but a\nmust for novices. It's a\ncustom for front-line\nclasses to wear this armor at\nleast once.",
+                    "translation": "Little protection, but a\nmust for novices. It's a\ncustom for front-line\nclasses to wear this armor\nat least once.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -1264,7 +1264,7 @@
                 {
                     "length": 110,
                     "source": "NA",
-                    "translation": "Less a broken shield than\none broken by shoddy\nmaterials. The handle\nwobbles, so it lowers defense\ninstead of raising it.",
+                    "translation": "Less a broken shield than\none broken by shoddy\nmaterials. The handle\nwobbles, so it lowers\ndefense instead of raising it.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -1320,7 +1320,7 @@
                 {
                     "length": 119,
                     "source": "NA",
-                    "translation": "A must for spellcasters who\ncan't wear heavy helms.\nEven if it adds just 1 to\ndefense, the head needs\nprotecting. Looks matter too,\ndon't you think?",
+                    "translation": "A must for spellcasters who\ncan't wear heavy helms.\nEven if it adds just 1 to\ndefense, the head needs\nprotecting. Looks matter\ntoo, don't you think?",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -1376,7 +1376,7 @@
                 {
                     "length": 112,
                     "source": "NA",
-                    "translation": "Made so a Ninja can do his\nwork without showing his\nface. Its light, sturdy\nmaterial raises defense\nwithout hindering movement.",
+                    "translation": "Made so a Ninja can do his\nwork without showing his\nface. Its light, sturdy\nmaterial raises defense\nwithout hindering\nmovement.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -1446,7 +1446,7 @@
                 {
                     "length": 112,
                     "source": "NA",
-                    "translation": "Leather at its base, but set\nwith thin iron plates and\nstuds that greatly raise\ndefense. It's handsome too, so\nit sells high for leather\narmor.",
+                    "translation": "Leather at its base, but set\nwith thin iron plates and\nstuds that greatly raise\ndefense. It's handsome too,\nso it sells high for leather\narmor.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -1460,7 +1460,7 @@
                 {
                     "length": 119,
                     "source": "NA",
-                    "translation": "Heavy, very heavy boots, so\nhard to walk in you'd think\nthe ground was pulling them\ndown. They cling to the body\ntoo, so the only way to get\nthem off is to make the\nboots vanish.",
+                    "translation": "Heavy, very heavy boots, so\nhard to walk in you'd think\nthe ground was pulling\nthem down. They cling to\nthe body too, so the only\nway to get them off is to\nmake the boots vanish.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -1481,7 +1481,7 @@
                 {
                     "length": 123,
                     "source": "NA",
-                    "translation": "Worn, damaged leather armor.\nPerhaps holding the grudge\nof the fallen, it curses the\nwearer and lowers defense.\nWhere it leads is, as the\nname says, loss.",
+                    "translation": "Worn, damaged leather\narmor. Perhaps holding the\ngrudge of the fallen, it\ncurses the wearer and\nlowers defense. Where it\nleads is, as the name says,\nloss.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -1516,7 +1516,7 @@
                 {
                     "length": 102,
                     "source": "NA",
-                    "translation": "Being silver, it too raises\ndefense against\nLycanthropes. Its footsteps\nhave an odd sound that\nmakes many monsters hide in\nfear.",
+                    "translation": "Being silver, it too raises\ndefense against\nLycanthropes. Its footsteps\nhave an odd sound that\nmakes many monsters hide\nin fear.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -1677,7 +1677,7 @@
                 {
                     "length": 77,
                     "source": "NA",
-                    "translation": "Evil-only armor. Steel plates\ncover the whole body,\nraising defense. Ideal for the\nmerciless.",
+                    "translation": "Evil-only armor. Steel\nplates cover the whole body,\nraising defense. Ideal for the\nmerciless.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -1754,7 +1754,7 @@
                 {
                     "length": 119,
                     "source": "NA",
-                    "translation": "Faerie-only cap. Flimsy for\na hat, but it helps resist\nparalysis. Woven of very\nlight fiber, it boosts a\nFaerie's famed speed further.",
+                    "translation": "Faerie-only cap. Flimsy for\na hat, but it helps resist\nparalysis. Woven of very\nlight fiber, it boosts a\nFaerie's famed speed\nfurther.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -1852,7 +1852,7 @@
                 {
                     "length": 83,
                     "source": "NA",
-                    "translation": "A top-grade helm for\nSamurai, with high defense.\nIts special power to ward off\ndecapitation is likely the\nsecret of its popularity.",
+                    "translation": "A top-grade helm for\nSamurai, with high defense.\nIts special power to ward\noff decapitation is likely\nthe secret of its popularity.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -1964,7 +1964,7 @@
                 {
                     "length": 81,
                     "source": "NA",
-                    "translation": "The finest gear, for Ninja\nonly. Fine metal sewn into\nthe cloth raises defense\nwithout hindering movement.",
+                    "translation": "The finest gear, for Ninja\nonly. Fine metal sewn into\nthe cloth raises defense\nwithout hindering\nmovement.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -2062,7 +2062,7 @@
                 {
                     "length": 129,
                     "source": "NA",
-                    "translation": "Perhaps it presses a fatigue\npoint on the finger. Wearing\nit stiffens your shoulders\nand dulls your moves, making\nyou easier to hit. Unlock its\nhidden power and you even\nage.",
+                    "translation": "Perhaps it presses a fatigue\npoint on the finger. Wearing\nit stiffens your shoulders\nand dulls your moves,\nmaking you easier to hit.\nUnlock its hidden power and\nyou even age.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -2104,7 +2104,7 @@
                 {
                     "length": 80,
                     "source": "NA",
-                    "translation": "Tidies loose clothing and\nsnugs oversized armor to the\nbody for easier movement. As\na result, it raises defense\ntoo.",
+                    "translation": "Tidies loose clothing and\nsnugs oversized armor to the\nbody for easier movement.\nAs a result, it raises\ndefense too.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -2251,7 +2251,7 @@
                 {
                     "length": 103,
                     "source": "NA",
-                    "translation": "Anyone can equip it, and it\nraises defense. Unlocking its\nhidden power raises Piety by\nthe grace of the gods. A\nmust for the clergy.",
+                    "translation": "Anyone can equip it, and it\nraises defense. Unlocking its\nhidden power raises Piety\nby the grace of the gods. A\nmust for the clergy.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -2300,7 +2300,7 @@
                 {
                     "length": 113,
                     "source": "NA",
-                    "translation": "This ring has a strange\npower that prevents stoning.\nBut it is cursed, so no other\nrings can be worn.\nUnlocking its hidden power\nlowers Piety.",
+                    "translation": "This ring has a strange\npower that prevents\nstoning. But it is cursed, so\nno other rings can be worn.\nUnlocking its hidden power\nlowers Piety.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -2398,14 +2398,14 @@
                 {
                     "length": 132,
                     "source": "NA",
-                    "translation": "A charm made to keep one's\nalignment utterly Evil. Wear\nit and, even if you walk an\nold man across the road or\nreturn a lost wallet, you\nstay Evil.",
+                    "translation": "A charm made to keep one's\nalignment utterly Evil.\nWear it and, even if you\nwalk an old man across the\nroad or return a lost wallet,\nyou stay Evil.",
                     "compress": null,
                     "addStringTerminator": true
                 },
                 {
                     "length": 134,
                     "source": "NA",
-                    "translation": "The finest item a Psionic\ncan hold. It raises mental\npower, and merely wearing it\nputs a barrier around the\nbody strong enough to\nnullify sword and magic\nattacks.",
+                    "translation": "The finest item a Psionic\ncan hold. It raises mental\npower, and merely wearing\nit puts a barrier around the\nbody strong enough to\nnullify sword and magic\nattacks.",
                     "compress": null,
                     "addStringTerminator": true
                 },
