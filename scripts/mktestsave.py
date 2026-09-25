@@ -9,6 +9,8 @@ without knowing the save format. Before saving, RAM is seeded with:
   - every monster marked seen, so the Monster Compendium is complete (0x8008a068)
   - Card items, registered with the Card Master so the card game has a stock,
     plus a few more left in Jupiter's and Earth's packs to try registering by hand
+  - one of each Master Card and Option Card in the card game's stock; Card items
+    only ever register as Unit Cards, so these are written in directly
 
 The save holds game data, not text, so it stays usable across rebuilds.
 
@@ -25,6 +27,12 @@ GOLD, PACK = 0x1c, 0x20                    # u32 gold; 10 u16 item slots (0xffff
 ITEMS_SEEN, MONSTERS_SEEN = 0x8008a040, 0x8008a068
 CARD, ALMIGHTY, CHANGE = 0x158, 0x159, 0x15a  # item ids 344-346
 UNIDENTIFIED = 0x2000                      # flag bits the game gave dropped cards
+# Card game stock, as the game's reset routine (near 0x80023ea0) lays it out: 10 parties
+# (0xc each) at 0x8008a268, 40 Unit Cards (0x14) at 0x8008a2e0, 20 Master Cards (one
+# byte, the kind) at 0x8008a600, 30 Option Cards (8 bytes: kind, level, ...) at
+# 0x8008a614. 0xff marks an empty Master or Option slot.
+MASTERS, OPTIONS = 0x8008a600, 0x8008a614
+MASTER_KINDS, OPTION_KINDS = 6, 10         # Earth..Forest; Weapon..All-Stat
 
 
 def memcard(e):
@@ -75,6 +83,10 @@ def build():
     e.seq('cross w60 cross w60 cross w60')      # back to the card game's menu
     e.seq('cross w400 cross w150')              # leave the card game, then the Table
     e.seq('cross w150')                         # tavern -> town
+
+    e.write(MASTERS, bytes(range(MASTER_KINDS)))
+    for k in range(OPTION_KINDS):
+        e.write(OPTIONS + 8 * k, bytes([k, 1]) + bytes(6))   # level 1
 
     give(e, 2, CARD, ALMIGHTY, CHANGE)
     give(e, 3, CARD, CARD)

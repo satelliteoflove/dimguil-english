@@ -2864,21 +2864,21 @@
                 {
                     "length": 3,
                     "source": "NA",
-                    "translation": "",
+                    "translation": " LV1",
                     "compress": null,
                     "addStringTerminator": true
                 },
                 {
                     "length": 3,
                     "source": "NA",
-                    "translation": "",
+                    "translation": " LV2",
                     "compress": null,
                     "addStringTerminator": true
                 },
                 {
                     "length": 5,
                     "source": "NA",
-                    "translation": "",
+                    "translation": " LV3{ff22}",
                     "compress": null,
                     "addStringTerminator": true
                 },
