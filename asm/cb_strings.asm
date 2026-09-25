@@ -13,9 +13,71 @@
 .area 0x19
     .asciiz "            Loading..."
 .endarea
+; Unit card records (0x32 bytes each: Japanese name, English name, stats). The card
+; game shows the English field, e.g. when a password is accepted; these match the
+; spellings used in MESSAGE.DAT and the Monster Compendium.
+.org 0x800a1d32
+.area 0x10
+    .asciiz "Murphy's Ghost"
+.endarea
+.org 0x800a1e2c
+.area 0x10
+    .asciiz "Demon Imp"
+.endarea
+.org 0x800a1f26
+.area 0x10
+    .asciiz "Greater Demon"
+.endarea
+.org 0x800a20b6
+.area 0x10
+    .asciiz "Were Jaguar"
+.endarea
+.org 0x800a214c
+.area 0x10
+    .asciiz "Dullahan"
+.endarea
+.org 0x800a217e
+.area 0x10
+    .asciiz "Dragonaire"
+.endarea
+.org 0x800a2278
+.area 0x10
+    .asciiz "Ixquic"
+.endarea
 .close
 
 .open "dirty/dimguil/CMAIN.BIN", 0x800a1000
+; Unit card records (0x32 bytes each: Japanese name, English name, stats). The card
+; game shows the English field, e.g. when a password is accepted; these match the
+; spellings used in MESSAGE.DAT and the Monster Compendium.
+.org 0x800a1a7e
+.area 0x10
+    .asciiz "Murphy's Ghost"
+.endarea
+.org 0x800a1b78
+.area 0x10
+    .asciiz "Demon Imp"
+.endarea
+.org 0x800a1c72
+.area 0x10
+    .asciiz "Greater Demon"
+.endarea
+.org 0x800a1e02
+.area 0x10
+    .asciiz "Were Jaguar"
+.endarea
+.org 0x800a1e98
+.area 0x10
+    .asciiz "Dullahan"
+.endarea
+.org 0x800a1eca
+.area 0x10
+    .asciiz "Dragonaire"
+.endarea
+.org 0x800a1fc4
+.area 0x10
+    .asciiz "Ixquic"
+.endarea
 ; Battle commands and their prompts
 .org 0x800a1724
 .area 0x0b
