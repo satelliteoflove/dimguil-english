@@ -1,8 +1,8 @@
 #!/bin/sh
 # Build a patched Rev 1 disc image natively on Linux.
 #
-# Expects rips/clean/dimguil (+ rips/clean/dimguil.xml) from:
-#   dumpsxiso -x rips/clean/dimguil -s rips/clean/dimguil.xml "<Rev 1>.cue"
+# Expects rips/clean/dimguil (+ rips/clean/dimguil.xml, with forced LBAs) from:
+#   dumpsxiso -l -x rips/clean/dimguil -s rips/clean/dimguil.xml "<Rev 1>.cue"
 # Needs: JRE 21+, armips and mkpsxiso on PATH (or ARMIPS / MKPSXISO set).
 #
 # Steps:
@@ -12,7 +12,8 @@
 #   3. import the edited font sheet into DATA00/SYSCG.BIN
 #   4. encode text + binary patches into rips/dirty/dimguil
 #   5. assemble vwf.asm (armips) into the executable and overlays
-#   6. overlay rips/dirty onto rips/clean and rebuild with mkpsxiso -> rips/iso/dimguil-en.cue
+#   6. relocate files that outgrew their sectors (scripts/relocate.py)
+#   7. overlay rips/dirty onto rips/clean and rebuild with mkpsxiso -> rips/iso/dimguil-en.cue
 set -eu
 cd "$(dirname "$0")/.."
 ROOT=$(pwd)
@@ -46,13 +47,15 @@ echo "== encode"
 (cd rips/stage && java -jar "$ROOT/$JAR" encode-all 2>&1 | grep -E "exceeded|ERROR" || true)
 
 echo "== asm"
-(cd rips && "$ARMIPS" ../vwf.asm)
+(cd rips && "$ARMIPS" ../vwf.asm && for a in ../asm/*.asm; do "$ARMIPS" "$a"; done)
+
+echo "== relocate"
+python3 scripts/relocate.py rips/clean/dimguil.xml rips/dirty/dimguil rips/iso/disc.xml
 
 echo "== disc"
-cp -al rips/clean/dimguil rips/iso/disc
+cp -al rips/clean/dimguil rips/iso/dimguil
 (cd rips/dirty/dimguil && find . -type f) | while read -r f; do
-  rm -f "rips/iso/disc/$f"; cp "rips/dirty/dimguil/$f" "rips/iso/disc/$f"; echo "  $f"
+  rm -f "rips/iso/dimguil/$f"; cp "rips/dirty/dimguil/$f" "rips/iso/dimguil/$f"; echo "  $f"
 done
-cp rips/clean/dimguil.xml rips/iso/disc.xml   # paths inside are relative: disc/...
 (cd rips/iso && "$MKPSXISO" -q -y -o dimguil-en.bin -c dimguil-en.cue disc.xml)
 echo "built rips/iso/dimguil-en.cue"
