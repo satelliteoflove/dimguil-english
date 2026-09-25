@@ -53,4 +53,5 @@ tools/
 *.dat
 *.DAT
 *.bin
-*.BIN__pycache__/
+*.BIN
+__pycache__/
