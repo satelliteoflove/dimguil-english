@@ -16,8 +16,10 @@ def load(path):
 dump, tr, out = sys.argv[1:4]
 nocomp = '--no-compress' in sys.argv
 D = load(dump); T = load(tr)
-assert len(D['sections']) == len(T['sections'])
-for ds, ts in zip(D['sections'], T['sections']):
+# Sections are matched by address, so a translation file may carry only the sections it changes.
+dsecs = {s['firstHeaderAddress']: s for s in D['sections']}
+for ts in T['sections']:
+    ds = dsecs[ts['firstHeaderAddress']]
     assert len(ds['strings']) == len(ts['strings']), (len(ds['strings']), len(ts['strings']))
     if nocomp:
         ts['compress'] = False

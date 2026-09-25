@@ -1,0 +1,293 @@
+{
+    "file": "DATA07/ITEM.DAT",
+    "sections": [
+        {
+            "firstHeaderAddress": 6032385,
+            "firstHeader": 160,
+            "sectionLength": 164,
+            "compress": true,
+            "strings": [
+                {
+                    "length": 4,
+                    "source": "NA",
+                    "translation": "Weapons",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 2,
+                    "source": "NA",
+                    "translation": "Armor",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 2,
+                    "source": "NA",
+                    "translation": "Shields",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 2,
+                    "source": "NA",
+                    "translation": "Helms",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 4,
+                    "source": "NA",
+                    "translation": "Gloves",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 4,
+                    "source": "NA",
+                    "translation": "Boots",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 4,
+                    "source": "NA",
+                    "translation": "Music",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 4,
+                    "source": "NA",
+                    "translation": "Other",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 3,
+                    "source": "NA",
+                    "translation": "Back",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 2,
+                    "source": "NA",
+                    "translation": "Swords",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 2,
+                    "source": "NA",
+                    "translation": "Katanas",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "Wands",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 7,
+                    "source": "NA",
+                    "translation": "Axes",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 6,
+                    "source": "NA",
+                    "translation": "Maces",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 2,
+                    "source": "NA",
+                    "translation": "Staves",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 11,
+                    "source": "NA",
+                    "translation": "Spears",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 2,
+                    "source": "NA",
+                    "translation": "Bows",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 8,
+                    "source": "NA",
+                    "translation": "Thrown",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 3,
+                    "source": "NA",
+                    "translation": "Back",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 4,
+                    "source": "NA",
+                    "translation": "Leather",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 4,
+                    "source": "NA",
+                    "translation": "Robes",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 6,
+                    "source": "NA",
+                    "translation": "Chain",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 5,
+                    "source": "NA",
+                    "translation": "Breast",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 8,
+                    "source": "NA",
+                    "translation": "Plate",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 3,
+                    "source": "NA",
+                    "translation": "Back",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 2,
+                    "source": "NA",
+                    "translation": "Helms",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 4,
+                    "source": "NA",
+                    "translation": "Hats",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 3,
+                    "source": "NA",
+                    "translation": "Back",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 2,
+                    "source": "NA",
+                    "translation": "Potions",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 4,
+                    "source": "NA",
+                    "translation": "Scrolls",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 3,
+                    "source": "NA",
+                    "translation": "Cloaks",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 3,
+                    "source": "NA",
+                    "translation": "Ankhs",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 4,
+                    "source": "NA",
+                    "translation": "Rings",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 5,
+                    "source": "NA",
+                    "translation": "Amulets",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 7,
+                    "source": "NA",
+                    "translation": "Mystic",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 3,
+                    "source": "NA",
+                    "translation": "Back",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 6,
+                    "source": "NA",
+                    "translation": "Stock",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 3,
+                    "source": "NA",
+                    "translation": "None",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 2,
+                    "source": "NA",
+                    "translation": " ",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 1,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": null,
+                    "addStringTerminator": true
+                }
+            ]
+        }
+    ]
+}
