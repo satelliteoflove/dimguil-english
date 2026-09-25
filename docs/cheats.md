@@ -131,6 +131,51 @@ This one writes a Card into roster slot 1, pack slot 10:
 Use this one-shot only. Left on, it puts a new Card back in the pack every time one is
 registered, and it overwrites whatever is in that pack slot.
 
+## Card battle: password registrations back to five
+
+The counter under the password glyphs ("Left: N") is one byte. Five is the most the game
+ever allows.
+
+```
+3008A262 0005
+```
+
+Verified as a RAM poke (the emulator test harness sets it before every password), not yet
+as a cheat.
+
+## Card battle: one of each Master and Option Card
+
+The card stock, as the game's reset routine (near `0x80023ea0`) lays it out:
+
+- `0x8008A268` 10 parties, 0xC bytes each
+- `0x8008A2E0` 40 Unit Cards, 0x14 bytes each; first byte `0x80` + the unit's record
+  number + 1, `0x80` alone is an empty slot
+- `0x8008A600` 20 Master Cards, one byte each, the kind (0-5: Earth, Wind, Heaven,
+  Mountain, Fire, Forest); `0xFF` is empty
+- `0x8008A614` 30 Option Cards, 8 bytes each: kind (0-9: Weapon .. All-Stat), level (1-3),
+  then Stat Growth % for HP, MP, Atk, Def, Magic, M.Defense; `0xFF` in the first byte is
+  empty
+
+All six Master Cards into the first six Master slots:
+
+```
+8008A600 0100
+8008A602 0302
+8008A604 0504
+```
+
+Option Cards need their level byte too, so one per line pair, e.g. a level 1 Weapon Card
+in the first Option slot:
+
+```
+8008A614 0100
+```
+
+These overwrite whatever is in those slots. `scripts/mktestsave.py` writes the same
+values (Option Cards 0-9 at level 1, growth 0) into the test save. Verified as RAM pokes
+and on the Stock Card Details screen; not yet as cheats. Kinds 6 and up for Master
+Cards, and 10 and up for Option Cards, show garbage.
+
 ## Other addresses (for reference, not cheats yet)
 
 - Party copy of each character: starts at `0x80086880` (records seem to be 0x90 bytes
