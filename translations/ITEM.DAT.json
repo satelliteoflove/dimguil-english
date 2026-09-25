@@ -288,6 +288,2156 @@
                     "addStringTerminator": true
                 }
             ]
+        },
+        {
+            "firstHeaderAddress": 6044867,
+            "firstHeader": 1224,
+            "sectionLength": 33654,
+            "compress": true,
+            "strings": [
+                {
+                    "length": 5,
+                    "source": "NA",
+                    "translation": "Junk.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 126,
+                    "source": "NA",
+                    "translation": "A small staff made for\nFaeries. It is so thin that\nother races can barely grip\nit. And since putting a\nFaerie in the front rank is\nvery dangerous, this is the\nleast popular weapon of all.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 78,
+                    "source": "NA",
+                    "translation": "A beginner's weapon for\nclerics. It is known for\nbeing easy to handle, but\nit's only a stick, so its\npower is nothing much.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 129,
+                    "source": "NA",
+                    "translation": "The only stone-throwing\nweapon. It looks like a plain\nleather strap, but it isn't.\nSet a dungeon stone in the\nmiddle, swing your arm down\nhard and let fly. Primitive,\nbut not to be taken lightly.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 138,
+                    "source": "NA",
+                    "translation": "Not a main weapon, but very\nversatile as a backup. A\nnovice Fighter must choose\nbetween this and a shield,\nthat is, between attack and\ndefense.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 137,
+                    "source": "NA",
+                    "translation": "The basic weapon of the\nfighting cleric, who dislikes\nmetal but can't fight\nmonsters with a stick. Only\nthe metal tip meets the\nmonster's skull, never the\nwielder's hand.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 82,
+                    "source": "NA",
+                    "translation": "A starting weapon for\nMages and the like. Still,\npure spellcasters should\navoid swinging it in the\nfront rank.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 126,
+                    "source": "NA",
+                    "translation": "A must for a starting\nRanger. Strike before the\nenemy can cast. It hits\ndistant foes even from the\nback row, which makes it\ndeadly against enemy casters\nin the rear.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 112,
+                    "source": "NA",
+                    "translation": "A blade even spellcasters\ncan use. Larger than a knife,\nbut only a bit better than\nbare hands. Clerics may not\nuse it.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 136,
+                    "source": "NA",
+                    "translation": "The standard long sword for\nFighters. Its damage grows\nas you level up and gain\nattacks, but by then you'll\nlikely have a better weapon.\nA sword for learning the\nropes.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 134,
+                    "source": "NA",
+                    "translation": "The standard blade of a\nstarting Samurai. Neither\ntoo light nor too heavy, it\nis now mass-produced and\nfairly priced. Born in the\nEast, its edge outcuts the\nLong Sword.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 80,
+                    "source": "NA",
+                    "translation": "A long spear for a starting\nValkyrie. Spears strike as\nhard from the back row as\nthe front, and finish off\nfoes who flee to the rear.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 121,
+                    "source": "NA",
+                    "translation": "Don't dismiss it as a long\ncord. Its tip breaks the\nsound barrier and strikes\nfear into foes. Rumor has it\nsome monsters enjoy it.\nWhether that's true is\nanyone's guess.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 106,
+                    "source": "NA",
+                    "translation": "A bit too big for driving\nnails, this hammer was first\nmade for forging swords,\nthey say. Smashing foes\nturned out to be a new use\nfor it.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 103,
+                    "source": "NA",
+                    "translation": "Throw it or swing it. Its\nhoned edge will surely take\nthe hide off a foe. Easy to\nhandle, but don't expect\nmuch power.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 100,
+                    "source": "NA",
+                    "translation": "It looks like a Long Sword,\nbut the edge is so chipped\nit won't cut anything. The\ngrip is slimy and smells\nawful. Frankly, it's junk.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 136,
+                    "source": "NA",
+                    "translation": "A step up from the Short\nSword. Handy as a backup\nweapon, with high attack\npower. It adds attacks even\nfor novices, so if you favor\noffense, give it to a\nfront-line Fighter.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 136,
+                    "source": "NA",
+                    "translation": "It looks like a flute or a\nstick, but blow hard into\none end and a hidden dart\nshoots out. Weak, but the\npoison on the tip steadily\nsaps the foe's strength.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 116,
+                    "source": "NA",
+                    "translation": "A step up from the Dagger.\nA strange power helps it\nhit. With it, a Thief can\nmake full use of surprise\nattacks.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 123,
+                    "source": "NA",
+                    "translation": "It looks like a small wooden\nrod, but unleash the magic\nsealed within and flames\nburst out to hurt the foe.\nBetter than a weapon that\ncan't reach from the back\nrow.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 133,
+                    "source": "NA",
+                    "translation": "A loathed short sword. It\nbrings misfortune to its\nbearer, and its attack is\npoor. If a Thief ends up\nequipping it, act fast or the\nwhole party will suffer.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 117,
+                    "source": "NA",
+                    "translation": "A step up from the common\nStaff. Light, sturdy and\neasy to hold, with fair\npower, but front-line\nFighters have better\nweapons to choose from.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 143,
+                    "source": "NA",
+                    "translation": "The blade of a novice Ninja.\nUnlike a Samurai's Katana,\nit is straight, with no\ncurve. Thrust at vital spots,\nit can kill a monster in one\nblow, however much HP it\nhas.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 79,
+                    "source": "NA",
+                    "translation": "A basic spear. Its medium\nrange lets it attack from\nthe back row, but it takes\ntwo hands, so no shield.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 233,
+                    "source": "NA",
+                    "translation": "A woodcutter's axe adapted\nfor battle. It is so large\nthat great strength is\nneeded to use it well, so only\ncertain races can wield it.{ff40}A strange Eastern flail of\ntwo linked rods.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 76,
+                    "source": "NA",
+                    "translation": "A polearm with a blade as\nlong as a sword. Its appeal is\nfinishing off foes who\nretreat to the rear.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 105,
+                    "source": "NA",
+                    "translation": "Equip this mace unawares\nand you'll wonder if your\nluck has run dry. In battle,\nyou simply won't hit\nanything.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 123,
+                    "source": "NA",
+                    "translation": "A mace famed among Priests\nand Bishops. It deals fatal\nblows to evil beings such as\nthe undead, and can cast\nBamatu.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 138,
+                    "source": "NA",
+                    "translation": "A Samurai-only backup\nweapon. Middling alone, it\nshines when wielded with a\nsecond blade. The more\nattacks you gain, the more\ndamage it deals.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 119,
+                    "source": "NA",
+                    "translation": "A classic weapon with high\npower that reaches distant\nfoes. Cocking it takes great\nstrength, so don't expect\nmany attacks, but its\naccuracy is excellent.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 106,
+                    "source": "NA",
+                    "translation": "One of many shuriken,\nhurled at foes lurking afar.\nAccurate, but deals little\ndamage. A Ninja-only\nthrown weapon.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 136,
+                    "source": "NA",
+                    "translation": "The mark of a seasoned\nFighter. Its sealed magic\nbrings a long sword to its\npeak, good even in the\ndeepest dungeon. If you find\na pricier sword, compare\nthem for yourself.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 136,
+                    "source": "NA",
+                    "translation": "Weak in direct combat, but\nused as a magic item with a\nfocused mind, it summons\nthe very demons that plague\nadventurers as allies. More\nuseful than an ordinary\nweapon.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 90,
+                    "source": "NA",
+                    "translation": "Cursed, but its power is\ndecent, so quite a few\nadventurers keep it equipped\nfor good. An odd choice, but\nthere it is.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 111,
+                    "source": "NA",
+                    "translation": "A well-known Samurai\nbackup weapon. Samurai can\nuse few shields, so they\noften fight with a weapon\nin each hand. This is a\nreliable blade for that.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 123,
+                    "source": "NA",
+                    "translation": "An axe with a cracked haft.\nIt works, but you must get\nvery close to cut with it, so\nyou lose attacks. And its\npower is nothing much\nanyway.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 128,
+                    "source": "NA",
+                    "translation": "A weapon from the East\nwith a distinctive\nthree-pronged blade. It\nimproves defense and hits\nhard. However, it does not\nadd attacks.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 117,
+                    "source": "NA",
+                    "translation": "An attempt to outdo the\nSword of Slashing. Too\nmuch magic was poured in,\nand its power dropped\ninstead. Even so, the magic\nis priced in, so it costs more.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 110,
+                    "source": "NA",
+                    "translation": "Weak, and it lowers\naccuracy. It's cursed, so few\nbuy it off the shelf. If you\nsaw a novice buying one,\nwhat would you do?",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 115,
+                    "source": "NA",
+                    "translation": "A strange item dropped in\nthe dungeon by an\nadventurer from the East. It\nhas short range and is hard\nto handle, so it takes a fair\nlevel to use it well.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 133,
+                    "source": "NA",
+                    "translation": "An old sword thrown away\nin the dungeon. Rusted and\nchipped, and once gripped it\nwon't leave your hand. Many\nbuy it believing polish will\nmake it shine, so it's oddly\npopular.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 140,
+                    "source": "NA",
+                    "translation": "A two-handed Samurai-only\nblade, named for its power to\nsplit even a helmet in two.\nNo extra attacks, but its\nsheer force is its appeal.\nFoes who see it are said to\nclutch their heads.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 137,
+                    "source": "NA",
+                    "translation": "An Evil-only short sword.\nThe best backup weapon for\nan alignment that lives to\nfight, letting you attack\nwith a weapon in each hand.\nThieves can equip it too, all\nthe better for an Evil party.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 119,
+                    "source": "NA",
+                    "translation": "As the name says, a bow for\nThief types. Fired from the\nback row, it hits the foe\nwithout leaving cover. Not\nstrong, but it has some\npower.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 106,
+                    "source": "NA",
+                    "translation": "A blade only Samurai and\nNinja may hold. Unleashing\nits hidden power drains your\nstrength, as if it wounds its\nown bearer. Its power is\nslight.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 132,
+                    "source": "NA",
+                    "translation": "A wand is a staff for\nspellcasters only. This one\nholds the lightning spell\nLazalik, which takes effect\nwhen used as an item. As a\nweapon it's no better than a\nplain staff.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 120,
+                    "source": "NA",
+                    "translation": "A spellcaster-only staff\nholding the cold spell\nMadalto. It too is best used\nas an item. As a weapon it's\nall but useless.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 109,
+                    "source": "NA",
+                    "translation": "Deals heavy blows to insect\nand animal monsters and\ngrants resistance to them. It\nalso wards off poison. A\nmust for a front-line Priest.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 128,
+                    "source": "NA",
+                    "translation": "A mighty bow of\nastonishing power. It doesn't\nadd attacks, but it lives by\nthe one-shot kill, so that's\nno problem. Its long range\nlets it chase foes anywhere.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 138,
+                    "source": "NA",
+                    "translation": "The only bow Fighters can\nuse. It reaches the enemy's\nrear, of course, and as its\nuser's skill grows, it fires\nseveral arrows per attack.\nSword or bow is up to you.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 77,
+                    "source": "NA",
+                    "translation": "The spearhead splits into a\ncross, each arm fitted with\na dagger blade. Weak, but its\nblows are sure to hit.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 126,
+                    "source": "NA",
+                    "translation": "Allows swift strikes, with\nthe most attacks per round\nof any weapon. But it's only\na short sword, so don't\nexpect much power. Best\nused as a backup weapon.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 79,
+                    "source": "NA",
+                    "translation": "A broad-bladed spear first\nused by guerrillas and now\nby royal guards too. Its\npower is strictly average.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 128,
+                    "source": "NA",
+                    "translation": "A heavy axe only for\ngiant-kind. Only races of\ngiant descent may use it.\nThat sounds grand, but the\ntruth seems to be that\nother races find it too\nheavy to swing.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 138,
+                    "source": "NA",
+                    "translation": "The dungeon holds monsters\nwith parts of human bodies,\nas if made by a prank of the\ngods. Most have human\nheads and are clever. This\nsilver weapon was made to\nfight them.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 105,
+                    "source": "NA",
+                    "translation": "A Demon Imp's tail wrapped\naround a twig to make a\nstaff. With a devil's power\ninside it has some punch,\nbut it's cursed, so it's not\nrecommended.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 116,
+                    "source": "NA",
+                    "translation": "A staff with a demon's fang\non the tip, and a dark past.\nStrong enough to withstand\neven a demon's roar, the\nfang soaked up the spells\nchanted near it and now\nholds their magic.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 126,
+                    "source": "NA",
+                    "translation": "An iron head on a pole,\nstudded with many small\nblades. Bring it down on a\nhead without a helm and it\nbursts like a watermelon. A\nvicious item, in a way.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 106,
+                    "source": "NA",
+                    "translation": "A mace that saps your\nvitality when equipped. The\nhead is damaged, so hits do\nlittle. However you try, it's\nno good in battle.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 104,
+                    "source": "NA",
+                    "translation": "Wondering what's so bad\nabout it? Try equipping it.\nIt's cursed, cuts your\nattacks, and lowers both\naccuracy and defense. A\nfitting name for the worst\nsword.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 105,
+                    "source": "NA",
+                    "translation": "Let me taste your blood. The\ncountless thorns on the lash\nrun right up the grip, so\nevery blow you strike draws\nblood from your own hand as\nwell.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 113,
+                    "source": "NA",
+                    "translation": "A dagger with a distinctive\nbone hilt. Raises strength\nand accuracy, and even adds\nattacks. Fighting at such\nclose range adds risk, but\nthat can't be helped.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 86,
+                    "source": "NA",
+                    "translation": "An axe mounted on a spear.\nMedium range lets it strike\nfrom the back row. High\nattack power, and useful for\nits price.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 114,
+                    "source": "NA",
+                    "translation": "A thrown weapon of steady\naccuracy. Its four points\nwill sink deep into the foe's\nthroat. One important\nthing: don't forget to pick\nit up after the battle.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 74,
+                    "source": "NA",
+                    "translation": "A replica of the spear of\nthe legendary maiden Joan.\nIt shows its full power in\nthe hands of the Neutral.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 126,
+                    "source": "NA",
+                    "translation": "Despite \"Evil\" in its name,\nthis axe isn't cursed. It's an\nEvil-only axe built for\nbrutality. High attack and\naccuracy, and it shows its\npower if your alignment fits.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 105,
+                    "source": "NA",
+                    "translation": "Short range, but it holds\nmagic. Used as an item it\nacts like Dios, healing your\nwounds.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 130,
+                    "source": "NA",
+                    "translation": "Thief-only, and far from\nordinary. Its secret is a\nhidden power: unleash it to\nbecome that walking killing\nmachine, the Ninja, with no\nchange in level or stats.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 127,
+                    "source": "NA",
+                    "translation": "Normal in size, but the\nstring is so stiff that only\nstrong races can use it. Its\npower is worth the effort,\nbut don't expect many\nattacks.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 126,
+                    "source": "NA",
+                    "translation": "Inscribed with Kadorto, the\nspell that raises the dead.\nNearly useless as a weapon,\nbut thanks to its spell you\ncan skip the temple's steep\ndonation.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 134,
+                    "source": "NA",
+                    "translation": "A custom Long Sword\ninscribed with a fire spell.\nUnleash it and hellfire\nengulfs the foe. Once the\nmagic is spent it's a normal\nsword again, but still a\nstrong one, so treasure it.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 132,
+                    "source": "NA",
+                    "translation": "The final work of Cusinart,\nmaker of famed blades. So\nfierce that one swing makes\nthe blade look like many.\nStill famous for its many\nmysteries.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 122,
+                    "source": "NA",
+                    "translation": "A classic dagger, deadly at\nclose range. It slices foes at\nuncanny speed. But it lowers\nyour defense, so it takes\ncourage to face the enemy.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 129,
+                    "source": "NA",
+                    "translation": "A Samurai-only blade that\ncan decapitate. It cuts\nthrough even steel.\nTerrifying to monsters with\npoor defense. Of course, if\nan enemy has one, be on\nguard.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 103,
+                    "source": "NA",
+                    "translation": "A very small, short rod. To a\nFaerie it's as big as a spear,\nbut its real power is modest.\nIt does protect against\npetrification.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 109,
+                    "source": "NA",
+                    "translation": "Made of gold, soft, but able\nto petrify. It can also cast\nMadi, but it often breaks, so\nuse it with care.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 70,
+                    "source": "NA",
+                    "translation": "Swing it fast and your\nattacks rise remarkably. It\ncan also paralyze foes.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 84,
+                    "source": "NA",
+                    "translation": "A very hard staff, ideal for\nattack. Double damage vs\ninsects and warriors. Hits\nhard and can stun foes.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 133,
+                    "source": "NA",
+                    "translation": "A strange three-part staff\nfrom the East. Swing, strike\nor thrust, its power is\nassured, though it takes\nskill to use. Extra damage vs\ngiants.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 119,
+                    "source": "NA",
+                    "translation": "A club made from a giant's\nthighbone, so huge only the\nstrongest races can wield it.\nIts deadly blows do double\ndamage to giants.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 109,
+                    "source": "NA",
+                    "translation": "A precise bow made by\nforest hunters. Double\ndamage vs animals. A\nhigh-level Ranger may gain\nextra attacks with it.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 69,
+                    "source": "NA",
+                    "translation": "Deals extra damage to\ndemons. Unleashing its\nhidden power lowers\nVitality.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 133,
+                    "source": "NA",
+                    "translation": "Out of magic mid-quest?\nThis bow has you covered.\nMade of strong, workable\nyew, it is light and sturdy\nenough for spellcasters to\nuse.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 133,
+                    "source": "NA",
+                    "translation": "A cursed weapon that bleeds.\nThe grudge of the dead?\nOnce equipped, its blood\ncongeals and it won't let go.\nIts hidden power lowers max\nHP but raises Vitality.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 113,
+                    "source": "NA",
+                    "translation": "A staff holding the silence\nspell Montino. If it works,\nfoes can't cast spells,\nturning the battle your way.\nIt rarely breaks, too, which\nis nice.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 108,
+                    "source": "NA",
+                    "translation": "A staff that summons\nmonsters by releasing its\nsealed magic, that is, it\ncasts Gardi. As a staff, its\npower is quite ordinary.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 88,
+                    "source": "NA",
+                    "translation": "A bow that drives off the\nundead. Unleashing its\nhidden power lowers max HP\nbut makes you younger.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 133,
+                    "source": "NA",
+                    "translation": "A weapon for Evil\ncharacters. Its curved blade\nand odd look resemble a\nkatana. Its magic adds to its\nattack. Some change\nalignment just to use it.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 57,
+                    "source": "NA",
+                    "translation": "A weapon made for slaying\nbeasts. Double damage vs\nanimals and beastmen.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 106,
+                    "source": "NA",
+                    "translation": "A mace that raises Strength\nand accuracy just by\nequipping it. Its hidden\npower raises Strength for\ngood. It lives up to its name.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 128,
+                    "source": "NA",
+                    "translation": "Not top-class, but it can\nreach the enemy front line\nfrom the back row, so it has\nits uses. Double damage vs\nbeastmen and undead. Its\nhidden power raises\nStrength but lowers Luck.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 109,
+                    "source": "NA",
+                    "translation": "As its name says, a mace\nonly clergy can equip.\nBlessed with holy water, it\nguards against the undead\nand deals them more damage.\nStrictly a striking weapon.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 114,
+                    "source": "NA",
+                    "translation": "Harder to pull out than a\nnormal shuriken, so it deals\nmore damage. Accuracy is\nso-so, but several can be\nthrown at once for more\nattacks.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 104,
+                    "source": "NA",
+                    "translation": "Get the maximum attacks\nwith every one hitting, and\nthe damage is considerable.\nA fine sword for raising a\nnew Fighter.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 75,
+                    "source": "NA",
+                    "translation": "A staff that changes length\nat will, depending on its\nuser's skill. Double damage\nvs mythical and mystery\ncreatures.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 125,
+                    "source": "NA",
+                    "translation": "A sword said to be made for\nslaying the dragons in the\nlabyrinth. But few have\never seen these \"dragons\", so\nsome call it useless. Will\nyou need it?",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 106,
+                    "source": "NA",
+                    "translation": "A bow made by the forest\nfolk, the Elves. Unleashing\nits hidden power raises\nAgility. Extra damage vs\nmythical creatures and\nanimals.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 131,
+                    "source": "NA",
+                    "translation": "A staff that casts Morfis,\ncuring ailments for the\nwhole party. Its hidden\npower fully restores HP. It\nbreaks easily, so you may\nhesitate to use it.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 115,
+                    "source": "NA",
+                    "translation": "A long sword used by forest\nhunters, prized as the only\nlong sword a Thief can\nwield. Its hidden power\ntrades Strength for Agility,\nwhich a Thief would\nwelcome.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 109,
+                    "source": "NA",
+                    "translation": "A short sword famed as the\nSamurai's backup weapon. Its\nspecial power raises the\nchance to decapitate. Very\npowerful, and many Samurai\ndual-wield it.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 126,
+                    "source": "NA",
+                    "translation": "A special weapon that\nbursts into flame, all but\nthe hilt, and clings to foes.\nIts hidden power turns you\nto ash but raises Piety. So\nmuch for faith being\nrewarded.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 128,
+                    "source": "NA",
+                    "translation": "As its name says, the finest\nof short blades. Power,\nattacks and accuracy all\nrise, but with no hidden\npower, many adventurers\nfind it lacking.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 123,
+                    "source": "NA",
+                    "translation": "The model of a fine sword, a\nmust for front-line\nfighters. Top power, better\naccuracy. Wishing it had a\nhidden power too is a bit\ngreedy.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 106,
+                    "source": "NA",
+                    "translation": "A spellcaster's weapon. Its\ngreat feature is that it can\ncast Tiltowait. It breaks\neasily, though, so pick your\nmoment.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 98,
+                    "source": "NA",
+                    "translation": "A staff holding a water\nspirit that casts Madalqua.\nUseless as a weapon, but the\nspell is devastating.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 97,
+                    "source": "NA",
+                    "translation": "A staff that casts Badi, the\nspell that slays a foe\ninstantly. Its hidden power\nraises HP, but ages you in\nexchange.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 85,
+                    "source": "NA",
+                    "translation": "A staff effective vs animals\nand beastmen. It also offers\nsome protection, but its base\nattack is pitiful.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 94,
+                    "source": "NA",
+                    "translation": "A weapon fit for\nspellcasters. It casts the\nPsionic spell Masios. The\nwand itself has no attack\npower.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 131,
+                    "source": "NA",
+                    "translation": "A huge axe that takes great\nstrength to swing. Its\nhidden power lowers max HP\nand makes you younger.\nPowerful, but in truth it is\ncursed.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 98,
+                    "source": "NA",
+                    "translation": "A spellcaster-only staff\nholding the Zilwan spell.\nEquipping it is sure to\ncurse you. As a weapon, its\npower is trifling.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 124,
+                    "source": "NA",
+                    "translation": "Poison, paralysis, stoning\nand more wear down a foe's\nHP for sure, making it\nstrong in a long fight. Very\nlight, with the world's\nhardest gem set in its head.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 82,
+                    "source": "NA",
+                    "translation": "A spear light enough to cut\na dragonfly in flight, made\nfor quick attacks. Double\ndamage vs insects.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 115,
+                    "source": "NA",
+                    "translation": "Named for its likeness to\nthe tails of the Nine-Tailed\nFox, the East's mightiest\nmagic beast. Its nine lashes\ndeal deep damage, great vs\nanimals and beastmen.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 85,
+                    "source": "NA",
+                    "translation": "More than a plain stick, it\nhides a blade that does real\ndamage. Accurate and\ndependable too.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 127,
+                    "source": "NA",
+                    "translation": "A sword that can be thrown\nor swung, and dual-wielded.\nIts hidden power raises\nVitality and makes you\nyounger. Double damage vs\nmythical and mystery\ncreatures.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 105,
+                    "source": "NA",
+                    "translation": "The strongest weapon a\nFaerie can hold. Double\ndamage vs demons and undead.\nBut it is tiny and said to be\nhard to find.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 69,
+                    "source": "NA",
+                    "translation": "A huge scythe said to be\nDeath's own. It drains the\nsouls of the living and can\nalso land critical hits.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 73,
+                    "source": "NA",
+                    "translation": "A long spear from an island\nnation in the East. Its blade\nis keen as a sword's, and\njust swinging it deals heavy\ndamage.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 126,
+                    "source": "NA",
+                    "translation": "A pricey axe, with\ndestructive power to match.\nIts hidden power raises\nVitality and age. Strength\nand accuracy rise too.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 112,
+                    "source": "NA",
+                    "translation": "As long as a katana, but its\nblade is broad as a cleaver.\nCleaving foes in two takes\nmuch training. Double\ndamage vs demons.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 107,
+                    "source": "NA",
+                    "translation": "The mightiest shuriken,\nmore destructive than most\nswords. It homes in on a\nfoe's vital spots. Resists\npoison and drain.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 114,
+                    "source": "NA",
+                    "translation": "The mightiest staff a\nspellcaster can carry. Its\nhidden power restores lost\nspell points, and it rarely\nbreaks, too.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 76,
+                    "source": "NA",
+                    "translation": "A spear imbued with dark\npower. Unleashing its hidden\npower turns you into a\nMonk. Its great power slays\nfoes outright.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 126,
+                    "source": "NA",
+                    "translation": "The name sounds ominous,\nbut it isn't cursed. The\nblood it drinks is the\nenemy's, so it's a fine\nweapon. Power and attacks\nare all you could want. A\nrare find among daggers.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 82,
+                    "source": "NA",
+                    "translation": "The finest weapon, for\nValkyries only. Its hidden\npower fully restores HP.\nDouble damage vs demons and\ndragons.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 113,
+                    "source": "NA",
+                    "translation": "The East's mightiest bow.\nIts power pierces and slays\nfoes, and its twanging\nstring is said to ward off\nevil. Extra damage vs\ndragons.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 118,
+                    "source": "NA",
+                    "translation": "The holy sword Excalibur.\nIts power is beyond compare,\nso needing both hands to\nwield it is only fair. It has\na hidden power, and is very\nrare.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 129,
+                    "source": "NA",
+                    "translation": "The finest axe a Fighter can\nwield. Only the labyrinth\nwalls can resist it. Few\nraces can use it, so you may\nneed to create a suitable\ncharacter after finding it.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 148,
+                    "source": "NA",
+                    "translation": "The cursed blade Muramasa,\na Samurai's greatest weapon.\nEven a novice Samurai can\nwield it well, and its eerie\npower cuts down the undead.\nMuramasa is said to be the\nsmith's name.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 110,
+                    "source": "NA",
+                    "translation": "This staff is shrouded in\nmystery. It's said some other\nstaff evolved into it with\nlong use. It casts Alikus,\nwhich deals a foe a fatal\nblow.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 79,
+                    "source": "NA",
+                    "translation": "A cloth robe anyone can\nwear. Its many layers give\nminimal protection. A must\nfor spellcasters.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 122,
+                    "source": "NA",
+                    "translation": "Small clothes made for\nFaeries. They magically\nreduce damage from insects.\nFaeries already have good\ndefense, so this makes them\nsafer still.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 89,
+                    "source": "NA",
+                    "translation": "Little protection, but a\nmust for novices. It's a\ncustom for front-line\nclasses to wear this armor at\nleast once.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 90,
+                    "source": "NA",
+                    "translation": "A small, light wooden shield\nthat's easy to handle. Don't\nexpect much defense, but\nit's a vital shield in close\ncombat.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 95,
+                    "source": "NA",
+                    "translation": "A novice's cap. Little\nprotection, but better than\nnothing. Every bit helps\nyou survive battle.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 114,
+                    "source": "NA",
+                    "translation": "Walking the labyrinth\nbarefoot is far too risky.\nMade to protect the soles of\nthe feet, they give good\nfooting, so front-line\nfighters wear them too.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 90,
+                    "source": "NA",
+                    "translation": "An important helm, but\nbeing leather it does little.\nEven so, novices can hardly\ndo without it.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 101,
+                    "source": "NA",
+                    "translation": "Wooden at heart, but faced\nwith goblin hide for\nstrength. Ugly, but light\nand easy to use. Good for\nnovices.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 110,
+                    "source": "NA",
+                    "translation": "Less a broken shield than\none broken by shoddy\nmaterials. The handle\nwobbles, so it lowers defense\ninstead of raising it.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 110,
+                    "source": "NA",
+                    "translation": "Leather gloves. Very light,\nand anyone but pure\nspellcasters can wear them.\nHandy for novices, but few\nwear them as they're costly.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 128,
+                    "source": "NA",
+                    "translation": "Samurai-only gauntlets of\nleather and cloth, made to\nguard the wrists. A\ntraditional item used in the\nEastern art of kendo. Just\nplain gauntlets, with no\nspecial power.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 83,
+                    "source": "NA",
+                    "translation": "One of the few armors pure\nspellcasters can use. Better\ndefense than Robes, and\nanyone can equip it. A fine\nitem.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 118,
+                    "source": "NA",
+                    "translation": "Leather footwear. Defense\naside, cold labyrinth floors\nare nicer to walk in shoes\nthan barefoot. That's about\nall they do.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 127,
+                    "source": "NA",
+                    "translation": "An import of the famous\nshields used by Norse\nVikings. Vikings are so\nstrong even their children\nused them, but you may find\nthe weight a bit much.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 105,
+                    "source": "NA",
+                    "translation": "Footwear from the East,\nwoven from bundled dried\nrice straw. Minimal defense,\nplus better defense vs\nmagical creatures.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 73,
+                    "source": "NA",
+                    "translation": "Worn by Ninja and Monks.\nThin iron plates are sewn in\nover vital areas.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 119,
+                    "source": "NA",
+                    "translation": "A must for spellcasters who\ncan't wear heavy helms.\nEven if it adds just 1 to\ndefense, the head needs\nprotecting. Looks matter too,\ndon't you think?",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 77,
+                    "source": "NA",
+                    "translation": "Metal rings linked like a\nchain. It deflects sword\nblows, improving defense.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 127,
+                    "source": "NA",
+                    "translation": "A full-face steel helm.\nGuarding the face as well\nmade it heavy and muffles\nsound, but front-liners find\nit reassuring.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 110,
+                    "source": "NA",
+                    "translation": "These pitch-black boots\nwork well for fighter types.\nThe rubber soles grip the\nground firmly when\nswinging a sword.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 120,
+                    "source": "NA",
+                    "translation": "Steel gauntlets modified for\nease of use, but botched into\njunk. Cursed as well, so\nremoving the curse will cost\nyou.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 105,
+                    "source": "NA",
+                    "translation": "Strong, easy-to-use steel\ngauntlets. Many adventurers\nlike their weight. A top\nitem in its class, known for\nits value.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 114,
+                    "source": "NA",
+                    "translation": "A cap with feathers from\nbirds shot by Rangers. The\nfeathers add damage vs\nanimals and beastmen, but\nthe cap's own defense is low.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 87,
+                    "source": "NA",
+                    "translation": "Plain leather armor studded\nwith rivets for more\ndefense. Made for ease of\nmovement, a must for Thief\ntypes.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 112,
+                    "source": "NA",
+                    "translation": "Made so a Ninja can do his\nwork without showing his\nface. Its light, sturdy\nmaterial raises defense\nwithout hindering movement.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 130,
+                    "source": "NA",
+                    "translation": "Footwear made for Ninja to\nsneak up on foes. The thin,\ntough cloth allows quick\nmovement and adds defense.\nIn the maze, not a single\nfootstep will be heard.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 109,
+                    "source": "NA",
+                    "translation": "Steel boots that cover the\ninstep and even the shins.\nSome adventurers call the\ntrim drab, but they serve\nwell as armor.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 75,
+                    "source": "NA",
+                    "translation": "Full-body armor said to hold\na Mage's grudge. Whoever\nputs it on is slowed at once.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 114,
+                    "source": "NA",
+                    "translation": "Starting gear for a Samurai\nfoot soldier. Made of leather\nand wood, it's light and easy\nto move in, but defense is\nlacking. Once you rise in\nrank, you'll want something\nbetter.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 81,
+                    "source": "NA",
+                    "translation": "Full armor. With no gaps, it\nraises defense greatly. It is\nalso famous for being a\nchore to put on.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 123,
+                    "source": "NA",
+                    "translation": "A clown's hat. Naturally,\nthere is no such class. Try\nit on and you'll be cursed.\nUtterly useless, but cursed\nitems often sell for a high\nprice.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 108,
+                    "source": "NA",
+                    "translation": "A sturdy shield of wood and\niron, its rim gilded for a\ntouch of luxury. A charming\npiece, both handsome and\npractical.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 114,
+                    "source": "NA",
+                    "translation": "A hat for spellcasters only.\nIt guards the head and\nraises magic power. So light\nthat even a frail Mage feels\nno burden.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 106,
+                    "source": "NA",
+                    "translation": "Plate armor for the chest, a\ncommon target, so defense\nthere matters. Arms and\nshoulders move freely,\nsuiting aggressive\nadventurers.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 112,
+                    "source": "NA",
+                    "translation": "Leather at its base, but set\nwith thin iron plates and\nstuds that greatly raise\ndefense. It's handsome too, so\nit sells high for leather\narmor.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 84,
+                    "source": "NA",
+                    "translation": "A Samurai-only helm from\nthe East. Defense is modest,\nbut it's light and gives a\nclear view, so it never\nlimits movement.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 119,
+                    "source": "NA",
+                    "translation": "Heavy, very heavy boots, so\nhard to walk in you'd think\nthe ground was pulling them\ndown. They cling to the body\ntoo, so the only way to get\nthem off is to make the\nboots vanish.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 97,
+                    "source": "NA",
+                    "translation": "Gloves are meant to protect\nthe hands, but these,\nblackened by the blood of\nfoes, are cursed. They lower\ndefense and paralyze\nmovement.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 129,
+                    "source": "NA",
+                    "translation": "A well-worn shield of wood\nand iron. The wood is rotten,\nso don't expect much\ndefense. Its last owner's will\nlingers, cursing anyone who\nuses it without leave.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 123,
+                    "source": "NA",
+                    "translation": "Worn, damaged leather armor.\nPerhaps holding the grudge\nof the fallen, it curses the\nwearer and lowers defense.\nWhere it leads is, as the\nname says, loss.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 119,
+                    "source": "NA",
+                    "translation": "Silver gloves. Quite costly,\nbut not for nothing. Being\nsilver, they work well,\nraising defense against\nLycanthropes.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 88,
+                    "source": "NA",
+                    "translation": "A traditional piece from the\nEast, and Samurai-only\narmor. Its fine power raises\ndefense against humanoid\nmonsters.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 72,
+                    "source": "NA",
+                    "translation": "Each link is inscribed with\na spell and glows with its\npower. It also adds spell\nresistance.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 103,
+                    "source": "NA",
+                    "translation": "A steel shield with\ntop-class defense. Far\nlighter than it looks, it\nturns aside enemy blows\nwith ease.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 102,
+                    "source": "NA",
+                    "translation": "Being silver, it too raises\ndefense against\nLycanthropes. Its footsteps\nhave an odd sound that\nmakes many monsters hide in\nfear.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 132,
+                    "source": "NA",
+                    "translation": "Body armor from Eastern\nmartial arts. Its hanging\nmetal plates absorb enemy\nblows. The metal is too\nheavy for clergy. Best worn\nby a Samurai.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 128,
+                    "source": "NA",
+                    "translation": "One of the few gloves a\nNinja can wear. Even a new\nNinja gets some benefit, as\nthey raise defense. Very\nlight, they never hinder a\nNinja's movement.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 122,
+                    "source": "NA",
+                    "translation": "Gloves once worn by the\nwalking dead. Unlike mere\nold gloves, each step brings\nfatigue and surely drains\nHP. Known as the worst of\ncursed gloves.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 70,
+                    "source": "NA",
+                    "translation": "Exactly what it says: a\ncursed robe. Never wear it.\nIt lowers defense and can't\nbe removed.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 83,
+                    "source": "NA",
+                    "translation": "A robe that glows emerald.\nGood only. Guards against\nfire and petrifying attacks.\nIts limited users are\nrewarded with fine powers.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 82,
+                    "source": "NA",
+                    "translation": "A robe that glows blue, for\nNeutral only. Raises\nresistance to cold and spells.\nIt has fair defense too, a\nstrong pick if alignment\nfits.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 77,
+                    "source": "NA",
+                    "translation": "A robe that glows crimson.\nEvil only. Resists fire and\npetrification, a must for\nEvil spellcasters.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 82,
+                    "source": "NA",
+                    "translation": "An Evil-only helm. Its\ndefense is so high that\nmany change alignment just\nfor it. Strong against\nMythical monsters.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 125,
+                    "source": "NA",
+                    "translation": "Handy mittens that resist\ncold. Not ordinary gloves,\nthey're sturdy enough for\nbattle. There are no finger\nslots, though, so only the\nthumb moves freely.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 126,
+                    "source": "NA",
+                    "translation": "Samurai-only leather shoes.\nMade of thin bark and cloth,\nthey're very light and help\ndodge attacks. Not sturdy,\nbut popular for nimble\nfootwork.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 124,
+                    "source": "NA",
+                    "translation": "Odd headgear that resists\npoison and helps withstand\ndeath. Covering the face, it\nfills with fresh air. Too\ngood to shun for its name.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 103,
+                    "source": "NA",
+                    "translation": "A breastplate with hidden\npower. Invoking it fully\nrestores HP. But a demon's\nsoul is sealed inside, so it is\ncursed after all.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 76,
+                    "source": "NA",
+                    "translation": "Each link bears a cursed\nword. Once worn it won't\ncome off. It lowers defense\nand increases fatigue.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 107,
+                    "source": "NA",
+                    "translation": "A helm that can cast Malor.\nIts defense is high too, so it\nmay do more than expected\nin a pinch. Good to carry as\ninsurance.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 114,
+                    "source": "NA",
+                    "translation": "More metal than a normal\nbreastplate, for greater\ndefense. Called the\nbreastplate of hope, it's\npopular with adventurers.\nThe hope, of course, is to\nsurvive.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 113,
+                    "source": "NA",
+                    "translation": "The finest leather armor.\nRicher trim and better\nleather and iron layering\nraise defense further. It\nkeeps warm too, preventing\nfrostbite.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 77,
+                    "source": "NA",
+                    "translation": "An aged Mage cast a spell to\nmake himself young again,\nbut it only worked on his\nclothes. This is that robe.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 107,
+                    "source": "NA",
+                    "translation": "Said to be worn by a warrior\nwho turned his back and\nfled battle. It is cursed: new\nwearers are gripped by fear,\nweakening their guard.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 131,
+                    "source": "NA",
+                    "translation": "A very rare gem called the\nNeutral Crystal is set in its\nback. Its power raises magic\ndefense. Normal defense is\nhigh too, a fine shield.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 108,
+                    "source": "NA",
+                    "translation": "This shield favors\nwickedness and repels the\nGood. Its defense is\nexcellent. A must for those\nwho hold to Evil.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 81,
+                    "source": "NA",
+                    "translation": "Neutral-only armor. Besides\nhigh defense, spells carved\nin it give off light that\ndulls attacks from\nLycanthropes and Animals.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 128,
+                    "source": "NA",
+                    "translation": "Made of many metal pieces,\nit's sturdier than it looks.\nAncient spells carved inside\nboost defense and guard\nagainst fire.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 77,
+                    "source": "NA",
+                    "translation": "Evil-only armor. Steel plates\ncover the whole body,\nraising defense. Ideal for the\nmerciless.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 112,
+                    "source": "NA",
+                    "translation": "A heavy, stifling cursed\nhelm that chokes its wearer.\nBut used as an item, it casts\nMatokani, wiping out foes.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 82,
+                    "source": "NA",
+                    "translation": "Cursed armor that glows\npale blue. Invoking its\nhidden power raises HP but\nlowers Vitality, so take care.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 79,
+                    "source": "NA",
+                    "translation": "Armor with better cold\nresistance. Each link bears a\nspell that halves damage\nfrom cold spells and breath.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 79,
+                    "source": "NA",
+                    "translation": "Armor with better fire\nresistance. Each link bears a\nspell that halves damage\nfrom fire spells and breath.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 129,
+                    "source": "NA",
+                    "translation": "Breastplate-sized, but its\ndefense is top class. Given a\nbreastplate's versatility,\nyou won't want to part with\nit. Clergy can wear it too,\nthough some call that too\nlavish.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 107,
+                    "source": "NA",
+                    "translation": "A helm fit for Hell's\ngatekeeper. Not only cursed:\ncarelessly invoke its hidden\npower and you forget every\nspell you know.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 116,
+                    "source": "NA",
+                    "translation": "Looks like an ordinary helm,\nbut talismans inside absorb\nenemy spells. Invoking its\nhidden power restores lost\nmagic power.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 139,
+                    "source": "NA",
+                    "translation": "Gloves for Ninja and\nThieves. Quite sturdy, but\nstill Thief gear, so the\neffect is minor. For a Thief\nwho fights in front,\nthough, they're a must.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 127,
+                    "source": "NA",
+                    "translation": "Among the few gloves a\nFaerie can wear. So tiny\nthat other races can't wear\nthem. Hidden power works\nagainst Demons and Undead.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 108,
+                    "source": "NA",
+                    "translation": "A sturdy steel helm\ncovering the whole head,\nhiding even the face.\nExcellent defense, but its\nweight limits which classes\ncan wear it.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 119,
+                    "source": "NA",
+                    "translation": "Faerie-only cap. Flimsy for\na hat, but it helps resist\nparalysis. Woven of very\nlight fiber, it boosts a\nFaerie's famed speed further.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 121,
+                    "source": "NA",
+                    "translation": "Shields have lost favor as\ndual-wielding spreads, but\nthis one's defense is so\ngreat that owning it is the\ntop status symbol among\nfighters.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 128,
+                    "source": "NA",
+                    "translation": "Odd among gloves. Serrated\nblades like a mantis's\nforelegs are attached, but\nthey're useless as weapons.\nInsect monsters fear them,\nthough.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 116,
+                    "source": "NA",
+                    "translation": "Gloves inscribed with holy\nletters. Among their fine\neffects, they raise defense\nagainst Demons. Clergy can\nwear them too, so they're\nhailed as the best of gloves.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 131,
+                    "source": "NA",
+                    "translation": "Good defense, but the odd\nshape draws the eye.\nMantis-like serrated blades\non the instep are said to\nmake Insect monsters freeze\nat the sight.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 111,
+                    "source": "NA",
+                    "translation": "A shield worked from\nmithril ore. Besides its\ndefense, it reacts to magic\nand weakens its effect. Best\ngiven to someone in the\nfront row.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 125,
+                    "source": "NA",
+                    "translation": "A shield with a sinister\ncrest. Weight and curse\nlower its defense. Invoking\nits hidden power turns you\nto stone. Decode the crest\nand you may sap enemy\nstrength, or so it's said.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 75,
+                    "source": "NA",
+                    "translation": "Robe of the Lich, king of\nthe dead. Grants great\ndefense to the undead, but\nto the living it's just a\ncursed item.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 113,
+                    "source": "NA",
+                    "translation": "A hat for Bishops, and\nPriests too. High defense,\nand it guards against\nparalysis. A bit pricey, but\nthink of it as an offering.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 106,
+                    "source": "NA",
+                    "translation": "Slippers said to be worn by\na famous Bishop. Covered in\ntalismans, they guard\nagainst enemy spells.\nSlippers, yes, but with\nhigh defense.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 103,
+                    "source": "NA",
+                    "translation": "Tiny, cute shoes. To anyone\nbut a Faerie they're\naccessory-sized, but they\nstrengthen attack and\ndefense against Giants and\nMages.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 108,
+                    "source": "NA",
+                    "translation": "Looks like a hair ornament,\nbut it's a true crown. It\ndraws out power beyond the\nwearer's limits, raises\ndefense and reduces magic\ndamage.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 115,
+                    "source": "NA",
+                    "translation": "A shield that seals enemy\nmagic. Built for spell\nresistance, it gives up some\ndefense. In return it's light\nenough that even Samurai\ncan use it.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 123,
+                    "source": "NA",
+                    "translation": "A full-protection helm for\nFighters and Lords. Made of\nlight material, its weight is\nno burden. Its base defense\nis, of course, superb.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 83,
+                    "source": "NA",
+                    "translation": "A top-grade helm for\nSamurai, with high defense.\nIts special power to ward off\ndecapitation is likely the\nsecret of its popularity.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 126,
+                    "source": "NA",
+                    "translation": "Stylish women-only shoes.\nGlass may seem fragile, but\na famous Mage made them\nmagic, so no worry there.\nThey boast very high\ndefense, of course.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 133,
+                    "source": "NA",
+                    "translation": "A costly Valkyrie-only\nbreastplate. Fitted for\nwomen, it avoids the usual\ntight squeeze. Ancient\nletters over the heart\nrestore HP.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 77,
+                    "source": "NA",
+                    "translation": "Top-grade Plate Mail made\nentirely of magic ore.\nPurified with holy water, it\nneutralizes all kinds of\nbreath.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 79,
+                    "source": "NA",
+                    "translation": "Light as a bird's feather,\nwith magic defense, it\nlowers AC to the limit.\nStrong against Giants and\nmagical creatures.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 84,
+                    "source": "NA",
+                    "translation": "A robe favored by female\nspellcasters. Invoking its\nhidden power raises max HP.\nGuards against Priest spells.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 101,
+                    "source": "NA",
+                    "translation": "Dragon scales laid over its\nface block all magic and\nbreath attacks. Its flaw is\nweight: only races born\nstrong can hold it.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 104,
+                    "source": "NA",
+                    "translation": "Strange shoes that overflow\nwith holy water. No wonder\nthe undead keep away. They\nhalve fire breath, and base\ndefense is very high.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 117,
+                    "source": "NA",
+                    "translation": "A purified crown that\nguards the head and steadies\nthe mind. Clergy and any\nfighter type can wear it.\nInvoking its hidden power\nrestores magic power.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 81,
+                    "source": "NA",
+                    "translation": "A superb robe that Mages\nas well as Priests can wear.\nUnlocking its hidden power\nallows a class change to\nBishop.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 80,
+                    "source": "NA",
+                    "translation": "An old garment from the\nEast. Its high defense turns\naside direct attacks. It also\nkeeps you warm, guarding\nagainst cold attacks.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 78,
+                    "source": "NA",
+                    "translation": "Chain mail forged from both\nice and fire. Making it takes\ntwo items, and a special\npower must be released.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 110,
+                    "source": "NA",
+                    "translation": "The small crest on its face\nholds holy power that keeps\ndemons away. Its defense is\nhigh too, and unlocking its\nhidden power raises Piety\nfurther.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 130,
+                    "source": "NA",
+                    "translation": "The finest armor for\nSamurai. Being only\nbreastplate-sized, it allows\neasy movement, yet it is\nmore than enough to stop\ndeadly blows. It also resists\nparalysis and stoning.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 81,
+                    "source": "NA",
+                    "translation": "Samurai armor said to have\nbeen worn by a Shogun, the\nhighest rank in the East.\nStrong in every respect.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 85,
+                    "source": "NA",
+                    "translation": "Armor joined with\nvestments for the highest\ndefense. The secret lies in\nthe vestments, which grant\nvarious protective effects.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 81,
+                    "source": "NA",
+                    "translation": "The finest gear, for Ninja\nonly. Fine metal sewn into\nthe cloth raises defense\nwithout hindering movement.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 121,
+                    "source": "NA",
+                    "translation": "Once famous armor, now a\nwreck after long years of\nbattle. Blood caked on its\nlining like glue won't let it\nleave the wearer's body.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 128,
+                    "source": "NA",
+                    "translation": "Use it when you feel a bit\nworn down. Wounds close as\nif by magic and HP returns.\nDeadly wounds, though, will\nneed several bottles.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 124,
+                    "source": "NA",
+                    "translation": "An instrument whose tones\nlull foes to sleep, like the\nspell Katino. Its music stops\nthem in their tracks,\nturning battle your way.\nOnly a Bard can play it.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 121,
+                    "source": "NA",
+                    "translation": "Curing poison by spell costs\neven a high-level Priest\nprecious spell points. If\nthat seems a waste, use this\npotion. The poison vanishes\nlike magic.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 132,
+                    "source": "NA",
+                    "translation": "A scroll inscribed with the\nsleep spell Katino. Direct\nattacks on sleeping foes do\ndouble damage, a sure\nadvantage. Its effect depends\non the user's level.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 73,
+                    "source": "NA",
+                    "translation": "A cloak that merges its\nwearer with the shadows.\nFoes will surely be confused\nwhen a shadow suddenly\nswings a sword at them.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 134,
+                    "source": "NA",
+                    "translation": "A very fragile ring, but\nmake a wish and it shows a\nmap of where you've walked.\nIn short, it holds the\nDumapic spell. It's cheap, so\nwhy not buy extras before\nan adventure?",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 95,
+                    "source": "NA",
+                    "translation": "A scroll holding the spell\nMapoba. It slows the enemy\nand hastens your party.\nEnemy attacks are easier to\ndodge and yours land more\noften.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 101,
+                    "source": "NA",
+                    "translation": "An angel's spirit becomes\nthe flute's note, damaging\nfoes. It works like the spell\nNagula, with damage rising\nwith the user's HP.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 131,
+                    "source": "NA",
+                    "translation": "A scroll sealed with\nMahalito. Just read it, no\nspell power needed. Popular\nfor opening attacks, it is\ndevastating to weak\nmonsters, killing them\noutright.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 110,
+                    "source": "NA",
+                    "translation": "A potion for the paralyzed.\nIt works like the spell\nDialko, and used on a\nstricken ally it takes effect\nquickly.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 112,
+                    "source": "NA",
+                    "translation": "Rub it on your body to\nreduce enemy spell attacks.\nIt works like the spell\nFofic, and one use lasts a\nlong time.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 113,
+                    "source": "NA",
+                    "translation": "An instrument that invokes\nMogato, sending foes back to\nthe demon world. It hits one\nfoe only, but banishing\ndemons without a fight\nmakes battle easier.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 129,
+                    "source": "NA",
+                    "translation": "Perhaps it presses a fatigue\npoint on the finger. Wearing\nit stiffens your shoulders\nand dulls your moves, making\nyou easier to hit. Unlock its\nhidden power and you even\nage.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 78,
+                    "source": "NA",
+                    "translation": "A cloak that wraps its\nwearer in darkness to hide\nthem. Its defense is slight,\nbut every class can wear it.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 75,
+                    "source": "NA",
+                    "translation": "A cloak woven of\nlight-absorbing fiber. By\nblending into the darkness\nof the maze, it helps ward\noff enemy attacks.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 109,
+                    "source": "NA",
+                    "translation": "Very effective against foes\nwhose cloud spells slowly\nsap your HP. It sweeps the\nclouds away in an instant,\nleaving clear skies.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 75,
+                    "source": "NA",
+                    "translation": "A cloak that makes its\nwearer look far larger than\nlife. Monsters that pounce\nmerely swing at an illusion.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 126,
+                    "source": "NA",
+                    "translation": "A scroll that seals enemy\nspells. It bears the spell\nCortu, and works when read\neven by those who know no\nspells. Best used at the\nstart of battle as a\nprecaution.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 80,
+                    "source": "NA",
+                    "translation": "Tidies loose clothing and\nsnugs oversized armor to the\nbody for easier movement. As\na result, it raises defense\ntoo.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 110,
+                    "source": "NA",
+                    "translation": "A scroll bearing the spell\nMatokani. Low-class foes are\nwiped out, reduced to dust.\nIt has no effect on the\nundead, so take care.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 110,
+                    "source": "NA",
+                    "translation": "Just lay this scroll on the\nground and a dark gate\nopens, releasing the undead.\nFoes will flee in fright or\nbe wiped out by their\nattacks.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 133,
+                    "source": "NA",
+                    "translation": "A magic ring for Mages,\nAlchemists and Psionics.\nAncient letters are written\non it, but it's said no one\nhas ever deciphered them.\nRaises defense slightly.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 113,
+                    "source": "NA",
+                    "translation": "A ring for Evil alignment\nonly. Unlocking its hidden\npower costs Piety but makes\nyou 1 year younger. It raises\ndefense and guards against\nPsionic spells.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 121,
+                    "source": "NA",
+                    "translation": "A strange bell that calls\ndemons, like the spell\nSocordi. Ring it once and\nthe gate of the demon world\nopens, and the demons who\ndescend become your allies.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 109,
+                    "source": "NA",
+                    "translation": "A mysterious orb with\nhealing power. Unlocking its\nhidden power raises Luck.\nNot everyone can wear it, as\nit's for Psionics only.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 106,
+                    "source": "NA",
+                    "translation": "A strange accessory sealed\nwith the spell Litofeit.\nWith it in effect, falls into\npits or from high places\ncause no damage.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 124,
+                    "source": "NA",
+                    "translation": "This liquid in a strange vial\nhas a power that demons\nfear. Use it and they vanish\nback to the demon world. It's\npricey, so not to be used\nlightly.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 78,
+                    "source": "NA",
+                    "translation": "A cloak with various special\nprotections that every class\ncan wear. It gives defense\ntoo, and can be worn over\narmor.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 136,
+                    "source": "NA",
+                    "translation": "A harp that seals enemy\nspells, like the spell\nMontino. Any Bard, novice\nor master, can use it. If it\nworks, battle will go your\nway.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 114,
+                    "source": "NA",
+                    "translation": "Straps that hold armor,\ngauntlets and boots in place.\nBesides raising defense,\nthey keep fire from getting\nin through the gaps. For\nFighter classes only.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 130,
+                    "source": "NA",
+                    "translation": "A costly cure-all. Drink it\nor rub it on, either way HP\nis fully restored. That goes\nfor the living only, though.\nIt's no use on the dead or\nthose turned to ash.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 129,
+                    "source": "NA",
+                    "translation": "Alone it's a mere trinket,\nbut when you wield a\nweapon with special effects,\nthat weapon's hit rate rises.\nThis hidden power made it\nfamous and prized.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 126,
+                    "source": "NA",
+                    "translation": "This amulet not only guards\nagainst fire, but can also\nattack with the fire spell\nLahalito. It may break,\nthough, so opinions differ\non whether to use it.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 109,
+                    "source": "NA",
+                    "translation": "An amulet that guards\nagainst Alchemist spells.\nUsed as an item it casts\nCortu. It breaks easily,\nthough, so use it with care.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 98,
+                    "source": "NA",
+                    "translation": "An amulet that casts the\nchoking spell Matokani.\nLesser fiends shatter to\npieces, leaving only ash\nbehind.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 107,
+                    "source": "NA",
+                    "translation": "Its effect is slight, but it\ncan seal enemy spells. While\nequipped, you can't be hit\nby undead attacks, and it\nresists level drain.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 127,
+                    "source": "NA",
+                    "translation": "Raises defense when worn,\nand unlocking its hidden\npower raises Strength. Save\nthat for when you truly\nneed it, since it is sure to\nbreak.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 120,
+                    "source": "NA",
+                    "translation": "Learning magic takes high\nIntellect. If you're slow to\nlearn spells, unlock this\nankh's hidden power and\nspells will soon be mastered.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 135,
+                    "source": "NA",
+                    "translation": "Vitality is a vital stat. If it\ndrops, HP gains shrink and\nyou may even be lost.\nUnlocking its hidden power\nraises Vitality.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 103,
+                    "source": "NA",
+                    "translation": "Anyone can equip it, and it\nraises defense. Unlocking its\nhidden power raises Piety by\nthe grace of the gods. A\nmust for the clergy.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 88,
+                    "source": "NA",
+                    "translation": "A special ankh whose hidden\npower, once unlocked,\nrestores even one turned to\nash. Merely carrying it\nraises defense.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 111,
+                    "source": "NA",
+                    "translation": "Aging shortens one's life.\nAs the name suggests,\nbetter not unlock this\nankh's hidden power. Merely\nequipping it does no harm,\nthough.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 126,
+                    "source": "NA",
+                    "translation": "A dangerous ankh that\ninvites death. It's cursed, so\nbeware even carrying it.\nOnce equipped, it drains HP\nwith every action. Best to\ndiscard or sell it soon.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 95,
+                    "source": "NA",
+                    "translation": "Since old times, a rabbit's\nfoot charm is said to bring\ngood luck. This one is no\nexception. Unlocking its\nhidden power raises Luck.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 123,
+                    "source": "NA",
+                    "translation": "A last resort when cornered.\nIt fully restores lost HP. It\ngives no defense or other\nspecial powers, however.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 119,
+                    "source": "NA",
+                    "translation": "An earring-sized accessory\nmade with rubies. It is also\na charm for a safe return\nfrom one's travels. But\nwhoever uses this power\nloses all belongings.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 113,
+                    "source": "NA",
+                    "translation": "This ring has a strange\npower that prevents stoning.\nBut it is cursed, so no other\nrings can be worn.\nUnlocking its hidden power\nlowers Piety.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 124,
+                    "source": "NA",
+                    "translation": "Its strange tones wrap you\nin soothing calm. It holds\nthe spell Madial, which\nheals the whole party. It\ncan be used a few times, but\nbreaks when you least\nexpect it.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 135,
+                    "source": "NA",
+                    "translation": "With this ring, no need to\nworry about HP. It works\njust by walking, so you\nwon't need inns or spells.\nBut you must walk off every\npoint lost, a hardship of its\nown.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 139,
+                    "source": "NA",
+                    "translation": "A scholar found that the\ntroll's hardy vitality lies in\nits bones, and had a\ncraftsman bore a troll's\nthighbone into a ring. It\nholds the power to heal and\nto find foes' vital spots.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 110,
+                    "source": "NA",
+                    "translation": "A book that brings back the\ndead. It bears the spell\nKadorto, so even a\nnon-Priest can revive a\ncomrade just by opening it.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 97,
+                    "source": "NA",
+                    "translation": "Please take care. Open this\nbook carelessly and your\nsoul will be sucked in. The\nright way to use it is to\nopen it at a foe in battle.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 108,
+                    "source": "NA",
+                    "translation": "Blow this horn instead of\ncasting a summon spell, and\ncavalry rides in from\nnowhere to help. They never\ndisappoint, and will scatter\nyour foes.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 129,
+                    "source": "NA",
+                    "translation": "A lavishly decorated ring of\npeerless beauty. It is\nactually cursed, but since it\nnever comes off once worn,\nsome adventurers favor it as\nan engagement ring.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 112,
+                    "source": "NA",
+                    "translation": "A charm that casts Dumapic\nand never breaks. Gently\nbring a light near the gem,\nand a map of the current\nmaze appears on the walls\nand floor.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 131,
+                    "source": "NA",
+                    "translation": "A mask for when you can't\nbreathe. Fresh air is always\nfed inside. It also resists\ndeath spells, blocking enemy\nspells such as Matokani and\nBadi.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 119,
+                    "source": "NA",
+                    "translation": "It looks like a plain earring\nbut is a rare treasure. Made\nfrom the fang of a dragon\nslain by its own kind's\nbetrayal, it spitefully\nwhispers their weak points\nin your ear.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 103,
+                    "source": "NA",
+                    "translation": "Beat this drum in battle and\nyour fighting rhythm\nimproves, making you harder\nto hit. Its sound also slows\nfoes and saps their will to\nfight.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 62,
+                    "source": "NA",
+                    "translation": "Long a mysterious item, it\nwas recently found that a\ncertain cloak evolves into\nthis with continued use.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 125,
+                    "source": "NA",
+                    "translation": "Made from the bones of a\nhigh priest called the Holy\nRinbo. It looks like a plain\ngauntlet, but used as an\nitem it casts the spell\nTiltowait.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 132,
+                    "source": "NA",
+                    "translation": "A charm made to keep one's\nalignment utterly Evil. Wear\nit and, even if you walk an\nold man across the road or\nreturn a lost wallet, you\nstay Evil.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 134,
+                    "source": "NA",
+                    "translation": "The finest item a Psionic\ncan hold. It raises mental\npower, and merely wearing it\nputs a barrier around the\nbody strong enough to\nnullify sword and magic\nattacks.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 123,
+                    "source": "NA",
+                    "translation": "A special instrument that\nunleashes the Mage's\nmightiest attack spell. The\nspell is written inside the\nhorn, and simply blowing\ninto it works just like\ncasting.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 99,
+                    "source": "NA",
+                    "translation": "A mummified monkey's left\nhand made into an accessory.\nPeople shun it as creepy,\nbut it grants your wishes in\nexchange for levels.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 131,
+                    "source": "NA",
+                    "translation": "Proof of mastery in a\nvenerable martial art of the\nEast. Even worn by a novice,\nfoes who see it will lose\ntheir nerve. But if a foe\nwears one, you'd best run.",
+                    "compress": null,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 111,
+                    "source": "NA",
+                    "translation": "For those too out of shape\nto reach behind their backs.\nA handy invention that gets\nright to the itch. For some\nreason, it casts Calko, the\nspell for peeking through\ngaps in walls.",
+                    "compress": null,
+                    "addStringTerminator": true
+                }
+            ]
         }
     ]
 }

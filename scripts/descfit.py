@@ -39,14 +39,19 @@ for line in open(os.path.join(ROOT, 'tables/compression.tbl'), encoding='utf-8')
         DIGRAPHS[line[:2]] = int(line[3:], 16)
 LUT = open(EXE, 'rb').read()[VWF_LUT:VWF_LUT + 0xd1]
 NEWLINE = -1
+CONTROL = -2
 
 
 def encode(text):
-    """Codes for text; NEWLINE marks a line break (2 bytes in the file)."""
+    """Codes for text; NEWLINE marks a line break (2 bytes in the file), CONTROL one byte
+    of a {xxxx} control code."""
     codes = []
     for word in re.findall(r'[^ ]* ?|[^ ]+', text):
         i = 0
         while i < len(word):
+            m = re.match(r'\{([0-9a-f]{4})\}', word[i:])
+            if m:  # control code, two bytes
+                codes += [CONTROL, CONTROL]; i += m.end(); continue
             if word[i] == '\n':
                 codes.append(NEWLINE); i += 1; continue
             pair = word[i:i + 2]
@@ -64,10 +69,14 @@ def size(text):
 
 
 def line_widths(text):
+    if '{ff40}' in text:  # string terminator: what follows is a separate string
+        return [w for part in text.split('{ff40}') for w in line_widths(part)]
     widths, w = [], 0
     for c in encode(text):
         if c == NEWLINE:
             widths.append(w); w = 0
+        elif c == CONTROL:
+            pass
         else:
             w += LUT[c] + 1 if c < len(LUT) else 12
     return widths + [w]
