@@ -6,9 +6,12 @@ pairs inside each space-delimited word, the trailing space included) and prices 
 glyph at VWF_LUT[code] + 1 px, read from the built executable (12 px past the table,
 which is what both the main text engine and catalog_vwf.asm do).
 
-    descfit.py FILE.json [--width 144] [--lines 7]
-        FILE.json: {"<index>": "text with \\n line breaks", ...}
+    descfit.py FILE.json [--width 144] [--lines 7] [--budgets BUDGETS.json]
+        FILE.json: {"<index>": "text with \\n line breaks", ...}; keys may be
+        "<section>:<index>".
         Prints per-entry bytes, widest line and line count; flags anything over.
+        BUDGETS.json: {"budgets": {"<section>": bytes}}; checks each section's total
+        (terminators excluded, as the encoder counts it).
 
 As a module: encode(text) -> list of codes, size(text) -> bytes incl. terminator,
 line_widths(text) -> [px, ...].
@@ -95,6 +98,11 @@ def main():
         bad = max(lw) > width or len(lw) > lines
         print(f'{"!!" if bad else "  "} {key:>4} {b:4d}B {max(lw):3d}px {len(lw)} lines')
     print(f'total {total} bytes for {len(m)} strings')
+    if '--budgets' in args:
+        budgets = json.load(open(args[args.index('--budgets') + 1]))['budgets']
+        for sec, limit in budgets.items():
+            used = sum(size(t) - 2 for k, t in m.items() if k.split(':')[0] == sec)
+            print(f'{"!!" if used > limit else "  "} section {sec}: {used} of {limit} bytes')
 
 
 if __name__ == '__main__':

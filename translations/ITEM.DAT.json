@@ -319,7 +319,7 @@
                 {
                     "length": 129,
                     "source": "NA",
-                    "translation": "The only stone-throwing\nweapon. It looks like a plain\nleather strap, but it isn't.\nSet a dungeon stone in the\nmiddle, swing your arm down\nhard and let fly. Primitive,\nbut not to be taken lightly.",
+                    "translation": "The only stone-throwing\nweapon. It looks like a plain\nleather strap, but it isn't.\nSet a maze stone in the\nmiddle, swing your arm down\nhard and let fly. Primitive,\nbut not to be taken lightly.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -515,7 +515,7 @@
                 {
                     "length": 136,
                     "source": "NA",
-                    "translation": "The mark of a seasoned\nFighter. Its sealed magic\nbrings a long sword to its\npeak, good even in the\ndeepest dungeon. If you find\na pricier sword, compare\nthem for yourself.",
+                    "translation": "The mark of a seasoned\nFighter. Its sealed magic\nbrings a long sword to its\npeak, good even in the\ndeepest maze. If you find\na pricier sword, compare\nthem for yourself.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -571,14 +571,14 @@
                 {
                     "length": 115,
                     "source": "NA",
-                    "translation": "A strange item dropped in\nthe dungeon by an\nadventurer from the East. It\nhas short range and is hard\nto handle, so it takes a fair\nlevel to use it well.",
+                    "translation": "A strange item dropped in\nthe maze by an\nadventurer from the East. It\nhas short range and is hard\nto handle, so it takes a fair\nlevel to use it well.",
                     "compress": null,
                     "addStringTerminator": true
                 },
                 {
                     "length": 133,
                     "source": "NA",
-                    "translation": "An old sword thrown away\nin the dungeon. Rusted and\nchipped, and once gripped it\nwon't leave your hand. Many\nbuy it believing polish will\nmake it shine, so it's oddly\npopular.",
+                    "translation": "An old sword thrown away\nin the maze. Rusted and\nchipped, and once gripped it\nwon't leave your hand. Many\nbuy it believing polish will\nmake it shine, so it's oddly\npopular.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -676,7 +676,7 @@
                 {
                     "length": 138,
                     "source": "NA",
-                    "translation": "The dungeon holds monsters\nwith parts of human bodies,\nas if made by a prank of the\ngods. Most have human\nheads and are clever. This\nsilver weapon was made to\nfight them.",
+                    "translation": "The maze holds monsters\nwith parts of human bodies,\nas if made by a prank of the\ngods. Most have human\nheads and are clever. This\nsilver weapon was made to\nfight them.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -963,7 +963,7 @@
                 {
                     "length": 125,
                     "source": "NA",
-                    "translation": "A sword said to be made for\nslaying the dragons in the\nlabyrinth. But few have\never seen these \"dragons\", so\nsome call it useless. Will\nyou need it?",
+                    "translation": "A sword said to be made for\nslaying the dragons in the\nmaze. But few have\never seen these \"dragons\", so\nsome call it useless. Will\nyou need it?",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -1187,7 +1187,7 @@
                 {
                     "length": 129,
                     "source": "NA",
-                    "translation": "The finest axe a Fighter can\nwield. Only the labyrinth\nwalls can resist it. Few\nraces can use it, so you may\nneed to create a suitable\ncharacter after finding it.",
+                    "translation": "The finest axe a Fighter can\nwield. Only the maze\nwalls can resist it. Few\nraces can use it, so you may\nneed to create a suitable\ncharacter after finding it.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -1243,7 +1243,7 @@
                 {
                     "length": 114,
                     "source": "NA",
-                    "translation": "Walking the labyrinth\nbarefoot is far too risky.\nMade to protect the soles of\nthe feet, they give good\nfooting, so front-line\nfighters wear them too.",
+                    "translation": "Walking the maze\nbarefoot is far too risky.\nMade to protect the soles of\nthe feet, they give good\nfooting, so front-line\nfighters wear them too.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -1292,7 +1292,7 @@
                 {
                     "length": 118,
                     "source": "NA",
-                    "translation": "Leather footwear. Defense\naside, cold labyrinth floors\nare nicer to walk in shoes\nthan barefoot. That's about\nall they do.",
+                    "translation": "Leather footwear. Defense\naside, cold maze floors\nare nicer to walk in shoes\nthan barefoot. That's about\nall they do.",
                     "compress": null,
                     "addStringTerminator": true
                 },

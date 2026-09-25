@@ -209,4 +209,13 @@ cat_adv:
     addu    v0, t4, a2
     addu    v0, t4, a3
 .org 0x800eb380                 ; sh v0, 0(a0)
+
+; Both string builders take a single-byte glyph's width field from a 0xd0-entry table,
+; so Remisse's digraphs 0xd2-0xd7 (ma me wa we mo mi) read whatever heap byte follows
+; it. A 7 there is the newline marker and broke "game" into "ga" + a line break.
+; The field no longer sets the advance (cat_adv does), and real entries are 0-3.
+.org 0x800e2bdc
+    andi    v0, v0, 3
+.org 0x800e97b0
+    andi    v0, v0, 3
 .close
