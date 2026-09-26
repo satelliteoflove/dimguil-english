@@ -1,111 +1,51 @@
-# dimguil-patcher
+# Wizardry: Dimguil English translation
 
-Tool for dumping the text of Wizardry Dimguil in a readable format and for patching it back. Also 
-included is a series of ASM hacks to add partial VWF support to the game (which is required for 
-the optional compression method to work correctly).  
+An English translation patch for Wizardry: Dimguil, the 2000 PlayStation release
+(SLPS-02691). It targets the Rev 1 disc only.
 
-The patcher works fine and could be considered feature-complete. The VWF hacks cover almost 
-every text routine that uses the "large font" except for monster and item descriptions and quite
-possibly some more stuff that I haven't personally encountered during my short-lived playthrough. 
-I'm no longer working on this, though, so somebody else will have to pick up the torch.
+All the text a player can reach is in English now: the town, the castle and its menus,
+the dungeon dialogue, combat, item and monster descriptions and the card game. It's a
+beta. Much of the text is still being reviewed, and nobody has played it through to the
+ending yet. See [ROADMAP.md](ROADMAP.md) for what's left.
 
-Check out `Findings.md` for a random list of notes. There's a 99% chance I have forgotten some 
-important details, so uhhh yeah.
+The patch is on the
+[Releases](https://github.com/satelliteoflove/dimguil-patcher/releases) page. It applies
+to the Track 1 `.bin` of a redump-style Rev 1 set, and the readme in the zip has the
+steps. If something looks wrong or breaks, please open an issue.
 
-The `translations` folder contains all the work that has been done so far by the translation team, 
-uploaded with their permission. The JP strings have been redacted, which means you'll have to 
-dump the original script and cross-reference it with the translated strings yourself.  
-Thanks to [name removed] for translating and to [name removed] for editing!
+## Credits
 
-### Status
+This started as Remisse's [dimguil-patcher](https://github.com/remii7/dimguil-patcher),
+which dumps and reinserts the game's text and adds variable-width font support.
+[name removed] translated the event script and much of the menu, status and combat text,
+and [name removed] edited it. Their work is still in here, and the git history keeps
+Remisse's commits as they made them.
 
-- `EVENTMES.BIN` 100% translated, ~15% edited
-- `STATUS.OBJ` should be 100% translated, 0% edited
-- `SISETU.OBJ` ~80% translated, 0% edited
-- `FIGHTMSG.OBJ` 70-75% translated, 0% edited 
-- `I_NAME_E.OBJ` was already in English, but various names have been relocalized
-- `M_CATALG.DAT` various names have been relocalized, 0% of descriptions translated
+I picked it up from there and carried on with the rest of the translation and the
+engine work it needed.
 
-Everything else is left untranslated. Anything past the first in-game area has not been 
-playtested.
+## Building it yourself
 
-### Prerequisites
+See [docs/building.md](docs/building.md). You'll need your own Rev 1 disc image.
 
-The instructions below assume you're using Linux, as that's what I've developed and tested the 
-project on.
+## What's where
 
-You'll need to download the following:
+- `translations/` holds the English text, one JSON file per game file. `binary/` holds
+  patches to non-text data (NPC party names).
+- `asm/` has the armips patches: Remisse's VWF hacks in `vwf.asm`, and the rest built
+  on top of them.
+- `src/` is Remisse's Kotlin dumper and encoder. `sections.json` tells it where the
+  text sits in each file, and `tables/` has the character tables.
+- `graphics/` has the edited font sheet.
+- `scripts/` has the build, a headless emulator harness built on the Beetle PSX
+  libretro core (`emu.py`), and the checkers and viewers used while translating.
+- `docs/` has notes on the engine, the translation and the review work, plus
+  Remisse's original notes in `findings.md`.
 
-- Ripper55555's fork of [psximager](https://github.com/Ripper55555/psximager/releases) (`psxrip.exe` and `psxbuild.exe`)
-- [armips](https://github.com/Kingcom/armips/releases/tag/v0.11.0)
-- [Tim2View](https://github.com/lab313ru/tim2view/releases/tag/r90)
-- JRE 21+
-- Wine
-- `patcher.jar` from Releases
-- This repo (either clone it or download it as a zip file)
+The text is compressed by packing common letter pairs into single bytes. If you add or
+change a digraph, the font sheet, `tables/compression.tbl` and the VWF width table in
+`asm/vwf.asm` all have to agree.
 
-### Setup
+## License
 
-1. If you've downloaded the repo as a zip, extract it (this will create a folder named `dimguil-patcher-main`, rename it
-to `dimguil-patcher`)
-2. Unpack your Dimguil image to a folder named `clean` (md5 of track 1: 9eeb5c508abb23c0e3538108b7755890):
-```sh
-$ wine psxrip.exe -v "<path-to-dimguil-image>.cue" clean
-```
-3. Make a copy of the `clean` folder and name it `dirty`, then move both to
-`dimguil-patcher/rips` (create this folder manually)
-4. Launch Tim2View and import `dimguil-patcher/SYSCG_000001_04b_01c.png` (the edited font 
-sheet) into `dimguil-patcher/rips/dirty/dimguil/DATA00/SYSCG.BIN`
-5. Move `patcher.jar` to `dimguil-patcher`
-6. Move `psxbuild.exe` and `armips.exe` to `dimguil-patcher/tools` (create this folder manually)
-
-### Using the tool
-
-Dumping all known text to `out/dumps` (see `sections.json`):
-
-```sh
-$ java -jar patcher.jar dump
-```
-
-Encoding the translated strings from the `translations` folder, copying them
-to `rips/dirty` and finally rebuilding the image:
-```sh
-$ java -jar patcher.jar encode-all && ./rebuild.sh
-```
-
-You'll find the new image in `rips/dirty`.  
->If you're getting errors like `Cannot open system area file "dimguil.sys"`, make sure you're
-executing `rebuild.sh` from within `dimguil-patcher`.
-
-Encoding a single string from CLI:
-```sh
-$ java -jar patcher.jar encode-string "<string>" [-compress] 
-```
-
-### Notes on VWF and compression
-
-The compression algorithm I've implemented scans the text for specific pairs of letters and encodes 
-them to a single byte. For text to look correct in-game, my VWF patches and the edited font 
-sheet need to be applied. Additionally, if you need to add/edit any digraphs, you'll have to make sure 
-that the font sheet, the digraph table in `tables/compression.tbl` and the VWF LUT in `vwf.asm` are
-all synced.
-
-### Native Linux build (this fork)
-
-No Wine needed. Build [armips](https://github.com/Kingcom/armips) and
-[mkpsxiso/dumpsxiso](https://github.com/Lameguy64/mkpsxiso) from source, then:
-
-```sh
-$ dumpsxiso -x rips/clean/dimguil -s rips/clean/dimguil.xml "<Rev 1 image>.cue"
-$ ./scripts/build.sh          # -> rips/iso/dimguil-en.cue
-```
-
-`scripts/build.sh` restores the redacted JP sources into a staging copy of `translations/`
-(so untranslated strings stay Japanese instead of becoming "NA"), imports the font sheet into
-`SYSCG.BIN` (the TIM at 0x400), encodes, assembles `vwf.asm` and rebuilds the image. Set
-`ARMIPS`/`MKPSXISO` if they aren't on your PATH.
-
-Testing and debugging use a headless Python frontend for the Beetle PSX libretro core
-(`scripts/emu.py`): frame stepping, input, screenshots, RAM access and save states. With
-`scripts/beetle-dbg-hooks.patch` applied to beetle-psx-libretro (commit 5718ab9, `make HAVE_HW=0`),
-it also supports watchpoints, PC breakpoints with register dumps and code coverage.
+GPL-3.0, the same as the original project. See [LICENSE](LICENSE).

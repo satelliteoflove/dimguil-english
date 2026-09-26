@@ -10,49 +10,50 @@ Releases go out as the work progresses. We don't hold everything back for 1.0.
 
 ## Release stages
 
-**Alpha (0.x).** The game is believed to be playable to the end, but some text is still
-Japanese, rough, or badly formatted. Where we are now.
+**Alpha.** The game is believed to be playable to the end, but some text is still
+Japanese, rough, or badly formatted.
 
-**Beta.** Every piece of text the player can reach is in English. Quality passes are
-still in progress.
+**Beta (0.8.x).** Every piece of text the player can reach is in English. Quality passes
+are still in progress. v0.8.0 is the first beta, and further 0.8.x releases follow as
+review passes land.
+
+**Release candidate (0.9).** After the full playthrough, with whatever it turns up fixed.
 
 **1.0.** Every piece of text the player can reach is in English and has had at least one
 quality check, and the game has been played through to the ending and confirmed
 completable.
 
-Each release gets a version tag, a changelog entry and a known-issues list. The upstream
-repo already has a `v0.1-pre` tag (Remisse's), so our numbering has to avoid it.
+Each release gets a version tag and a changelog entry. Pushing a `v*` tag builds the
+patch and publishes the release (`.github/workflows/release.yml`); the notes come from
+that version's section of `CHANGELOG.md`. The patch is an xdelta for the Track 1 `.bin`
+of the redump set, since the build leaves both audio tracks untouched.
 
-## Before the first public release
+## Still to do around releases
 
-- **Release packaging.** A script that turns a build into the release package: patch
-  file, readme, credits, checksums of the expected Rev 1 source image. Redump's Rev 1 is
-  three files (a data track and two audio tracks), while our build writes one merged
-  `.bin`, so the patch format needs working out first (see open questions).
 - **Project identity.** A name and repo of its own instead of a GitHub fork. Keep the full
   git history (Remisse's commits and authorship stay in it) and GPL-3.0.
 - **Credits.** Remisse (patcher, VWF hacks), [name removed] (base translation: the event
   script and much of the menu, status and combat text) and [name removed] (editing). Contact
-  all three before the first public release to ask how they'd like to be credited.
-- **README.** The current one is Remisse's, and it describes their Windows build and
-  their project status. Rewrite it for players (how to patch) and for people who want to
-  build it (see "Build from a clean clone").
+  all three to ask how they'd like to be credited.
 - **Known issues.** A list players can read before starting, and GitHub issues for
   reports.
+- **romhacking.net.** Submit the release package once the project has its own name.
 
 ## Work streams
 
-### Text coverage (to reach beta)
+### Text coverage (done for v0.8.0)
 
-We don't have a full inventory of the Japanese text that's left. What we know:
-- Translated files: EVENTMES, STATUS, SISETU, FIGHTMSG, M_CATALG, ITEM, I_NAME_E,
-  MESSAGE, NPC_MES1-5.
-- Dungeon text outside those files hasn't been inventoried.
-- Text drawn into graphics (TIMs) hasn't been checked either.
+`scripts/jpinventory.py` sorts every string in the dumped text files into translated,
+needing translation, and deliberately Japanese (with the reason for each exclusion). As
+of 2026-09-26 every reachable string is translated: 4,245 of 4,245. The rest are
+Japanese-mode lists the game doesn't use because it has built-in English beside them,
+placeholder slots, debug text, and two item files nothing loads. The staff roll and the
+other screen graphics were already in English. Checked in play: the level-up stat
+messages and the catalog's item names. Inferred but not seen in play: the ITEM.DAT
+alignment and sex labels, and that ITEM_SE and ITEM_CA are never loaded.
 
-A script that lists every string still in Japanese across all text-bearing files, with
-the deliberately unused ones marked (the Japanese-mode name lists, see
-`docs/engine-notes.md`), would tell us how far beta is and track it down to zero.
+Typos in the game's own English monster names are for the quality passes:
+"Silhoutte", "Drumer", "Maelific", and "Dragonare" (the card game says "Dragonaire").
 
 ### Quality passes (to reach 1.0)
 
@@ -82,16 +83,12 @@ before telling players they can upgrade mid-game.
 
 ### Build from a clean clone
 
-The GPL means the source we publish has to be buildable. Today the build expects armips
-and mkpsxiso at local paths (`scripts/build.sh`). Document the tool versions and the
-steps, and check that a fresh clone builds the same image.
+A fresh clone builds the same image as the development machine (checked 2026-09-26,
+after making file relocation independent of filesystem order). The release workflow pins
+the armips and mkpsxiso commits; `docs/building.md` has the steps.
 
 ## Open questions
 
-- Patch format: one patch against a merged single-`.bin` image (players merge the redump
-  tracks first), or a patch per track, or something else. What do other PS1 translations
-  on romhacking.net do?
-- Project name and version numbering.
+- Project name.
 - Should the version show in-game (title screen) so bug reports say which build they're
   on?
-- Is the first public release an alpha or an early beta?
