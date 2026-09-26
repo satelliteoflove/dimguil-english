@@ -1,0 +1,1712 @@
+{
+    "file": "DATA06/NPC_MES3.OBJ",
+    "extendByBytes": 49628,
+    "sections": [
+        {
+            "firstHeaderAddress": 0,
+            "firstHeader": 1132,
+            "sectionLength": 14210,
+            "compress": true,
+            "strings": [
+                {
+                    "length": 26,
+                    "source": "NA",
+                    "translation": "Young samurai\n\"Oh... h-hello...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 20,
+                    "source": "NA",
+                    "translation": "Young samurai\n\"Wh-what is it?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 46,
+                    "source": "NA",
+                    "translation": "Young samurai\n\"Oh, hello.\n Are you the new search party?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 27,
+                    "source": "NA",
+                    "translation": "Big Dracon\n\"Don't know your faces...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 27,
+                    "source": "NA",
+                    "translation": "Woman with a spear\n\"Nice to meet you. Hello.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 29,
+                    "source": "NA",
+                    "translation": "Green-haired elf\n\"Hiii. Want something from me?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 23,
+                    "source": "NA",
+                    "translation": "Little elf\n\"...Hello.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 25,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Oh, um, hello there...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 21,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Oh, hello, {ff12}.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 137,
+                    "source": "NA",
+                    "translation": "Reiran\n\"Long time no see.\n Gotten any stronger?\n\r ......\n What am I doing here?\n\r Well, what was I supposed to do? I helped\n these kids out as a side job, and my\n alignment went and changed on me.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 51,
+                    "source": "NA",
+                    "translation": "Faerie with a katana\n\"Don't think we know you lot.\n Are you new around here?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 34,
+                    "source": "NA",
+                    "translation": "Reiran\n\"I've heard all kinds of rumors about you.\n Nice to meet you.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 30,
+                    "source": "NA",
+                    "translation": "Young samurai\n\"Well then, we'll be on our way.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 19,
+                    "source": "NA",
+                    "translation": "Big Dracon\n\"See ya.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 30,
+                    "source": "NA",
+                    "translation": "Woman with a spear\n\"If you don't need anything, then...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 33,
+                    "source": "NA",
+                    "translation": "Green-haired elf\n\"Oh, OK. Well, bye-bye then.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 19,
+                    "source": "NA",
+                    "translation": "Little elf\n\"Excuse me.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 26,
+                    "source": "NA",
+                    "translation": "Faerie with a katana\n\"Yeah, yeah, bye-bye.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 21,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Well then...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 16,
+                    "source": "NA",
+                    "translation": "Fontana\n\"{ff12}...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 29,
+                    "source": "NA",
+                    "translation": "Fontana\n\"I hope we meet again, safe and sound.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 29,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Well then, I hope we meet again.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 63,
+                    "source": "NA",
+                    "translation": "Zaril\n\"So that's {ff12}...\n\r Hope the Kadorto works out.\n See ya, and you lot watch yourselves too.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 28,
+                    "source": "NA",
+                    "translation": "Zaril\n\"See ya, and you lot watch yourselves too.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 51,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"{ff12}...\n\r I hope they come back to life!\n Well, see you again sometime.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 21,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"See you again sometime.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 50,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"...Ugh, what am I even saying?\n W-well then, goodbye.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 71,
+                    "source": "NA",
+                    "translation": "Lilia\n\"Poor little {ff12}\n looks pretty dead to me,\n\r so you bring them back properly, OK?\n That's a promise.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 26,
+                    "source": "NA",
+                    "translation": "Lilia\n\"See you... ...promise?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 77,
+                    "source": "NA",
+                    "translation": "Cephala\n\"Is {ff12} dead?\n\r Then revival at the Temple has the best odds.\n Well, goodbye.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 27,
+                    "source": "NA",
+                    "translation": "Cephala\n\"I see. Well, goodbye.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 65,
+                    "source": "NA",
+                    "translation": "Reiran\n\"Hey, you lot. {ff12} is one\n of your friends, sort of, right?\n\r So you make sure you help them out.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 26,
+                    "source": "NA",
+                    "translation": "Reiran\n\"Yeah, got it. See ya.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 35,
+                    "source": "NA",
+                    "translation": "Zaril\n\"Hey! How's the exploring? Going well?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 11,
+                    "source": "NA",
+                    "translation": "Zaril\n\"Yo.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 21,
+                    "source": "NA",
+                    "translation": "Zaril\n\"You lot again...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 82,
+                    "source": "NA",
+                    "translation": "Zaril\n\"What splendid equipment you have,\n {ff12}. Might you part with it?\n\r Why, it's all quite fit for someone like me.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 105,
+                    "source": "NA",
+                    "translation": "Zaril\n\"How many heads must you lop off before\n you're satisfied?\n\r One ruthless killing machine I could bear.\n I'd like you to learn a little more about\n the sanctity of life.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 15,
+                    "source": "NA",
+                    "translation": "Zaril\n\"Hey there, comrade.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 20,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"Hello, {ff12}.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 16,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"Hello.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 19,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"Hello...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 55,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"How curious, {ff12}.\n Age unknown? ...What a mystery.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 32,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"Bringing up juniors? Must be nice to have\n time to spare.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 19,
+                    "source": "NA",
+                    "translation": "Lilia\n\"Hiii, have you been well?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 11,
+                    "source": "NA",
+                    "translation": "Lilia\n\"What is it?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 25,
+                    "source": "NA",
+                    "translation": "Lilia\n\"Hiii, how's it going? Working hard?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 45,
+                    "source": "NA",
+                    "translation": "Lilia\n\"Looks like you've got someone a bit\n dim in there. Is everything OK?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 94,
+                    "source": "NA",
+                    "translation": "Lilia\n\"That 'Richguy' at the tavern\n\r was looking kind of lonely.\n I think I'll ask him out on a date.\n I mean, he must be absolutely loaded.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 21,
+                    "source": "NA",
+                    "translation": "Lilia\n\"Keep it up, gramps.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 21,
+                    "source": "NA",
+                    "translation": "Lilia\n\"Keep it up, granny.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 16,
+                    "source": "NA",
+                    "translation": "Cephala\n\"Hello...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 18,
+                    "source": "NA",
+                    "translation": "Cephala\n\"Oh, hello...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 33,
+                    "source": "NA",
+                    "translation": "Cephala\n\"Hello, {ff12}.\n Can I help you with something?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 63,
+                    "source": "NA",
+                    "translation": "Cephala\n\"Don't you have any money?\n You poor things.\n\r If 100Gp will do, you can have it.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 56,
+                    "source": "NA",
+                    "translation": "Cephala\n\"Is it you? Is that why this maze has been\n so full of meowing lately?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 22,
+                    "source": "NA",
+                    "translation": "Cephala\n\"Hi, big brothers! How are you?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 22,
+                    "source": "NA",
+                    "translation": "Cephala\n\"Hi, big sisters! How are you?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 57,
+                    "source": "NA",
+                    "translation": "Cephala\n\"Heh heh. Items must really like you.\n You're a funny one,\n\r {ff12}.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 80,
+                    "source": "NA",
+                    "translation": "Cephala\n\"What a splendid katana. Is that the\n legendary Muramasa?\n\r Would you please give it to\n our leader, Fontana?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 13,
+                    "source": "NA",
+                    "translation": "Reiran\n\"How's it going?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 20,
+                    "source": "NA",
+                    "translation": "Reiran\n\"Gotten any stronger?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 58,
+                    "source": "NA",
+                    "translation": "Reiran\n\"The card master at the tavern was thrilled.\n I hear you collected every kind of card.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 28,
+                    "source": "NA",
+                    "translation": "Reiran\n\"Oh, hello, girls. How are things?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 27,
+                    "source": "NA",
+                    "translation": "Reiran\n\"Oh, hello, boys. How are things?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 56,
+                    "source": "NA",
+                    "translation": "Reiran\n\"Old folks shouldn't push themselves.\n There's no fountain of youth, you know.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 55,
+                    "source": "NA",
+                    "translation": "Reiran\n\"A Thieves Dagger? {ff12}, a Ninja\n at your age? How wonderful.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 136,
+                    "source": "NA",
+                    "translation": "Young samurai\n\"Who are you?\n\r This statue seems to hide some kind of\n secret, so we're looking into it.\n\r It's pretty much what we expected, but\n we forgot to bring that thing with us.\n We're hurrying back for it, so maybe later.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 144,
+                    "source": "NA",
+                    "translation": "Fontana\n\"So you've ended up here too,\n {ff12}...\n\r This statue had a slot for\n the Sun tablet.\n\r I can't tell what it might do, but\n I have a feeling these ancient glyphs\n are some kind of key.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 20,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"Maybe...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 15,
+                    "source": "NA",
+                    "translation": "Fontana\n\"What is it?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 120,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"That small tablet we saw earlier had\n the same glyphs as these.\n\r Right, there must be some connection.\n Sorry, but we need to hurry on.\n We'll see you again.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 122,
+                    "source": "NA",
+                    "translation": "Young samurai\n\"Huh? What happened?\n Looks like we teleported into a new maze.\n\r The map doesn't look any different, though.\n We'll poke around here a little more.\n We're still way too low-level anyway.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 121,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Huh? What happened?\n Looks like we teleported into a new maze.\n\r The map doesn't look any different, though.\n We'll poke around here a little more.\n We're still way too low-level anyway.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 161,
+                    "source": "NA",
+                    "translation": "Young samurai\n\"Hello. Are you searching for the\n Priestess too?\n\r We're still green, but we're looking\n for her as well.\n\r We haven't found any leads yet.\n Have you found anything?\n\r Let's keep trading information.\n We look forward to working with you.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 108,
+                    "source": "NA",
+                    "translation": "Young samurai\n\"What a mess. Zaril says he's quitting.\n The party's splitting up.\n\r Are things going well for you?\n We'll have to regroup, so we're heading\n back to town. Farewell.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 42,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"I've had it! All these two ever do\n is fight.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 17,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Oh, so it's my fault?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 28,
+                    "source": "NA",
+                    "translation": "Zaril\n\"You're not fit to be leader.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 26,
+                    "source": "NA",
+                    "translation": "Cephala\n\"Now, now, don't say things like that.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 67,
+                    "source": "NA",
+                    "translation": "Zaril\n\"I can't stay in a party this feeble\n any longer.\n\r I'm going my own way from here.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 35,
+                    "source": "NA",
+                    "translation": "Lilia\n\"Yes, I suppose you'd do\n just fine on your own.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 31,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Hey, don't go rubbing salt in it.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 28,
+                    "source": "NA",
+                    "translation": "Lilia\n\"Then do you want to make Zaril leader?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 24,
+                    "source": "NA",
+                    "translation": "Fontana\n\"That's out of the question.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 22,
+                    "source": "NA",
+                    "translation": "Zaril\n\"Right then. Farewell.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 18,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"Take care.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 22,
+                    "source": "NA",
+                    "translation": "Cephala\n\"That's cold, Artemisia.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 51,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Oh, it's you.\n\r Ah, you caught us at an\n embarrassing moment.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 47,
+                    "source": "NA",
+                    "translation": " Our party's going to split up for now.\n If fate allows, we'll meet again. Farewell.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 133,
+                    "source": "NA",
+                    "translation": "As you stand in the middle of the room,\nthe floor beneath you begins to move!\nThe rubbish strewn about the room\n\rslides into the center and wraps around\nyour feet, leaving you unable to move.\n\rThen, like an antlion's pit, the floor\nsucks you down beneath it.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 4,
+                    "source": "NA",
+                    "translation": "THUD",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 33,
+                    "source": "NA",
+                    "translation": "Looking around, you see others in the same\nfix coming toward you.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 139,
+                    "source": "NA",
+                    "translation": "Fontana\n\"So you fell into this pit too.\n\r It seems the exit is locked from\n the other side.\n And the walls are too high to climb.\n\r I was just wondering what to do.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 31,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Huh, something's coming down from above.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 28,
+                    "source": "NA",
+                    "translation": "Man's voice\n\"Heeey, what are you doing down there?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 39,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Looks like help has arrived.\n We'll go on ahead.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 145,
+                    "source": "NA",
+                    "translation": "Young samurai\n\"Who are you?\n So you fell into this pit too.\n\r It seems the exit is locked from\n the other side.\n\r And the walls are too high to climb.\n I was just wondering what to do.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 32,
+                    "source": "NA",
+                    "translation": "Young samurai\n\"Huh, something's coming down from above.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 50,
+                    "source": "NA",
+                    "translation": "Man's voice\n\"Heeey! Anybody down there?!\n I'm lowering a rope! Climb on up!",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 40,
+                    "source": "NA",
+                    "translation": "Young samurai\n\"Looks like help has arrived.\n We'll go on ahead.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 277,
+                    "source": "NA",
+                    "translation": "Guy\n\"Well! You lot too?\n Oh, think nothing of it.\n\r Helping those in need is simply\n a hero's duty.\n I only did what anyone should.\n\r Besides, I owed you one.\n Still, getting caught in a trap like this?\n\r Pathetic. From Fontana I could understand\n it, but you?\n\r Fontana's lot have gone back already.\n You should hurry back too and wash\n off all that muck you're covered in.\n\r The smell is unpleasant even for those\n of us standing near you.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 49,
+                    "source": "NA",
+                    "translation": " Farewell! And don't fall in here again!\n Also, you really should take a bath.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 33,
+                    "source": "NA",
+                    "translation": "Balbo\n\"What's this? You lot, and the samurai kiddies.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 193,
+                    "source": "NA",
+                    "translation": "Balbo\n\"From Fontana I could understand it.\n Well, just watch yourselves from now on.\n\r Somebody ain't always gonna be\n there to bail you out.\n Fontana's lot have gone back already.\n\r So long, and don't fall in again.\n Oh, and leave that rope where it is.\n\r Wouldn't want some other idiot\n falling in, now.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 41,
+                    "source": "NA",
+                    "translation": "Man in armor\n\"What's this?\n You lot, and the samurai kiddies.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 68,
+                    "source": "NA",
+                    "translation": "Man in armor\n\"Well, just watch yourselves from now on.\n\r Somebody ain't always gonna be\n there to bail you out.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 87,
+                    "source": "NA",
+                    "translation": "Man in armor\n\"So long, and don't fall in again.\n\r Oh, and leave that rope where it is.\n Wouldn't want some other idiot\n falling in, now.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 40,
+                    "source": "NA",
+                    "translation": "A rope on the floor leads down to the\nlevel below. Climb down?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 36,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Huh? There are a lot of new faces here.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 59,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Oh, aren't you {ff12}\n from the tavern?\n\r You'll have to tell me your story sometime.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 68,
+                    "source": "NA",
+                    "translation": "Fontana\n\"I'm Fontana. I'm 13, but I'm a Samurai.\n I'm from a samurai house, so I was born one.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 25,
+                    "source": "NA",
+                    "translation": "Zaril\n\"The name's Zaril. Good to know you.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 50,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"Nice to meet you. Hello!\n\r I'm Artemisia.\n Let's get along!",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 43,
+                    "source": "NA",
+                    "translation": "Lilia\n\"My name's Liliaceus.\n Call me Lilia.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 101,
+                    "source": "NA",
+                    "translation": "Cephala\n\"Me?\n My name is Euphorbia Leuco Cephala.\n\r It's long, so Cephala is fine.\n I'm a Bishop.\n Just a 13-year-old girl.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 73,
+                    "source": "NA",
+                    "translation": "Reiran\n\"Hey there, nice to meet you.\n\r I'm Reiran, and believe it or not, I'm a\n Ninja. Shall I lop your head off for you?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 93,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Introductions again...?\n\r Oh well, I suppose\n some of you don't know us.\n My name is Fontana. I'm a Samurai...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 40,
+                    "source": "NA",
+                    "translation": "Zaril\n\"Like I said before, the name's Zaril.\n I'm a Lord.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 57,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"Again? Oh, fine, if we have to.\n\r I'm Artemisia.\n Don't forget it this time.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 39,
+                    "source": "NA",
+                    "translation": "Lilia\n\"...You... forgot all about me...\n How could you!",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 30,
+                    "source": "NA",
+                    "translation": "Lilia\n\"Just kidding, I'm only teasing.\n I'm Lilia.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 45,
+                    "source": "NA",
+                    "translation": "Cephala\n\"I'm Cephala...\n Is my name hard to remember...?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 84,
+                    "source": "NA",
+                    "translation": "Reiran\n\"I told you before, I'm Reiran.\n\r I'm a Ninja, you know, so if you say\n you don't know me next time,\n I'll lop your head off.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 46,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"Umm, let's see,\n do I still have any healing spells left...?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 32,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"Huh? They look fine to me.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 35,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"Sorry... I don't think I can fix this one...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 42,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"All right.\n         {ff30}2Dialko{ff30}0",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 42,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"Sorry!\n I'm all out of magic.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 57,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"All right.\n\r         {ff30}2Dios{ff30}0\n How's that?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 56,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"Got it.\n\r         {ff30}2Dial{ff30}0\n How's that?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 25,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"Oh, OK. Well, take care.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 67,
+                    "source": "NA",
+                    "translation": "Cephala\n\"It looks like some of you are hurt.\n\r All right. Who should I heal?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 32,
+                    "source": "NA",
+                    "translation": "Cephala\n\"There doesn't seem to be anything wrong\n with that person, though?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 44,
+                    "source": "NA",
+                    "translation": "Cephala\n\"I don't think I can treat that person.\n I'm sorry.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 54,
+                    "source": "NA",
+                    "translation": "Cephala\n\"Paralysis.\n All right.\n\r         {ff30}2Dialko{ff30}0",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 51,
+                    "source": "NA",
+                    "translation": "Cephala\n\"Poison.\n All right.\n\r        {ff30}2Latumofis{ff30}0",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 58,
+                    "source": "NA",
+                    "translation": "Cephala\n\"All right.\n This is a precious spell, you know.\n\r          {ff30}2Madi{ff30}0",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 44,
+                    "source": "NA",
+                    "translation": "Cephala\n\"I don't think I can treat that person.\n I'm sorry.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 114,
+                    "source": "NA",
+                    "translation": "Cephala\n\"You don't want the Temple?\n\r Revival magic and Mahaman are the only\n spells I'm never quite sure of, though...\n\r         {ff30}2Kadorto{ff30}0\n Did it work?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 38,
+                    "source": "NA",
+                    "translation": "Cephala\n\"I don't have any magic left.\n Sorry.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 54,
+                    "source": "NA",
+                    "translation": "Cephala\n\"Yes, yes.\n\r         {ff30}2Dial{ff30}0\n There we go.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 54,
+                    "source": "NA",
+                    "translation": "Cephala\n\"Yes, yes.\n\r        {ff30}2Dialma{ff30}0\n There we go.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 58,
+                    "source": "NA",
+                    "translation": "Cephala\n\"You owe me one, you know.\n\r          {ff30}2Madi{ff30}0\n You're all better now.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 31,
+                    "source": "NA",
+                    "translation": "Cephala\n\"I see. Then I'll be going...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 76,
+                    "source": "NA",
+                    "translation": "Cephala\n\"Identify something?\n\r Sure. But...\n please don't get mad if I fail.\n Whose item is it?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 41,
+                    "source": "NA",
+                    "translation": "Cephala\n\"That person doesn't seem to have\n any unidentified items?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 65,
+                    "source": "NA",
+                    "translation": "Cephala\n\"You're right.\n\r You'd be better off doing it\n yourselves or getting it appraised\n at the shop.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 46,
+                    "source": "NA",
+                    "translation": "Cephala\n\"Hyah!\n\r Ow, ow! F-failed.\n It won't come off. Sorry.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 27,
+                    "source": "NA",
+                    "translation": "Cephala\n\"Hyah!\n No, it didn't work.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 21,
+                    "source": "NA",
+                    "translation": "Cephala\n\"Oh, I identified it.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 167,
+                    "source": "NA",
+                    "translation": "Fontana\n\"By the way, just between us,\n we recently came across a wiped-out party.\n\r Seems they pushed themselves too hard.\n They looked like they had promise, too.\n\r If they're friends of yours, would you\n like us to take them back to the Temple?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 14,
+                    "source": "NA",
+                    "translation": "Have them take the party back?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 100,
+                    "source": "NA",
+                    "translation": "Fontana\n\"You're a soft-hearted bunch, too.\n Well, so are we, I suppose.\n\r We'll take good care of them.\n We'll bring them all back together.\n Take care.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 69,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Are you a professional rescue squad?\n I'm sorry, I overstepped.\n\r Please forgive me.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 143,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Um, have you found anything good?\n\r We got some items out of a chest,\n but we haven't identified them yet.\n\r What do you say? Would you like to buy\n one of the three items\n we picked up?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "Buy one?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 46,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Which one would you like?\n How does {ff11}0Gp sound?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 29,
+                    "source": "NA",
+                    "translation": "A:Weapons\nB:Armor\nC:Other\nD:Quit",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "Which one?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 75,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Oh, come on. If you don't have any\n money, you should say so up front.\n\r You got my hopes up.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 67,
+                    "source": "NA",
+                    "translation": "Fontana\n\"I see.\n Well, if you don't find good items\n\r yourself, there's no thrill in it.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 15,
+                    "source": "NA",
+                    "translation": "{ff12} obtained an item.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 70,
+                    "source": "NA",
+                    "translation": "Fontana\n\"What, with us?\n For practice?\n\r You're joking, right?\n Well, if you insist...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "Fight anyway?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 71,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Whoa, I already drew my sword!\n If you're joking, say so sooner.\n\r We'll be going now.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 33,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Sorry. I don't know anything...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 37,
+                    "source": "NA",
+                    "translation": "Zaril\n\"I don't know anything either.\n When I say I don't know, I don't know.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 26,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"I don't have any information.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 17,
+                    "source": "NA",
+                    "translation": "Lilia\n\"I don't know anything either.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 27,
+                    "source": "NA",
+                    "translation": "Cephala\n\"New information...? I don't have any.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 21,
+                    "source": "NA",
+                    "translation": "Fontana\n\"...O-oh, is that so.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 33,
+                    "source": "NA",
+                    "translation": "Zaril\n\"..........\n And? So what?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 25,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"Huh... ...Really...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 32,
+                    "source": "NA",
+                    "translation": "Lilia\n\"............\n Hmm. Is that so?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 21,
+                    "source": "NA",
+                    "translation": "Cephala\n\"...I see.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 37,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Th-there's nothing interesting about me.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 39,
+                    "source": "NA",
+                    "translation": "Zaril\n\"Huh?\n Why should I have to tell you that?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 30,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"Huh? Ew... What are you on about?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 43,
+                    "source": "NA",
+                    "translation": "Lilia\n\"What's this? Are you interested in me?\n .........Pervert.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 29,
+                    "source": "NA",
+                    "translation": "Cephala\n\"There's nothing about me worth telling.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 62,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Have you met a party led by a man called\n Guy? He kept saying he was a hero.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 51,
+                    "source": "NA",
+                    "translation": "Zaril\n\"I ran into some Lord who was spouting\n off about being a hero or whatever.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 21,
+                    "source": "NA",
+                    "translation": "Zaril\n\"What's with that guy?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 85,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"I met this guy called Gaillardia,\n and he kept insisting he's not a Lord,\n\r he's a hero.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 17,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"I wonder why?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 55,
+                    "source": "NA",
+                    "translation": "Lilia\n\"Do you know someone called Gaillardia?\n I ran into his party...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 39,
+                    "source": "NA",
+                    "translation": "Lilia\n\"He's pretty hot-blooded.\n Stifling, really...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 20,
+                    "source": "NA",
+                    "translation": "Cephala\n\"My impression of him?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 44,
+                    "source": "NA",
+                    "translation": "Cephala\n\"......A grown man acting like that.\n What was he thinking?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 34,
+                    "source": "NA",
+                    "translation": "Fontana\n\"We met a party led by a man called Balbo.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 30,
+                    "source": "NA",
+                    "translation": "Fontana\n\"They were kind of scary.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 47,
+                    "source": "NA",
+                    "translation": "Zaril\n\"So there really are Evil Lords out there.\n First one I've ever met.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 86,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"We met a dwarf fella called Balbo.\n\r Kiku was scared of him, but he\n didn't seem like a bad guy to me.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 84,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"Huh? Haven't you heard?\n Our leader's real name is Kikunoshin.\n\r That's why I call him 'Kiku.'",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 85,
+                    "source": "NA",
+                    "translation": "Lilia\n\"We met the dwarf Balbo's party.\n\r But more than the leader, it was\n Alba the Ranger who caught my eye.\n So cool and mature...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 103,
+                    "source": "NA",
+                    "translation": "Cephala\n\"We met a dwarf called Balbo.\n An Evil Lord just feels kind of odd.\n\r You can't tell whether he's\n a good person or not...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 56,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Zaril, who used to be with us,\n has formed a party of his own...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 51,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"I ran into Zaril the other day.\n He hasn't changed one bit since he left.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 56,
+                    "source": "NA",
+                    "translation": "Cephala\n\"We met Zaril's party.\n Apparently he wanted to be leader himself.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 64,
+                    "source": "NA",
+                    "translation": "Cephala\n\"Does something like that\n really matter?\n\r Grown-ups are so complicated.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 81,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Have you met the scholars down in the\n Shrine Vaults? They'll explain things\n\r you don't understand. They're very kind.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 24,
+                    "source": "NA",
+                    "translation": "Zaril\n\"There were scholars in the archive.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 87,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"I met an old scholar fella.\n\r His name was... um...?\n Let's see... Cleo? Was that it?\n Yeah, I'm pretty sure that's right.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 52,
+                    "source": "NA",
+                    "translation": "Lilia\n\"I met this scholarly elf gentleman.\n Very intellectual. I liked him.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 126,
+                    "source": "NA",
+                    "translation": "Lilia\n\"There was a human and a gnome too,\n but they were no good.\n\r The gnome was grumpy, and the\n human was scared of something,\n though I couldn't tell what.\n\r Is there someone scary in our party?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 132,
+                    "source": "NA",
+                    "translation": "Cephala\n\"I met an elf man in the underground archive.\n\r Ever since he came to this Shrine and\n found an archive to rival the royal library,\n he's been studying the Shrine itself\n\r more than searching for the Priestess.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 77,
+                    "source": "NA",
+                    "translation": "Fontana\n\"We met a strange person.\n\r He went off somewhere right away,\n but he glared at us first...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 62,
+                    "source": "NA",
+                    "translation": "Fontana\n\"He gave me the creeps.\n I really can't say who he was...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 39,
+                    "source": "NA",
+                    "translation": "Zaril\n\"Met someone wrapped in garb\n I've never seen before.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 45,
+                    "source": "NA",
+                    "translation": "Zaril\n\"Maybe we've stuck our necks into\n something nasty.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 51,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"I met someone who gave off a really\n bad vibe. It scared me a little...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 18,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"I wonder who it was?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 74,
+                    "source": "NA",
+                    "translation": "Lilia\n\"I met a weird guy. Such a killing aura,\n and he just left without a word...\n\r What was that about?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 77,
+                    "source": "NA",
+                    "translation": "Cephala\n\"I met a suspicious grown-up.\n But I only met him, that's all.\n\r Oh, and he snorted at us as he left.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 30,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Sorry. We don't have any new information.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 28,
+                    "source": "NA",
+                    "translation": "Zaril\n\"Information? ...Nope, got nothing.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 24,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"Sorry! I don't have any information.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 29,
+                    "source": "NA",
+                    "translation": "Lilia\n\"Sorry, dear, there's nothing new to tell.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 35,
+                    "source": "NA",
+                    "translation": "Cephala\n\"I don't have anything worth telling you.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 36,
+                    "source": "NA",
+                    "translation": "Fontana\n\"My real name is Kikunoshin, actually.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 158,
+                    "source": "NA",
+                    "translation": "Fontana\n\"But when I formed a party with Zaril,\n he said a name like that sounded weak,\n\r and went and registered me\n as 'Fontana' without asking.\n\r Apparently it's the name of some hero\n or other from where Zaril grew up...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 62,
+                    "source": "NA",
+                    "translation": "Zaril\n\"Me? I've got no strengths or weaknesses.\n Swords, magic, I can handle anything.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 72,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"Me? Umm... my name's Artemisia.\n\r Huh? Did I tell you that already?\n Umm, umm... in that case,",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 49,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"I'm a Valkyrie. And Kiku, Cephala\n and I are childhood friends.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 21,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"Huh? Haven't you heard?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 76,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"Our leader's real name is\n Kikunoshin.\n\r That's why I call him 'Kiku.'",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 174,
+                    "source": "NA",
+                    "translation": "Lilia\n\"What's this? You want to know about me?\n Oh, fine. You know my name, right?\n\r My name's Liliaceus.\n Everyone calls me Lilia.\n I'm a Bard, and a fresh young 17.\n\r But I'm the oldest one in our party.\n Hard to believe, isn't it?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 24,
+                    "source": "NA",
+                    "translation": "Cephala\n\"Do you remember my full name?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 88,
+                    "source": "NA",
+                    "translation": "Fontana\n\"I told you my real name is\n Kikunoshin, didn't I?\n\r If you can, please call me 'Kikunoshin.'\n ...Would that be OK?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 27,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Heh... I knew it......",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 70,
+                    "source": "NA",
+                    "translation": "Zaril\n\"Have you met that dwarf, Balbo?\n\r Lately I've started thinking that's\n not a bad way to be.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 21,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"Huh, me? Umm,",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 59,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"I love hunting down and reading old\n tomes of lost magic and ancient texts.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 18,
+                    "source": "NA",
+                    "translation": "Lilia\n\"Let's see now......",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 34,
+                    "source": "NA",
+                    "translation": "Lilia\n\"I don't just play music, I'm a great\n dancer too.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 122,
+                    "source": "NA",
+                    "translation": "Cephala\n\"Me?\n I can use magic\n\r of any school.\n But I can't carry heavy weapons or armor.\n\r Because I'm a Bishop... or rather,\n because I'm a young girl.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 44,
+                    "source": "NA",
+                    "translation": "Fontana\n\"......\n A sword is about all I'm good for.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 64,
+                    "source": "NA",
+                    "translation": "Zaril\n\"......\n\r Well, same goes for us, but I guess\n you lot are still greenhorns too.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 148,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"The other day I found one of the lost\n spells! It seems to be a Priest spell,\n\r and it looks like an attack spell.\n I'm going to get Cephala to help me\n restore it.\n\r If it works, I'll teach it\n to you too!",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 78,
+                    "source": "NA",
+                    "translation": "Lilia\n\"If you're friendly with Artemisia,\n\r I'd steer clear of that girl's\n magic experiments...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 28,
+                    "source": "NA",
+                    "translation": "Cephala\n\"............\n That's right.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 40,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Hmm...\n Nothing out of the ordinary, really.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 27,
+                    "source": "NA",
+                    "translation": "Zaril\n\"Sorry. No new information.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 29,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"No new information. Sorry!",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 26,
+                    "source": "NA",
+                    "translation": "Lilia\n\"Sorry! Nothing much to tell.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 39,
+                    "source": "NA",
+                    "translation": "Cephala\n\"Information?\n There isn't any.\n\r Sorry.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 35,
+                    "source": "NA",
+                    "translation": "Fontana\n\"I changed my name the other day...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 35,
+                    "source": "NA",
+                    "translation": "Fontana\n\"But by the next day it had gone back...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 68,
+                    "source": "NA",
+                    "translation": "Zaril\n\"I want to be like that Balbo, so\n\r I've been fighting every monster\n I come across, but",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 32,
+                    "source": "NA",
+                    "translation": "Zaril\n\"Alignment sure doesn't change easy, huh...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 71,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"Hey, is it true that deep below the\n\r Training Maze there's ancient gear\n only certain races and classes can use?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 52,
+                    "source": "NA",
+                    "translation": "Lilia\n\"Is it true some people eat the monsters\n they kill in the dungeon?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 144,
+                    "source": "NA",
+                    "translation": "Cephala\n\"Artemisia and I recently revived a lost\n spell, but it turned out to be useless.\n\r All it does is lower the caster's\n Armor Class by 2...\n\r I suppose it was lost\n for a reason.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 41,
+                    "source": "NA",
+                    "translation": "Fontana\n\"......\n We won't lose to you, you know!",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 41,
+                    "source": "NA",
+                    "translation": "Zaril\n\"Hear Fontana wants to change\n his name.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 152,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"That spell from the other day\n didn't work properly...\n\r The name part was badly damaged, so I\n kind of guessed. Maybe that was the problem?\n I figured 'Likaton' was probably right...\n\r Maybe I read it wrong after all...?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 39,
+                    "source": "NA",
+                    "translation": "Lilia\n\".........\n Hey, how'd you like to recruit me?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 38,
+                    "source": "NA",
+                    "translation": "Lilia\n\"Just kidding, I was only saying it.\n Don't worry about it.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 97,
+                    "source": "NA",
+                    "translation": "Cephala\n\".........\n\r Apparently I was born with strong magic.\n As a baby, nobody could even hold me\n unless I was wrapped in a sealing cloth...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 29,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Come on, you told me that before.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 22,
+                    "source": "NA",
+                    "translation": "Zaril\n\"Heard that one already.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 31,
+                    "source": "NA",
+                    "translation": "Artemisia\n\"Ugh, you said the same thing last time.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 22,
+                    "source": "NA",
+                    "translation": "Lilia\n\"You told me that before, silly.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 33,
+                    "source": "NA",
+                    "translation": "Cephala\n\"I know that.\n You told me before.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 20,
+                    "source": "NA",
+                    "translation": "Reiran\n\"Don't ask me.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 13,
+                    "source": "NA",
+                    "translation": "Reiran\n\"And?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 28,
+                    "source": "NA",
+                    "translation": "Reiran\n\"What's this all of a sudden? Creepy.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 21,
+                    "source": "NA",
+                    "translation": "Reiran\n\"Isn't there anything fun going on?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 25,
+                    "source": "NA",
+                    "translation": "Reiran\n\"I may not look it, but I'm 18.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 29,
+                    "source": "NA",
+                    "translation": "Reiran\n\"Nothing to show for any of it. How annoying.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 34,
+                    "source": "NA",
+                    "translation": "Reiran\n\"......\n Hey, know any good ways to make money?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 48,
+                    "source": "NA",
+                    "translation": "Reiran\n\"Why are you repeating yourselves?\n Your info is junk. Total junk.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 28,
+                    "source": "NA",
+                    "translation": "We asked if they had any new information.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 25,
+                    "source": "NA",
+                    "translation": "We told them everything we knew.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 21,
+                    "source": "NA",
+                    "translation": "We asked them about themselves.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 22,
+                    "source": "NA",
+                    "translation": "We asked about other parties.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 20,
+                    "source": "NA",
+                    "translation": "We asked them some personal questions.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 141,
+                    "source": "NA",
+                    "translation": "Fontana\n\"Do you know any word that stands for\n a god? What was that tablet asking?\n\r I'm still puzzling over it.\n I'm sure it isn't the god Kadorto.\n\r Oh well. I'll go ask a fortune teller.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 17,
+                    "source": "NA",
+                    "translation": "We asked them for healing.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 22,
+                    "source": "NA",
+                    "translation": "We asked them to identify an item.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 22,
+                    "source": "NA",
+                    "translation": "We asked them to rescue our comrades.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 17,
+                    "source": "NA",
+                    "translation": "We asked them about themselves.",
+                    "addStringTerminator": true
+                }
+            ]
+        }
+    ]
+}

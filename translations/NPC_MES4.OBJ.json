@@ -1,0 +1,1016 @@
+{
+    "file": "DATA06/NPC_MES4.OBJ",
+    "extendByBytes": 53717,
+    "sections": [
+        {
+            "firstHeaderAddress": 0,
+            "firstHeader": 668,
+            "sectionLength": 10817,
+            "compress": true,
+            "strings": [
+                {
+                    "length": 31,
+                    "source": "NA",
+                    "translation": "Robed elf\n\"Oh? More visitors?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 61,
+                    "source": "NA",
+                    "translation": "Robed elf\n\"Welcome to the underground archive.\n\r Well, whatever brings you here,\n do make yourselves at home.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 36,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Ah, welcome.\n What can I do for you today?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 21,
+                    "source": "NA",
+                    "translation": "Robed elf\n\"Hello there.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 13,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Hello there.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 33,
+                    "source": "NA",
+                    "translation": "Robed elf\n\"Off you go, then...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 53,
+                    "source": "NA",
+                    "translation": "Robed elf\n\"Leaving already?\n Then I shall excuse myself as well.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 36,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Leaving already?\n Well then, do come again.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 25,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Off you go, then...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 32,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"Well now, are you folks about our age?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 99,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"Able to cast every last spell!\n Splendid, simply splendid.\n\r With learning like that, ye must know\n everything there is. Am I right?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 125,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"Who needs brains? If ye can get the\n hang of it by feel, that's good enough.\n\r Truth be told, I can't make head nor tail\n of these ancient glyphs meself.\n Just muddle along, that's the ticket.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 84,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"Well, well! Marguda and Arabik, together!\n I'd heard ye'd gone missing. Keep at it.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 84,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"{ff12}, ye have a\n remarkable power about ye.\n\r With power like yours, even the sealed\n door may yet open.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 87,
+                    "source": "NA",
+                    "translation": "Cresson\n\"How presumptuous, to share a name\n with so fearsome a god.\n\r And to us, isn't that god an evil one?\n You'd best change your name, and soon.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 80,
+                    "source": "NA",
+                    "translation": "Cresson\n\"What tremendous vitality. A brute\n like you would pass for a monster.\n\r Well, do watch out for Labadi.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 76,
+                    "source": "NA",
+                    "translation": "Cresson\n\"With strength like that,\n why not come and join us?\n\r ......Only joking.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 87,
+                    "source": "NA",
+                    "translation": "Cresson\n\"{ff12}, splendid work.\n\r Still, if your stats won't go any higher,\n why not try changing your class?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 34,
+                    "source": "NA",
+                    "translation": "Cresson\n\"Well, boys, any progress?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 30,
+                    "source": "NA",
+                    "translation": "Cresson\n\"Well, girls, any progress?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 34,
+                    "source": "NA",
+                    "translation": "Cresson\n\"Well, my good fellows, any progress?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 74,
+                    "source": "NA",
+                    "translation": "Cresson\n\"You must understand it all already.\n\r With knowledge like yours,\n you'd hardly need a primer.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 171,
+                    "source": "NA",
+                    "translation": "Robed elf\n\"It's just as I suspected. This maze is\n unlike any that came before.\n\r It's no maze built by some wizard, but\n a structure of a very special kind.\n\r I must look into this more closely.\n Forgive me, but you're disturbing my\n research. Would you mind leaving?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 163,
+                    "source": "NA",
+                    "translation": "Cleo\n\"It's just as I suspected. This maze is\n unlike any that came before.\n\r It's no maze built by some wizard, but\n a structure of a very special kind.\n\r I must look into this more closely.\n Forgive me, but you're disturbing my\n research. Would you mind leaving?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 197,
+                    "source": "NA",
+                    "translation": "Cresson\n\"It seems those two won't be\n coming back......\n\r Please, hear me out for a moment.\n My party lost a battle with\n the heretics, and afterwards\n\r I alone was dragged off to this archive\n by force. So you see,\n I am not a heretic.\n\r I don't really understand why, but...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 63,
+                    "source": "NA",
+                    "translation": "Cresson\n\"Among the heretics, it seems, some await\n the Opener of the Door, and some don't.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 80,
+                    "source": "NA",
+                    "translation": "Cresson\n\"Cleo and Bergamot were among those\n who awaited it... but\n\r it seems they could not become\n the Opener of the Door themselves.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 139,
+                    "source": "NA",
+                    "translation": "Cresson\n\"But don't let it trouble you. You became\n the Opener of the Door they awaited.\n\r So go, and tell the world what you\n find beyond that door.\n I'll wait here for the next Opener.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 32,
+                    "source": "NA",
+                    "translation": "Cresson\n\"I'm sure that's what they would\n have wanted, too...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 48,
+                    "source": "NA",
+                    "translation": "Cresson\n\"Thank you for today.\n Until we meet again.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 26,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Why, a small stone tablet, here of all places.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 58,
+                    "source": "NA",
+                    "translation": "Cresson\n\"Could it hold every one of the ancient\n glyphs we've been studying?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 28,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"Hah, indeed. Marvelous.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 60,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"With all 26 ancient glyphs laid out like\n this, our research can finally move on.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 86,
+                    "source": "NA",
+                    "translation": "Cresson\n\"This tablet seems to work as\n some kind of switch.\n\r Let's call it a day for our survey.\n We'll leave the rest to you.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 65,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Do come tell us if you learn anything.\n We'll continue our analysis in the library.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 34,
+                    "source": "NA",
+                    "translation": "Robed elf\n\"Why, a small stone tablet, here of all places.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 64,
+                    "source": "NA",
+                    "translation": "Robed man\n\"Could it hold every one of the ancient\n glyphs we've been studying?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 28,
+                    "source": "NA",
+                    "translation": "Old man\n\"Hah, indeed. Marvelous.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 60,
+                    "source": "NA",
+                    "translation": "Old man\n\"With all 26 ancient glyphs laid out like\n this, our research can finally move on.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 92,
+                    "source": "NA",
+                    "translation": "Robed man\n\"This tablet seems to work as\n some kind of switch.\n\r Let's call it a day for our survey.\n We'll leave the rest to you.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 73,
+                    "source": "NA",
+                    "translation": "Robed elf\n\"Do come tell us if you learn anything.\n We'll continue our analysis in the library.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 110,
+                    "source": "NA",
+                    "translation": "Cleo\n\"What a wealth of research material!\n\r Things I've never seen, all around us.\n I must report this to the King at once.\n Forgive me, but I'll take my leave here.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 118,
+                    "source": "NA",
+                    "translation": "Robed elf\n\"What a wealth of research material!\n\r Things I've never seen, all around us.\n I must report this to the King at once.\n Forgive me, but I'll take my leave here.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 133,
+                    "source": "NA",
+                    "translation": "From within the black shadow before you,\n something darker still than the shadow\n oozed out without a sound.\n\r The shadow was familiar by now,\n but this time, something different\n had appeared.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 25,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Welcome to the control room, everyone!",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 61,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Still, this is quite a predicament...\n\r And after I warned you so firmly\n not to go any further...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 30,
+                    "source": "NA",
+                    "translation": "Cleo\n\"To think you'd come all the way here...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 46,
+                    "source": "NA",
+                    "translation": "Man's voice\n\"Like I told ye. Ye shouldn't have gone\n helpin' the likes of them.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 42,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Ah, Bergamot...\n You were quite right, as it turns out.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 182,
+                    "source": "NA",
+                    "translation": "Cleo\n\"You understand by now, surely?\n We are the ones who took your Priestess.\n\r We hid the monsters at the Shrine's altar,\n and we laid out the ancient glyphs.\n All of it was us, the ones you call heretics.\n\r For that was what\n our god desired...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 102,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"Thus spake our god......\n 'Do battle with those who appear\n\r before this door. The victor alone\n shall open it and touch the truth.'......",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 114,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"Bring folk into the Shrine, leave things\n to help 'em, then set traps to drive 'em off.\n\r Truth is, not even we know what\n the god really intends.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 175,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Yet we, scorned as heretics, still kept\n this Shrine and our god's commands.\n\r Surely we, of all people, have the right\n to open this door... So we believed,\n and for generation after generation,\n\r here where the god's voice can be heard,\n we have waited for the coming of\n the Opener of the Door.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 99,
+                    "source": "NA",
+                    "translation": "Cleo\n\"But enough talk...\n The time has come.\n\r Us, or you. Which of us will pass\n beyond this door...\n Let us settle it!",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 110,
+                    "source": "NA",
+                    "translation": "From within the black shadow before you,\n something darker still than the shadow\n oozed out without a sound.\n\r\"Now then, you who know nothing.\n Have at you!",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 80,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Yes, lately a great many self-styled\n adventurers have started coming by.\n\r I take it you're some of them?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 74,
+                    "source": "NA",
+                    "translation": "Cleo\n\"I am Cleodendrum.\n People call me Cleo.\n\r I'm a Bishop, believe it or not.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 44,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"Me? The name's Bergamot.\n I'm a Priest, if ye must know.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 44,
+                    "source": "NA",
+                    "translation": "Cresson\n\"M-me? I'm Cresson.\n I'm an Alchemist.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 55,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Oh? I believe I've told you before?\n Ah, there's someone here I haven't met.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 40,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Well, never mind.\n I'm Cleo, the Bishop.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 65,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"..Ye've got awful memories, you lot...\n I'm Bergamot, the Priest.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 33,
+                    "source": "NA",
+                    "translation": "Cresson\n\"I believe I told you before. I'm Cresson.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 90,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Do be careful, won't you?\n\r You are a valuable source of\n information to us, after all......\n Whom shall I heal?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 32,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Oh? That one seems to be fine.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 67,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Oh dear, oh dear.\n Well, it can't be helped.\n\r          {ff30}2Madi{ff30}0\n There, all better.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 101,
+                    "source": "NA",
+                    "translation": "Cleo\n\"This isn't the Temple, you know.\n Are you sure that's all right?\n\r          {ff30}2Kadorto{ff30}0\n Mmmmm...............\n How's that?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 51,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Oh dear, this is awkward......\n I've no healing magic left.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 79,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Let's see.\n This spell ought to do the trick.\n\r          {ff30}2Madi{ff30}0\n There, all better.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 31,
+                    "source": "NA",
+                    "translation": "Cleo\n\"I see. Well then, do take care...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 109,
+                    "source": "NA",
+                    "translation": "Bergamot\n\".....................\n Can't be helped, I suppose...\n\r Ye ought to sort out some healin'\n before ye go divin' into a dungeon...\n So, who is it?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 75,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"Looks healthy enough to me...\n\r Makin' sport of an old man.........\n Ye'll get what's comin' to ye......",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 94,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"Hmph.\n For that one, this spell'll do.\n\r          {ff30}2Madi{ff30}0\n Huff, huff. These old bones can't do more.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 108,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"Are ye sure about this...?\n If it fails, there's no takin' it back.\n\r Still want it done?\n          {ff30}2Kadorto{ff30}0\n Well?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 83,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"Hm? Healin'? Or curin'?\n Oops.\n\r Either way, I'm out of magic just now.\n Awful sorry.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 82,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"Hard on an old man,\n this spell is.\n\r          {ff30}2Madi{ff30}0\n Well? No good? Not enough?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 50,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"No? I'd have thought ye still needed it...\n Ah well, suit yerselves.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 82,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Identification? Yes, happy to.\n\r I haven't done much of it lately,\n so I can't promise anything.\n Now, whose belongings are they?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 42,
+                    "source": "NA",
+                    "translation": "Cleo\n\"That one doesn't seem to be carrying\n any unidentified items?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 67,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Quite right.\n I'm not very confident myself, so\n\r you'd do better to have the shop\n appraise it after all.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 61,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Oh.\n ....Just as I feared......A failure.\n\r I'm sorry, it seems you've been cursed.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 50,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Oh!\n\r Oh dear, a failure.\n These things do happen, it seems...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 47,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Well, well, I managed to identify it.\n Old skills die hard, as they say.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 98,
+                    "source": "NA",
+                    "translation": "Cresson\n\"The ancient glyphs?\n\r Let's see.\n Shall we compare yours with our results?\n\r It looks like you match us at about {ff11}0%.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 149,
+                    "source": "NA",
+                    "translation": "Cresson\n\"The ancient glyphs?\n\r Let's see.\n Shall we compare yours with our results?\n\r Well, well,\n you match us 100%.\n\r That proves our research was right.\n Thank you very much.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 28,
+                    "source": "NA",
+                    "translation": "Cleo\n\"I've nothing to tell you just now.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 26,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"Don't bother me...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 31,
+                    "source": "NA",
+                    "translation": "Cresson\n\"P-please stop. I don't know anything.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 36,
+                    "source": "NA",
+                    "translation": "Cleo\n\"..................\n Oho......",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 46,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"............\n And what of it?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 46,
+                    "source": "NA",
+                    "translation": "Cresson\n\"..................\n ...I see......",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 34,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Nothing that's especially worth mentioning.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 30,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"Now, what might ye be talkin' about...?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 28,
+                    "source": "NA",
+                    "translation": "Cresson\n\"I'm only the assistant...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 56,
+                    "source": "NA",
+                    "translation": "Cleo\n\"A little while ago, a man called Gaillardia\n came here with his companions,",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 31,
+                    "source": "NA",
+                    "translation": "Cleo\n\"and he was rather a peculiar fellow.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 22,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"Let me think...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 54,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"Come to think of it, a Guy-somethin'\n and his lot came by just recently.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 24,
+                    "source": "NA",
+                    "translation": "Cresson\n\"Odd bunch, yes. Very odd.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 57,
+                    "source": "NA",
+                    "translation": "Cleo\n\"A peculiar man, an Evil-aligned Lord,\n came here with his companions.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 42,
+                    "source": "NA",
+                    "translation": "Cleo\n\"His name was...\n Balbo, I believe he said.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 22,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"Let me think...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 37,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"A coarse feller called Balbo came by,\n if memory serves.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 52,
+                    "source": "NA",
+                    "translation": "Cresson\n\"He was rather rough...\n I don't do well with that sort...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 95,
+                    "source": "NA",
+                    "translation": "Cleo\n\"The other day a party with a Samurai\n named Fontana came here.\n\r All young and full of beans.\n Ah, it's a fine thing to be young.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 125,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"Just recently, a pack o' children\n came traipsin' in here.\n\r I can't stand children, but Cleo was nice\n to 'em, so they ran wild all over.\n The racket was more than I could bear.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 56,
+                    "source": "NA",
+                    "translation": "Cresson\n\"A party of young adventurers came by.\n They were ever so lively.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 90,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Oh, that reminds me. Did you know?\n\r Zaril, who was with Fontana, has\n become a leader himself and put\n together a different party.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 96,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"Let me think... That party o' kids\n\r that came by before, one of 'em,\n what's-his-name, came back this time\n with a different crowd...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 72,
+                    "source": "NA",
+                    "translation": "Cresson\n\"The other day Zaril\n\r came to visit, leading a different\n party from the one he had before.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 64,
+                    "source": "NA",
+                    "translation": "Cleo\n\"I hear Cresson met a very frightening\n person somewhere deep in this Shrine.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 68,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"I don't know much, but my assistant Cresson\n met some heretic-lookin' man down below.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 54,
+                    "source": "NA",
+                    "translation": "Cresson\n\"P-please stop. I don't know anything.\n I never met any heretics.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 30,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Same as always. Nothing has changed.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 27,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"I don't know a thing...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 34,
+                    "source": "NA",
+                    "translation": "Cresson\n\"I'm sorry, but please don't ask me too much.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 66,
+                    "source": "NA",
+                    "translation": "Cleo\n\"..................\n\r I see...\n Well, well, I'll keep that in mind.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 44,
+                    "source": "NA",
+                    "translation": "Bergamot\n\".........\n Haven't ye got any fresher news...?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 70,
+                    "source": "NA",
+                    "translation": "Cresson\n\".....................\n\r I-I see......\n No, it's nothing...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 32,
+                    "source": "NA",
+                    "translation": "Cresson\n\"Really... it's... nothing.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 51,
+                    "source": "NA",
+                    "translation": "Cleo\n\"We came here meaning to rescue\n the Priestess too, at first...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 31,
+                    "source": "NA",
+                    "translation": "Cleo\n\"But then we found this room...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 164,
+                    "source": "NA",
+                    "translation": "Cleo\n\"You may not understand, but scholars and\n mages are terribly greedy for knowledge.\n\r With this much material before us,\n we could hardly ignore it...\n\r That's when we began staying here\n to carry on our research.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 74,
+                    "source": "NA",
+                    "translation": "Bergamot\n\".....................\n\r Hm? Did ye say somethin'?\n This old man's hard of hearin'...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 70,
+                    "source": "NA",
+                    "translation": "Cresson\n\"...Be careful of the altars.\n\r ............\n Some of them are dangerous...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 61,
+                    "source": "NA",
+                    "translation": "Cleo\n\"My true field is the natural history of\n monsters: magical creatures, demons...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 64,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"Me? Ancient tongues, magic circles...\n writin', in short. That's my field.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 45,
+                    "source": "NA",
+                    "translation": "Cresson\n\"I study architecture, such as\n shrines and ruins.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 55,
+                    "source": "NA",
+                    "translation": "Cleo\n\"I'm terribly sorry...\n\r There's nothing out of the ordinary,\n and no new discoveries either.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 41,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"Sorry, we've not turned up\n anything new.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 42,
+                    "source": "NA",
+                    "translation": "Cresson\n\"I'm sorry, but there are no new\n discoveries, and no news either.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 69,
+                    "source": "NA",
+                    "translation": "Cleo\n\"I hear that some monsters, just\n like us,\n\r band together in parties.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 30,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Now that's a fascinating phenomenon.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 23,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"Want somethin' with me?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 58,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"That's it! The other day I went up to\n the castle for supplies and got tea cakes!",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 56,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"Eh? I'm sure.........\n I left 'em right here......",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 49,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"Oi! Cresson, lad!\n Seen the tea cakes I left here?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 74,
+                    "source": "NA",
+                    "translation": "Cresson\n\"Oh, come on, Bergamot.\n\r You ate them yesterday,\n with Cleo. Don't you remember?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 55,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"Eh? Did I now...?\n Sorry, I'll have some ready next time.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 36,
+                    "source": "NA",
+                    "translation": "Cresson\n\"...Please, do be careful of the heretics.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 76,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Is it true the Training Maze has monsters\n you won't find in the Shrine?\n\r I'd love to go there one day.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 75,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"I hear the Training Maze has codes\n like the ones here in the Shrine.\n\r Go take a look for me sometime, eh?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 85,
+                    "source": "NA",
+                    "translation": "Cresson\n\"Cleo and Bergamot sometimes go up to\n the surface for supplies, but...\n\r where do they really go......",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 95,
+                    "source": "NA",
+                    "translation": "Cleo\n\"Oh dear, I've no information to give.\n\r Please ask Bergamot\n or Cresson instead.\n They won't mind in the slightest.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 48,
+                    "source": "NA",
+                    "translation": "Bergamot\n\"I'm tired.\n Go have a chat with the others.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 65,
+                    "source": "NA",
+                    "translation": "Cresson\n\"Y-you shouldn't ask only me.\n Hear what Cleo and Bergamot\n\r have to say, too.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 54,
+                    "source": "NA",
+                    "translation": "Cleo\n\".....................\n Oh? You've told me that before.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 87,
+                    "source": "NA",
+                    "translation": "Bergamot\n\".........\n\r What, that again...\n I've heard it before...\n This old man remembers that much.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 47,
+                    "source": "NA",
+                    "translation": "Cresson\n\"Oh, I know about that already.\n You told me before.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 228,
+                    "source": "NA",
+                    "translation": "Cresson\n\"Let me tell you about Ganess, the castle\n built atop the ruins of the past.\n\r Ganess II, who came to power in recent\n years, was called a tyrant. He built this\n vast Fortress City of Ganess.\n\r But to raise his new city, he tore down\n the buildings and churches of the\n native people.\n\r The shamans who guard the Shrine\n cursed him for it, and Ganess II\n died all too easily.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 335,
+                    "source": "NA",
+                    "translation": " His son took the throne in his place.\n He had no interest in war at all,\n and gave himself to ancient history\n\r and astronomy. That is why\n the kingdom has prospered so long.\n\r The king who knew no war kept to a\n strong defense and sold the magic\n water that wells up without end,\n\r and so the kingdom grew into the rich\n trading nation it is today.\n\r And since he honors the customs of the\n native people, Ganess III is unlikely\n to be cursed to death like his father.\n\r Could the troubles we face now\n have something to do with the past?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 35,
+                    "source": "NA",
+                    "translation": "Robed man\n\"Why, how do you do. Are you well?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 26,
+                    "source": "NA",
+                    "translation": "Cresson\n\"Well, well, have you been well?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 27,
+                    "source": "NA",
+                    "translation": "Robed man\n\"Take care, then.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 21,
+                    "source": "NA",
+                    "translation": "Cresson\n\"Take care, then.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 28,
+                    "source": "NA",
+                    "translation": "We asked if they had any news.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 25,
+                    "source": "NA",
+                    "translation": "We told them all we knew.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 21,
+                    "source": "NA",
+                    "translation": "We asked them who they were.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 22,
+                    "source": "NA",
+                    "translation": "We asked about other parties.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 20,
+                    "source": "NA",
+                    "translation": "We asked them something personal.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 110,
+                    "source": "NA",
+                    "translation": "Robed man\n\"You'll need this item for your analysis.\n Do try using it in camp.\n\r Come and show me once your analysis\n makes progress. I'll look forward to it.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 104,
+                    "source": "NA",
+                    "translation": "Cresson\n\"You'll need this item for your analysis.\n Do try using it in camp.\n\r Come and show me once your analysis\n makes progress. I'll look forward to it.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 17,
+                    "source": "NA",
+                    "translation": "We asked them for healing.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 22,
+                    "source": "NA",
+                    "translation": "We asked them to identify items.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 22,
+                    "source": "NA",
+                    "translation": "We asked them to rescue a companion.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 17,
+                    "source": "NA",
+                    "translation": "We asked them about themselves.",
+                    "addStringTerminator": true
+                }
+            ]
+        }
+    ]
+}

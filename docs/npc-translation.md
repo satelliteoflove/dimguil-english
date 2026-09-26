@@ -84,7 +84,62 @@ speaker tags: "Man with a greatsword", "Tall man", "Hooded woman", "Green-haired
 
 ## Voice
 
-Natural, conversational English with each character's personality coming through, not a
-literal gloss. Jokes stay jokes: the Japanese pokes fun at players who name characters
+This was written for a Japanese audience in the late 90s, and every NPC is built on a
+stock character type of that era, marked by a first-person pronoun, sentence endings
+and a verbal tic or two. The English has to carry the type, not just the meaning: a
+reader should know who is talking with the speaker line covered. Give each character an
+English voice that does the same job as their Japanese one, and keep it the same in
+every file. Jokes stay jokes: the Japanese pokes fun at players who name characters
 "あ", "アイテム" or "かねもち"; carry those over as names a player might really type
 ("A", "Item", "Richguy").
+
+What marks each one in the Japanese, and what that becomes in English:
+
+- **Guy (Gaillardia)**. 俺, 〜さっ, よろしくっ!, 勇者. The self-appointed hero from
+  "far across the sea", a hot-blooded shounen lead and a lovable blowhard. Loud,
+  upbeat, grandstanding, exclamation marks, calls himself a hero at every chance; laughs
+  off his own disasters ("Ha, ha... ow."). Friendly "you guys".
+- **Alstron**. 私, ですな / ですねぇ, drawled politeness. The genteel, slightly
+  lecherous priest who plays straight man to Guy and needles him with perfect manners
+  ("Oh my, oh my", "Quite so", "if you'll pardon my saying"). Fawns over pretty women.
+  Once Evil, and says so without embarrassment.
+- **Linaria**. あたし, わよ / なんだ, アハハッ! Tomboyish big-sister fighter: blunt,
+  breezy, laughs at people's blunders, proud of her cooking. Casual, direct, short.
+- **Lychee**. Calls herself ライチ, ねぇねぇねぇ, 聞いて聞いて〜, すごいっしょ〜.
+  The airheaded child-mage. Refers to herself in the third person ("Lychee summoned a
+  Greater Demon!"), run-on excitement ("and then, and then"), "Listen, listen!",
+  "Isn't that amazing? Isn't it?", stretched vowels ("Byeee!").
+- **Fritillaria**. おいら, 〜だよ, 〜な! Scrappy kid thief, hero-worships Zaril.
+  Street-urchin English: "ain't", "gonna", "me and Zaril", brags then deflates. (One
+  confession line is deliberately stiff and formal; that's the joke.)
+- **Lilia (Liliaceus)**. あたし, なぁに?, ふぅん, 〜ねぇ, 〜わよ. The flirt: a
+  teasing, worldly older-sister bard who toys with people. "Hmm? Want to know about me?",
+  "darling", sighs and purrs, mock-bored "Oh, really?"
+- **Artemisia**. あたし, 〜のよ / 〜ね, bubbly. Energetic research girl who digs up lost
+  spells and gets them wrong; cheerful, quick to exasperation ("Honestly, these two!").
+- **Zaril**. オレ, 〜ぜ, 知らんと言ったら知らん. Gruff Dracon Lord, tough guy with a
+  soft centre, stubborn. Clipped and plain: "I said I don't know. So I don't."
+  (A few reaction lines are stiffly polite and sarcastic in the source; keep those.)
+- **Balbo**. 俺様, 〜ねぇ, 知らねぇぞ, 〜っつう. Rough-mouthed Evil dwarf Lord, a
+  swaggering tough. Coarse English: dropped g's, "ain't", "ya", "don't come cryin' to me".
+- **Gaura**. オレ, stammers, no grammar: オレ,ガウラ. The timid gentle giant. Broken,
+  halting English, dropped articles and verbs, stutters: "M-me... Gaura. H-hello."
+- **Reiran**. あたし, ヤンなっちゃう, バイト, ハマっちゃって, なーんか偉そう. A ninja
+  who talks like a late-90s high-school girl. Teen slang: "like", "totally", "so
+  over it", "whatever", "ugh", "I'm kinda hooked on...".
+- **Fontana**. 僕, polite ですよ. Earnest young samurai, polite and a bit
+  unsure of himself; real name Kikunoshin, renamed by Zaril. Proper, eager, a little
+  stiff, "sir"/"ma'am" optional.
+- **Cephala**. わたし, polite ですね, clumsy (えいっ! あいたーっ). Sweet, earnest
+  bishop girl, a little ditzy, sometimes a sly giggle. Polite and soft, trailing "...".
+- **Rosea**. わたし, かしら, gentle feminine. The kind healer. Soft, warm, refined,
+  worries about others.
+- **Alba**. 私 / 俺, terse, ・・・. Ranger with a dark past. Few words, weary, pauses
+  ("...Alba."), formal when kind.
+- **Cleo**. 私, 〜ですよ, chatty. Elf scholar, a talkative professor who loves his
+  subject, pleasant and faintly condescending; the late reveal should land.
+- **Cresson**. 私, polite, timid (や,やめて下さい). Nervous scholar, apologetic.
+- **Bergamot**. わし, 〜じゃ, 〜のぉ / のぅ, わしゃ. The crotchety old man. Old-codger
+  English: "Eh?", "whippersnappers", "I tell ye", grumbling, "back in my day".
+- **Man in armor**. 俺, 〜ねぇ, チッ. A rough, short-tempered adventurer.
+- **Agan, the mysterious figures**. Grand, archaic, portentous.

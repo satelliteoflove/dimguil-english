@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Check translated NPC dialogue (NPC_MES1-5.OBJ) against the dungeon text box.
 
-    npcfit.py [N ...] [--all]
+    npcfit.py [N ...] [--all] [--overlay FILE.json]
 
 N picks files (default 1-5). Reads translations/NPC_MESn.OBJ.json and the JP dump in
 rips/stage/out/dumps (run scripts/build.sh once so it exists). Reports, per string:
@@ -9,7 +9,8 @@ rips/stage/out/dumps (run scripts/build.sh once so it exists). Reports, per stri
   - a page with more lines than the box holds (3; menu pages keep the source's count)
   - control codes that differ from the source
 and per file the encoded size against the 32-sector load buffer (see relocate.py).
---all also lists untranslated strings.
+--all also lists untranslated strings. --overlay applies {"n:idx": "text", ...} on top of
+the translation files first, to check proposed edits without writing them.
 
 Box measured in the emulator: text starts at x=27, the frame is at x=321 (350-px mode).
 Pages are split by "\\n\\r"; lines after the first on a page start with one space,
@@ -36,8 +37,11 @@ def pages(text):
     return [p for p in re.split(r'\n\r|\{ff40\}\r', text)]
 
 
-def check(n, show_all):
+def check(n, show_all, overlay=None):
     tr = json.load(open(os.path.join(ROOT, f'translations/NPC_MES{n}.OBJ.json'), encoding='utf-8'))
+    for key, text in (overlay or {}).items():
+        if int(key.split(':')[0]) == n:
+            tr['sections'][0]['strings'][int(key.split(':')[1])]['translation'] = text
     dump = json.load(open(os.path.join(ROOT, f'rips/stage/out/dumps/NPC_MES{n}.OBJ.json'), encoding='utf-8'))
     ts, ds = tr['sections'][0]['strings'], dump['sections'][0]['strings']
     total, bad, todo = 4 * len(ts), 0, 0
@@ -77,5 +81,10 @@ def check(n, show_all):
 
 if __name__ == '__main__':
     args = sys.argv[1:]
+    overlay = None
+    if '--overlay' in args:
+        k = args.index('--overlay')
+        overlay = json.load(open(args[k + 1], encoding='utf-8'))
+        del args[k:k + 2]
     files = [int(a) for a in args if a.isdigit()] or range(1, 6)
-    sys.exit(1 if sum(check(n, '--all' in args) for n in files) else 0)
+    sys.exit(1 if sum(check(n, '--all' in args, overlay) for n in files) else 0)
