@@ -4,8 +4,6 @@
 #   - by hand (Actions > build and release > Run workflow)
 #   - on pushes to main that touch the build itself, which is how Dependabot's updates
 #     get tested once merged (its pull requests can't see the disc secrets)
-#   - once a month, so a broken dependency or an expired token shows up before release
-#     day rather than on it
 #
 # The original disc can't live in this public repo. It's a release asset in a private
 # repo instead:
@@ -31,8 +29,6 @@ on:
       - 'scripts/tim.py'
       - 'scripts/relocate.py'
       - 'scripts/mkrelease.py'
-  schedule:
-    - cron: '17 6 1 * *'
   workflow_dispatch:
 
 concurrency:
