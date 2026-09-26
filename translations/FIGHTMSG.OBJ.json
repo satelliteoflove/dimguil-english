@@ -1,0 +1,2057 @@
+{
+    "file": "DATA01/FIGHTMSG.OBJ",
+    "sections": [
+        {
+            "firstHeaderAddress": 0,
+            "firstHeader": 1192,
+            "sectionLength": 3928,
+            "strings": [
+                {
+                    "length": 4,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 7,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 7,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 7,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 7,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 6,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "scratches",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 14,
+                    "source": "NA",
+                    "translation": "tries to pin down",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 8,
+                    "source": "NA",
+                    "translation": "fans",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "whips",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "swings at",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 7,
+                    "source": "NA",
+                    "translation": "touches",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "headbutts",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 13,
+                    "source": "NA",
+                    "translation": "tries to crush",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 13,
+                    "source": "NA",
+                    "translation": "tries to deal with",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 7,
+                    "source": "NA",
+                    "translation": "burns",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 7,
+                    "source": "NA",
+                    "translation": "kicks",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 15,
+                    "source": "NA",
+                    "translation": "tries to blow away",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "rips into",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 7,
+                    "source": "NA",
+                    "translation": "stings",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 11,
+                    "source": "NA",
+                    "translation": "kicks at",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "squeezes",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "pecks at",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "gnaws on",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 8,
+                    "source": "NA",
+                    "translation": "pinches",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 7,
+                    "source": "NA",
+                    "translation": "smacks",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "slaps",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 8,
+                    "source": "NA",
+                    "translation": "thrashes",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 15,
+                    "source": "NA",
+                    "translation": "tries to bowl over",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 8,
+                    "source": "NA",
+                    "translation": "glares at",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "tries to lull",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 8,
+                    "source": "NA",
+                    "translation": "startles",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 11,
+                    "source": "NA",
+                    "translation": "tries to melt",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 13,
+                    "source": "NA",
+                    "translation": "tries to engulf",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 13,
+                    "source": "NA",
+                    "translation": "bops",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "batters",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 13,
+                    "source": "NA",
+                    "translation": "tries to chomp",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 8,
+                    "source": "NA",
+                    "translation": "grabs",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 13,
+                    "source": "NA",
+                    "translation": "tries to choke out",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "sprays",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 8,
+                    "source": "NA",
+                    "translation": "pelts",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "slams into",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 8,
+                    "source": "NA",
+                    "translation": "stares at",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "wallops",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "{ff18} plays {ff14}.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 11,
+                    "source": "NA",
+                    "translation": "{ff18} plays {ff14}.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "{ff18} sounds {ff14}.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 13,
+                    "source": "NA",
+                    "translation": "{ff18} strikes up {ff14}.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "{ff18} beats {ff14}.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 6,
+                    "source": "NA",
+                    "translation": "-",
+                    "addStringTerminator": false,
+                    "compress": true
+                },
+                {
+                    "length": 6,
+                    "source": "NA",
+                    "translation": "-",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 6,
+                    "source": "NA",
+                    "translation": "-",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 6,
+                    "source": "NA",
+                    "translation": "-",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 6,
+                    "source": "NA",
+                    "translation": "-",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 6,
+                    "source": "NA",
+                    "translation": "-",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 6,
+                    "source": "NA",
+                    "translation": "-",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "unleashes the power of",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "pelts",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 6,
+                    "source": "NA",
+                    "translation": "buffets",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 7,
+                    "source": "NA",
+                    "translation": "raises",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "tries to entangle",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 6,
+                    "source": "NA",
+                    "translation": "lets out",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 17,
+                    "source": "NA",
+                    "translation": "{ff13} breathes a sweet breath.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 17,
+                    "source": "NA",
+                    "translation": "{ff13}\nspits venom everywhere.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 21,
+                    "source": "NA",
+                    "translation": "{ff13}\nbreathes deadly poison.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 23,
+                    "source": "NA",
+                    "translation": "{ff13}\nsprays deadly venom.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 23,
+                    "source": "NA",
+                    "translation": "{ff13}\nhurls a hail of rocks.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 21,
+                    "source": "NA",
+                    "translation": "{ff13}\nbreathes darkness.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 21,
+                    "source": "NA",
+                    "translation": "{ff13} lets out a maddening scream.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 26,
+                    "source": "NA",
+                    "translation": "{ff13} lets out a terrifying scream.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 21,
+                    "source": "NA",
+                    "translation": "{ff13}\nspits sticky goo.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 28,
+                    "source": "NA",
+                    "translation": "{ff13}\nsprays putrid fluid.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 11,
+                    "source": "NA",
+                    "translation": "{ff13}\nbreathes fire.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 18,
+                    "source": "NA",
+                    "translation": "{ff13}\nshoots flames from its eyes.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 13,
+                    "source": "NA",
+                    "translation": "{ff13}\nspits lava.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 21,
+                    "source": "NA",
+                    "translation": "{ff13}\nbreathes searing flames.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 18,
+                    "source": "NA",
+                    "translation": "{ff13}\nbreathes freezing cold.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 23,
+                    "source": "NA",
+                    "translation": "{ff13}\nwhips up a raging blizzard.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 19,
+                    "source": "NA",
+                    "translation": "{ff13} lets out a deadly scream.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 22,
+                    "source": "NA",
+                    "translation": "{ff13} utters a ruinous curse.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 22,
+                    "source": "NA",
+                    "translation": "{ff13}\nraises a wind of death.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 22,
+                    "source": "NA",
+                    "translation": "{ff13} breathes a holy breath.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "{ff18} {ff15} {ff13} with {ff14}.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "{ff18} {ff15} {ff13} with {ff14}.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "{ff18} defends.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "{ff18} {ff15}\nthe power of {ff14}.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "{ff18} casts {ff16}.",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 8,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 14,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 19,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 24,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 28,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 8,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 13,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 8,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 33,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 13,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 30,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 14,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 14,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 6,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 14,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 18,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 17,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 19,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 16,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 19,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 8,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 11,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 13,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 19,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 11,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 13,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 13,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 8,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 13,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 19,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 20,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 8,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 11,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 11,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 11,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 13,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 13,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 17,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 11,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 2,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 5,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 14,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 18,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 17,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 20,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 19,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 14,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 19,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 18,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 21,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 20,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 18,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 20,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 19,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 16,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 16,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 20,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 17,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 19,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 16,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 36,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 17,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 20,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 20,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 21,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 17,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 31,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 24,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 17,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 18,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 2,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 8,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 5,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 4,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 5,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 6,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 4,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 6,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 11,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 6,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 4,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 5,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 4,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 8,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 7,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 4,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 7,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 14,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 18,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 16,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 19,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 15,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 11,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 13,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 20,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 23,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 24,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 16,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 18,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 17,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 18,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 15,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 17,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 21,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 16,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 1,
+                    "source": "NA",
+                    "translation": " ",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 13,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 18,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 15,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 39,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 27,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 3,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 15,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 15,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 23,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 11,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 17,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 11,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 16,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 11,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 13,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 14,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 19,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 17,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 17,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 12,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 11,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 14,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 10,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 18,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 13,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 9,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 18,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 19,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 7,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 131,
+                    "source": "NA",
+                    "translation": "",
+                    "compress": true,
+                    "addStringTerminator": true
+                }
+            ]
+        }
+    ]
+}
