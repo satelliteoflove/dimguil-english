@@ -14,13 +14,14 @@ from emu import Emu
 S = 'rips/states/'
 e = Emu('rips/iso/dimguil-en.cue')
 e.run(3600); e.save(S + 'boot.state')
-e.seq('circle w60 circle w60 circle w60 circle w60 circle w200'); e.save(S + 'town.state')
-e.seq('circle w60'); e.save(S + 'tavern.state')
+# The town ignores input for a moment after it fades in; w120 covers it.
+e.seq('circle w60 circle w60 circle w60 circle w60 circle w200 w120'); e.save(S + 'town.state')
+e.seq('circle w120'); e.save(S + 'tavern.state')
 e.seq('circle w60')
 for _ in range(6):  # Mars and Mercury are refused (alignment), leaving 4
     e.seq('circle w60 circle w90')
 e.seq('w60 cross w60'); e.save(S + 'party.state')
-e.seq('cross w120'); e.save(S + 'town_party.state')
+e.seq('cross w180'); e.save(S + 'town_party.state')
 for i in range(1, 7):
     e.load(S + 'town_party.state')
     e.seq(' '.join(['right'] * i) + ' w20 circle w150')
