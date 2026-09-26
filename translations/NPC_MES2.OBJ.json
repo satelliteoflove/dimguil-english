@@ -485,7 +485,7 @@
                 {
                     "length": 90,
                     "source": "NA",
-                    "translation": "  We decided to press the switch together.\n From far off comes the count: \"Three, two, one.\"\n  On \"Zero\" we pressed the switch.",
+                    "translation": "  We decided to press the switch together.\n From far off comes the count: 'Three, two, one.'\n  On 'Zero' we pressed the switch.",
                     "addStringTerminator": true
                 },
                 {
@@ -1211,7 +1211,7 @@
                 {
                     "length": 67,
                     "source": "NA",
-                    "translation": "Reiran\n\"I met this, like, seriously weird guy.{ff40}\r He goes \"Begone!\" and stuff,\n all high and mighty.\n",
+                    "translation": "Reiran\n\"I met this, like, seriously weird guy.{ff40}\r He goes 'Begone!' and stuff,\n all high and mighty.\n",
                     "addStringTerminator": false
                 },
                 {
@@ -1541,7 +1541,7 @@
                 {
                     "length": 156,
                     "source": "NA",
-                    "translation": "Artemisia\n\"That spell I dug up the other day\n just wouldn't work right.\n\r The name part was really worn, so I\n kinda winged it. Was that the problem?\n\r I was sure \"Likaton\" would be fine...\n Maybe I read it wrong after all...?",
+                    "translation": "Artemisia\n\"That spell I dug up the other day\n just wouldn't work right.\n\r The name part was really worn, so I\n kinda winged it. Was that the problem?\n\r I was sure 'Likaton' would be fine...\n Maybe I read it wrong after all...?",
                     "addStringTerminator": true
                 },
                 {

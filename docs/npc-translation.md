@@ -17,6 +17,9 @@ Check them with `scripts/npcfit.py [n]` after `scripts/build.sh` has produced th
   3 lines or fewer (the first page's 3 includes the speaker line).
 - Menus (`A:武器\nB:防具\nC:その他\nD:やめる`) keep their 4 lines and letters:
   `A:Weapons\nB:Armor\nC:Other\nD:Quit`.
+- Quotes inside a line are single quotes ('Item'). The printer treats `"` as the
+  Japanese voicing mark and merges it into the glyph before it, so a mid-line `"` can
+  come out as a kana; only the `"` that opens a line is safe. npcfit checks this.
 - Plain ASCII only. `...` for ・・・ (a long run of ・ can be a longer run of dots);
   no curly quotes or dashes the font doesn't have (`npcfit` reports those).
 

@@ -371,7 +371,7 @@
                 {
                     "length": 110,
                     "source": "NA",
-                    "translation": "Alstron\n\"I once saw a grave bearing that very name.\n Forgotten in time, forsaken even by friends.\n\r To the bearer of such a name,\n our friend \"A\", I present 100Gp.",
+                    "translation": "Alstron\n\"I once saw a grave bearing that very name.\n Forgotten in time, forsaken even by friends.\n\r To the bearer of such a name,\n our friend 'A', I present 100Gp.",
                     "addStringTerminator": true
                 },
                 {
@@ -419,7 +419,7 @@
                 {
                     "length": 100,
                     "source": "NA",
-                    "translation": "Lychee\n\"Y'know, at the tavern the other day there was\n somebody drinking all alone, all sad.\n\r Isn't that one of your friends?\n I think their name was \"Item\" or something.",
+                    "translation": "Lychee\n\"Y'know, at the tavern the other day there was\n somebody drinking all alone, all sad.\n\r Isn't that one of your friends?\n I think their name was 'Item' or something.",
                     "addStringTerminator": true
                 },
                 {
@@ -461,7 +461,7 @@
                 {
                     "length": 94,
                     "source": "NA",
-                    "translation": "Lilia\n\"That \"Richguy\" of yours at the tavern\n was looking sooo lonely.\n\r Maybe I'll ask him out on a date.\n I mean, he must be positively loaded.",
+                    "translation": "Lilia\n\"That 'Richguy' of yours at the tavern\n was looking sooo lonely.\n\r Maybe I'll ask him out on a date.\n I mean, he must be positively loaded.",
                     "addStringTerminator": true
                 },
                 {
@@ -791,7 +791,7 @@
                 {
                     "length": 52,
                     "source": "NA",
-                    "translation": "Alstron\n\"I am Alstron, a Priest.\n Do feel free to call me \"Al.\"",
+                    "translation": "Alstron\n\"I am Alstron, a Priest.\n Do feel free to call me 'Al.'",
                     "addStringTerminator": true
                 },
                 {
@@ -1241,7 +1241,7 @@
                 {
                     "length": 154,
                     "source": "NA",
-                    "translation": "Alstron\n\"Well, I was once what you'd all call\n \"Evil\" myself, so I can hardly talk,\n\r but we met a party led by an odd sort,\n an Evil-aligned Lord.\n\r Still, I don't think he was\n rotten to the core.",
+                    "translation": "Alstron\n\"Well, I was once what you'd all call\n 'Evil' myself, so I can hardly talk,\n\r but we met a party led by an odd sort,\n an Evil-aligned Lord.\n\r Still, I don't think he was\n rotten to the core.",
                     "addStringTerminator": true
                 },
                 {
@@ -1565,7 +1565,7 @@
                 {
                     "length": 58,
                     "source": "NA",
-                    "translation": "Alstron\n\"I recently came across something called\n a \"card.\" What could it be, I wonder?",
+                    "translation": "Alstron\n\"I recently came across something called\n a 'card.' What could it be, I wonder?",
                     "addStringTerminator": true
                 },
                 {

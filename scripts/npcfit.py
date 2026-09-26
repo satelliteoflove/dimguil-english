@@ -25,6 +25,14 @@ WIDTH = 288
 LINES = 3
 LIMIT = 32 * 2048
 CODE = re.compile(r'\{ff[0-9a-f]{2}\}')
+# The printer draws glyph 0xb6 (") as the voicing mark and merges it into a preceding
+# kana, so " after a digraph whose code is a voiceable kana ('y ' is 0x92 = フ) turns
+# into a Japanese glyph (ブ). Only quotes that open a line are safe.
+_KANA = {}
+for _l in open(os.path.join(ROOT, 'tables/dimguil_dec.tbl'), encoding='utf-8'):
+    _k, _, _v = _l.rstrip('\n').partition('=')
+    if len(_k) == 2 and _v in set('かきくけこさしすせそたちつてとはひふへほカキクケコサシスセソタチツテトハヒフヘホウう'):
+        _KANA[int(_k, 16)] = _v
 
 
 def measurable(text):
@@ -64,6 +72,11 @@ def check(n, show_all, overlay=None):
                 for w, line in zip(descfit.line_widths(measurable(pg)), pg.split('\n')):
                     if w > WIDTH:
                         problems.append(f'{w}px: {line!r}')
+            codes = descfit.encode(text.replace('\r', '{ff20}'))
+            for a, b in zip(codes, codes[1:]):
+                if b == descfit.CHARS['"'] and a in _KANA:
+                    problems.append(f'" after code {a:#x} prints as {_KANA[a]}+voicing mark; '
+                                    "use ' for quotes inside a line")
             if len(pages(text)) != len(srcpages):
                 problems.append(f'{len(pages(text))} pages, source has {len(srcpages)} (fine if intended)')
         except ValueError as e:
