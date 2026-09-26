@@ -1,0 +1,104 @@
+# Builds the patch and publishes a GitHub release when a version tag (v*) is pushed.
+# Running it by hand (Actions > release > Run workflow) builds the same zip as an
+# artifact without publishing anything.
+#
+# The original disc can't live in this public repo. It's a release asset in a private
+# repo instead:
+#   vars.DISC_REPO     owner/name of the private repo
+#   vars.DISC_TAG      the release there holding one .zip of the redump Rev 1 .cue and .bin
+#                      files (zipped because GitHub renames assets with spaces in them,
+#                      which would break the cue sheet)
+#   secrets.DISC_TOKEN fine-grained token with read access to that repo's contents
+name: release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  ARMIPS_COMMIT: 62adab4ef30da765f5cf22a451eb08a59c54dc8b
+  MKPSXISO_COMMIT: a6b11ea86e67c189137ac50a4066044b3fdb0525
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Packages
+        run: sudo apt-get update && sudo apt-get install -y xdelta3 python3-pil
+
+      - name: Cache armips and mkpsxiso
+        id: tools
+        uses: actions/cache@v4
+        with:
+          path: ~/tools
+          key: tools-${{ env.ARMIPS_COMMIT }}-${{ env.MKPSXISO_COMMIT }}
+
+      - name: Build armips and mkpsxiso
+        if: steps.tools.outputs.cache-hit != 'true'
+        run: |
+          set -eu
+          mkdir -p ~/tools
+          build() {
+            git clone -q "$1" "$2" && git -C "$2" checkout -q "$3"
+            git -C "$2" submodule update -q --init --recursive
+            cmake -S "$2" -B "$2/build" -DCMAKE_BUILD_TYPE=Release > /dev/null
+            cmake --build "$2/build" -j"$(nproc)" > /dev/null
+          }
+          build https://github.com/Kingcom/armips.git /tmp/armips "$ARMIPS_COMMIT"
+          build https://github.com/Lameguy64/mkpsxiso.git /tmp/mkpsxiso "$MKPSXISO_COMMIT"
+          cp /tmp/armips/build/armips /tmp/mkpsxiso/build/mkpsxiso /tmp/mkpsxiso/build/dumpsxiso ~/tools/
+
+      - name: Fetch the original disc
+        env:
+          GH_TOKEN: ${{ secrets.DISC_TOKEN }}
+        run: |
+          set -eu
+          gh release download "${{ vars.DISC_TAG }}" --repo "${{ vars.DISC_REPO }}" --dir "$RUNNER_TEMP/dl"
+          unzip -q "$RUNNER_TEMP"/dl/*.zip -d "$RUNNER_TEMP/disc"
+
+      - name: Build
+        run: |
+          set -eu
+          cue=$(find "$RUNNER_TEMP/disc" -name "*.cue" | head -n1)
+          ~/tools/dumpsxiso -l -x rips/clean/dimguil -s rips/clean/dimguil.xml "$cue" > /dev/null
+          ARMIPS=~/tools/armips MKPSXISO=~/tools/mkpsxiso ./scripts/build.sh
+
+      - name: Package
+        id: package
+        run: |
+          set -eu
+          if [ "$GITHUB_REF_TYPE" = tag ]; then version=$GITHUB_REF_NAME
+          else version=$(grep -m1 '^## v' CHANGELOG.md | cut -c4-); fi
+          python3 scripts/mkrelease.py "$version" "$(find "$RUNNER_TEMP/disc" -name "*.cue" | head -n1)"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "dir=rips/release/$version" >> "$GITHUB_OUTPUT"
+
+      - name: Upload artifact
+        if: github.ref_type != 'tag'
+        uses: actions/upload-artifact@v4
+        with:
+          name: dimguil-en-${{ steps.package.outputs.version }}
+          path: ${{ steps.package.outputs.dir }}/*.zip
+
+      - name: Publish release
+        if: github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.package.outputs.version }}
+          DIR: ${{ steps.package.outputs.dir }}
+        run: |
+          set -eu
+          pre=
+          case "$VERSION" in v0.*) pre=--prerelease ;; esac
+          gh release create "$VERSION" "$DIR"/*.zip --title "$VERSION" --notes-file "$DIR/notes.md" $pre
