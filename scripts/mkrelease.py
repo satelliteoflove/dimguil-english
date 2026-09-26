@@ -64,6 +64,8 @@ def changelog_section(version):
 def main():
     version, orig_cue = sys.argv[1], sys.argv[2]
     notes = changelog_section(version)
+    # Remisse asked for this on the repo and on every release page.
+    notice = open(os.path.join(ROOT, 'docs/notice.txt'), encoding='utf-8').read().strip()
 
     orig = cue_files(orig_cue)
     if len(orig) < 2 or any(len(t) != 1 for _, t in orig):
@@ -115,7 +117,7 @@ def main():
 
     template = open(os.path.join(ROOT, 'docs/release-readme.txt'), encoding='utf-8').read()
     readme = template.format(
-        version=version, patch=os.path.basename(patch), notes=notes.rstrip(),
+        version=version, patch=os.path.basename(patch), notes=notes.rstrip(), notice=notice,
         src_md5=src['md5'], src_sha1=src['sha1'], src_crc=src['crc32'],
         dst_md5=dst['md5'], dst_sha1=dst['sha1'], dst_crc=dst['crc32'])
     readme = readme.replace('\n', '\r\n')  # Notepad-friendly
@@ -124,7 +126,9 @@ def main():
     with zipfile.ZipFile(zpath, 'w', zipfile.ZIP_DEFLATED) as z:
         z.write(patch, os.path.basename(patch))
         z.writestr('readme.txt', readme)
-    open(os.path.join(out, 'notes.md'), 'w', encoding='utf-8').write(notes)
+    # Markdown for the release page: unwrap the notice's hard-wrapped paragraphs.
+    paras = '\n\n'.join(' '.join(p.split()) for p in notice.split('\n\n'))
+    open(os.path.join(out, 'notes.md'), 'w', encoding='utf-8').write(notes + '\n---\n\n' + paras + '\n')
     print(zpath)
 
 

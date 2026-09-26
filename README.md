@@ -3,26 +3,22 @@
 An English translation patch for Wizardry: Dimguil, the 2000 PlayStation release
 (SLPS-02691). It targets the Rev 1 disc only.
 
-All the text a player can reach is in English now: the town, the castle and its menus,
-the dungeon dialogue, combat, item and monster descriptions and the card game. It's a
-beta. Much of the text is still being reviewed, and nobody has played it through to the
-ending yet. See [ROADMAP.md](ROADMAP.md) for what's left.
+Most of the text a player can reach is in English: the town and castle, the dungeon
+dialogue, combat, item and monster descriptions and the card game. The event script and
+parts of the town and castle menus are being translated again from scratch, and the
+first release will follow once they're done. Nobody has played it through to the ending
+yet. See [ROADMAP.md](ROADMAP.md) for what's left.
 
-The patch is on the
-[Releases](https://github.com/satelliteoflove/dimguil-patcher/releases) page. It applies
-to the Track 1 `.bin` of a redump-style Rev 1 set, and the readme in the zip has the
-steps. If something looks wrong or breaks, please open an issue.
+## Origins
 
-## Credits
+This project is built on Remisse's
+[dimguil-patcher](https://github.com/remii7/dimguil-patcher): the text dumper and
+inserter, the text compression and the variable-width font. No LLMs were used in
+writing Remisse's original code. Remisse had no role in this project's development, and
+the original team does not endorse it.
 
-This started as Remisse's [dimguil-patcher](https://github.com/remii7/dimguil-patcher),
-which dumps and reinserts the game's text and adds variable-width font support.
-[name removed] translated the event script and much of the menu, status and combat text,
-and [name removed] edited it. Their work is still in here, and the git history keeps
-Remisse's commits as they made them.
-
-I picked it up from there and carried on with the rest of the translation and the
-engine work it needed.
+Everything added since, including the whole translation, is my own work, done with the
+help of Claude, an AI model.
 
 ## Building it yourself
 

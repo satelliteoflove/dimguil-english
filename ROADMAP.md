@@ -14,8 +14,9 @@ Releases go out as the work progresses. We don't hold everything back for 1.0.
 Japanese, rough, or badly formatted.
 
 **Beta (0.8.x).** Every piece of text the player can reach is in English. Quality passes
-are still in progress. v0.8.0 is the first beta, and further 0.8.x releases follow as
-review passes land.
+are still in progress. v0.8.0 will be the first beta, once the text removed at the
+original team's request is translated again. Further 0.8.x releases follow as review
+passes land.
 
 **Release candidate (0.9).** After the full playthrough, with whatever it turns up fixed.
 
@@ -32,25 +33,34 @@ of the redump set, since the build leaves both audio tracks untouched.
 
 - **Project identity.** A name and repo of its own instead of a GitHub fork. Keep the full
   git history (Remisse's commits and authorship stay in it) and GPL-3.0.
-- **Credits.** Remisse (patcher, VWF hacks), [name removed] (base translation: the event
-  script and much of the menu, status and combat text) and [name removed] (editing). Contact
-  all three to ask how they'd like to be credited.
+- **The original team's requests (2026-09-26).** Their translation is removed and must not
+  come back, and they aren't to be credited. Remisse's code stays under the GPL, with the
+  notice in `docs/notice.txt` on the repo (README) and on every release page: no LLMs
+  were used in Remisse's original code, Remisse had no role in this project, and the
+  original team doesn't endorse it. `scripts/mkrelease.py` adds it to the release notes
+  and the readme in the zip. It also goes on the romhacking.net page.
 - **Known issues.** A list players can read before starting, and GitHub issues for
   reports.
 - **romhacking.net.** Submit the release package once the project has its own name.
 
 ## Work streams
 
-### Text coverage (done for v0.8.0)
+### Text coverage (to reach beta)
 
 `scripts/jpinventory.py` sorts every string in the dumped text files into translated,
-needing translation, and deliberately Japanese (with the reason for each exclusion). As
-of 2026-09-26 every reachable string is translated: 4,245 of 4,245. The rest are
-Japanese-mode lists the game doesn't use because it has built-in English beside them,
-placeholder slots, debug text, and two item files nothing loads. The staff roll and the
-other screen graphics were already in English. Checked in play: the level-up stat
-messages and the catalog's item names. Inferred but not seen in play: the ITEM.DAT
-alignment and sex labels, and that ITEM_SE and ITEM_CA are never loaded.
+needing translation, and deliberately Japanese (with the reason for each exclusion).
+Before the original team's text was removed, every reachable string was translated.
+Now 1,281 strings are left, about 21% of the Japanese by character count: all of
+EVENTMES (316 strings), and parts of SISETU (551), STATUS (195), FIGHTMSG (203) and
+M_CATALG (16). Until they're done, these show up garbled in the patched game, because
+the English font and digraphs replace the kana glyphs.
+
+The rest of the Japanese doesn't need translating: Japanese-mode lists the game doesn't
+use because it has built-in English beside them, placeholder slots, debug text, and two
+item files nothing loads. The staff roll and the other screen graphics were already in
+English. Checked in play: the level-up stat messages and the catalog's item names.
+Inferred but not seen in play: the ITEM.DAT alignment and sex labels, and that ITEM_SE
+and ITEM_CA are never loaded.
 
 Typos in the game's own English monster names are for the quality passes:
 "Silhoutte", "Drumer", "Maelific", and "Dragonare" (the card game says "Dragonaire").
@@ -59,12 +69,9 @@ Typos in the game's own English monster names are for the quality passes:
 
 1. NPC dialogue cultural review (NPC_MES1-5). In progress; tracked in
    `docs/npc-review.md`.
-2. Inherited text review. The original team's translation (about 9,600 words) is still
-   almost exactly as they wrote it. EVENTMES hasn't changed at all, and upstream put it
-   at about 15% edited. Review it to the same standard as the NPC pass, EVENTMES first,
-   then their parts of SISETU, STATUS and FIGHTMSG. Also check it against terms we've
-   settled on since (character names, the game's own spell list) and conventions like
-   ellipses (their text uses the `` ` `` placeholder, ours three periods).
+2. The retranslated text (see "Text coverage"), once it's done. Translate it fresh from
+   the Japanese, to the same standard as the NPC pass, with the terms we've settled on
+   (character names, the game's own spell list) and three periods for ellipses.
 3. Our own first-pass text that hasn't had a second look: item and monster
    descriptions (ITEM, M_CATALG), MESSAGE, combat verbs.
 

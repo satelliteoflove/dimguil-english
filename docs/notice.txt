@@ -1,0 +1,8 @@
+This project is built on Remisse's dimguil-patcher
+(https://github.com/remii7/dimguil-patcher): the text dumper and inserter, the
+text compression and the variable-width font. No LLMs were used in writing
+Remisse's original code. Remisse had no role in this project's development,
+and the original team does not endorse it.
+
+Everything added since, including the whole translation, is my own work, done
+with the help of Claude, an AI model.

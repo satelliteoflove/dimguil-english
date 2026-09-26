@@ -41,13 +41,10 @@ If the patcher refuses your file, it's most likely the original 2000
 pressing rather than Rev 1, or a dump that was merged into a single .bin.
 
 
-Credits
+Origins
 -------
 
-Remisse wrote the original dimguil-patcher: the text dumper and inserter,
-the text compression and the variable-width font. [name removed] translated the
-event script and much of the menu, status and combat text, and [name removed]
-edited it. I picked it up from there and did the rest.
+{notice}
 
 
 License
