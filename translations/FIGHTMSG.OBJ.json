@@ -9,153 +9,153 @@
                 {
                     "length": 4,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "-",
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "attacks",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "slashes at",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "stabs",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "cuts",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "rips into",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 7,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "runs through",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "slams",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "swings at",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "brings down on",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "clubs",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 7,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "hits",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 7,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "strikes",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 7,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "thrusts at",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "sweeps",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "shoots",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "takes aim at",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "peppers",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "looses at",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "swings at",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "claws",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "bites",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -729,481 +729,481 @@
                 {
                     "length": 8,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} {ff15} {ff14}.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 14,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} tries to hide.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} ambushes {ff13} with {ff14}.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} dispels {ff13}.\n({ff11}0 destroyed)",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} tries to dispel\n{ff13}, but fails.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} {ff15} {ff18} with {ff14}.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} {ff15} {ff18} with {ff14}.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} defends.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 8,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} {ff15} {ff14}.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13}\ncasts {ff16}.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 8,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} {ff15} {ff14}.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 33,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} calls for help! A monster appears.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} flees.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} fails to flee.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 30,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} calls for help! But no help comes.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Hits {ff11}0 times!",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "The attack misses.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Dodged the attack.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 14,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "But nothing happens.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 14,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "But nothing appears.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff16} takes effect.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 14,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "But they're spotted.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 18,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} couldn't cast\n{ff16}.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13}\ncouldn't cast {ff16}.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "But spells are sealed.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 16,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} is unaffected.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} takes {ff11}1 damage.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 8,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} falls asleep.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} is poisoned.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} turns to stone.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} is confused.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} is paralyzed.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} is knocked out.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} is decapitated!",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} is drained of {ff11}2 levels.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} is lost.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} dies.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} turns to ashes.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} crumbles to dust.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} is silenced.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} recovers {ff11}1.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} is fully healed.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} is healed.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} comes to their senses.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} is unharmed.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 8,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} hides.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff14}\nbreaks.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} takes {ff11}1 damage.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 20,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13}\ntakes {ff11}1 damage.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 8,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} falls asleep.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} is poisoned.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} turns to stone.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} is confused.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} is paralyzed.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} is knocked out.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} is decapitated!",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} dies.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} turns to ashes.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} crumbles to dust.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} is silenced.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} recovers {ff11}1.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} is fully healed.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} is healed.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} comes to its senses.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} is unharmed.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13}\nis unaffected.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} appears.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} is startled.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} vanishes.",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -1222,259 +1222,259 @@
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} is engulfed in flames.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 14,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} is engulfed in cold.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 18,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} is engulfed in unseen flames.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} is engulfed in searing flames.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 20,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} is engulfed in an unseen inferno.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} is engulfed in freezing cold.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} is engulfed in flames.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 14,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} is engulfed in cold.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13}\nis engulfed in unseen flames.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 18,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13}\nis engulfed in searing flames.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 21,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13}\nis engulfed in an unseen inferno.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 20,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13}\nis engulfed in freezing cold.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 18,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "The spell has no effect on {ff18}.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "It has no effect on {ff18}.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 20,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} nullifies\nthe spell.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "The spell has no effect.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "It has no effect on the party.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 16,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "It has no effect on {ff18}.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 16,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "It has no effect on {ff13}.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 20,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} tries to hide, but fails.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} hides successfully.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} is spotted hiding.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} is lost.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 16,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} loses a level.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 36,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Each survivor gains\n{ff11}0 experience!",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Carried to the temple.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Press a button to return to the castle.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 20,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "But it does no damage.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Cast it on whom?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 20,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "The monsters haven't noticed you!",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 21,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "The monsters attack without warning!",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} gets away!",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "The enemy cuts off your escape!",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} breathes acid\non the enemy group.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} breathes acid\non {ff13}.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "The breath has no effect on {ff18}.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 18,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "The breath has no effect\non {ff13}.",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -1487,300 +1487,300 @@
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} uses {ff14}.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Use it on whom?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 8,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} {ff15} {ff14}.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 5,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Inspect",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 4,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Calfo",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 5,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Calnova",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Disarm",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 4,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Open",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Leave",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "There's no trap.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Stone Shot",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 4,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Poison Needle",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Magic Drain",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 5,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Gas Bomb",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 4,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Exploding Box",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 8,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Ghost Swarm",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Demon's Eye",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 7,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Rainbow Flash",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Goddess's Kiss",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Spell Blaster",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 4,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Alarm",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 7,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Teleporter",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 14,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "You don't know Calfo.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 18,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Not enough spell points.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 16,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Spells are sealed.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Too frightened to cast.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 15,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "You don't know Calnova.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Couldn't disarm the trap.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "There was no trap.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 20,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} disarms the trap!",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Oops! {ff12}!!",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 23,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "No one can cast Calfo.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "No one can cast Calnova.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 16,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "A chest! What will you do?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 18,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Who will inspect the chest?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Who will cast Calfo?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 18,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Who will cast Calnova?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 15,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Who will disarm the trap?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Who will open the chest?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Choose the trap.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} is poisoned.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 21,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} loses spell points.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 16,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18}'s strength drains away.",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -1793,189 +1793,189 @@
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} is blessed.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} dies.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 18,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "New enemies have been summoned!!",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "You've been sent somewhere!",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "You're inside stone!",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 15,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} obtains {ff14}!",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 39,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Each survivor gains\n{ff11}0 gold!",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 27,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "A friendly monster appears. What will you do?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 3,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Fight",
                     "addStringTerminator": true
                 },
                 {
                     "length": 15,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} turns Evil.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 15,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff18} turns Good.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 23,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "But the gods do not grant the wish.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "What do you wish for?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Restore magic",
                     "addStringTerminator": true
                 },
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Restore drained levels",
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Health and revival",
                     "addStringTerminator": true
                 },
                 {
                     "length": 16,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Stronger spells",
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Protection from magic",
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Better defense",
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Teleport the monsters",
                     "addStringTerminator": true
                 },
                 {
                     "length": 14,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Party loses magic",
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Party wiped out",
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Party silenced",
                     "addStringTerminator": true
                 },
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Party's magic resistance falls",
                     "addStringTerminator": true
                 },
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Party's defense falls",
                     "addStringTerminator": true
                 },
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Party's attack falls",
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Party loses HP",
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "The wish is granted.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 14,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} appears, {ff11}0 of them.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff13} advances.",
                     "addStringTerminator": true
                 },
                 {
@@ -1987,7 +1987,7 @@
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Item test {ff14}",
                     "addStringTerminator": true
                 },
                 {
@@ -2047,7 +2047,7 @@
                 {
                     "length": 131,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Before you, a huge mural covers the wall.\nWhat could the center show?{ff26}\rOh? In the lower right, in strange letters,\n]{ff30}5{ancient_d}{ancient_i}{ancient_m}{ancient_g}{ancient_u}{ancient_i}{ancient_l}{ff30}0[\nis written.{ff26}",
                     "compress": true,
                     "addStringTerminator": true
                 }
