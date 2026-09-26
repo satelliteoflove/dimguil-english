@@ -1067,434 +1067,434 @@
                 {
                     "length": 14,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Choose a name.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 21,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "That name is already registered.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 14,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Choose a race.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Choose a sex.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 14,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Choose an alignment.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 14,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Choose a class.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 27,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Assign the remaining bonus points.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Is this all right?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 15,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Use this character?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Retrain?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 15,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "A year has passed.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 16,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "No more characters can be registered.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Look at whom?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Move the cursor onto a spell to read it.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Delete whom?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 15,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Delete this character?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Rename whom?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "New name?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Who will change class?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Change to which class?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Not qualified.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Change class?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 26,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Class changed. (Check their equipment.)",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Move whom?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Move where?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 66,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Names can be up to 8 letters.\nSELECT switches between hiragana,\nkatakana and English letters.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 68,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "No strengths and no weaknesses.\nAverage base stats let them manage\nany class. Nothing stands out.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 73,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "High I.Q. and Piety, and they\nresist sleep. But they're frail,\nand poor at fighting up front.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 65,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Tough and strong, with high Piety.\nThey resist poison. Not suited\nto the spellcasting classes.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 76,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Earth spirits who live underground.\nThe highest Piety of all. Small,\nsturdy bodies suit fighting classes.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 74,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "A cheerful race, small and quick.\nLucky, but little else is high.\nBest as thieves. Resist specials.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 73,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "The highest I.Q., small and fast,\nso naturally hard to hit. But\ndon't expect their HP to grow.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 73,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Reptilian humanoids with great\nvitality and strength. No I.Q. or\nPiety, so poor at learning spells.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 67,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Half dragon, half human, and the\nonly race that breathes. Scaly\nskin makes them resist specials.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 69,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Humanoids descended from dogs.\nHigh Piety and Vitality. Their\nfur makes them resist cold.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 72,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Cryptid humanoids. Strong, with\nhigh Vitality and I.Q. Their fur\nmakes them resist cold.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 73,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Humanoids descended from cats.\nClever and quick, and good at\ndodging. They resist cold.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 68,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Violent and crude, so their\nrace's Strength goes up by 1.\nSuited to fighting in front.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 72,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Gentle, with the power to bring\nlife. Their race's Vitality goes\nup by 1. Suited to the back row.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 70,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Good means courtesy. Leaving\nfriendly monsters in peace is\nwhat keeps a character ]Good[.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 69,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Swayed by nothing, they judge\nfrom a neutral stance and never\nturn ]Good[ or ]Evil[.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 70,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Evil means cutting down foes\nwithout scruple. Keep at it, and\nthe heart is dyed ]Evil[.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 59,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "High HP, and experts at fighting\nwith weapons. They learn nothing\nbut combat.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 70,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Experts at attack magic, and a\nspellcasting class. Low HP and\nfew items; not for the front.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 69,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Experts at healing. Average gear\nand HP. Their Dispel turns the\nundead back to dust.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 57,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "They disarm traps, pick locks and\nspot hidden doors, and can hide\nto launch a surprise attack.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 75,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Swordsmen with their own gear and\nMage spells. Less HP than a\nFighter, but they hit harder.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 73,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "High HP and the finest gear, with\nPriest spells. At level 9 they\ncan use Dispel.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 79,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Women only, with high HP and a\nFighter's gear, but weaker in\nbattle. They learn Priest spells.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 72,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Archers who strike wide, with a\nFighter's gear, Alchemist spells\nand some thieving skill.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 75,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Instruments that work like spells.\nThey learn Mage spells, slowly,\nand have thieving skills.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 73,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Alchemists who make something from\nnothing, with spells for attack\nand healing. Casters with low HP.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 73,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "They learn spells that work on the\nmind through words of power.\nCasters with low HP and few items.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 69,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "They learn Mage and Priest spells,\nturn the undead to dust with\nDispel, and identify items.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 68,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Critical hits and thieving skills,\nplus Alchemist spells. Harder to\nhit as they grow.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 58,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "They can knock foes out and learn\nPsionic spells. Harder to hit\nas they grow.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 68,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Physical strength. It affects\ncombat: the damage dealt and\nskill with weapons.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 66,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Intelligence. How fast Mage,\nAlchemist and Psionic spells are\nlearned, and how well they work.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 62,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Devotion to the gods. How fast\nPriest spells are learned, and\nhow well they work.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 65,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Strength of life. How much max HP\nrises on a level up, and the\nodds of coming back from death.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 69,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Quickness. It decides the order\nof attacks, and helps spot and\ndisarm traps.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 71,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Sheer luck. It sways many things,\nlike disarming traps and dodging\nenemy attacks.",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -2591,7 +2591,7 @@
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Training Grounds",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -2766,35 +2766,35 @@
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Create Character",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Delete Character",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Change Name",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Change Class",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Change Order",
                     "compress": true,
                     "addStringTerminator": true
                 },
