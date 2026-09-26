@@ -538,445 +538,445 @@
                 {
                     "length": 15,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Who will do business?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 16,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Choose a category.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 16,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Choose a type.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 15,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Buy which item?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 22,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "They can't equip it. Buy anyway?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Gather gold on this character?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Sorry, you can't afford it.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Your pack is full. What will you do?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 15,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Sell which item?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 15,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Give an item to whom?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 15,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Give which item?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 15,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Drop which item?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "You can't carry any more.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 15,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Your pack is full.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "This item?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Buy this set?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "You can't carry all the items.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "That can't be sold.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 27,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Unidentified items can't be sold.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "It's equipped. Sell it?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 22,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Choose an item to uncurse.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "That isn't cursed, though.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Identify which item?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Already identified.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Buy items.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Sell your belongings.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 20,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Lift curses from equipped items.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Identify unknown belongings.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 22,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Compare two weapons you carry.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 16,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Identify this item?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Lift the curse?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Can't sell.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 14,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Sell this item?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Your pack is full. Swap it for something.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 7,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Cursed",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Beginner's Set",
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Journeyman's Set",
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Expert's Set",
                     "addStringTerminator": true
                 },
                 {
                     "length": 27,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "A set needs five free item slots.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "*Identified*",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "<Alignment>",
                     "addStringTerminator": true
                 },
                 {
                     "length": 7,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "<Sex>",
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "<Class>",
                     "addStringTerminator": true
                 },
                 {
                     "length": 7,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "<Race>",
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "I'm sure you'll like it.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "That's fine. Everyone makes mistakes.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "That's the last one.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "It seems you're a little short of gold.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 108,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "\"Why, nothing's sold out any more!\nIt's been ages since that happened.\nHave this, to mark the occasion.\n\r\n      Received the Book of Rebirth.      ",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 7,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Mystic Items",
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff24}Compare",
                     "addStringTerminator": true
                 },
                 {
                     "length": 2,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "H",
                     "addStringTerminator": true
                 },
                 {
                     "length": 2,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "A",
                     "addStringTerminator": true
                 },
                 {
                     "length": 2,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "X",
                     "addStringTerminator": true
                 },
                 {
                     "length": 2,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "N",
                     "addStringTerminator": true
                 },
                 {
                     "length": 2,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "M",
                     "addStringTerminator": true
                 },
                 {
                     "length": 2,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "S",
                     "addStringTerminator": true
                 },
                 {
                     "length": 36,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "H: Accuracy   A: Extra attacks",
                     "addStringTerminator": true
                 },
                 {
                     "length": 40,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "X: Max damage   N: Min damage",
                     "addStringTerminator": true
                 },
                 {
                     "length": 39,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "M: Vs. monsters   S: Special powers",
                     "addStringTerminator": true
                 },
                 {
                     "length": 15,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "They're both the same.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Which weapon is the baseline?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 16,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Compare it with which?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Oh, never mind, then.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "That's the same weapon.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 15,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "That isn't a weapon, dear.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "I really couldn't say.",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -2577,7 +2577,7 @@
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Boltac's Trading Post",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -2689,14 +2689,14 @@
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Trade",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Item Catalog",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -3877,13 +3877,13 @@
                 {
                     "length": 3,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Set",
                     "addStringTerminator": true
                 },
                 {
                     "length": 3,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Back",
                     "addStringTerminator": true
                 },
                 {
@@ -3913,7 +3913,7 @@
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Sold Out",
                     "addStringTerminator": true
                 },
                 {
@@ -3931,19 +3931,19 @@
                 {
                     "length": 3,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "What?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Magic Item",
                     "addStringTerminator": true
                 },
                 {
                     "length": 7,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Special Item",
                     "addStringTerminator": true
                 },
                 {
