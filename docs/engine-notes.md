@@ -35,9 +35,13 @@ more of the detail behind each item.
   (`y ` is フ), so a mid-line `"` after them prints as a Japanese glyph. Only a `"` that
   opens a line is safe; inner quotes are single quotes. `npcfit.py` checks this.
 - The dungeon NPC box is 288 px by 3 lines, pages split by `\n\r`.
-- The battle box wraps at 24 glyph codes per line. An inserted name that won't fit moves
-  to the next line, but plain text breaks wherever it hits 24, mid-word included, so
-  battle lines break after the name. `fightfit.py` checks this.
+- The battle box wraps at 24 glyph codes per line. Messages are expanded by 0x8001dfc0
+  into 0x8008b400; only the battle call (BATTLE.BIN 0x800d1e20) turns wrapping on. The
+  original moves an inserted name that won't fit to the next line, but breaks plain text
+  wherever it hits 24, mid-word included, and where that lands depends on the name
+  lengths ("Jupiter sweeps Cuautori wi / th LANCE."). `asm/word_wrap.asm` adds a
+  lookahead at each space (and each digraph ending in one), so words move whole.
+  `fightfit.py` simulates it over every combination of name lengths.
 
 ## Battle
 
@@ -48,7 +52,10 @@ more of the detail behind each item.
   sets a flag. The result indexes I_NAME_E.OBJ, whose strings 427-938 were never
   localised in the English-mode file: 428-557 mirror the item list, 558+ are natural
   attacks (claws, fangs, stinger). The verb indexes FIGHTMSG.OBJ.
-- `battleshow.py` renders any template/verb/noun combination in the real battle box.
+- In a battle, the current group's monster record is at 0x801b0680 (in
+  rips/states/battle_wriggle.state).
+- `battleshow.py` renders any template/verb/noun combination in the real battle box, with
+  `--monster NAME` to try other name lengths.
 - NPC parties fight as monsters. The encounter loader (0x80021268) loads the enemy file
   as table 1 index id+0x2c; NPC parties use id 379+n, which is DATA02/NPTnn.BIN. Their
   member records sit at the end of the file in the monster layout, with katakana in the
