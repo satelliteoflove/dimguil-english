@@ -11,7 +11,7 @@
 #      (committed files stay redacted; the encoder falls back to `source` for untranslated strings)
 #   3. import the edited font sheet into DATA00/SYSCG.BIN
 #   4. encode text + binary patches into rips/dirty/dimguil
-#   5. assemble vwf.asm (armips) into the executable and overlays
+#   5. assemble asm/vwf.asm, then the other asm/*.asm in name order (armips)
 #   6. relocate files that outgrew their sectors (scripts/relocate.py)
 #   7. overlay rips/dirty onto rips/clean and rebuild with mkpsxiso -> rips/iso/dimguil-en.cue
 set -eu
@@ -40,14 +40,17 @@ for t in translations/*.json; do
 done
 
 echo "== font"
-python3 scripts/tim.py import rips/clean/dimguil/DATA00/SYSCG.BIN 0x400 SYSCG_000001_04b_01c.png \
+python3 scripts/tim.py import rips/clean/dimguil/DATA00/SYSCG.BIN 0x400 graphics/SYSCG_000001_04b_01c.png \
   rips/dirty/dimguil/DATA00/SYSCG.BIN
 
 echo "== encode"
 (cd rips/stage && java -jar "$ROOT/$JAR" encode-all 2>&1 | grep -E "exceeded|ERROR" || true)
 
 echo "== asm"
-(cd rips && "$ARMIPS" ../vwf.asm && for a in ../asm/*.asm; do "$ARMIPS" "$a"; done)
+# vwf.asm goes first: it copies the clean executable and overlays into dirty/, and the
+# others patch those copies.
+(cd rips && "$ARMIPS" ../asm/vwf.asm && for a in ../asm/*.asm; do
+  [ "$a" = ../asm/vwf.asm ] || "$ARMIPS" "$a"; done)
 
 echo "== relocate"
 python3 scripts/relocate.py rips/clean/dimguil.xml rips/dirty/dimguil rips/iso/disc.xml
