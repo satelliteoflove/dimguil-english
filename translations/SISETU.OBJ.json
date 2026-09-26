@@ -264,202 +264,202 @@
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Who will stay?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 22,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "That character can't stay here.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 16,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Which room?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 7,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Sleeping...",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Happy birthday!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 14,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Gained a level!",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Strength rose.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 14,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Strength fell.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "I.Q. rose.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "I.Q. fell.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Piety rose.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Piety fell.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Vitality rose.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 14,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Vitality fell.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Agility rose.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Agility fell.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Luck rose.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Luck fell.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 14,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Learned new spells.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Not enough gold.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 27,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Restores MP only. No HP.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 23,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Restores 1 HP for 10G a week.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 23,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Restores 3 HP for 50G a week.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Restores 7 HP for 200G a week.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Restores 10 HP for 500G a week.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Restores all HP for 10000G a week.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Stop resting.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff12} has died",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "of old age.",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -2570,7 +2570,7 @@
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Adventurer's Inn",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -2682,7 +2682,7 @@
                 {
                     "length": 4,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Stay",
                     "compress": true,
                     "addStringTerminator": true
                 },

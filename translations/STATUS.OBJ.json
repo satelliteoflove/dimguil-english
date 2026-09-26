@@ -60,48 +60,48 @@
                 {
                     "length": 4,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Adventurer's Inn",
                     "addStringTerminator": true
                 },
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "The Stables        (Free)",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "A Cot              10G/W",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 21,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Economy Rooms      50G/W",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 21,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Merchant Suites   200G/W",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 21,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "The Royal Suite   500G/W",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 22,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Special Room    10000G/W",
                     "compress": true,
                     "addStringTerminator": true
                 },
