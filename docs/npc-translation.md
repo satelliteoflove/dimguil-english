@@ -49,7 +49,7 @@ written by `scripts/nptnames.py`).
 | Japanese | English | Notes |
 |---|---|---|
 | ガイ / ガイラルディア | Guy / Gaillardia | self-proclaimed hero, party leader |
-| アルストロン | Alstron | priest, polite, dry, flirts; "Al" for アルちゃん. His battle record (NPT files) says アルストン, the site's "Alston"; the patch uses Alstron there too, as the dialogue does 59 times |
+| アルストロン | Alstron | priest, polite, dry, flirts; asks to be called "Al-chan" (アルちゃん), the one honorific kept, because the cutesy -chan on a tall formal priest is the joke and anime-literate players know it. His battle record (NPT files) says アルストン, the site's "Alston"; the patch uses Alstron there too, as the dialogue does 59 times |
 | リナリア | Linaria | fighter, frank, big-sisterly |
 | ライチ | Lychee | mage, childish, calls herself "Lychee" |
 | フリチラリア | Fritillaria | thief, cheeky kid voice (おいら) |
