@@ -32,8 +32,11 @@ TABLE_LEN = {0: 263, 1: 547, 2: 102, 3: 70}
 # NPC_MES1-5.OBJ load (one at a time, when an NPC is met) to 0x801a0400, the staging
 # area the maze also uses for 66-sector wall textures. Nothing else is loaded or read
 # there during a conversation; 32 sectors stays below MAZE.BIN's second buffer at 0x801b0400.
+# I_NAME_E.OBJ (and I_NAME_J) load to 0x801d1000; FIGHTMSG.OBJ is resident from 0x801d7000
+# in town and maze alike -> 12 whole sectors.
 MAX_SECTORS = {
     'DATA06/SISETU.OBJ': 14,
+    'DATA06/I_NAME_E.OBJ': 12,
     **{f'DATA06/NPC_MES{n}.OBJ': 32 for n in range(1, 6)},
 }
 
