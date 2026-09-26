@@ -983,84 +983,84 @@
                 {
                     "length": 15,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "No one has been brought in.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Help whom?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Who will pay?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 15,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "The party is full.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Take back whom?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 20,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "No one needs treatment.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Leave whom here?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 8,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff12} is healed.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff12} went back to the tavern.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff12} is alive again!",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff12} has turned to ashes.",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 16,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff12} is lost forever.",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -2584,7 +2584,7 @@
                 {
                     "length": 7,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Temple of Cant",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -2703,21 +2703,21 @@
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Heal Character",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Take Back Character",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Leave Character",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -3829,25 +3829,25 @@
                 {
                     "length": 4,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Murmur-",
                     "addStringTerminator": true
                 },
                 {
                     "length": 5,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Chant-",
                     "addStringTerminator": true
                 },
                 {
                     "length": 5,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Pray-",
                     "addStringTerminator": true
                 },
                 {
                     "length": 5,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Invoke!",
                     "addStringTerminator": true
                 },
                 {
@@ -4015,7 +4015,7 @@
                 {
                     "length": 18,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff12} was carried to the temple.",
                     "compress": true,
                     "addStringTerminator": true
                 },
