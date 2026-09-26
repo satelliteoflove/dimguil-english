@@ -11,7 +11,7 @@
                 {
                     "length": 54,
                     "source": "NA",
-                    "translation": "Man with a greatsword\n\"Hey there, hello!\n You guys here looking for the Priestess too?",
+                    "translation": "Man with a greatsword\n\"Well, hello there!\n You guys here looking for the Priestess too?",
                     "addStringTerminator": true
                 },
                 {
@@ -707,7 +707,7 @@
                 {
                     "length": 105,
                     "source": "NA",
-                    "translation": "Tall man\n\"I am Alstron, a Priest.\n I trust you'll remember the name.\n\r For form's sake, I'll introduce the rest of us.\n The tall lady here is our Fighter, Linaria.",
+                    "translation": "Tall man\n\"I am Alstron, a Priest.\n A pleasure to make your acquaintance.\n\r Where are my manners? Let me introduce the others.\n The tall lady here is our Fighter, Linaria.",
                     "addStringTerminator": true
                 },
                 {
@@ -755,25 +755,25 @@
                 {
                     "length": 43,
                     "source": "NA",
-                    "translation": "Guy\n\"Just so we're clear,\n the leader here is me, the hero!",
+                    "translation": "Guy\n\"Now, just so you know,\n I'm the leader here. Me, the hero!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Alstron\n\"Quite so. We'll leave it at that, shall we?",
+                    "translation": "Alstron\n\"Of course. If you say so.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": "Guy\n\"Always hogging the spotlight......",
+                    "translation": "Guy\n\"Show-off...",
                     "addStringTerminator": true
                 },
                 {
                     "length": 21,
                     "source": "NA",
-                    "translation": "Alstron\n\"Did you say something?",
+                    "translation": "Alstron\n\"Hm? Did you say something?",
                     "addStringTerminator": true
                 },
                 {
