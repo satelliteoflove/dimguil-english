@@ -47,7 +47,6 @@ bin/
 ### Misc
 
 rips/
-tools/
 *.obj
 *.OBJ
 *.dat
