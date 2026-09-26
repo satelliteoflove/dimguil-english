@@ -29,8 +29,12 @@ TABLE_LEN = {0: 263, 1: 547, 2: 102, 3: 70}
 
 # Largest sector count each file's load buffer can take, checked in RAM:
 # SISETU.OBJ loads to 0x801d8c00, next live data at 0x801e0200 -> 14 whole sectors.
+# NPC_MES1-5.OBJ load (one at a time, when an NPC is met) to 0x801a0400, the staging
+# area the maze also uses for 66-sector wall textures. Nothing else is loaded or read
+# there during a conversation; 32 sectors stays below MAZE.BIN's second buffer at 0x801b0400.
 MAX_SECTORS = {
     'DATA06/SISETU.OBJ': 14,
+    **{f'DATA06/NPC_MES{n}.OBJ': 32 for n in range(1, 6)},
 }
 
 
