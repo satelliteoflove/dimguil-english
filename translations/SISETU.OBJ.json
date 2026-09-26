@@ -2177,7 +2177,7 @@
                 {
                     "length": 26,
                     "source": "NA",
-                    "translation": "",
+                    "translation": " \n      \"Welcome, adventurers.\"",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -2208,14 +2208,14 @@
                 {
                     "length": 60,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "\"Have you learned something?\nSpeak freely.\"",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 70,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "\"Adventurers! Go to the Shrine, rescue the\nPriestess, and find out what is happening\nbelow. Then report back to me!\"",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -2300,7 +2300,7 @@
                 {
                     "length": 36,
                     "source": "NA",
-                    "translation": "",
+                    "translation": " \n    \"I see it! A dark god, asleep below!\"",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -2416,7 +2416,7 @@
                 {
                     "length": 5,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "King's Chambers",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -2801,7 +2801,7 @@
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Audience with the King",
                     "compress": true,
                     "addStringTerminator": true
                 },
