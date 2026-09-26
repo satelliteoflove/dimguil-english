@@ -24,7 +24,7 @@ where the series' English and a literal reading differ.
 | 王の間 | King's Chambers | |
 | 城下 | Castle Town | |
 | 占い師 | Diviner | Already used in the NPC dialogue. |
-| 神殿内部 / 地下神殿 | Temple Interior / Underground Temple | Map area names. |
+| 神殿内部 / 地下神殿 | Shrine Interior / Underground Shrine | Map area names. 神殿 is "the Shrine" everywhere, as in the King's speeches; 寺院 is the Temple of Cant. |
 | エリアA-E, X, Z | Area A-E, X, Z | |
 
 ## Inn rooms
