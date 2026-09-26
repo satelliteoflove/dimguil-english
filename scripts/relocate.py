@@ -76,35 +76,35 @@ def main(clean_xml, dirty, out_xml):
     off = lambda ram: ram - EXE_BASE
 
     moved = {}
-    for base, _, files in os.walk(dirty):
-        for f in files:
-            path = os.path.relpath(os.path.join(base, f), dirty)
-            if path not in entries:
-                continue
-            old = math.ceil(os.path.getsize(os.path.join(clean_root, path)) / 2048)
-            new = math.ceil(os.path.getsize(os.path.join(dirty, path)) / 2048)
-            if new <= old:
-                continue
-            if new > MAX_SECTORS.get(path, old):
-                sys.exit(f'relocate: {path} needs {new} sectors (had {old}); its load buffer '
-                         f'allows {MAX_SECTORS.get(path, old)}. Shorten the text or verify a larger buffer.')
-            lba = entries[path]
-            hits = 0
-            for t, (mbase, cbase, w) in enumerate(TABLES):
-                for i in range(TABLE_LEN[t]):
-                    p = off(mbase) + 3 * i
-                    e = exe[p:p + 3]
-                    if unbcd(e[0]) * 4500 + unbcd(e[1]) * 75 + unbcd(e[2]) - 150 != lba:
-                        continue
-                    exe[p:p + 3] = msf(next_free)
-                    c = off(cbase) + w * i
-                    exe[c:c + w] = new.to_bytes(w, 'little')
-                    hits += 1
-            if not hits:
-                sys.exit(f'relocate: no table entry for {path} (LBA {lba})')
-            print(f'  moved {path}: LBA {lba} -> {next_free}, {old} -> {new} sectors ({hits} table entries)')
-            moved[path] = next_free
-            next_free += new
+    # Disc order, not os.walk order: the walk order depends on the filesystem, and the
+    # order files are moved in decides where each one lands.
+    for path in entries:
+        if not os.path.exists(os.path.join(dirty, path)):
+            continue
+        old = math.ceil(os.path.getsize(os.path.join(clean_root, path)) / 2048)
+        new = math.ceil(os.path.getsize(os.path.join(dirty, path)) / 2048)
+        if new <= old:
+            continue
+        if new > MAX_SECTORS.get(path, old):
+            sys.exit(f'relocate: {path} needs {new} sectors (had {old}); its load buffer '
+                     f'allows {MAX_SECTORS.get(path, old)}. Shorten the text or verify a larger buffer.')
+        lba = entries[path]
+        hits = 0
+        for t, (mbase, cbase, w) in enumerate(TABLES):
+            for i in range(TABLE_LEN[t]):
+                p = off(mbase) + 3 * i
+                e = exe[p:p + 3]
+                if unbcd(e[0]) * 4500 + unbcd(e[1]) * 75 + unbcd(e[2]) - 150 != lba:
+                    continue
+                exe[p:p + 3] = msf(next_free)
+                c = off(cbase) + w * i
+                exe[c:c + w] = new.to_bytes(w, 'little')
+                hits += 1
+        if not hits:
+            sys.exit(f'relocate: no table entry for {path} (LBA {lba})')
+        print(f'  moved {path}: LBA {lba} -> {next_free}, {old} -> {new} sectors ({hits} table entries)')
+        moved[path] = next_free
+        next_free += new
     open(exe_path, 'wb').write(bytes(exe))
 
     def fix(m):
