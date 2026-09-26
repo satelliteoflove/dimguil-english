@@ -989,7 +989,7 @@
                 {
                     "length": 132,
                     "source": "NA",
-                    "translation": "Guy\n\"I think they're friends of yours, but\n we just found a party that was wiped out.\n\r If you like, as a favor from us,\n we'll deliver that party safely\n to the Temple for you. How about it?",
+                    "translation": "Guy\n\"I believe these are friends of yours.\n We came across a party that was wiped out.\n\r Should you wish it, we would be pleased\n to return them safely to the Temple,\n as a favor to you. What do you say?",
                     "addStringTerminator": true
                 },
                 {
@@ -1001,7 +1001,7 @@
                 {
                     "length": 95,
                     "source": "NA",
-                    "translation": " I see!\n We're glad to be of help to you.\n No, no, no need to thank us.\n\r We'll collect our fee wherever we can.\n Farewell!",
+                    "translation": " Very well.\n We're glad we could be of help.\n No, no, there's no need to thank us.\n\r We'll just help ourselves to our fee.\n Farewell!",
                     "addStringTerminator": true
                 },
                 {
