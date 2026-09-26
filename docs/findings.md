@@ -1,3 +1,9 @@
+# Remisse's findings
+
+Remisse's notes from the original dimguil-patcher, kept as they wrote them. The notes
+starting with "Since then" were added later, where things have changed. Newer engine
+notes are in `engine-notes.md`.
+
 - 0x89ac0  -> possibly the location where raw text is written, must investigate further
 - 0x8b400  -> current string is loaded here
 - 0x8b680  -> had f9 76 (encoded char)
@@ -44,8 +50,18 @@ other strings will need to be shortened to recover that extra space
 translation file, under the `file` field (e.g. `"extendByBytes": 1000` should probably be safe for EVENTMES), but I 
 haven't yet determined if it's *completely* safe to do so (and you likely won't be able to create xdelta 
 patches this way, so only do this if you have no other option)
+
+> Since then: files can grow. `scripts/relocate.py` moves a file that outgrows its sectors
+> to the end of the data track and updates the executable's file tables. The NPC dialogue
+> files are now about 50 KB bigger each. The limits are each file's load buffer (only
+> files with a known limit may grow) and the 16-bit string offsets, which cap a file at
+> 64 KB; see `engine-notes.md`.
+
 - to place ellipses, use the placeholder char `\`` (yeah, I know)
 - use `'` instead of `’`
+
+> Since then: the NPC dialogue files use three periods instead of the ellipsis placeholder.
+
 - for ancient characters, write `{ancient_<x>}` (e.g. `{ancient_a}`) instead of `{ff35}xx` to achieve correct
 spacing and to use 1 byte instead of 3 per char (see also `tables/codes.tbl`)
 
@@ -59,3 +75,6 @@ deterministic and needs to be figured out on a case-by-case basis. Known instanc
 this by renaming the book to "Tome{of}Rebirth" (notice the hacky `{of}` char))
 - Narrator lines (EVENTMES): random cutoff point. One very long string might get printed in its entirety, while 
 another of the same length might get truncated
+
+> Since then: these haven't been rechecked one by one. The shop is still called Boltac's
+> Trading Post, and SISETU still uses the `Tome{of}Rebirth` workaround.

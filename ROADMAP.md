@@ -62,7 +62,8 @@ the deliberately unused ones marked (the Japanese-mode name lists, see
    almost exactly as they wrote it. EVENTMES hasn't changed at all, and upstream put it
    at about 15% edited. Review it to the same standard as the NPC pass, EVENTMES first,
    then their parts of SISETU, STATUS and FIGHTMSG. Also check it against terms we've
-   settled on since (character names, the game's own spell list).
+   settled on since (character names, the game's own spell list) and conventions like
+   ellipses (their text uses the `` ` `` placeholder, ours three periods).
 3. Our own first-pass text that hasn't had a second look: item and monster
    descriptions (ITEM, M_CATALG), MESSAGE, combat verbs.
 

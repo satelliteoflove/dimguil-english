@@ -1,7 +1,7 @@
 # Engine notes
 
 What we learned about Wizardry: Dimguil (SLPS-02691 Rev 1) while translating it, beyond
-Remisse's `Findings.md`. Addresses are RAM unless a file is named. Commit messages carry
+Remisse's notes in `findings.md`. Addresses are RAM unless a file is named. Commit messages carry
 more of the detail behind each item.
 
 ## Loading files
