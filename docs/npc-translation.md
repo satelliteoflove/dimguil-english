@@ -43,10 +43,13 @@ Keep every control code from the source, the same number of times.
 Names follow the reference site's glossary (bartoks-trading-post), which transliterates
 the NPC party names the same way everywhere.
 
+The same names go into the party records the game shows in battle (DATA02/NPT00-15.BIN,
+written by `scripts/nptnames.py`).
+
 | Japanese | English | Notes |
 |---|---|---|
 | ガイ / ガイラルディア | Guy / Gaillardia | self-proclaimed hero, party leader |
-| アルストロン | Alstron | priest, polite, dry, flirts; "Al" for アルちゃん |
+| アルストロン | Alstron | priest, polite, dry, flirts; "Al" for アルちゃん. His battle record (NPT files) says アルストン, the site's "Alston"; the patch uses Alstron there too, as the dialogue does 59 times |
 | リナリア | Linaria | fighter, frank, big-sisterly |
 | ライチ | Lychee | mage, childish, calls herself "Lychee" |
 | フリチラリア | Fritillaria | thief, cheeky kid voice (おいら) |

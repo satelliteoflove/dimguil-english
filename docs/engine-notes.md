@@ -49,6 +49,11 @@ more of the detail behind each item.
   localised in the English-mode file: 428-557 mirror the item list, 558+ are natural
   attacks (claws, fangs, stinger). The verb indexes FIGHTMSG.OBJ.
 - `battleshow.py` renders any template/verb/noun combination in the real battle box.
+- NPC parties fight as monsters. The encounter loader (0x80021268) loads the enemy file
+  as table 1 index id+0x2c; NPC parties use id 379+n, which is DATA02/NPTnn.BIN. Their
+  member records sit at the end of the file in the monster layout, with katakana in the
+  English name slots too. `nptnames.py` writes the patches in `binary/`, and `nptshow.py`
+  forces a fight with any party to check the enemy panel.
 
 ## Card battle
 
