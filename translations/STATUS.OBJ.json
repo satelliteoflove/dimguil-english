@@ -9,52 +9,52 @@
                 {
                     "length": 14,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Gilgamesh's Tavern",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Seeking Members",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Take Along",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 4,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Decline",
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Hear More",
                     "addStringTerminator": true
                 },
                 {
                     "length": 3,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Quit",
                     "addStringTerminator": true
                 },
                 {
                     "length": 2,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Yes",
                     "addStringTerminator": true
                 },
                 {
                     "length": 3,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "No",
                     "addStringTerminator": true
                 },
                 {
@@ -598,31 +598,31 @@
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff24}Spellbook",
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff24}Equip Items",
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff24}Give Items",
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff24}Drop Items",
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff24}Pool Gold",
                     "addStringTerminator": true
                 },
                 {
