@@ -575,7 +575,7 @@
                 {
                     "length": 287,
                     "source": "NA",
-                    "translation": "Guy\n\"Well, I went and did it.\n I was grinding a bit of experience, and\n\r ended up killing a friendly monster.\n Since I, the leader, went Evil first,\n the rest of us followed in no time.\n\r But thinking it over calmly? It's not so bad.\n Walk up all friendly-like,\n then cut 'em down.\n\r If you guys were no use to us, you'd have\n eaten a Tiltowait the second\n you spoke to us.\n\r Lucky for you, your info's worth a little.",
+                    "translation": "Guy\n\"Well, I blew it.\n I was grinding a bit of experience, and\n\r ended up killing a friendly monster.\n And since I, the leader, went Evil first,\n the whole party followed in no time.\n\r But on calm reflection, it isn't so bad.\n Approach as a friend...\n then strike.\n\r Were you of no use to us, we would have\n treated you to a Tiltowait the moment\n you spoke to us.\n\r Fortunately, your information is\n of some small value.",
                     "addStringTerminator": true
                 },
                 {
@@ -593,7 +593,7 @@
                 {
                     "length": 26,
                     "source": "NA",
-                    "translation": "Guy\n\"So anyway, here's to getting along.",
+                    "translation": "Guy\n\"So anyway, let's stay friends!",
                     "addStringTerminator": true
                 },
                 {
