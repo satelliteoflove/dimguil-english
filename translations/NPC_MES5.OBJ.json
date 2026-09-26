@@ -29,43 +29,43 @@
                 {
                     "length": 18,
                     "source": "NA",
-                    "translation": "Hairy man\n\"Mm?",
+                    "translation": "Shaggy man\n\"Mmm?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 45,
                     "source": "NA",
-                    "translation": "Short guy\n\"Hey, I've heard all about you guys.\n You mean you've never heard of me?",
+                    "translation": "Short man\n\"Hey, I've heard all about you guys.\n Ain't you ever heard of me?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "Big Dracon\n\"See you.",
+                    "translation": "Big Dracon\n\"See ya.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 21,
                     "source": "NA",
-                    "translation": "Hairy man\n\"Mmm...",
+                    "translation": "Shaggy man\n\"Mmm...",
                     "addStringTerminator": true
                 },
                 {
                     "length": 18,
                     "source": "NA",
-                    "translation": "Short guy\n\"Hmph!",
+                    "translation": "Short man\n\"Hmph!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 63,
                     "source": "NA",
-                    "translation": "Zaril\n\"That {ff12}...\n Hope the Kadorto works out.\n\r See you. You lot take care too.",
+                    "translation": "Zaril\n\"That {ff12} of yours...\n\r Hope the Kadorto takes.\n See ya. You lot watch yourselves too.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "Zaril\n\"See you. You lot take care too.",
+                    "translation": "Zaril\n\"See ya. You lot watch yourselves too.",
                     "addStringTerminator": true
                 },
                 {
@@ -77,7 +77,7 @@
                 {
                     "length": 45,
                     "source": "NA",
-                    "translation": "Gaura\n\"{ff12}, w-wasn't moving.\n Next time, m-maybe we talk...",
+                    "translation": "Gaura\n\"{ff12}... w-wasn't moving.\n N-next time, m-maybe we t-talk...",
                     "addStringTerminator": true
                 },
                 {
@@ -89,19 +89,19 @@
                 {
                     "length": 37,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"Tch, it's you guys...\n Whaddya want with me?",
+                    "translation": "Fritillaria\n\"Tch, it's you guys...\n Whaddaya want with me?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 36,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"Oh, it's just you guys!\n Need somethin' from me?",
+                    "translation": "Fritillaria\n\"Oh, it's just you guys!\n Whaddaya want with me?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 56,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"Hey! You doin' good?\n I'm doin' great, as you can see.\n\r So what's up today?",
+                    "translation": "Fritillaria\n\"Hey! You doin' good?\n Me, I'm doin' great, as ya can see.\n\r So whaddaya need today?",
                     "addStringTerminator": true
                 },
                 {
@@ -113,13 +113,13 @@
                 {
                     "length": 47,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"Hey! It's {ff12}, the walking corpse!\n This time we met while you're alive.",
+                    "translation": "Fritillaria\n\"Hey! It's {ff12}, the walkin' corpse!\n Nice to catch ya alive this time.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 23,
                     "source": "NA",
-                    "translation": "Gaura\n\"Ohh... Mo... G-good morning.",
+                    "translation": "Gaura\n\"Ohh, oh... G-good morning.",
                     "addStringTerminator": true
                 },
                 {
@@ -131,13 +131,13 @@
                 {
                     "length": 35,
                     "source": "NA",
-                    "translation": "Zaril\n\"Hey! How's the exploring coming along?\n Going all right?",
+                    "translation": "Zaril\n\"Hey! How's the exploring?\n Going all right?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "Zaril\n\"Hey.",
+                    "translation": "Zaril\n\"Yo.",
                     "addStringTerminator": true
                 },
                 {
@@ -173,7 +173,7 @@
                 {
                     "length": 107,
                     "source": "NA",
-                    "translation": "Zaril\n\"I'm Zaril, leader of this party.\n\r Well, I say party, but there's only\n two others. Still, let me introduce 'em.\n This little one's Fritillaria.",
+                    "translation": "Zaril\n\"I am Zaril, leader of this party.\n\r Well, I say party, but there's only\n two others. Still, let me introduce 'em.\n This little one's Fritillaria.",
                     "addStringTerminator": true
                 },
                 {
@@ -185,19 +185,19 @@
                 {
                     "length": 26,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"You didn't need the \"little\" part!",
+                    "translation": "Fritillaria\n\"Ya didn't have to say \"little\"!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 37,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"Hi! I'm Fritillaria the Thief!\n Nice to meetcha!",
+                    "translation": "Fritillaria\n\"Hiya! Fritillaria the Thief, that's me!\n Nice to meetcha!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 32,
                     "source": "NA",
-                    "translation": "Zaril\n\"And this hairy one here is...",
+                    "translation": "Zaril\n\"And this shaggy one here is...",
                     "addStringTerminator": true
                 },
                 {
@@ -209,7 +209,7 @@
                 {
                     "length": 38,
                     "source": "NA",
-                    "translation": "Zaril\n\"So yeah, that's about it.\n Hope we get along from here on.",
+                    "translation": "Zaril\n\"So, that's about the size of it.\n Hope we get along from here on out.",
                     "addStringTerminator": true
                 },
                 {
@@ -221,19 +221,19 @@
                 {
                     "length": 56,
                     "source": "NA",
-                    "translation": "Zaril\n\"Fine, fine. Need curing? Healing?\n So who's the one needs my help?",
+                    "translation": "Zaril\n\"Can't be helped. Curing? Healing?\n So who's the one needs my help?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 30,
                     "source": "NA",
-                    "translation": "Zaril\n\"Look... quit messing me around, would ya?",
+                    "translation": "Zaril\n\"Look... quit wasting my time, would ya?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 35,
                     "source": "NA",
-                    "translation": "Zaril\n\"This is... sorry, I can't cure this one.",
+                    "translation": "Zaril\n\"This here... Sorry, can't cure this one.",
                     "addStringTerminator": true
                 },
                 {
@@ -263,7 +263,7 @@
                 {
                     "length": 43,
                     "source": "NA",
-                    "translation": "Zaril\n\"That so? Well, keep the trip home\n in mind in whatever you do.",
+                    "translation": "Zaril\n\"That so? Well, from here on, keep\n the trip home in mind.",
                     "addStringTerminator": true
                 },
                 {
@@ -299,7 +299,7 @@
                 {
                     "length": 37,
                     "source": "NA",
-                    "translation": "Zaril\n\"Hey, you don't have enough money.\n Some other time.",
+                    "translation": "Zaril\n\"Hey, you're short on cash.\n Some other time.",
                     "addStringTerminator": true
                 },
                 {
@@ -335,7 +335,7 @@
                 {
                     "length": 37,
                     "source": "NA",
-                    "translation": "Zaril\n\"I don't know anything either.\n When I say I don't know, I don't know.",
+                    "translation": "Zaril\n\"Don't know a thing either.\n I said I don't know, so I don't know.",
                     "addStringTerminator": true
                 },
                 {
@@ -359,7 +359,7 @@
                 {
                     "length": 33,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"Whaaat? What d'you want with me?",
+                    "translation": "Fritillaria\n\"Whaaat? You got business with me or somethin'?",
                     "addStringTerminator": true
                 },
                 {
@@ -383,7 +383,7 @@
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "Gaura\n\"Hmm hm hmm hmmm...",
+                    "translation": "Gaura\n\"Hm hm hmm, hm hm hmmm.",
                     "addStringTerminator": true
                 },
                 {
@@ -401,7 +401,7 @@
                 {
                     "length": 42,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"'Cause he called me a brat!",
+                    "translation": "Fritillaria\n\"'Cause he keeps callin' me a brat!",
                     "addStringTerminator": true
                 },
                 {
@@ -413,37 +413,37 @@
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "Zaril\n\"There was a scholar down in the archives.",
+                    "translation": "Zaril\n\"Saw some scholars in the archives.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 34,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"The elf guy in the archives is real nice.",
+                    "translation": "Fritillaria\n\"That elf guy in the archives is real nice, huh?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Gaura\n\"There, lots of books. He studied.",
+                    "translation": "Gaura\n\"There, lots of books. Studying.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 39,
                     "source": "NA",
-                    "translation": "Zaril\n\"Ran into someone dressed in clothes\n like nothing I've ever seen.",
+                    "translation": "Zaril\n\"Ran into somebody wrapped in garb\n like nothing I've ever seen.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 45,
                     "source": "NA",
-                    "translation": "Zaril\n\"Maybe we've stuck our necks into\n something nasty here.",
+                    "translation": "Zaril\n\"Might be we've gone and stuck our\n necks into something nasty.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 159,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"Way before I teamed up with Zaril,\n I met this weird guy.\n\r He looked like a Fighter or a Lord,\n but he was in a big hurry, and I never\n heard of anybody else meeting him.\n\r Maybe he's not from this world?",
+                    "translation": "Fritillaria\n\"Way before I teamed up with Zaril,\n I met this weird guy.\n\r He looked like a Fighter or a Lord, sorta,\n but he was in a big hurry, and I ain't\n heard of nobody else meetin' him.\n\r Maybe he ain't from this world?",
                     "addStringTerminator": true
                 },
                 {
@@ -455,7 +455,7 @@
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "Zaril\n\"Info? ......Nope, nothing.",
+                    "translation": "Zaril\n\"Info? ......Nope. Got nothing.",
                     "addStringTerminator": true
                 },
                 {
@@ -467,13 +467,13 @@
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Gaura\n\"That way...............maybe?",
+                    "translation": "Gaura\n\"That way............... maybe?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 62,
                     "source": "NA",
-                    "translation": "Zaril\n\"Me? I'm not especially good or bad at\n anything. Sword, magic, I handle it all.",
+                    "translation": "Zaril\n\"Me? Nothing I'm especially good or bad at.\n Sword or magic, I can handle it all.",
                     "addStringTerminator": true
                 },
                 {
@@ -485,13 +485,13 @@
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": "Gaura\n\"I-I, not picky. Like everything.\n Good guy.",
+                    "translation": "Gaura\n\"M-me, not picky.\n Good guy.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 64,
                     "source": "NA",
-                    "translation": "Zaril\n\"......\n\r Well, same goes for us, but I guess\n you folks are still greenhorns too, huh.",
+                    "translation": "Zaril\n\"......\n\r Well, same goes for us, but I guess\n you lot are still greenhorns too, huh.",
                     "addStringTerminator": true
                 },
                 {
@@ -503,7 +503,7 @@
                 {
                     "length": 41,
                     "source": "NA",
-                    "translation": "Gaura\n\"I-I, s-slow to move.\n B-but, rest is great.",
+                    "translation": "Gaura\n\"M-me, s-slow.\n B-but, everything else, great.",
                     "addStringTerminator": true
                 },
                 {
@@ -515,19 +515,19 @@
                 {
                     "length": 112,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"I got paralyzed and couldn't move,\n\r and they just left me behind all alone.\n Then Zaril came and saved me.\n\r That's why I've been sticking\n with Zaril ever since.",
+                    "translation": "Fritillaria\n\"I got paralyzed, couldn't move a muscle,\n\r and they ditched me all by myself.\n Zaril's the one who saved me.\n\r That's how come I stick with Zaril.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 36,
                     "source": "NA",
-                    "translation": "Gaura\n\"I, know nothing.\n Mmm...... Sorry.",
+                    "translation": "Gaura\n\"Me, know nothing.\n Mmm...... Sorry.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 70,
                     "source": "NA",
-                    "translation": "Zaril\n\"You met that dwarf, Balbo?\n\r Lately I've kinda started thinking\n a guy like that is pretty cool.",
+                    "translation": "Zaril\n\"You met that dwarf, Balbo?\n\r Lately I've started thinking\n a guy like that's all right.",
                     "addStringTerminator": true
                 },
                 {
@@ -539,7 +539,7 @@
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "Gaura\n\"I-I, g-gonna be Samurai. Someday.",
+                    "translation": "Gaura\n\"M-me, g-gonna be Samurai. Someday.",
                     "addStringTerminator": true
                 },
                 {
@@ -557,7 +557,7 @@
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "Gaura\n\"I-I, g-gonna be Samurai. Someday.",
+                    "translation": "Gaura\n\"M-me, g-gonna be Samurai. Someday.",
                     "addStringTerminator": true
                 },
                 {
@@ -569,13 +569,13 @@
                 {
                     "length": 40,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"............!\n Whoa! Not bad at all!",
+                    "translation": "Fritillaria\n\"............!\n Whoa, awesome! You guys are somethin'!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 40,
                     "source": "NA",
-                    "translation": "Gaura\n\"I-I, when I'm Samurai,\n g-gonna get Muramasa.",
+                    "translation": "Gaura\n\"M-me, when Samurai,\n g-gonna get Muramasa.",
                     "addStringTerminator": true
                 },
                 {
@@ -593,7 +593,7 @@
                 {
                     "length": 18,
                     "source": "NA",
-                    "translation": "Gaura\n\"H-heard that.",
+                    "translation": "Gaura\n\"Th-that, heard it.",
                     "addStringTerminator": true
                 },
                 {
@@ -617,19 +617,19 @@
                 {
                     "length": 22,
                     "source": "NA",
-                    "translation": "We asked them about other parties.",
+                    "translation": "We asked about other parties.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 20,
                     "source": "NA",
-                    "translation": "We asked them personal questions.",
+                    "translation": "We asked them something personal.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 92,
                     "source": "NA",
-                    "translation": "  From within the black shadow before you,\n  something darker than the shadow itself\n  seeped out without a sound.",
+                    "translation": "  From within the black shadow before you,\n  something darker still than the shadow\n  came seeping out without a sound.",
                     "addStringTerminator": true
                 },
                 {
@@ -641,19 +641,19 @@
                 {
                     "length": 179,
                     "source": "NA",
-                    "translation": "Mysterious figure\n\"Begone, unbelievers in the old god!\n Hear my words and heed my warning!\n\r Beyond here is the holy ground of the\n Opener of the Door! Should any other\n go further, our god's wrath awaits!\n\r \n         Begone!",
+                    "translation": "Mysterious figure\n\"Begone, unbelievers in the old god!\n Hear my words and heed my warning!\n\r Beyond lies the holy ground of the\n Opener of the Door! Any other who goes\n further shall know the wrath of our god!\n\r \n         Begone!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 75,
                     "source": "NA",
-                    "translation": "Mysterious man\n\"Fools! You have ignored my warning!\n\r You must now be punished for the sin\n you yourselves have committed!",
+                    "translation": "Mysterious man\n\"Fools! You have scorned my warning!\n\r Now you shall bear the punishment for\n the sin you yourselves have wrought!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 151,
                     "source": "NA",
-                    "translation": "Mysterious man\n\"Adventurers who have come this far,\n beyond here lies the real world.\n\r If dreams are what you seek, you would\n do better not to go on.\n\r You are not ready yet, are you?\n Calm yourselves and consider once more\n just where it is you are standing.",
+                    "translation": "Mysterious man\n\"Adventurers who have come this far,\n beyond this point lies the real world.\n\r If it is dreams you seek, you would\n do well to go no further.\n\r You are not yet ready, are you?\n Calm yourselves and consider once more\n what manner of place you stand upon.",
                     "addStringTerminator": true
                 },
                 {
@@ -683,7 +683,7 @@
                 {
                     "length": 242,
                     "source": "NA",
-                    "translation": "Mysterious man\n\"I am Agan, the eternal traveler.\n Demons dragged me into the past.\n\r Beneath this ground, it seems, lies a\n place where monsters stir that even\n the gods cannot control.\n\r But it is under a powerful seal and\n cannot be opened.\n\r I must go there and gain more power\n so that I can return to my homeland.\n I must hurry on. Farewell.",
+                    "translation": "Mysterious man\n\"I am Agan, the eternal traveler.\n Demons bore me away into a world long past.\n\r Beneath this ground, it seems, lies a\n place where monsters stir that even\n the gods cannot control.\n\r But it is sealed fast, and\n cannot be opened.\n\r I must go there and gain more power\n so that I may return to my homeland.\n I must hurry on. Farewell.",
                     "addStringTerminator": true
                 },
                 {
@@ -695,7 +695,7 @@
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "We asked them to heal us.",
+                    "translation": "We asked them for healing.",
                     "addStringTerminator": true
                 },
                 {
@@ -713,7 +713,7 @@
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "We asked them about themselves.",
+                    "translation": "We asked them who they were.",
                     "addStringTerminator": true
                 },
                 {
@@ -743,13 +743,13 @@
                 {
                     "length": 37,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"Hi! I'm Fritillaria the Thief!\n Nice to meetcha!",
+                    "translation": "Fritillaria\n\"Hiya! Fritillaria the Thief, that's me!\n Nice to meetcha!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": "Gaura\n\"Heyyy. H-hello.\n I'm, Gaura.",
+                    "translation": "Gaura\n\"Heyyy. H-hello.\n Me, Gaura.",
                     "addStringTerminator": true
                 }
             ]

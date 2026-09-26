@@ -11,19 +11,19 @@
                 {
                     "length": 30,
                     "source": "NA",
-                    "translation": "Armored man\n\"Haven't seen your faces around here......",
+                    "translation": "Man in armor\n\"Ain't seen your faces around here......",
                     "addStringTerminator": true
                 },
                 {
                     "length": 33,
                     "source": "NA",
-                    "translation": "Armored man\n\"Yo! How's it goin', brother?",
+                    "translation": "Man in armor\n\"Yo! How's it goin', brother?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 27,
                     "source": "NA",
-                    "translation": "Armored man\n\"Haven't seen your faces around here...",
+                    "translation": "Man in armor\n\"Ain't seen your faces around here...",
                     "addStringTerminator": true
                 },
                 {
@@ -35,13 +35,13 @@
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "Balbo\n\"Hey! Keepin' well?",
+                    "translation": "Balbo\n\"Hey! You holdin' up alright?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 26,
                     "source": "NA",
-                    "translation": "Balbo\n\"Tch! I got no business with you lot.",
+                    "translation": "Balbo\n\"Tch! Ain't got no business with you lot.",
                     "addStringTerminator": true
                 },
                 {
@@ -53,7 +53,7 @@
                 {
                     "length": 27,
                     "source": "NA",
-                    "translation": "Woman with a spear\n\"Hello, nice to meet you.",
+                    "translation": "Woman with a spear\n\"Hi there, nice to meet you!",
                     "addStringTerminator": true
                 },
                 {
@@ -77,19 +77,19 @@
                 {
                     "length": 21,
                     "source": "NA",
-                    "translation": "Artemisia\n\"Hi there, {ff12}.",
+                    "translation": "Artemisia\n\"Hi, {ff12}!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 35,
                     "source": "NA",
-                    "translation": "Artemisia\n\"Long time no see.\n Hi there, {ff12}.",
+                    "translation": "Artemisia\n\"Long time no see!\n Hi, {ff12}!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "Wolfish man\n\"You there... Who are you?",
+                    "translation": "Wolfish man\n\"You there... Who might you be?",
                     "addStringTerminator": true
                 },
                 {
@@ -101,13 +101,13 @@
                 {
                     "length": 51,
                     "source": "NA",
-                    "translation": "Faerie with a katana\n\"Don't think I know you lot.\n Are you new around here?",
+                    "translation": "Faerie with a katana\n\"Hmm, don't think I know you guys.\n You new around here or something?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 18,
                     "source": "NA",
-                    "translation": "Shaggy man\n\"Hmm?",
+                    "translation": "Shaggy man\n\"Mmm?",
                     "addStringTerminator": true
                 },
                 {
@@ -125,7 +125,7 @@
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "Reiran\n\"...Same as ever, I see.",
+                    "translation": "Reiran\n\"...Same old, same old with you guys, huh.",
                     "addStringTerminator": true
                 },
                 {
@@ -137,13 +137,13 @@
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "Armored man\n\"Later, then.",
+                    "translation": "Man in armor\n\"Right, see ya.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "Wolfish man\n\"Well then......",
+                    "translation": "Wolfish man\n\"Farewell......",
                     "addStringTerminator": true
                 },
                 {
@@ -155,7 +155,7 @@
                 {
                     "length": 26,
                     "source": "NA",
-                    "translation": "Faerie with a katana\n\"Okay, bye-bye.",
+                    "translation": "Faerie with a katana\n\"'Kay, buh-bye.",
                     "addStringTerminator": true
                 },
                 {
@@ -167,13 +167,13 @@
                 {
                     "length": 30,
                     "source": "NA",
-                    "translation": "Woman with a spear\n\"If you don't need anything,\n I'll be going...",
+                    "translation": "Woman with a spear\n\"If you don't need anything,\n I'll be off, then...",
                     "addStringTerminator": true
                 },
                 {
                     "length": 18,
                     "source": "NA",
-                    "translation": "Balbo\n\"Well, see ya.",
+                    "translation": "Balbo\n\"Right, see ya 'round.",
                     "addStringTerminator": true
                 },
                 {
@@ -191,7 +191,7 @@
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "Reiran\n\"See ya.",
+                    "translation": "Reiran\n\"Later!",
                     "addStringTerminator": true
                 },
                 {
@@ -209,7 +209,7 @@
                 {
                     "length": 26,
                     "source": "NA",
-                    "translation": "Balbo\n\"See ya. Watch yourselves out there.",
+                    "translation": "Balbo\n\"See ya. Watch your backs out there.",
                     "addStringTerminator": true
                 },
                 {
@@ -239,25 +239,25 @@
                 {
                     "length": 16,
                     "source": "NA",
-                    "translation": "Rosea\n\"Take care.",
+                    "translation": "Rosea\n\"Do take care.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 34,
                     "source": "NA",
-                    "translation": "Rosea\n\"{ff12}...\n I hope they pull through...",
+                    "translation": "Rosea\n\"{ff12}...\n I do hope they'll be saved...",
                     "addStringTerminator": true
                 },
                 {
                     "length": 26,
                     "source": "NA",
-                    "translation": "Reiran\n\"Okay, got it. See ya.",
+                    "translation": "Reiran\n\"Uh-huh, gotcha. Okay, later!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 65,
                     "source": "NA",
-                    "translation": "Reiran\n\"Hey, you lot.\n {ff12} is one of yours, right?\n\r So you'd better save them properly.",
+                    "translation": "Reiran\n\"Hey, you guys. {ff12} is, like,\n technically your friend, right?\n\r So you'd better save them for real, 'kay?",
                     "addStringTerminator": true
                 },
                 {
@@ -269,31 +269,31 @@
                 {
                     "length": 45,
                     "source": "NA",
-                    "translation": "Gaura\n\"{ff12} w-wasn't moving.\n M-maybe next time we can t-talk...",
+                    "translation": "Gaura\n\"{ff12}... w-wasn't moving.\n N-next time, m-maybe we t-talk...",
                     "addStringTerminator": true
                 },
                 {
                     "length": 21,
                     "source": "NA",
-                    "translation": "Artemisia\n\"See you again sometime.",
+                    "translation": "Artemisia\n\"Let's meet again sometime, okay?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 50,
                     "source": "NA",
-                    "translation": "Artemisia\n\"......Ugh, what am I even saying?\n W-well, goodbye then.",
+                    "translation": "Artemisia\n\"......Oh gosh, what am I even saying?\n W-well, goodbye!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 51,
                     "source": "NA",
-                    "translation": "Artemisia\n\"I hope {ff12}\n gets brought back to life!\n\r Well, see you again sometime.",
+                    "translation": "Artemisia\n\"{ff12}...\n I really hope they come back to life!\n\r Well, let's meet again sometime, okay?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "Alba\n\"Are you all in good health?",
+                    "translation": "Alba\n\"Are you all well?",
                     "addStringTerminator": true
                 },
                 {
@@ -341,13 +341,13 @@
                 {
                     "length": 106,
                     "source": "NA",
-                    "translation": "Rosea\n\"I just heard a rumor\n that someone has been lost.\n\r Poor thing. I believe their name\n was {ff12}.\n Do you know them?",
+                    "translation": "Rosea\n\"I just heard a rumor\n that someone has been lost.\n\r Poor dear. I believe their name\n was {ff12}.\n Do you know them?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 85,
                     "source": "NA",
-                    "translation": "Rosea\n\"I'd really rather not talk to you people.\n What am I supposed to call you?\n\r It's too embarrassing to say out loud.\n {ff12}...",
+                    "translation": "Rosea\n\"I'd rather not talk with you very much.\n What am I supposed to call you?\n\r It's far too embarrassing to say aloud.\n {ff12}...",
                     "addStringTerminator": true
                 },
                 {
@@ -359,61 +359,61 @@
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "Reiran\n\"How ya doin'?",
+                    "translation": "Reiran\n\"Hey! What's up?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 20,
                     "source": "NA",
-                    "translation": "Reiran\n\"Gotten any stronger yet?",
+                    "translation": "Reiran\n\"So, get any stronger, or what?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 58,
                     "source": "NA",
-                    "translation": "Reiran\n\"The Card Master at the tavern was thrilled.\n I hear you collected the whole set.",
+                    "translation": "Reiran\n\"The Card Master at the tavern was delighted.\n I hear you collected the complete set.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "Reiran\n\"Well hello, ladies. How's it going?",
+                    "translation": "Reiran\n\"Well hi there, girlies. How's it going?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 27,
                     "source": "NA",
-                    "translation": "Reiran\n\"Well hello, little boys. How's it going?",
+                    "translation": "Reiran\n\"Well hi there, little boys. How's it going?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 56,
                     "source": "NA",
-                    "translation": "Reiran\n\"You old folks shouldn't overdo it.\n There's no such thing as a fountain of youth.",
+                    "translation": "Reiran\n\"You old folks really shouldn't overdo it.\n There's no such thing as a fountain of youth.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 59,
                     "source": "NA",
-                    "translation": "Reiran\n\"Is that a Thieves Dagger?\n\r {ff12},\n a ninja at your age? How wonderful.",
+                    "translation": "Reiran\n\"Is that a Thieves Dagger?\n {ff12},\n\r a Ninja at your age? How marvelous.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 23,
                     "source": "NA",
-                    "translation": "Gaura\n\"Oh, oh... G-good morning.",
+                    "translation": "Gaura\n\"Ohh, oh... G-good morning.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 20,
                     "source": "NA",
-                    "translation": "Gaura\n\"Oh-ho. H-hello.",
+                    "translation": "Gaura\n\"Heyyy. H-hello.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 20,
                     "source": "NA",
-                    "translation": "Artemisia\n\"Hi, {ff12}.",
+                    "translation": "Artemisia\n\"Hi, {ff12}!",
                     "addStringTerminator": true
                 },
                 {
@@ -437,49 +437,49 @@
                 {
                     "length": 32,
                     "source": "NA",
-                    "translation": "Artemisia\n\"Training up the newbies?\n You must have it pretty easy.",
+                    "translation": "Artemisia\n\"Training up juniors, are you?\n You must have time to spare.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 63,
                     "source": "NA",
-                    "translation": "Armored man\n\"You're here lookin' for the Priestess too, right?\n How 'bout it? Wanna lend us a hand?",
+                    "translation": "Man in armor\n\"You're here lookin' for the Priestess too, right?\n How 'bout it? Wanna lend us a hand?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 168,
                     "source": "NA",
-                    "translation": "Armored man\n\"Yeah? You'll help us out!\n\r Right! We'll head over to the other switch\n and give you a signal from there,\n and you push this switch at the same time.\n\r Got it? At the same time. Otherwise\n the door next to it won't open. That's the setup.\n Countin' on ya.",
+                    "translation": "Man in armor\n\"Yeah? You'll help us out!\n\r Right! We'll head over to the other switch\n and give ya a signal from there,\n and you push this switch at the same time.\n\r Got it? At the same time. Otherwise\n the door next to it won't open. That's the setup.\n Countin' on ya.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 115,
                     "source": "NA",
-                    "translation": "Armored man\n\"Tch! Fine! Suit yourselves, then!\n\r Just so you know, this door won't open\n unless this switch and the other one\n get pushed at the same time.\n\r See ya!",
+                    "translation": "Man in armor\n\"Tch! Fine! Suit yourselves, then!\n\r Just so ya know, this door won't open\n unless this switch and the other one\n get pushed at the same time.\n\r See ya!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 33,
                     "source": "NA",
-                    "translation": "Armored man\n\"Yo! How's it goin', brother?",
+                    "translation": "Man in armor\n\"Yo! How's it goin', brother?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 73,
                     "source": "NA",
-                    "translation": "Armored man\n\"You're headed further in too, right?\n\r How 'bout it?\n Folks of the same alignment oughta team up, eh?",
+                    "translation": "Man in armor\n\"You're headed further in too, right?\n\r How 'bout it?\n Folks of the same alignment oughta team up, eh?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 200,
                     "source": "NA",
-                    "translation": "Armored man\n\"Yeah? You'll do it!\n\r Right! We'll head over to the other switch\n and give you a signal from there,\n and you push this switch at the same time.\n\r Got it? At the same time. Otherwise\n the door next to it won't open. That's the setup.\n And once it's open, no sneakin' ahead of us.\n\r Got it? Countin' on ya.",
+                    "translation": "Man in armor\n\"Yeah? You'll do it!\n\r Right! We'll head over to the other switch\n and give ya a signal from there,\n and you push this switch at the same time.\n\r Got it? At the same time. Otherwise\n the door next to it won't open. That's the setup.\n And once it's open, no sneakin' ahead of us.\n\r Got it? Countin' on ya.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 121,
                     "source": "NA",
-                    "translation": "Armored man\n\"Tch! Fine!\n Then do whatever the hell ya want!\n\r Just so you know, this door won't open\n unless this switch and the other one\n get pushed at the same time.\n\r See ya!",
+                    "translation": "Man in armor\n\"Tch! Fine!\n Then do whatever the hell ya want!\n\r Just so ya know, this door won't open\n unless this switch and the other one\n get pushed at the same time.\n\r See ya!",
                     "addStringTerminator": true
                 },
                 {
@@ -497,25 +497,25 @@
                 {
                     "length": 93,
                     "source": "NA",
-                    "translation": "Armored man\n\"Was that you earlier?\n Thanks to you pressing the switch,\n\r we were able to go on ahead. By way of thanks,\n is there anything you would like to ask?",
+                    "translation": "Man in armor\n\"Ah, was that you earlier?\n Thanks to you pressing the switch,\n\r we were able to proceed. By way of thanks,\n is there anything you would care to ask?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 161,
                     "source": "NA",
-                    "translation": "Armored man\n\"So you managed to fit the blue stone\n into the Lithograph of the Sun as well.\n\r Who'd have thought there was such a mechanism.\n\r We intend to search the area further.\n Something more important must lie hidden ahead,\n but we'll be going on ahead of you.",
+                    "translation": "Man in armor\n\"I see you too have managed to fit the blue\n stone into the Lithograph of the Sun.\n\r Who'd have thought there was such a mechanism.\n\r We intend to search the vicinity further.\n Something of greater import lies hidden ahead,\n I suspect, so we shall take our leave of you.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 158,
                     "source": "NA",
-                    "translation": "Balbo\n\"So you managed to fit the blue stone\n into the Lithograph of the Sun as well.\n\r Who'd have thought there was such a mechanism.\n\r We intend to search the area further.\n Something more important must lie hidden ahead,\n but we'll be going on ahead of you.",
+                    "translation": "Balbo\n\"I see you too have managed to fit the blue\n stone into the Lithograph of the Sun.\n\r Who'd have thought there was such a mechanism.\n\r We intend to search the vicinity further.\n Something of greater import lies hidden ahead,\n I suspect, so we shall take our leave of you.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 169,
                     "source": "NA",
-                    "translation": "Armored man\n\"So this is the center of something.\n The doors on all four sides won't budge.\n\r I suspect those small tablets we saw earlier\n hold some sort of secret,\n but is something still missing?\n\r Forgive me, but kindly don't\n interrupt our strategy meeting.\n ...Farewell.",
+                    "translation": "Man in armor\n\"So this is the center of something.\n The doors on all four sides won't budge.\n\r I suspect those small tablets we saw earlier\n hold some sort of secret,\n but is something still missing?\n\r Forgive me, but kindly don't\n interrupt our strategy meeting.\n ...Farewell.",
                     "addStringTerminator": true
                 },
                 {
@@ -527,31 +527,31 @@
                 {
                     "length": 151,
                     "source": "NA",
-                    "translation": "Armored man\n\"Well, so you lot made it this far too.\n\r We got this far ourselves, but\n something about the iron bars ahead seems off.\n We mean to come back fully prepared,\n\r so don't you push your luck either.\n We'll be heading back with Malor.",
+                    "translation": "Man in armor\n\"Well, well. So you lot have made it this far?\n\r We got this far ourselves, but\n something about the iron bars ahead seems off.\n We mean to come back fully prepared,\n\r so don't you go pushing your luck either.\n We shall be heading back by Malor.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 148,
                     "source": "NA",
-                    "translation": "Balbo\n\"Well, so you lot made it this far too.\n\r We got this far ourselves, but\n something about the iron bars ahead seems off.\n We mean to come back fully prepared,\n\r so don't you push your luck either.\n We'll be heading back with Malor.",
+                    "translation": "Balbo\n\"Well, well. So you lot have made it this far?\n\r We got this far ourselves, but\n something about the iron bars ahead seems off.\n We mean to come back fully prepared,\n\r so don't you go pushing your luck either.\n We shall be heading back by Malor.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 177,
                     "source": "NA",
-                    "translation": "Armored man\n\"This strange door just won't open.\n\r Turning the three discs ought to do it,\n but it shows no sign of opening.\n\r There must be a clue somewhere.\n We'll keep exploring a while longer.\n\r Well, don't overdo it yourselves.",
+                    "translation": "Man in armor\n\"This curious door simply refuses to open.\n\r Turning the three discs ought to do it,\n yet it shows no sign of opening.\n\r There must be a clue somewhere.\n We shall keep exploring a while longer.\n\r Well, don't overdo it yourselves, now.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 174,
                     "source": "NA",
-                    "translation": "Balbo\n\"This strange door just won't open.\n\r Turning the three discs ought to do it,\n but it shows no sign of opening.\n\r There must be a clue somewhere.\n We'll keep exploring a while longer.\n\r Well, don't overdo it yourselves.",
+                    "translation": "Balbo\n\"This curious door simply refuses to open.\n\r Turning the three discs ought to do it,\n yet it shows no sign of opening.\n\r There must be a clue somewhere.\n We shall keep exploring a while longer.\n\r Well, don't overdo it yourselves, now.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 85,
                     "source": "NA",
-                    "translation": "Armored man\n\"Whoa. What the...\n What just happened?!\n\r Guess we gotta redo our maps.\n Sorry, we're headin' back for now.",
+                    "translation": "Man in armor\n\"Whoa. What the...\n What just happened?!\n\r Guess we gotta redo our maps.\n Sorry, we're headin' back for now.",
                     "addStringTerminator": true
                 },
                 {
@@ -563,25 +563,25 @@
                 {
                     "length": 168,
                     "source": "NA",
-                    "translation": "Balbo\n\"The other day I got poisoned,\n so I let a friendly monster go.\n\r And then my alignment changed.\n\r These days I'm at the Temple repenting my sins.\n Such terrible things I used to do.\n So there you have it. I hope we'll get along.",
+                    "translation": "Balbo\n\"The other day I got poisoned,\n so I let a friendly monster go.\n\r And then my alignment changed.\n\r These days I'm at the Temple repenting my sins.\n Oh, the terrible things I used to do.\n So there you have it. I do hope we'll get along.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 129,
                     "source": "NA",
-                    "translation": "Balbo\n\"Hey, it's you lot. Been a while.\n Had a bit of an accident lately.\n\r Killed a friendly monster.\n\r Now I'm right back to my old ways.\n Temple priest was fed up with me, though.",
+                    "translation": "Balbo\n\"Well, if it ain't you lot. Been a while.\n Had a little accident lately.\n\r Went and killed a friendly monster.\n\r So now I'm right back to my old ways.\n Got the Temple priest good and fed up, though.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 53,
                     "source": "NA",
-                    "translation": "Balbo\n\"Huh?\n\r Looks like you've got\n a whole lotta new faces.",
+                    "translation": "Balbo\n\"Huh?\n\r Got yerselves a whole buncha\n new faces, ain'tcha?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "Balbo\n\"Heh! Still alive, are ya?",
+                    "translation": "Balbo\n\"Feh! Still breathin', are ya?",
                     "addStringTerminator": true
                 },
                 {
@@ -593,7 +593,7 @@
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Alba\n\"I am Alba...... Well met...",
+                    "translation": "Alba\n\"Alba...... Well met...",
                     "addStringTerminator": true
                 },
                 {
@@ -605,7 +605,7 @@
                 {
                     "length": 16,
                     "source": "NA",
-                    "translation": "Reiran\n\"I'm Reiran.",
+                    "translation": "Reiran\n\"Me? I'm Reiran.",
                     "addStringTerminator": true
                 },
                 {
@@ -623,7 +623,7 @@
                 {
                     "length": 69,
                     "source": "NA",
-                    "translation": "Balbo\n\"What, you don't know who I am?\n\r I'm Balbo.\n Got it? Don't you forget it.",
+                    "translation": "Balbo\n\"Wha? Ya don't know yours truly?\n\r Name's Balbo.\n Got it? Don't you forget it.",
                     "addStringTerminator": true
                 },
                 {
@@ -641,7 +641,7 @@
                 {
                     "length": 73,
                     "source": "NA",
-                    "translation": "Reiran\n\"Hiya, nice to meet you. I'm Reiran.\n\r I may not look it, but I'm a ninja.\n Shall I lop your head off for you?",
+                    "translation": "Reiran\n\"Hiya, nice to meetcha. I'm Reiran.\n\r Believe it or not, I'm a Ninja.\n Shall I lop your head off for you?",
                     "addStringTerminator": true
                 },
                 {
@@ -653,19 +653,19 @@
                 {
                     "length": 50,
                     "source": "NA",
-                    "translation": "Artemisia\n\"Hi, nice to meet you.\n\r I'm Artemisia.\n Hope we get along!",
+                    "translation": "Artemisia\n\"Hi, nice to meet you!\n\r I'm Artemisia.\n Hope we get along!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 68,
                     "source": "NA",
-                    "translation": "Balbo\n\"What, somebody here doesn't know me?\n I'm Balbo. Got it? Don't you forget it.",
+                    "translation": "Balbo\n\"Wha? Somebody here don't know yours truly?\n Name's Balbo. Got it? Don't you forget it.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 40,
                     "source": "NA",
-                    "translation": "Alba\n\"I believe I told you before...\n I am Alba...",
+                    "translation": "Alba\n\"I believe I told you before...\n Alba...",
                     "addStringTerminator": true
                 },
                 {
@@ -677,7 +677,7 @@
                 {
                     "length": 81,
                     "source": "NA",
-                    "translation": "Reiran\n\"I told you before, I'm Reiran.\n\r I'm a ninja, you know,\n so forget me again and off comes your head.",
+                    "translation": "Reiran\n\"Ugh, I told you already. I'm Reiran.\n\r I'm a Ninja, y'know? Forget me one more\n time and off comes your head. 'Kay?",
                     "addStringTerminator": true
                 },
                 {
@@ -689,13 +689,13 @@
                 {
                     "length": 57,
                     "source": "NA",
-                    "translation": "Artemisia\n\"Again? Oh, fine, if I must.\n\r I'm Artemisia.\n Don't forget it this time.",
+                    "translation": "Artemisia\n\"Again? Oh, honestly. Fine.\n\r I'm Artemisia.\n Don't forget it this time!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 64,
                     "source": "NA",
-                    "translation": "Balbo\n\"Somebody hurt?\n\r Jeez, fine. Who is it?\n Huh? Who needs healin'?",
+                    "translation": "Balbo\n\"Somebody hurt?\n\r Ugh, fine, fine. Who is it?\n Huh? Who needs patchin' up?",
                     "addStringTerminator": true
                 },
                 {
@@ -713,43 +713,43 @@
                 {
                     "length": 49,
                     "source": "NA",
-                    "translation": "Balbo\n\"Don't blame me if it goes wrong.\n         {ff30}2Dialko{ff30}0",
+                    "translation": "Balbo\n\"Don't come cryin' to me if it goes wrong.\n         {ff30}2Dialko{ff30}0",
                     "addStringTerminator": true
                 },
                 {
                     "length": 48,
                     "source": "NA",
-                    "translation": "Balbo\n\"Don't blame me if it goes wrong.\n        {ff30}2Latumofis{ff30}0",
+                    "translation": "Balbo\n\"Don't come cryin' to me if it goes wrong.\n        {ff30}2Latumofis{ff30}0",
                     "addStringTerminator": true
                 },
                 {
                     "length": 57,
                     "source": "NA",
-                    "translation": "Balbo\n\"I'd heal ya, I would.\n Sorry. I'm outta healin' spells.",
+                    "translation": "Balbo\n\"I'd patch ya up, sure I would.\n Sorry. I'm plumb outta healin' spells.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 78,
                     "source": "NA",
-                    "translation": "Balbo\n\"Fine, just the once.\n\r         {ff30}2Dios{ff30}0\n Sorry it's such a low-level one.",
+                    "translation": "Balbo\n\"Fine, just the once, ya hear?\n\r         {ff30}2Dios{ff30}0\n Sorry it's such a piddly little one.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 78,
                     "source": "NA",
-                    "translation": "Balbo\n\"Fine, just the once.\n\r         {ff30}2Dial{ff30}0\n Sorry it's such a low-level one.",
+                    "translation": "Balbo\n\"Fine, just the once, ya hear?\n\r         {ff30}2Dial{ff30}0\n Sorry it's such a piddly little one.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 77,
                     "source": "NA",
-                    "translation": "Balbo\n\"Fine, just the once.\n\r        {ff30}2Madial{ff30}0\n Sorry, that's about the best I can do.",
+                    "translation": "Balbo\n\"Fine, just the once, ya hear?\n\r        {ff30}2Madial{ff30}0\n Sorry, that's about the best I got.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 56,
                     "source": "NA",
-                    "translation": "Balbo\n\"I see.\n\r So you don't need our help.\n Well, good luck with that.",
+                    "translation": "Balbo\n\"Oh yeah?\n\r So ya don't need our help, huh.\n Well, best of luck to ya.",
                     "addStringTerminator": true
                 },
                 {
@@ -761,7 +761,7 @@
                 {
                     "length": 44,
                     "source": "NA",
-                    "translation": "Rosea\n\"Looks healthy to me...\n There's nothing wrong with that one.",
+                    "translation": "Rosea\n\"They look perfectly healthy...\n There's nothing wrong with them at all.",
                     "addStringTerminator": true
                 },
                 {
@@ -791,7 +791,7 @@
                 {
                     "length": 94,
                     "source": "NA",
-                    "translation": "Rosea\n\"The Temple's odds of revival are better...\n But if you insist, I'll do it here.\n\r         {ff30}2Kadorto{ff30}0",
+                    "translation": "Rosea\n\"Revival at the Temple has better odds...\n Are you sure you want me to do it here?\n\r         {ff30}2Kadorto{ff30}0",
                     "addStringTerminator": true
                 },
                 {
@@ -821,7 +821,7 @@
                 {
                     "length": 23,
                     "source": "NA",
-                    "translation": "Rosea\n\"I see... Take care.",
+                    "translation": "Rosea\n\"I see... Do take care.",
                     "addStringTerminator": true
                 },
                 {
@@ -839,7 +839,7 @@
                 {
                     "length": 37,
                     "source": "NA",
-                    "translation": "Rosea\n\"Oh, never mind, then?\n Fine, I see you don't trust me.",
+                    "translation": "Rosea\n\"Oh, you don't want me to?\n I see... you don't trust me.",
                     "addStringTerminator": true
                 },
                 {
@@ -875,13 +875,13 @@
                 {
                     "length": 52,
                     "source": "NA",
-                    "translation": " That lot had some mighty fine gear on them.\n Well, no need to thank us.\n Farewell.",
+                    "translation": " That lot had some mighty fine gear on 'em.\n Don't bother thankin' us.\n So long.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 56,
                     "source": "NA",
-                    "translation": " I see. Hope they don't end up as monster food.\n Not that it's any concern of ours.",
+                    "translation": " Suit yourselves. Hope they don't end up\n as monster chow.\n Not that it's any skin off our noses.",
                     "addStringTerminator": true
                 },
                 {
@@ -893,13 +893,13 @@
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "Buy an item?",
+                    "translation": "Buy one?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 38,
                     "source": "NA",
-                    "translation": " Which'll it be?\n As for the price, how's {ff11}0 Gp sound?",
+                    "translation": " Which'll it be?\n And the price... how's {ff11}0 Gp sound?",
                     "addStringTerminator": true
                 },
                 {
@@ -917,31 +917,31 @@
                 {
                     "length": 44,
                     "source": "NA",
-                    "translation": " Can't just give items away for free.\n Better save up a bit more money.",
+                    "translation": " Ain't givin' stuff away for free.\n Go save up a bit more cash.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 45,
                     "source": "NA",
-                    "translation": " So you won't accept our kindness.\n Oh well. Buy something next time, eh?",
+                    "translation": " Too good for our kindness, huh?\n Fine. Buy somethin' next time, ya hear?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 84,
                     "source": "NA",
-                    "translation": "Balbo\n\"What, you lookin' to pick a fight with us?\n\r Fine by me. Haven't met many\n foes worth the trouble lately.\n No hard feelings if you lose.",
+                    "translation": "Balbo\n\"What, you lookin' to pick a fight with us?\n\r Fine by me. Ain't met many\n foes worth the trouble lately.\n Don't come cryin' when ya lose.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "Fight them anyway?",
+                    "translation": "Fight anyway?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 70,
                     "source": "NA",
-                    "translation": " Just a bunch of spineless cowards after all.\n Well, if you ever want a match,\n don't hesitate to call on us.\n\r See ya.",
+                    "translation": " Figures. Just a bunch of gutless cowards.\n Well, whenever you want a match, do\n feel free to give us a shout.\n\r See ya.",
                     "addStringTerminator": true
                 },
                 {
@@ -953,7 +953,7 @@
                 {
                     "length": 22,
                     "source": "NA",
-                    "translation": "Alba\n\"How dull.........",
+                    "translation": "Alba\n\"Tiresome.........",
                     "addStringTerminator": true
                 },
                 {
@@ -971,7 +971,7 @@
                 {
                     "length": 20,
                     "source": "NA",
-                    "translation": "Reiran\n\"Don't look at me. I don't know.",
+                    "translation": "Reiran\n\"Don't look at me. I dunno.",
                     "addStringTerminator": true
                 },
                 {
@@ -983,7 +983,7 @@
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "Balbo\n\"And?",
+                    "translation": "Balbo\n\"Yeah? So?",
                     "addStringTerminator": true
                 },
                 {
@@ -1007,7 +1007,7 @@
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "Reiran\n\"So?",
+                    "translation": "Reiran\n\"And your point is...?",
                     "addStringTerminator": true
                 },
                 {
@@ -1043,7 +1043,7 @@
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "Reiran\n\"What's this, out of nowhere? You're creepy.",
+                    "translation": "Reiran\n\"Um, what's with you all of a sudden?\n Ew. Creepy.",
                     "addStringTerminator": true
                 },
                 {
@@ -1055,7 +1055,7 @@
                 {
                     "length": 48,
                     "source": "NA",
-                    "translation": "Balbo\n\"Dunno what he's got confused about,\n but we met some champion of justice.",
+                    "translation": "Balbo\n\"Dunno what's got into his head, but there's\n some champion-of-justice type runnin' around.",
                     "addStringTerminator": true
                 },
                 {
@@ -1079,13 +1079,13 @@
                 {
                     "length": 45,
                     "source": "NA",
-                    "translation": "Reiran\n\"I did meet some sketchy guy\n who calls himself a hero.",
+                    "translation": "Reiran\n\"Well, I met this, like, total weirdo\n who kept calling himself a hero.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 71,
                     "source": "NA",
-                    "translation": "Balbo\n\"There was this kid samurai.\n\r Says he's been a samurai since birth, too.\n Must be nice, bein' born lucky.",
+                    "translation": "Balbo\n\"There's this little kiddie samurai.\n\r Says he's been a samurai since he was born.\n Must be nice, bein' born with a silver spoon.",
                     "addStringTerminator": true
                 },
                 {
@@ -1109,19 +1109,19 @@
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Reiran\n\"I met the samurai kid.........",
+                    "translation": "Reiran\n\"So I ran into the samurai kid.........",
                     "addStringTerminator": true
                 },
                 {
                     "length": 68,
                     "source": "NA",
-                    "translation": "Reiran\n\"I'm not one to talk, but\n that party might be a bit dodgy...\n\r In more ways than one.",
+                    "translation": "Reiran\n\"Not like I'm one to talk, but\n that party's kinda sketchy...\n\r In, like, more ways than one.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 79,
                     "source": "NA",
-                    "translation": "Balbo\n\"Ya hear there's a party with just 3 people?\n\r And one of 'em used to be\n in our party.",
+                    "translation": "Balbo\n\"Ya hear there's a party of just 3 now?\n\r And get this, one of 'em used to be\n in our party.",
                     "addStringTerminator": true
                 },
                 {
@@ -1139,7 +1139,7 @@
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "Balbo\n\"You met the scholars?",
+                    "translation": "Balbo\n\"You met them scholars yet?",
                     "addStringTerminator": true
                 },
                 {
@@ -1169,25 +1169,25 @@
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "Reiran\n\"Kind of a gloomy bunch.",
+                    "translation": "Reiran\n\"They were, like, sooo gloomy.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 87,
                     "source": "NA",
-                    "translation": "Artemisia\n\"I met an old scholar guy.\n\r His name was... um?\n Let's see... Cleo? Was that it?\n Yeah, I'm pretty sure that's right.",
+                    "translation": "Artemisia\n\"I met this old scholar guy.\n\r His name was... um...?\n Let's see... Cleo? Was that it?\n Yeah, I'm pretty sure that's it!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 67,
                     "source": "NA",
-                    "translation": "Balbo\n\"There was this guy on his own, awful stuck-up.\n Didn't seem like an adventurer, that one.",
+                    "translation": "Balbo\n\"There's this guy on his lonesome, stuck-up\n as all get-out. Weren't no adventurer, that one.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 67,
                     "source": "NA",
-                    "translation": "Alba\n\"I met someone who gave off a fearsome bloodlust...\n Who, I know not, but no ordinary person.",
+                    "translation": "Alba\n\"I met one who gave off a fearsome bloodlust...\n Who, I know not. But no ordinary man.",
                     "addStringTerminator": true
                 },
                 {
@@ -1205,31 +1205,31 @@
                 {
                     "length": 26,
                     "source": "NA",
-                    "translation": "Gaura\n\"Scary person. Was grumbling.",
+                    "translation": "Gaura\n\"Scary man. Was grumbling.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 67,
                     "source": "NA",
-                    "translation": "Reiran\n\"I met a seriously weird guy.{ff40}\r He goes \"Begone!\" and stuff,\n all high and mighty.\n",
+                    "translation": "Reiran\n\"I met this, like, seriously weird guy.{ff40}\r He goes \"Begone!\" and stuff,\n all high and mighty.\n",
                     "addStringTerminator": false
                 },
                 {
                     "length": 51,
                     "source": "NA",
-                    "translation": "Artemisia\n\"I met someone with a really nasty vibe.\n It was a little scary...",
+                    "translation": "Artemisia\n\"I met someone with a really creepy vibe.\n It was kinda scary...",
                     "addStringTerminator": true
                 },
                 {
                     "length": 18,
                     "source": "NA",
-                    "translation": "Artemisia\n\"Who could that be?",
+                    "translation": "Artemisia\n\"I wonder who that was?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 90,
                     "source": "NA",
-                    "translation": "Balbo\n\"Well, you prob'ly figured, but\n I wasn't Evil to begin with.\n\r One little slip, and it went and changed.",
+                    "translation": "Balbo\n\"Well, ya prob'ly figured, but\n I ain't always been Evil, see.\n\r One little slip, and it went and changed.",
                     "addStringTerminator": true
                 },
                 {
@@ -1241,7 +1241,7 @@
                 {
                     "length": 30,
                     "source": "NA",
-                    "translation": "Rosea\n\"Are there no half-bloods in this country?",
+                    "translation": "Rosea\n\"Are there no half-bloods in this\n country, I wonder?",
                     "addStringTerminator": true
                 },
                 {
@@ -1253,25 +1253,25 @@
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "Reiran\n\"I may not look it, but I'm 18.",
+                    "translation": "Reiran\n\"I don't look it, but I'm totally 18.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 71,
                     "source": "NA",
-                    "translation": "Artemisia\n\"Me? Um... my name's Artemisia.\n\r Huh? Did I tell you that before?\n Um, um... Well then,",
+                    "translation": "Artemisia\n\"Me? Umm... my name's Artemisia.\n\r Huh? Did I already tell you that?\n Umm, umm... okay, then,",
                     "addStringTerminator": true
                 },
                 {
                     "length": 22,
                     "source": "NA",
-                    "translation": "Artemisia\n\"My class is Valkyrie.",
+                    "translation": "Artemisia\n\"I'm a Valkyrie!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Balbo\n\"Sorry, business has been slow lately.",
+                    "translation": "Balbo\n\"Sorry, pickin's been slim lately.",
                     "addStringTerminator": true
                 },
                 {
@@ -1295,13 +1295,13 @@
                 {
                     "length": 21,
                     "source": "NA",
-                    "translation": "Reiran\n\"Isn't there anything fun going on?",
+                    "translation": "Reiran\n\"Isn't there, like, anything fun to do?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 37,
                     "source": "NA",
-                    "translation": "Balbo\n\"......\n Heh, let's neither of us push our luck.",
+                    "translation": "Balbo\n\"......\n Heh. Let's neither of us go pushin' our luck.",
                     "addStringTerminator": true
                 },
                 {
@@ -1325,13 +1325,13 @@
                 {
                     "length": 40,
                     "source": "NA",
-                    "translation": "Reiran\n\"......\n Hmm... Everyone's working hard, huh.",
+                    "translation": "Reiran\n\"......\n Hmmm... Wow, everybody's really trying, huh.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 21,
                     "source": "NA",
-                    "translation": "Reiran\n\"Guess I'll work hard too.",
+                    "translation": "Reiran\n\"Okay! Guess I'll try hard too.",
                     "addStringTerminator": true
                 },
                 {
@@ -1361,19 +1361,19 @@
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Reiran\n\"Haven't found a single thing. What a drag.",
+                    "translation": "Reiran\n\"Haven't found a thing. Ugh, I'm so over it.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 71,
                     "source": "NA",
-                    "translation": "Balbo\n\"Me? Hmm, lemme think. I'm a great swimmer.\n Not that there's anywhere to swim down here.",
+                    "translation": "Balbo\n\"Me? Hmm, lemme think. I'm a heck of a swimmer.\n Not that there's anyplace to swim down here.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 48,
                     "source": "NA",
-                    "translation": "Alba\n\"Truth be told, I'm better with\n a katana or sword than a bow.",
+                    "translation": "Alba\n\"Truth be told, I'm better with a katana\n or a sword than I am with a bow.",
                     "addStringTerminator": true
                 },
                 {
@@ -1391,7 +1391,7 @@
                 {
                     "length": 59,
                     "source": "NA",
-                    "translation": "Reiran\n\"I'm pretty handy with a sword.\n There's a master swordsman here teaching me.",
+                    "translation": "Reiran\n\"I'm, like, pretty good with a sword.\n There's this sword master here teaching me.",
                     "addStringTerminator": true
                 },
                 {
@@ -1415,19 +1415,19 @@
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "Gaura\n\"M-me, g-gonna be samurai. Someday.",
+                    "translation": "Gaura\n\"M-me, g-gonna be Samurai. Someday.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 105,
                     "source": "NA",
-                    "translation": "Reiran\n\"Lately I'm hooked on setting off\n teleporter traps on purpose.\n\r I know it's dangerous, but there's\n something about getting sucked in.",
+                    "translation": "Reiran\n\"Lately I'm, like, totally hooked on\n setting off teleporter traps on purpose.\n\r I know it's crazy dangerous, but that\n getting-sucked-in feeling? Love it.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "Balbo\n\"Hey, found any treasure?",
+                    "translation": "Balbo\n\"Yo, dig up any treasure?",
                     "addStringTerminator": true
                 },
                 {
@@ -1457,19 +1457,19 @@
                 {
                     "length": 40,
                     "source": "NA",
-                    "translation": "Gaura\n\"M-me, when samurai,\n g-gonna get Muramasa.",
+                    "translation": "Gaura\n\"M-me, when Samurai,\n g-gonna get Muramasa.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 34,
                     "source": "NA",
-                    "translation": "Reiran\n\"......\n Hey, know any good ways to make money?",
+                    "translation": "Reiran\n\"......\n Hey, know any good ways to score some cash?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 33,
                     "source": "NA",
-                    "translation": "Balbo\n\"What's that?\n I heard that one already.",
+                    "translation": "Balbo\n\"Say what?\n Heard that one already.",
                     "addStringTerminator": true
                 },
                 {
@@ -1493,13 +1493,13 @@
                 {
                     "length": 48,
                     "source": "NA",
-                    "translation": "Reiran\n\"Why're you telling me the same thing again?\n Your info's garbage, total garbage.",
+                    "translation": "Reiran\n\"Hello? You already told me that.\n Your info is trash. Total trash.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "We asked if they had any new information.",
+                    "translation": "We asked if they had any news.",
                     "addStringTerminator": true
                 },
                 {
@@ -1517,7 +1517,7 @@
                 {
                     "length": 22,
                     "source": "NA",
-                    "translation": "We asked them about other parties.",
+                    "translation": "We asked about other parties.",
                     "addStringTerminator": true
                 },
                 {
@@ -1529,7 +1529,7 @@
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": "Artemisia\n\"Ugh, you said the same thing last time.",
+                    "translation": "Artemisia\n\"Oh, come on, you said that last time too.",
                     "addStringTerminator": true
                 },
                 {
@@ -1541,13 +1541,13 @@
                 {
                     "length": 156,
                     "source": "NA",
-                    "translation": "Artemisia\n\"The spell I dug up the other day\n wouldn't work properly.\n\r The name part was badly worn, so I guessed.\n Maybe that's what went wrong?\n\r I thought \"Likaton\" sounded right...\n Maybe I read it wrong after all...?",
+                    "translation": "Artemisia\n\"That spell I dug up the other day\n just wouldn't work right.\n\r The name part was really worn, so I\n kinda winged it. Was that the problem?\n\r I was sure \"Likaton\" would be fine...\n Maybe I read it wrong after all...?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 148,
                     "source": "NA",
-                    "translation": "Artemisia\n\"The other day I found one of the lost spells!\n\r It seems to be a Priest spell,\n and an attack spell at that.\n\r Next time I'll get Cephala to help me\n restore it.\n\r If it works, I'll teach it to you too!",
+                    "translation": "Artemisia\n\"I found one of the lost spells the other day!\n\r It looks like a Priest spell,\n and an attack spell, too!\n\r I'm getting Cephala to help me\n restore it soon.\n\r If it works, I'll teach it to you too, okay?",
                     "addStringTerminator": true
                 },
                 {
@@ -1571,7 +1571,7 @@
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "Artemisia\n\"Sooorry. I don't have any info.",
+                    "translation": "Artemisia\n\"Sorry! I've got nothing.",
                     "addStringTerminator": true
                 },
                 {
@@ -1589,7 +1589,7 @@
                 {
                     "length": 99,
                     "source": "NA",
-                    "translation": "Balbo\n\"A room in this area had a statue of a giant face.\n We mean to hurry and tell the scholars.\n\r You go on ahead and examine the statue.",
+                    "translation": "Balbo\n\"A room in this area had a statue of a giant face.\n We mean to make haste and tell the scholars.\n\r Kindly go on ahead and examine the statue.",
                     "addStringTerminator": true
                 },
                 {
@@ -1601,7 +1601,7 @@
                 {
                     "length": 212,
                     "source": "NA",
-                    "translation": "Armored man\n\"What, who are you lot?\n\r The treasure ahead\n is beyond the likes of you.\n\r Alba went in a while ago, and the moment\n he came out, he turned to ashes.\n\r It seems some fearsome trap\n lies in wait.\n\r We're heading back to the Temple to have Alba\n revived, then we'll decide what to do next.",
+                    "translation": "Man in armor\n\"What's this? Who are you people?\n\r The treasure ahead\n is beyond the likes of you.\n\r Alba went in a while ago, and the moment\n he came out, he turned to ashes.\n\r It seems some fearsome trap\n lies in wait.\n\r We're heading back to the Temple to have Alba\n revived, then we'll decide what to do next.",
                     "addStringTerminator": true
                 },
                 {
@@ -1619,25 +1619,25 @@
                 {
                     "length": 22,
                     "source": "NA",
-                    "translation": "We asked them to identify an item.",
+                    "translation": "We asked them to identify items.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 22,
                     "source": "NA",
-                    "translation": "We asked them to rescue our companion.",
+                    "translation": "We asked them to rescue our comrades.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "We asked them about themselves.",
+                    "translation": "We asked them who they were.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 48,
                     "source": "NA",
-                    "translation": "Woman with a spear\n\"Hi, nice to meet you.\n I'm Artemisia. Hope we get along!",
+                    "translation": "Woman with a spear\n\"Hi there, nice to meet you!\n I'm Artemisia. Hope we get along!",
                     "addStringTerminator": true
                 }
             ]

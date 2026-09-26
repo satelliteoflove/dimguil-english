@@ -11,19 +11,19 @@
                 {
                     "length": 54,
                     "source": "NA",
-                    "translation": "Man with a greatsword\n\"Well, hello there.\n Are you here searching for the Priestess too?",
+                    "translation": "Man with a greatsword\n\"Hey there, hello!\n You guys here looking for the Priestess too?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 117,
                     "source": "NA",
-                    "translation": "Man with a greatsword\n\"Hey! Are you looking for the Priestess too?\n\r Folks here only mix with their own alignment,\n but I'm a hero, so I don't go in for that.",
+                    "translation": "Man with a greatsword\n\"Hey! You guys looking for the Priestess too?\n\r Folks here only mix with their own alignment,\n but I'm a hero! I don't discriminate like that.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 49,
                     "source": "NA",
-                    "translation": "Man with a greatsword\n\"Yo!\n Are you here searching for the Priestess too?",
+                    "translation": "Man with a greatsword\n\"Yo!\n You guys here looking for the Priestess too?",
                     "addStringTerminator": true
                 },
                 {
@@ -35,7 +35,7 @@
                 {
                     "length": 35,
                     "source": "NA",
-                    "translation": "Tall man\n\"Oh? I don't believe we've met.",
+                    "translation": "Tall man\n\"Oh my? I don't believe we've had the pleasure.",
                     "addStringTerminator": true
                 },
                 {
@@ -47,7 +47,7 @@
                 {
                     "length": 43,
                     "source": "NA",
-                    "translation": "Man with a greatsword\n\"Oh!\n Are you searching for the Priestess too?",
+                    "translation": "Man with a greatsword\n\"Whoa!\n You guys looking for the Priestess too?",
                     "addStringTerminator": true
                 },
                 {
@@ -59,7 +59,7 @@
                 {
                     "length": 20,
                     "source": "NA",
-                    "translation": "Tall man\n\"You have business with us?",
+                    "translation": "Tall man\n\"Have you some business with us?",
                     "addStringTerminator": true
                 },
                 {
@@ -77,19 +77,19 @@
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Green-haired elf\n\"Hiii, something I can do for you?",
+                    "translation": "Green-haired elf\n\"Hey there. Something you want from me?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 45,
                     "source": "NA",
-                    "translation": "Short man\n\"Hey, I've heard about you guys.\n You mean you haven't heard of me?",
+                    "translation": "Short man\n\"Hey, I've heard all about you guys.\n Ain't you ever heard of me?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 52,
                     "source": "NA",
-                    "translation": "Green-haired elf\n\"...Hello.\n Don't be mean to me over alignment, okay?",
+                    "translation": "Green-haired elf\n\"...Hello there.\n Don't go picking on me over alignment, 'kay?",
                     "addStringTerminator": true
                 },
                 {
@@ -107,13 +107,13 @@
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "Guy\n\"Hey! We meet again.",
+                    "translation": "Guy\n\"Hey! We meet again!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "Guy\n\"Hey! Keeping well?",
+                    "translation": "Guy\n\"Hey there! You guys doing all right?",
                     "addStringTerminator": true
                 },
                 {
@@ -131,7 +131,7 @@
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "Linaria\n\"What is it?",
+                    "translation": "Linaria\n\"Yeah? What's up?",
                     "addStringTerminator": true
                 },
                 {
@@ -149,7 +149,7 @@
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "Man with a greatsword\n\"Well, see you.",
+                    "translation": "Man with a greatsword\n\"Well, see ya!",
                     "addStringTerminator": true
                 },
                 {
@@ -167,7 +167,7 @@
                 {
                     "length": 23,
                     "source": "NA",
-                    "translation": "Hooded woman\n\"Bye-bye.",
+                    "translation": "Hooded woman\n\"Bye-byeee!",
                     "addStringTerminator": true
                 },
                 {
@@ -179,13 +179,13 @@
                 {
                     "length": 34,
                     "source": "NA",
-                    "translation": "Green-haired elf\n\"If there's nothing else, then...",
+                    "translation": "Green-haired elf\n\"Nothing you need? Then I'll be off...",
                     "addStringTerminator": true
                 },
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "Guy\n\"Well, see you around.",
+                    "translation": "Guy\n\"Well, catch you later!",
                     "addStringTerminator": true
                 },
                 {
@@ -209,25 +209,25 @@
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"Later!",
+                    "translation": "Fritillaria\n\"See ya!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 14,
                     "source": "NA",
-                    "translation": "Lilia\n\"Byeee.",
+                    "translation": "Lilia\n\"Ta-ta.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": "Guy\n\"Well, we'd better get moving too. See you!",
+                    "translation": "Guy\n\"Well, guess we'll be on our way too. See ya!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "Linaria\n\"Well then, see you again.",
+                    "translation": "Linaria\n\"Okay then, see ya later.",
                     "addStringTerminator": true
                 },
                 {
@@ -245,55 +245,55 @@
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"Later! You all take care now!",
+                    "translation": "Fritillaria\n\"See ya! Take care, everybody!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 27,
                     "source": "NA",
-                    "translation": "Lilia\n\"See you again. ......... It's a promise.",
+                    "translation": "Lilia\n\"Till next time. .........It's a date.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 30,
                     "source": "NA",
-                    "translation": "Guy\n\"Hope {ff12} comes back to life.\n Later!",
+                    "translation": "Guy\n\"Here's hoping {ff12} comes back to life!\n Later!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 41,
                     "source": "NA",
-                    "translation": "Linaria\n\"Bye, then...\n And {ff12}...\n\r I hope they come back to life.",
+                    "translation": "Linaria\n\"See ya...\n I really hope {ff12}\n\r comes back to life.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 67,
                     "source": "NA",
-                    "translation": "Alstron\n\"About {ff12}...\n I do hope the revival goes well...\n\r Well then, until we meet again.",
+                    "translation": "Alstron\n\"Now, as regards {ff12}...\n I do hope they come back to life...\n\r Well then, until we meet again.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 44,
                     "source": "NA",
-                    "translation": "Lychee\n\"I hope {ff12}\n comes back to life!\n\r Okay, bye-bye.",
+                    "translation": "Lychee\n\"I hope {ff12}\n comes back to life!\n\r Okay, bye-byeee!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 70,
                     "source": "NA",
-                    "translation": "Lilia\n\"Poor little {ff12}\n seems to have gone and died,\n\r so be sure to bring them back, okay?\n See you. It's a promise.",
+                    "translation": "Lilia\n\"Looks like little {ff12}\n has gone and died on you.\n\r Be a dear and bring them back, 'kay?\n Now, that's a promise.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 16,
                     "source": "NA",
-                    "translation": "Linaria\n\"Oh, how're you doing?",
+                    "translation": "Linaria\n\"Oh, hey. How ya doing?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "Linaria\n\"What is it?",
+                    "translation": "Linaria\n\"Yeah? What's up?",
                     "addStringTerminator": true
                 },
                 {
@@ -347,13 +347,13 @@
                 {
                     "length": 53,
                     "source": "NA",
-                    "translation": "Alstron\n\"Oh? There seems to be someone I don't know.\n What became of the one from before?",
+                    "translation": "Alstron\n\"Oh my? I see someone I don't know.\n Whatever became of the one from before?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 37,
                     "source": "NA",
-                    "translation": "Alstron\n\"Oh? Has your party's lineup changed?",
+                    "translation": "Alstron\n\"Oh my? Has your party had a change of lineup?",
                     "addStringTerminator": true
                 },
                 {
@@ -365,7 +365,7 @@
                 {
                     "length": 132,
                     "source": "NA",
-                    "translation": "Alstron\n\"I had heard there was a lovely young lady\n in your party. Now, which of you might it be?\n\r Oh-ho, lovelier even than the rumors,\n {ff12}. Do let me buy you a drink\n at the tavern sometime.",
+                    "translation": "Alstron\n\"I'd heard tell of a most beautiful young lady\n in your party. Which of you might she be?\n\r Ohhh-ho! Even lovelier than the rumors,\n my dear {ff12}. You simply must let me\n buy you a drink at the tavern.",
                     "addStringTerminator": true
                 },
                 {
@@ -377,25 +377,25 @@
                 {
                     "length": 107,
                     "source": "NA",
-                    "translation": "Alstron\n\"Isn't the shop's selection splendid lately?\n I'm thinking of buying out the whole lot.\n\r Please, don't make such a frightful face.\n I'm only joking.",
+                    "translation": "Alstron\n\"Isn't the shop's selection splendid lately?\n I'm thinking of buying out the whole lot.\n\r Now, now, no need for such a frightful face.\n I jest, I assure you.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 65,
                     "source": "NA",
-                    "translation": "Alstron\n\"Such strength at so young an age. Splendid.\n But could you do something about that\n\r stable smell?",
+                    "translation": "Alstron\n\"Such strength, and at so young an age.\n Splendid. But if you'll pardon my saying,\n\r could you do something about\n that smell of the stables?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 20,
                     "source": "NA",
-                    "translation": "Alstron\n\"Well, well. Long time no see.",
+                    "translation": "Alstron\n\"Hey there, long time no see.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 40,
                     "source": "NA",
-                    "translation": "Alstron\n\"You highway robbers!\n Where on earth did you get that money?",
+                    "translation": "Alstron\n\"You thieving scum!\n Where the hell'd you get all that money?!",
                     "addStringTerminator": true
                 },
                 {
@@ -419,13 +419,13 @@
                 {
                     "length": 100,
                     "source": "NA",
-                    "translation": "Lychee\n\"The other day at the tavern there was\n somebody drinking all by themself, all sad.\n\r Isn't that one of your friends?\n I think their name was \"Item\" or something.",
+                    "translation": "Lychee\n\"Y'know, at the tavern the other day there was\n somebody drinking all alone, all sad.\n\r Isn't that one of your friends?\n I think their name was \"Item\" or something.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 49,
                     "source": "NA",
-                    "translation": "Lychee\n\"You're our kind of people.\n Opening chests is all guts and luck, right?",
+                    "translation": "Lychee\n\"You guys are just like us!\n Opening chests is all guts and luck, huh?",
                     "addStringTerminator": true
                 },
                 {
@@ -443,37 +443,37 @@
                 {
                     "length": 85,
                     "source": "NA",
-                    "translation": "Lychee\n\"I don't really wanna talk to you guys.\n What am I supposed to call you?\n\r It's too embarrassing to say out loud.\n {ff12}... eek!",
+                    "translation": "Lychee\n\"I don't really wanna talk to you guys.\n What's Lychee s'posed to call you?\n\r It's too embarrassing to say out loud!\n {ff12}... eek!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "Lilia\n\"Hiii, how's it going? Working hard?",
+                    "translation": "Lilia\n\"Hey there. How's it going?\n Working hard, hmm?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 45,
                     "source": "NA",
-                    "translation": "Lilia\n\"Looks like someone in your party is\n a little... dim. Will you be all right?",
+                    "translation": "Lilia\n\"It seems one of your number is a bit...\n slow. Will you be quite all right?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 94,
                     "source": "NA",
-                    "translation": "Lilia\n\"That \"Richguy\" at the tavern\n was looking awfully lonely.\n\r I think I'll ask them out on a date.\n I mean, they must be simply loaded.",
+                    "translation": "Lilia\n\"That \"Richguy\" of yours at the tavern\n was looking sooo lonely.\n\r Maybe I'll ask him out on a date.\n I mean, he must be positively loaded.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 20,
                     "source": "NA",
-                    "translation": "Lilia\n\"Hang in there, gramps.",
+                    "translation": "Lilia\n\"Don't overdo it, gramps.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 20,
                     "source": "NA",
-                    "translation": "Lilia\n\"Hang in there, granny.",
+                    "translation": "Lilia\n\"Don't overdo it, granny.",
                     "addStringTerminator": true
                 },
                 {
@@ -485,7 +485,7 @@
                 {
                     "length": 47,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"Hey! {ff12}, back from the dead!\n Guess we got to meet alive this time.",
+                    "translation": "Fritillaria\n\"Hey! It's {ff12}, the walkin' corpse!\n Nice to catch ya alive this time.",
                     "addStringTerminator": true
                 },
                 {
@@ -545,37 +545,37 @@
                 {
                     "length": 46,
                     "source": "NA",
-                    "translation": "Man with a greatsword\n\"The room ahead has some baffling trap in it.",
+                    "translation": "Man with a greatsword\n\"The room up ahead's got some crazy trap in it!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 58,
                     "source": "NA",
-                    "translation": "Man with a greatsword\n\"Watch yourselves.\n We're heading back to the castle to regroup.",
+                    "translation": "Man with a greatsword\n\"Take care out there!\n We're heading back to the castle to regroup.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 55,
                     "source": "NA",
-                    "translation": "Guy\n\"Oh, it's you guys............\n No, nothing's up. Just taking a little break.",
+                    "translation": "Guy\n\"Oh, it's you guys............\n Nah, nothing's wrong! Just taking a breather!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 35,
                     "source": "NA",
-                    "translation": "Guy\n\"The room ahead has some baffling trap in it.",
+                    "translation": "Guy\n\"The room up ahead's got some crazy trap in it!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 47,
                     "source": "NA",
-                    "translation": "Guy\n\"Watch yourselves.\n We're heading back to the castle to regroup.",
+                    "translation": "Guy\n\"Take care out there!\n We're heading back to the castle to regroup.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 287,
                     "source": "NA",
-                    "translation": "Guy\n\"I blew it.\n I was grinding a bit of experience, and\n\r ended up killing a friendly monster.\n Since I, the leader, went Evil first,\n the rest of us followed in no time.\n\r Well, thinking it over calmly, it's not so bad.\n Walk up pretending to be friends,\n then cut 'em down.\n\r If you lot weren't of any use to us,\n you'd get a Tiltowait the moment\n you spoke to us.\n\r Still, your information's worth a little.",
+                    "translation": "Guy\n\"Well, I went and did it.\n I was grinding a bit of experience, and\n\r ended up killing a friendly monster.\n Since I, the leader, went Evil first,\n the rest of us followed in no time.\n\r But thinking it over calmly? It's not so bad.\n Walk up all friendly-like,\n then cut 'em down.\n\r If you guys were no use to us, you'd have\n eaten a Tiltowait the second\n you spoke to us.\n\r Lucky for you, your info's worth a little.",
                     "addStringTerminator": true
                 },
                 {
@@ -599,13 +599,13 @@
                 {
                     "length": 60,
                     "source": "NA",
-                    "translation": "Man with a greatsword\n\"Hey, what happened to this maze?\n Everything suddenly looks different.",
+                    "translation": "Man with a greatsword\n\"Hey, what the heck happened to this maze?\n The walls just up and changed on us!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 53,
                     "source": "NA",
-                    "translation": "Hooded woman\n\"It wasn't Lychee.\n I just kicked a little rock, that's all.",
+                    "translation": "Hooded woman\n\"It wasn't Lychee!\n I only kicked a teeny little rock, that's all!",
                     "addStringTerminator": true
                 },
                 {
@@ -617,13 +617,13 @@
                 {
                     "length": 48,
                     "source": "NA",
-                    "translation": "Guy\n\"Hey, what happened to this maze?\n The walls just changed out of nowhere.",
+                    "translation": "Guy\n\"Hey, what the heck happened to this maze?\n The walls just up and changed on us!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 44,
                     "source": "NA",
-                    "translation": "Lychee\n\"It wasn't Lychee.\n I just kicked a little rock, that's all.",
+                    "translation": "Lychee\n\"It wasn't Lychee!\n I only kicked a teeny little rock, that's all!",
                     "addStringTerminator": true
                 },
                 {
@@ -635,19 +635,19 @@
                 {
                     "length": 156,
                     "source": "NA",
-                    "translation": "Guy\n\"Hey there. Thanks for the help earlier.\n We lost all our items, but\n\r now we can explore the maze again.\n Thank you so much.\n This is just a small token, but please take it.\n\r{ff12} received\n 10000Gp.",
+                    "translation": "Guy\n\"Hey there, you guys! Thanks for bailing us out.\n We lost all our items, but\n\r now we can explore the maze again.\n Thanks a bunch!\n This is just a little something, but take it.\n\r{ff12} received\n 10000Gp.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 53,
                     "source": "NA",
-                    "translation": "Guy\n\"By the way, did you know?\n The door at this entrance is locked.",
+                    "translation": "Guy\n\"Hey, by the way, did you guys know?\n The door at this entrance is locked!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 66,
                     "source": "NA",
-                    "translation": "Alstron\n\"It's more of a seal than a lock, really.\n It seems to need some kind of tablet to open.",
+                    "translation": "Alstron\n\"I'd call it a seal rather than a lock, myself.\n It seems some sort of tablet is needed to open it.",
                     "addStringTerminator": true
                 },
                 {
@@ -659,13 +659,13 @@
                 {
                     "length": 97,
                     "source": "NA",
-                    "translation": "Alstron\n\"When sealing something with a barrier, one\n places the thing to be sealed at the center\n\r and arranges magical items around it.\n That is the usual method.",
+                    "translation": "Alstron\n\"When sealing something with a barrier, one\n places the thing to be sealed at the center\n\r and arranges magical items around it.\n That is the customary method, you see.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 20,
                     "source": "NA",
-                    "translation": "Guy\n\"So, in plain words?",
+                    "translation": "Guy\n\"So what's the short version?",
                     "addStringTerminator": true
                 },
                 {
@@ -677,7 +677,7 @@
                 {
                     "length": 41,
                     "source": "NA",
-                    "translation": "Guy\n\"Right, now we know what we're after for now.\n Let's go!",
+                    "translation": "Guy\n\"Right! At least we know what to do for now.\n Let's move out!",
                     "addStringTerminator": true
                 },
                 {
@@ -701,13 +701,13 @@
                 {
                     "length": 91,
                     "source": "NA",
-                    "translation": "Man with a greatsword\n\"I'm a hero from far across the sea!\n\r The name's Gaillardia!\n Call me Guy.\n Nice to meet you!",
+                    "translation": "Man with a greatsword\n\"I'm the hero from far across the sea!\n\r The name's Gaillardia!\n Just call me Guy.\n Glad to meet ya!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 105,
                     "source": "NA",
-                    "translation": "Tall man\n\"I am the Priest Alstron.\n A pleasure to make your acquaintance.\n\r Allow me to introduce the rest of our party.\n This large one here is our Fighter, Linaria.",
+                    "translation": "Tall man\n\"I am Alstron, a Priest.\n I trust you'll remember the name.\n\r For form's sake, I'll introduce the rest of us.\n This rather large one is our Fighter, Linaria.",
                     "addStringTerminator": true
                 },
                 {
@@ -737,13 +737,13 @@
                 {
                     "length": 68,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"Hi, I'm Fritillaria the Thief!\n\r Heh, this party scouted me.\n Nice to meet ya!",
+                    "translation": "Fritillaria\n\"Hiya! Fritillaria the Thief, that's me!\n\r Heh-heh, this party went and scouted me.\n Nice to meetcha!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 54,
                     "source": "NA",
-                    "translation": "Alstron\n\"This lovely lady is our newest member,\n the Bard Liliaceus.",
+                    "translation": "Alstron\n\"And this beautiful lady, our newest member,\n is the Bard Liliaceus.",
                     "addStringTerminator": true
                 },
                 {
@@ -755,19 +755,19 @@
                 {
                     "length": 43,
                     "source": "NA",
-                    "translation": "Guy\n\"Just so we're clear,\n the leader's me, the hero.",
+                    "translation": "Guy\n\"Just so we're clear,\n the leader here is me, the hero!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Alstron\n\"Well, we'll let you believe that.",
+                    "translation": "Alstron\n\"Quite so. We'll leave it at that, shall we?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": "Guy\n\"Such a show-off......",
+                    "translation": "Guy\n\"Always hogging the spotlight......",
                     "addStringTerminator": true
                 },
                 {
@@ -779,31 +779,31 @@
                 {
                     "length": 106,
                     "source": "NA",
-                    "translation": "Guy\n\"Looks like we've got some new faces,\n so how about a quick round of introductions?\n\r My name's Gaillardia!\n Call me Guy!\n My class is Hero.",
+                    "translation": "Guy\n\"Looks like we've got some new faces here,\n so let's do some quick introductions!\n\r My name's Gaillardia!\n Call me Guy!\n And my class is Hero!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Linaria\n\"I'm Linaria. A Fighter through and through.",
+                    "translation": "Linaria\n\"I'm Linaria. Fighter, born and bred.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 52,
                     "source": "NA",
-                    "translation": "Alstron\n\"I'm Alstron, a Priest.\n Please, just call me \"Al.\"",
+                    "translation": "Alstron\n\"I am Alstron, a Priest.\n Do feel free to call me \"Al.\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "Lychee\n\"I'm Lychee, and I'm a Maaage!",
+                    "translation": "Lychee\n\"Lychee's a Maaage, y'know!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 37,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"Hi, I'm Fritillaria the Thief!\n Nice to meet ya!",
+                    "translation": "Fritillaria\n\"Hiya! Fritillaria the Thief, that's me!\n Nice to meetcha!",
                     "addStringTerminator": true
                 },
                 {
@@ -815,7 +815,7 @@
                 {
                     "length": 50,
                     "source": "NA",
-                    "translation": "Guy\n\"Huh? Didn't I tell you before?\n There's still people who don't know me?",
+                    "translation": "Guy\n\"Huh? Didn't I tell you already?\n There's somebody who still doesn't know me?!",
                     "addStringTerminator": true
                 },
                 {
@@ -827,7 +827,7 @@
                 {
                     "length": 47,
                     "source": "NA",
-                    "translation": "Linaria\n\"We did this already. You forgot?\n That's harsh. Oh well, whatever.",
+                    "translation": "Linaria\n\"We did this already! You forgot?\n That's cold. Eh, whatever.",
                     "addStringTerminator": true
                 },
                 {
@@ -857,13 +857,13 @@
                 {
                     "length": 46,
                     "source": "NA",
-                    "translation": "Lilia\n\"Do you know who I am?\n I'm Liliaceus. Call me Lilia, 'kay?",
+                    "translation": "Lilia\n\"Heard of me? I'm Liliaceus.\n But you can call me Lilia, 'kay?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 81,
                     "source": "NA",
-                    "translation": "Guy\n\"Looks like some of you are low on health.\n I can heal you, if you like.\n\r Who should I heal?",
+                    "translation": "Guy\n\"Looks like some of you are running on empty.\n I can heal you, if you'd like.\n\r So, who'll it be?",
                     "addStringTerminator": true
                 },
                 {
@@ -893,7 +893,7 @@
                 {
                     "length": 58,
                     "source": "NA",
-                    "translation": "Guy\n\"Ah, sorry. I'm clean out of magic.\n Sorry to get your hopes up. Really, I'm sorry.",
+                    "translation": "Guy\n\"Ah, my bad. I'm clean out of magic.\n Sorry to get your hopes up. Really, I'm sorry.",
                     "addStringTerminator": true
                 },
                 {
@@ -917,19 +917,19 @@
                 {
                     "length": 38,
                     "source": "NA",
-                    "translation": "Guy\n\"You'll handle it yourselves?\n Well, good luck.",
+                    "translation": "Guy\n\"You'll handle it yourselves, huh?\n Well, hang in there!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 95,
                     "source": "NA",
-                    "translation": "Alstron\n\"It seems some of you are\n running low on health.\n\r I'd be happy to heal you, if you like.\n So, whom shall I heal?",
+                    "translation": "Alstron\n\"It would seem some of you are\n rather low on health.\n\r If my humble services will do, I shall heal you.\n Now, whom shall I tend to?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "Alstron\n\"That one seems to be fine.",
+                    "translation": "Alstron\n\"That one seems quite all right, I'd say.",
                     "addStringTerminator": true
                 },
                 {
@@ -959,7 +959,7 @@
                 {
                     "length": 73,
                     "source": "NA",
-                    "translation": "Alstron\n\"Let's hope it works.\n If you ask, I can hardly refuse.\n\r         {ff30}2Kadorto{ff30}0",
+                    "translation": "Alstron\n\"One can only hope it succeeds.\n If you ask, I can hardly refuse.\n\r         {ff30}2Kadorto{ff30}0",
                     "addStringTerminator": true
                 },
                 {
@@ -983,7 +983,7 @@
                 {
                     "length": 60,
                     "source": "NA",
-                    "translation": "Alstron\n\"I see. You don't need my help.\n Well, kindness does sometimes backfire.",
+                    "translation": "Alstron\n\"I see. So my help is not required.\n Well, kindness does sometimes backfire.",
                     "addStringTerminator": true
                 },
                 {
@@ -1001,7 +1001,7 @@
                 {
                     "length": 95,
                     "source": "NA",
-                    "translation": " I see.\n We're glad we could help you out.\n No, no need to thank us.\n\r We'll just help ourselves to what we can.\n Farewell.",
+                    "translation": " I see!\n We're glad to be of help to you.\n No, no, no need to thank us.\n\r We'll collect our fee wherever we can.\n Farewell!",
                     "addStringTerminator": true
                 },
                 {
@@ -1013,7 +1013,7 @@
                 {
                     "length": 136,
                     "source": "NA",
-                    "translation": "Guy\n\"How's it going? Making progress?\n\r We just got some items out of a chest,\n but they're still unidentified.\n\r So how'd you like to buy\n one of the three items\n we found?",
+                    "translation": "Guy\n\"Hey, how's the exploring going?\n\r We just pulled some items out of a chest,\n but we haven't identified them yet.\n\r So how about it? Want to buy\n one of these three items\n we found?",
                     "addStringTerminator": true
                 },
                 {
@@ -1025,7 +1025,7 @@
                 {
                     "length": 44,
                     "source": "NA",
-                    "translation": "Guy\n\"Which one?\n By the way, how does {ff11}0Gp sound?",
+                    "translation": "Guy\n\"Which'll it be?\n Oh, and how does {ff11}0Gp sound?",
                     "addStringTerminator": true
                 },
                 {
@@ -1055,13 +1055,13 @@
                 {
                     "length": 48,
                     "source": "NA",
-                    "translation": "Guy\n\"A test of skill, eh?\n\r Sounds like fun.\n Win or lose, no hard feelings.",
+                    "translation": "Guy\n\"A test of skill, eh?\n\r Sounds like fun!\n Win or lose, no hard feelings!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "Fight them anyway?",
+                    "translation": "Fight anyway?",
                     "addStringTerminator": true
                 },
                 {
@@ -1073,7 +1073,7 @@
                 {
                     "length": 45,
                     "source": "NA",
-                    "translation": "Guy\n\"What's this about?\n Hey, everyone, anybody find anything new?",
+                    "translation": "Guy\n\"What's this about?\n Hey guys, anybody find anything new?",
                     "addStringTerminator": true
                 },
                 {
@@ -1091,13 +1091,13 @@
                 {
                     "length": 21,
                     "source": "NA",
-                    "translation": "Lychee\n\"Lychee doesn't know anything.",
+                    "translation": "Lychee\n\"Lychee doesn't know anythiiing.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "Lilia\n\"I don't know either.",
+                    "translation": "Lilia\n\"Mm, I don't know either.",
                     "addStringTerminator": true
                 },
                 {
@@ -1109,7 +1109,7 @@
                 {
                     "length": 23,
                     "source": "NA",
-                    "translation": "Guy\n\"There's nothing else I need to tell you.",
+                    "translation": "Guy\n\"Nope, nothing else to tell you.",
                     "addStringTerminator": true
                 },
                 {
@@ -1121,13 +1121,13 @@
                 {
                     "length": 34,
                     "source": "NA",
-                    "translation": "Alstron\n\"Nothing interesting has happened lately.",
+                    "translation": "Alstron\n\"Things have been rather dull of late, I must say.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "Lychee\n\"Not telling!",
+                    "translation": "Lychee\n\"Lychee's not telling!",
                     "addStringTerminator": true
                 },
                 {
@@ -1139,7 +1139,7 @@
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "Lilia\n\"I don't know either.",
+                    "translation": "Lilia\n\"Mm, I don't know either.",
                     "addStringTerminator": true
                 },
                 {
@@ -1151,13 +1151,13 @@
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": "Linaria\n\".........\n Oh, really. And?",
+                    "translation": "Linaria\n\".........\n Oh yeah? So?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 36,
                     "source": "NA",
-                    "translation": "Alstron\n\"............\n Oh, is that so.",
+                    "translation": "Alstron\n\"............\n My, is that so.",
                     "addStringTerminator": true
                 },
                 {
@@ -1175,13 +1175,13 @@
                 {
                     "length": 32,
                     "source": "NA",
-                    "translation": "Lilia\n\"............\n Hmm. Is that so?",
+                    "translation": "Lilia\n\"............\n Hmm. Oh, really?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 37,
                     "source": "NA",
-                    "translation": "Guy\n\"We did meet a party that was all kids.",
+                    "translation": "Guy\n\"Well, we met a party that was nothing but kids!",
                     "addStringTerminator": true
                 },
                 {
@@ -1199,7 +1199,7 @@
                 {
                     "length": 72,
                     "source": "NA",
-                    "translation": "Lychee\n\"Y'know, we met a party of cute boys.\n And they gave me an item!\n\r Hehe, jealous?",
+                    "translation": "Lychee\n\"Y'know what? We met a party of cute boys!\n And then, and then, they gave me an item!\n\r Heheee, jealous?",
                     "addStringTerminator": true
                 },
                 {
@@ -1217,7 +1217,7 @@
                 {
                     "length": 92,
                     "source": "NA",
-                    "translation": "Linaria\n\"We met some people who were very\n obviously out grave robbing.\n\r And one of them's a Lord, same as our leader.\n I can't believe it. This is a Shrine...",
+                    "translation": "Linaria\n\"We met some folks who were grave robbing,\n plain as day.\n\r And one of 'em's a Lord, same as our leader?\n Can't believe it. This is a Shrine...",
                     "addStringTerminator": true
                 },
                 {
@@ -1265,13 +1265,13 @@
                 {
                     "length": 68,
                     "source": "NA",
-                    "translation": "Alstron\n\"Young Zaril had just two companions\n with him.\n\r Honestly, how reckless can you be.",
+                    "translation": "Alstron\n\"Young Zaril had a mere two companions\n with him.\n\r My, my. How very reckless of him.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 90,
                     "source": "NA",
-                    "translation": "Lychee\n\"The other day, Zaril was leading a party.\n\r And y'know, he asked Lychee to join too.\n But Lychee said no, fair and square!",
+                    "translation": "Lychee\n\"The other day, Zaril was leading a party!\n\r And then, y'know, he asked Lychee to join!\n But Lychee said no, just like she should!",
                     "addStringTerminator": true
                 },
                 {
@@ -1283,19 +1283,19 @@
                 {
                     "length": 32,
                     "source": "NA",
-                    "translation": "Linaria\n\"......Not that I'm very interested.",
+                    "translation": "Linaria\n\"......Not that I care much.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 48,
                     "source": "NA",
-                    "translation": "Alstron\n\"Even so, they struck me as\n very learned people.",
+                    "translation": "Alstron\n\"Even so, they struck me as\n remarkably learned people.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 94,
                     "source": "NA",
-                    "translation": "Lychee\n\"Down underground, we met this mister\n called Cleo who studies stuff.\n\r He seems to know lots of things,\n but I couldn't understand what he was saying.",
+                    "translation": "Lychee\n\"Down underground, y'know, we met this\n old guy called Cleo who studies stuff.\n\r He knows lots and lots of things, I guess,\n but I couldn't understand a word he said.",
                     "addStringTerminator": true
                 },
                 {
@@ -1307,7 +1307,7 @@
                 {
                     "length": 52,
                     "source": "NA",
-                    "translation": "Lilia\n\"I met a scholarly elf gentleman.\n Very intellectual. I liked him.",
+                    "translation": "Lilia\n\"I met an elf gentleman, the scholarly type.\n So intellectual... I rather liked him.",
                     "addStringTerminator": true
                 },
                 {
@@ -1349,7 +1349,7 @@
                 {
                     "length": 74,
                     "source": "NA",
-                    "translation": "Lilia\n\"We met a weird man. Such a killing aura,\n and he just left without a word...\n\r What was that about?",
+                    "translation": "Lilia\n\"I met the strangest man. Sooo much\n killing intent, and he just left without a word...\n\r What was that all about, I wonder?",
                     "addStringTerminator": true
                 },
                 {
@@ -1367,7 +1367,7 @@
                 {
                     "length": 38,
                     "source": "NA",
-                    "translation": "Alstron\n\"......\n My, so such things do happen.",
+                    "translation": "Alstron\n\"......\n My, my. So such things do happen.",
                     "addStringTerminator": true
                 },
                 {
@@ -1421,7 +1421,7 @@
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Lilia\n\"Sorry, hon, there's nothing new.",
+                    "translation": "Lilia\n\"Sorry, darling. Nothing new, I'm afraid.",
                     "addStringTerminator": true
                 },
                 {
@@ -1439,25 +1439,25 @@
                 {
                     "length": 132,
                     "source": "NA",
-                    "translation": "Alstron\n\"The other day I thought I'd\n change class to Bishop, but\n\r I was told my faith was lacking.\n\r In this country, can't one simply take\n that certain book to the Shrine?",
+                    "translation": "Alstron\n\"The other day I thought I'd\n change class to Bishop, but\n\r I was told something about lacking faith.\n\r In this country, can't one simply take\n that certain book to the Shrine?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 36,
                     "source": "NA",
-                    "translation": "Lychee\n\"Lychee's really into summoning magic lately.",
+                    "translation": "Lychee\n\"Lychee's reeeally into summoning magic lately!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 47,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"I want to hurry up and learn the trade\n so I can have a party of my own.",
+                    "translation": "Fritillaria\n\"I wish to become a proper Thief soon\n and have a party of my own.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 121,
                     "source": "NA",
-                    "translation": "Lilia\n\"Hmm? You want to know about me?\n\r Oh, all right. You know my name, don't you?\n I'm Liliaceus.\n Everyone calls me Lilia.\n\r I'm a Bard, and a fresh young 17!",
+                    "translation": "Lilia\n\"Hmm? You want to know about me?\n\r Well, if you insist. You know my name, right?\n I'm Liliaceus.\n Everyone calls me Lilia.\n\r I'm a Bard, and a fresh young thing of 17.",
                     "addStringTerminator": true
                 },
                 {
@@ -1469,7 +1469,7 @@
                 {
                     "length": 41,
                     "source": "NA",
-                    "translation": "Linaria\n\"Hmm... no news in particular.\n Sorry.",
+                    "translation": "Linaria\n\"Hmm... nothing new, really.\n Sorry 'bout that.",
                     "addStringTerminator": true
                 },
                 {
@@ -1487,13 +1487,13 @@
                 {
                     "length": 30,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"C-can't help you.\n I'm sorry.",
+                    "translation": "Fritillaria\n\"I-I cannot be of use.\n I am sorry.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 26,
                     "source": "NA",
-                    "translation": "Lilia\n\"Sorryyy. Nothing much to tell.",
+                    "translation": "Lilia\n\"Sorry, sweetie. Nothing much to tell.",
                     "addStringTerminator": true
                 },
                 {
@@ -1535,19 +1535,19 @@
                 {
                     "length": 96,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"Just between us, I'm bad at disarming\n chest traps.\n\r This party relies on me completely.\n When I mess up, they hit me.\n I'm sorry.",
+                    "translation": "Fritillaria\n\"Just between us, I am poor at disarming\n chest traps.\n\r This party depends on me entirely.\n When I fail, they hit me.\n I am sorry.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 18,
                     "source": "NA",
-                    "translation": "Lilia\n\"Let's see......",
+                    "translation": "Lilia\n\"Mmm, let's see......",
                     "addStringTerminator": true
                 },
                 {
                     "length": 35,
                     "source": "NA",
-                    "translation": "Lilia\n\"I'm not just good with instruments.\n I'm a great dancer, too.",
+                    "translation": "Lilia\n\"It's not just instruments, you know.\n I'm quite the dancer, too.",
                     "addStringTerminator": true
                 },
                 {
@@ -1571,7 +1571,7 @@
                 {
                     "length": 103,
                     "source": "NA",
-                    "translation": "Lychee\n\"Hey hey hey, listen, listen!\n I summoned a Greater Demon!\n\r Amazing, right? Amazing, right?\n It'd be so easy if one showed up every time.",
+                    "translation": "Lychee\n\"Hey hey hey, listen, listen!\n Lychee summoned a Greater Demon!\n\r Isn't that amazing? Isn't it, isn't it?\n It'd be so easy if one showed up every time.",
                     "addStringTerminator": true
                 },
                 {
@@ -1589,7 +1589,7 @@
                 {
                     "length": 42,
                     "source": "NA",
-                    "translation": "Alstron\n\"Such a thing happened......\n Hmm, how fortunate for you.",
+                    "translation": "Alstron\n\"Why, such a thing......\n Hmm, how very fortunate for you.",
                     "addStringTerminator": true
                 },
                 {
@@ -1601,25 +1601,25 @@
                 {
                     "length": 63,
                     "source": "NA",
-                    "translation": "Fritillaria\n\".........\n\r I don't get the complicated stuff,\n but I'll try believing what you say.",
+                    "translation": "Fritillaria\n\".........\n\r I don't get the complicated stuff,\n but I'll take your word for it.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 39,
                     "source": "NA",
-                    "translation": "Lilia\n\".........\n Say, wouldn't you like to scout me?",
+                    "translation": "Lilia\n\".........\n Say... don't you want to scout me?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 32,
                     "source": "NA",
-                    "translation": " Just kidding, I was only saying it.\n Don't take it seriously, 'kay?",
+                    "translation": " Kidding, I was just teasing.\n Don't mind me, 'kay?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 20,
                     "source": "NA",
-                    "translation": "Guy\n\"You told me that before.",
+                    "translation": "Guy\n\"Hey, you told me that already!",
                     "addStringTerminator": true
                 },
                 {
@@ -1631,7 +1631,7 @@
                 {
                     "length": 34,
                     "source": "NA",
-                    "translation": "Alstron\n\"I've heard that story before.",
+                    "translation": "Alstron\n\"I do believe I've heard that tale before.",
                     "addStringTerminator": true
                 },
                 {
@@ -1643,13 +1643,13 @@
                 {
                     "length": 50,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"Y-you've told me that lots of times.\n Is it really that important?",
+                    "translation": "Fritillaria\n\"Y-you have told me that many times.\n Is it truly so important?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 22,
                     "source": "NA",
-                    "translation": "Lilia\n\"You told me that before, hon.",
+                    "translation": "Lilia\n\"You've told me that before, darling.",
                     "addStringTerminator": true
                 },
                 {
@@ -1661,7 +1661,7 @@
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "Linaria\n\"Show me, show me",
+                    "translation": "Linaria\n\"Lemme see, lemme see!",
                     "addStringTerminator": true
                 },
                 {
@@ -1697,7 +1697,7 @@
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "We asked if they had any new information.",
+                    "translation": "We asked if they had any news.",
                     "addStringTerminator": true
                 },
                 {
@@ -1721,7 +1721,7 @@
                 {
                     "length": 20,
                     "source": "NA",
-                    "translation": "We asked them personal questions.",
+                    "translation": "We asked them something personal.",
                     "addStringTerminator": true
                 },
                 {
@@ -1763,19 +1763,19 @@
                 {
                     "length": 56,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"Hey! How're ya doin'?\n Me, I'm doin' great, as you can see.\n\r So what can I do for ya today?",
+                    "translation": "Fritillaria\n\"Hey! You doin' good?\n Me, I'm doin' great, as ya can see.\n\r So whaddaya need today?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "Lilia\n\"Hiii, how've you been?",
+                    "translation": "Lilia\n\"Hey there. Been keeping well?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "Lilia\n\"What is it?",
+                    "translation": "Lilia\n\"Hmm? What is it?",
                     "addStringTerminator": true
                 },
                 {
@@ -1787,7 +1787,7 @@
                 {
                     "length": 66,
                     "source": "NA",
-                    "translation": "Man with a greatsword\n\"Oh, it's you guys............\n No, nothing's up. Just taking a little break.",
+                    "translation": "Man with a greatsword\n\"Oh, it's you guys............\n Nah, nothing's wrong! Just taking a breather!",
                     "addStringTerminator": true
                 },
                 {
@@ -1823,7 +1823,7 @@
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "We asked them about themselves.",
+                    "translation": "We asked them who they were.",
                     "addStringTerminator": true
                 },
                 {

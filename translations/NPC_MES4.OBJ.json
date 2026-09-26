@@ -65,25 +65,25 @@
                 {
                     "length": 32,
                     "source": "NA",
-                    "translation": "Bergamot\n\"Well now, are you folks about our age?",
+                    "translation": "Bergamot\n\"Well, I'll be. Would ye folks be about\n our vintage?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 99,
                     "source": "NA",
-                    "translation": "Bergamot\n\"Able to cast every last spell!\n Splendid, simply splendid.\n\r With learning like that, ye must know\n everything there is. Am I right?",
+                    "translation": "Bergamot\n\"Can cast every spell there is, eh?\n Splendid, I must say.\n\r With learnin' like that, ye must know\n all there is to know. Well? Do ye?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 125,
                     "source": "NA",
-                    "translation": "Bergamot\n\"Who needs brains? If ye can get the\n hang of it by feel, that's good enough.\n\r Truth be told, I can't make head nor tail\n of these ancient glyphs meself.\n Just muddle along, that's the ticket.",
+                    "translation": "Bergamot\n\"No need to go usin' yer head. If ye can\n get the hang of it by feel, where's the harm?\n\r Truth be told, I can't make head nor tail\n of these ancient glyphs meself.\n Just muddle along, that's the ticket.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 84,
                     "source": "NA",
-                    "translation": "Bergamot\n\"Well, well! Marguda and Arabik, together!\n I'd heard ye'd gone missing. Keep at it.",
+                    "translation": "Bergamot\n\"Well, well! If it ain't Marguda and Arabik,\n the pair of ye! Heard ye'd gone missing.\n Keep at it, now.",
                     "addStringTerminator": true
                 },
                 {
@@ -95,13 +95,13 @@
                 {
                     "length": 87,
                     "source": "NA",
-                    "translation": "Cresson\n\"How presumptuous, to share a name\n with so fearsome a god.\n\r And to us, isn't that god an evil one?\n You'd best change your name, and soon.",
+                    "translation": "Cresson\n\"My, to bear the very name of\n so dreadful a god...\n\r Isn't that god an evil one, to us?\n You really had better change your name.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 80,
                     "source": "NA",
-                    "translation": "Cresson\n\"What tremendous vitality. A brute\n like you would pass for a monster.\n\r Well, do watch out for Labadi.",
+                    "translation": "Cresson\n\"What tremendous vitality. Someone as\n monstrous as you would make a fine monster.\n\r Well, do watch out for Labadi.",
                     "addStringTerminator": true
                 },
                 {
@@ -113,7 +113,7 @@
                 {
                     "length": 87,
                     "source": "NA",
-                    "translation": "Cresson\n\"{ff12}, splendid work.\n\r Still, if your stats won't go any higher,\n why not try changing your class?",
+                    "translation": "Cresson\n\"{ff12}, how splendid.\n\r But if your stats won't go any higher,\n perhaps you might try changing class?",
                     "addStringTerminator": true
                 },
                 {
@@ -143,13 +143,13 @@
                 {
                     "length": 171,
                     "source": "NA",
-                    "translation": "Robed elf\n\"It's just as I suspected. This maze is\n unlike any that came before.\n\r It's no maze built by some wizard, but\n a structure of a very special kind.\n\r I must look into this more closely.\n Forgive me, but you're disturbing my\n research. Would you mind leaving?",
+                    "translation": "Robed elf\n\"Just as I'd predicted, you see. This maze\n is unlike any that came before.\n\r It's no maze built by some wizard, but\n a structure of a very special kind.\n\r I really must look into it more closely.\n Sorry, but you're rather in the way of\n my research. Would you mind going home?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 163,
                     "source": "NA",
-                    "translation": "Cleo\n\"It's just as I suspected. This maze is\n unlike any that came before.\n\r It's no maze built by some wizard, but\n a structure of a very special kind.\n\r I must look into this more closely.\n Forgive me, but you're disturbing my\n research. Would you mind leaving?",
+                    "translation": "Cleo\n\"Just as I'd predicted, you see. This maze\n is unlike any that came before.\n\r It's no maze built by some wizard, but\n a structure of a very special kind.\n\r I really must look into it more closely.\n Sorry, but you're rather in the way of\n my research. Would you mind going home?",
                     "addStringTerminator": true
                 },
                 {
@@ -173,7 +173,7 @@
                 {
                     "length": 139,
                     "source": "NA",
-                    "translation": "Cresson\n\"But don't let it trouble you. You became\n the Opener of the Door they awaited.\n\r So go, and tell the world what you\n find beyond that door.\n I'll wait here for the next Opener.",
+                    "translation": "Cresson\n\"But please don't let it trouble you. You\n became the Opener of the Door they awaited.\n\r And please, tell the world what you\n experienced beyond that door.\n I'll wait here for the next Opener.",
                     "addStringTerminator": true
                 },
                 {
@@ -203,13 +203,13 @@
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "Bergamot\n\"Hah, indeed. Marvelous.",
+                    "translation": "Bergamot\n\"Well, I'll be. Marvelous.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 60,
                     "source": "NA",
-                    "translation": "Bergamot\n\"With all 26 ancient glyphs laid out like\n this, our research can finally move on.",
+                    "translation": "Bergamot\n\"With all 26 ancient glyphs laid out like\n this, our research is bound to get on.",
                     "addStringTerminator": true
                 },
                 {
@@ -239,13 +239,13 @@
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "Old man\n\"Hah, indeed. Marvelous.",
+                    "translation": "Old man\n\"Well, I'll be. Marvelous.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 60,
                     "source": "NA",
-                    "translation": "Old man\n\"With all 26 ancient glyphs laid out like\n this, our research can finally move on.",
+                    "translation": "Old man\n\"With all 26 ancient glyphs laid out like\n this, our research is bound to get on.",
                     "addStringTerminator": true
                 },
                 {
@@ -275,7 +275,7 @@
                 {
                     "length": 133,
                     "source": "NA",
-                    "translation": "From within the black shadow before you,\n something darker still than the shadow\n oozed out without a sound.\n\r The shadow was familiar by now,\n but this time, something different\n had appeared.",
+                    "translation": "   From within the black shadow before you,\n something darker still than the shadow\n came seeping out without a sound.\n\r By now the shadow was a familiar sight,\n but this time, something different\n had appeared.",
                     "addStringTerminator": true
                 },
                 {
@@ -287,7 +287,7 @@
                 {
                     "length": 61,
                     "source": "NA",
-                    "translation": "Cleo\n\"Still, this is quite a predicament...\n\r And after I warned you so firmly\n not to go any further...",
+                    "translation": "Cleo\n\"But oh dear, this is awkward...\n\r And after I warned you so very firmly\n not to go any further...",
                     "addStringTerminator": true
                 },
                 {
@@ -299,7 +299,7 @@
                 {
                     "length": 46,
                     "source": "NA",
-                    "translation": "Man's voice\n\"Like I told ye. Ye shouldn't have gone\n helpin' the likes of them.",
+                    "translation": "Man's voice\n\"I told ye, didn't I? Ye had no business\n helpin' the likes o' them.",
                     "addStringTerminator": true
                 },
                 {
@@ -311,7 +311,7 @@
                 {
                     "length": 182,
                     "source": "NA",
-                    "translation": "Cleo\n\"You understand by now, surely?\n We are the ones who took your Priestess.\n\r We hid the monsters at the Shrine's altar,\n and we laid out the ancient glyphs.\n All of it was us, the ones you call heretics.\n\r For that was what\n our god desired...",
+                    "translation": "Cleo\n\"Surely you've worked it out by now?\n We are the ones who took your Priestess.\n\r We hid the monsters at the Shrine's altar,\n and we laid out the ancient glyphs.\n All of it was us, the ones you call heretics.\n\r For that was what\n our god desired...",
                     "addStringTerminator": true
                 },
                 {
@@ -323,7 +323,7 @@
                 {
                     "length": 114,
                     "source": "NA",
-                    "translation": "Bergamot\n\"Bring folk into the Shrine, leave things\n to help 'em, then set traps to drive 'em off.\n\r Truth is, not even we know what\n the god really intends.",
+                    "translation": "Bergamot\n\"Bring folk into the Shrine, leave things\n to help 'em, then set traps to drive 'em off.\n\r Truth is, not even the likes of us can\n tell what the god's really after.",
                     "addStringTerminator": true
                 },
                 {
@@ -335,19 +335,19 @@
                 {
                     "length": 99,
                     "source": "NA",
-                    "translation": "Cleo\n\"But enough talk...\n The time has come.\n\r Us, or you. Which of us will pass\n beyond this door...\n Let us settle it!",
+                    "translation": "Cleo\n\"But I think that's enough chatter...\n The time has come.\n\r Us, or you. Which of us will pass\n beyond this door...\n Let us settle it!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 110,
                     "source": "NA",
-                    "translation": "From within the black shadow before you,\n something darker still than the shadow\n oozed out without a sound.\n\r\"Now then, you who know nothing.\n Have at you!",
+                    "translation": "   From within the black shadow before you,\n something darker still than the shadow\n came seeping out without a sound.\n\r\"Now then, you who know nothing...\n Have at you!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 80,
                     "source": "NA",
-                    "translation": "Cleo\n\"Yes, lately a great many self-styled\n adventurers have started coming by.\n\r I take it you're some of them?",
+                    "translation": "Cleo\n\"Yes, lately we've had a great many self-styled\n adventurers dropping by, you know.\n\r I suppose you're more of the same?",
                     "addStringTerminator": true
                 },
                 {
@@ -359,7 +359,7 @@
                 {
                     "length": 44,
                     "source": "NA",
-                    "translation": "Bergamot\n\"Me? The name's Bergamot.\n I'm a Priest, if ye must know.",
+                    "translation": "Bergamot\n\"Me? Why, I'm a Priest\n by the name o' Bergamot.",
                     "addStringTerminator": true
                 },
                 {
@@ -383,7 +383,7 @@
                 {
                     "length": 65,
                     "source": "NA",
-                    "translation": "Bergamot\n\"..Ye've got awful memories, you lot...\n I'm Bergamot, the Priest.",
+                    "translation": "Bergamot\n\"..Memories like sieves, you lot...\n I'm a Priest by the name o' Bergamot.",
                     "addStringTerminator": true
                 },
                 {
@@ -401,7 +401,7 @@
                 {
                     "length": 32,
                     "source": "NA",
-                    "translation": "Cleo\n\"Oh? That one seems to be fine.",
+                    "translation": "Cleo\n\"Well, well. That one looks perfectly\n fine, you know.",
                     "addStringTerminator": true
                 },
                 {
@@ -479,13 +479,13 @@
                 {
                     "length": 82,
                     "source": "NA",
-                    "translation": "Cleo\n\"Identification? Yes, happy to.\n\r I haven't done much of it lately,\n so I can't promise anything.\n Now, whose belongings are they?",
+                    "translation": "Cleo\n\"Identification, is it? Why, certainly.\n\r I haven't done much of it lately, mind,\n so I can't promise anything.\n Now then, whose belongings are they?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 42,
                     "source": "NA",
-                    "translation": "Cleo\n\"That one doesn't seem to be carrying\n any unidentified items?",
+                    "translation": "Cleo\n\"Hm? That one doesn't appear to have\n anything unidentified, you know.",
                     "addStringTerminator": true
                 },
                 {
@@ -509,19 +509,19 @@
                 {
                     "length": 47,
                     "source": "NA",
-                    "translation": "Cleo\n\"Well, well, I managed to identify it.\n Old skills die hard, as they say.",
+                    "translation": "Cleo\n\"Well, well, it's identified. Old skills\n never leave you, or however it goes.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 98,
                     "source": "NA",
-                    "translation": "Cresson\n\"The ancient glyphs?\n\r Let's see.\n Shall we compare yours with our results?\n\r It looks like you match us at about {ff11}0%.",
+                    "translation": "Cresson\n\"The ancient glyphs, is it?\n\r Let me see.\n Shall we compare them with our results?\n\r Um, you seem to match us at about {ff11}0%.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 149,
                     "source": "NA",
-                    "translation": "Cresson\n\"The ancient glyphs?\n\r Let's see.\n Shall we compare yours with our results?\n\r Well, well,\n you match us 100%.\n\r That proves our research was right.\n Thank you very much.",
+                    "translation": "Cresson\n\"The ancient glyphs, is it?\n\r Let me see.\n Shall we compare them with our results?\n\r Oh, my!\n You match us 100%.\n\r That proves our research was right.\n Thank you so very much.",
                     "addStringTerminator": true
                 },
                 {
@@ -533,7 +533,7 @@
                 {
                     "length": 26,
                     "source": "NA",
-                    "translation": "Bergamot\n\"Don't bother me...",
+                    "translation": "Bergamot\n\"Don't go botherin' me...",
                     "addStringTerminator": true
                 },
                 {
@@ -551,7 +551,7 @@
                 {
                     "length": 46,
                     "source": "NA",
-                    "translation": "Bergamot\n\"............\n And what of it?",
+                    "translation": "Bergamot\n\"............\n So what's that to me, eh?",
                     "addStringTerminator": true
                 },
                 {
@@ -581,19 +581,19 @@
                 {
                     "length": 56,
                     "source": "NA",
-                    "translation": "Cleo\n\"A little while ago, a man called Gaillardia\n came here with his companions,",
+                    "translation": "Cleo\n\"A little while ago, a man called Gaillardia\n came here with his companions...",
                     "addStringTerminator": true
                 },
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": "Cleo\n\"and he was rather a peculiar fellow.",
+                    "translation": "Cleo\n\"A rather peculiar fellow, I must say.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 22,
                     "source": "NA",
-                    "translation": "Bergamot\n\"Let me think...",
+                    "translation": "Bergamot\n\"Well now, let's see...",
                     "addStringTerminator": true
                 },
                 {
@@ -605,7 +605,7 @@
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "Cresson\n\"Odd bunch, yes. Very odd.",
+                    "translation": "Cresson\n\"They were an odd lot, yes.",
                     "addStringTerminator": true
                 },
                 {
@@ -623,7 +623,7 @@
                 {
                     "length": 22,
                     "source": "NA",
-                    "translation": "Bergamot\n\"Let me think...",
+                    "translation": "Bergamot\n\"Well now, let's see...",
                     "addStringTerminator": true
                 },
                 {
@@ -659,7 +659,7 @@
                 {
                     "length": 90,
                     "source": "NA",
-                    "translation": "Cleo\n\"Oh, that reminds me. Did you know?\n\r Zaril, who was with Fontana, has\n become a leader himself and put\n together a different party.",
+                    "translation": "Cleo\n\"Oh, that reminds me. Did you know?\n\r Young Zaril, who was with young Fontana,\n has become a leader himself and put\n together a party of his own.",
                     "addStringTerminator": true
                 },
                 {
@@ -677,7 +677,7 @@
                 {
                     "length": 64,
                     "source": "NA",
-                    "translation": "Cleo\n\"I hear Cresson met a very frightening\n person somewhere deep in this Shrine.",
+                    "translation": "Cleo\n\"It seems young Cresson met a very\n frightening person deep in this Shrine.",
                     "addStringTerminator": true
                 },
                 {
@@ -743,7 +743,7 @@
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": "Cleo\n\"But then we found this room...",
+                    "translation": "Cleo\n\"And then we went and found this room...",
                     "addStringTerminator": true
                 },
                 {
@@ -767,7 +767,7 @@
                 {
                     "length": 61,
                     "source": "NA",
-                    "translation": "Cleo\n\"My true field is the natural history of\n monsters: magical creatures, demons...",
+                    "translation": "Cleo\n\"My real field, you know, is the natural\n history of monsters: magical beasts, demons...",
                     "addStringTerminator": true
                 },
                 {
@@ -779,7 +779,7 @@
                 {
                     "length": 45,
                     "source": "NA",
-                    "translation": "Cresson\n\"I study architecture, such as\n shrines and ruins.",
+                    "translation": "Cresson\n\"I study architecture:\n shrines, ruins and the like.",
                     "addStringTerminator": true
                 },
                 {
@@ -791,7 +791,7 @@
                 {
                     "length": 41,
                     "source": "NA",
-                    "translation": "Bergamot\n\"Sorry, we've not turned up\n anything new.",
+                    "translation": "Bergamot\n\"Sorry 'bout that. We ain't turned up\n anythin' new.",
                     "addStringTerminator": true
                 },
                 {
@@ -803,7 +803,7 @@
                 {
                     "length": 69,
                     "source": "NA",
-                    "translation": "Cleo\n\"I hear that some monsters, just\n like us,\n\r band together in parties.",
+                    "translation": "Cleo\n\"I hear some monsters band together\n in parties, just as we do.",
                     "addStringTerminator": true
                 },
                 {
@@ -815,7 +815,7 @@
                 {
                     "length": 23,
                     "source": "NA",
-                    "translation": "Bergamot\n\"Want somethin' with me?",
+                    "translation": "Bergamot\n\"Eh? Somethin' ye want with me?",
                     "addStringTerminator": true
                 },
                 {
@@ -875,13 +875,13 @@
                 {
                     "length": 95,
                     "source": "NA",
-                    "translation": "Cleo\n\"Oh dear, I've no information to give.\n\r Please ask Bergamot\n or Cresson instead.\n They won't mind in the slightest.",
+                    "translation": "Cleo\n\"Dear me, I've no information to give.\n\r Do ask Bergamot\n or young Cresson instead.\n We won't mind in the slightest.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 48,
                     "source": "NA",
-                    "translation": "Bergamot\n\"I'm tired.\n Go have a chat with the others.",
+                    "translation": "Bergamot\n\"I'm plumb worn out.\n You lot go jaw with somebody else.",
                     "addStringTerminator": true
                 },
                 {
@@ -953,13 +953,13 @@
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "We told them all we knew.",
+                    "translation": "We told them everything we knew.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 21,
                     "source": "NA",
-                    "translation": "We asked them who they were.",
+                    "translation": "We asked them about themselves.",
                     "addStringTerminator": true
                 },
                 {
@@ -1001,13 +1001,13 @@
                 {
                     "length": 22,
                     "source": "NA",
-                    "translation": "We asked them to rescue a companion.",
+                    "translation": "We asked them to rescue our comrades.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "We asked them about themselves.",
+                    "translation": "We asked them who they were.",
                     "addStringTerminator": true
                 }
             ]
