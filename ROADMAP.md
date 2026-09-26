@@ -87,6 +87,16 @@ A fresh clone builds the same image as the development machine (checked 2026-09-
 after making file relocation independent of filesystem order). The release workflow pins
 the armips and mkpsxiso commits; `docs/building.md` has the steps.
 
+## After 1.0
+
+Once 1.0 is out and any early bug reports are dealt with, the repo mostly goes quiet.
+- Turn off Dependabot (delete `.github/dependabot.yml`). Its weekly pull requests only
+  make sense while releases are still coming.
+- Archive the repo, so it stays readable and downloadable and it's clear the patch is
+  finished rather than abandoned.
+- The disc token can be left to expire. The private disc repo only matters if another
+  release is ever needed, and that would need a new token too.
+
 ## Open questions
 
 - Project name.
