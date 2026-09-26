@@ -628,49 +628,49 @@
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff24}Cast Spell",
                     "addStringTerminator": true
                 },
                 {
                     "length": 8,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff24}Equip",
                     "addStringTerminator": true
                 },
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff24}Items",
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff24}Pool Gold",
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff24}Back",
                     "addStringTerminator": true
                 },
                 {
                     "length": 5,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff24}Use",
                     "addStringTerminator": true
                 },
                 {
                     "length": 5,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff24}Give",
                     "addStringTerminator": true
                 },
                 {
                     "length": 5,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff24}Drop",
                     "addStringTerminator": true
                 },
                 {
@@ -2494,68 +2494,68 @@
                 {
                     "length": 4,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Fight",
                     "addStringTerminator": true
                 },
                 {
                     "length": 5,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Parry",
                     "addStringTerminator": true
                 },
                 {
                     "length": 5,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Spell",
                     "addStringTerminator": true
                 },
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Dispel",
                     "addStringTerminator": true
                 },
                 {
                     "length": 4,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Use",
                     "addStringTerminator": true
                 },
                 {
                     "length": 4,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Run",
                     "addStringTerminator": true
                 },
                 {
                     "length": 4,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Ambush",
                     "addStringTerminator": true
                 },
                 {
                     "length": 4,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Hide",
                     "addStringTerminator": true
                 },
                 {
                     "length": 4,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Breath",
                     "addStringTerminator": true
                 },
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Is this all right?",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 7,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Yes/  No",
                     "addStringTerminator": true
                 },
                 {
@@ -2585,588 +2585,588 @@
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Sleep: puts an enemy group to sleep",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 20,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Flame: 1-8 damage to one enemy",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 32,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Map: where you are, and where you've been",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Sparks: 1-8 damage to an enemy group",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Shield: one ally's AC drops by 2",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 36,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Gloom: an enemy group's AC rises",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 33,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Fear: enemy group AC +4, and held fast",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Firestorm: 4-24 damage to a group",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 33,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Barrier: a wall that stops enemy spells",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 22,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Heaven: 24-58 damage to one enemy",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Inferno: 6-58 damage to a group",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 36,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Float: rise above traps; lasts long",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Summon: calls up a demon from below",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Frost: 8-64 damage to a group",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 39,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Ward: walls enemies off from casting",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Dispel: 1000 damage to one undead",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 26,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Ice Storm: 44-98 damage to a group",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 22,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Smite: 64-80 damage to one enemy",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 36,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Teleport: go anywhere; random in battle",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 34,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Wish: special effects, but lose a level",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Nuke: 10-150 damage to all enemies",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Bless: heals one ally 1-8 HP",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Pain: 1-8 damage to one enemy",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 23,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Shield: the caster's AC drops by 4",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Sight: nearly always spots chest traps",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Silence: an enemy group can't cast",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Locate: finds one missing ally",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 30,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Identify: reveals enemies; lasts long",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 34,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Cure: one ally recovers from paralysis",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Shield: the party's AC drops by 3",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Bless: heals one ally 2-16 HP",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Cure: cures one ally of poison",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 36,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Shield: party AC drops by 2; lasts long",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Heal: heals one ally 3-24 HP",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 27,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Death: stops one enemy's heart",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 26,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Summon: calls up undead monsters",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 36,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Bless: full HP; cures all but death, ash",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 32,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Drain: leaves one enemy a sliver of HP",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 36,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Banish: sends a demon back to its world",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 33,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Revive: raises the dead or ash, full HP",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 32,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Death: stops an enemy group's hearts",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 30,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Great Prayer: party heals 30-60 HP",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 34,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Might: party hits harder for a few steps",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 34,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Ki Wave: damage of half HP; weakens",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 37,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Haste: one ally attacks more, AC -1",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 33,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Fire Mist: 1-4 damage to a group",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 26,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Weaken: lowers enemy spell resistance",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 32,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Clear Sky: lifts clouds off the party",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Ice Mist: 2-8 damage to a group",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 22,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Drowse: sleep dust over all enemies",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 37,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Might: party hits harder; lasts long",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 34,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Glow Mist: 3-12 damage to a group",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 40,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Guard: party resists magic; lasts long",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 32,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Reflect: may bounce enemy spells back",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 32,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Flame Mist: 4-20 damage to a group",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Create: makes a living monster",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 39,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Cure Mist: party ailments but death, stone",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 32,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Ray Mist: 5-40 damage to a group",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Elixir: fully heals one ally",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Acid: turns weak monsters to dust",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 23,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Blast: 80-130 damage to one enemy",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 32,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Unlock: doors and trapped chests; can fail",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 32,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Low Mist: 4-60 damage to a group",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Mind Blast: 1-10 mental damage to one",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Secret Art: heals one ally 2-6 HP",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 34,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Quick: party AC -1, enemy AC +1",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 32,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Spirit Blast: 2-10 mental damage, group",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 33,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Sense: finds secret doors; lasts long",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Scout: see one block ahead of the party",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 36,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Bind: suggestion holds an enemy group",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 34,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Swift: party AC -2, enemy AC +2",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 35,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Vanish: caster hides, ambushes next turn",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 32,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Psi Blast: 2-16 mental damage, group",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 32,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Focus: party's attack spells grow stronger",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 27,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Weak Wave: an enemy group hits softer",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Phantom: an illusion fights as if real",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 34,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Return: back to the castle; items lost",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 22,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Frost: 36-64 damage to one enemy",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 23,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Appraise: identifies an unknown item",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Bless: heals the party 6-18 HP",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Mind Arrow: 8-64 damage to a group",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 32,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Alch Wave: 12-48 to all, plus ailments",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Psi Wave: 9-72 mental damage to all",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 30,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Plea: grants a special wish; stats change",
                     "compress": true,
                     "addStringTerminator": true
                 },
