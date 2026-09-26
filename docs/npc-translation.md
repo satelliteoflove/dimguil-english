@@ -149,3 +149,70 @@ What marks each one in the Japanese, and what that becomes in English:
   English: "Eh?", "whippersnappers", "I tell ye", grumbling, "back in my day".
 - **Man in armor**. 俺, 〜ねぇ, チッ. A rough, short-tempered adventurer.
 - **Agan, the mysterious figures**. Grand, archaic, portentous.
+
+## Guy's party and Dragon Quest III
+
+Guy's party reads as a Dragon Quest III party stranded in a Wizardry game. No source
+we found says so; the case rests on the facts below. They are kept apart from the
+interpretation so either can be checked or overturned on its own.
+
+### What the game says (NPC_MES1 string numbers)
+
+- Guy calls himself a 勇者, "hero", in ten strings (1, 86-88, 115, 124, 128, 202,
+  248, 295; 86-88 and 295 are one speech under two speaker tags). Three treat it as
+  his class or rank:
+  128 クラスは勇者だ ("my class is Hero"), 202 俺はロードでなくて勇者だぜ! ("I'm not a
+  Lord, I'm a hero!"), and 1 俺は勇者だからそんな差別はしないつもりだ (he's above the
+  alignment rules because he's a hero). His battle record shows him as a Lord (class
+  letter L in the enemy panel, DATA02/NPT00.BIN). Wizardry has no Hero class.
+- 115: 俺は遥か遠い海の向こうから来た勇者さっ, "I'm the hero from far across the sea."
+- 248: 俺は勇者だから、やっぱ炎系や雷系の魔法が得意だなっ, "Being a hero, naturally
+  I'm good with fire and lightning spells."
+- The first four members are introduced as 僧侶 Priest Alstron (116), 戦士 Fighter
+  Linaria (117) and 魔法使い Mage Lychee (118), with Guy the hero. Later additions are
+  盗賊 Thief Fritillaria (120) and バード Bard Liliaceus (122). Linaria's portrait wears
+  bikini-style armor.
+- 238: Alstron tried to become a Bishop, was told his 信仰心 (the Piety stat) was too
+  low, and asks この国では例の書物を神殿に持って行けばよいという訳ではないのですかな?,
+  "in this country, isn't it enough to take that book to the temple?"
+
+### What the other games do
+
+- Dragon Quest III (Enix, 1988): the protagonist is the 勇者 (Hero). The Sage (賢者),
+  which casts both mage and priest spells, is reached by taking the 悟りの書 to the
+  ダーマ神殿 and changing class there (or by changing from Goof-off (遊び人) at level 20).
+  The 悟りの書 was the "Book of Satori" in Dragon Warrior III (NES) and the Game Boy
+  Color version, and "Words of Wisdom" in the 2024 HD-2D remake; the temple was the
+  "Temple of Dharma", later "Alltrades Abbey". The female Soldier (戦士) wears Akira
+  Toriyama's well-known bikini armor. Sources: https://strategywiki.org/wiki/Dragon_Warrior_III/Player_classes ,
+  https://game8.co/games/Dragon-Quest-3/archives/463736 ,
+  https://dic.pixiv.net/a/%E5%A5%B3%E6%88%A6%E5%A3%AB(DQ3)
+- Wizardry never uses a book for this. The Bishop class change comes from an item's
+  special power: ほうおうのローブ in Gaiden III, ほうおうのおまもり (Amulet of Pope) in
+  Gaiden IV, and 法皇のローブ (ROBE OF POPE) in Dimguil itself (ITEM.DAT section 1,
+  string 231). Source: the item tables in the 得物屋 archive (emonoya.net), which
+  bartoks-trading-post mirrors in data/items/g3, g4 and dim.
+- Dimguil can bring in characters from Gaiden III and IV (the Tome of Rebirth lists
+  "Scripture of the Dark" and "Throb of the Demon's Heart"), so a Wizardry player of
+  the time knew those rules.
+
+### Our reading (interpretation, not established)
+
+- Alstron's "that book" and "that temple" are Dragon Quest III's, and 例の ("you know
+  the one") assumes the player knows them. This is the firmest part: the mechanic
+  matches exactly, and no Wizardry game has it.
+- Guy is a Dragon Quest hero who doesn't fit Wizardry's classes: he insists he's a
+  Hero, not a Lord, and claims the DQ hero's lightning magic, which a Wizardry Lord
+  can't cast. "From far across the sea" would then mean from another game.
+- The core party matches DQ3's classic lineup of Hero, Soldier, Priest and Mage, with
+  Linaria's armor in the DQ3 Soldier style. Weaker: the Thief matches the class the
+  1996 Super Famicom DQ3 added, and the flirty Bard may stand in for the Goof-off,
+  whose female form is the bunny girl. Either could be coincidence.
+
+### What that means for the translation
+
+- Keep "hero" as Guy's word for himself everywhere; it's the running gag. Where he
+  names it as a class (128, 202), capitalise it: "Hero".
+- 238 names the book as the English Dragon Warrior III did ("Book of Satori"), so the
+  one explicit reference can be recognised in English.
+- Don't add Dragon Quest references the Japanese doesn't make.
