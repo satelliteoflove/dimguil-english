@@ -29,7 +29,7 @@
                 {
                     "length": 35,
                     "source": "NA",
-                    "translation": "Burly woman\n\"Haven't seen you around. Want something with us?",
+                    "translation": "Tall woman\n\"Haven't seen you around. Need something from us?",
                     "addStringTerminator": true
                 },
                 {
@@ -53,7 +53,7 @@
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Burly woman\n\"Haven't seen you around. Want something?",
+                    "translation": "Tall woman\n\"Haven't seen you around. Want something?",
                     "addStringTerminator": true
                 },
                 {
@@ -155,7 +155,7 @@
                 {
                     "length": 16,
                     "source": "NA",
-                    "translation": "Burly woman\n\"Bye.",
+                    "translation": "Tall woman\n\"Bye.",
                     "addStringTerminator": true
                 },
                 {
@@ -509,7 +509,7 @@
                 {
                     "length": 59,
                     "source": "NA",
-                    "translation": " I see. So you've abandoned us.\n Don't worry about it, we'll ask the others.",
+                    "translation": " I see. So you've abandoned us.\n Don't worry about it, we'll ask someone else.",
                     "addStringTerminator": true
                 },
                 {
@@ -683,7 +683,7 @@
                 {
                     "length": 42,
                     "source": "NA",
-                    "translation": "Guy\n\"Oops, gotta run!\n You guys hang in there too! See you!",
+                    "translation": "Guy\n\"Oh, right! Well, see ya!\n You guys hang in there too! See you around!",
                     "addStringTerminator": true
                 },
                 {
