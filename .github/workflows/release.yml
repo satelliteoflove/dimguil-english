@@ -1,6 +1,11 @@
-# Builds the patch and publishes a GitHub release when a version tag (v*) is pushed.
-# Running it by hand (Actions > release > Run workflow) builds the same zip as an
-# artifact without publishing anything.
+# Builds the patch, and publishes a GitHub release when a version tag (v*) is pushed.
+#
+# Every other run builds the same zip as an artifact and publishes nothing:
+#   - by hand (Actions > build and release > Run workflow)
+#   - on pushes to main that touch the build itself, which is how Dependabot's updates
+#     get tested once merged (its pull requests can't see the disc secrets)
+#   - once a month, so a broken dependency or an expired token shows up before release
+#     day rather than on it
 #
 # The original disc can't live in this public repo. It's a release asset in a private
 # repo instead:
@@ -9,12 +14,29 @@
 #                      files (zipped because GitHub renames assets with spaces in them,
 #                      which would break the cue sheet)
 #   secrets.DISC_TOKEN fine-grained token with read access to that repo's contents
-name: release
+name: build and release
 
 on:
   push:
     tags: ['v*']
+    branches: [main]
+    paths:
+      - '.github/workflows/**'
+      - 'build.gradle.kts'
+      - 'settings.gradle.kts'
+      - 'gradle/**'
+      - 'src/**'
+      - 'scripts/build.sh'
+      - 'scripts/merge_source.py'
+      - 'scripts/tim.py'
+      - 'scripts/relocate.py'
+      - 'scripts/mkrelease.py'
+  schedule:
+    - cron: '17 6 1 * *'
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
 
 permissions:
   contents: write
@@ -90,6 +112,7 @@ jobs:
         with:
           name: dimguil-en-${{ steps.package.outputs.version }}
           path: ${{ steps.package.outputs.dir }}/*.zip
+          retention-days: 14
 
       - name: Publish release
         if: github.ref_type == 'tag'
