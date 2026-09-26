@@ -40,7 +40,7 @@ def main():
             sys.exit(f'no encounter for NPT{n:02d}')
         e.dbg_clear()
         e.run(480)
-        path = f'/tmp/nptshow_{n}.png'
+        path = os.path.join(ROOT, f'rips/shots/nptshow_{n}.png')
         e.shot(path, scale=1)
         shots.append(Image.open(path))
     w, h = shots[0].size

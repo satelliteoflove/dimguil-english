@@ -106,7 +106,7 @@ def build():
     assert stable >= 5 and card[:2] == b'MC' and b'BISLPS-02691' in card, 'no Dimguil save on the card'
     e.seq('circle w150')
     open(OUT, 'wb').write(card)
-    e.shot('/tmp/testsave_done.png')
+    e.shot('rips/shots/testsave_done.png')
     print('wrote', OUT)
 
 
@@ -120,13 +120,13 @@ def verify():
     shots = []
     for i in range(8):
         e.seq('circle w150')
-        e.shot(f'/tmp/testsave_load{i}.png')
+        e.shot(f'rips/shots/testsave_load{i}.png')
     gold = [struct.unpack('<I', bytes(e.read(ROSTER + w * RECORD + GOLD, 4)))[0] for w in range(6)]
     seen = bytes(e.read(ITEMS_SEEN, 100))
     print('gold', gold)
     print('seen bits set:', sum(bin(b).count('1') for b in seen), 'of', 800)
     print('card items left in packs:', cards_left(e))
-    e.shot('/tmp/testsave_loaded.png')
+    e.shot('rips/shots/testsave_loaded.png')
     return e
 
 

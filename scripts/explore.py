@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """explore.py STATE NICONS OUT [extra-seq]
 For each icon i: load STATE, move right i times, then circle, circle, (extra) with a
-screenshot after each step. Writes OUT_sheet.png (one row per icon)."""
+screenshot after each step. Writes rips/shots/OUT_sheet.png (one row per icon)."""
 import sys, os, subprocess
 sys.path.insert(0, os.path.dirname(__file__))
 from emu import Emu
@@ -15,7 +15,7 @@ for i in range(n):
     for k, tok in enumerate(('circle w90 circle w90 ' + extra).split()):
         e.seq(tok)
         if not tok.startswith('w'):
-            e.run(1); P.append(e.shot(f'/tmp/dg/{out}_{i}_{k}.png', scale=1))
+            e.run(1); P.append(e.shot(f'rips/shots/{out}_{i}_{k}.png', scale=1))
     e.save(f'rips/states/{out}_{i}.state')
 steps = len([t for t in ('circle circle ' + extra).split() if not t.startswith('w')])
-subprocess.run([sys.executable, os.path.join(os.path.dirname(__file__), 'sheet.py'), f'/tmp/dg/{out}_sheet.png', str(steps)] + P)
+subprocess.run([sys.executable, os.path.join(os.path.dirname(__file__), 'sheet.py'), f'rips/shots/{out}_sheet.png', str(steps)] + P)
