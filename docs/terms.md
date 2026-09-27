@@ -67,7 +67,7 @@ or a literal one in the Japanese order.
 
 | Japanese | English | Notes |
 |---|---|---|
-| 転生の書 | Book of Rebirth | The item that brings in characters from Gaiden III and IV. Remisse's notes say the name cuts off on one screen, so check it there. |
+| 転生の書 | Book of Movement | The item that brings in characters from Gaiden III and IV. BOOK OF MOVEMENT is the game's own English in its item list. Remisse's notes say the name cuts off on one screen, so check it there. |
 | 外伝3 / 外伝4 | Gaiden III / Gaiden IV | |
 | 識別 | Identify | |
 | 呪い / 呪いを解く | curse / Uncurse | |

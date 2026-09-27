@@ -864,7 +864,7 @@
                 {
                     "length": 108,
                     "source": "NA",
-                    "translation": "\"Why, nothing's sold out any more!\nIt's been ages since that happened.\nHave this, to mark the occasion.\n\r\n      Received the Book of Rebirth.      ",
+                    "translation": "\"Why, nothing's sold out any more!\nIt's been ages since that happened.\nHave this, to mark the occasion.\n\r\n      Received the BOOK OF MOVEMENT.     ",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -2878,7 +2878,7 @@
                 {
                     "length": 7,
                     "source": "NA",
-                    "translation": "Book of Rebirth",
+                    "translation": "Book of Movement",
                     "compress": true,
                     "addStringTerminator": true
                 },
