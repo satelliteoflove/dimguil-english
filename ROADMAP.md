@@ -73,7 +73,8 @@ Typos in the game's own English monster names are for the quality passes:
 
 1. NPC dialogue cultural review (NPC_MES1-5). In progress; tracked in
    `docs/npc-review.md`.
-2. The retranslated text (see "Text coverage"), once it's done. Translate it fresh from
+2. The retranslated text (see "Text coverage"), the event script is under review
+   scene by scene; see `docs/event-review.md` for where it stands. Translate it fresh from
    the Japanese, to the same standard as the NPC pass, with the terms we've settled on
    (character names, the game's own spell list) and three periods for ellipses.
 3. Our own first-pass text that hasn't had a second look: item and monster

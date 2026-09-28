@@ -7,31 +7,42 @@ are at the end.
 
 ## The narrator
 
-Most of the script is narration. The Japanese is past tense and never names the
-party ("the door began to open", "reached out a hand"). In English:
+Most of the script is narration. The Japanese mixes tenses freely (ている for what's
+there, た for what happens) and never names the party ("the door began to open",
+"reached out a hand"). Japanese readers don't notice the switching; English readers
+do. In English:
 
-- **Past tense, no "you" unless needed.** "A huge mural covers the wall" for what's
-  there, past tense for what happens: "The door slowly opened." Where English needs a
-  subject, it's "you" or "the party", not "we".
+- **Present tense, second person, all the way through**, as in a text adventure: "A
+  square monolith stands on the altar." "You touch the monolith, but nothing happens."
+  "The door slowly begins to open." This runs straight into the prompts ("Will you
+  touch it?") without a jolt. Past tense only for what really happened earlier ("The
+  switch you pressed earlier is still held down"). "Obtained X." is a status line and
+  stays as it is. The subject is "you", never "we" (except the party's thoughts).
+- **Prompts are full questions**: "Will you touch it?", "Will you press it?", not
+  "Touch it?".
 - **Plain and a little old-fashioned**, like the text of the early Wizardry games.
   Short sentences, concrete words, no modern idiom.
-- **Keep the dry jokes.** The Japanese sometimes undercuts itself ("You touched the
-  monolith, but nothing happened. Or so it seemed."). Those stay.
-- **Questions to the player** are short and end the box: "Touch it?", "Press the
-  switch?"
+- **American English**, in idiom as well as spelling. The old-fashioned feel comes
+  from plain, slightly formal wording, never from British turns of phrase ("fancy a",
+  "rubbish", "lad"). The exception is a formal or stuffy speaker, where a British
+  turn of phrase can be deliberate.
+- **Full sentences.** No clipped fragments unless the speaker or scene really calls
+  for them (Otaka's chatter, a terse inscription).
+- **Keep the dry jokes.** The Japanese sometimes undercuts itself ("You touch the
+  monolith, but nothing happens. Or so it seems."). Those stay.
 
 ## Recurring lines
 
 | Japanese | English |
 |---|---|
-| 見知らぬ古代文字が刻まれていた | Strange ancient letters were carved there: |
-| 何か忘れてはいないだろうか? (coloured, the party's own thought) | "Aren't we forgetting something?" |
+| 見知らぬ古代文字が刻まれていた | Strange ancient letters are carved there: |
+| 何か忘れてはいないだろうか? (colored, the party's own thought) | "Aren't we forgetting something?" |
 | 何か必要なのであろうか? | "Do we need something?" |
-| 特におかしな所はない | "Nothing unusual here." |
-| 触れてみますか? / 押してみますか? | Touch it? / Press it? |
+| 特におかしな所はない | "There's nothing particularly strange about it." (or "here." when no object is named) |
+| 触れてみますか? / 押してみますか? | Will you touch it? / Will you press it? |
 | 「X」を手に入れた | Obtained X. |
 | 太陽の石板 | LITHOGRAPH OF SUN (the item's own name) |
-| 巫女 | the Priestess (as in the King's speeches; her bracelet is the item RING OF MEDIUM) |
+| 巫女 | the Priestess (as in the King's speeches; her 腕輪 is the item RING OF MEDIUM, so the narration calls it a ring) |
 | 神殿 | the Shrine |
 | 伝言板 | *Message Board* |
 
@@ -51,9 +62,10 @@ place "we" is used.
 - **The dome's voice and the inscriptions.** Terse commands: "Name the god!",
   "Correct! Let us begin!"
 - **Otaka.** A goofy wandering adventurer who calls himself 俺っち and gives away
-  items, and probably a developer cameo ("Otaka of Prog"). Chatty, silly and
+  items, a developer cameo. Chatty, silly and
   friendly, with sloppy grammar where the Japanese has sloppy writing: "Fancy running
-  into you here! Name's Otaka, from Prog." His friend Agan stays Agan.
+  into you here! Name's Otaka, one of the programmers." (プログ is short for
+  programmer; the FAQ calls this a programmer's hidden event.) His friend Agan stays Agan.
 
 ## Puzzle text
 
@@ -62,6 +74,15 @@ is 180"), the escaping animals and their directions, the dial puzzle, the right 
 left foot pillars, the stat door. The riddle's answer is still GAME, and the message
 board that mentions a game of GAME stays, since it's a hint. The ancient-letter words
 (DIMGUIL, SUN, STAR and so on) are already English and stay as they are.
+
+Murals that carry an ancient-letter word describe the picture with that word, so the
+player can guess the letters (a ship for SHIP, a figure like Death for DEATH).
+
+とりもち is birdlime, the sticky paste used to trap birds. The dead bird in the
+window (17) was caught in it, it gets on the party's hands, and later it holds a
+switch down (44, 45). Most American players won't know the word "birdlime", so it's
+"a sticky white paste" in 17 and "the sticky paste" after, which keeps the link
+between the scenes.
 
 ## The box
 

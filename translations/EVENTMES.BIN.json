@@ -1,0 +1,1916 @@
+{
+    "file": "DATA06/EVENTMES.BIN",
+    "extendByBytes": null,
+    "sections": [
+        {
+            "firstHeaderAddress": 0,
+            "firstHeader": 1268,
+            "sectionLength": 25721,
+            "compress": true,
+            "strings": [
+                {
+                    "length": 145,
+                    "source": "NA",
+                    "translation": "A huge mural covers the wall before you.\nWhat could it mean? And what is that\npainted in the middle?{ff26}\rOh? In the lower right corner, strange\nancient letters are carved:\n]{ff30}4{ancient_d}{ancient_i}{ancient_m}{ancient_g}{ancient_u}{ancient_i}{ancient_l}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 54,
+                    "source": "NA",
+                    "translation": " \n*Message Board*{ff26}\r*Attention*\n \n\"Did you equip your gear? Is everyone's status normal?\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 71,
+                    "source": "NA",
+                    "translation": " \n*Message Board*{ff26}\r*Fortunes Told*\n\"Know your life, from past to future.\nSeek me in the tavern.\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 58,
+                    "source": "NA",
+                    "translation": " \n*Message Board*{ff26}\r*To Jade*\n\"Tonight's meeting place: the Shrine at 3!\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 69,
+                    "source": "NA",
+                    "translation": " \n*Message Board*{ff26}\r*No Graffiti*\n*No Camping on Pits*\n*No Casting Malor into Rock*",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 126,
+                    "source": "NA",
+                    "translation": " \n*Message Board*{ff26}\r*To Jade*\n\"I helped myself to everything in the vault.\nI left that red thing where it was, though.{ff26}\rI locked it up again, too. Here's a hint\nfor opening it: north is 0 and south is 180.\nGot it?\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 102,
+                    "source": "NA",
+                    "translation": " \n*Message Board*{ff26}\r \n*Dangerous floors!*{ff26}\rThree combinations, three doors.\nThe switches show the directions.\nWork out how the moving floors behave,{ff26}\rand don't forget the mask!",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 74,
+                    "source": "NA",
+                    "translation": " \n*Message Board*{ff26}\r*To Jade*\n\"I'm free tonight, so how about a game of\n'{ancient_g}{ancient_a}{ancient_m}{ancient_e}' at the tavern?\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 77,
+                    "source": "NA",
+                    "translation": " \n*Message Board*{ff26}\r*Come, young adventurers, to the Training Maze!\nMonster capture rates are UP right now!\nWe have all kinds of tough foes waiting for you.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 134,
+                    "source": "NA",
+                    "translation": " \n*Message Board*{ff26}\r*To Jade*\n\"The tavern waitress turned me down.\nThere's nothing keeping me in this town anymore.{ff26}\rSo this is goodbye. Farewell.\"\n \nPS-]{ff30}5{ancient_t}{ancient_r}{ancient_e}{ancient_b}{ancient_o}{ancient_r} {ancient_s}{ancient_u}{ancient_x}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 23,
+                    "source": "NA",
+                    "translation": " \nThe door is shut tight, and there isn't even a keyhole.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 133,
+                    "source": "NA",
+                    "translation": "Before the Shrine stands a sealed door\nbearing the crest of the sun.{ff26}\rStrange ancient letters are carved into the crest:\n]{ff30}5{ancient_s}{ancient_u}{ancient_n}{ff30}0[\nIn the middle of the door is a square hole.{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 83,
+                    "source": "NA",
+                    "translation": "The stones from the pillars look like\nthey'd fit, but something seems to be missing.\n.........Sure enough, the door won't open.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 142,
+                    "source": "NA",
+                    "translation": "The four stones from the pillars look\nlike they'd fit.{ff26}\rThe four pieces fit together into a single tablet.\n \nObtained {ff30}2LITHOGRAPH OF SUN{ff30}0.{ff26}\r \nAnd then......the door slowly begins to open.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 58,
+                    "source": "NA",
+                    "translation": "You fit the LITHOGRAPH OF SUN into the hole,\n \n.........and the door slowly begins to open.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 69,
+                    "source": "NA",
+                    "translation": "The door won't budge, no matter how hard you\npush or pound on it. It's solidly built.\n\"{ff30}2Do we need something?{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 25,
+                    "source": "NA",
+                    "translation": " \n\"{ff30}2Haven't we forgotten something?{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 65,
+                    "source": "NA",
+                    "translation": "The skeleton of a bird lies in the window\nrecess. When you look closer, your hand\ncomes away coated in a sticky white paste.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 57,
+                    "source": "NA",
+                    "translation": "Strange ancient letters are carved on\nthe plaque on the door:\n]{ff30}5{ancient_s}{ancient_t}{ancient_a}{ancient_r}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 56,
+                    "source": "NA",
+                    "translation": "In the middle of a ceiling painted with\nconstellations like the night sky, you find\na shining jewel. Will you touch it?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 26,
+                    "source": "NA",
+                    "translation": " \nWhen you touch the jewel,\nthe floor begins to move!",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 33,
+                    "source": "NA",
+                    "translation": " \nThe jewel is tempting, but you draw\nyour hand back.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 97,
+                    "source": "NA",
+                    "translation": "The mural shows people aboard a ship,\nsailing toward the Shrine.{ff26}\rStrange ancient letters are carved in\nthe lower right:\n]{ff30}5{ancient_s}{ancient_h}{ancient_i}{ancient_p}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 122,
+                    "source": "NA",
+                    "translation": "A huge mural covers the wall before you.\nA giant figure is drawn like Death itself.{ff26}\rStrange ancient letters are carved in\nthe lower right:\n]{ff30}5{ancient_d}{ancient_e}{ancient_a}{ancient_t}{ancient_h}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 49,
+                    "source": "NA",
+                    "translation": "At the edge of the island stands a stone pillar\ncarved with a picture of a tiger.\nWill you touch it?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 56,
+                    "source": "NA",
+                    "translation": "At the edge of the island stands a stone pillar\ncarved with a picture of a tiger.\nYou examine it, but nothing happens.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 49,
+                    "source": "NA",
+                    "translation": "At the edge of the island stands a stone pillar\ncarved with a picture of a dog.\nWill you touch it?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 56,
+                    "source": "NA",
+                    "translation": "At the edge of the island stands a stone pillar\ncarved with a picture of a dog.\nYou examine it, but nothing happens.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 49,
+                    "source": "NA",
+                    "translation": "At the edge of the island stands a stone pillar\ncarved with a picture of a bird.\nWill you touch it?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 56,
+                    "source": "NA",
+                    "translation": "At the edge of the island stands a stone pillar\ncarved with a picture of a bird.\nYou examine it, but nothing happens.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 49,
+                    "source": "NA",
+                    "translation": "At the edge of the island stands a stone pillar\ncarved with a picture of a snake.\nWill you touch it?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 56,
+                    "source": "NA",
+                    "translation": "At the edge of the island stands a stone pillar\ncarved with a picture of a snake.\nYou examine it, but nothing happens.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 56,
+                    "source": "NA",
+                    "translation": "A strange statue stands on a pedestal.\nWhen you touch it gently, the statue\nbegins to vibrate faintly.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 34,
+                    "source": "NA",
+                    "translation": "The door adorned with beautiful ornaments\nis locked.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 29,
+                    "source": "NA",
+                    "translation": "   There is a door adorned with beautiful ornaments.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 130,
+                    "source": "NA",
+                    "translation": "A square monolith stands on the altar.\nCould this be something connected to the Priestess?{ff26}\rGlancing down, you see\n\"{ff30}1DON'T TOUCH!{ff30}0\" written in blood on the floor.\nWill you ignore the warning and touch it?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 107,
+                    "source": "NA",
+                    "translation": " \nYou touch the monolith, but nothing happens.{ff26}\rOr so it seems.\nYou begin to feel a burning gaze on your back.{ff26}\rBy the time you realize you should have heeded\nthe warning, it's too late.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 37,
+                    "source": "NA",
+                    "translation": " \nHeeding the warning, you draw your\nhand back.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 27,
+                    "source": "NA",
+                    "translation": " \nYou touch the altar, but nothing happens.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 55,
+                    "source": "NA",
+                    "translation": "On the wall hangs a bloodstained mask\nmade of jade.\nWill you take it?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 32,
+                    "source": "NA",
+                    "translation": " \nWhen you touch the mask, it begins to move strangely.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 27,
+                    "source": "NA",
+                    "translation": " \nA nasty feeling comes over you, and you\nleave the mask alone.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 39,
+                    "source": "NA",
+                    "translation": "There's a switch on the wall.\nWhen you press it, you hear a lock click open.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 37,
+                    "source": "NA",
+                    "translation": "You press the switch, but it springs\nright back.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 122,
+                    "source": "NA",
+                    "translation": "Could this switch have some hidden mechanism?\nAs you examine it again, the sticky paste\non your hand gets stuck to the switch.{ff26}\rWhen you press it this time,\nit stays down.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 138,
+                    "source": "NA",
+                    "translation": "The switch from before is still held\ndown by the sticky paste.{ff26}\rWill pressing this switch\ndo anything?{ff26}\r...You press it, and hear the door's\nlock click open.\nAnd the switch doesn't spring back.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 37,
+                    "source": "NA",
+                    "translation": "\"A desk?\"\n \nBut there is nothing else to find.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 27,
+                    "source": "NA",
+                    "translation": " \nYou look out across the view from the window,\nbut nothing catches your eye.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 69,
+                    "source": "NA",
+                    "translation": "The pillar begins to shake and is sucked into\nthe ground. Dust rises, and a savage-eyed tiger\nattacks.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 69,
+                    "source": "NA",
+                    "translation": "The pillar begins to shake and is sucked into\nthe ground. Dust rises, and a savage-eyed dog\nattacks.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 69,
+                    "source": "NA",
+                    "translation": "The pillar begins to shake and is sucked into\nthe ground. Dust rises, and a savage-eyed bird\nattacks.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 69,
+                    "source": "NA",
+                    "translation": "The pillar begins to shake and is sucked into\nthe ground. Dust rises, and a cold-eyed snake\nattacks.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 37,
+                    "source": "NA",
+                    "translation": "\"A statue?\"\n \n\"{ff30}2There's nothing particularly strange about it.{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 26,
+                    "source": "NA",
+                    "translation": " \n\"{ff30}2There's nothing particularly strange here.{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 35,
+                    "source": "NA",
+                    "translation": "\"A coffin?\"\n \n\"{ff30}2There's nothing particularly strange about it.{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 25,
+                    "source": "NA",
+                    "translation": " \nA pillar of ice towers before you.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 56,
+                    "source": "NA",
+                    "translation": "Strange ancient letters are carved on\nthe door:\n]{ff30}5{ancient_e}{ancient_n}{ancient_t}{ancient_e}{ancient_r}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 53,
+                    "source": "NA",
+                    "translation": "Strange ancient letters are carved on\nthe door:\n]{ff30}5{ancient_e}{ancient_x}{ancient_i}{ancient_t}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 65,
+                    "source": "NA",
+                    "translation": "Strange ancient letters are carved on\nthe door:\n]{ff30}5{ancient_c}{ancient_o}{ancient_m}{ancient_p}{ancient_u}{ancient_t}{ancient_e}{ancient_r}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 106,
+                    "source": "NA",
+                    "translation": " \nA strange statue stands on the altar.{ff26}\rGlancing down, you see\n\"{ff30}1DON'T TOUCH!{ff30}0\" written in blood on the floor.\nWill you ignore the warning and touch it?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 30,
+                    "source": "NA",
+                    "translation": " \nA strange statue stands on the altar.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 130,
+                    "source": "NA",
+                    "translation": " \nYou touch the statue, but nothing happens.{ff26}\rOr so it seems.\nAn eerie light covers the statue, and\nits shadow spreads across the wall.{ff26}\rBy the time you realize you should have heeded\nthe warning, it's too late.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 37,
+                    "source": "NA",
+                    "translation": " \nHeeding the warning, you draw your\nhand back.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 40,
+                    "source": "NA",
+                    "translation": "An eerie light covers the statue, and\nits shadow spreads across the wall.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 118,
+                    "source": "NA",
+                    "translation": " \nYou can see a figure inside the pillar of ice.{ff26}\rCould someone be trapped inside?\nThe face juts out from the ice.{ff26}\rAs you reach out to gently touch the face,\nthe whole room begins to shake.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 31,
+                    "source": "NA",
+                    "translation": " \nThe pillar of ice rapidly begins to melt,\nand a passage opens.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 107,
+                    "source": "NA",
+                    "translation": "In a corner, a strange machine is running.\nIs this what makes the Shrine shake?{ff26}\rBeside the machine is a lever.\nWill you pull the lever?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 49,
+                    "source": "NA",
+                    "translation": "At the lever's pull the machine roars,\nand steam fills the room.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 145,
+                    "source": "NA",
+                    "translation": "With the fiend of steam defeated, the\nmachine stops dead. Outside the room,\nthe sound of flowing water ceases.{ff26}\rSo the machine was the cause after all.\nWill the tainted lake regain its power\nnow?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 28,
+                    "source": "NA",
+                    "translation": " \nThe strange machine has fallen still.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 29,
+                    "source": "NA",
+                    "translation": " \nThe strange machine hums quietly on.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 131,
+                    "source": "NA",
+                    "translation": "In the room lies something like a log.\nAs you go to step over it, you see\nit is moving like a living thing.{ff26}\rThe end of the log splits in two, and two\nhuge mouths bare their fangs at you!",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 21,
+                    "source": "NA",
+                    "translation": " \nNothing is carved on the grave marker.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 50,
+                    "source": "NA",
+                    "translation": "Words are carved on the grave marker:\n\"{ff30}6Here lies {ff18}, a hero of many battles.{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 84,
+                    "source": "NA",
+                    "translation": " \nThe mural shows a ruler.{ff26}\rStrange ancient letters are carved in\nthe lower right:\n]{ff30}5{ancient_k}{ancient_i}{ancient_n}{ancient_g}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 54,
+                    "source": "NA",
+                    "translation": "This must be the Shrine's exit.\nAt the lightest touch,\n......the door swings open.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 62,
+                    "source": "NA",
+                    "translation": "Strange ancient letters are carved on\nthe door:\n]{ff30}5{ancient_l}{ancient_i}{ancient_b}{ancient_r}{ancient_a}{ancient_r}{ancient_y}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 136,
+                    "source": "NA",
+                    "translation": " \nThis door is shut, and has no keyhole.{ff26}\rIt looks like it was used once, but\nit won't budge.\nWater drips from the gap beneath it.{ff26}\rIt seems you'll have to find some way\nto open it.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 79,
+                    "source": "NA",
+                    "translation": "There's a round hole in the wall.\nWas water sent to the lake from here?\nIt reeks, and filth is caked all over.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 62,
+                    "source": "NA",
+                    "translation": "Strange ancient letters are carved on\nthe door:\n]{ff30}5{ancient_f}{ancient_r}{ancient_e}{ancient_e}{ancient_z}{ancient_e}{ancient_r}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 164,
+                    "source": "NA",
+                    "translation": "This door bears the crest of the moon.\nIn the middle of the door is a square hole.{ff26}\rStrange ancient letters are carved into\nthe crest:\n]{ff30}5{ancient_m}{ancient_o}{ancient_o}{ancient_n}{ff30}0[{ff26}\rYou fit the LITHOGRAPH OF SUN into the hole,\n \n......and the door slowly begins to open.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 153,
+                    "source": "NA",
+                    "translation": "This door bears the crest of the moon.\nIn the middle of the door is a square hole.{ff26} \nStrange ancient letters are carved into the crest:\n]{ff30}5{ancient_m}{ancient_o}{ancient_o}{ancient_n}{ff30}0[{ff26}\rCould something be needed? You try everything\nyou can think of, but the door won't budge.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 131,
+                    "source": "NA",
+                    "translation": "A strange machine has been set here.\nIt has something like a lever,\nbut the lever won't move.{ff26}\rThere's a hollow in the floor before it.\nThe LITHOGRAPH OF SUN might fit.\nWill you try it?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 141,
+                    "source": "NA",
+                    "translation": "A strange machine has been set here.\nIt has something like a lever,\nbut the lever won't move.{ff26}\rThere's a hollow in the floor before it.\nSomething in it might start the machine.\n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 72,
+                    "source": "NA",
+                    "translation": "Is it the LITHOGRAPH OF SUN it's answering?\nThe drum in the machine begins to turn,\nwinding in the chain.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 72,
+                    "source": "NA",
+                    "translation": "Is it the LITHOGRAPH OF SUN it's answering?\nThe drum in the machine begins to turn,\npaying out the chain.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 53,
+                    "source": "NA",
+                    "translation": "Strange ancient letters are carved on\nthe door:\n]{ff30}5{ancient_c}{ancient_o}{ancient_r}{ancient_e}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 43,
+                    "source": "NA",
+                    "translation": "There's a square hole in the floor.\nIt's shallow, with nothing at the bottom.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 171,
+                    "source": "NA",
+                    "translation": "There's a square hole in the floor,\nshallow and empty. It's the same size as\nthe LITHOGRAPH OF SUN.{ff26}\rAs you set the LITHOGRAPH OF SUN in it,\nthe underground stream before you stops,\nparts in two, and a new path appears.{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 66,
+                    "source": "NA",
+                    "translation": "A strange altar has been set here.\nA shaft of light shines from its top,\nreaching up toward the ceiling.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 26,
+                    "source": "NA",
+                    "translation": " \nBut you have nothing that fits it.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 35,
+                    "source": "NA",
+                    "translation": " \nAn altar with a square hole stands\nagainst the wall.{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 59,
+                    "source": "NA",
+                    "translation": "Strange ancient letters are carved on\nthe door:\n]{ff30}5{ancient_f}{ancient_e}{ancient_m}{ancient_a}{ancient_l}{ancient_e}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 53,
+                    "source": "NA",
+                    "translation": "Strange ancient letters are carved on\nthe door:\n]{ff30}5{ancient_m}{ancient_a}{ancient_l}{ancient_e}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 146,
+                    "source": "NA",
+                    "translation": " \nStrangely, a voice rings out from the device.{ff26}\r{ff30}4I am no reality, but a thing imagined.\nI call for luck and wit, and hold many\na hardship.{ff26}\rOvercome them, and win a fruitless prize.\nWhat do you call my world?{ff30}0",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 67,
+                    "source": "NA",
+                    "translation": "You set the LITHOGRAPH OF SUN in the hole.\nThe green stone is blinking.\nWill you touch it?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 67,
+                    "source": "NA",
+                    "translation": "You set the LITHOGRAPH OF SUN in the hole.\nThe red stone is blinking.\nWill you touch it?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 85,
+                    "source": "NA",
+                    "translation": "You set the LITHOGRAPH OF SUN in the hole.\nThe green stone and the red stone blink.\nWhich will you touch?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 50,
+                    "source": "NA",
+                    "translation": "You set the LITHOGRAPH OF SUN in the hole.\nBut nothing happens.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 139,
+                    "source": "NA",
+                    "translation": "Beyond the bars lies murky darkness.\nA fierce stench hangs there. A beast\nis near.{ff26}\rAs you grip the bars, the door opens\nlike a waiting trap. There's no way out!\n\"{ff30}2Now what do we do?{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 38,
+                    "source": "NA",
+                    "translation": "A stone coffin lies here.\nYou search it, but find nothing.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 38,
+                    "source": "NA",
+                    "translation": "A strange iron box lies here.\nYou search it, but find nothing.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 56,
+                    "source": "NA",
+                    "translation": "The bars are closed, but not locked.\nAt a push, they swing quietly open.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 161,
+                    "source": "NA",
+                    "translation": "An eerily glowing altar stands here.\nSmall tablets are lined up before it,\nand beyond them sits a clear round dome.{ff26}\rAn eerie light glows inside.\nYou try touching a small tablet,\nbut nothing happens.{ff26}\r \n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 15,
+                    "source": "NA",
+                    "translation": "But nothing happens.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 169,
+                    "source": "NA",
+                    "translation": "A message was left on the wall.\n \n{ff30}4The sky fell!{ff26}\rThe birds of heaven fled clockwise, east.\nThe people fled counterclockwise, northeast.\nThe crawling snakes fled clockwise, southeast.{ff30}0{ff26}\rIs there some secret hidden here?\nNothing else is written.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 77,
+                    "source": "NA",
+                    "translation": "Old books are crammed onto the shelves.\nYou search for anything worthwhile,\nbut find no books that look particularly useful.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 131,
+                    "source": "NA",
+                    "translation": "The mural shows someone wrapped in tubes.\nIs it some sort of experiment?{ff26}\rStrange ancient letters are carved in\nthe right corner:\n]{ff30}4{ancient_l}{ancient_a}{ancient_b}{ancient_o}{ancient_r}{ancient_a}{ancient_t}{ancient_o}{ancient_r}{ancient_y}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 174,
+                    "source": "NA",
+                    "translation": "An eerily glowing altar stands here.\nSmall tablets are lined up neatly,\nand beyond them sits a clear round dome.{ff26}\r \nAn eerie light glows inside it.{ff26}\rAs you hold up the LITHOGRAPH OF SUN,\nthe small tablets light up.\nWill you touch a small tablet?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 24,
+                    "source": "NA",
+                    "translation": "You type in whatever comes to mind.{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 51,
+                    "source": "NA",
+                    "translation": "A voice answers from the round dome.\n \n\"{ff30}4Correct! Now, let us begin!{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 65,
+                    "source": "NA",
+                    "translation": "The shining demon falls, and a stone that\nglows gold, a piece of it perhaps, sets\nitself into the LITHOGRAPH OF SUN.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 31,
+                    "source": "NA",
+                    "translation": "Wary of the eerie light, you hold your\nhand back.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 80,
+                    "source": "NA",
+                    "translation": "On a bed in the corner lies a corpse\nwearing a golden helm.\nAs you reach for the helm, it twitches!",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 65,
+                    "source": "NA",
+                    "translation": "On a bed in the corner lies a corpse.\nAs you reach for it, it twitches!",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 80,
+                    "source": "NA",
+                    "translation": "On a bed in the corner lies a corpse\nwearing golden armor.\nAs you reach for the armor, it twitches!",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 84,
+                    "source": "NA",
+                    "translation": "On a bed in the corner lies a corpse\nwearing golden gauntlets.\nAs you reach for them, it twitches!",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 84,
+                    "source": "NA",
+                    "translation": "On a bed in the corner lies a corpse\nwearing golden boots.\nAs you reach for the boots, it twitches!",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 68,
+                    "source": "NA",
+                    "translation": "The door bears a red crest.\nThe red crest is lit up.\nIt seems the door has been unlocked.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 42,
+                    "source": "NA",
+                    "translation": "The door bears a red crest.\nBut the door is locked and won't open.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 68,
+                    "source": "NA",
+                    "translation": "The door bears a green crest.\nThe green crest is lit up.\nIt seems the door has been unlocked.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 42,
+                    "source": "NA",
+                    "translation": "The door bears a green crest.\nBut the door is locked and won't open.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 44,
+                    "source": "NA",
+                    "translation": "There's a hole in the floor, and a shaft\nof light reaches up to the ceiling.{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 29,
+                    "source": "NA",
+                    "translation": " \nThe light shines white, and feels warm.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 28,
+                    "source": "NA",
+                    "translation": " \nThe light is beautiful, a glowing green.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 30,
+                    "source": "NA",
+                    "translation": " \nThe light glows red, and feels like fire.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 18,
+                    "source": "NA",
+                    "translation": " \nBut nothing happens.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 68,
+                    "source": "NA",
+                    "translation": "Strange ancient letters are carved on\nthe wall:\n]{ff30}5{ancient_c}{ancient_o}{ancient_l}{ancient_d}{ancient_s}{ancient_l}{ancient_e}{ancient_e}{ancient_p}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 33,
+                    "source": "NA",
+                    "translation": "A crystal floats near the ceiling.\nWill you touch it?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 160,
+                    "source": "NA",
+                    "translation": "There's a square hole in the floor,\nshallow and empty. It seems to be the\nsame size as the LITHOGRAPH OF SUN.{ff26}\rYou set the LITHOGRAPH OF SUN in it, but\nnothing happens.\n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 57,
+                    "source": "NA",
+                    "translation": "Words have been carved on the door recently:\n\"Danger ahead. Don't forget full gear.\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 74,
+                    "source": "NA",
+                    "translation": "Strange ancient letters are carved on\nthe door:\n]{ff30}5{ancient_t}{ancient_r}{ancient_a}{ancient_n}{ancient_s}{ancient_p}{ancient_o}{ancient_r}{ancient_t}{ancient_e}{ancient_r}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 78,
+                    "source": "NA",
+                    "translation": "The mural shows people, and strange\nancient letters are carved on it:\n]{ff30}5{ancient_p}{ancient_e}{ancient_o}{ancient_p}{ancient_l}{ancient_e}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 99,
+                    "source": "NA",
+                    "translation": "There's a hole in the floor, and a shaft\nof light reaches up to the ceiling.{ff26}\rWhere it ends, a strange device clings\nto the ceiling, seeming to drink the light.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 132,
+                    "source": "NA",
+                    "translation": "In the corner is a pedestal set with\nsmall tablets, with a big square hole.{ff26}\rAs you fit the LITHOGRAPH OF SUN,\nthe small tablets light up.\nMaybe one of these buttons?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 122,
+                    "source": "NA",
+                    "translation": "In the corner is a pedestal set with\nsmall tablets, with a big square hole.{ff26}\rYou touch a small tablet. Nothing.\n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 68,
+                    "source": "NA",
+                    "translation": "Strangely, a letter on the pedestal lights up:\n]{ff30}4{ancient_a}{ff30}0[\nIt seems to have sensed something vital.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 68,
+                    "source": "NA",
+                    "translation": "Strangely, a letter on the pedestal lights up:\n]{ff30}4{ancient_b}{ff30}0[\nIt seems to have sensed something vital.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 68,
+                    "source": "NA",
+                    "translation": "Strangely, a letter on the pedestal lights up:\n]{ff30}4{ancient_c}{ff30}0[\nIt seems to have sensed something vital.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 68,
+                    "source": "NA",
+                    "translation": "Strangely, a letter on the pedestal lights up:\n]{ff30}4{ancient_d}{ff30}0[\nIt seems to have sensed something vital.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 68,
+                    "source": "NA",
+                    "translation": "Strangely, a letter on the pedestal lights up:\n]{ff30}4{ancient_e}{ff30}0[\nIt seems to have sensed something vital.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 44,
+                    "source": "NA",
+                    "translation": " Strange ancient letters are carved on\nthe door: ]{ff30}4{ancient_a}{ff30}0[{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 44,
+                    "source": "NA",
+                    "translation": " Strange ancient letters are carved on\nthe door: ]{ff30}4{ancient_b}{ff30}0[{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 44,
+                    "source": "NA",
+                    "translation": " Strange ancient letters are carved on\nthe door: ]{ff30}4{ancient_c}{ff30}0[{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 44,
+                    "source": "NA",
+                    "translation": " Strange ancient letters are carved on\nthe door: ]{ff30}4{ancient_d}{ff30}0[{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 44,
+                    "source": "NA",
+                    "translation": " Strange ancient letters are carved on\nthe door: ]{ff30}4{ancient_e}{ff30}0[{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 44,
+                    "source": "NA",
+                    "translation": " Strange ancient letters are carved on\nthe door: ]{ff30}5{ancient_a}{ff30}0[{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 44,
+                    "source": "NA",
+                    "translation": " Strange ancient letters are carved on\nthe door: ]{ff30}5{ancient_b}{ff30}0[{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 44,
+                    "source": "NA",
+                    "translation": " Strange ancient letters are carved on\nthe door: ]{ff30}5{ancient_c}{ff30}0[{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 99,
+                    "source": "NA",
+                    "translation": "You reach for a red stone set in the\nwall.{ff26}\rIn an instant, cracks run across the wall.\nIt seems you've woken something that\nwas sleeping behind it!",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 176,
+                    "source": "NA",
+                    "translation": "You meet Zaril's party, but they flee\ninto the darkness as if in terror\nof something.{ff26}\rHuge footsteps echo from far off.\nPeering ahead, you see Zaril's party,\ntwisted together into one.{ff26}\r \"......\" With a voiceless cry,\nthey come on in the shape of a huge fiend.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 37,
+                    "source": "NA",
+                    "translation": "The bones of the fiend you felled are\nknitting back together before your eyes.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 45,
+                    "source": "NA",
+                    "translation": "Bones creak and clatter all around.\n\"{ff30}2It's him!{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 163,
+                    "source": "NA",
+                    "translation": "The dark room holds an eerie device.\nOn top is a tank covered in frost.\nWhat could be inside?{ff26}\rAs you carefully brush away the frost,\nthe eyes of the creature inside glow!",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 53,
+                    "source": "NA",
+                    "translation": "Strange ancient letters are carved on\nthe door:\n]{ff30}5{ancient_t}{ancient_r}{ancient_a}{ancient_p}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 78,
+                    "source": "NA",
+                    "translation": "The mural shows people, and strange\nancient letters are carved on it:\n]{ff30}5{ancient_p}{ancient_e}{ancient_o}{ancient_p}{ancient_l}{ancient_e}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 71,
+                    "source": "NA",
+                    "translation": "Strange ancient letters are carved on\nthe door:\n]{ff30}4{ancient_l}{ancient_a}{ancient_b}{ancient_o}{ancient_r}{ancient_a}{ancient_t}{ancient_o}{ancient_r}{ancient_y}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 78,
+                    "source": "NA",
+                    "translation": "The mural shows people, and strange\nancient letters are carved on it:\n]{ff30}5{ancient_p}{ancient_e}{ancient_o}{ancient_p}{ancient_l}{ancient_e}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 71,
+                    "source": "NA",
+                    "translation": "The door has a dial of three rings.\nIt's locked, and won't budge.\nWill you turn the dial?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 42,
+                    "source": "NA",
+                    "translation": "The door has a dial of three rings.\nThe door is unlocked.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 26,
+                    "source": "NA",
+                    "translation": " \nHow far will you turn the small ring?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 27,
+                    "source": "NA",
+                    "translation": " \nHow far will you turn the middle ring?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 27,
+                    "source": "NA",
+                    "translation": " \nHow far will you turn the outer ring?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 31,
+                    "source": "NA",
+                    "translation": " \nNothing happens. The dial turns back.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 20,
+                    "source": "NA",
+                    "translation": " \n\"Success!\" The door opens!",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 34,
+                    "source": "NA",
+                    "translation": " \nA strange stand, some sort of device.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 47,
+                    "source": "NA",
+                    "translation": "Words have recently been carved on the\ngreat pillar:\n'For the right foot'",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 25,
+                    "source": "NA",
+                    "translation": " \nThere's a switch on the wall.\nWill you press it?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 47,
+                    "source": "NA",
+                    "translation": "Words have recently been carved on the\ngreat pillar:\n'For the left foot'",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 40,
+                    "source": "NA",
+                    "translation": "The door is locked and won't open.\nIt doesn't even have a keyhole.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 56,
+                    "source": "NA",
+                    "translation": "Strange ancient letters are carved on\nthe wall:\n]{ff30}5{ancient_d}{ancient_a}{ancient_n}{ancient_g}{ancient_e}{ancient_r}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 69,
+                    "source": "NA",
+                    "translation": "Strange ancient letters are carved on\nthe strange statue:\n]{ff30}5{ancient_s}{ancient_h}{ancient_u}{ancient_t}{ancient_t}{ancient_l}{ancient_e}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 73,
+                    "source": "NA",
+                    "translation": "Strange ancient letters are carved on\nthe huge box:\n]{ff30}5{ancient_c}{ancient_o}{ancient_n}{ancient_t}{ancient_a}{ancient_i}{ancient_n}{ancient_e}{ancient_r}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 56,
+                    "source": "NA",
+                    "translation": "Strange ancient letters are carved on\nthe floor:\n]{ff30}5{ancient_t}{ancient_r}{ancient_a}{ancient_s}{ancient_h}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 65,
+                    "source": "NA",
+                    "translation": "This big room is like the inside of\na rubbish bin. There may be a find here.\nWill you search it?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 110,
+                    "source": "NA",
+                    "translation": "You rummage for anything useful, but\nfind only stones and dead animals.\n\"Hm?\" Something soft touches your hand.{ff26}\rA huge heap of rubbish attacks!",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 111,
+                    "source": "NA",
+                    "translation": "You rummage for anything useful, but\nfind only scrap iron and dead animals.\n\"Hm?\" Something soft touches your hand.{ff26}\rA huge heap of rubbish attacks!",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 100,
+                    "source": "NA",
+                    "translation": "A fierce stench comes from this room.\nYou want nothing more than to leave.{ff26}\r\"Hm?\" You step on something soft.\nIt seems to be a dead animal.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 104,
+                    "source": "NA",
+                    "translation": "On the pillar's head, recent words and\nstrange ancient letters are carved.{ff26}\r]{ff30}4{ancient_w}{ancient_a}{ancient_r}{ancient_e}{ancient_h}{ancient_o}{ancient_u}{ancient_s}{ancient_e}{ff30}0[\nGo to the altar",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 104,
+                    "source": "NA",
+                    "translation": "On the pillar's head, recent words and\nstrange ancient letters are carved.{ff26}\r]{ff30}4{ancient_w}{ancient_a}{ancient_r}{ancient_e}{ancient_h}{ancient_o}{ancient_u}{ancient_s}{ancient_e}{ff30}0[\nGo to the altar",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 82,
+                    "source": "NA",
+                    "translation": "Words are written on the door:\n\"Holy altar beyond. Keep out.\"\nStrangely, you hear the lock click open.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 125,
+                    "source": "NA",
+                    "translation": "Words are written on the door:\n\"Holy altar beyond. Keep out.\"{ff26}\rYou don't mean to ignore the warning,\nbut at your touch the lock clicks open,\nand the door quietly swings wide.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 47,
+                    "source": "NA",
+                    "translation": "The huge fiend falls, and a great hole\nopens in the middle of the floor.{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 46,
+                    "source": "NA",
+                    "translation": "In a corner, a row of small switches.\n \nWill you press them?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 25,
+                    "source": "NA",
+                    "translation": "A red snake and a blue snake are carved\ninto the door.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 20,
+                    "source": "NA",
+                    "translation": "A huge ornament has been smashed.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 168,
+                    "source": "NA",
+                    "translation": "The wreck of some sort of vehicle?\nScrap, perhaps. There's no way in.{ff26}\rStrange ancient letters are carved on\nits side: ]{ff30}5{ancient_s}{ancient_h}{ancient_u}{ancient_t}{ancient_t}{ancient_l}{ancient_e}{ff30}0[{ff26}\rA stone statue is lodged in one of the\nmachine's tubes. Will you pull it out?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 18,
+                    "source": "NA",
+                    "translation": "Obtained a strange stone statue.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 38,
+                    "source": "NA",
+                    "translation": "Sensing it would end badly, you leave\nthe statue where it is.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 84,
+                    "source": "NA",
+                    "translation": "The mural is broken beyond reading,\nbut faint ancient letters remain:\n]{ff30}5{ancient_r}{ancient_e}{ancient_s}{ancient_t}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 52,
+                    "source": "NA",
+                    "translation": "Words have recently been carved on the door:\n \n\"M*E*N*'*S D*R*E*A*M*L*A*N*D\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 72,
+                    "source": "NA",
+                    "translation": "You rest on the bed, and a beautiful\nwoman comes to you in a dream. But when\nyou open your eyes, a fiend leaps at you.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 52,
+                    "source": "NA",
+                    "translation": "Words have recently been carved on the door:\n \n\"W*O*M*E*N*'*S D*R*E*A*M*L*A*N*D\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 72,
+                    "source": "NA",
+                    "translation": "You rest on the bed, and a beautiful\nman comes to you in a dream. But when\nyou open your eyes, a fiend leaps at you.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 186,
+                    "source": "NA",
+                    "translation": "You meet another party, but they flee\ninto the darkness as if in terror\nof something.{ff26}\rHuge footsteps echo from far off.\nPeering ahead, you see that party,\ntwisted together into one.{ff26}\r \"......\" With a voiceless cry,\nthey come on in the shape of a huge fiend.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 48,
+                    "source": "NA",
+                    "translation": "A strange device has been set here.\nLight shines out from its top.{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 51,
+                    "source": "NA",
+                    "translation": "Some wild beast was kept here.\nA fierce stench, and scraps of food\nlie scattered.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 25,
+                    "source": "NA",
+                    "translation": "There's a switch on the wall.\nWill you press it?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 61,
+                    "source": "NA",
+                    "translation": "Strange ancient letters are carved on\nthe mural:\n]{ff30}4{ancient_e}{ancient_n}{ancient_e}{ancient_r}{ancient_g}{ancient_y}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 96,
+                    "source": "NA",
+                    "translation": "A wall like a giant needle stands here.\nOn the altar in the middle are a square\nhole and many small tablets.{ff26}\r \nWill you take a closer look?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 11,
+                    "source": "NA",
+                    "translation": "Nothing in particular.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 24,
+                    "source": "NA",
+                    "translation": "\"{ff30}4Speak the name of the god!{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 45,
+                    "source": "NA",
+                    "translation": "Something seems to belong in the hole,\nbut you have nothing like it.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 117,
+                    "source": "NA",
+                    "translation": "You set the LITHOGRAPH OF SUN in the hole.\nThe small tablets light, and a voice rings\nthrough the room.{ff26}\rIt is not a man's voice, nor a beast's,\nbut a lifeless one.{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 71,
+                    "source": "NA",
+                    "translation": "\"{ff30}1Wrong! Leave this place!{ff30}0\"\nThe voice rings through the room.\n\"{ff30}2We seem to be forgetting something.{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 174,
+                    "source": "NA",
+                    "translation": "\"{ff30}4Correct!{ff30}0\"\n\"{ff30}4Now receive your final baptism!{ff30}0\"{ff26}\rThe wall ahead crumbles, and a beautiful\nwoman appears before you, but you\nrealize she is an illusion.{ff26}\rA woman's body clad in giant needles.\nThe guardian god of this labyrinth?\nShe shudders, and attacks.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 93,
+                    "source": "NA",
+                    "translation": "In a warm, close room, an egg clings\nto the floor. It's as hard as rock, yet\nit seems, somehow, to be breathing.{ff26}\r \nWill you examine the egg?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 31,
+                    "source": "NA",
+                    "translation": "At your touch, something waiting in the\negg begins to move.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 41,
+                    "source": "NA",
+                    "translation": "What on earth was it?\nThe egg is gone. Only silence remains.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 57,
+                    "source": "NA",
+                    "translation": "Yellow fluid spurts out. Its smell is\nso foul you don't want to touch it.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 113,
+                    "source": "NA",
+                    "translation": "Is the great stone pillar filled with\nliquid? It leaks from a crack, thicker\nthan the lake's water.{ff26}\rJust a touch of it, and your magic\nseems restored.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 113,
+                    "source": "NA",
+                    "translation": "Is the great iron pillar filled with\nliquid? It leaks from a seam, thicker\nthan the lake's water.{ff26}\rJust a touch of it, and your magic\nseems restored.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 47,
+                    "source": "NA",
+                    "translation": "This one wall is made of something\nunlike the rest. It must hide a secret.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 56,
+                    "source": "NA",
+                    "translation": "Strange ancient letters are carved on\nthe door:\n ]{ff30}5{ancient_h}{ancient_e}{ancient_a}{ancient_l}{ff30}0[{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 53,
+                    "source": "NA",
+                    "translation": "Strange ancient letters are carved on\nthe door:\n ]{ff30}5{ancient_g}{ancient_a}{ancient_s}{ff30}0[{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 93,
+                    "source": "NA",
+                    "translation": "The mural is broken beyond reading,\nbut faint ancient letters remain:\n]{ff30}5{ancient_m}{ancient_e}{ancient_a}{ancient_t}{ancient_i}{ancient_n}{ancient_g}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 93,
+                    "source": "NA",
+                    "translation": "The mural is broken beyond reading,\nbut faint ancient letters remain:\n]{ff30}5{ancient_r}{ancient_e}{ancient_v}{ancient_i}{ancient_v}{ancient_a}{ancient_l}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 84,
+                    "source": "NA",
+                    "translation": "The mural is broken beyond reading,\nbut faint ancient letters remain:\n]{ff30}5{ancient_j}{ancient_u}{ancient_n}{ancient_k}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 37,
+                    "source": "NA",
+                    "translation": "But {ff12} is in no state to do\nanything.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 29,
+                    "source": "NA",
+                    "translation": "You find a ladder leading down.\n \nWill you climb down?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 28,
+                    "source": "NA",
+                    "translation": "There's a ladder leading up.\n \nWill you climb up?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 42,
+                    "source": "NA",
+                    "translation": "The small door is shut tight, as if to\nkeep intruders out.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 123,
+                    "source": "NA",
+                    "translation": "The small door is shut tight, as if to\nkeep intruders out.{ff26}\rBut your GOLD GAUNTLETS answer it, and\nthe door quietly opens. The room is\ncramped, though. Only one can go in.{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 11,
+                    "source": "NA",
+                    "translation": "Who will go in?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 199,
+                    "source": "NA",
+                    "translation": "{ff12} touches the crystal\nin the middle of the room.{ff26}\rAfter a while, the faint tremor\ngrows stronger.{ff26}\rWithout meaning to, they crush\nthe crystal in their grip.{ff26}\rThen a voice comes from the whole labyrinth:\n\"{ff30}6Danger! Mimicry mode released.{ff30}0\"\nEverything around you begins to change.{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 72,
+                    "source": "NA",
+                    "translation": "{ff12} bursts out, wreathed in flames,\nand turns to ash before your eyes.\n\"{ff30}2Did we forget something?{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 63,
+                    "source": "NA",
+                    "translation": "Flames fill your sight. You can see\nnothing.\n\"{ff30}2Did we forget something?{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 35,
+                    "source": "NA",
+                    "translation": "A bed?\n \n\"{ff30}2There's nothing particularly strange about it.{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 20,
+                    "source": "NA",
+                    "translation": " \nA huge pillar towers here.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 64,
+                    "source": "NA",
+                    "translation": "In the middle of the huge room sits a\nhuge coffin. Will you touch the face-like\nrelief on its front?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 81,
+                    "source": "NA",
+                    "translation": "At your touch, the whole room shakes.\nStepping back in alarm, you see the lid\nof the huge coffin begin to open.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 65,
+                    "source": "NA",
+                    "translation": "Perhaps it is too soon to touch it.\n\"{ff30}2Have we left something undone?{ff30}0\"\nYou draw your hand back.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 55,
+                    "source": "NA",
+                    "translation": "The relief lies silent, as if nothing\nhad happened. \"{ff30}2We shouldn't have\nforgotten anything...{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 63,
+                    "source": "NA",
+                    "translation": "You've felled the one in the huge coffin\n(a god?), and the relief before you\nparts in two and opens.{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 457,
+                    "source": "NA",
+                    "translation": "A beautiful woman appears there.\nHer lips part, and she speaks softly.{ff26}\r\"{ff30}2You who know the nature of all things:\n  do you see this place as one, or as all?{ff30}0\"{ff26}\r\"{ff30}2You who have gained every power:\n  is it the end, or the beginning?{ff30}0\"{ff26}\r\"{ff30}2You who give off every light:\n  is that light the past, or the future?{ff30}0\" {ff26}\r    \"{ff30}2You must carry the answer.{ff30}0\"   {ff26}\r\"{ff30}2I, the Priestess who carries the gods'\n  word, must wait for those who seek more.{ff30}0\"{ff26}\r\"{ff30}2Take the proof home with you,\n  and see everything, as your heart bids.{ff30}0\"{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 130,
+                    "source": "NA",
+                    "translation": "At once, a wall carved with a face-like\nrelief appears ahead.{ff26}\rAt your touch, the whole room shakes.\nStepping back in alarm, you see the lid\nof the huge coffin begin to open.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 271,
+                    "source": "NA",
+                    "translation": "A beautiful woman appears there.\nHer lips part, and she speaks softly.{ff26}\r\"{ff30}2You who believe in power alone:\n  I have no tale to tell you.{ff30}0\"{ff26}\r\"{ff30}2I, the Priestess who carries the gods'\n  word, must wait for those who seek more.{ff30}0\"{ff26}\r\"{ff30}2Take the proof home, and see everything,\n  as your heart bids.{ff30}0\"{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 46,
+                    "source": "NA",
+                    "translation": "Before your eyes, the labyrinth's stone\nwalls turn to metal.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 32,
+                    "source": "NA",
+                    "translation": " \nYour bodies don't match. The door stays shut.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 102,
+                    "source": "NA",
+                    "translation": "A match. The door opens on a new room.\nA sudden chill raises gooseflesh, and fear.\nShould you really go on?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 364,
+                    "source": "NA",
+                    "translation": "Ancient letters and numbers mark the door:\n{ff30}4]{ancient_s}{ancient_t}{ancient_r}[ 5 ]{ancient_i}{ancient_n}{ancient_t}[18\n{ff30}4]{ancient_p}{ancient_i}{ancient_e}[18 ]{ancient_v}{ancient_i}{ancient_t}[ 5{ff26}\r{ff30}4]{ancient_a}{ancient_g}{ancient_i}[ 5 ]{ancient_l}{ancient_u}{ancient_c}[18\n{ff30}4]{ancient_l}{ancient_v}{ancient_l}[ 5 ]{ancient_a}{ancient_g}{ancient_e}[18\n{ff30}4]{ancient_s}{ancient_e}{ancient_x}[   ]{ancient_f}{ancient_e}{ancient_m}{ancient_a}{ancient_l}{ancient_e}[{ff26}\r{ff30}4]{ancient_r}{ancient_a}{ancient_c}{ancient_e}[  ]{ancient_e}{ancient_l}{ancient_f}[\n{ff30}4]{ancient_c}{ancient_l}{ancient_a}{ancient_s}{ancient_s}[ ]{ancient_p}{ancient_r}{ancient_i}{ancient_e}{ancient_s}{ancient_t}[{ff30}0\nAnd last, in modern letters: ]Priestess's Door[{ff26}\rThe door seems made to fit someone's body.\nWill someone try it?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 352,
+                    "source": "NA",
+                    "translation": "Ancient letters and numbers mark the door:\n{ff30}4]{ancient_s}{ancient_t}{ancient_r}[ 5 ]{ancient_i}{ancient_n}{ancient_t}[18\n{ff30}4]{ancient_p}{ancient_i}{ancient_e}[18 ]{ancient_v}{ancient_i}{ancient_t}[ 5{ff26}\r{ff30}4]{ancient_a}{ancient_g}{ancient_i}[ 5 ]{ancient_l}{ancient_u}{ancient_c}[18\n{ff30}4]{ancient_l}{ancient_v}{ancient_l}[ 5 ]{ancient_a}{ancient_g}{ancient_e}[18\n{ff30}4]{ancient_s}{ancient_e}{ancient_x}[   ]{ancient_f}{ancient_e}{ancient_m}{ancient_a}{ancient_l}{ancient_e}[{ff26}\r{ff30}4]{ancient_r}{ancient_a}{ancient_c}{ancient_e}[  ]{ancient_e}{ancient_l}{ancient_f}[\n{ff30}4]{ancient_c}{ancient_l}{ancient_a}{ancient_s}{ancient_s}[ ]{ancient_p}{ancient_r}{ancient_i}{ancient_e}{ancient_s}{ancient_t}[{ff30}0\nAnd last, in modern letters: ]Priestess's Door[{ff26}\rA heavy door, but it seems to be unlocked.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 199,
+                    "source": "NA",
+                    "translation": "You open the book on the desk and read.{ff30}6{ff26}\r\"Experiment 1: Land mines\n \n......Success!{ff26}\rExperiment 2: Modification\n \n......Success!{ff26}\rExperiment 3: Growth\n \n.....Failure!?{ff26}\rThe enemy is coming sooner than expected.\nI'll set out the traps now.\nDamn that Royal Guard, they'll pay!\"{ff30}0",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 66,
+                    "source": "NA",
+                    "translation": "Strange ancient letters are carved on\nthe mural:\n]{ff30}4{ancient_c}{ancient_o}{ancient_c}{ancient_k}{ancient_p}{ancient_i}{ancient_t}{ff30}0[{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 64,
+                    "source": "NA",
+                    "translation": "Strange ancient letters are carved on\nthe door:\n]{ff30}5{ancient_c}{ancient_o}{ancient_n}{ancient_t}{ancient_r}{ancient_o}{ancient_l}{ff30}0[{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 61,
+                    "source": "NA",
+                    "translation": "Strange ancient letters are carved on\nthe door:\n]{ff30}5{ancient_b}{ancient_r}{ancient_i}{ancient_d}{ancient_g}{ancient_e}{ff30}0[{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 78,
+                    "source": "NA",
+                    "translation": "A strange little box sits in a corner.\nIt's locked, and won't open.\nThere must be some trick to it.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 87,
+                    "source": "NA",
+                    "translation": "A strange little box sits in a corner.\nIt seems to be unlocked.\nInside, you find a single card.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 30,
+                    "source": "NA",
+                    "translation": "A switch is fixed to the wall.\nWill you press it?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 41,
+                    "source": "NA",
+                    "translation": "There's a hollow in the middle of the\npedestal before you.\nWill you place something in it?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 26,
+                    "source": "NA",
+                    "translation": "You have nothing that fits the hollow.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 88,
+                    "source": "NA",
+                    "translation": "Something to fit the hollow...\nThis little stone statue looks right.\nYou take a breath and set it there.{ff26}\r \n....The pedestal begins to sink.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 60,
+                    "source": "NA",
+                    "translation": "As the pedestal sinks, a magic circle\nappears. Is someone being sent here?\nA mysterious band appears!",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 29,
+                    "source": "NA",
+                    "translation": "But the amulet reacts to the pedestal!",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 24,
+                    "source": "NA",
+                    "translation": "It feels wrong, so you leave the pedestal.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 24,
+                    "source": "NA",
+                    "translation": "It feels wrong, so you leave the pedestal.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 49,
+                    "source": "NA",
+                    "translation": "You find a strange hollow in the middle\nof the wall. A blue stone is stuck fast\nto its bottom.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 165,
+                    "source": "NA",
+                    "translation": "You find a strange hollow in the middle\nof the wall. A blue stone is stuck fast\nto its bottom.{ff26}\rThe blue stone can't be pried loose.\nThe LITHOGRAPH OF SUN might fit\nthe hollow.{ff26}\r \n...The blue stone sets itself into the\nLITHOGRAPH OF SUN.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 154,
+                    "source": "NA",
+                    "translation": "You find a strange hollow in the middle\nof the wall. A green stone is stuck fast\nto its bottom.{ff26}\rThe blue stone can't be pried loose,\nand you have nothing that would fit\nthe hollow.{ff26}\r \n\"Aren't we forgetting something?{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 226,
+                    "source": "NA",
+                    "translation": "Bones lie strewn about, of those eaten by\nsomething, perhaps.{ff26}\rNearby is a wall with a square hollow.\nA yellow stone is stuck fast inside it,\nand can't be pried loose.{ff26}\rThe LITHOGRAPH OF SUN might fit\nthe hollow.{ff26}\r \n...The yellow stone sets itself into the\nLITHOGRAPH OF SUN.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 210,
+                    "source": "NA",
+                    "translation": "Bones lie strewn about, of those eaten by\nsomething, perhaps.{ff26}\rNearby is a wall with a square hollow.\nA yellow stone is stuck fast inside it,\nand can't be pried loose.{ff26}\rAnd you have nothing that would fit\nthe hollow.\n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 108,
+                    "source": "NA",
+                    "translation": "Bones lie strewn about, of those eaten by\nsomething, perhaps.{ff26}\rNearby is a wall with a square hollow.\nA yellow stone is stuck fast inside it.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 51,
+                    "source": "NA",
+                    "translation": "You find a strange hollow in the middle\nof the wall. A green stone is stuck fast\nto its bottom.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 138,
+                    "source": "NA",
+                    "translation": "You find a strange hollow in the middle\nof the wall. A green stone is stuck fast\nto its bottom.{ff26}\rThe LITHOGRAPH OF SUN might fit\nthe hollow.{ff26}\r \n...The green stone sets itself into the\nLITHOGRAPH OF SUN.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 156,
+                    "source": "NA",
+                    "translation": "You find a strange hollow in the middle\nof the wall. A green stone is stuck fast\nto its bottom.{ff26}\rThe green stone can't be pried loose,\nand you have nothing that would fit\nthe hollow.{ff26}\r \n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 51,
+                    "source": "NA",
+                    "translation": "You find a strange hollow in the middle\nof the wall. A green stone is stuck fast\nto its bottom.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 165,
+                    "source": "NA",
+                    "translation": "You find a strange hollow in the middle\nof the wall. A green stone is stuck fast\nto its bottom.{ff26}\rThe green stone can't be pried loose.\nThe LITHOGRAPH OF SUN might fit\nthe hollow.{ff26}\r \n...The green stone sets itself into the\nLITHOGRAPH OF SUN.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 156,
+                    "source": "NA",
+                    "translation": "You find a strange hollow in the middle\nof the wall. A green stone is stuck fast\nto its bottom.{ff26}\rThe green stone can't be pried loose,\nand you have nothing that would fit\nthe hollow.{ff26}\r \n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 190,
+                    "source": "NA",
+                    "translation": "The pedestal of a small statue has a\nsquare hole, with a white shining stone\nstuck to its bottom.{ff26}\rStrange ancient letters are carved nearby:\n \n]{ff30}4{ancient_s}{ancient_t}{ancient_a}{ancient_f}{ancient_f}{ff30}0[{ff26}\rYou fit the LITHOGRAPH OF SUN,\n \n...and the white stone sets itself into it.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 183,
+                    "source": "NA",
+                    "translation": "The pedestal of a small statue has a\nsquare hole, with a white shining stone\nstuck inside.{ff26}\rStrange ancient letters are carved nearby:\n \n]{ff30}4{ancient_s}{ancient_t}{ancient_a}{ancient_f}{ancient_f}{ff30}0[{ff26}\rBut you have nothing to fit the hole.\n \n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 117,
+                    "source": "NA",
+                    "translation": "The pedestal of a small statue has a\nsquare hole, with a white shining stone\nstuck inside.{ff26}\rStrange ancient letters are carved nearby:\n \n]{ff30}4{ancient_s}{ancient_t}{ancient_a}{ancient_f}{ancient_f}{ff30}0[",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 85,
+                    "source": "NA",
+                    "translation": "In the middle of the room stands a device\nwith a square pedestal.{ff26}\rThe pedestal has a hollow, with a silver\nstone stuck fast to its bottom.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 203,
+                    "source": "NA",
+                    "translation": "In the middle of the room stands a device\nwith a square pedestal.{ff26}\rThe pedestal has a hollow, with a silver\nstone stuck fast to its bottom.{ff26}\rThe silver stone can't be pried loose.\nThe LITHOGRAPH OF SUN might fit\nthe hollow.{ff26}\r \n...The silver stone sets itself into the\nLITHOGRAPH OF SUN.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 192,
+                    "source": "NA",
+                    "translation": "In the middle of the room stands a device\nwith a square pedestal.{ff26}\rThe pedestal has a hollow, with a silver\nstone stuck fast to its bottom.{ff26}\rThe silver stone can't be pried loose,\nand you have nothing that would fit\nthe hollow.{ff26}\r \n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 33,
+                    "source": "NA",
+                    "translation": " \nIn the small room is a wall with a square\nhollow.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 173,
+                    "source": "NA",
+                    "translation": "In the small room is a wall with a square\nhollow, a red stone stuck to its bottom.{ff26}\rThe red stone can't be pried loose.\nThe LITHOGRAPH OF SUN might fit\nthe hollow.{ff26}\r \n...The red stone sets itself into the\nLITHOGRAPH OF SUN.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 163,
+                    "source": "NA",
+                    "translation": "In the small room is a wall with a square\nhollow, a red stone stuck to its bottom.{ff26}\rThe red stone can't be pried loose,\nand you have nothing that would fit\nthe hollow.{ff26}\r \n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 197,
+                    "source": "NA",
+                    "translation": "In the middle of the room stands a device\nwith a square pedestal.{ff26}\rThe pedestal has a hollow, with a black\nstone stuck fast to its bottom.{ff26}\rThe black stone can't be pried loose.\nThe LITHOGRAPH OF SUN might fit\nthe hollow.{ff26}\r \n...The black stone sets itself into the\nLITHOGRAPH OF SUN.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 185,
+                    "source": "NA",
+                    "translation": "In the middle of the room stands a device\nwith a square pedestal.{ff26}\rThe pedestal has a hollow, with a black\nstone stuck fast to its bottom.{ff26}\rThe black stone can't be pried loose,\nand you have nothing that would fit\nthe hollow.{ff26}\r\"{ff30}2Aren't we forgetting something?{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 40,
+                    "source": "NA",
+                    "translation": "In the middle of the room stands a device\nwith a square pedestal.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 137,
+                    "source": "NA",
+                    "translation": "{ff30}4       We are the Guardians,\n{ff30}4       who rule this land.{ff26}\r{ff30}4  You shall not cut off the waters.\n{ff30}4        Begone at once!{ff30}0{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 111,
+                    "source": "NA",
+                    "translation": "{ff30}4       We are the Guardians,\n{ff30}4       who rule this land.{ff26}\r \n{ff30}4Your bodies shall serve to remake our own.{ff30}0{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 147,
+                    "source": "NA",
+                    "translation": "{ff30}4       We are the Guardians,\n{ff30}4       who rule this land.{ff26}\r{ff30}4  Your souls we offer up to our god,\n{ff30}4  drunk in like the Priestess's own.{ff30}0{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 248,
+                    "source": "NA",
+                    "translation": "{ff30}4       We are the Guardians,\n{ff30}4       who rule this land.{ff26}\r{ff30}4  You who defile this precious land,\n{ff30}4  to us you are worshippers of false\n{ff30}4  gods. You shall not leave alive.{ff26}\r{ff30}4  This sword shall drink your blood,\n{ff30}4     and our god shall rise again.{ff30}0{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 217,
+                    "source": "NA",
+                    "translation": "{ff30}4       We are the Guardians,\n{ff30}4       who rule this land.{ff26}\r \n{ff30}4   You shall go no further.{ff26}\r{ff30}4  How many hundreds of years it took\n{ff30}4  to raise this land again, you cannot\n{ff30}4  know. Here we finish you.{ff30}0{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 255,
+                    "source": "NA",
+                    "translation": "{ff30}4       We are the Guardians,\n{ff30}4       who rule this land.{ff26}\r{ff30}4  Why do you not believe in our god?\n{ff30}4  Would you not see him live again here?{ff26}\r{ff30}4  Would you not rule every wish, every\n{ff30}4  fate? We shall raise this land and rule\n{ff30}4  all. Would you so defile our dream?{ff30}0{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 3,
+                    "source": "NA",
+                    "translation": "Clear",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 3,
+                    "source": "NA",
+                    "translation": "",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 54,
+                    "source": "NA",
+                    "translation": "A switch is fixed to the wall.\nYou press it: \"{ff30}6Click.{ff30}0\"",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 77,
+                    "source": "NA",
+                    "translation": "When you defeat the monster that came out\nof the statue, you find a strange stone\nfragment has fallen there.{ff26}\r \nObtained {ff30}2STONE OF TIGER{ff30}0.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 77,
+                    "source": "NA",
+                    "translation": "When you defeat the monster that came out\nof the statue, you find a strange stone\nfragment has fallen there.{ff26}\r \nObtained {ff30}2STONE OF BIRD{ff30}0.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 77,
+                    "source": "NA",
+                    "translation": "When you defeat the monster that came out\nof the statue, you find a strange stone\nfragment has fallen there.{ff26}\r \nObtained {ff30}2STONE OF DOG{ff30}0.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 77,
+                    "source": "NA",
+                    "translation": "When you defeat the monster that came out\nof the statue, you find a strange stone\nfragment has fallen there.{ff26}\r \nObtained {ff30}2STONE OF SNAKE{ff30}0.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 92,
+                    "source": "NA",
+                    "translation": "When you defeat the monster that came out\nof the strange mask, only the bloodstained\nmask is left on the floor.{ff26}\r \nObtained {ff30}2JADE MASK{ff30}0.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 76,
+                    "source": "NA",
+                    "translation": "The fiend in the golden helm falls, and\nonly the helm is left on the floor.{ff26}\r \nObtained {ff30}2GOLD HELM{ff30}0.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 82,
+                    "source": "NA",
+                    "translation": "The fiend in the golden boots falls, and\nonly the boots are left on the floor.{ff26}\r \nObtained {ff30}2GOLD BOOTS{ff30}0.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 82,
+                    "source": "NA",
+                    "translation": "The fiend in the golden gauntlets falls,\nand only the gauntlets are left.{ff26}\r \nObtained {ff30}2GOLD GAUNTLETS{ff30}0.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 76,
+                    "source": "NA",
+                    "translation": "The fiend in the golden armor falls, and\nonly the armor is left on the floor.{ff26}\r \nObtained {ff30}2GOLD ARMOR{ff30}0.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 75,
+                    "source": "NA",
+                    "translation": "The Priestess gently reaches out and\noffers you a ring.{ff26}\r \nObtained {ff30}2RING OF MEDIUM{ff30}0.{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 40,
+                    "source": "NA",
+                    "translation": "Then everything goes dark for a moment,\nand you are sent somewhere else.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 80,
+                    "source": "NA",
+                    "translation": "The band of fiends falls, and a strange\ncharm is left on the altar.{ff26}\r \nObtained {ff30}2MAGIC AMULET{ff30}0.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 88,
+                    "source": "NA",
+                    "translation": "You decide to press the switches at the\nsame time. From far off comes the count:\n'Three, two, one.' On 'Zero,' you press.{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 58,
+                    "source": "NA",
+                    "translation": " \n\"Clunk.\"{ff26}\rThe side door seems to have unlocked.\nAnd the switch doesn't spring back.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 47,
+                    "source": "NA",
+                    "translation": "That's all for the game show.\nPlease wait a little longer for the full game.{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 34,
+                    "source": "NA",
+                    "translation": " \nA strange statue, with an X on its chest.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 104,
+                    "source": "NA",
+                    "translation": " \nA strange statue, with an X on its chest.{ff26}\rIs it answering the LITHOGRAPH OF SUN?\nThe LITHOGRAPH OF SUN shines, and you\nare whisked away somewhere.{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 39,
+                    "source": "NA",
+                    "translation": " \n\"{ff30}2Looks like something switched on.{ff30}0\"{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 40,
+                    "source": "NA",
+                    "translation": " \n\"{ff30}2Looks like something switched off.{ff30}0\"{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 41,
+                    "source": "NA",
+                    "translation": "Someone has ransacked this place.\n \nWill you search it?",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 31,
+                    "source": "NA",
+                    "translation": " \nYou search the rubble on the floor...\n\r",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 38,
+                    "source": "NA",
+                    "translation": " \n\"{ff30}2Buried gold!{ff30}0\"\nObtained {ff11}0 Gp.",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 313,
+                    "source": "NA",
+                    "translation": "Otaka\n\"Fancy bumping into you here! What luck!\n Name's Otaka, one of the programmers.{ff26}\r Since you're so lucky, I oughta do\n something for you. Hmm, what, what...\n Ooh, this is a tough one...{ff26}\r Oh, I know!\n I'll give you stuff I found in the maze.\n Take as much as you can carry.{ff26}\r \n Oh, and not a word to Agan!\"{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 266,
+                    "source": "NA",
+                    "translation": "Otaka\n\"Bumped into you again, huh!\n Were you out lookin' for me, maybe?{ff26}\r Well... can't be helped, I guess.\n I worked hard collectin' this stuff, but\n it's time for my usual item handout.{ff26}\r Don't go sellin' it right off, OK?\n ...Right, off to collect more stuff.\n Hope we meet again!\"{ff26}",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 101,
+                    "source": "NA",
+                    "translation": " \nSadly, you have no room for any items.{ff26} \n\rOtaka: \"Aww... what a shame...\"\nOtaka wanders sadly off into the dark...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 64,
+                    "source": "NA",
+                    "translation": "Otaka stuffs the items into your pack,\nand wanders happily off into the dark...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 108,
+                    "source": "NA",
+                    "translation": " \n\"Oh yeah, I had 'em appraised this time!\" {ff26}\n \n\rOtaka stuffs the items into your pack,\nand wanders happily off into the dark...",
+                    "addStringTerminator": true
+                },
+                {
+                    "length": 31,
+                    "source": "NA",
+                    "translation": " \nObtained {ff30}2buried treasure{ff30}0.",
+                    "addStringTerminator": true
+                }
+            ]
+        }
+    ]
+}
