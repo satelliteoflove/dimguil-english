@@ -3,11 +3,13 @@
 An English translation patch for Wizardry: Dimguil, the 2000 PlayStation release
 (SLPS-02691). It targets the Rev 1 disc only.
 
-Most of the text a player can reach is in English: the town and castle, the dungeon
-dialogue, combat, item and monster descriptions and the card game. The event script and
-parts of the town and castle menus are being translated again from scratch, and the
-first release will follow once they're done. Nobody has played it through to the ending
-yet. See [ROADMAP.md](ROADMAP.md) for what's left.
+Every line of text is, technically, translated into English. This work was done
+largely by a machine. The immediate result is that the game can be played and
+(hopefully) completed at this time, including the card game. All translated text is
+currently undergoing a meticulous quality pass to account for the expected results of
+machine translation. A full playthrough on this build hasn't been done yet. It is
+reasonable to expect that game saves will break as the patch is developed. There be
+dragons. See [ROADMAP.md](ROADMAP.md) for what's left.
 
 ## Origins
 

@@ -292,9 +292,9 @@ liquid thicker than the lake's water restores magic).
 Where: Underground; FAQ: start by dropping down the chute on B2F E22 N19.
 What: a hollow in a wall with a blue stone stuck in it. 257 the LITHOGRAPH fits and the
 blue stone sets into it. 256 plain (after). 258 without the LITHOGRAPH.
-Bug in 258: the Japanese says the stuck stone is green, then that the blue stone can't
-be removed, and its closing thought has a broken color code (a bare "7" where
-{ff30}2 belongs). The current English copies the green/blue slip.
+Slip in 258 (corroborated, see Translation traps): the first line says the stuck stone
+is green, though this is the blue set; its closing thought has a bare "7" where {ff30}2
+belongs. The current English copies the slip.
 Links: NPC2 82-83 (Balbo: you too fitted the blue stone into the LITHOGRAPH); S15.
 
 **S15. The waterway.** EV 87, 88, 129.
@@ -1067,19 +1067,26 @@ roughly follows the game:
 - 102 in NPC1 (Lychee: it wasn't me, I only kicked a pebble) is a joke that works because
   the player caused the change (EV 224).
 
-**Oddities and bugs in the Japanese.**
+**Oddities in the Japanese.** Only one of these is a corroborated mistake (EV 258).
+Everything else is what the text says, checked in the source, with no outside source
+confirming it's an error. Don't "fix" those in the English on this list's say-so.
 
-- **EV 258:** the stuck stone is green, then "the blue stone can't be removed"; the
-  closing thought has a broken color code (a bare "7" instead of {ff30}2). It is the
-  blue-stone hollow without the LITHOGRAPH. The English copies the color slip and drops
-  the opening color code. Decide whether to fix.
+- **EV 258 (corroborated):** the stuck stone is green, then "the blue stone can't be
+  removed", and the closing thought has a bare "7" where {ff30}2 belongs. The hollow
+  texts come in sets of three (first look, with the LITHOGRAPH, without it): 256-258
+  for the blue stone, 262-264 and 265-267 for the green. 258 is the blue set's third
+  string, and its green twins 264 and 267 have the same wording with "green" in both
+  places and a proper {ff30}2. So "green" in 258's first line is the slip, and the
+  broken code is in the source data, not the dump. No outside source mentions it. The
+  English copies the slip and drops the opening color code.
 - **EV 289-292:** the four pillar stones drop from a monster that "came out of the
   statue", though the pillars are pillars everywhere else, and 12-13 call the pieces
   "the stones from the pillars".
 - **EV 222:** only the gauntlets are said to open the small door; all four pieces are
   required.
-- **EV 215 MEATING:** the glyphs spell MEATING, probably for MEETING. Glyph words can't
-  be fixed without editing the script, so leave it; don't "correct" it in a note.
+- **EV 215 MEATING:** the glyphs spell M-E-A-T-I-N-G. MEETING is a guess at the intent,
+  not established. It's a teaching word, and changing it would change which letters it
+  teaches, so it stays as it is.
 - **EV 231:** a typo in the thought (この for こと); the meaning, "is there something we
   left undone?", is clear.
 - **EV 178 and 179** are identical. The FAQ says WAREHOUSE is on a statue's head; the
