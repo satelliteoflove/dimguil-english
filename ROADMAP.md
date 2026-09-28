@@ -31,8 +31,12 @@ of the redump set, since the build leaves both audio tracks untouched.
 
 ## Still to do around releases
 
-- **Project identity.** A name and repo of its own instead of a GitHub fork. Keep the full
-  git history (Remisse's commits and authorship stay in it) and GPL-3.0.
+- **Project identity.** A name and repo of its own instead of a GitHub fork. Decided
+  2026-09-27: create a fresh repo under the new name and push the full git history
+  there (Remisse's commits and authorship stay in it), keep GPL-3.0, and point to the
+  original repo at the bottom of the README as the origin of the code, as the license
+  and courtesy ask. The local folder, the jar name and paths in scripts follow the new
+  name.
 - **The original team's requests (2026-09-26).** Their translation is removed and must not
   come back, and they aren't to be credited. Remisse's code stays under the GPL, with the
   notice in `docs/notice.txt` on the repo (README) and on every release page: no LLMs
@@ -97,8 +101,6 @@ the armips and mkpsxiso commits; `docs/building.md` has the steps.
 ## After 1.0
 
 Once 1.0 is out and any early bug reports are dealt with, the repo mostly goes quiet.
-- Turn off Dependabot (delete `.github/dependabot.yml`). Its weekly pull requests only
-  make sense while releases are still coming.
 - Archive the repo, so it stays readable and downloadable and it's clear the patch is
   finished rather than abandoned.
 - The disc token can be left to expire. The private disc repo only matters if another

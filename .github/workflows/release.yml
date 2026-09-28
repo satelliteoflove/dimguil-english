@@ -2,8 +2,7 @@
 #
 # Every other run builds the same zip as an artifact and publishes nothing:
 #   - by hand (Actions > build and release > Run workflow)
-#   - on pushes to main that touch the build itself, which is how Dependabot's updates
-#     get tested once merged (its pull requests can't see the disc secrets)
+#   - on pushes to main that touch the build itself
 #
 # The original disc can't live in this public repo. It's a release asset in a private
 # repo instead:
