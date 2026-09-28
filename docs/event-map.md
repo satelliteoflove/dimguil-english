@@ -245,8 +245,9 @@ Where: mostly Shrine by file position; not established.
 - 47 you look out of the window: nothing. Pairs with 17's window.
 - 52, 53, 54, 227 "A statue?", "Nothing unusual", "A coffin?", "A bed?": revisit lines
   after an event object is used up (statue S6/S18, coffin S52, bed S21). **Inferred.**
-- 72 a blank grave marker; 73 "Here lies a hero of many battles" followed by an
-  unexplained code {ff18}. Location unknown.
+- 72 a blank grave marker; 73 "Here lies {ff18}, a hero of many battles". {ff18} prints
+  a party member's name (checked in the emulator: it printed the first character's
+  name), so the grave carries one of your own characters' names. Location unknown.
 - 75 the Shrine's exit door opens at a touch.
 
 ### The Underground Shrine, B1-B4
@@ -1093,8 +1094,8 @@ confirming it's an error. Don't "fix" those in the English on this list's say-so
   text says a pillar's head.
 - **EV 262-264 and 265-267** are two full sets for the green stone; why is not known.
 - **EV 227** ("A bed?") lacks the quotation marks its siblings 46, 52, 54 have.
-- **EV 73** ends with {ff18}, a code not documented elsewhere; what it prints is not
-  known.
+- **EV 73**'s {ff18} prints a party member's name (checked in the emulator), so the
+  English can place it where an epitaph puts a name.
 - **SISETU 342** calls the GAME device a "strange machine" (see above).
 - **NPC2 261:** Balbo's はし can be bridge, ladder or edge; the English says "bridge",
   which happens to echo the BRIDGE glyph door (245). Not established that either is
