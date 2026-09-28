@@ -192,7 +192,7 @@ interpretation so either can be checked or overturned on its own.
   Gaiden IV, and 法皇のローブ (ROBE OF POPE) in Dimguil itself (ITEM.DAT section 1,
   string 231). Source: the item tables in the 得物屋 archive (emonoya.net), which
   bartoks-trading-post mirrors in data/items/g3, g4 and dim.
-- Dimguil can bring in characters from Gaiden III and IV (the Tome of Rebirth lists
+- Dimguil can bring in characters from Gaiden III and IV (the Book of Movement lists
   "Scripture of the Dark" and "Throb of the Demon's Heart"), so a Wizardry player of
   the time knew those rules.
 
@@ -212,7 +212,7 @@ interpretation so either can be checked or overturned on its own.
 ### What that means for the translation
 
 - Keep "hero" as Guy's word for himself everywhere; it's the running gag. Where he
-  names it as a class (128, 202), capitalise it: "Hero".
+  names it as a class (128, 202), capitalize it: "Hero".
 - 238 names the book as the English Dragon Warrior III did ("Book of Satori"), so the
-  one explicit reference can be recognised in English.
+  one explicit reference can be recognized in English.
 - Don't add Dragon Quest references the Japanese doesn't make.
