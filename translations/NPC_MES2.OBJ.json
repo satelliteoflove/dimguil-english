@@ -485,13 +485,13 @@
                 {
                     "length": 90,
                     "source": "NA",
-                    "translation": "  We decided to press the switch together.\n From far off comes the count: 'Three, two, one.'\n  On 'Zero' we pressed the switch.",
+                    "translation": "  You decide to press the switches at the same time.\n From far off comes the count: 'Three, two, one.'\n  On 'Zero,' you press.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 68,
                     "source": "NA",
-                    "translation": "        *Clunk*\n     The side door seems to have unlocked.\n  The switch stayed down.",
+                    "translation": "        \"Clunk.\"\n     The side door seems to have unlocked.\n  And the switch doesn't spring back.",
                     "addStringTerminator": true
                 },
                 {
