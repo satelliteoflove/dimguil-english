@@ -6,7 +6,7 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S15, the waterway (EV 87, 88, 129).** See `docs/event-map.md`.
+**Next: scene S16, "The sky fell" (EV 105).** See `docs/event-map.md`.
 
 ## How a scene is reviewed
 
@@ -41,9 +41,9 @@ NPC_MES2 79-80 to match); S5 the star ceiling 18-21; S6 Murphy's Ghost 32, 52; S
 altar room 0, 35-38; S8 the jade mask 39-41, 293; S9 Shrine odds and ends 33, 34, 46,
 47, 53, 54, 72, 73, 75, 227; S10 the moon door 80, 81; S11 the library 76, 106; S12 the
 freezer 55, 64, 65, 79; S13 the lake machine 66-70, 77, 78, 280; S14 the blue stone
-256-258 (258's green/blue slip fixed: blue, and its {ff30}2 put back). Also done early,
-out of scene order: the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given the same
-wording as 35 and 36.
+256-258 (258's green/blue slip fixed: blue, and its {ff30}2 put back); S15 the waterway
+87, 88, 129. Also done early, out of scene order: the murals 22 (SHIP) and 23 (DEATH),
+and 59 and 61 given the same wording as 35 and 36.
 
 Every string also had the present-tense sweep and full-question prompts applied, so
 unreviewed strings are consistent but not yet approved.

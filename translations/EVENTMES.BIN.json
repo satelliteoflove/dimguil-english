@@ -539,7 +539,7 @@
                 {
                     "length": 171,
                     "source": "NA",
-                    "translation": "There's a square hole in the floor,\nshallow and empty. It's the same size as\nthe LITHOGRAPH OF SUN.{ff26}\rAs you set the LITHOGRAPH OF SUN in it,\nthe underground stream before you stops,\nparts in two, and a new path appears.{ff26}",
+                    "translation": "There's a square hole in the floor. It's\nshallow, with nothing at the bottom. It's\nthe same size as the LITHOGRAPH OF SUN.{ff26}\rAs you set the LITHOGRAPH OF SUN in it,\nthe underground stream before you stops\nand splits in two. A new path appears.{ff26}",
                     "addStringTerminator": true
                 },
                 {
@@ -785,7 +785,7 @@
                 {
                     "length": 160,
                     "source": "NA",
-                    "translation": "There's a square hole in the floor,\nshallow and empty. It seems to be the\nsame size as the LITHOGRAPH OF SUN.{ff26}\rYou set the LITHOGRAPH OF SUN in it, but\nnothing happens.\n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
+                    "translation": "There's a square hole in the floor. It's\nshallow, with nothing at the bottom. It\nseems the same size as the LITHOGRAPH OF SUN.{ff26}\rYou try setting the LITHOGRAPH OF SUN in\nit, but nothing happens.\n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
                     "addStringTerminator": true
                 },
                 {
