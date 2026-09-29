@@ -413,13 +413,13 @@
                 {
                     "length": 49,
                     "source": "NA",
-                    "translation": "At the lever's pull the machine roars,\nand steam fills the room.",
+                    "translation": "When you pull the lever, the machine\nreacts violently, and steam fills the\nroom.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 145,
                     "source": "NA",
-                    "translation": "With the fiend of steam defeated, the\nmachine stops dead. Outside the room,\nthe sound of flowing water ceases.{ff26}\rSo the machine was the cause after all.\nWill the tainted lake regain its power\nnow?",
+                    "translation": "When you defeat the steam monster, the\nmachine stops dead. The sound of flowing\nwater outside the room stops.{ff26}\rSo the machine was the cause after all.\nWill the fouled lake regain its magic\nnow?",
                     "addStringTerminator": true
                 },
                 {
@@ -473,13 +473,13 @@
                 {
                     "length": 136,
                     "source": "NA",
-                    "translation": " \nThis door is shut, and has no keyhole.{ff26}\rIt looks like it was used once, but\nit won't budge.\nWater drips from the gap beneath it.{ff26}\rIt seems you'll have to find some way\nto open it.",
+                    "translation": " \nThis door is shut, and has no keyhole.{ff26}\rThere are signs it has been used before,\nbut it won't budge.\nWater drips from the gap beneath it.{ff26}\rIt seems you'll have to find some way\nto open it.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 79,
                     "source": "NA",
-                    "translation": "There's a round hole in the wall.\nWas water sent to the lake from here?\nIt reeks, and filth is caked all over.",
+                    "translation": "There's a round hole in the wall. Is this\nwhere water was sent into the lake? It\nreeks horribly, and filth is caked on it.",
                     "addStringTerminator": true
                 },
                 {
@@ -1691,7 +1691,7 @@
                 {
                     "length": 137,
                     "source": "NA",
-                    "translation": "{ff30}4       We are the Guardians,\n{ff30}4       who rule this land.{ff26}\r{ff30}4  You shall not cut off the waters.\n{ff30}4        Begone at once!{ff30}0{ff26}",
+                    "translation": "{ff30}4       We are the Guardians\n{ff30}4       who rule this land.{ff26}\r{ff30}4You are not permitted to cut off the flow of the water.\n{ff30}4        Begone at once!{ff30}0{ff26}",
                     "addStringTerminator": true
                 },
                 {

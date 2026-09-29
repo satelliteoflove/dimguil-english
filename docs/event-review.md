@@ -6,24 +6,8 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S13, the lake machine (EV 66-70, 77, 78, 280).** It was presented and
-Chris took a break before answering. Re-present it, starting from these suggestions:
-
-- 77: "It looks like it was used once" becomes "There are signs it has been used
-  before"; "from the gap beneath it" becomes "from the gap in the door" (the Japanese
-  doesn't say beneath).
-- 78: "There's a round hole in the wall. Is this where water was sent into the lake? A
-  horrible stench hangs about it, and filth is caked all over."
-- 66: keep.
-- 67: "When you pull the lever, the machine reacts violently, and steam fills the room."
-- 68: "When you defeat the monster with a body of steam, the machine stops dead. The
-  sound of flowing water outside the room stops." / "So the machine was the cause after
-  all. Will the fouled lake regain its magic now?" ("magic" rather than the literal
-  "power", to match the King's SISETU 327 "the lake has regained its magic").
-- 69, 70: keep.
-- 280 (Guardians): "You shall not cut off the flow of the waters." Keep "Begone at once!"
-
-Then carry on with S14 in `docs/event-map.md`.
+**Next: scene S14, the blue stone (EV 256-258).** See `docs/event-map.md`. It carries
+the corroborated green/blue slip in 258 (see "Waiting for their scene" below).
 
 ## How a scene is reviewed
 
@@ -56,8 +40,9 @@ Approved and applied (string numbers): S1 message boards 1-9; S2 the pillars 24-
 NPC_MES2 79-80 to match); S5 the star ceiling 18-21; S6 Murphy's Ghost 32, 52; S7 the
 altar room 0, 35-38; S8 the jade mask 39-41, 293; S9 Shrine odds and ends 33, 34, 46,
 47, 53, 54, 72, 73, 75, 227; S10 the moon door 80, 81; S11 the library 76, 106; S12 the
-freezer 55, 64, 65, 79. Also done early, out of scene order: the murals 22 (SHIP) and 23
-(DEATH), and 59 and 61 given the same wording as 35 and 36.
+freezer 55, 64, 65, 79; S13 the lake machine 66-70, 77, 78, 280. Also done early, out of
+scene order: the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given the same wording
+as 35 and 36.
 
 Every string also had the present-tense sweep and full-question prompts applied, so
 unreviewed strings are consistent but not yet approved.
@@ -78,6 +63,9 @@ unreviewed strings are consistent but not yet approved.
 - Naming across files: the NPC files say "Lithograph of the Sun" and "the Sun tablet"
   where the event script says LITHOGRAPH OF SUN; 迷宮 is "labyrinth" in some event
   strings and "maze" elsewhere. Settle these.
+- 281-285 (Guardians): 280's intro became "We are the Guardians who rule this land."
+  with no comma; the other five share that intro and should match. Also open: whether
+  to carry the contempt of 貴様ら, which every Guardian speech uses.
 
 ## After the event script
 
