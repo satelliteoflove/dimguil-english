@@ -1547,19 +1547,19 @@
                 {
                     "length": 49,
                     "source": "NA",
-                    "translation": "You find a strange hollow in the middle\nof the wall. A blue stone is stuck fast\nto its bottom.",
+                    "translation": "You find a strange hollow in the middle\nof the wall. A blue stone is stuck fast\nto the bottom.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 165,
                     "source": "NA",
-                    "translation": "You find a strange hollow in the middle\nof the wall. A blue stone is stuck fast\nto its bottom.{ff26}\rThe blue stone can't be pried loose.\nThe LITHOGRAPH OF SUN might fit\nthe hollow.{ff26}\r \n...The blue stone sets itself into the\nLITHOGRAPH OF SUN.",
+                    "translation": "You find a strange hollow in the middle\nof the wall. A blue stone is stuck fast\nto the bottom.{ff26}\rBut the blue stone can't be removed.\nIt looks like the LITHOGRAPH OF SUN\nwould fit into this hollow.{ff26}\r \n...The blue stone is now set into the\nLITHOGRAPH OF SUN.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 154,
                     "source": "NA",
-                    "translation": "You find a strange hollow in the middle\nof the wall. A green stone is stuck fast\nto its bottom.{ff26}\rThe blue stone can't be pried loose,\nand you have nothing that would fit\nthe hollow.{ff26}\r \n\"Aren't we forgetting something?{ff30}0\"",
+                    "translation": "You find a strange hollow in the middle\nof the wall. A blue stone is stuck fast\nto the bottom.{ff26}\rBut the blue stone can't be removed, and\nyou have nothing with you that would fit\nthe hollow.{ff26}\r \n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
                     "addStringTerminator": true
                 },
                 {

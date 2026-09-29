@@ -295,7 +295,8 @@ What: a hollow in a wall with a blue stone stuck in it. 257 the LITHOGRAPH fits 
 blue stone sets into it. 256 plain (after). 258 without the LITHOGRAPH.
 Slip in 258 (corroborated, see Translation traps): the first line says the stuck stone
 is green, though this is the blue set; its closing thought has a bare "7" where {ff30}2
-belongs. The current English copies the slip.
+belongs. The English says blue and restores the {ff30}2 (S14 review). 258 needs the
+LITHOGRAPH's carrier left behind, so few players would ever have seen it.
 Links: NPC2 82-83 (Balbo: you too fitted the blue stone into the LITHOGRAPH); S15.
 
 **S15. The waterway.** EV 87, 88, 129.
@@ -1078,8 +1079,9 @@ confirming it's an error. Don't "fix" those in the English on this list's say-so
   for the blue stone, 262-264 and 265-267 for the green. 258 is the blue set's third
   string, and its green twins 264 and 267 have the same wording with "green" in both
   places and a proper {ff30}2. So "green" in 258's first line is the slip, and the
-  broken code is in the source data, not the dump. No outside source mentions it. The
-  English copies the slip and drops the opening color code.
+  broken code is in the source data, not the dump. No outside source mentions it, and
+  Emonoya's BBS archive has no player report of it. The English says blue and restores
+  the {ff30}2 (fixed in the S14 review).
 - **EV 289-292:** the four pillar stones drop from a monster that "came out of the
   statue", though the pillars are pillars everywhere else, and 12-13 call the pieces
   "the stones from the pillars".
