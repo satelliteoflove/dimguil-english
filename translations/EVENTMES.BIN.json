@@ -815,43 +815,43 @@
                 {
                     "length": 132,
                     "source": "NA",
-                    "translation": "In the corner is a pedestal set with\nsmall tablets, with a big square hole.{ff26}\rAs you fit the LITHOGRAPH OF SUN,\nthe small tablets light up.\nMaybe one of these buttons?",
+                    "translation": "In the corner is a pedestal set with\nsmall tablets. There's a big square hole\nin the middle of it.{ff26}\rWhen you fit the LITHOGRAPH OF SUN in,\nthe small tablets light up.\nMaybe you should press one of the buttons?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 122,
                     "source": "NA",
-                    "translation": "In the corner is a pedestal set with\nsmall tablets, with a big square hole.{ff26}\rYou touch a small tablet. Nothing.\n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
+                    "translation": "In the corner is a pedestal set with\nsmall tablets. There's a big square hole\nin the middle of it.{ff26}\rYou touch the small tablets, but nothing\nhappens.\n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 68,
                     "source": "NA",
-                    "translation": "Strangely, a letter on the pedestal lights up:\n]{ff30}4{ancient_a}{ff30}0[\nIt seems to have sensed something vital.",
+                    "translation": "Strangely, a letter on the pedestal lights up:\n]{ff30}4{ancient_a}{ff30}0[\nIt seems to have responded to something important.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 68,
                     "source": "NA",
-                    "translation": "Strangely, a letter on the pedestal lights up:\n]{ff30}4{ancient_b}{ff30}0[\nIt seems to have sensed something vital.",
+                    "translation": "Strangely, a letter on the pedestal lights up:\n]{ff30}4{ancient_b}{ff30}0[\nIt seems to have responded to something important.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 68,
                     "source": "NA",
-                    "translation": "Strangely, a letter on the pedestal lights up:\n]{ff30}4{ancient_c}{ff30}0[\nIt seems to have sensed something vital.",
+                    "translation": "Strangely, a letter on the pedestal lights up:\n]{ff30}4{ancient_c}{ff30}0[\nIt seems to have responded to something important.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 68,
                     "source": "NA",
-                    "translation": "Strangely, a letter on the pedestal lights up:\n]{ff30}4{ancient_d}{ff30}0[\nIt seems to have sensed something vital.",
+                    "translation": "Strangely, a letter on the pedestal lights up:\n]{ff30}4{ancient_d}{ff30}0[\nIt seems to have responded to something important.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 68,
                     "source": "NA",
-                    "translation": "Strangely, a letter on the pedestal lights up:\n]{ff30}4{ancient_e}{ff30}0[\nIt seems to have sensed something vital.",
+                    "translation": "Strangely, a letter on the pedestal lights up:\n]{ff30}4{ancient_e}{ff30}0[\nIt seems to have responded to something important.",
                     "addStringTerminator": true
                 },
                 {

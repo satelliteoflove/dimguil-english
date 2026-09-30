@@ -6,7 +6,7 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S18, the Shadow Golem's statue (EV 59-63).** See `docs/event-map.md`.
+**Next: scene S20, STAFF and the white stone (EV 268-270).** See `docs/event-map.md`.
 
 ## How a scene is reviewed
 
@@ -43,7 +43,8 @@ altar room 0, 35-38; S8 the jade mask 39-41, 293; S9 Shrine odds and ends 33, 34
 freezer 55, 64, 65, 79; S13 the lake machine 66-70, 77, 78, 280; S14 the blue stone
 256-258 (258's green/blue slip fixed: blue, and its {ff30}2 put back); S15 the waterway
 87, 88, 129; S16 "The sky fell" 105 (sky and earth, to match the Fortune Teller's SISETU
-339); S17 the 2-Head Snake and the winding machine 71, 82-86. Also done early, out of
+339); S17 the 2-Head Snake and the winding machine 71, 82-86; S18 the Shadow Golem's
+statue 59-63 (no changes); S19 the central computer 58, 134-145. Also done early, out of
 scene order: the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given the same wording
 as 35 and 36.
 
