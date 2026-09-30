@@ -103,14 +103,18 @@ I_NAME_E and NPC_MES1-3 move from around LBA 28,300-29,500 to around 163,300, so
 load of one of them is a seek across most of the data track and back. NPC_MES loads on
 every NPC encounter.
 
-Things to look at:
-- Whether the original layout groups files by when they're loaded, and what a moved
-  file sits next to in the loads around it.
-- Whether a moved file can go somewhere nearer, such as sectors of a file nothing
-  loads (ITEM_SE and ITEM_CA are believed never to be loaded), or not move at all
-  because its text is trimmed to fit.
-- Load times against the original disc, in DuckStation with accurate CD timing and on
-  real hardware if possible.
+Consider a complete reorganization of the data track rather than finding nearer
+holes for the moved files, so placement is planned around load order from the start.
+relocate.py already rewrites the executable's four MSF tables for moved files, so a
+full reorder is the same mechanism applied to every file. Before relying on it:
+- Log the real load sequence in play (town, maze, NPC encounters, combat, cards) to
+  see which files load together.
+- Confirm nothing outside the four tables holds an LBA: overlays, movie or XA streams,
+  or files that point into other files.
+- Drop files nothing loads (ITEM_SE and ITEM_CA are believed never to be loaded) from
+  the hot areas, or from the disc if nothing checks for them.
+- Compare load times against the original disc, in DuckStation with accurate CD
+  timing and on real hardware if possible.
 
 The PS1 drive reads at constant linear velocity, so data comes off at the same rate
 anywhere on the disc. The outer-edge speed advantage of CAV drives doesn't apply here;
