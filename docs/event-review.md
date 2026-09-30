@@ -6,7 +6,7 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S16, "The sky fell" (EV 105).** See `docs/event-map.md`.
+**Next: scene S17, the 2-Head Snake and the winding machine (EV 71, 82-86).** See `docs/event-map.md`.
 
 ## How a scene is reviewed
 
@@ -42,17 +42,15 @@ altar room 0, 35-38; S8 the jade mask 39-41, 293; S9 Shrine odds and ends 33, 34
 47, 53, 54, 72, 73, 75, 227; S10 the moon door 80, 81; S11 the library 76, 106; S12 the
 freezer 55, 64, 65, 79; S13 the lake machine 66-70, 77, 78, 280; S14 the blue stone
 256-258 (258's green/blue slip fixed: blue, and its {ff30}2 put back); S15 the waterway
-87, 88, 129. Also done early, out of scene order: the murals 22 (SHIP) and 23 (DEATH),
-and 59 and 61 given the same wording as 35 and 36.
+87, 88, 129; S16 "The sky fell" 105 (sky and earth, to match the Fortune Teller's SISETU
+339). Also done early, out of scene order: the murals 22 (SHIP) and 23 (DEATH), and 59
+and 61 given the same wording as 35 and 36.
 
 Every string also had the present-tense sweep and full-question prompts applied, so
 unreviewed strings are consistent but not yet approved.
 
 ## Waiting for their scene
 
-- 105 (S16): the dial clue. The Fortune Teller says the large ring is the sky and the
-  small ring the earth, so 105 should say birds of the sky and snakes that crawl the
-  earth, not "birds of heaven" and "crawling snakes".
 - 84, 85 (S17): "Is it the LITHOGRAPH OF SUN it's answering?" is stiff; "Is it
   answering the LITHOGRAPH OF SUN?" would match 305.
 - 130: "Don't forget full gear" ties back to board 1, which Chris rewrote as "Did you

@@ -641,7 +641,7 @@
                 {
                     "length": 169,
                     "source": "NA",
-                    "translation": "A message was left on the wall.\n \n{ff30}4The sky fell!{ff26}\rThe birds of heaven fled clockwise, east.\nThe people fled counterclockwise, northeast.\nThe crawling snakes fled clockwise, southeast.{ff30}0{ff26}\rIs there some secret hidden here?\nNothing else is written.",
+                    "translation": "A message has been left on the wall.\n \n{ff30}4The sky fell!{ff26}\rThe birds of the sky fled clockwise to the east.\nThe people fled counterclockwise to the northeast.\nThe snakes of the earth fled clockwise to the southeast.{ff30}0{ff26}\rIs there some secret hidden here?\nNothing else is written.",
                     "addStringTerminator": true
                 },
                 {

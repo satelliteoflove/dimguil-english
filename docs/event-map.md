@@ -998,9 +998,8 @@ roughly follows the game:
 
 - **EV 105 and SISETU 339: sky and earth.** 105 has birds of the sky (天) and snakes that
   crawl the ground (地); the Fortune Teller says the large ring is the sky (大空) and the
-  small ring the earth (大地). The current 105 says "birds of heaven" and "crawling
-  snakes", so the English loses both halves of the mapping. Use "sky" and "ground" or
-  "earth" in 105 to match 339.
+  small ring the earth (大地). 105 now says "the birds of the sky" and "the snakes of
+  the earth" to match 339 (S16 review).
 - **Ring sizes.** 160-162 say small, middle, outer; SISETU 339 says large and small.
   Either make the Fortune Teller's large ring clearly the outer one, or call it outer.
   The NPCs say "discs" (円盤, as does 158); the Fortune Teller says "rings" (輪). Guy's
