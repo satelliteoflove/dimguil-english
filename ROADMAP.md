@@ -21,8 +21,9 @@ passes land.
 **Release candidate (0.9).** After the full playthrough, with whatever it turns up fixed.
 
 **1.0.** Every piece of text the player can reach is in English and has had at least one
-quality check, and the game has been played through to the ending and confirmed
-completable.
+quality check, the game has been played through to the ending and confirmed
+completable, and the disc layout has been reviewed so the patch doesn't slow loading
+(see "Disc layout").
 
 Each release gets a version tag and a changelog entry. Pushing a `v*` tag builds the
 patch and publishes the release (`.github/workflows/release.yml`); the notes come from
@@ -92,6 +93,28 @@ public.
 Saves live on the memory card, and as far as we know the patch doesn't touch the save
 format, so a save should carry over from one release to the next. Verify this once
 before telling players they can upgrade mid-game.
+
+### Disc layout (to reach 1.0)
+
+Review where the build puts files on the disc, and optimize it. Every file keeps its
+original LBA, except that a file that outgrows its sectors is appended after the last
+data file (`scripts/relocate.py`). As of 2026-09-30 that's five files: SISETU,
+I_NAME_E and NPC_MES1-3 move from around LBA 28,300-29,500 to around 163,300, so each
+load of one of them is a seek across most of the data track and back. NPC_MES loads on
+every NPC encounter.
+
+Things to look at:
+- Whether the original layout groups files by when they're loaded, and what a moved
+  file sits next to in the loads around it.
+- Whether a moved file can go somewhere nearer, such as sectors of a file nothing
+  loads (ITEM_SE and ITEM_CA are believed never to be loaded), or not move at all
+  because its text is trimmed to fit.
+- Load times against the original disc, in DuckStation with accurate CD timing and on
+  real hardware if possible.
+
+The PS1 drive reads at constant linear velocity, so data comes off at the same rate
+anywhere on the disc. The outer-edge speed advantage of CAV drives doesn't apply here;
+what placement changes is seek distance.
 
 ### Build from a clean clone
 
