@@ -437,7 +437,7 @@
                 {
                     "length": 131,
                     "source": "NA",
-                    "translation": "In the room lies something like a log.\nAs you go to step over it, you see\nit is moving like a living thing.{ff26}\rThe end of the log splits in two, and two\nhuge mouths bare their fangs at you!",
+                    "translation": "Something like a log lies in the room.\nAs you go to step over it, you notice\nit's moving like a living thing.{ff26}\rThe end of the log splits in two, and two\nhuge mouths bare their fangs and attack!",
                     "addStringTerminator": true
                 },
                 {
@@ -503,25 +503,25 @@
                 {
                     "length": 131,
                     "source": "NA",
-                    "translation": "A strange machine has been set here.\nIt has something like a lever,\nbut the lever won't move.{ff26}\rThere's a hollow in the floor before it.\nThe LITHOGRAPH OF SUN might fit.\nWill you try it?",
+                    "translation": "A strange machine has been set here.\nIt has something like a lever,\nbut the lever won't move.{ff26}\rThere's a hollow in the floor before it.\nIt looks like the LITHOGRAPH OF SUN would fit.\nWill you try it?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 141,
                     "source": "NA",
-                    "translation": "A strange machine has been set here.\nIt has something like a lever,\nbut the lever won't move.{ff26}\rThere's a hollow in the floor before it.\nSomething in it might start the machine.\n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
+                    "translation": "A strange machine has been set here.\nIt has something like a lever,\nbut the lever won't move.{ff26}\rThere's a hollow in the floor before it.\nFitting something in might start it.\n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 72,
                     "source": "NA",
-                    "translation": "Is it the LITHOGRAPH OF SUN it's answering?\nThe drum in the machine begins to turn,\nwinding in the chain.",
+                    "translation": "Is it answering the LITHOGRAPH OF SUN?\nThe drum at the machine's center quietly\nbegins to turn, winding in the chain.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 72,
                     "source": "NA",
-                    "translation": "Is it the LITHOGRAPH OF SUN it's answering?\nThe drum in the machine begins to turn,\npaying out the chain.",
+                    "translation": "Is it answering the LITHOGRAPH OF SUN?\nThe drum at the machine's center quietly\nbegins to turn, paying out the chain.",
                     "addStringTerminator": true
                 },
                 {
