@@ -605,7 +605,7 @@
                 {
                     "length": 139,
                     "source": "NA",
-                    "translation": "Beyond the bars lies murky darkness.\nA fierce stench hangs there. A beast\nis near.{ff26}\rAs you grip the bars, the door opens\nlike a waiting trap. There's no way out!\n\"{ff30}2Now what do we do?{ff30}0\"",
+                    "translation": "Beyond the bars lies murky darkness.\nA fierce stench hangs in the air, and\nyou sense a beast.{ff26}\rAs you grip the bars, the door begins to open\nlike a trap lying in wait. There's no way out!\n\"{ff30}2Now what do we do?{ff30}0\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1187,7 +1187,7 @@
                 {
                     "length": 51,
                     "source": "NA",
-                    "translation": "Some wild beast was kept here.\nA fierce stench, and scraps of food\nlie scattered.",
+                    "translation": "Some wild beast must have been kept here.\nThere's a fierce stench, and scraps of\nfood lie scattered about.",
                     "addStringTerminator": true
                 },
                 {
@@ -1565,19 +1565,19 @@
                 {
                     "length": 226,
                     "source": "NA",
-                    "translation": "Bones lie strewn about, of those eaten by\nsomething, perhaps.{ff26}\rNearby is a wall with a square hollow.\nA yellow stone is stuck fast inside it,\nand can't be pried loose.{ff26}\rThe LITHOGRAPH OF SUN might fit\nthe hollow.{ff26}\r \n...The yellow stone sets itself into the\nLITHOGRAPH OF SUN.",
+                    "translation": "Were these people eaten by something?\nMany skeletons lie scattered about.{ff26}\rNearby is a wall with a square hollow.\nA yellow stone is stuck fast inside it.\nBut the yellow stone can't be removed.{ff26}\rIt looks like the LITHOGRAPH OF SUN\nwould fit into this hollow.{ff26}\r \n...The yellow stone is now set into the\nLITHOGRAPH OF SUN.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 210,
                     "source": "NA",
-                    "translation": "Bones lie strewn about, of those eaten by\nsomething, perhaps.{ff26}\rNearby is a wall with a square hollow.\nA yellow stone is stuck fast inside it,\nand can't be pried loose.{ff26}\rAnd you have nothing that would fit\nthe hollow.\n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
+                    "translation": "Were these people eaten by something?\nMany skeletons lie scattered about.{ff26}\rNearby is a wall with a square hollow.\nA yellow stone is stuck fast inside it.\nBut the yellow stone can't be removed.{ff26}\rAnd you have nothing with you that would\nfit the hollow.\n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 108,
                     "source": "NA",
-                    "translation": "Bones lie strewn about, of those eaten by\nsomething, perhaps.{ff26}\rNearby is a wall with a square hollow.\nA yellow stone is stuck fast inside it.",
+                    "translation": "Were these people eaten by something?\nMany skeletons lie scattered about.{ff26}\rNearby is a wall with a square hollow.\nA yellow stone is stuck fast inside it.",
                     "addStringTerminator": true
                 },
                 {
