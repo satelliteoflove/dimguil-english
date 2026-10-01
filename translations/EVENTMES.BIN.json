@@ -1619,19 +1619,19 @@
                 {
                     "length": 190,
                     "source": "NA",
-                    "translation": "The pedestal of a small statue has a\nsquare hole, with a white shining stone\nstuck to its bottom.{ff26}\rStrange ancient letters are carved nearby:\n \n]{ff30}4{ancient_s}{ancient_t}{ancient_a}{ancient_f}{ancient_f}{ff30}0[{ff26}\rYou fit the LITHOGRAPH OF SUN,\n \n...and the white stone sets itself into it.",
+                    "translation": "There's a square hole in the pedestal of\na small statue. A shining white stone is\nstuck fast to the bottom.{ff26}\rStrange ancient letters are carved beside it:\n \n]{ff30}4{ancient_s}{ancient_t}{ancient_a}{ancient_f}{ancient_f}{ff30}0[{ff26}\rYou fit in the LITHOGRAPH OF SUN.\n \n...The white stone is now set into it.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 183,
                     "source": "NA",
-                    "translation": "The pedestal of a small statue has a\nsquare hole, with a white shining stone\nstuck inside.{ff26}\rStrange ancient letters are carved nearby:\n \n]{ff30}4{ancient_s}{ancient_t}{ancient_a}{ancient_f}{ancient_f}{ff30}0[{ff26}\rBut you have nothing to fit the hole.\n \n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
+                    "translation": "There's a square hole in the pedestal of\na small statue. A shining white stone is\nstuck fast inside.{ff26}\rStrange ancient letters are carved beside it:\n \n]{ff30}4{ancient_s}{ancient_t}{ancient_a}{ancient_f}{ancient_f}{ff30}0[{ff26}\rBut you have nothing that would fit the square hole.\n \n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 117,
                     "source": "NA",
-                    "translation": "The pedestal of a small statue has a\nsquare hole, with a white shining stone\nstuck inside.{ff26}\rStrange ancient letters are carved nearby:\n \n]{ff30}4{ancient_s}{ancient_t}{ancient_a}{ancient_f}{ancient_f}{ff30}0[",
+                    "translation": "There's a square hole in the pedestal of\na small statue. A shining white stone is\nstuck fast inside.{ff26}\rStrange ancient letters are carved beside it:\n \n]{ff30}4{ancient_s}{ancient_t}{ancient_a}{ancient_f}{ancient_f}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
