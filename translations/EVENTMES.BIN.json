@@ -551,7 +551,7 @@
                 {
                     "length": 26,
                     "source": "NA",
-                    "translation": " \nBut you have nothing that fits it.",
+                    "translation": " \nBut you have nothing that would fit it.",
                     "addStringTerminator": true
                 },
                 {
@@ -581,25 +581,25 @@
                 {
                     "length": 67,
                     "source": "NA",
-                    "translation": "You set the LITHOGRAPH OF SUN in the hole.\nThe green stone is blinking.\nWill you touch it?",
+                    "translation": "You try setting the LITHOGRAPH OF SUN in the hole.\nThe green stone is blinking.\nWill you touch it?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 67,
                     "source": "NA",
-                    "translation": "You set the LITHOGRAPH OF SUN in the hole.\nThe red stone is blinking.\nWill you touch it?",
+                    "translation": "You try setting the LITHOGRAPH OF SUN in the hole.\nThe red stone is blinking.\nWill you touch it?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 85,
                     "source": "NA",
-                    "translation": "You set the LITHOGRAPH OF SUN in the hole.\nThe green stone and the red stone blink.\nWhich will you touch?",
+                    "translation": "You try setting the LITHOGRAPH OF SUN in the hole.\nThe green stone and the red stone are blinking.\nWhich stone will you touch?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 50,
                     "source": "NA",
-                    "translation": "You set the LITHOGRAPH OF SUN in the hole.\nBut nothing happens.",
+                    "translation": "You try setting the LITHOGRAPH OF SUN in the hole.\nBut nothing happens.",
                     "addStringTerminator": true
                 },
                 {
@@ -755,7 +755,7 @@
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": " \nThe light is beautiful, a glowing green.",
+                    "translation": " \nThe light is a beautiful, glowing green.",
                     "addStringTerminator": true
                 },
                 {

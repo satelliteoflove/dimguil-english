@@ -6,7 +6,7 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S23, the light altars and the crest doors (EV 89-98, 118-126, 133, 195).** See `docs/event-map.md`.
+**Next: scene S24, the Jail Ogre's cage and the yellow stone (EV 99-102, 196, 259-261).** See `docs/event-map.md`.
 
 ## How a scene is reviewed
 
@@ -46,9 +46,10 @@ freezer 55, 64, 65, 79; S13 the lake machine 66-70, 77, 78, 280; S14 the blue st
 339); S17 the 2-Head Snake and the winding machine 71, 82-86; S18 the Shadow Golem's
 statue 59-63 (no changes); S19 the central computer 58, 134-145; S20 STAFF and the white
 stone 268-270; S21 the golden corpses 113-117, 281, 294-297 (281 keeps "remake our own"
-for 同士; Chris found "comrades" wrong); S22 the green stone 262-267 (S14's wording). Also
-done early, out of scene order: the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given
-the same wording as 35 and 36.
+for 同士; Chris found "comrades" wrong); S22 the green stone 262-267 (S14's wording); S23
+the light altars and the crest doors 89-93, 95-98, 118-126, 133, 195 (94 is S49's
+riddle). Also done early, out of scene order: the murals 22 (SHIP) and 23 (DEATH), and
+59 and 61 given the same wording as 35 and 36.
 
 Every string also had the present-tense sweep and full-question prompts applied, so
 unreviewed strings are consistent but not yet approved.
