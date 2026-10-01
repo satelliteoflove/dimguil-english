@@ -6,7 +6,7 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S21, the golden corpses (EV 113-117, 294-297, 227; Guardians 281).** See `docs/event-map.md`.
+**Next: scene S22, the green stone (EV 262-267).** See `docs/event-map.md`.
 
 ## How a scene is reviewed
 
@@ -45,8 +45,9 @@ freezer 55, 64, 65, 79; S13 the lake machine 66-70, 77, 78, 280; S14 the blue st
 87, 88, 129; S16 "The sky fell" 105 (sky and earth, to match the Fortune Teller's SISETU
 339); S17 the 2-Head Snake and the winding machine 71, 82-86; S18 the Shadow Golem's
 statue 59-63 (no changes); S19 the central computer 58, 134-145; S20 STAFF and the white
-stone 268-270. Also done early, out of scene order: the murals 22 (SHIP) and 23 (DEATH),
-and 59 and 61 given the same wording as 35 and 36.
+stone 268-270; S21 the golden corpses 113-117, 281, 294-297 (281 keeps "remake our own"
+for 同士; Chris found "comrades" wrong). Also done early, out of scene order: the murals
+22 (SHIP) and 23 (DEATH), and 59 and 61 given the same wording as 35 and 36.
 
 Every string also had the present-tense sweep and full-question prompts applied, so
 unreviewed strings are consistent but not yet approved.
@@ -60,8 +61,8 @@ unreviewed strings are consistent but not yet approved.
 - Naming across files: the NPC files say "Lithograph of the Sun" and "the Sun tablet"
   where the event script says LITHOGRAPH OF SUN; 迷宮 is "labyrinth" in some event
   strings and "maze" elsewhere. Settle these.
-- 281-285 (Guardians): 280's intro became "We are the Guardians who rule this land."
-  with no comma; the other five share that intro and should match. Chris decided
+- 282-285 (Guardians): 280's intro became "We are the Guardians who rule this land."
+  with no comma; 281 matches, and the other four share that intro and should too. Chris decided
   not to carry the contempt of 貴様ら; plain "you" throughout.
 
 ## After the event script

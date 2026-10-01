@@ -689,31 +689,31 @@
                 {
                     "length": 80,
                     "source": "NA",
-                    "translation": "On a bed in the corner lies a corpse\nwearing a golden helm.\nAs you reach for the helm, it twitches!",
+                    "translation": "On a bed in the corner lies a corpse\nwearing a golden helm.\nAs you reach for the helm, the corpse twitches!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 65,
                     "source": "NA",
-                    "translation": "On a bed in the corner lies a corpse.\nAs you reach for it, it twitches!",
+                    "translation": "On a bed in the corner lies a corpse.\nAs you reach for it, the corpse twitches!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 80,
                     "source": "NA",
-                    "translation": "On a bed in the corner lies a corpse\nwearing golden armor.\nAs you reach for the armor, it twitches!",
+                    "translation": "On a bed in the corner lies a corpse\nwearing golden armor.\nAs you reach for the armor, the corpse twitches!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 84,
                     "source": "NA",
-                    "translation": "On a bed in the corner lies a corpse\nwearing golden gauntlets.\nAs you reach for them, it twitches!",
+                    "translation": "On a bed in the corner lies a corpse\nwearing golden gauntlets.\nAs you reach for the gauntlets, the corpse twitches!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 84,
                     "source": "NA",
-                    "translation": "On a bed in the corner lies a corpse\nwearing golden boots.\nAs you reach for the boots, it twitches!",
+                    "translation": "On a bed in the corner lies a corpse\nwearing golden boots.\nAs you reach for the boots, the corpse twitches!",
                     "addStringTerminator": true
                 },
                 {
@@ -1697,7 +1697,7 @@
                 {
                     "length": 111,
                     "source": "NA",
-                    "translation": "{ff30}4       We are the Guardians,\n{ff30}4       who rule this land.{ff26}\r \n{ff30}4Your bodies shall serve to remake our own.{ff30}0{ff26}",
+                    "translation": "{ff30}4       We are the Guardians\n{ff30}4       who rule this land.{ff26}\r \n{ff30}4Your bodies shall serve to remake our own.{ff30}0{ff26}",
                     "addStringTerminator": true
                 },
                 {
@@ -1775,25 +1775,25 @@
                 {
                     "length": 76,
                     "source": "NA",
-                    "translation": "The fiend in the golden helm falls, and\nonly the helm is left on the floor.{ff26}\r \nObtained {ff30}2GOLD HELM{ff30}0.",
+                    "translation": "When you defeat the monster wearing a golden\nhelm, only the helm is left on the floor.{ff26}\r \nObtained {ff30}2GOLD HELM{ff30}0.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 82,
                     "source": "NA",
-                    "translation": "The fiend in the golden boots falls, and\nonly the boots are left on the floor.{ff26}\r \nObtained {ff30}2GOLD BOOTS{ff30}0.",
+                    "translation": "When you defeat the monster wearing golden\nboots, only the boots are left on the floor.{ff26}\r \nObtained {ff30}2GOLD BOOTS{ff30}0.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 82,
                     "source": "NA",
-                    "translation": "The fiend in the golden gauntlets falls,\nand only the gauntlets are left.{ff26}\r \nObtained {ff30}2GOLD GAUNTLETS{ff30}0.",
+                    "translation": "When you defeat the monster wearing golden\ngauntlets, only the gauntlets are left on the floor.{ff26}\r \nObtained {ff30}2GOLD GAUNTLETS{ff30}0.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 76,
                     "source": "NA",
-                    "translation": "The fiend in the golden armor falls, and\nonly the armor is left on the floor.{ff26}\r \nObtained {ff30}2GOLD ARMOR{ff30}0.",
+                    "translation": "When you defeat the monster wearing golden\narmor, only the armor is left on the floor.{ff26}\r \nObtained {ff30}2GOLD ARMOR{ff30}0.",
                     "addStringTerminator": true
                 },
                 {
