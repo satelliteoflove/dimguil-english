@@ -17,10 +17,18 @@ Japanese makes.
   floor and square of each scripted fight. That is how most scenes below are placed.
 - Coordinates are written as the FAQ writes them: "B4F E5 N13" is five squares east,
   thirteen north. A prime (A', D') means that area after mimicry mode is released.
+- **Disc** is the map event tables read from the disc (Bartok's Trading Post,
+  `data/maps/dim/`): a message event there names the EVENTMES string it prints and the
+  squares it fires on, so a string placed this way is placed for certain. Only plain
+  message events carry a string number; scripted scenes (fights, prompts, stones) don't,
+  so most of those are still placed by the other sources. **Walkthrough** is harano's
+  Japanese walkthrough on dra.jp (https://dra.jp/game/wizardy-dimguil/chart/), which gives
+  squares as xNyM (east N, north M).
 - The Japanese is authoritative. Each claim says where it comes from: **Game** (the
-  text itself), **FAQ**, **Tips**, **Enc.**, or **Inferred** (my reading, which could
-  be wrong). String order in the file is loosely grouped by area, and is used as weak
-  evidence where nothing better exists; it is marked when used.
+  text itself), **Disc**, **Walkthrough**, **FAQ**, **Tips**, **Enc.**, or **Inferred**
+  (my reading, which could be wrong). String order in the file is loosely grouped by
+  area, and is used as weak evidence where nothing better exists; it is marked when
+  used.
 - The mirror's English says "Temple" for 神殿 and "Training Dungeon" for 練武場. This
   project uses Shrine and Training Maze.
 
@@ -44,8 +52,8 @@ fouled and the town shaken by quakes (SISETU 327, EV 66, EV 68).
    (NPC1 105-111).
 2. **The Shrine interior, 1F-4F.** Murals and signs teaching the ancient script, the
    bird skeleton and the birdlime switch, the JADE MASK (4F), Murphy's Ghost (1F), and
-   the altar room with the DIMGUIL mural and the Fire Golem (2F), which is optional
-   and far too strong for now.
+   the altar room with the Fire Golem (2F) and the DIMGUIL mural a floor below it (1F),
+   the golem optional and far too strong for now.
 3. **The Underground Shrine, B1-B4,** through the moon-crested door (the LITHOGRAPH
    again). The scholars' archive, the man frozen in ice, the machine that fouls the
    lake (stopping it ends the quakes and restores the lake: SISETU 327), the first
@@ -196,10 +204,11 @@ Links: Catalog bird entry (7:2): birds came into the Shrine through its windows,
 adventurers hunted them for their meat. Someone was trapping birds. **Inferred.**
 
 **S5. The star ceiling.** EV 18-21.
-Where: Shrine (file position). What: a door plaque reads STAR; a ceiling painted like
-the night sky holds a shining jewel. 19 prompt; 20 touch it and the floor starts to
-move; 21 declined. Teaches S, T, A, R; a moving-floor puzzle in miniature. Links: SUN
-and MOON crest doors; the sun, moon and star pictures on Area C's switches (S38).
+Where: Shrine 4F; the STAR plaque (18) is at E11 N10 (Disc). What: a door plaque reads
+STAR; a ceiling painted like the night sky holds a shining jewel. 19 prompt; 20 touch it
+and the floor starts to move; 21 declined. Teaches S, T, A, R; a moving-floor puzzle in
+miniature. Links: SUN and MOON crest doors; the sun, moon and star pictures on Area C's
+switches (S38).
 
 **S6. Murphy's Ghost.** EV 32, 52.
 Where: Shrine 1F E6 N6 (Enc., Tips). What: a strange statue on a pedestal that
@@ -209,8 +218,10 @@ old friend awaits you. Murphy's Ghost is the series' famous old enemy from Wizar
 **Inferred.** Joke/flavor and an experience farm.
 
 **S7. The altar room: the DIMGUIL mural and the Fire Golem.** EV 0, 35-38.
-Where: Shrine 2F; Fire Golem at E11 N12 (Enc.). The FAQ says the god's name is written
-on the mural in the room where the Fire Golem appears, so EV 0 is here.
+Where: the altar is on Shrine 2F, E11 N13 in the Walkthrough (Fire Golem at E11 N12,
+Enc.). The DIMGUIL mural (0) is a floor below, on Shrine 1F at E10-E12 N15 (Disc), in
+the part of 1F reached by the side stairs from 2F. The FAQ puts the mural in the Fire
+Golem's room; the disc doesn't.
 What: 0 a huge mural, something painted in the middle, and in the lower right unknown
 ancient letters: DIMGUIL (color 4). 35 a square monolith on the altar; "Could this be
 connected to the Priestess?"; DON'T TOUCH written in blood on the floor; touch it? 36
@@ -238,13 +249,16 @@ day); board 6 "don't forget the mask"; Catalog 5:13 (a puppet warrior whose brig
 mask is the real monster).
 
 **S9. Shrine odds and ends.** EV 33, 34, 46, 47, 53, 54, 72, 73, 75, 227.
-Where: mostly Shrine by file position; not established.
+Where: by file position mostly the Shrine; the revisit lines are placed by Disc (below).
 - 33/34 a door adorned with beautiful ornaments, locked / present. Purpose unknown.
-- 46 "A desk?" nothing else. Probably the revisit line after the experiment log on a
-  desk (S30). **Inferred.**
-- 47 you look out of the window: nothing. Pairs with 17's window.
-- 52, 53, 54, 227 "A statue?", "Nothing unusual", "A coffin?", "A bed?": revisit lines
-  after an event object is used up (statue S6/S18, coffin S52, bed S21). **Inferred.**
+- 46 "A desk?" nothing else: Shrine 2F E6 N6 (Disc), a desk of its own, not the
+  experiment log's.
+- 47 you look out of the window: nothing. Shrine 2F E17 N17, Shrine 4F E7/E15 N12, and
+  six squares on Underground B1 (Disc). Pairs with 17's window.
+- 52, 53, 54, 227 "A statue?", "Nothing unusual", "A coffin?", "A bed?" are scenery lines
+  for ordinary objects, not revisits (Disc): 52 statues on Shrine 3F and 4F; 53 three
+  corners of Shrine 1F; 54 coffins on Shrine 4F and Underground B4; 227 dozens of beds
+  across Area A B1 and B2 (the corpses' rooms, S21).
 - 72 a blank grave marker; 73 "Here lies {ff18}, a hero of many battles". {ff18} prints
   a party member's name (checked in the emulator: it printed the first character's
   name), so the grave carries one of your own characters' names. Location unknown.
@@ -275,7 +289,10 @@ for a "bridge"; はし could also be a ladder). Catalog 12:24 (a creature that l
 cold and wears ice). FREEZER is the only word with Z.
 
 **S13. The lake machine.** EV 66-70, 77, 78; Guardians EV 280.
-Where: Underground B2; Gas Cloud at E11 N22, Guardian party at E7 N22 (Enc.).
+Where: Underground B2; Gas Cloud at E11 N22, Guardian party at E7 N22 (Enc.). The
+Walkthrough reaches the machine through a secret door in the east wall at x9y23 and finds
+it at x11y21; stopping it drains the water on B3. The round hole (78) is on B3 at E5 N2
+(Disc).
 What: 77 a door with no keyhole, water dripping from beneath. 78 a round hole where
 water was sent to the lake, reeking and caked with filth. 66 a strange machine running
 in a corner: "Is this what makes the Shrine shake?"; pull the lever? 67 steam fills the
@@ -300,7 +317,9 @@ LITHOGRAPH's carrier left behind, so few players would ever have seen it.
 Links: NPC2 82-83 (Balbo: you too fitted the blue stone into the LITHOGRAPH); S15.
 
 **S15. The waterway.** EV 87, 88, 129.
-Where: Underground (FAQ: crossing the waterway needs the blue stone).
+Where: Underground B2 E7 N12; once it's set, you cross to x3y12 (Walkthrough). FAQ:
+crossing the waterway needs the blue stone. Balbo's party is met just past it, at x3y14
+(Walkthrough).
 What: a shallow square hole in the floor, the size of the LITHOGRAPH. 88 set it and the
 underground stream stops and parts, opening a path. 129 set it, nothing happens,
 "Aren't we forgetting something?" (the blue stone isn't in yet). 87 plain description.
@@ -321,7 +340,7 @@ mouths (fight). 82/83 behind it, a strange machine with an immovable lever and a
 in the floor before it; 82 with the LITHOGRAPH (try it?), 83 without ("Aren't we
 forgetting something?"). 84 the drum winds in the chain; 85 pays it out.
 Result (FAQ): the mural by the elevator disappears and an elevator to Area X appears.
-86 a door reads CORE (location not established; file position near here).
+86 a door reads CORE: Area D B3 E10 N8 (Disc), not near here.
 Links: Catalog 7:16 (holy places are often ruled by snakes).
 
 **S18. The Shadow Golem's statue.** EV 59-63.
@@ -342,8 +361,8 @@ LITHOGRAPH the tablets light up ("Maybe one of these buttons?"), 135 without. Th
 tablets are a keyboard of the 26 ancient letters (NPC4 33); the FAQ's hint for reading
 the script is that the tablets follow a keyboard layout read down the columns. Typing
 the right word lights a letter: 136-140 A to E (color 4), "it seems to have sensed
-something vital". 141-145 the doors read A to E (color 4). 58 a door reads COMPUTER
-(location not established).
+something vital". 141-145 the doors read A to E (color 4). 58 a door reads COMPUTER:
+Area D B3 E11 N21 (Disc), not Area X.
 Passwords (FAQ): STAFF opens A, LABORATORY B, WAREHOUSE C (with the black stone),
 ENERGY D, COCKPIT the center door to E once all eight stones are set.
 Links: NPC4 30-41 (the scholars find the tablets, "a switch", and leave it to you);
@@ -411,7 +430,9 @@ Rescue (Enc. "Guy party rescue"; NPC1 80-85, 104): Guy, the only survivor and
 poisoned, thanks you for killing "that big green brute" that nearly ate them and asks
 for Ruby Slippers; later he pays 10000 Gp, having lost all their items.
 100/101 a stone coffin / a strange iron box, nothing inside (stone and iron: see
-"Stone turns to metal"); location not established, file position here.
+"Stone turns to metal"). 100 fires on two dozen squares in the west of Area A B4,
+E2-E7 N5-N17 (Disc), a room of coffins; 101 isn't a plain message event, so it's
+probably the same room after mimicry mode (iron in place of stone). **Inferred.**
 Links: SISETU 338 and menu 352 "The Imprisoned" (a chained, vast, green-glowing fiend
 lies in wait); Catalog 7:17 (an ogre chained in a prison); NPC2 86-87 (Balbo: the iron
 bars ahead seem off). The yellow stone's link to the ogre's lair is **Inferred** from
@@ -451,28 +472,35 @@ EV 242 ("Experiment 2: Modification"); NPC3 75-89 (Zaril leaves Fontana's party)
 **S29. The frost tank.** EV 153, 127.
 Where: probably Area B' (Mutants at six squares on B'-B2: Enc.). **Inferred.**
 What: 153 an eerie device in a dark room with a frost-covered tank; you wipe the frost
-and the eyes of a creature inside glow (fight). 127 a wall reads COLDSLEEP (location
-not established).
+and the eyes of a creature inside glow (fight). 127 a wall reads COLDSLEEP: Area A
+B4 E2 N11 (Disc), near the coffin room (S24). That puts at least the word in Area A, which
+weakens the Area B' guess for the tank itself.
 Links: NPC5 109 (the survivor's creatures crumbled once out of the tanks); Catalog 12:28
 (a failed experiment that seems to beg for help).
 
-**S30. The experiment log.** EV 242, 46.
-Where: not established (a desk; LABORATORY suggests Area B).
+**S30. The experiment log.** EV 242.
+Where: Area B B4 E15 N12 (Disc).
 What: a book on a desk (color 6): Experiment 1, land mines, success; 2, modification,
 success; 3, growth, failure?; the enemy is coming sooner, so traps are being set; curse
-the Royal Guard. 46 "A desk?" is probably the revisit.
+the Royal Guard. (46 "A desk?" was listed here as the revisit line; it's a different
+desk, on Shrine 2F; see S9.)
 Links: "Growth" failing = the eggs that hatch and never grow (S48, NPC5 109); the Royal
 Guard (SISETU 326, 332); the TRAP and DANGER signs (S32, S37).
 
 **S31. Right foot, left foot.** EV 166-168.
-Where: not established (file position between Areas B and C). Two great pillars with
+Where: Area B B2, 166 at E13 N17 and 168 at E13 N6 (Disc). Two great pillars with
 recently carved words, "For the right foot" and "For the left foot", and a switch
-between them (167). Purpose not established. EV 228 "A huge pillar towers here" uses
-the same noun (巨大な柱).
+between them (167). The same two squares one floor up, on Area B B1, are the pillar heads
+carved WAREHOUSE (178, 179, S35), and on B3 the same columns are "huge pillars" (228)
+(Disc). So each is one giant pillar through three floors, with a head on B1 and a foot
+label on B2. The FAQ calls the B1 part a statue's head. That fits the heretics' unfinished
+made god (SISETU 340, "A Made God"): the pillars may be its legs. **Inferred.**
 
 **S32. Other Area B doors.** EV 154, 155, 157, 169, 165.
-154 TRAP, 155/157 PEOPLE murals (132 is a third), 169 a locked door with no keyhole,
-165 a strange stand. Locations not established; file position Area B.
+154 TRAP (Area B B1 E19 N11), 155/157 PEOPLE murals (Area B B3, along E7-E10 N19
+and E7-E10 N4) (Disc); 132 is a third PEOPLE. 156, the LABORATORY door, is at Area B B3
+E13 N11 (Disc). 169 a locked door with no keyhole and 165 a strange stand aren't plain
+message events; file position Area B.
 
 **S33. The three-ring dial.** EV 158-164.
 Where: Area B, reached from B1F by stairs (FAQ).
@@ -503,8 +531,9 @@ after the Ruby Hand, saving before leaving can trap the party behind the restore
 Catalog.
 
 **S35. WAREHOUSE.** EV 178, 179.
-Where: Area B B1F, on the head of a statue (FAQ). The event text calls it a pillar
-(石柱); two identical strings.
+Where: Area B B1F, on the head of a statue (FAQ): 178 at E13 N17, 179 at E13 N6 (Disc).
+The event text calls it a pillar (石柱); two identical strings, one per pillar. The
+same pillars carry the foot labels a floor down (S31).
 What: recently carved words and ancient letters on the pillar's head: WAREHOUSE (color
 4) and "Go to the altar". WAREHOUSE is the only word with W, so the glyph can't be
 learned anywhere else.
@@ -512,8 +541,8 @@ learned anywhere else.
 ### Area C (B1-B4)
 
 **S36. TRASH and the rubbish room.** EV 173-177; NPC3 90-108.
-Where: Area C; the Dust fights at four squares on C-B2 (Enc.). **Inferred** that the
-room is here.
+Where: Area C B2; the Dust fights at four squares on C-B2 (Enc.), and 173 TRASH fires on
+six squares of C-B2 (Disc), so the room is here.
 What: 173 the floor reads TRASH. 174 a big room like the inside of a rubbish bin; search
 it? 175 only stones and dead animals, then something soft, and a huge heap of rubbish
 attacks. 176 the same with scrap iron instead of stones (Area C', after the walls turn
@@ -523,10 +552,11 @@ like an antlion's pit; Fontana's party is down there too; Guy lowers a rope and 
 you to take a bath). JUNK (217).
 
 **S37. Area C glyph words.** EV 170, 171, 172, 185.
-170 a wall reads DANGER (probably near the damage floor: board 6's heading is
-"Dangerous floors!", 危険, the same word). 171 a strange statue reads SHUTTLE. 172 a
-huge box reads CONTAINER. 185 a huge ornament has been smashed. Locations not
-established; file position Area C.
+170 a wall reads DANGER: Area C B4 E2 N2 (Disc), on the floor of the damage floor and
+ENERGY (S41), as board 6's "Dangerous floors!" (危険, the same word) suggests. 171 strange
+statues read SHUTTLE, a ring of them around Area C B4. 172 huge boxes read CONTAINER, rows
+of them on Area C B3 (Disc). 185 a huge ornament has been smashed (not a plain message
+event; file position Area C).
 
 **S38. The moving-floor panel.** EV 183, 146-148.
 Where: Area C B1 (FAQ calls it the B1F panel).
@@ -556,10 +586,10 @@ pedestal and a silver stone: set / without / plain. 283 the Guardians: this swor
 drink your blood and our god shall rise.
 
 **S41. The snake door, the damage floor, and ENERGY.** EV 184, 198.
-Where: Area C (FAQ). 184 a door carved with a red snake and a blue snake. Beyond it a
-damage floor; the JADE MASK, worn, shows the safe route (FAQ; or heal as you go, since
-it leaves 1 HP). Past it, 198 a mural reads ENERGY (color 4), the password for Area D.
-Links: S8, board 6, SISETU 334.
+Where: Area C B4 (FAQ; Disc: 184 at E8-E9 N2, 198 at E2 N12). 184 a door carved with a
+red snake and a blue snake. Beyond it a damage floor; the JADE MASK, worn, shows the
+safe route (FAQ; or heal as you go, since it leaves 1 HP). Past it, 198 a mural reads
+ENERGY (color 4), the password for Area D. Links: S8, board 6, SISETU 334.
 
 **S42. The SHUTTLE and the stone statue.** EV 186-188.
 Where: Area C' B4F E21 N6, after mimicry mode (FAQ).
@@ -599,8 +629,9 @@ character named after the god: that god is evil to us, change your name). 284 th
 Guardians: hundreds of years to raise this land again.
 
 **S46. COCKPIT.** EV 243.
-Where: Area D B2F E2 N14 (FAQ). A mural reads COCKPIT (color 4): the password for the
-center door of Area X, usable once all eight stones are set.
+Where: Area D B2F E2 N14 (FAQ, Disc). The disc also fires 243 at Area C B1 E10 N2, so
+there's a second COCKPIT mural in Area C. A mural reads COCKPIT (color 4): the password
+for the center door of Area X, usable once all eight stones are set.
 
 **S47. The small door and mimicry mode.** EV 130, 221-226, 218, 237.
 Where: Area D (FAQ).
@@ -648,19 +679,23 @@ NPC1 287 (Guy: since the maze changed, a strange device asks questions; he'll as
 Fortune Teller); Catalog 12:30 (a guardian made with the maze's knowledge and machines).
 
 **S50. The dreamlands.** EV 190-193.
-Where: Area D' B1; Succubus around E0 N4, Incubus around E23 N4 (Enc.).
+Where: Area D' B1; Succubus around E0 N4, Incubus around E23 N4 (Enc.). The doors are
+190 at E3 N4 and 192 at E20 N4 (Disc).
 What: 190 recently carved on a door: MEN'S DREAMLAND; 191 rest on the bed, a beautiful
 woman in a dream, a fiend when you wake. 192 WOMEN'S DREAMLAND; 193 a beautiful man.
 Joke. Links: FEMALE and MALE doors (92, 93); the "beautiful woman" motif.
 
 ### Area E and the control room
 
-**S51. Area E.** EV 131, 189, 213-217, 244, 245 (locations not established).
+**S51. Area E, and the ship-room words.** EV 131, 189, 213-217, 244, 245.
 FAQ: the B3F switch restores HP and MP; a hidden door in the north wall of B4F E11 N21.
 Guardian speech 285 probably belongs to the sixth Guardian party (location unknown).
-Glyph words that sit late in the file or name the ship's command rooms: 244 CONTROL,
-245 BRIDGE, 131 TRANSPORTER, 213 HEAL, 214 GAS, and the broken murals with faint
-letters 189 REST, 215 MEATING (sic), 216 REVIVAL, 217 JUNK. **Placement Inferred.**
+The ship-room glyph words were all guessed to be in Area E; the disc places most of
+them elsewhere (Disc): 245 BRIDGE, Area E B4 E12 N6; 244 CONTROL, Area X E10 N11; 131
+TRANSPORTER, Area X E9 N14; 213 HEAL, Area B B4 E6 N18; 214 GAS, Area B B4 E5 N6; and
+the broken murals with faint letters 215 MEATING (sic), Area B B1 E17 N4; 216 REVIVAL,
+Area B B1 E16 N18; 217 JUNK, Area B B1 E6 N19. 189 REST isn't a plain message event and
+is still unplaced.
 The control room fight with Cleo and Bergamot is NPC4 44-55 (no event strings). Cleo
 greets the party "to the control room" (司令室), which is presumably behind the CONTROL
 door.
@@ -674,8 +709,9 @@ What: 229 a huge coffin in a huge room; touch the face-like relief on its front?
 room shakes and the lid opens (fight). 231 too soon: "Have we left something undone?"
 232 the relief is silent (after): "We shouldn't have forgotten anything..." 233 you
 felled the one in the coffin (a god?), and the relief parts. 235 a wall with the relief
-appears at once, then as 230 (probably arriving by teleport on the golem route). 228 a
-huge pillar (location not established).
+appears at once, then as 230 (probably arriving by teleport on the golem route). (228 "A
+huge pillar towers here" was listed here; the disc puts it in Area A B3 and B4, Area B B3
+(the giant pillars, S31) and Area E B1 E22 N7, not Area Z.)
 Links: NPC5 107-111 (the mysterious man: this is the real world; the iron ship; face my
 father, who is also myself); SISETU 343 and menu 357 "Dark God" (a dark god asleep
 below); Catalog 5:12; NPC2 263 (Balbo saw a statue of a giant face; not established
@@ -750,10 +786,12 @@ buried treasure.
 and 197 (switch prompts), 212, 104, 126.
 
 **S61. The glyph-word signs** (for reviewing the carved-letters lines together). Words
-not already placed above: 22 SHIP (a mural of people sailing to the Shrine), 23 DEATH
-(a giant figure drawn like Death), 56 ENTER, 57 EXIT, 74 KING (a mural of a ruler), 132
-PEOPLE. Locations not established; file position puts 22/23 early and 56-58, 74 with
-the Underground strings.
+not already placed above (Disc where given): 22 SHIP (a mural of people sailing to the
+Shrine), Shrine 2F E10-E12 N5; 23 DEATH (a giant figure drawn like Death), Underground B3
+E17 N12; 56 ENTER and 57 EXIT, door pairs on Area A B3 (E3 N12/N11), Area B B5 (E18
+N11/N12), Area C B1 (E11/E12 N3) and Area D B3 (E12/E11 N22), plus ENTER alone on Area E
+B2 E12 N15, which look like each area's way in and out; 74 KING (a mural of a ruler) and
+132 PEOPLE aren't plain message events and are unplaced.
 
 ## Setups and payoffs
 
@@ -836,8 +874,8 @@ or read to solve something. The needed words are the ones in color 4 (see the tr
 | LABORATORY | 107 (Area A B4F mural of a tube experiment), 156 (door) | **needed**: opens Area B; the mural teaches it |
 | WAREHOUSE | 178, 179 (Area B B1F) | **needed**: opens Area C; the only W |
 | ENERGY | 198 (Area C, past the damage floor) | **needed**: opens Area D |
-| COCKPIT | 243 (Area D B2F) | **needed**: opens Area E; K otherwise only in KING, JUNK |
-| DIMGUIL | 0 (Shrine 2F mural) | **needed**: the god's name (201) |
+| COCKPIT | 243 (Area D B2F; also Area C B1) | **needed**: opens Area E; K otherwise only in KING, JUNK |
+| DIMGUIL | 0 (Shrine 1F mural, E10-E12 N15) | **needed**: the god's name (201) |
 | GAME | board 7 | **needed**: the riddle (94) |
 | A-E | 136-145 (Area X), A-C 146-148 (Area C doors) | area letters |
 | STR ... PRIEST | 240, 241 | the Priestess's Door profile |

@@ -12,7 +12,9 @@ Paused 2026-10-01 at S31: Chris is adding the drajp walkthrough
 (https://dra.jp/game/wizardy-dimguil/chart/) to the Bartok's Trading Post site in another
 session. When it's ready, check the event map against it (trust it slightly more than the
 map, not blindly), then resume. S31 was proposed as "great pillar" -> "huge pillar" (to
-match 228) with the single-quoted labels kept; not yet approved.
+match 228) with the single-quoted labels kept; not yet approved. The disc's map events (see the
+event map's S31) show the foot pillars sit under the WAREHOUSE pillar heads, which
+supports the "parts for the made god" reading.
 
 ## How a scene is reviewed
 
