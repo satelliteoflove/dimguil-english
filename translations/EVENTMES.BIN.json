@@ -1661,13 +1661,13 @@
                 {
                     "length": 173,
                     "source": "NA",
-                    "translation": "In the small room is a wall with a square\nhollow, a red stone stuck to its bottom.{ff26}\rThe red stone can't be pried loose.\nThe LITHOGRAPH OF SUN might fit\nthe hollow.{ff26}\r \n...The red stone sets itself into the\nLITHOGRAPH OF SUN.",
+                    "translation": "In the small room is a wall with a square\nhollow. A red stone is stuck fast to the\nbottom.{ff26}\rBut the red stone can't be removed.\nIt looks like the LITHOGRAPH OF SUN\nwould fit into this hollow.{ff26}\r \n...The red stone is now set into the\nLITHOGRAPH OF SUN.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 163,
                     "source": "NA",
-                    "translation": "In the small room is a wall with a square\nhollow, a red stone stuck to its bottom.{ff26}\rThe red stone can't be pried loose,\nand you have nothing that would fit\nthe hollow.{ff26}\r \n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
+                    "translation": "In the small room is a wall with a square\nhollow. A red stone is stuck fast to the\nbottom.{ff26}\rBut the red stone can't be removed, and\nyou have nothing with you that would fit\nthe hollow.{ff26}\r \n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1703,7 +1703,7 @@
                 {
                     "length": 147,
                     "source": "NA",
-                    "translation": "{ff30}4       We are the Guardians,\n{ff30}4       who rule this land.{ff26}\r{ff30}4  Your souls we offer up to our god,\n{ff30}4  drunk in like the Priestess's own.{ff30}0{ff26}",
+                    "translation": "{ff30}4       We are the Guardians\n{ff30}4       who rule this land.{ff26}\r{ff30}4  Your souls we offer up to our god.\n{ff30}4  We shall absorb them as we did the Priestess's.{ff30}0{ff26}",
                     "addStringTerminator": true
                 },
                 {

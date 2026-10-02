@@ -6,7 +6,7 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S34, the vault, the Ruby Hand and the red stone (EV 149, 274-276; Guardians 282).** See `docs/event-map.md`.
+**Next: scene S35, WAREHOUSE (EV 178, 179).** See `docs/event-map.md`.
 
 ## How a scene is reviewed
 
@@ -56,8 +56,9 @@ pressed; 248 waits for S55); S28 Zaril's party and the Chimera Warrior 150-152, 
 "It's that thing!": やつ is the monster, not "him"); S29 the frost tank 127, 153; S30 the
 experiment log 46, 242; S31 right foot, left foot 166-168; S32 other Area B doors 132,
 154, 155, 157, 165, 169; S33 the three-ring dial 158-164 (162 and SISETU 339 both say
-"large ring"). Also done early, out of scene order: the murals 22 (SHIP) and 23 (DEATH),
-and 59 and 61 given the same wording as 35 and 36.
+"large ring"); S34 the vault, the Ruby Hand and the red stone 149, 274-276, 282. Also
+done early, out of scene order: the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given
+the same wording as 35 and 36.
 
 Every string also had the present-tense sweep and full-question prompts applied, so
 unreviewed strings are consistent but not yet approved.
@@ -74,8 +75,8 @@ unreviewed strings are consistent but not yet approved.
 - Naming across files: the NPC files say "Lithograph of the Sun" and "the Sun tablet"
   where the event script says LITHOGRAPH OF SUN; 迷宮 is "labyrinth" in some event
   strings and "maze" elsewhere. Settle these.
-- 282-285 (Guardians): 280's intro became "We are the Guardians who rule this land."
-  with no comma; 281 matches, and the other four share that intro and should too. Chris decided
+- 283-285 (Guardians): 280's intro became "We are the Guardians who rule this land."
+  with no comma; 281 and 282 match, and the other three share that intro and should too. Chris decided
   not to carry the contempt of 貴様ら; plain "you" throughout.
 
 ## After the event script

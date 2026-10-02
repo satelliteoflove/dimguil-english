@@ -545,8 +545,9 @@ Links: board 5 (the vault robbed, "that red thing" left behind): the vault is th
 behind the dial, and the red thing is this stone. Catalog 13:3 (a guardian of the
 heretics' treasure vault, 宝物庫, a mineral body like a gem with a face and arms). FAQ:
 after the Ruby Hand, saving before leaving can trap the party behind the restored wall
-(first print only). **The dial-to-vault connection is Inferred** from board 5 and the
-Catalog.
+(first print only). The dial door is a giant dial safe (巨大なダイヤル式の金庫) at B5
+x7y11, and the Ruby Hand is at x5y12 (Walkthrough), so the vault is the room behind the
+dial.
 
 **S35. WAREHOUSE.** EV 178, 179.
 Where: Area B B1F, on the head of a statue (FAQ): 178 at E13 N17, 179 at E13 N6 (Disc).

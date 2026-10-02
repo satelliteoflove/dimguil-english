@@ -872,13 +872,13 @@
           ],
           "strings": "EVENTMES 282",
           "placement": "Walkthrough: harano fights the Guardians on Area B B5F at x9y12, beside the dial vault. That speech 282 goes with this fight is Inferred (third of six).",
-          "blurb": "The third Guardian party bars the way to the vault on B5F, and they're the first to say what became of the Priestess: \"Your souls we offer up to our god, drunk in like the Priestess's own.\"",
+          "blurb": "The third Guardian party bars the way to the vault on B5F, and they're the first to say what became of the Priestess: \"Your souls we offer up to our god. We shall absorb them as we did the Priestess's.\"",
           "quotes": [
             {
               "file": "EVENTMES",
               "idx": 282,
               "speaker": "The Guardians",
-              "text": "Your souls we offer up to our god, drunk in like the Priestess's own."
+              "text": "Your souls we offer up to our god. We shall absorb them as we did the Priestess's."
             }
           ],
           "flags": "EVENTMES 282 is in scene S34, which hasn't been reviewed with Chris yet (the review stopped at S30), so the quoted wording may change. Its intro still reads \"We are the Guardians, who rule this land.\" with a comma, unlike 280/281 (pending, per event-review.md).",
