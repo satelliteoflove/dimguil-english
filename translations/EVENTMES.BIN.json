@@ -1673,13 +1673,13 @@
                 {
                     "length": 197,
                     "source": "NA",
-                    "translation": "In the middle of the room stands a device\nwith a square pedestal.{ff26}\rThe pedestal has a hollow, with a black\nstone stuck fast to its bottom.{ff26}\rThe black stone can't be pried loose.\nThe LITHOGRAPH OF SUN might fit\nthe hollow.{ff26}\r \n...The black stone sets itself into the\nLITHOGRAPH OF SUN.",
+                    "translation": "In the middle of the room stands a device\nwith a square pedestal.{ff26}\rThe square pedestal has a hollow, and a\nblack stone is stuck fast to the bottom.{ff26}\rBut the black stone can't be removed.\nIt looks like the LITHOGRAPH OF SUN\nwould fit into this hollow.{ff26}\r \n...The black stone is now set into the\nLITHOGRAPH OF SUN.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 185,
                     "source": "NA",
-                    "translation": "In the middle of the room stands a device\nwith a square pedestal.{ff26}\rThe pedestal has a hollow, with a black\nstone stuck fast to its bottom.{ff26}\rThe black stone can't be pried loose,\nand you have nothing that would fit\nthe hollow.{ff26}\r\"{ff30}2Aren't we forgetting something?{ff30}0\"",
+                    "translation": "In the middle of the room stands a device\nwith a square pedestal.{ff26}\rThe square pedestal has a hollow, and a\nblack stone is stuck fast to the bottom.{ff26}\rBut the black stone can't be removed, and\nyou have nothing with you that would fit\nthe hollow.{ff26}\r\"{ff30}2Aren't we forgetting something?{ff30}0\"",
                     "addStringTerminator": true
                 },
                 {
