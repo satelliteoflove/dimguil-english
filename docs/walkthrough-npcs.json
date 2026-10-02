@@ -145,7 +145,7 @@
           ],
           "strings": "SISETU 346/332, 347/333, 348/334",
           "placement": "Inferred: Priestess & Altar points at the altar room on Shrine 2F, Old Friend at Murphy's Ghost on 1F, and The Mask at the jade mask on 4F, all on this chapter's floors. Whether the Fortune Teller's topic list grows with your progress isn't established; the topic is placed with the chapter it points at.",
-          "blurb": "Three of the Fortune Teller's topics fit the Shrine's floors. Old Friend promises that \"An old friend will be awaiting you.\" and won't say what he wants, and The Mask says of the fiend inside the jade mask, \"one day you will have need of it.\" So keep the mask once you've won it.",
+          "blurb": "Three of the Fortune Teller's topics fit the Shrine's floors. Old Friend promises that \"An old friend will be awaiting you.\" and won't say what he wants, and The Mask says of the monster inside the jade mask, \"one day you will have need of it.\" So keep the mask once you've won it.",
           "quotes": [
             {
               "file": "SISETU",
@@ -361,7 +361,7 @@
           ],
           "strings": "SISETU 350/336",
           "placement": "Inferred: Strange Machine names the machine that fouls the lake, which harano stops at B2F x11y21 in this chapter. Whether the Fortune Teller's topic list grows with your progress isn't established; the topic is placed with the chapter it points at.",
-          "blurb": "Strange Machine names the cause of the lake's trouble: \"It seems a machine sleeping underground fouled the lake.\" It adds that few know about the fiend that runs it, and pulling the lever is how you find out, since the steam turns into a Gas Cloud.",
+          "blurb": "Strange Machine names the cause of the lake's trouble: \"It seems a machine sleeping underground fouled the lake.\" It adds that few know about the monster that runs it, and pulling the lever is how you find out, since the steam turns into a Gas Cloud.",
           "quotes": [
             {
               "file": "SISETU",
@@ -679,7 +679,7 @@
           ],
           "strings": "SISETU 352/338",
           "placement": "Inferred: The Imprisoned describes the Jail Ogre, which harano fights at Area A B4F x17y12 in this chapter. Whether the Fortune Teller's topic list grows with your progress isn't established; the topic is placed with the chapter it points at.",
-          "blurb": "The Imprisoned is the Fortune Teller's warning about the Jail Ogre, a chained fiend on Area A's bottom floor: \"Its vast, green-glowing form terrifies all, and they say it lies in wait for those lost in the labyrinth.\"",
+          "blurb": "The Imprisoned is the Fortune Teller's warning about the Jail Ogre, a chained monster on Area A's bottom floor: \"Its vast, green-glowing form terrifies all, and they say it lies in wait for those lost in the labyrinth.\"",
           "quotes": [
             {
               "file": "SISETU",

@@ -73,6 +73,6 @@ or a literal one in the Japanese order.
 | 呪い / 呪いを解く | curse / Uncurse | |
 | 成功! / 失敗! | Success! / Failed! | |
 | キャンプ | Camp | |
-| 魔物 / モンスター | monster | Both mean "monster". 魔物 is the native word the narration and the King use; モンスター is the loanword the adventurers and the combat screens use. "Fiend" only in the King's mouth, where his stuffy register earns it. |
+| 魔物 / モンスター | monster | Both mean "monster". 魔物 is the native word the narration and the King use; モンスター is the loanword the adventurers and the combat screens use. "Fiend" only in the King's mouth (SISETU 322-329), where his stuffy register earns it; the Fortune Teller says "monster" like everyone else. |
 | 悪魔 | demon | A monster family in the Catalog, so "demon" is kept for it. |
 | 獣 / 猛獣 | beast / wild beast | |

@@ -2246,7 +2246,7 @@
                 {
                     "length": 90,
                     "source": "NA",
-                    "translation": "\"The power of the fiend within the mask...\none day you will have need of it.\"",
+                    "translation": "\"The power of the monster within the\nmask... one day you will have need of it.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -2258,7 +2258,7 @@
                 {
                     "length": 134,
                     "source": "NA",
-                    "translation": "\"It seems a machine sleeping underground\nfouled the lake. Few know the tale of\nthe fiend that runs that strange machine.\"",
+                    "translation": "\"It seems a machine sleeping underground\nfouled the lake. Few know the tale of the\nmonster that runs that strange machine.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -2270,7 +2270,7 @@
                 {
                     "length": 105,
                     "source": "NA",
-                    "translation": "\"Know you the tale of the chained fiend?\nIts vast, green-glowing form terrifies\nall, and they say it lies in wait for\nthose lost in the labyrinth.\"",
+                    "translation": "\"Know you the tale of the chained monster?\nIts vast, green-glowing form terrifies\nall, and they say it lies in wait for\nthose lost in the labyrinth.\"",
                     "addStringTerminator": true
                 },
                 {
