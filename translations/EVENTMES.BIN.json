@@ -653,7 +653,7 @@
                 {
                     "length": 131,
                     "source": "NA",
-                    "translation": "The mural shows someone wrapped in tubes.\nIs it some sort of experiment?{ff26}\rStrange ancient letters are carved in\nthe right corner:\n]{ff30}4{ancient_l}{ancient_a}{ancient_b}{ancient_o}{ancient_r}{ancient_a}{ancient_t}{ancient_o}{ancient_r}{ancient_y}{ff30}0[",
+                    "translation": "The mural shows someone wrapped in many tubes.\nIs it some sort of experiment?{ff26}\rStrange ancient letters are carved in\nthe right corner:\n]{ff30}4{ancient_l}{ancient_a}{ancient_b}{ancient_o}{ancient_r}{ancient_a}{ancient_t}{ancient_o}{ancient_r}{ancient_y}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
