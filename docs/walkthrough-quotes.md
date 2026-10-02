@@ -55,6 +55,8 @@ with the chapter and the string's new wording, to carry over to the site.
 
 | Who | String | Quote |
 |---|---|---|
+| Guy | NPC_MES1 195 | a party that was nothing but kids |
+| Lychee | NPC_MES1 198 | they gave me an item! Heheee, jealous? |
 | Balbo | NPC_MES2 85 | Forgive me, but kindly don't interrupt our strategy meeting. |
 | Fontana | NPC_MES3 68 | I have a feeling these ancient glyphs are some kind of key. |
 | Artemisia | NPC_MES3 71 | That little tablet we saw earlier had the same glyphs as these! |
@@ -65,8 +67,6 @@ with the chapter and the string's new wording, to carry over to the site.
 
 | Who | String | Quote |
 |---|---|---|
-| Guy | NPC_MES1 195 | a party that was nothing but kids |
-| Lychee | NPC_MES1 198 | they gave me an item! Heheee, jealous? |
 | Balbo | NPC_MES2 262 | Isn't fitting the green stone enough? Something seems to be missing. |
 
 ## 8. Area A: the yellow stone and the Jail Ogre
@@ -79,8 +79,6 @@ with the chapter and the string's new wording, to carry over to the site.
 | Balbo | NPC_MES2 185 | And get this, one of 'em used to be in our party. |
 | Artemisia | NPC_MES3 76 | All these two ever do is fight! |
 | Zaril | NPC_MES3 78 | You're not fit to be leader |
-| Zaril | NPC_MES5 28 | Well, I say party, but there's only two others. |
-| Fritillaria | NPC_MES5 29 | Ya didn't have to say 'little'! |
 | The Guardians | EVENTMES 281 | Your bodies shall serve to remake our own. |
 | The Fortune Teller | SISETU 338 | Its vast, green-glowing form terrifies all, and they say it lies in wait for those lost in the labyrinth. |
 
@@ -95,6 +93,8 @@ with the chapter and the string's new wording, to carry over to the site.
 | Bergamot | NPC_MES4 109 | one of 'em, what's-his-name, came back this time with a different crowd |
 | Zaril | NPC_MES5 119 | Whoa!! |
 | Fritillaria | NPC_MES5 120 | Help!! |
+| Zaril | NPC_MES5 28 | Well, I say party, but there's only two others. |
+| Fritillaria | NPC_MES5 29 | Ya didn't have to say 'little'! |
 
 ## 10. Area B: the red stone
 

@@ -414,6 +414,33 @@
       "title": "Area X and the white stone",
       "npcs": [
         {
+          "who": "Guy's party",
+          "speakers": [
+            "Guy",
+            "Linaria",
+            "Alstron",
+            "Lychee"
+          ],
+          "strings": "NPC_MES1 195-199",
+          "placement": "Inferred: they talk about Fontana's party with Zaril still in it, so it's before the quarrel in chapter 8, and after you can first meet Fontana's party at the STAFF statue in Area X (NPC3 67-71). Harano also mentions Guy here, telling you to buy Ruby Slippers before Area A. Moved to area-x 2026-10-02: Emonoya's NPC tables have Guy's party gone from the maze from the moment you enter Area A until his rescue.",
+          "blurb": "Guy's party has run into Fontana's group, \"a party that was nothing but kids,\" and Alstron thinks the young Samurai is level-headed for his age. Lychee mostly remembers the presents: \"they gave me an item! Heheee, jealous?\"",
+          "quotes": [
+            {
+              "file": "NPC_MES1",
+              "idx": 195,
+              "speaker": "Guy",
+              "text": "a party that was nothing but kids"
+            },
+            {
+              "file": "NPC_MES1",
+              "idx": 198,
+              "speaker": "Lychee",
+              "text": "they gave me an item! Heheee, jealous?"
+            }
+          ],
+          "source": "NPC_MES1"
+        },
+        {
           "who": "Balbo's party",
           "speakers": [
             "Balbo"
@@ -493,33 +520,6 @@
       "harano": "area-a-gleenstone",
       "title": "Area A: the green stone",
       "npcs": [
-        {
-          "who": "Guy's party",
-          "speakers": [
-            "Guy",
-            "Linaria",
-            "Alstron",
-            "Lychee"
-          ],
-          "strings": "NPC_MES1 195-199",
-          "placement": "Inferred: they talk about Fontana's party with Zaril still in it, so it's before the quarrel in chapter 8, and after you can first meet Fontana's party at the STAFF statue in Area X (NPC3 67-71). Harano also mentions Guy here, telling you to buy Ruby Slippers before Area A.",
-          "blurb": "Guy's party has run into Fontana's group, \"a party that was nothing but kids,\" and Alstron thinks the young Samurai is level-headed for his age. Lychee mostly remembers the presents: \"they gave me an item! Heheee, jealous?\"",
-          "quotes": [
-            {
-              "file": "NPC_MES1",
-              "idx": 195,
-              "speaker": "Guy",
-              "text": "a party that was nothing but kids"
-            },
-            {
-              "file": "NPC_MES1",
-              "idx": 198,
-              "speaker": "Lychee",
-              "text": "they gave me an item! Heheee, jealous?"
-            }
-          ],
-          "source": "NPC_MES1"
-        },
         {
           "who": "Balbo's party",
           "speakers": [
@@ -626,33 +626,6 @@
           ],
           "flags": "This scene is npc-review scene 1 (HIGH, unreviewed), and the open question on 82 (\"Whose side are you on?\" vs \"Don't encourage him!\") may change Fontana's reply to Lilia, so I left 82 unquoted. If you haven't been introduced, a \"Young samurai\" (75) delivers the news in one line instead. In 77 Fontana says おれ, not his usual 僕; he's rattled.",
           "source": "NPC_MES3"
-        },
-        {
-          "who": "Zaril's party",
-          "speakers": [
-            "Zaril",
-            "Fritillaria",
-            "Gaura"
-          ],
-          "strings": "NPC_MES5 26-34, 117 (28 is the version for players who knew Zaril in Fontana's party)",
-          "placement": "Inferred: Zaril walks out on Fontana at Area A B2F x6y11 in this chapter, and harano notes the NPC parties change from then on. String 28 ('starting now I'm gonna be the leader') is the intro for players who knew him before, so it fits right after the quarrel. EV 150 names Zaril's party in chapter 9 only if you've met them already, which also points to a meeting before Area B. harano doesn't record this meeting himself.",
-          "blurb": "Zaril's walkout leaves him with a party of his own, and from here on you can run into it. He introduces it with a little less ceremony than it deserves: \"Well, I say party, but there's only two others.\" When he gets to \"this little one,\" Fritillaria cuts in: \"Ya didn't have to say 'little'!\"",
-          "quotes": [
-            {
-              "file": "NPC_MES5",
-              "idx": 28,
-              "speaker": "Zaril",
-              "text": "Well, I say party, but there's only two others."
-            },
-            {
-              "file": "NPC_MES5",
-              "idx": 29,
-              "speaker": "Fritillaria",
-              "text": "Ya didn't have to say 'little'!"
-            }
-          ],
-          "flags": "The first page of 28, 'Truth is, starting now I'm gonna be the leader', is slightly off: 今度っから means 'as of now' and 実は is 'guess what', not a confession (rips/review/NPC_MES5.md proposes 'So, turns out I'm the leader of this party now'). Not quoted. The quoted second half is identical in 27 and 28.",
-          "source": "NPC_MES5"
         },
         {
           "who": "The Guardians",
@@ -780,8 +753,8 @@
             "Fritillaria",
             "Gaura"
           ],
-          "strings": "NPC_MES5 118-121 (with EV 150-152, 194)",
-          "placement": "Walkthrough: harano meets Zaril's party at Area B B3F x12y11, next to the LABORATORY door, and fights the Chimera Warrior and Skeleton Warrior there. The event map (S28) links NPC5 118-121 as the rescue afterward.",
+          "strings": "NPC_MES5 118-121 (with EV 150-152, 194); NPC_MES5 26-34, 117 (28 is the version for players who knew Zaril in Fontana's party)",
+          "placement": "Walkthrough: harano meets Zaril's party at Area B B3F x12y11, next to the LABORATORY door, and fights the Chimera Warrior and Skeleton Warrior there. The event map (S28) links NPC5 118-121 as the rescue afterward. The introduction (NPC_MES5 28-29) moved here from area-a-yellowstone 2026-10-02: Emonoya has Zaril's party in the maze only after the Area B rescue.",
           "blurb": "Right outside the LABORATORY door you meet Zaril's party, and they flee into the dark as if something is after them. Something is: a moment later they come back twisted together into one Chimera Warrior, with a Skeleton Warrior along for the fight. Beat it and the three of them turn up again in one piece, Zaril yelling \"Whoa!!\" and Fritillaria yelling \"Help!!\"",
           "quotes": [
             {
@@ -795,6 +768,18 @@
               "idx": 120,
               "speaker": "Fritillaria",
               "text": "Help!!"
+            },
+            {
+              "file": "NPC_MES5",
+              "idx": 28,
+              "speaker": "Zaril",
+              "text": "Well, I say party, but there's only two others."
+            },
+            {
+              "file": "NPC_MES5",
+              "idx": 29,
+              "speaker": "Fritillaria",
+              "text": "Ya didn't have to say 'little'!"
             }
           ],
           "flags": "The meeting itself is EVENTMES 150 (or 194, 'another party', if you never met Zaril's). That the reappearance follows the Chimera comes from the event map's reading of Enc. ('Zaril party rescue'); I didn't verify it in play.",
