@@ -929,7 +929,7 @@
                 {
                     "length": 163,
                     "source": "NA",
-                    "translation": "The dark room holds an eerie device.\nOn top is a tank covered in frost.\nWhat could be inside?{ff26}\rAs you carefully brush away the frost,\nthe eyes of the creature inside glow!",
+                    "translation": "The dark room holds an eerie device.\nOn top is a tank covered in frost.\nWhat could be inside?{ff26}\rAs you carefully brush away the frost,\nthe eyes of a creature inside glow!",
                     "addStringTerminator": true
                 },
                 {

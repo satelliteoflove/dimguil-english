@@ -6,7 +6,7 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S29, the frost tank (EV 153, 127).** See `docs/event-map.md`.
+**Next: scene S30, the experiment log (EV 242, 46).** See `docs/event-map.md`.
 
 ## How a scene is reviewed
 
@@ -52,8 +52,9 @@ riddle); S24 the Jail Ogre's cage and the yellow stone 99-102, 196, 259-261; S25
 LABORATORY 107, 219, 220; S26 the lab door and the black stone 156, 277-279; S27 the
 warp switches 197, 306, 307 (keep the noun "switch" so the remark ties to the switch you
 pressed; 248 waits for S55); S28 Zaril's party and the Chimera Warrior 150-152, 194 (152
-"It's that thing!": やつ is the monster, not "him"). Also done early, out of scene order:
-the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given the same wording as 35 and 36.
+"It's that thing!": やつ is the monster, not "him"); S29 the frost tank 127, 153. Also
+done early, out of scene order: the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given
+the same wording as 35 and 36.
 
 Every string also had the present-tense sweep and full-question prompts applied, so
 unreviewed strings are consistent but not yet approved.
