@@ -14,6 +14,9 @@ scene was reworked with Chris.
    approves or adjusts it.
 3. Each approved scene is its own commit (`scripts/npcapply.py`), with the reasoning in
    the commit message. Every line is fit-checked with `scripts/npcfit.py`.
+4. Run `scripts/wtquotes.py check` after applying a scene. The website walkthrough quotes
+   NPC lines (`docs/walkthrough-npcs.json`, ledger in `docs/walkthrough-quotes.md`); any
+   quote that changed is listed with its chapter, to carry over to the site.
 
 The reviewers' reports quote the Japanese at length, so they stay out of the repo
 (same policy as the redacted `source` fields). They live in `rips/review/` on the

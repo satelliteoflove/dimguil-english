@@ -1,0 +1,2480 @@
+{
+  "_about": "NPC blurbs and quotes for the Bartok's Trading Post Dimguil walkthrough, chapter by chapter. Chapters follow harano's walkthrough on dra.jp (https://dra.jp/game/wizardy-dimguil/chart/<harano>.html) in his index order; his moving-floor chapter (13) says it is played after Area D's release. Each entry: who appears, the strings involved, how the placement is known (Walkthrough, Game, Inferred), a 1-3 sentence blurb, and quotes in the patch's English, each pinned to its file and string. Quotes are checked with scripts/wtquotes.py check; docs/walkthrough-quotes.md is the readable ledger. `flags` notes things to settle in the patch (unreviewed or doubtful lines). `source` is the agent file the entry came from.",
+  "chapters": [
+    {
+      "no": 1,
+      "harano": "temple-field",
+      "title": "The four pillars and the Lithograph of Sun",
+      "npcs": [
+        {
+          "who": "Guy's party",
+          "speakers": [
+            "Guy",
+            "Alstron"
+          ],
+          "strings": "NPC_MES1 105-111",
+          "placement": "Game: Guy says the door at this entrance is locked, and the event map ties it to the sun door in front of the Shrine (S3); Alstron's seal speech is linked to the four pillars (S2).",
+          "blurb": "Guy's party got here first and found the door shut. If you talk to them, Guy calls it locked and Alstron corrects him: it's a seal, and it takes a tablet to open.",
+          "quotes": [
+            {
+              "file": "NPC_MES1",
+              "idx": 106,
+              "speaker": "Alstron",
+              "text": "I'd call it a seal rather than a lock, myself."
+            }
+          ],
+          "flags": "Already used in the chapter 1 text; the blurb above is the existing one, repeated for completeness.",
+          "source": "NPC_MES1"
+        },
+        {
+          "who": "The King",
+          "speakers": [
+            "The King"
+          ],
+          "strings": "SISETU 329",
+          "placement": "Game: this is the King's opening order, which sets the quest (rescue the Priestess, report on the underground); it's what he says before anything has been found. Told in town before the first trip.",
+          "blurb": "Before you set foot on the island, the King gives you your orders in one breath: \"Go to the Shrine, rescue the Priestess, and find out what is happening below.\" He expects a report, so his chambers are worth a visit between trips.",
+          "quotes": [
+            {
+              "file": "SISETU",
+              "idx": 329,
+              "speaker": "The King",
+              "text": "Go to the Shrine, rescue the Priestess, and find out what is happening below."
+            }
+          ],
+          "flags": "SISETU isn't covered by docs/npc-review.md or docs/event-review.md, so the King's and Fortune Teller's English may not have been reviewed with Chris.",
+          "source": "TOWN_EVENTS"
+        },
+        {
+          "who": "The Fortune Teller",
+          "speakers": [
+            "The Fortune Teller"
+          ],
+          "strings": "SISETU 359, 345/331, 330",
+          "placement": "Inferred: the first topic, The Beginning (345/331), retells the festival night the Priestess vanished, the game's premise, and a message board (EV 2) points new players to the tavern for fortunes. Whether the Fortune Teller's topic list grows with your progress isn't established; the topic is placed with the chapter it points at.",
+          "blurb": "The Fortune Teller in the tavern offers to show you your past and future, and the first topic, The Beginning, tells of the festival night when the Priestess and three guards went to the Shrine for a rite that should have gone as it always did. Every reading ends with the same shrug: \"Believe it or not, as you will... .......that is all a fortune is.\"",
+          "quotes": [
+            {
+              "file": "SISETU",
+              "idx": 330,
+              "speaker": "The Fortune Teller",
+              "text": "Believe it or not, as you will... .......that is all a fortune is."
+            }
+          ],
+          "flags": "SISETU isn't covered by docs/npc-review.md or docs/event-review.md, so the King's and Fortune Teller's English may not have been reviewed with Chris.",
+          "source": "TOWN_EVENTS"
+        }
+      ],
+      "slug": "temple-field"
+    },
+    {
+      "no": 2,
+      "harano": "temple-internal",
+      "title": "The Shrine and the jade mask",
+      "npcs": [
+        {
+          "who": "Guy's party",
+          "speakers": [
+            "Guy"
+          ],
+          "strings": "NPC_MES1 86-88, 295, 286",
+          "placement": "Game for 286: Guy's four floors and missing stairs match the Shrine, where harano finds the way to 4F through a hidden door on 3F (x9y6 or x13y6). Inferred for 86-88/295: Guy warns you off an altar that killed his party, and harano's chapter has the deadly altar on 2F (x11y13, the Fire Golem).",
+          "blurb": "You may find Guy alone outside a room, battered, warning you to keep your hands off the statue on the altar. Something came out of it and killed his whole party, \"Well, everyone except me, the immortal hero! Ha, ha... ow.\" On another visit he points out that the Shrine looked like four floors from outside, so \"There must be a hidden door somewhere.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES1",
+              "idx": 86,
+              "speaker": "Guy",
+              "text": "Well, everyone except me, the immortal hero! Ha, ha... ow."
+            },
+            {
+              "file": "NPC_MES1",
+              "idx": 286,
+              "speaker": "Guy",
+              "text": "There must be a hidden door somewhere."
+            }
+          ],
+          "flags": "Which altar Guy means isn't settled. He says 彫像 (statue), the word the Shadow Golem's altar uses (EV 59, Underground B3), while the 2F altar holds a モノリス (monolith, EV 35). If it's the Shadow Golem's, the warning belongs in chapter 4 or 5 instead.",
+          "source": "NPC_MES1"
+        },
+        {
+          "who": "Balbo's party",
+          "speakers": [
+            "Man in armor (Balbo)"
+          ],
+          "strings": "NPC_MES2 72-81",
+          "placement": "Game: the event map (S4) ties Balbo's two-switch request to the Shrine's side door that needs two switches held at once, and the encounter tables put Balbo's party on Shrine 3F E11 N6. harano's 3F has the switches (x7y8, x15y8) and hidden doors (x9y6, x13y6) but doesn't name Balbo.",
+          "blurb": "On 3F a man in armor is stuck at a side door that only opens when two switches are pressed at the same time. It's Balbo, though he hasn't told you his name yet. He asks if you're after the Priestess too and wants a hand, and if your party is Evil like his, he adds a condition: \"And once it's open, no sneakin' ahead of us.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES2",
+              "idx": 72,
+              "speaker": "Man in armor",
+              "text": "You're here lookin' for the Priestess too, right?"
+            },
+            {
+              "file": "NPC_MES2",
+              "idx": 77,
+              "speaker": "Man in armor",
+              "text": "And once it's open, no sneakin' ahead of us."
+            }
+          ],
+          "flags": "72-74 is the offer to non-Evil parties, 75-78 the same-alignment version (\"Folks of the same alignment oughta team up, eh?\"); 79-80 is the countdown. 81 (\"Ah, was that you earlier?... is there anything you would care to ask?\") is a later meeting after you've helped, merged here as Inferred; it's already in the stiff register of review scene 3. The switch scene itself (72-81) is review scene 9, not yet reviewed. That 75-78 is the version for Evil parties is Inferred from \"same alignment\" and the \"brother\" greeting (75, also 1).",
+          "source": "NPC_MES2"
+        },
+        {
+          "who": "Murphy's Ghost",
+          "strings": "EVENTMES 32, 52",
+          "placement": "Game: the event map (S6) puts the statue at Shrine 1F E6 N6 from Emonoya's encounter tables and tips. harano's route passes through 1F but doesn't mention it.",
+          "blurb": "On Shrine 1F a strange statue stands on a pedestal, and \"When you touch it gently, the statue begins to vibrate faintly.\" What comes out is Murphy's Ghost, an old acquaintance from the first Wizardry, and very likely the old friend the Fortune Teller has in mind.",
+          "quotes": [
+            {
+              "file": "EVENTMES",
+              "idx": 32,
+              "speaker": "narration",
+              "text": "When you touch it gently, the statue begins to vibrate faintly."
+            }
+          ],
+          "flags": "Murphy's Ghost has no lines; the quote is the narration of S6 (reviewed). That he's the Fortune Teller's Old Friend (SISETU 333) is the map's inference.",
+          "source": "TOWN_EVENTS"
+        },
+        {
+          "who": "The Fortune Teller",
+          "speakers": [
+            "The Fortune Teller"
+          ],
+          "strings": "SISETU 346/332, 347/333, 348/334",
+          "placement": "Inferred: Priestess & Altar points at the altar room on Shrine 2F, Old Friend at Murphy's Ghost on 1F, and The Mask at the jade mask on 4F, all on this chapter's floors. Whether the Fortune Teller's topic list grows with your progress isn't established; the topic is placed with the chapter it points at.",
+          "blurb": "Three of the Fortune Teller's topics fit the Shrine's floors. Old Friend promises that \"An old friend will be awaiting you.\" and won't say what he wants, and The Mask says of the fiend inside the jade mask, \"one day you will have need of it.\" So keep the mask once you've won it.",
+          "quotes": [
+            {
+              "file": "SISETU",
+              "idx": 333,
+              "speaker": "The Fortune Teller",
+              "text": "An old friend will be awaiting you."
+            },
+            {
+              "file": "SISETU",
+              "idx": 334,
+              "speaker": "The Fortune Teller",
+              "text": "one day you will have need of it."
+            }
+          ],
+          "flags": "SISETU isn't covered by docs/npc-review.md or docs/event-review.md, so the King's and Fortune Teller's English may not have been reviewed with Chris. Priestess & Altar (332) also offers to show what happened at the altar (\"Let me show you what happened.\"); what it shows wasn't checked.",
+          "source": "TOWN_EVENTS"
+        }
+      ],
+      "slug": "temple-internal"
+    },
+    {
+      "no": 3,
+      "harano": "under-temple-blue-stone",
+      "title": "The Underground Shrine and the blue stone",
+      "npcs": [
+        {
+          "who": "Guy's party",
+          "speakers": [
+            "Guy",
+            "Lychee",
+            "Linaria",
+            "Alstron"
+          ],
+          "strings": "NPC_MES1 211-217",
+          "placement": "Inferred: when asked about other parties they talk about the scholars and point you to the underground library, which harano reaches in this chapter.",
+          "blurb": "Guy's party has already met the scholars, and Guy sends you their way: \"If you're interested, try heading down to the underground library.\" Lychee came away less impressed with Cleo. \"He knows lots and lots of things, I guess, but I couldn't understand a word he said.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES1",
+              "idx": 217,
+              "speaker": "Guy",
+              "text": "If you're interested, try heading down to the underground library."
+            },
+            {
+              "file": "NPC_MES1",
+              "idx": 214,
+              "speaker": "Lychee",
+              "text": "He knows lots and lots of things, I guess, but I couldn't understand a word he said."
+            }
+          ],
+          "source": "NPC_MES1"
+        },
+        {
+          "who": "Balbo's party",
+          "speakers": [
+            "Balbo"
+          ],
+          "strings": "NPC_MES2 261",
+          "placement": "Inferred: Balbo has seen the man frozen in the ice (Underground B3F, this chapter) but can't get to the area ahead. Balbo's next report (82-83, chapter 4) assumes the blue stone, so this one comes before it.",
+          "blurb": "Balbo's party is exploring the Underground Shrine as well, and they've found the man frozen in the ice. Balbo is sure it's a trap, and he isn't wrong. He wants to push on to the area ahead, \"but isn't there a bridge or something?\"",
+          "quotes": [
+            {
+              "file": "NPC_MES2",
+              "idx": 261,
+              "speaker": "Balbo",
+              "text": "I saw a frozen man, and I can't help thinking it's a trap."
+            },
+            {
+              "file": "NPC_MES2",
+              "idx": 261,
+              "speaker": "Balbo",
+              "text": "but isn't there a bridge or something?"
+            }
+          ],
+          "flags": "The map's translation-trap note says Balbo's はし could be bridge, ladder or edge. harano's next chapter supports \"bridge\": the way on is the waterway on B2F x7y12, which the blue-stoned Lithograph lets you cross to x3y12, and that's exactly where Balbo turns up next. Balbo's progress reports (81-89, 142, 261-265) are review scene 3 in docs/npc-review.md, still open: the Japanese is stiff and haughty here, unlike Balbo anywhere else, and the English keeps that register for now.",
+          "source": "NPC_MES2"
+        },
+        {
+          "who": "Cleo's group",
+          "speakers": [
+            "Cleo",
+            "Bergamot",
+            "Cresson"
+          ],
+          "strings": "NPC_MES4 0-1, 56-59, 64-77, 161-162",
+          "placement": "Walkthrough: harano heads for the library at B3F x8y6 and talks to Cleo's group; talking twice unlocks glyph analysis (Cresson's item, 161/162). harano also notes Cleo can resurrect here.",
+          "blurb": "Three scholars have set up house in the library at x8y6 on B3F: Cleo, a chatty elf (\"I'm a Bishop, believe it or not\"), old Bergamot, a Priest, and Cresson, a nervous Alchemist. Talk to them twice and Cresson gives you an item for decoding the ancient glyphs, which you use from the camp menu. Cleo will also try to raise your dead if you ask, after pointing out, \"This isn't the Temple, you know.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES4",
+              "idx": 57,
+              "speaker": "Cleo",
+              "text": "I'm a Bishop, believe it or not"
+            },
+            {
+              "file": "NPC_MES4",
+              "idx": 67,
+              "speaker": "Cleo",
+              "text": "This isn't the Temple, you know."
+            }
+          ],
+          "flags": "harano's resurrection tips, if wanted in the chapter text: with a dead member, talk to them three times and either Cleo or Bergamot takes the job; harano says Bergamot's attempt fails, so leave by the stairs and retry until Cleo does it, and Cleo's has no downside. Once you reach Area X they always refuse, saying they're out of magic (NPC4 68, 75). The item is unnamed in the Japanese too (解析アイテム, 'analysis item').",
+          "source": "NPC_MES4"
+        },
+        {
+          "who": "The Fortune Teller",
+          "speakers": [
+            "The Fortune Teller"
+          ],
+          "strings": "SISETU 349/335",
+          "placement": "Inferred: The Freezer is about the man in the ice behind the FREEZER door, which harano reaches on Underground B3F (Ice Rock at x20y20) in this chapter. Whether the Fortune Teller's topic list grows with your progress isn't established; the topic is placed with the chapter it points at.",
+          "blurb": "The Freezer is about the figure you'll find in a pillar of ice behind the FREEZER door: \"His magic will vanish only with his life, and he shall sleep forever.\" In practice that means a fight, since touching the face in the ice wakes the Ice Rock, and beating it melts the path open.",
+          "quotes": [
+            {
+              "file": "SISETU",
+              "idx": 335,
+              "speaker": "The Fortune Teller",
+              "text": "His magic will vanish only with his life, and he shall sleep forever."
+            }
+          ],
+          "flags": "SISETU isn't covered by docs/npc-review.md or docs/event-review.md, so the King's and Fortune Teller's English may not have been reviewed with Chris.",
+          "source": "TOWN_EVENTS"
+        }
+      ],
+      "slug": "under-temple-blue-stone"
+    },
+    {
+      "no": 4,
+      "harano": "under-temple-strange-machine",
+      "title": "The lake machine",
+      "npcs": [
+        {
+          "who": "Guy's party",
+          "speakers": [
+            "Guy",
+            "Linaria",
+            "Alstron",
+            "Lychee"
+          ],
+          "strings": "NPC_MES1 200-206",
+          "placement": "Inferred: asked about other parties, they describe Balbo's (grave robbers led by an Evil Lord, a foul-mouthed man, a pirate type), and harano meets Balbo at x3y14 in this chapter.",
+          "blurb": "Ask about other parties and Linaria tells you about a bunch of obvious grave robbers whose leader is a Lord, the same as hers. Guy won't have it: \"I'm not a Lord, I'm a Hero!\" Linaria's answer is a weary \"Yeah, yeah......\"",
+          "quotes": [
+            {
+              "file": "NPC_MES1",
+              "idx": 202,
+              "speaker": "Guy",
+              "text": "I'm not a Lord, I'm a Hero!"
+            },
+            {
+              "file": "NPC_MES1",
+              "idx": 203,
+              "speaker": "Linaria",
+              "text": "Yeah, yeah......"
+            }
+          ],
+          "flags": "Balbo's party may be met before this; the event map cites Enc. for a first meeting on Shrine 3F.",
+          "source": "NPC_MES1"
+        },
+        {
+          "who": "Balbo's party",
+          "speakers": [
+            "Balbo"
+          ],
+          "strings": "NPC_MES2 82-83",
+          "placement": "Walkthrough: harano meets Balbo at x3y14 on B2F, just across the waterway that the blue-stoned Lithograph opens. The line about the blue stone (82-83) fits that moment.",
+          "blurb": "Across the water at x3y14, Balbo's party has gotten there first, and Balbo has noticed what you're carrying: \"I see you too have managed to fit the blue stone into the Lithograph of the Sun.\" He's in an oddly stately mood about it, and his party heads off to search the area, sure something more important lies ahead.",
+          "quotes": [
+            {
+              "file": "NPC_MES2",
+              "idx": 83,
+              "speaker": "Balbo",
+              "text": "I see you too have managed to fit the blue stone into the Lithograph of the Sun."
+            },
+            {
+              "file": "NPC_MES2",
+              "idx": 83,
+              "speaker": "Balbo",
+              "text": "Who'd have thought there was such a mechanism."
+            }
+          ],
+          "flags": "82 is the same speech under \"Man in armor\" for players who haven't learned his name. Balbo's progress reports (81-89, 142, 261-265) are review scene 3 in docs/npc-review.md, still open: the Japanese is stiff and haughty here, unlike Balbo anywhere else, and the English keeps that register for now.",
+          "source": "NPC_MES2"
+        },
+        {
+          "who": "The Guardians",
+          "speakers": [
+            "The Guardians"
+          ],
+          "strings": "EVENTMES 280",
+          "placement": "Walkthrough: harano fights the Guardians at B2F x7y22, just before the lake machine. That speech 280 goes with this fight is Inferred (it's the first of six, and it's about the water).",
+          "blurb": "The first Guardian party stands between you and the lake machine, and its back-row mages are the real danger. They open with \"We are the Guardians who rule this land.\" and then get to the point: \"You are not permitted to cut off the flow of the water.\"",
+          "quotes": [
+            {
+              "file": "EVENTMES",
+              "idx": 280,
+              "speaker": "The Guardians",
+              "text": "We are the Guardians who rule this land."
+            },
+            {
+              "file": "EVENTMES",
+              "idx": 280,
+              "speaker": "The Guardians",
+              "text": "You are not permitted to cut off the flow of the water."
+            }
+          ],
+          "source": "TOWN_EVENTS"
+        },
+        {
+          "who": "The Fortune Teller",
+          "speakers": [
+            "The Fortune Teller"
+          ],
+          "strings": "SISETU 350/336",
+          "placement": "Inferred: Strange Machine names the machine that fouls the lake, which harano stops at B2F x11y21 in this chapter. Whether the Fortune Teller's topic list grows with your progress isn't established; the topic is placed with the chapter it points at.",
+          "blurb": "Strange Machine names the cause of the lake's trouble: \"It seems a machine sleeping underground fouled the lake.\" It adds that few know about the fiend that runs it, and pulling the lever is how you find out, since the steam turns into a Gas Cloud.",
+          "quotes": [
+            {
+              "file": "SISETU",
+              "idx": 336,
+              "speaker": "The Fortune Teller",
+              "text": "It seems a machine sleeping underground fouled the lake."
+            }
+          ],
+          "flags": "SISETU isn't covered by docs/npc-review.md or docs/event-review.md, so the King's and Fortune Teller's English may not have been reviewed with Chris.",
+          "source": "TOWN_EVENTS"
+        },
+        {
+          "who": "The King",
+          "speakers": [
+            "The King"
+          ],
+          "strings": "SISETU 327",
+          "placement": "Walkthrough: harano says that after the machine is stopped you can report to the King that Lake Cara is clean again. Told in town after this chapter's trip.",
+          "blurb": "Once the machine is stopped, the King has good news of his own: \"At last the quakes in this fortress have ceased, and the lake has regained its magic.\" The Priestess still weighs on him, though, and he sends you back with \"There is work left for you yet.\"",
+          "quotes": [
+            {
+              "file": "SISETU",
+              "idx": 327,
+              "speaker": "The King",
+              "text": "At last the quakes in this fortress have ceased, and the lake has regained its magic."
+            },
+            {
+              "file": "SISETU",
+              "idx": 327,
+              "speaker": "The King",
+              "text": "There is work left for you yet."
+            }
+          ],
+          "flags": "SISETU isn't covered by docs/npc-review.md or docs/event-review.md, so the King's and Fortune Teller's English may not have been reviewed with Chris.",
+          "source": "TOWN_EVENTS"
+        }
+      ],
+      "slug": "under-temple-strange-machine"
+    },
+    {
+      "no": 5,
+      "harano": "under-temple-moon-gate",
+      "title": "The moon door and the 2-Head Snake",
+      "npcs": [],
+      "slug": "under-temple-moon-gate"
+    },
+    {
+      "no": 6,
+      "harano": "area-x",
+      "title": "Area X and the white stone",
+      "npcs": [
+        {
+          "who": "Balbo's party",
+          "speakers": [
+            "Balbo"
+          ],
+          "strings": "NPC_MES2 84-85",
+          "placement": "Game: the center of something, with doors on four sides and small tablets, is Area X's central computer (event map S19).",
+          "blurb": "Balbo's party has reached the central computer and worked out that it's the center of something. The four doors won't budge and Balbo suspects the small tablets, but he isn't sharing notes: \"Forgive me, but kindly don't interrupt our strategy meeting.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES2",
+              "idx": 85,
+              "speaker": "Balbo",
+              "text": "Forgive me, but kindly don't interrupt our strategy meeting."
+            }
+          ],
+          "flags": "Balbo's progress reports (81-89, 142, 261-265) are review scene 3 in docs/npc-review.md, still open: the Japanese is stiff and haughty here, unlike Balbo anywhere else, and the English keeps that register for now.",
+          "source": "NPC_MES2"
+        },
+        {
+          "who": "Fontana's party",
+          "speakers": [
+            "Fontana",
+            "Artemisia"
+          ],
+          "strings": "NPC_MES3 67-71",
+          "placement": "Game: the event map links NPC3 67-71 to S20, the statue with the white stone and the word STAFF in Area X's north-east (harano's x15y16). harano doesn't mention Fontana's party there.",
+          "blurb": "Fontana's party found the statue first and is still puzzling over it. Fontana has spotted a slot for the LITHOGRAPH OF SUN and says, \"I have a feeling these ancient glyphs are some kind of key.\" Then Artemisia makes the connection for you: \"That little tablet we saw earlier had the same glyphs as these!\"",
+          "quotes": [
+            {
+              "file": "NPC_MES3",
+              "idx": 68,
+              "speaker": "Fontana",
+              "text": "I have a feeling these ancient glyphs are some kind of key."
+            },
+            {
+              "file": "NPC_MES3",
+              "idx": 71,
+              "speaker": "Artemisia",
+              "text": "That little tablet we saw earlier had the same glyphs as these!"
+            }
+          ],
+          "flags": "68 calls the item \"the Sun tablet\"; npc-review scene 3 (unreviewed, HIGH-MEDIUM) wants \"Lithograph of the Sun\", so I didn't quote that sentence. If you haven't been introduced, the party shows up as \"Young samurai\" (67), who says only that they forgot to bring \"that thing\" and are going back for it. 71 is all labeled Artemisia, but its second half (\"Yes, they must be connected somehow. Excuse us, but we'll be hurrying on ahead.\") reads like a reply, and might be Fontana in the original.",
+          "source": "NPC_MES3"
+        },
+        {
+          "who": "Cleo's group",
+          "speakers": [
+            "Cleo",
+            "Cresson",
+            "Bergamot"
+          ],
+          "strings": "NPC_MES4 30-41",
+          "placement": "Game: the scholars find the pedestal of small tablets, all 26 ancient glyphs, and call it a switch; that is the central computer in Area X (event map S19). harano doesn't mention the meeting.",
+          "blurb": "Cleo's group got to the central computer before you and found its pedestal of small tablets. Bergamot is thrilled: \"With all 26 ancient glyphs laid out like this, our research is bound to get on.\" Cresson decides the thing is some kind of switch, and they pack up for the library: \"We'll leave the rest to you.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES4",
+              "idx": 33,
+              "speaker": "Bergamot",
+              "text": "With all 26 ancient glyphs laid out like this, our research is bound to get on."
+            },
+            {
+              "file": "NPC_MES4",
+              "idx": 34,
+              "speaker": "Cresson",
+              "text": "We'll leave the rest to you."
+            }
+          ],
+          "flags": "30-35 are the named version, 36-41 the same lines as 'Robed elf', 'Robed man' and 'Old man' if you never asked their names.",
+          "source": "NPC_MES4"
+        }
+      ],
+      "slug": "area-x"
+    },
+    {
+      "no": 7,
+      "harano": "area-a-gleenstone",
+      "title": "Area A: the green stone",
+      "npcs": [
+        {
+          "who": "Guy's party",
+          "speakers": [
+            "Guy",
+            "Linaria",
+            "Alstron",
+            "Lychee"
+          ],
+          "strings": "NPC_MES1 195-199",
+          "placement": "Inferred: they talk about Fontana's party with Zaril still in it, so it's before the quarrel in chapter 8, and after you can first meet Fontana's party at the STAFF statue in Area X (NPC3 67-71). Harano also mentions Guy here, telling you to buy Ruby Slippers before Area A.",
+          "blurb": "Guy's party has run into Fontana's group, \"a party that was nothing but kids,\" and Alstron thinks the young Samurai is level-headed for his age. Lychee mostly remembers the presents: \"they gave me an item! Heheee, jealous?\"",
+          "quotes": [
+            {
+              "file": "NPC_MES1",
+              "idx": 195,
+              "speaker": "Guy",
+              "text": "a party that was nothing but kids"
+            },
+            {
+              "file": "NPC_MES1",
+              "idx": 198,
+              "speaker": "Lychee",
+              "text": "they gave me an item! Heheee, jealous?"
+            }
+          ],
+          "source": "NPC_MES1"
+        },
+        {
+          "who": "Balbo's party",
+          "speakers": [
+            "Balbo"
+          ],
+          "strings": "NPC_MES2 262",
+          "placement": "Game: Balbo has fitted the green stone (Area A B4F, this chapter; event map S22).",
+          "blurb": "Balbo has the green stone in his Lithograph and nothing to show for it: \"Isn't fitting the green stone enough? Something seems to be missing.\" He's right, since the stone still has to light the altar on B4F, but his party gives up and moves on.",
+          "quotes": [
+            {
+              "file": "NPC_MES2",
+              "idx": 262,
+              "speaker": "Balbo",
+              "text": "Isn't fitting the green stone enough? Something seems to be missing."
+            }
+          ],
+          "flags": "\"The light altar on B4F\" is harano's next chapter (B4F x11y11: the green-stoned Lithograph turns the light green). Balbo's progress reports (81-89, 142, 261-265) are review scene 3 in docs/npc-review.md, still open: the Japanese is stiff and haughty here, unlike Balbo anywhere else, and the English keeps that register for now.",
+          "source": "NPC_MES2"
+        }
+      ],
+      "slug": "area-a-gleenstone"
+    },
+    {
+      "no": 8,
+      "harano": "area-a-yellowstone",
+      "title": "Area A: the yellow stone and the Jail Ogre",
+      "npcs": [
+        {
+          "who": "Guy's party",
+          "speakers": [
+            "Guy"
+          ],
+          "strings": "NPC_MES1 80-85, 104",
+          "placement": "Walkthrough: harano finds Guy in the room behind the Jail Ogre (B4F x17y12) and gives him the Ruby Slippers; his party returns to the maze and pays you.",
+          "blurb": "Behind the Jail Ogre you find Guy, poisoned and the only one of his party still alive. He thanks you for taking down \"that big green brute\" and admits \"We very nearly ended up as its lunch,\" then asks for a pair of Ruby Slippers. Hand them over and you'll meet his party in the maze again, short on gear but grateful, and Guy pays you 10000Gp.",
+          "quotes": [
+            {
+              "file": "NPC_MES1",
+              "idx": 80,
+              "speaker": "Guy",
+              "text": "that big green brute"
+            },
+            {
+              "file": "NPC_MES1",
+              "idx": 80,
+              "speaker": "Guy",
+              "text": "We very nearly ended up as its lunch"
+            }
+          ],
+          "flags": "Harano says the reward is 10,000 GP, or 1,000,000 in some versions, and his green-stone page says 1,000,000. The Japanese and the patch both say 10000Gp.",
+          "source": "NPC_MES1"
+        },
+        {
+          "who": "Balbo's party",
+          "speakers": [
+            "Balbo",
+            "Rosea"
+          ],
+          "strings": "NPC_MES2 86-87, 185-187",
+          "placement": "Game: the iron bars are the Jail Ogre's cage (event map S24, which links 86-87); the gossip about a new party of three refers to Zaril walking out on Fontana, which harano has at B2F x6y11 in this chapter, \"after which the NPC parties change.\"",
+          "blurb": "Balbo's party has reached the Jail Ogre's cage and doesn't like the look of it: \"something about the iron bars ahead seems off.\" They're going home by Malor to come back fully prepared. By now Gaura has left them, and if you ask about other parties Balbo grumbles that the new three-man party has one of theirs: \"And get this, one of 'em used to be in our party.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES2",
+              "idx": 87,
+              "speaker": "Balbo",
+              "text": "something about the iron bars ahead seems off."
+            },
+            {
+              "file": "NPC_MES2",
+              "idx": 185,
+              "speaker": "Balbo",
+              "text": "And get this, one of 'em used to be in our party."
+            }
+          ],
+          "flags": "The roster swap is Inferred from the dialogue: Gaura joins Zaril's new party (NPC2 187, Rosea: \"Gaura was in the new party\"; NPC5 66, Gaura: \"Balbo, scary. Ran away.\"); Reiran moves to Fontana's party (NPC3 9, \"I helped these kids out as a part-time gig\"); Artemisia, who was in Fontana's party during the quarrel (NPC3 76, 86), turns up in Balbo's (NPC2 12, \"Long time no see!\"; NPC2 271, the woman with a spear is Artemisia). So from here on Balbo's party is Balbo, Alba, Rosea and Artemisia. Whether the reshuffle has happened by the time you meet Balbo at the bars depends on order; harano's route reaches the cage after the quarrel. Balbo's progress reports (81-89, 142, 261-265) are review scene 3 in docs/npc-review.md, still open: the Japanese is stiff and haughty here, unlike Balbo anywhere else, and the English keeps that register for now.",
+          "source": "NPC_MES2"
+        },
+        {
+          "who": "Fontana's party",
+          "speakers": [
+            "Artemisia",
+            "Fontana",
+            "Zaril",
+            "Cephala",
+            "Lilia"
+          ],
+          "strings": "NPC_MES3 75-89",
+          "placement": "Walkthrough: harano watches Fontana and Zaril's quarrel at Area A B2F x6y11 in this chapter, and notes that the NPC parties change from then on.",
+          "blurb": "On B2F you walk in on Fontana's party mid-quarrel, and Artemisia has had it: \"All these two ever do is fight!\" Zaril tells Fontana, \"You're not fit to be leader,\" and announces he's going his own way, and Lilia, instead of smoothing things over, agrees he'd do fine on his own. Fontana, embarrassed to have been seen, says the party is splitting up for now; from here on the NPC parties reshuffle.",
+          "quotes": [
+            {
+              "file": "NPC_MES3",
+              "idx": 76,
+              "speaker": "Artemisia",
+              "text": "All these two ever do is fight!"
+            },
+            {
+              "file": "NPC_MES3",
+              "idx": 78,
+              "speaker": "Zaril",
+              "text": "You're not fit to be leader"
+            }
+          ],
+          "flags": "This scene is npc-review scene 1 (HIGH, unreviewed), and the open question on 82 (\"Whose side are you on?\" vs \"Don't encourage him!\") may change Fontana's reply to Lilia, so I left 82 unquoted. If you haven't been introduced, a \"Young samurai\" (75) delivers the news in one line instead. In 77 Fontana says おれ, not his usual 僕; he's rattled.",
+          "source": "NPC_MES3"
+        },
+        {
+          "who": "Zaril's party",
+          "speakers": [
+            "Zaril",
+            "Fritillaria",
+            "Gaura"
+          ],
+          "strings": "NPC_MES5 26-34, 117 (28 is the version for players who knew Zaril in Fontana's party)",
+          "placement": "Inferred: Zaril walks out on Fontana at Area A B2F x6y11 in this chapter, and harano notes the NPC parties change from then on. String 28 ('starting now I'm gonna be the leader') is the intro for players who knew him before, so it fits right after the quarrel. EV 150 names Zaril's party in chapter 9 only if you've met them already, which also points to a meeting before Area B. harano doesn't record this meeting himself.",
+          "blurb": "Zaril's walkout leaves him with a party of his own, and from here on you can run into it. He introduces it with a little less ceremony than it deserves: \"Well, I say party, but there's only two others.\" When he gets to \"this little one,\" Fritillaria cuts in: \"Ya didn't have to say 'little'!\"",
+          "quotes": [
+            {
+              "file": "NPC_MES5",
+              "idx": 28,
+              "speaker": "Zaril",
+              "text": "Well, I say party, but there's only two others."
+            },
+            {
+              "file": "NPC_MES5",
+              "idx": 29,
+              "speaker": "Fritillaria",
+              "text": "Ya didn't have to say 'little'!"
+            }
+          ],
+          "flags": "The first page of 28, 'Truth is, starting now I'm gonna be the leader', is slightly off: 今度っから means 'as of now' and 実は is 'guess what', not a confession (rips/review/NPC_MES5.md proposes 'So, turns out I'm the leader of this party now'). Not quoted. The quoted second half is identical in 27 and 28.",
+          "source": "NPC_MES5"
+        },
+        {
+          "who": "The Guardians",
+          "speakers": [
+            "The Guardians"
+          ],
+          "strings": "EVENTMES 281",
+          "placement": "Walkthrough: harano fights the Guardians on Area A B1F at x16y11 in this chapter. That speech 281 goes with this fight is Inferred (second of six; it fits the golden corpses on the same floor).",
+          "blurb": "The second Guardian party waits on B1F of Area A, the floor where the golden corpses lie on their beds. Their plans for you are practical: \"Your bodies shall serve to remake our own.\"",
+          "quotes": [
+            {
+              "file": "EVENTMES",
+              "idx": 281,
+              "speaker": "The Guardians",
+              "text": "Your bodies shall serve to remake our own."
+            }
+          ],
+          "source": "TOWN_EVENTS"
+        },
+        {
+          "who": "The Fortune Teller",
+          "speakers": [
+            "The Fortune Teller"
+          ],
+          "strings": "SISETU 352/338",
+          "placement": "Inferred: The Imprisoned describes the Jail Ogre, which harano fights at Area A B4F x17y12 in this chapter. Whether the Fortune Teller's topic list grows with your progress isn't established; the topic is placed with the chapter it points at.",
+          "blurb": "The Imprisoned is the Fortune Teller's warning about the Jail Ogre, a chained fiend on Area A's bottom floor: \"Its vast, green-glowing form terrifies all, and they say it lies in wait for those lost in the labyrinth.\"",
+          "quotes": [
+            {
+              "file": "SISETU",
+              "idx": 338,
+              "speaker": "The Fortune Teller",
+              "text": "Its vast, green-glowing form terrifies all, and they say it lies in wait for those lost in the labyrinth."
+            }
+          ],
+          "flags": "SISETU isn't covered by docs/npc-review.md or docs/event-review.md, so the King's and Fortune Teller's English may not have been reviewed with Chris. 338 says \"labyrinth\" for 迷宮, which the NPC files call the maze (a known cross-file naming question).",
+          "source": "TOWN_EVENTS"
+        }
+      ],
+      "slug": "area-a-yellowstone"
+    },
+    {
+      "no": 9,
+      "harano": "area-b-blackstone",
+      "title": "Area B: the black stone",
+      "npcs": [
+        {
+          "who": "Guy's party",
+          "speakers": [
+            "Guy",
+            "Linaria",
+            "Alstron",
+            "Lychee"
+          ],
+          "strings": "NPC_MES1 207-210",
+          "placement": "Game: they report that the Dracon left the young Samurai's party with only two companions, which is the quarrel harano sees at x6y11 in chapter 8. Inferred: this chapter, where Zaril's party turns up at x12y11.",
+          "blurb": "Word has gotten around that Zaril walked out on Fontana, and Alstron doesn't think much of how he did it: \"Young Zaril had a mere two companions with him. My, my. How very reckless of him.\" Lychee adds that Zaril asked her to join, \"But Lychee said no, just like she should!\"",
+          "quotes": [
+            {
+              "file": "NPC_MES1",
+              "idx": 209,
+              "speaker": "Alstron",
+              "text": "Young Zaril had a mere two companions with him. My, my. How very reckless of him."
+            },
+            {
+              "file": "NPC_MES1",
+              "idx": 210,
+              "speaker": "Lychee",
+              "text": "But Lychee said no, just like she should!"
+            }
+          ],
+          "source": "NPC_MES1"
+        },
+        {
+          "who": "Fontana's party",
+          "speakers": [
+            "Reiran",
+            "Cephala"
+          ],
+          "strings": "NPC_MES3 9, 11, 197-200",
+          "placement": "Inferred: Reiran (Balbo's ninja in NPC_MES2) joins Fontana's party in Zaril's place after the quarrel (harano: the parties change after chapter 8). This is the first chapter after it, and the one where you meet Zaril's new party (x12y11), which Cephala's gossip refers to.",
+          "blurb": "Fontana's party has a new ninja: Reiran, late of Balbo's party. Ask her why and she shrugs it off: \"I helped these kids out as a part-time gig, and my alignment totally went and changed on me.\" Cephala, who is thirteen, has heard Zaril left because he wanted to lead, and doesn't see the point: \"Grown-ups are so complicated.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES3",
+              "idx": 9,
+              "speaker": "Reiran",
+              "text": "I helped these kids out as a part-time gig, and my alignment totally went and changed on me."
+            },
+            {
+              "file": "NPC_MES3",
+              "idx": 200,
+              "speaker": "Cephala",
+              "text": "Grown-ups are so complicated."
+            }
+          ],
+          "flags": "9 is the reunion line for players who met Reiran in Balbo's party; 11 is the version for those who didn't. Reiran's reunion is npc-review scene 7 (MEDIUM, unreviewed). The chapter is a guess: any meeting after chapter 8 could carry these lines.",
+          "source": "NPC_MES3"
+        },
+        {
+          "who": "Cleo's group",
+          "speakers": [
+            "Cleo",
+            "Bergamot",
+            "Cresson"
+          ],
+          "strings": "NPC_MES4 108-110",
+          "placement": "Game: the gossip is that Zaril has left Fontana and leads his own party, which happens in chapter 8 (x6y11); Inferred for the chapter, since this is the first chapter after the split and the gossip only makes sense before or around Zaril's party's trouble here. A library visit is a detour by now (harano warps to Area X from the Shrine's outer statue).",
+          "blurb": "If you stop at the library, the scholars have news of Zaril, who now leads a party of his own. Cleo has the facts straight. Bergamot's version is that \"one of 'em, what's-his-name, came back this time with a different crowd.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES4",
+              "idx": 109,
+              "speaker": "Bergamot",
+              "text": "one of 'em, what's-his-name, came back this time with a different crowd"
+            }
+          ],
+          "flags": "Optional entry; it comes from the 'other parties' menu topic, so it's the weakest placement here.",
+          "source": "NPC_MES4"
+        },
+        {
+          "who": "Zaril's party",
+          "speakers": [
+            "Zaril",
+            "Fritillaria",
+            "Gaura"
+          ],
+          "strings": "NPC_MES5 118-121 (with EV 150-152, 194)",
+          "placement": "Walkthrough: harano meets Zaril's party at Area B B3F x12y11, next to the LABORATORY door, and fights the Chimera Warrior and Skeleton Warrior there. The event map (S28) links NPC5 118-121 as the rescue afterward.",
+          "blurb": "Right outside the LABORATORY door you meet Zaril's party, and they flee into the dark as if something is after them. Something is: a moment later they come back twisted together into one Chimera Warrior, with a Skeleton Warrior along for the fight. Beat it and the three of them turn up again in one piece, Zaril yelling \"Whoa!!\" and Fritillaria yelling \"Help!!\"",
+          "quotes": [
+            {
+              "file": "NPC_MES5",
+              "idx": 119,
+              "speaker": "Zaril",
+              "text": "Whoa!!"
+            },
+            {
+              "file": "NPC_MES5",
+              "idx": 120,
+              "speaker": "Fritillaria",
+              "text": "Help!!"
+            }
+          ],
+          "flags": "The meeting itself is EVENTMES 150 (or 194, 'another party', if you never met Zaril's). That the reappearance follows the Chimera comes from the event map's reading of Enc. ('Zaril party rescue'); I didn't verify it in play.",
+          "source": "NPC_MES5"
+        }
+      ],
+      "slug": "area-b-blackstone"
+    },
+    {
+      "no": 10,
+      "harano": "area-b-redstone",
+      "title": "Area B: the red stone",
+      "npcs": [
+        {
+          "who": "Guy's party",
+          "speakers": [
+            "Guy",
+            "Lilia",
+            "Linaria",
+            "Alstron",
+            "Lychee"
+          ],
+          "strings": "NPC_MES1 288, 218-223",
+          "placement": "Game for 288: Guy is stuck on the three-ring disc \"here\" in this area (the FAQ also says Guy tells you about the discs in Area B). Inferred for 218-223: the stranger who left without a word, full of killing intent, matches the shadowy figure harano meets behind the north door at x17y10 (NPC5 103-105).",
+          "blurb": "Guy's party has found the three-ring disc too and can't line it up, though Guy half-remembers the clue: \"Three animals... it's on the tip of my tongue...\" Ask about other parties and they describe a stranger who walked off without a word, which sounds a lot like the figure at x17y10. Lilia, their newest member, says he was \"Positively oozing killing intent...\"",
+          "quotes": [
+            {
+              "file": "NPC_MES1",
+              "idx": 288,
+              "speaker": "Guy",
+              "text": "Three animals... it's on the tip of my tongue..."
+            },
+            {
+              "file": "NPC_MES1",
+              "idx": 223,
+              "speaker": "Lilia",
+              "text": "Positively oozing killing intent..."
+            }
+          ],
+          "source": "NPC_MES1"
+        },
+        {
+          "who": "Balbo's party",
+          "speakers": [
+            "Balbo"
+          ],
+          "strings": "NPC_MES2 88-89",
+          "placement": "Game: the door worked by three discs is the three-ring dial in Area B (event map S33; harano's B5F x7y11).",
+          "blurb": "Balbo's party has found the three-ring dial and can't crack it: \"This curious door simply refuses to open.\" Balbo figures there must be a clue somewhere, and there is. It's the \"sky fell\" inscription on Underground B4F, which you hopefully copied down.",
+          "quotes": [
+            {
+              "file": "NPC_MES2",
+              "idx": 89,
+              "speaker": "Balbo",
+              "text": "This curious door simply refuses to open."
+            },
+            {
+              "file": "NPC_MES2",
+              "idx": 89,
+              "speaker": "Balbo",
+              "text": "There must be a clue somewhere."
+            }
+          ],
+          "flags": "Balbo's progress reports (81-89, 142, 261-265) are review scene 3 in docs/npc-review.md, still open: the Japanese is stiff and haughty here, unlike Balbo anywhere else, and the English keeps that register for now.",
+          "source": "NPC_MES2"
+        },
+        {
+          "who": "The shadow (mysterious figure)",
+          "speakers": [
+            "Mysterious figure"
+          ],
+          "strings": "NPC_MES5 103-105",
+          "placement": "Walkthrough: harano opens the north door at Area B B2F x17y10 and a mysterious man appears, 'warning only' (忠告だけ). That this is the shadow's warning (103-105) and not the mysterious man of 107 is Inferred: 105 is the speech that calls itself a warning (我が言葉を聴き,忠告とせよ), 104 says the shadow speaks in a man's voice, and 106 (labelled 謎の男) follows up 'you have scorned my warning'. harano also guesses this roadside mysterious man is Cresson in another form (guardian page), which fits the heretic talk of the old god and the Opener of the Door, not 107-111's ship survivor.",
+          "blurb": "Open the north door at x17y10 and something darker than the shadows seeps out of the dark to warn you off in a man's voice. It calls you unbelievers in the old god and declares, \"Beyond lies the holy ground of the Opener of the Door!\" Then it melts back into the shadow. This time it's only a warning.",
+          "quotes": [
+            {
+              "file": "NPC_MES5",
+              "idx": 105,
+              "speaker": "Mysterious figure",
+              "text": "Beyond lies the holy ground of the Opener of the Door!"
+            }
+          ],
+          "flags": "The caller's brief assumed the x17y10 man is 107-111; I think it's 103-105 (see placement). 104 is the narration after the speech and reads like a new shout without a 'So' (review proposal pending), and 105's 'unbelievers in the old god' is stiff but correct. Neither affects the quote.",
+          "source": "NPC_MES5"
+        },
+        {
+          "who": "The Guardians",
+          "speakers": [
+            "The Guardians"
+          ],
+          "strings": "EVENTMES 282",
+          "placement": "Walkthrough: harano fights the Guardians on Area B B5F at x9y12, beside the dial vault. That speech 282 goes with this fight is Inferred (third of six).",
+          "blurb": "The third Guardian party bars the way to the vault on B5F, and they're the first to say what became of the Priestess: \"Your souls we offer up to our god, drunk in like the Priestess's own.\"",
+          "quotes": [
+            {
+              "file": "EVENTMES",
+              "idx": 282,
+              "speaker": "The Guardians",
+              "text": "Your souls we offer up to our god, drunk in like the Priestess's own."
+            }
+          ],
+          "flags": "EVENTMES 282 is in scene S34, which hasn't been reviewed with Chris yet (the review stopped at S30), so the quoted wording may change. Its intro still reads \"We are the Guardians, who rule this land.\" with a comma, unlike 280/281 (pending, per event-review.md).",
+          "source": "TOWN_EVENTS"
+        },
+        {
+          "who": "The Fortune Teller",
+          "speakers": [
+            "The Fortune Teller"
+          ],
+          "strings": "SISETU 353/339",
+          "placement": "Inferred: Ring Door is the three-ring dial on the vault, which harano opens at Area B B5F x7y11 in this chapter. Whether the Fortune Teller's topic list grows with your progress isn't established; the topic is placed with the chapter it points at.",
+          "blurb": "Ring Door is the topic to hear before you reach the dial on B5F: \"The key to the secret is hidden on some wall. The great ring stands for the sky, the small ring for the earth.\" The wall in question is the one on Underground B4F that says the sky fell.",
+          "quotes": [
+            {
+              "file": "SISETU",
+              "idx": 339,
+              "speaker": "The Fortune Teller",
+              "text": "The key to the secret is hidden on some wall. The great ring stands for the sky, the small ring for the earth."
+            }
+          ],
+          "flags": "SISETU isn't covered by docs/npc-review.md or docs/event-review.md, so the King's and Fortune Teller's English may not have been reviewed with Chris.",
+          "source": "TOWN_EVENTS"
+        }
+      ],
+      "slug": "area-b-redstone"
+    },
+    {
+      "no": 11,
+      "harano": "area-a-golden-armor",
+      "title": "Area A: the gold armor",
+      "npcs": [
+        {
+          "who": "The Fortune Teller",
+          "speakers": [
+            "The Fortune Teller"
+          ],
+          "strings": "SISETU 351/337",
+          "placement": "Inferred: Golden Warrior points at the gold equipment, which harano collects in this chapter; the prophecy itself comes true in Area D. Whether the Fortune Teller's topic list grows with your progress isn't established; the topic is placed with the chapter it points at.",
+          "blurb": "Golden Warrior is the shortest of the Fortune Teller's riddles: \"Friend or foe? One clad in gold .......shall shake heaven and earth.\" Hold on to all four gold pieces.",
+          "quotes": [
+            {
+              "file": "SISETU",
+              "idx": 337,
+              "speaker": "The Fortune Teller",
+              "text": "Friend or foe? One clad in gold .......shall shake heaven and earth."
+            }
+          ],
+          "flags": "SISETU isn't covered by docs/npc-review.md or docs/event-review.md, so the King's and Fortune Teller's English may not have been reviewed with Chris.",
+          "source": "TOWN_EVENTS"
+        }
+      ],
+      "slug": "area-a-golden-armor"
+    },
+    {
+      "no": 12,
+      "harano": "area-c-silverstone",
+      "title": "Area C: the silver stone",
+      "npcs": [
+        {
+          "who": "Fontana's party (with Guy's or Balbo's party)",
+          "speakers": [
+            "Fontana",
+            "Guy"
+          ],
+          "strings": "NPC_MES3 90-108",
+          "placement": "Inferred: the event map ties the pit to the TRASH rubbish room (S36), which it places in Area C from file position and the Dust fights on C-B2; harano's route crosses C-B2 in this chapter. Guy's \"I owed you one\" puts his version after the Jail Ogre rescue (chapter 8), and 176 shows the room survives into Area C'. harano doesn't mention the pit.",
+          "blurb": "Step into the middle of a trash-strewn room and the floor swallows you like an antlion's pit, dropping you next to Fontana's party, who fell in first. A rope comes down, Fontana's crew climbs out, and Guy is waiting at the top for you: \"I'd expect it from Fontana, but you guys?\" He sends you off with a parting shot: \"Oh, and you really ought to take a bath!\"",
+          "quotes": [
+            {
+              "file": "NPC_MES3",
+              "idx": 101,
+              "speaker": "Guy",
+              "text": "I'd expect it from Fontana, but you guys?"
+            },
+            {
+              "file": "NPC_MES3",
+              "idx": 102,
+              "speaker": "Guy",
+              "text": "Oh, and you really ought to take a bath!"
+            }
+          ],
+          "flags": "The rescuer is Guy (101-102) or Balbo (103-104; \"Man in armor\" 105-107 if unintroduced). Balbo's version has no bath joke; he tells you to leave the rope for the next idiot. Fontana is \"Young samurai\" (97-100) if unintroduced. The chapter is the weakest placement here: Area C itself is the map's inference, and the pit could fall in any Area C chapter.",
+          "source": "NPC_MES3"
+        },
+        {
+          "who": "The Fortune Teller",
+          "speakers": [
+            "The Fortune Teller"
+          ],
+          "strings": "SISETU 354/340",
+          "placement": "Inferred: A Made God sits between Ring Door and The God's Name in the topic list, and the Greater Golem, which harano fights at Area C B2F x11y10 in this chapter, is the one the Catalog says was made in the god's likeness. It could also mean the Fire Golem. Whether the Fortune Teller's topic list grows with your progress isn't established; the topic is placed with the chapter it points at.",
+          "blurb": "A Made God is about an idol: \"The idol the heretics made of their god was unfinished, it seems.\" The likeliest candidate in Area C is the Greater Golem behind the door on B2F, which the monster catalog describes as made in their god's image.",
+          "quotes": [
+            {
+              "file": "SISETU",
+              "idx": 340,
+              "speaker": "The Fortune Teller",
+              "text": "The idol the heretics made of their god was unfinished, it seems."
+            }
+          ],
+          "flags": "SISETU isn't covered by docs/npc-review.md or docs/event-review.md, so the King's and Fortune Teller's English may not have been reviewed with Chris. Which golem is meant is the event map's inference.",
+          "source": "TOWN_EVENTS"
+        }
+      ],
+      "slug": "area-c-silverstone"
+    },
+    {
+      "no": 13,
+      "harano": "area-c-movefloor",
+      "title": "Area C: stopping the moving floors",
+      "npcs": [
+        {
+          "who": "The Guardians",
+          "speakers": [
+            "The Guardians"
+          ],
+          "strings": "EVENTMES 283",
+          "placement": "Walkthrough: harano fights the Guardians on Area C B4F at x5y11, past the snake door and the damage floor, in this chapter. That speech 283 goes with this fight is Inferred (fourth of six).",
+          "blurb": "Past the snake door and the damage floor, the fourth Guardian party calls you defilers of their land and makes a promise: \"This sword shall drink your blood, and our god shall rise again.\"",
+          "quotes": [
+            {
+              "file": "EVENTMES",
+              "idx": 283,
+              "speaker": "The Guardians",
+              "text": "This sword shall drink your blood, and our god shall rise again."
+            }
+          ],
+          "flags": "EVENTMES 283 is in scene S40, which hasn't been reviewed with Chris yet (the review stopped at S30), so the quoted wording may change.",
+          "source": "TOWN_EVENTS"
+        }
+      ],
+      "slug": "area-c-movefloor"
+    },
+    {
+      "no": 14,
+      "harano": "area-d",
+      "title": "Area D: mimicry mode released",
+      "npcs": [
+        {
+          "who": "Guy's party",
+          "speakers": [
+            "Guy",
+            "Lychee"
+          ],
+          "strings": "NPC_MES1 289, 98-103",
+          "placement": "Game: 289 is about a word needed from glyphs in an altar room on a higher floor, the god's-name altar on B3F (event map S45); 98-103 react to the maze changing, which happens when mimicry mode is released at the end of this chapter (S47).",
+          "blurb": "Before the release, Guy is turning over \"a string of baffling ancient glyphs somewhere on a higher floor\" and wondering if it's the answer, which it is. Once the walls have changed, he wants to know what happened to the maze, and Lychee answers before anyone accuses her: \"It wasn't Lychee! I only kicked a teeny little rock, that's all!\"",
+          "quotes": [
+            {
+              "file": "NPC_MES1",
+              "idx": 289,
+              "speaker": "Guy",
+              "text": "a string of baffling ancient glyphs somewhere on a higher floor"
+            },
+            {
+              "file": "NPC_MES1",
+              "idx": 102,
+              "speaker": "Lychee",
+              "text": "It wasn't Lychee! I only kicked a teeny little rock, that's all!"
+            }
+          ],
+          "flags": "98-103 can come up any time after the release; harano's chapter 13 (area-c-movefloor) is itself set after the release, so it could sit there instead.",
+          "source": "NPC_MES1"
+        },
+        {
+          "who": "Balbo's party",
+          "speakers": [
+            "Balbo"
+          ],
+          "strings": "NPC_MES2 264-265",
+          "placement": "Game: the treasure behind a door that turned Alba to ash is the small door and crystal in Area D (event map S47, which links 264-265); harano has it on B1F, the step that releases mimicry mode.",
+          "blurb": "Balbo's party got to the small door before you, and it went badly. Balbo warns you off: \"The treasure ahead is beyond the likes of you.\" Alba went in and turned to ash the moment he came out, so they're off to the Temple to have him revived.",
+          "quotes": [
+            {
+              "file": "NPC_MES2",
+              "idx": 264,
+              "speaker": "Balbo",
+              "text": "The treasure ahead is beyond the likes of you."
+            },
+            {
+              "file": "NPC_MES2",
+              "idx": 264,
+              "speaker": "Balbo",
+              "text": "Alba went in a while ago, and the moment he came out, he turned to ashes."
+            }
+          ],
+          "flags": "265 is the same speech under \"Man in armor\". The blurb says \"turned to ash\" in its own words; the quote keeps the patch's \"ashes\". Balbo's progress reports (81-89, 142, 261-265) are review scene 3 in docs/npc-review.md, still open: the Japanese is stiff and haughty here, unlike Balbo anywhere else, and the English keeps that register for now.",
+          "source": "NPC_MES2"
+        },
+        {
+          "who": "Fontana's party",
+          "speakers": [
+            "Fontana"
+          ],
+          "strings": "NPC_MES3 278, 72-73",
+          "placement": "Game: the event map links 278 to the Area D altar that asks for the god's name (S45), and 72-73 to the aftermath of mimicry mode (S47), both in this chapter. 72-73 could equally turn up in any later chapter.",
+          "blurb": "Fontana has seen the altar's question too, and he's stuck. He asks whether you know any word that stands for a god, and offers the one thing he's sure of: \"I'm sure it isn't the god Kadorto.\" Once the crystal is crushed, his party is as baffled as you are: \"Looks like we teleported into a new maze.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES3",
+              "idx": 278,
+              "speaker": "Fontana",
+              "text": "I'm sure it isn't the god Kadorto."
+            },
+            {
+              "file": "NPC_MES3",
+              "idx": 73,
+              "speaker": "Fontana",
+              "text": "Looks like we teleported into a new maze."
+            }
+          ],
+          "flags": "278 is npc-review scene 2 (HIGH, unreviewed). The review note says 占い師 should be \"the Diviner, as in Guy's line\", but the patch now says \"Fortune Teller\" in NPC_MES1, NPC_MES3 and SISETU alike, so that note looks stale. Fontana's advice to ask the Fortune Teller is sound: she has a \"God's Name\" topic (SISETU 341). カドルト神 is the god of the Temple of Cant in Japanese Wizardry lore, not only the spell; the line may be lore rather than a joke. 72 is the \"Young samurai\" version of 73.",
+          "source": "NPC_MES3"
+        },
+        {
+          "who": "The Guardians",
+          "speakers": [
+            "The Guardians"
+          ],
+          "strings": "EVENTMES 284",
+          "placement": "Walkthrough: harano fights the Guardians on Area D B3F at x10y9, behind the door marked CORE, in this chapter. That speech 284 goes with this fight is Inferred (fifth of six).",
+          "blurb": "The fifth Guardian party, behind the CORE door, has two Archmages and a grievance: \"How many hundreds of years it took to raise this land again, you cannot know.\"",
+          "quotes": [
+            {
+              "file": "EVENTMES",
+              "idx": 284,
+              "speaker": "The Guardians",
+              "text": "How many hundreds of years it took to raise this land again, you cannot know."
+            }
+          ],
+          "flags": "EVENTMES 284 is in scene S45, which hasn't been reviewed with Chris yet (the review stopped at S30), so the quoted wording may change. \"Archmages\" is harano's アークメイジ; check the patch's monster name before publishing.",
+          "source": "TOWN_EVENTS"
+        },
+        {
+          "who": "The voice at the god's altar",
+          "speakers": [
+            "the altar's voice"
+          ],
+          "strings": "EVENTMES 199-205",
+          "placement": "Walkthrough: harano sets the LITHOGRAPH at the altar on Area D B3F x11y19 (behind the door marked COMPUTER), answers DIMGUIL, and fights Mother.",
+          "blurb": "Set the LITHOGRAPH OF SUN in the altar behind the COMPUTER door and the tablets light up, and a voice that is neither a man's nor a beast's fills the room: \"Speak the name of the god!\" Give it the name from the mural in the Shrine's altar room and it answers \"Now receive your final baptism!\", and the wall falls to let a woman clad in giant needles attack.",
+          "quotes": [
+            {
+              "file": "EVENTMES",
+              "idx": 201,
+              "speaker": "the altar's voice",
+              "text": "Speak the name of the god!"
+            },
+            {
+              "file": "EVENTMES",
+              "idx": 205,
+              "speaker": "the altar's voice",
+              "text": "Now receive your final baptism!"
+            }
+          ],
+          "flags": "EVENTMES 199-205 is in scene S45, which hasn't been reviewed with Chris yet (the review stopped at S30), so the quoted wording may change.",
+          "source": "TOWN_EVENTS"
+        },
+        {
+          "who": "The labyrinth's voice",
+          "speakers": [
+            "the labyrinth's voice"
+          ],
+          "strings": "EVENTMES 224, 237",
+          "placement": "Walkthrough: harano's character in the full gold set enters the small room on Area D B1F and mimicry mode is released.",
+          "blurb": "Only one character fits through the little door, and only one in all four gold pieces comes out alive. Inside, the crystal cracks in their grip, and the whole labyrinth speaks at once: \"Danger! Mimicry mode released.\" Then the stone walls turn to metal around you.",
+          "quotes": [
+            {
+              "file": "EVENTMES",
+              "idx": 224,
+              "speaker": "the labyrinth's voice",
+              "text": "Danger! Mimicry mode released."
+            }
+          ],
+          "flags": "EVENTMES 224 and 237 is in scene S47, which hasn't been reviewed with Chris yet (the review stopped at S30), so the quoted wording may change. If the caller prefers, this and the altar's voice can be merged as one speaker (both are the ship's machine voices).",
+          "source": "TOWN_EVENTS"
+        },
+        {
+          "who": "The Fortune Teller",
+          "speakers": [
+            "The Fortune Teller"
+          ],
+          "strings": "SISETU 355/341",
+          "placement": "Inferred: The God's Name is the hint for the altar on Area D B3F, which harano answers in this chapter. Whether the Fortune Teller's topic list grows with your progress isn't established; the topic is placed with the chapter it points at.",
+          "blurb": "The God's Name sends you back to somewhere you've already been: \"If you would learn the god's name, go to the altar once more.\" The name is on the mural in the Shrine's 2F altar room, the one with the Fire Golem.",
+          "quotes": [
+            {
+              "file": "SISETU",
+              "idx": 341,
+              "speaker": "The Fortune Teller",
+              "text": "If you would learn the god's name, go to the altar once more."
+            }
+          ],
+          "flags": "SISETU isn't covered by docs/npc-review.md or docs/event-review.md, so the King's and Fortune Teller's English may not have been reviewed with Chris.",
+          "source": "TOWN_EVENTS"
+        },
+        {
+          "who": "The King",
+          "speakers": [
+            "The King"
+          ],
+          "strings": "SISETU 326",
+          "placement": "Game: the King speaks of the great tremor that shook the town and the depths being not of this world, which is mimicry mode's release (EV 224, 237) at the end of this chapter. Told in town after this trip.",
+          "blurb": "Back in town after mimicry mode, the King has felt the tremor and drawn his own conclusion: \"So the depths beneath the Shrine truly are not of this world.\" He wants you back down there at once, and before you can answer, \"you are handed 10000 Gp and shown out of the chamber.\"",
+          "quotes": [
+            {
+              "file": "SISETU",
+              "idx": 326,
+              "speaker": "The King",
+              "text": "So the depths beneath the Shrine truly are not of this world."
+            },
+            {
+              "file": "SISETU",
+              "idx": 326,
+              "speaker": "narration",
+              "text": "you are handed 10000 Gp and shown out of the chamber."
+            }
+          ],
+          "flags": "SISETU isn't covered by docs/npc-review.md or docs/event-review.md, so the King's and Fortune Teller's English may not have been reviewed with Chris.",
+          "source": "TOWN_EVENTS"
+        }
+      ],
+      "slug": "area-d"
+    },
+    {
+      "no": 15,
+      "harano": "area-c-deamon-statue",
+      "title": "Area C: the demon statue",
+      "npcs": [
+        {
+          "who": "Balbo's party",
+          "speakers": [
+            "Balbo"
+          ],
+          "strings": "NPC_MES2 90-91",
+          "placement": "Inferred: Balbo reacts to the maze changing, which happens when mimicry mode is released at the end of chapter 14 (event map S47 links 90-91). This is the first chapter played afterward.",
+          "blurb": "The stone maze has turned to metal, and Balbo's party is as rattled as everyone else. Balbo's verdict is practical: \"Guess we gotta redo our maps.\" They head back to town to start over.",
+          "quotes": [
+            {
+              "file": "NPC_MES2",
+              "idx": 91,
+              "speaker": "Balbo",
+              "text": "Guess we gotta redo our maps."
+            }
+          ],
+          "flags": "Could equally go in any chapter after mimicry mode (area-a-goldenstone is the next one on the main route; area-c-deamon-statue is optional). 90 is the \"Man in armor\" version.",
+          "source": "NPC_MES2"
+        },
+        {
+          "who": "Cleo",
+          "speakers": [
+            "Cleo"
+          ],
+          "strings": "NPC_MES4 22-23, 42-43",
+          "placement": "Inferred: both lines react to the maze being transformed (\"unlike any that came before\", \"no maze built by some wizard\", \"Things I've never seen, all around us\"), which the event map ties to mimicry mode (S47, end of chapter 14). This is the first chapter in the changed maze.",
+          "blurb": "With the walls turned to metal, Cleo is in his element. The maze is \"a structure of a very special kind,\" he says, and you're in the way of his research: \"Would you mind going home?\" Run into him elsewhere and he's hurrying off to report it all to the King.",
+          "quotes": [
+            {
+              "file": "NPC_MES4",
+              "idx": 23,
+              "speaker": "Cleo",
+              "text": "a structure of a very special kind"
+            },
+            {
+              "file": "NPC_MES4",
+              "idx": 23,
+              "speaker": "Cleo",
+              "text": "Would you mind going home?"
+            }
+          ],
+          "flags": "The mimicry-mode reading is the event map's and mine; 42/43 ('What a wealth of research material! Things I've never seen... I must report this to the King at once') could instead be a first look at Area X in chapter 6. Neither line names what changed. 'Would you mind going home?' is the only time in the file Cleo tells you to leave, and it's likely what he means by 'after I warned you' in chapter 17.",
+          "source": "NPC_MES4"
+        }
+      ],
+      "slug": "area-c-deamon-statue"
+    },
+    {
+      "no": 16,
+      "harano": "area-a-goldenstone",
+      "title": "Area A: the gold stone",
+      "npcs": [
+        {
+          "who": "Guy's party",
+          "speakers": [
+            "Guy"
+          ],
+          "strings": "NPC_MES1 287",
+          "placement": "Game: since the maze changed, Guy's party found a hidden room where a strange device asks questions, the GAME dome in Area A' (event map S49).",
+          "blurb": "Guy's party got into the new hidden room too, and the device's question has them stumped. \"Guess I'll try asking the Fortune Teller.\" That's sound advice, since her \"Strange Device\" topic all but gives the answer away.",
+          "quotes": [
+            {
+              "file": "NPC_MES1",
+              "idx": 287,
+              "speaker": "Guy",
+              "text": "Guess I'll try asking the Fortune Teller."
+            }
+          ],
+          "source": "NPC_MES1"
+        },
+        {
+          "who": "The voice in the GAME dome",
+          "speakers": [
+            "the dome's voice"
+          ],
+          "strings": "EVENTMES 94, 103, 108-112",
+          "placement": "Walkthrough: harano finds the glowing altar at Area A B2F x6y5 after mimicry mode, answers GAME and fights the Crystal Man.",
+          "blurb": "Behind a secret door in Area A's new rooms, a glowing altar with a clear dome asks you a riddle: \"I am no reality, but a thing imagined.\" It wants the name of its world, and when you type GAME it answers \"Correct! Now, let us begin!\" and the Crystal Man comes out swinging.",
+          "quotes": [
+            {
+              "file": "EVENTMES",
+              "idx": 94,
+              "speaker": "the dome's voice",
+              "text": "I am no reality, but a thing imagined."
+            },
+            {
+              "file": "EVENTMES",
+              "idx": 110,
+              "speaker": "the dome's voice",
+              "text": "Correct! Now, let us begin!"
+            }
+          ],
+          "flags": "EVENTMES 94 and 108-112 is in scene S49, which hasn't been reviewed with Chris yet (the review stopped at S30), so the quoted wording may change.",
+          "source": "TOWN_EVENTS"
+        },
+        {
+          "who": "The Fortune Teller",
+          "speakers": [
+            "The Fortune Teller"
+          ],
+          "strings": "SISETU 356/342",
+          "placement": "Inferred: Strange Device points at the GAME dome, which harano solves at Area A B2F x6y5 in this chapter. Whether the Fortune Teller's topic list grows with your progress isn't established; the topic is placed with the chapter it points at.",
+          "blurb": "Strange Device all but gives the riddle away: \"It must be something like a GAME. ....Best not to think too deeply on it.\"",
+          "quotes": [
+            {
+              "file": "SISETU",
+              "idx": 342,
+              "speaker": "The Fortune Teller",
+              "text": "It must be something like a GAME. ....Best not to think too deeply on it."
+            }
+          ],
+          "flags": "SISETU isn't covered by docs/npc-review.md or docs/event-review.md, so the King's and Fortune Teller's English may not have been reviewed with Chris. The line's first sentence says \"strange machine\" though the topic is Strange Device (the Japanese has the same slip; the map's Translation traps suggest \"strange device\"). The quote avoids that sentence.",
+          "source": "TOWN_EVENTS"
+        }
+      ],
+      "slug": "area-a-goldenstone"
+    },
+    {
+      "no": 17,
+      "harano": "area-e",
+      "title": "Area E: the control room",
+      "npcs": [
+        {
+          "who": "Cleo and Bergamot",
+          "speakers": [
+            "Cleo",
+            "Bergamot"
+          ],
+          "strings": "NPC_MES4 44-54",
+          "placement": "Walkthrough: harano opens the BRIDGE door at B4F x12y6 and fights Cleo's group with the Guardians at x12y12.",
+          "blurb": "The black shadow you've met before is waiting in the control room, and this time Cleo steps out of it. He's sorry to see you: \"And after I warned you so very firmly not to go any further...\" Then he drops the act. \"We are the ones who took your Priestess,\" he says, and the heretics laid out the glyphs too, because their god wanted whoever wins this fight to open the door.",
+          "quotes": [
+            {
+              "file": "NPC_MES4",
+              "idx": 46,
+              "speaker": "Cleo",
+              "text": "And after I warned you so very firmly not to go any further..."
+            },
+            {
+              "file": "NPC_MES4",
+              "idx": 50,
+              "speaker": "Cleo",
+              "text": "We are the ones who took your Priestess"
+            }
+          ],
+          "flags": "Cresson isn't in the fight (harano: he never appears; harano guesses he may be the mysterious man of chapter 10, which is speculation). Cleo and Bergamot fight alongside Guardians (Arch Fighter, Arch Lord, Arch Ninja, Arch Bishop); harano calls it the hardest fight on the normal route, with Cleo casting Tiltowait and Bergamot Bacadi (バカディ, a spell name the patch doesn't use anywhere I found), and says Mahaman's teleport-the-monsters wish beats it most easily. Once beaten, Cleo's group is gone for good. Bergamot's line 48 ('Ye had no business helpin' the likes o' them') is a nice payoff for chapters 3 and 6 if the text wants it.",
+          "source": "NPC_MES4"
+        },
+        {
+          "who": "The Guardians, with Cleo's group",
+          "speakers": [
+            "The Guardians"
+          ],
+          "strings": "EVENTMES 285",
+          "placement": "Walkthrough: harano's Guardian page lists the sixth and last Guardian party as Cleo's group in Area E, fought behind the BRIDGE door at B4F x12y12. That speech 285 goes with this fight is Inferred (last in the file, and the map had no place for it).",
+          "blurb": "The last Guardian party fights alongside Cleo's group behind the BRIDGE door, and this time they make you an offer before they attack: \"Would you not rule every wish, every fate?\"",
+          "quotes": [
+            {
+              "file": "EVENTMES",
+              "idx": 285,
+              "speaker": "The Guardians",
+              "text": "Would you not rule every wish, every fate?"
+            }
+          ],
+          "flags": "EVENTMES 285 is in scene S51, which hasn't been reviewed with Chris yet (the review stopped at S30), so the quoted wording may change. Whether 285 actually plays alongside Cleo's own lines (NPC_MES4 44-55) isn't established; check in the emulator.",
+          "source": "TOWN_EVENTS"
+        }
+      ],
+      "slug": "area-e"
+    },
+    {
+      "no": 18,
+      "harano": "area-z",
+      "title": "Area Z: the final battle",
+      "npcs": [
+        {
+          "who": "The mysterious man",
+          "speakers": [
+            "Mysterious man"
+          ],
+          "strings": "NPC_MES5 108-111",
+          "placement": "Game: the event map links NPC5 107-111 to the coffin scene (S52), and 108 says 'So you have reached this place at last' and names the great iron ship; 111 sends you on to face 'my father'. harano records an event on entering the great hall at Area Z x10y6, before the coffin at x10y10; that this event is 108-111 is Inferred.",
+          "blurb": "In the great hall a mysterious man is waiting, and he finally tells you what the Shrine is: a great iron ship whose leaking fuel disordered this world's life and produced you, his unforeseen \"lesser beings.\" He sounds more lonely than menacing (\"This world is too full of the unexpected for me to bear\"), and he sends you on to the coffin: \"Face my father, who is also myself, you who know no fear.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES5",
+              "idx": 110,
+              "speaker": "Mysterious man",
+              "text": "This world is too full of the unexpected for me to bear."
+            },
+            {
+              "file": "NPC_MES5",
+              "idx": 111,
+              "speaker": "Mysterious man",
+              "text": "Face my father, who is also myself, you who know no fear."
+            }
+          ],
+          "source": "NPC_MES5"
+        },
+        {
+          "who": "The Fortune Teller",
+          "speakers": [
+            "The Fortune Teller"
+          ],
+          "strings": "SISETU 357/343",
+          "placement": "Inferred: Dark God points at the god in the huge coffin, the final boss in this chapter. Whether the Fortune Teller's topic list grows with your progress isn't established; the topic is placed with the chapter it points at.",
+          "blurb": "Dark God is one line long, and it's all the warning the Fortune Teller gives about Area Z: \"I see it! A dark god, asleep below!\"",
+          "quotes": [
+            {
+              "file": "SISETU",
+              "idx": 343,
+              "speaker": "The Fortune Teller",
+              "text": "I see it! A dark god, asleep below!"
+            }
+          ],
+          "flags": "SISETU isn't covered by docs/npc-review.md or docs/event-review.md, so the King's and Fortune Teller's English may not have been reviewed with Chris.",
+          "source": "TOWN_EVENTS"
+        },
+        {
+          "who": "The Priestess",
+          "speakers": [
+            "The Priestess"
+          ],
+          "strings": "EVENTMES 233, 234, 236, 298, 299",
+          "placement": "Walkthrough: harano says beating the final boss triggers an event that gives the RING OF MEDIUM and teleports the party to Shrine 2F x11y12.",
+          "blurb": "When the thing in the huge coffin falls, the relief parts and a beautiful woman appears: the Priestess, speaking in paired riddles such as \"You who have gained every power: is it the end, or the beginning?\" She gives you the RING OF MEDIUM as proof to take home. A party that came by the golem route gets a shorter speech: \"You who believe in power alone: I have no tale to tell you.\"",
+          "quotes": [
+            {
+              "file": "EVENTMES",
+              "idx": 234,
+              "speaker": "The Priestess",
+              "text": "You who have gained every power: is it the end, or the beginning?"
+            },
+            {
+              "file": "EVENTMES",
+              "idx": 236,
+              "speaker": "The Priestess",
+              "text": "You who believe in power alone: I have no tale to tell you."
+            }
+          ],
+          "flags": "EVENTMES 233-236 and 298 is in scene S52/S53, which hasn't been reviewed with Chris yet (the review stopped at S30), so the quoted wording may change. 234 and 236 say \"the gods' word\" for 神の言葉 in a one-god story (a map Translation trap; \"the god's word\" is safer). That 236 is the golem-route version is the map's inference.",
+          "source": "TOWN_EVENTS"
+        }
+      ],
+      "slug": "area-z"
+    },
+    {
+      "no": 19,
+      "harano": "ending",
+      "title": "The ending",
+      "npcs": [
+        {
+          "who": "Cresson",
+          "speakers": [
+            "Cresson"
+          ],
+          "strings": "NPC_MES4 24-29",
+          "placement": "Inferred: Game fixes it after the Area E fight (\"It seems those two won't be coming back\"); harano goes straight from the fight to Area Z, and Cresson's \"tell the world what you experienced beyond that door\" reads as after the final boss, so the first natural visit is now.",
+          "blurb": "With Cleo and Bergamot gone, Cresson is alone in the library, and he has something to get off his chest. He was never a heretic, only a captive, and he asks you to \"tell the world what you experienced beyond that door.\" As for him, \"I'll wait here for the next Opener.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES4",
+              "idx": 27,
+              "speaker": "Cresson",
+              "text": "tell the world what you experienced beyond that door."
+            },
+            {
+              "file": "NPC_MES4",
+              "idx": 27,
+              "speaker": "Cresson",
+              "text": "I'll wait here for the next Opener."
+            }
+          ],
+          "flags": "Could equally be heard any time after chapter 17; the main session might prefer it as a postscript there. Not yet reviewed with Chris (npc-review NPC_MES4 scene 2, HIGH).",
+          "source": "NPC_MES4"
+        },
+        {
+          "who": "The King",
+          "speakers": [
+            "The King"
+          ],
+          "strings": "SISETU 322",
+          "placement": "Walkthrough: harano says a character carrying the RING OF MEDIUM is summoned to the King the moment they enter town, and the ending follows.",
+          "blurb": "Carry the RING OF MEDIUM into town and the King summons you at once. He takes the news as something he half expected, \"So the Priestess was fated not to return.\" Then comes the reward: \"Accept this title and 1,000,000 Gp.\"",
+          "quotes": [
+            {
+              "file": "SISETU",
+              "idx": 322,
+              "speaker": "The King",
+              "text": "So the Priestess was fated not to return."
+            },
+            {
+              "file": "SISETU",
+              "idx": 322,
+              "speaker": "The King",
+              "text": "Accept this title and 1,000,000 Gp."
+            }
+          ],
+          "flags": "SISETU isn't covered by docs/npc-review.md or docs/event-review.md, so the King's and Fortune Teller's English may not have been reviewed with Chris. harano adds that the ring is taken from you here and titled characters get their MP restored by later audiences (probably 325, \"I see you continue to hone your skills.\").",
+          "source": "TOWN_EVENTS"
+        },
+        {
+          "who": "The Fortune Teller",
+          "speakers": [
+            "The Fortune Teller"
+          ],
+          "strings": "SISETU 358/344",
+          "placement": "Inferred: The End is the last topic and follows the Priestess's speech in the list. Whether the Fortune Teller's topic list grows with your progress isn't established; the topic is placed with the chapter it points at.",
+          "blurb": "The End, the Fortune Teller's last topic, declines to predict anything at all: \"You understand it all, I suppose. What comes after, no one can say.\"",
+          "quotes": [
+            {
+              "file": "SISETU",
+              "idx": 344,
+              "speaker": "The Fortune Teller",
+              "text": "You understand it all, I suppose. What comes after, no one can say."
+            }
+          ],
+          "flags": "SISETU isn't covered by docs/npc-review.md or docs/event-review.md, so the King's and Fortune Teller's English may not have been reviewed with Chris.",
+          "source": "TOWN_EVENTS"
+        }
+      ],
+      "slug": "ending"
+    },
+    {
+      "no": 20,
+      "harano": "training-field",
+      "title": "The Training Maze",
+      "npcs": [],
+      "slug": "training-field"
+    },
+    {
+      "no": 21,
+      "harano": "dragon-cave",
+      "title": "The Dragon's Cave",
+      "npcs": [],
+      "slug": "dragon-cave"
+    },
+    {
+      "no": null,
+      "harano": null,
+      "title": "Anytime (not tied to a chapter)",
+      "npcs": [
+        {
+          "who": "Guy's party",
+          "speakers": [
+            "Guy",
+            "Alstron"
+          ],
+          "strings": "NPC_MES1 115-127",
+          "placement": "Generic: the \"who are you\" topic.",
+          "blurb": "Ask who they are and Guy introduces himself as \"the hero from far across the sea!\" Alstron then introduces everyone else, and when Guy reminds you that he's the leader, Alstron lets it go: \"Of course. If you say so.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES1",
+              "idx": 115,
+              "speaker": "Guy",
+              "text": "the hero from far across the sea!"
+            },
+            {
+              "file": "NPC_MES1",
+              "idx": 125,
+              "speaker": "Alstron",
+              "text": "Of course. If you say so."
+            }
+          ],
+          "source": "NPC_MES1"
+        },
+        {
+          "who": "Guy's party",
+          "speakers": [
+            "Alstron",
+            "Linaria",
+            "Fritillaria"
+          ],
+          "strings": "NPC_MES1 236-260",
+          "placement": "Generic: the personal-questions topic.",
+          "blurb": "Ask them something personal and the party's odd side comes out. Alstron was turned down for Bishop and is puzzled, because where he comes from you just take a certain book to the temple, and Linaria wants your opinion: \"Hey, do you think monsters taste good?\" Fritillaria, while he's with them, confides that \"When I fail, they hit me.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES1",
+              "idx": 258,
+              "speaker": "Linaria",
+              "text": "Hey, do you think monsters taste good?"
+            },
+            {
+              "file": "NPC_MES1",
+              "idx": 254,
+              "speaker": "Fritillaria",
+              "text": "When I fail, they hit me."
+            }
+          ],
+          "flags": "Alstron's book is Dragon Quest III's Book of Satori; see npc-translation.md.",
+          "source": "NPC_MES1"
+        },
+        {
+          "who": "Alstron",
+          "speakers": [
+            "Alstron"
+          ],
+          "strings": "NPC_MES1 56-64",
+          "placement": "Generic: Alstron's reactions to your party.",
+          "blurb": "Alstron has remarks for all kinds of parties. A strong young one gets a compliment and a polite request, \"could you do something about that smell of the stables?\" Another greeting is a lot less genteel: \"You thieving scum! Where the hell'd you get all that money?!\"",
+          "quotes": [
+            {
+              "file": "NPC_MES1",
+              "idx": 62,
+              "speaker": "Alstron",
+              "text": "could you do something about that smell of the stables?"
+            },
+            {
+              "file": "NPC_MES1",
+              "idx": 64,
+              "speaker": "Alstron",
+              "text": "You thieving scum! Where the hell'd you get all that money?!"
+            }
+          ],
+          "flags": "What triggers 64 isn't established; it reads like a reaction to a party carrying a lot of gold.",
+          "source": "NPC_MES1"
+        },
+        {
+          "who": "Guy's party",
+          "speakers": [
+            "Lychee",
+            "Alstron",
+            "Lilia"
+          ],
+          "strings": "NPC_MES1 60, 68, 75",
+          "placement": "Generic: lines keyed to joke character names (A, Item, Richguy).",
+          "blurb": "The party has lines for some joke character names. Lychee saw one of yours at the tavern drinking all alone: \"I think their name was 'Item' or something.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES1",
+              "idx": 68,
+              "speaker": "Lychee",
+              "text": "I think their name was 'Item' or something."
+            }
+          ],
+          "flags": "The exact trigger (a name in your party or in the tavern) isn't established.",
+          "source": "NPC_MES1"
+        },
+        {
+          "who": "Guy",
+          "speakers": [
+            "Guy"
+          ],
+          "strings": "NPC_MES1 163-166",
+          "placement": "Generic: the body-recovery service.",
+          "blurb": "If one of your other parties has been wiped out, Guy offers to carry them back to the Temple as a favor. Accept and he waves off your thanks: \"We'll just help ourselves to our fee.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES1",
+              "idx": 165,
+              "speaker": "Guy",
+              "text": "We'll just help ourselves to our fee."
+            }
+          ],
+          "source": "NPC_MES1"
+        },
+        {
+          "who": "Balbo's party",
+          "speakers": [
+            "Balbo",
+            "Alba",
+            "Rosea",
+            "Reiran",
+            "Gaura",
+            "Artemisia"
+          ],
+          "strings": "NPC_MES2 96-113",
+          "placement": "Anytime: introductions when you ask who they are.",
+          "blurb": "Ask Balbo's party who they are and you get a roll call. Gaura, the big shaggy one, manages \"Uuu, mmm, everyone, scary.\" Reiran the Ninja is friendlier, in her way: \"Shall I lop your head off for you?\"",
+          "quotes": [
+            {
+              "file": "NPC_MES2",
+              "idx": 100,
+              "speaker": "Gaura",
+              "text": "Uuu, mmm, everyone, scary."
+            },
+            {
+              "file": "NPC_MES2",
+              "idx": 105,
+              "speaker": "Reiran",
+              "text": "Shall I lop your head off for you?"
+            }
+          ],
+          "flags": "Gaura and Reiran leave the party after chapter 8 (see the area-a-yellowstone flags), so these two intros belong to the early game.",
+          "source": "NPC_MES2"
+        },
+        {
+          "who": "Balbo",
+          "speakers": [
+            "Balbo"
+          ],
+          "strings": "NPC_MES2 92-93, 203",
+          "placement": "Anytime: Balbo's alignment changes; what triggers each line isn't known.",
+          "blurb": "Balbo's alignment is less settled than his manners. Too poisoned to fight, he once let a friendly monster walk, turned Good, and now spends his time at the Temple repenting: \"Oh, what terrible things I have done!\" Later he kills one by accident and is \"right back to my old ways.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES2",
+              "idx": 92,
+              "speaker": "Balbo",
+              "text": "Oh, what terrible things I have done!"
+            },
+            {
+              "file": "NPC_MES2",
+              "idx": 93,
+              "speaker": "Balbo",
+              "text": "right back to my old ways"
+            }
+          ],
+          "flags": "Review scene 1 (done).",
+          "source": "NPC_MES2"
+        },
+        {
+          "who": "Balbo",
+          "speakers": [
+            "Balbo"
+          ],
+          "strings": "NPC_MES2 142-145",
+          "placement": "Anytime: the body-collection service, offered when your dead are left in the maze.",
+          "blurb": "If you've left bodies in the maze, Balbo offers to haul them to the Temple, though \"We Evil types don't usually go in for this.\" Say yes and he admits what caught his eye: \"That lot had some mighty fine gear on 'em.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES2",
+              "idx": 142,
+              "speaker": "Balbo",
+              "text": "We Evil types don't usually go in for this"
+            },
+            {
+              "file": "NPC_MES2",
+              "idx": 144,
+              "speaker": "Balbo",
+              "text": "That lot had some mighty fine gear on 'em."
+            }
+          ],
+          "flags": "Review scene 5, not yet reviewed. 142 is in the stiff register of scene 3; 144 is coarse Balbo.",
+          "source": "NPC_MES2"
+        },
+        {
+          "who": "Balbo's party",
+          "speakers": [
+            "Balbo",
+            "Reiran"
+          ],
+          "strings": "NPC_MES2 226-242",
+          "placement": "Anytime: personal questions.",
+          "blurb": "Ask them something personal and Balbo brags that he's a strong swimmer, then admits, \"Not that there's anyplace to swim down here.\" Reiran confesses a hobby: \"Lately I'm, like, totally hooked on setting off teleporter traps on purpose.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES2",
+              "idx": 226,
+              "speaker": "Balbo",
+              "text": "Not that there's anyplace to swim down here."
+            },
+            {
+              "file": "NPC_MES2",
+              "idx": 235,
+              "speaker": "Reiran",
+              "text": "Lately I'm, like, totally hooked on setting off teleporter traps on purpose."
+            }
+          ],
+          "source": "NPC_MES2"
+        },
+        {
+          "who": "Balbo's party",
+          "speakers": [
+            "Balbo",
+            "Rosea"
+          ],
+          "strings": "NPC_MES2 227, 231-233",
+          "placement": "Anytime: personal questions about Alba.",
+          "blurb": "Alba lost his comrades in some other dungeon long ago and hasn't gotten over it. Balbo's sympathy runs about as deep as you'd expect: \"but the guy's just too damn gloomy.\" Rosea, who owes Alba and Balbo her life, wishes she could ease his pain.",
+          "quotes": [
+            {
+              "file": "NPC_MES2",
+              "idx": 231,
+              "speaker": "Balbo",
+              "text": "but the guy's just too damn gloomy."
+            }
+          ],
+          "flags": "Rosea's line (233) is review scene 2, with a new wording proposed but not approved, so it's paraphrased rather than quoted. Rosea being saved by Balbo and Alba is 228.",
+          "source": "NPC_MES2"
+        },
+        {
+          "who": "Rosea",
+          "speakers": [
+            "Rosea"
+          ],
+          "strings": "NPC_MES2 54",
+          "placement": "Anytime: news.",
+          "blurb": "Rosea has a word of advice about Loktofeit: \"It was once a safe way to get home, but now every item you carry vanishes.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES2",
+              "idx": 54,
+              "speaker": "Rosea",
+              "text": "It was once a safe way to get home, but now every item you carry vanishes."
+            }
+          ],
+          "source": "NPC_MES2"
+        },
+        {
+          "who": "Balbo's party",
+          "speakers": [
+            "Balbo",
+            "Reiran"
+          ],
+          "strings": "NPC_MES2 174-184",
+          "placement": "Anytime: gossip about Guy's and Fontana's parties.",
+          "blurb": "Ask about other parties and Balbo isn't impressed by Fontana, the boy samurai: \"Must be nice, bein' born with a silver spoon.\" Reiran thinks Fontana's party is \"kinda sketchy... In, like, more ways than one.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES2",
+              "idx": 179,
+              "speaker": "Balbo",
+              "text": "Must be nice, bein' born with a silver spoon."
+            },
+            {
+              "file": "NPC_MES2",
+              "idx": 184,
+              "speaker": "Reiran",
+              "text": "kinda sketchy... In, like, more ways than one."
+            }
+          ],
+          "flags": "Reiran joins Fontana's party after chapter 8 (NPC3 9), which makes 184 funnier in hindsight. The blurb doesn't say so.",
+          "source": "NPC_MES2"
+        },
+        {
+          "who": "Artemisia",
+          "speakers": [
+            "Artemisia"
+          ],
+          "strings": "NPC_MES2 254-259",
+          "placement": "Anytime after chapter 8, when Artemisia is with Balbo's party (Inferred).",
+          "blurb": "Artemisia digs up lost spells and doesn't always read them right. Her latest wouldn't work because the name was worn and she guessed: \"I was sure 'Likaton' would be fine...\"",
+          "quotes": [
+            {
+              "file": "NPC_MES2",
+              "idx": 255,
+              "speaker": "Artemisia",
+              "text": "I was sure 'Likaton' would be fine..."
+            }
+          ],
+          "flags": "The Japanese is りかとん, a garbled take on the spell name; the patch has no Litokan string to set it against, so the joke may be lost on players who don't know Wizardry's spell list.",
+          "source": "NPC_MES2"
+        },
+        {
+          "who": "Fontana's party",
+          "speakers": [
+            "Fontana",
+            "Cephala"
+          ],
+          "strings": "NPC_MES3 109-123",
+          "placement": "Generic: introductions, when you ask who they are.",
+          "blurb": "Ask Fontana's party who they are and you learn how young they are. Fontana says, \"I'm only 13, but I'm a Samurai,\" since he was born into a samurai house, and Cephala gives you her full name, Euphorbia Leuco Cephala, before adding, \"It's long, so Cephala is fine.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES3",
+              "idx": 111,
+              "speaker": "Fontana",
+              "text": "I'm only 13, but I'm a Samurai"
+            },
+            {
+              "file": "NPC_MES3",
+              "idx": 115,
+              "speaker": "Cephala",
+              "text": "It's long, so Cephala is fine."
+            }
+          ],
+          "flags": "npc-review scene 8 (LOW-MEDIUM, unreviewed).",
+          "source": "NPC_MES3"
+        },
+        {
+          "who": "Fontana's party",
+          "speakers": [
+            "Fontana"
+          ],
+          "strings": "NPC_MES3 220-221, 229-230, 247-248, 193-194, 224-226, 255",
+          "placement": "Generic: personal questions; a running gag.",
+          "blurb": "Fontana's real name is Kikunoshin; Zaril thought it sounded weak and registered him as \"Fontana\" without asking. He'd like you to call him Kikunoshin, and if you won't, he says, \"Heh... I knew it......\" He did try changing it back once: \"But by the next day it had gone back...\"",
+          "quotes": [
+            {
+              "file": "NPC_MES3",
+              "idx": 230,
+              "speaker": "Fontana",
+              "text": "Heh... I knew it......"
+            },
+            {
+              "file": "NPC_MES3",
+              "idx": 248,
+              "speaker": "Fontana",
+              "text": "But by the next day it had gone back..."
+            }
+          ],
+          "flags": "npc-review scene 6 (MEDIUM, unreviewed) and the open question on Artemisia's nickname for him (\"Kiku\", 193-194, 224, 226). I'm assuming 230 is the answer to 229 when you refuse; the dump doesn't show the menu.",
+          "source": "NPC_MES3"
+        },
+        {
+          "who": "Fontana's party",
+          "speakers": [
+            "Artemisia",
+            "Lilia",
+            "Cephala"
+          ],
+          "strings": "NPC_MES3 239-240, 253, 256",
+          "placement": "Generic: personal questions; the lines read as a sequence over several meetings.",
+          "blurb": "Artemisia has found a lost Priest attack spell and means to restore it with Cephala's help. Lilia warns you to stay out of that girl's magic experiments, and she's right: the revived spell only lowers the caster's Armor Class by 2, and Cephala's verdict is, \"I suppose it was lost for a reason.\" Artemisia suspects she misread the worn name: \"I was sure 'Likaton' would be fine...\"",
+          "quotes": [
+            {
+              "file": "NPC_MES3",
+              "idx": 253,
+              "speaker": "Cephala",
+              "text": "I suppose it was lost for a reason."
+            },
+            {
+              "file": "NPC_MES3",
+              "idx": 256,
+              "speaker": "Artemisia",
+              "text": "I was sure 'Likaton' would be fine..."
+            }
+          ],
+          "flags": "りかとん looks like a scrambled LITOKAN, the Priest flame spell from the older Wizardry games (it's not in Dimguil's spell list), so the joke is that she read the name wrong. If the patch has an established English spelling for Litokan from those games, \"Likaton\" should mirror it.",
+          "source": "NPC_MES3"
+        },
+        {
+          "who": "Fontana's party",
+          "speakers": [
+            "Cephala"
+          ],
+          "strings": "NPC_MES3 55",
+          "placement": "Generic: a reaction to the player's party's race (cat-folk in the party, presumably).",
+          "blurb": "Bring enough cat-people into the maze and Cephala notices: \"So it's you, is it? The reason this maze has been so full of meowing lately.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES3",
+              "idx": 55,
+              "speaker": "Cephala",
+              "text": "So it's you, is it? The reason this maze has been so full of meowing lately."
+            }
+          ],
+          "flags": "The trigger isn't in the text. I'm assuming Felpurrs (the patch's spelling) in the party; check before the site says so.",
+          "source": "NPC_MES3"
+        },
+        {
+          "who": "Bergamot and Cresson",
+          "speakers": [
+            "Bergamot",
+            "Cresson"
+          ],
+          "strings": "NPC_MES4 134-139",
+          "placement": "Generic: a 'news' topic in the library; no time fixed.",
+          "blurb": "Ask Bergamot what's new and he remembers he brought back tea cakes from his last trip to the castle, then can't find them anywhere. Cresson sets him straight: \"You ate them yesterday, with Cleo. Don't you remember?\"",
+          "quotes": [
+            {
+              "file": "NPC_MES4",
+              "idx": 138,
+              "speaker": "Cresson",
+              "text": "You ate them yesterday, with Cleo. Don't you remember?"
+            }
+          ],
+          "flags": "The patch calls the same 茶菓子 'tea cakes' in 135 and 'cookies' in 137.",
+          "source": "NPC_MES4"
+        },
+        {
+          "who": "Bergamot",
+          "speakers": [
+            "Bergamot"
+          ],
+          "strings": "NPC_MES4 11, 127",
+          "placement": "Generic: 127 is his answer when asked about himself, 11 a reaction to the player's party; no time fixed.",
+          "blurb": "Bergamot's field, he tells you, is \"Ancient tongues, magic circles... writin', in short.\" That makes his other admission a little odd: \"I can't make head nor tail of these ancient glyphs meself.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES4",
+              "idx": 127,
+              "speaker": "Bergamot",
+              "text": "Ancient tongues, magic circles... writin', in short."
+            },
+            {
+              "file": "NPC_MES4",
+              "idx": 11,
+              "speaker": "Bergamot",
+              "text": "I can't make head nor tail of these ancient glyphs meself."
+            }
+          ],
+          "source": "NPC_MES4"
+        },
+        {
+          "who": "Cresson",
+          "speakers": [
+            "Cresson"
+          ],
+          "strings": "NPC_MES4 14, 16",
+          "placement": "Generic: reactions to the player's party (a strong party; a character named after the god).",
+          "blurb": "Cresson has opinions about your party. A strong one gets an invitation, \"why not come and join us? ......Only joking.\" Name a character after a certain god and he urges, \"You really had better change your name.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES4",
+              "idx": 16,
+              "speaker": "Cresson",
+              "text": "why not come and join us? ......Only joking."
+            },
+            {
+              "file": "NPC_MES4",
+              "idx": 14,
+              "speaker": "Cresson",
+              "text": "You really had better change your name."
+            }
+          ],
+          "flags": "14 presumably fires for a character named DIMGUIL; the blurb avoids the name because it's the chapter 14 password.",
+          "source": "NPC_MES4"
+        },
+        {
+          "who": "Cleo and Bergamot (healing)",
+          "speakers": [
+            "Cleo",
+            "Bergamot"
+          ],
+          "strings": "NPC_MES4 64-77",
+          "placement": "Generic: the healing menu. Walkthrough (under-temple-blue-stone): once you reach Area X they always say they're out of magic.",
+          "blurb": "Cleo and Bergamot will heal you, Cleo with the reminder that \"You are a valuable source of information to us, after all.\" Ask Bergamot to heal someone who's perfectly fine and he grumbles about \"Makin' sport of an old man.\" Once you've reached Area X, they're always out of magic.",
+          "quotes": [
+            {
+              "file": "NPC_MES4",
+              "idx": 64,
+              "speaker": "Cleo",
+              "text": "You are a valuable source of information to us, after all"
+            },
+            {
+              "file": "NPC_MES4",
+              "idx": 72,
+              "speaker": "Bergamot",
+              "text": "Makin' sport of an old man"
+            }
+          ],
+          "source": "NPC_MES4"
+        },
+        {
+          "who": "Cleo",
+          "speakers": [
+            "Cleo"
+          ],
+          "strings": "NPC_MES4 121-123",
+          "placement": "Generic: asking the scholars about themselves; no time fixed.",
+          "blurb": "Ask Cleo how they ended up in a library under the Shrine and he says, \"We came here meaning to rescue the Priestess too, at first...\" Then they found this room, and scholars, he explains, \"are terribly greedy for knowledge.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES4",
+              "idx": 121,
+              "speaker": "Cleo",
+              "text": "We came here meaning to rescue the Priestess too, at first..."
+            },
+            {
+              "file": "NPC_MES4",
+              "idx": 123,
+              "speaker": "Cleo",
+              "text": "are terribly greedy for knowledge."
+            }
+          ],
+          "source": "NPC_MES4"
+        },
+        {
+          "who": "Cresson",
+          "speakers": [
+            "Cresson"
+          ],
+          "strings": "NPC_MES4 84-85",
+          "placement": "Generic: the glyph check; 85 when your decoding is complete.",
+          "blurb": "Cresson will check your glyph decoding against the scholars' notes and give you a match rate. Get them all and he's delighted: \"You match us 100%. That proves our research was right.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES4",
+              "idx": 85,
+              "speaker": "Cresson",
+              "text": "You match us 100%. That proves our research was right."
+            }
+          ],
+          "source": "NPC_MES4"
+        },
+        {
+          "who": "Bergamot",
+          "speakers": [
+            "Bergamot"
+          ],
+          "strings": "NPC_MES4 105-107",
+          "placement": "Generic: gossip about other parties (Fontana's); no time fixed.",
+          "blurb": "Bergamot hasn't forgiven Fontana's party for their visit. \"I can't stand children, but Cleo was nice to 'em, so they ran wild all over.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES4",
+              "idx": 106,
+              "speaker": "Bergamot",
+              "text": "I can't stand children, but Cleo was nice to 'em, so they ran wild all over."
+            }
+          ],
+          "source": "NPC_MES4"
+        },
+        {
+          "who": "Cresson",
+          "speakers": [
+            "Cresson"
+          ],
+          "strings": "NPC_MES4 150-151",
+          "placement": "Generic: a talk topic; no time fixed.",
+          "blurb": "Cresson will give you the history of Ganess: a tyrant king cursed to death by the Shrine's shamans, and a peaceable son who got rich selling the lake's magic water. He ends on a question: \"Could the troubles we face now have something to do with the past?\"",
+          "quotes": [
+            {
+              "file": "NPC_MES4",
+              "idx": 151,
+              "speaker": "Cresson",
+              "text": "Could the troubles we face now have something to do with the past?"
+            }
+          ],
+          "source": "NPC_MES4"
+        },
+        {
+          "who": "Zaril's party",
+          "speakers": [
+            "Zaril"
+          ],
+          "strings": "NPC_MES5 51-53",
+          "placement": "Any meeting with Zaril's party (chapter 8 on), if you choose to fight them.",
+          "blurb": "Try to pick a fight with Zaril and he argues with taunts you never actually say on screen: \"What, you calling me chicken?\" He talks himself into a duel, and if you back down at the last prompt he turns it around on you: \"So you're the chicken, then.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES5",
+              "idx": 51,
+              "speaker": "Zaril",
+              "text": "What, you calling me chicken?"
+            },
+            {
+              "file": "NPC_MES5",
+              "idx": 53,
+              "speaker": "Zaril",
+              "text": "So you're the chicken, then."
+            }
+          ],
+          "flags": "51's 'What're you after, getting me this mad?' reads as a real question where どうするつもりだ is a warning (review proposal pending). Not quoted.",
+          "source": "NPC_MES5"
+        },
+        {
+          "who": "Zaril's party",
+          "speakers": [
+            "Zaril",
+            "Fritillaria"
+          ],
+          "strings": "NPC_MES5 63-66, 84, 86, 89, 90",
+          "placement": "Any meeting with Zaril's party; these are news/talk lines that assume you've met Balbo (chapter 4), and Zaril's party only exists from chapter 8. Not tied to a chapter.",
+          "blurb": "Zaril has met Balbo, an Evil Lord, and likes what he sees: \"I wanna be like that Balbo, so I've been picking fights with every monster I come across, but...\" Fritillaria, who owes Zaril for rescuing him when he was left paralyzed, would rather he stayed put: \"I like Zaril just the way he is.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES5",
+              "idx": 89,
+              "speaker": "Zaril",
+              "text": "I wanna be like that Balbo, so I've been picking fights with every monster I come across, but..."
+            },
+            {
+              "file": "NPC_MES5",
+              "idx": 90,
+              "speaker": "Fritillaria",
+              "text": "I like Zaril just the way he is."
+            }
+          ],
+          "flags": "84 says 'they ditched me', inventing a 'they' the Japanese leaves unnamed (置いてけぼりくらってた, 'got left behind'), and 86's 'a guy like that's all right' loses the 'I'd like to be like him' sense of ああいうのもイイな. Both paraphrased, not quoted. 86 is the same string as NPC_MES3 231.",
+          "source": "NPC_MES5"
+        },
+        {
+          "who": "Zaril's party",
+          "speakers": [
+            "Fritillaria"
+          ],
+          "strings": "NPC_MES5 16 (and 24)",
+          "placement": "A greeting that depends on the player's kill count, not on time.",
+          "blurb": "Run up a big enough body count and Fritillaria greets you accordingly: \"Hey! It's the murder squad. You guys kill way too much!\" Zaril gets prim about it in his own version, wishing you'd learn a little more about the sanctity of life.",
+          "quotes": [
+            {
+              "file": "NPC_MES5",
+              "idx": 16,
+              "speaker": "Fritillaria",
+              "text": "Hey! It's the murder squad. You guys kill way too much!"
+            }
+          ],
+          "source": "NPC_MES5"
+        },
+        {
+          "who": "Zaril's party",
+          "speakers": [
+            "Zaril"
+          ],
+          "strings": "NPC_MES5 43-50",
+          "placement": "Trade menu; time unknown.",
+          "blurb": "Zaril's party has three items from a chest it can't identify and offers to sell you one sight unseen, for a reason any Wizardry party will recognize: \"No Bishop in our party, see.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES5",
+              "idx": 43,
+              "speaker": "Zaril",
+              "text": "No Bishop in our party, see."
+            }
+          ],
+          "source": "NPC_MES5"
+        },
+        {
+          "who": "Otaka",
+          "speakers": [
+            "Otaka"
+          ],
+          "strings": "EVENTMES 311-315",
+          "placement": "Game (event map S57, from the FAQ): a random event, rarely found, triggered by touching a spinning magic circle (Underground B3 or Area B, for example). harano doesn't mention it.",
+          "blurb": "Every so often a spinning magic circle turns out to be Otaka, who introduces himself as \"one of the programmers\" and gives you as much as you can carry of whatever he's found in the maze. He has one condition: \"Oh, and not a word to Agan!\"",
+          "quotes": [
+            {
+              "file": "EVENTMES",
+              "idx": 311,
+              "speaker": "Otaka",
+              "text": "one of the programmers"
+            },
+            {
+              "file": "EVENTMES",
+              "idx": 311,
+              "speaker": "Otaka",
+              "text": "Oh, and not a word to Agan!"
+            }
+          ],
+          "flags": "EVENTMES 311-315 is in scene S57, which hasn't been reviewed with Chris yet (the review stopped at S30), so the quoted wording may change. 311 opens \"Fancy bumping into you here!\", a British turn Chris has ruled out (event-voice.md itself gives \"Fancy running into you here!\" as the example); the quotes avoid it.",
+          "source": "TOWN_EVENTS"
+        }
+      ],
+      "slug": "anytime"
+    },
+    {
+      "no": null,
+      "harano": null,
+      "title": "Not yet placed",
+      "npcs": [
+        {
+          "who": "Guy's party",
+          "speakers": [
+            "Guy"
+          ],
+          "strings": "NPC_MES1 89-93, 296",
+          "placement": "Unknown. Guy rests outside a room with \"some crazy trap\" (わけの分からない罠) and heads back to the castle; nothing names the room. Candidates: the warp-back corridors on Underground B2-B3 (chapter 3), the Area B warp switches (chapter 9-10), or the rubbish-room pit in Area C (NPC3 90-108).",
+          "blurb": "Guy is sitting outside a room and insists he's fine: \"Nah, nothing's wrong! Just taking a breather!\" The room up ahead has a trap nobody could make sense of, and his party is going back to the castle to regroup.",
+          "quotes": [
+            {
+              "file": "NPC_MES1",
+              "idx": 91,
+              "speaker": "Guy",
+              "text": "Nah, nothing's wrong! Just taking a breather!"
+            }
+          ],
+          "source": "NPC_MES1"
+        },
+        {
+          "who": "Guy's party",
+          "speakers": [
+            "Guy",
+            "Lychee"
+          ],
+          "strings": "NPC_MES1 94-97",
+          "placement": "Unknown. The party turns Evil and then Good again; no event fixes when. Harano mentions Magical Rabbits (ベーナモカー) by Area B. It mirrors Balbo turning Good by accident (NPC2).",
+          "blurb": "While grinding, Guy killed a friendly monster and took the whole party Evil with him, and he's decided he likes it: \"Approach as a friend... then strike.\" Next time they're Good again, because Lychee \"didn't wanna kill the cute little Magical Rabbit.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES1",
+              "idx": 94,
+              "speaker": "Guy",
+              "text": "Approach as a friend... then strike."
+            },
+            {
+              "file": "NPC_MES1",
+              "idx": 96,
+              "speaker": "Lychee",
+              "text": "I didn't wanna kill the cute little Magical Rabbit."
+            }
+          ],
+          "source": "NPC_MES1"
+        },
+        {
+          "who": "Guy",
+          "speakers": [
+            "Guy",
+            "Alstron",
+            "Fritillaria"
+          ],
+          "strings": "NPC_MES1 257, 120-121",
+          "placement": "Inferred, early (before chapter 8): Guy says they have no Thief and need to scout one, and Fritillaria is later introduced as their newest member. By chapter 9 Fritillaria is with Zaril (NPC5).",
+          "blurb": "Guy admits his party has no Thief and needs to poach one from another party. Later Alstron introduces their new recruit, \"the ever-handy Thief, Fritillaria.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES1",
+              "idx": 257,
+              "speaker": "Guy",
+              "text": "We need to scout someone from another party."
+            },
+            {
+              "file": "NPC_MES1",
+              "idx": 120,
+              "speaker": "Alstron",
+              "text": "the ever-handy Thief, Fritillaria."
+            }
+          ],
+          "source": "NPC_MES1"
+        },
+        {
+          "who": "Balbo's party",
+          "speakers": [
+            "Balbo"
+          ],
+          "strings": "NPC_MES2 263",
+          "placement": "Unknown: \"this area\" has a room with a statue of a giant face, and Balbo means to hurry and tell the scholars. Which area isn't established. Area Z's face-like relief on the coffin (harano area-z x10y10) is a candidate, but Balbo still trusting the scholars suggests a time before chapter 17's reveal.",
+          "blurb": "Balbo has found a room with a statue of a giant face and is hurrying off to tell the scholars. He leaves the examining to you: \"Kindly go on ahead and examine the statue.\"",
+          "quotes": [
+            {
+              "file": "NPC_MES2",
+              "idx": 263,
+              "speaker": "Balbo",
+              "text": "Kindly go on ahead and examine the statue."
+            }
+          ],
+          "flags": "Balbo's progress reports (81-89, 142, 261-265) are review scene 3 in docs/npc-review.md, still open: the Japanese is stiff and haughty here, unlike Balbo anywhere else, and the English keeps that register for now.",
+          "source": "NPC_MES2"
+        },
+        {
+          "who": "Fontana's party",
+          "speakers": [
+            "Fontana"
+          ],
+          "strings": "NPC_MES3 0-8, 74",
+          "placement": "Unknown: the first meeting. Fontana appears as an unnamed \"Young samurai\" who asks if you're the new search party (2) or searching for the Priestess too (74), with no leads yet, which suggests an early chapter (1-5), but nothing fixes it. The Area X statue scene (chapter 6) also has a \"Who are you?\" version (67), so the first meeting can come as late as that.",
+          "blurb": "The first time you meet them, Fontana is just a \"Young samurai\" leading a party of kids who are looking for the Priestess too. \"We're still green, but we're looking for her as well.\" He offers to trade information.",
+          "quotes": [
+            {
+              "file": "NPC_MES3",
+              "idx": 74,
+              "speaker": "Young samurai",
+              "text": "We're still green, but we're looking for her as well."
+            }
+          ],
+          "flags": "npc-review scene 4 (MEDIUM, unreviewed) is reconsidering the \"Young samurai\" tag (\"Little samurai\"), which would change the speaker label but not this quote.",
+          "source": "NPC_MES3"
+        },
+        {
+          "who": "Cleo's group (Cresson's nerves)",
+          "speakers": [
+            "Cleo",
+            "Bergamot",
+            "Cresson"
+          ],
+          "strings": "NPC_MES4 111-113, 116, 119-120, 125, 140, 143",
+          "placement": "Unknown: these come from the 'news' and 'tell them what we know' topics, and what selects them isn't decoded. They read as mid-game (Cresson has been somewhere deep), and they set up the chapter 17 reveal, so they'd fit any chapter between 6 and 16.",
+          "blurb": "Cleo has heard that young Cresson met a very frightening person deep in the Shrine. Cresson would rather not talk about it: \"P-please stop. I don't know anything. I never met any heretics.\" Another time he lets slip that Cleo and Bergamot go up to the surface for supplies, \"but... where do they really go......\"",
+          "quotes": [
+            {
+              "file": "NPC_MES4",
+              "idx": 113,
+              "speaker": "Cresson",
+              "text": "P-please stop. I don't know anything. I never met any heretics."
+            },
+            {
+              "file": "NPC_MES4",
+              "idx": 143,
+              "speaker": "Cresson",
+              "text": "but... where do they really go......"
+            }
+          ],
+          "flags": "Spoiler-safe as written; it's the game's own foreshadowing. Not reviewed with Chris (npc-review NPC_MES4 scene 5).",
+          "source": "NPC_MES4"
+        },
+        {
+          "who": "The mysterious man (warning ignored)",
+          "speakers": [
+            "Mysterious man"
+          ],
+          "strings": "NPC_MES5 106",
+          "placement": "Unknown. It follows up the shadow's warning ('You have scorned my warning!'), so it comes after chapter 10's x17y10 warning, presumably when you go on past it. Whether a fight follows, and where (the Guardians at B5F x9y12 in the same chapter are a guess), isn't established.",
+          "blurb": "If you press on after the shadow's warning, it comes back angrier: \"Fools! You have scorned my warning!\"",
+          "quotes": [
+            {
+              "file": "NPC_MES5",
+              "idx": 106,
+              "speaker": "Mysterious man",
+              "text": "Fools! You have scorned my warning!"
+            }
+          ],
+          "source": "NPC_MES5"
+        },
+        {
+          "who": "The mysterious man (the 'real world' warning)",
+          "speakers": [
+            "Mysterious man"
+          ],
+          "strings": "NPC_MES5 107",
+          "placement": "Unknown. The event map groups it with 108-111 in Area Z, but it reads as a separate, earlier or conditional speech ('You are not yet ready, are you?'), perhaps for a party that reaches Area Z too soon or by the golem route. Not in harano's text.",
+          "blurb": "A mysterious man stops you with a strangely knowing warning: \"Adventurers who have come this far, beyond this point lies the real world.\" If it's dreams you're after, he says, you'd do well to turn back.",
+          "quotes": [
+            {
+              "file": "NPC_MES5",
+              "idx": 107,
+              "speaker": "Mysterious man",
+              "text": "Adventurers who have come this far, beyond this point lies the real world."
+            }
+          ],
+          "source": "NPC_MES5"
+        },
+        {
+          "who": "Agan",
+          "speakers": [
+            "Agan"
+          ],
+          "strings": "NPC_MES5 112",
+          "placement": "Unknown; nobody has recorded where he appears, and harano never mentions him. Fritillaria's talk line 72 (a busy Fighter- or Lord-like man nobody else has met, 'Maybe he ain't from this world?') may be about him. His speech points at the Dragon's Cave, so the dragon-cave chapter is the natural place to mention him.",
+          "blurb": "A mysterious man introduces himself (\"I am Agan, the eternal traveler\") and explains that demons carried him off into the past. He's looking for a sealed place below where \"monsters stir that even the gods cannot control,\" and he's in too much of a hurry to say more.",
+          "quotes": [
+            {
+              "file": "NPC_MES5",
+              "idx": 112,
+              "speaker": "Agan",
+              "text": "I am Agan, the eternal traveler."
+            },
+            {
+              "file": "NPC_MES5",
+              "idx": 112,
+              "speaker": "Agan",
+              "text": "monsters stir that even the gods cannot control"
+            }
+          ],
+          "flags": "The speaker label in-game is 'Mysterious man'; he names himself Agan in the line.",
+          "source": "NPC_MES5"
+        },
+        {
+          "who": "The King",
+          "speakers": [
+            "The King"
+          ],
+          "strings": "SISETU 324",
+          "placement": "Unknown: when the King says this isn't established. It may be his reply when you have nothing new to report, or a post-ending line.",
+          "blurb": "If you come to the King with nothing to report, he takes it in stride: \"Oh ho, you say nothing remains to be done? Then rest easy until new orders are issued.\"",
+          "quotes": [
+            {
+              "file": "SISETU",
+              "idx": 324,
+              "speaker": "The King",
+              "text": "Oh ho, you say nothing remains to be done? Then rest easy until new orders are issued."
+            }
+          ],
+          "flags": "SISETU isn't covered by docs/npc-review.md or docs/event-review.md, so the King's and Fortune Teller's English may not have been reviewed with Chris.",
+          "source": "TOWN_EVENTS"
+        }
+      ],
+      "slug": "unplaced"
+    }
+  ]
+}

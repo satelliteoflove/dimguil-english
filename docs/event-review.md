@@ -23,7 +23,8 @@ each scene show: its place in the story and anything it sets up or pays off (fro
 map), the Japanese read literally, our current English, and a suggestion that fits the
 box. Don't quote long Japanese in the repo; chat is fine. After approval, apply it,
 run `scripts/evfit.py` (the only expected flags are string 36's extra page and
-258's restored {ff30}2), and move on.
+258's restored {ff30}2), then `scripts/wtquotes.py check` (the website walkthrough
+quotes the patch; carry any changed quote over to the site), and move on.
 Before calling a line a joke or loosening it, search the Japanese for its key nouns
 elsewhere; that's how the sticky paste (17, 44, 45) turned out to be a puzzle clue.
 
