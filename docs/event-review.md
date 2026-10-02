@@ -6,15 +6,7 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S31, right foot, left foot (EV 166-168).** See `docs/event-map.md`.
-
-Paused 2026-10-01 at S31: Chris is adding the drajp walkthrough
-(https://dra.jp/game/wizardy-dimguil/chart/) to the Bartok's Trading Post site in another
-session. When it's ready, check the event map against it (trust it slightly more than the
-map, not blindly), then resume. S31 was proposed as "great pillar" -> "huge pillar" (to
-match 228) with the single-quoted labels kept; not yet approved. The disc's map events (see the
-event map's S31) show the foot pillars sit under the WAREHOUSE pillar heads, which
-supports the "parts for the made god" reading.
+**Next: scene S32, other Area B doors (EV 154, 155, 157, 165, 169).** See `docs/event-map.md`.
 
 ## How a scene is reviewed
 
@@ -62,8 +54,9 @@ LABORATORY 107, 219, 220; S26 the lab door and the black stone 156, 277-279; S27
 warp switches 197, 306, 307 (keep the noun "switch" so the remark ties to the switch you
 pressed; 248 waits for S55); S28 Zaril's party and the Chimera Warrior 150-152, 194 (152
 "It's that thing!": やつ is the monster, not "him"); S29 the frost tank 127, 153; S30 the
-experiment log 46, 242. Also done early, out of scene order: the murals 22 (SHIP) and 23
-(DEATH), and 59 and 61 given the same wording as 35 and 36.
+experiment log 46, 242; S31 right foot, left foot 166-168. Also done early, out of scene
+order: the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given the same wording as 35
+and 36.
 
 Every string also had the present-tense sweep and full-question prompts applied, so
 unreviewed strings are consistent but not yet approved.
