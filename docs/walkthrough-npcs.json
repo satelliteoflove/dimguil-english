@@ -891,13 +891,13 @@
           ],
           "strings": "SISETU 353/339",
           "placement": "Inferred: Ring Door is the three-ring dial on the vault, which harano opens at Area B B5F x7y11 in this chapter. Whether the Fortune Teller's topic list grows with your progress isn't established; the topic is placed with the chapter it points at.",
-          "blurb": "Ring Door is the topic to hear before you reach the dial on B5F: \"The key to the secret is hidden on some wall. The great ring stands for the sky, the small ring for the earth.\" The wall in question is the one on Underground B4F that says the sky fell.",
+          "blurb": "Ring Door is the topic to hear before you reach the dial on B5F: \"The key to the secret is hidden on some wall. The large ring stands for the sky, the small ring for the earth.\" The wall in question is the one on Underground B4F that says the sky fell.",
           "quotes": [
             {
               "file": "SISETU",
               "idx": 339,
               "speaker": "The Fortune Teller",
-              "text": "The key to the secret is hidden on some wall. The great ring stands for the sky, the small ring for the earth."
+              "text": "The key to the secret is hidden on some wall. The large ring stands for the sky, the small ring for the earth."
             }
           ],
           "flags": "SISETU isn't covered by docs/npc-review.md or docs/event-review.md, so the King's and Fortune Teller's English may not have been reviewed with Chris.",

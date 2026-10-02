@@ -983,13 +983,13 @@
                 {
                     "length": 27,
                     "source": "NA",
-                    "translation": " \nHow far will you turn the outer ring?",
+                    "translation": " \nHow far will you turn the large ring?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": " \nNothing happens. The dial turns back.",
+                    "translation": " \nNothing happens. The dial quietly turns back.",
                     "addStringTerminator": true
                 },
                 {

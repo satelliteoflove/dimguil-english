@@ -106,7 +106,7 @@ with the chapter and the string's new wording, to carry over to the site.
 | Balbo | NPC_MES2 89 | There must be a clue somewhere. |
 | Mysterious figure | NPC_MES5 105 | Beyond lies the holy ground of the Opener of the Door! |
 | The Guardians | EVENTMES 282 | Your souls we offer up to our god, drunk in like the Priestess's own. |
-| The Fortune Teller | SISETU 339 | The key to the secret is hidden on some wall. The great ring stands for the sky, the small ring for the earth. |
+| The Fortune Teller | SISETU 339 | The key to the secret is hidden on some wall. The large ring stands for the sky, the small ring for the earth. |
 
 ## 11. Area A: the gold armor
 

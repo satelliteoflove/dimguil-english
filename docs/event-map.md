@@ -1080,8 +1080,9 @@ roughly follows the game:
   crawl the ground (地); the Fortune Teller says the large ring is the sky (大空) and the
   small ring the earth (大地). 105 now says "the birds of the sky" and "the snakes of
   the earth" to match 339 (S16 review).
-- **Ring sizes.** 160-162 say small, middle, outer; SISETU 339 says large and small.
-  Either make the Fortune Teller's large ring clearly the outer one, or call it outer.
+- **Ring sizes.** The Japanese says small, middle, outer (160-162) and large and small
+  (SISETU 339). The English says "large" in both places (162 and 339), so the Fortune
+  Teller's ring and the dial's ring are plainly the same (S33 review).
   The NPCs say "discs" (円盤, as does 158); the Fortune Teller says "rings" (輪). Guy's
   "a disc split into three rings" (NPC1 288) bridges them. Keep both words recognizable
   as the same object.
