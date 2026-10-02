@@ -911,19 +911,19 @@
                 {
                     "length": 176,
                     "source": "NA",
-                    "translation": "You meet Zaril's party, but they flee\ninto the darkness as if in terror\nof something.{ff26}\rHuge footsteps echo from far off.\nPeering ahead, you see Zaril's party,\ntwisted together into one.{ff26}\r \"......\" With a voiceless cry,\nthey come on in the shape of a huge fiend.",
+                    "translation": "You meet Zaril's party, but they flee\ninto the darkness as if in terror\nof something.{ff26}\rHuge footsteps echo from far off.\nPeering ahead, you see Zaril's party,\ntwisted together into one.{ff26}\r \"......\" With a voiceless cry,\nthey come at you in the shape of a huge\nmonster.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 37,
                     "source": "NA",
-                    "translation": "The bones of the fiend you felled are\nknitting back together before your eyes.",
+                    "translation": "The bones of the monster you thought you'd\nkilled knit back together before your eyes.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 45,
                     "source": "NA",
-                    "translation": "Bones creak and clatter all around.\n\"{ff30}2It's him!{ff30}0\"",
+                    "translation": "Bones creak and clatter all around.\n\"{ff30}2It's that thing!{ff30}0\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1175,7 +1175,7 @@
                 {
                     "length": 186,
                     "source": "NA",
-                    "translation": "You meet another party, but they flee\ninto the darkness as if in terror\nof something.{ff26}\rHuge footsteps echo from far off.\nPeering ahead, you see that party,\ntwisted together into one.{ff26}\r \"......\" With a voiceless cry,\nthey come on in the shape of a huge fiend.",
+                    "translation": "You meet another party, but they flee\ninto the darkness as if in terror\nof something.{ff26}\rHuge footsteps echo from far off.\nPeering ahead, you see the party from\nbefore, twisted together into one.{ff26}\r \"......\" With a voiceless cry,\nthey come at you in the shape of a huge\nmonster.",
                     "addStringTerminator": true
                 },
                 {
