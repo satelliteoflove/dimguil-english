@@ -1847,13 +1847,13 @@
                 {
                     "length": 39,
                     "source": "NA",
-                    "translation": " \n\"{ff30}2Looks like something switched on.{ff30}0\"{ff26}",
+                    "translation": " \n\"{ff30}2It looks like some switch has been turned on.{ff30}0\"{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 40,
                     "source": "NA",
-                    "translation": " \n\"{ff30}2Looks like something switched off.{ff30}0\"{ff26}",
+                    "translation": " \n\"{ff30}2It looks like some switch has been turned off.{ff30}0\"{ff26}",
                     "addStringTerminator": true
                 },
                 {
