@@ -54,16 +54,20 @@ fouled and the town shaken by quakes (SISETU 327, EV 66, EV 68).
    bird skeleton and the birdlime switch, the JADE MASK (4F), Murphy's Ghost (1F), and
    the altar room with the Fire Golem (2F) and the DIMGUIL mural a floor below it (1F),
    the golem optional and far too strong for now.
-3. **The Underground Shrine, B1-B4,** through the moon-crested door (the LITHOGRAPH
-   again). The scholars' archive, the man frozen in ice, the machine that fouls the
-   lake (stopping it ends the quakes and restores the lake: SISETU 327), the first
-   Guardian party, the blue stone (the first stone set into the LITHOGRAPH), the
-   waterway, the "sky fell" inscription on B4F, and the 2-Head Snake guarding a
-   winding machine that opens the elevator to Area X.
-4. **Area X,** a hub with four sealed doors (A-D) and a central computer: a pedestal
-   of 26 small tablets, one per ancient letter, where the LITHOGRAPH goes and a word is
+3. **The Underground Shrine, B1-B4,** reached by the shining jewel on Shrine 4F, an
+   elevator down to B3 (S5; Walkthrough). The scholars' archive, the man frozen in ice,
+   the machine that fouls the lake (stopping it ends the quakes and restores the lake:
+   SISETU 327), the first Guardian party, the blue stone (the first stone set into the
+   LITHOGRAPH), the waterway, the "sky fell" inscription on B4F, the moon-crested door
+   on B3 (which opens with the LITHOGRAPH once the machine has drained B3's water), and
+   the 2-Head Snake guarding a winding machine that opens the elevator to Area X
+   (Walkthrough).
+4. **Area X,** a hub with four sealed doors (A-D) and a central computer: a pedestal of
+   26 small tablets, one per ancient letter, where the LITHOGRAPH goes and a word is
    typed. The white stone and the word STAFF are in the north-east; typing STAFF opens
-   Area A. Each later area is opened the same way with a word found in the area before.
+   Area A. A door marked TRANSPORTER takes you back to town, and once the white stone is
+   set, the X statue on the island (S54) warps you here (Walkthrough). Each later area
+   is opened the same way with a word found in the area before.
 5. **Area A** (password STAFF): the four golden corpses and the gold equipment, the
    green stone, the red and green crest doors, the Jail Ogre's cage (where Guy's party
    is rescued) and the yellow stone, and the word LABORATORY.
@@ -86,17 +90,20 @@ fouled and the town shaken by quakes (SISETU 327, EV 66, EV 68).
     scholars Cleo and Bergamot reveal that they and their fellow heretics (邪教徒) took
     the Priestess, set monsters on the altar and laid out the ancient letters, all to
     find the "Opener of the Door" (扉を開く者). They fight the party (NPC4 44-55; Enc.
-    places this at E B4F E12 N12).
-11. **Area Z and the ending.** A mysterious man explains that the "Shrine" is a great
-    iron ship that crashed long ago, that its leaking fuel changed this world's life,
-    and that his failed experiments ended with crossing "our father" with a suitable
-    creature; he invites the party to face "my father, who is also myself" (NPC5
-    107-111). In a huge coffin lies a god; when it falls the Priestess appears, speaks
-    an oracle, and gives the RING OF MEDIUM (巫女の腕輪) as proof to take home (EV
-    229-236, 298). The King's closing speech says the Priestess was fated not to
-    return (SISETU 322). Enc. puts Quetzalcoatl at Area Z E10 N10, and the Catalog
-    describes him as the heretics' one god, "water, sun and creator"; that he is the
-    thing in the coffin is **Inferred**.
+    places this at E B4F E12 N12), through the door marked BRIDGE at x12y6, alongside a
+    Guardian party (the sixth, 285); Cresson isn't among them, and once beaten the group
+    is gone for good (Walkthrough).
+11. **Area Z and the ending.** On entering the great hall (x10y6, Walkthrough), a
+    mysterious man explains that the "Shrine" is a great iron ship that crashed long
+    ago, that its leaking fuel changed this world's life, and that his failed
+    experiments ended with crossing "our father" with a suitable creature; he invites
+    the party to face "my father, who is also myself" (NPC5 108-111; that this is the
+    hall event is Inferred). 107 is a separate warning to a party that isn't ready. In a
+    huge coffin lies a god; when it falls the Priestess appears, speaks an oracle, and
+    gives the RING OF MEDIUM (巫女の腕輪) as proof to take home (EV 229-236, 298). The King's
+    closing speech says the Priestess was fated not to return (SISETU 322). Enc. puts
+    Quetzalcoatl at Area Z E10 N10, and the Catalog describes him as the heretics' one
+    god, "water, sun and creator"; that he is the thing in the coffin is **Inferred**.
 12. **The golem route (FAQ, Tips).** A strong party can skip ahead: the Fire Golem
     (Shrine 2F), then the Shadow Golem (Underground B3), then the final boss. The two
     Priestess speeches (EV 234 and 236) probably belong to the two routes: 236 begins
@@ -186,8 +193,10 @@ The square hole is the first of many (see "Square holes").
 
 **S4. The bird skeleton and the birdlime switch.** EV 17, 42-45; alternative EV 301,
 302 with NPC2 72-80.
-Where: the Shrine floors (Game: window; Balbo's party is first met at Shrine 3F
-E11 N6 per Enc.). Exact squares not established.
+Where: Shrine 3F. The Walkthrough presses the switch at x7y8 or x15y8 and finds the
+hidden doors at x9y6 and x13y6; Balbo's party is first met at 3F E11 N6 (Enc.). NPC1
+286 (Guy: the Shrine looks like four floors from outside, there must be a hidden door)
+points at the same doors.
 What: 17 a bird's skeleton lies in a window recess, and on a closer look a sticky white
 substance gets on the party's hands. It is とりもち, birdlime, the paste used to trap
 birds; the bird was caught in it. A side door needs two switches held at once. 43 a
@@ -206,9 +215,10 @@ adventurers hunted them for their meat. Someone was trapping birds. **Inferred.*
 **S5. The star ceiling.** EV 18-21.
 Where: Shrine 4F; the STAR plaque (18) is at E11 N10 (Disc). What: a door plaque reads
 STAR; a ceiling painted like the night sky holds a shining jewel. 19 prompt; 20 touch it
-and the floor starts to move; 21 declined. Teaches S, T, A, R; a moving-floor puzzle in
-miniature. Links: SUN and MOON crest doors; the sun, moon and star pictures on Area C's
-switches (S38).
+and the floor starts to move; 21 declined. Teaches S, T, A, R. The moving floor is an
+elevator: the jewel at 4F x11y12 takes you down to Underground B3, the way into the
+Underground Shrine (Walkthrough). Links: SUN and MOON crest doors; the sun, moon and
+star pictures on Area C's switches (S38).
 
 **S6. Murphy's Ghost.** EV 32, 52.
 Where: Shrine 1F E6 N6 (Enc., Tips). What: a strange statue on a pedestal that
@@ -267,16 +277,20 @@ Where: by file position mostly the Shrine; the revisit lines are placed by Disc 
 ### The Underground Shrine, B1-B4
 
 **S10. The moon door.** EV 80, 81.
-Where: the way into the Underground Shrine (Enc. treats entering it as a milestone).
+Where: Underground B3 x19y4. It opens after the lake machine has drained B3's water,
+and leads down toward B4 and round to the 2-Head Snake on B1 (Walkthrough). It isn't the
+way into the Underground Shrine; that's the jewel elevator (S5).
 What: a door with the moon crest, the glyph word MOON, and a square hole. 80 the
 LITHOGRAPH fits and it opens; 81 without it ("Do you need something?").
 Links: SUN door (S3), STAR (S5).
 
 **S11. The library.** EV 76, 106.
-Where: the underground archive where the scholars Cleo, Bergamot and Cresson live
-(NPC4; NPC3 206 calls it an archive to rival the royal library). 76 a door reads
-LIBRARY. 106 old books crammed on shelves, nothing useful. Flavor, and home of the
-scholars who turn out to be the villains (S50).
+Where: Underground B3 x8y6 (Walkthrough), the archive where the scholars Cleo, Bergamot
+and Cresson live (NPC4; NPC3 206 calls it an archive to rival the royal library). 76 a
+door reads LIBRARY. 106 old books crammed on shelves, nothing useful. Flavor, and home
+of the scholars who turn out to be the villains (S51). Talking to them twice unlocks the
+glyph analysis on the party menu, and they'll raise the dead until you reach Area X
+(Walkthrough). NPC1 211-217 (Guy's party on the scholars and the library).
 
 **S12. The freezer and the man in the ice.** EV 79, 55, 64, 65.
 Where: Underground B3; Ice Rock at E20 N20 (Enc.).
@@ -428,7 +442,9 @@ of many who were eaten; a wall hollow with a yellow stone; 259 set, 260 without,
 after.
 Rescue (Enc. "Guy party rescue"; NPC1 80-85, 104): Guy, the only survivor and
 poisoned, thanks you for killing "that big green brute" that nearly ate them and asks
-for Ruby Slippers; later he pays 10000 Gp, having lost all their items.
+for Ruby Slippers; later he pays 10000 Gp, having lost all their items. (harano writes
+100万 GP in one chapter and "1万, or 100万 in some versions" in another; the Japanese text
+here says 10000.)
 100/101 a stone coffin / a strange iron box, nothing inside (stone and iron: see
 "Stone turns to metal"). 100 fires on two dozen squares in the west of Area A B4,
 E2-E7 N5-N17 (Disc), a room of coffins; 101 isn't a plain message event, so it's
@@ -465,6 +481,8 @@ with an unnamed party (if you never met Zaril's). 151 the fiend's bones knit bac
 together; 152 bones creak, "It's him!" (やつだ, "that one", not necessarily a person).
 Afterward Zaril's party reappears, alive (NPC5 118-121: Gaura groans, Zaril yells,
 Fritillaria cries for help, "a party suddenly appeared"; Enc. "Zaril party rescue").
+Zaril walks out on Fontana's party earlier, in Area A B2 at x6y11 (NPC3 75-89;
+Walkthrough), and the NPC parties trade members after it (see "Zaril's party").
 Links: Catalog 12:27 (a chimera warrior made by heretics with three adventurers trapped
 in its middle; Zaril's party has three members); EV 281 (Guardians remaking bodies);
 EV 242 ("Experiment 2: Modification"); NPC3 75-89 (Zaril leaves Fontana's party).
@@ -548,8 +566,9 @@ it? 175 only stones and dead animals, then something soft, and a huge heap of ru
 attacks. 176 the same with scrap iron instead of stones (Area C', after the walls turn
 to metal). 177 a stench; you step on a dead animal.
 Links: NPC3 90-108 (a trap in a rubbish-strewn room sucks the party through the floor
-like an antlion's pit; Fontana's party is down there too; Guy lowers a rope and tells
-you to take a bath). JUNK (217).
+like an antlion's pit; Fontana's party is down there too, named or as "Young samurai"
+(97-100); the rescuer is Guy, who lowers a rope and tells you to take a bath (101-102,
+so after his rescue in Area A), or Balbo (103-107)). JUNK (217).
 
 **S37. Area C glyph words.** EV 170, 171, 172, 185.
 170 a wall reads DANGER: Area C B4 E2 N2 (Disc), on the floor of the damage floor and
@@ -581,9 +600,10 @@ Golem is also made in the god's likeness (Catalog 4:6). Which golem the Fortune 
 means is **Inferred** from the topic order (between the dial and the god's name).
 
 **S40. The silver stone.** EV 271-273; Guardians EV 283.
-Where: Area C (FAQ); Guardian party at C-B4 E5 N11 (Enc.). A device with a square
-pedestal and a silver stone: set / without / plain. 283 the Guardians: this sword shall
-drink your blood and our god shall rise.
+Where: Area C (FAQ). A device with a square pedestal and a silver stone: set / without /
+plain. (Guardian speech 283 was listed here; that party, at C-B4 E5 N11 (Enc.), is
+reached through the snake door and over the damage floor, so it belongs with S41
+(Walkthrough).)
 
 **S41. The snake door, the damage floor, and ENERGY.** EV 184, 198.
 Where: Area C B4 (FAQ; Disc: 184 at E8-E9 N2, 198 at E2 N12). 184 a door carved with a
@@ -601,7 +621,9 @@ Purpose: the key to the Dragon's Cave (S56).
 **S43. The holy altar door.** EV 180, 181.
 Where: not established (file position Area C). A door: "Holy altar beyond. Keep out."
 The lock clicks open anyway (181: you touch it and it opens). Links: 178/179 "Go to the
-altar"; NPC5 105 (the shadow: beyond lies the holy ground of the Opener of the Door).
+altar". (NPC5 105, the shadow's "beyond lies the holy ground of the Opener of the
+Door", was linked here by file position; the Walkthrough meets that warning in Area B,
+see "The shadow's warning".)
 
 ### Area D (B1-B3)
 
@@ -689,7 +711,8 @@ Joke. Links: FEMALE and MALE doors (92, 93); the "beautiful woman" motif.
 
 **S51. Area E, and the ship-room words.** EV 131, 189, 213-217, 244, 245.
 FAQ: the B3F switch restores HP and MP; a hidden door in the north wall of B4F E11 N21.
-Guardian speech 285 probably belongs to the sixth Guardian party (location unknown).
+Guardian speech 285 belongs to the sixth Guardian party, which fights beside Cleo and
+Bergamot at B4 x12y12 (Walkthrough).
 The ship-room glyph words were all guessed to be in Area E; the disc places most of
 them elsewhere (Disc): 245 BRIDGE, Area E B4 E12 N6; 244 CONTROL, Area X E10 N11; 131
 TRANSPORTER, Area X E9 N14; 213 HEAL, Area B B4 E6 N18; 214 GAS, Area B B4 E5 N6; and
@@ -697,8 +720,11 @@ the broken murals with faint letters 215 MEATING (sic), Area B B1 E17 N4; 216 RE
 Area B B1 E16 N18; 217 JUNK, Area B B1 E6 N19. 189 REST isn't a plain message event and
 is still unplaced.
 The control room fight with Cleo and Bergamot is NPC4 44-55 (no event strings). Cleo
-greets the party "to the control room" (司令室), which is presumably behind the CONTROL
-door.
+greets the party "to the control room" (司令室). It's behind the door marked BRIDGE, at
+B4 x12y6 (Walkthrough, and 245's square on the disc), not CONTROL, which is in Area X.
+Other glyph doors the Walkthrough places: COMPUTER (58) leads to the god's-name altar in
+Area D B3, CORE (86) to the Area D Guardians, and TRANSPORTER (131) is Area X's way back
+to town (harano gives x14y9; the disc gives E9 N14, the two numbers swapped).
 
 ### Area Z and the ending
 
@@ -710,12 +736,13 @@ room shakes and the lid opens (fight). 231 too soon: "Have we left something und
 232 the relief is silent (after): "We shouldn't have forgotten anything..." 233 you
 felled the one in the coffin (a god?), and the relief parts. 235 a wall with the relief
 appears at once, then as 230 (probably arriving by teleport on the golem route). (228 "A
-huge pillar towers here" was listed here; the disc puts it in Area A B3 and B4, Area B B3
-(the giant pillars, S31) and Area E B1 E22 N7, not Area Z.)
-Links: NPC5 107-111 (the mysterious man: this is the real world; the iron ship; face my
-father, who is also myself); SISETU 343 and menu 357 "Dark God" (a dark god asleep
-below); Catalog 5:12; NPC2 263 (Balbo saw a statue of a giant face; not established
-that it is this relief).
+huge pillar towers here" was listed here; the disc puts it in Area A B3 and B4, Area B
+B3 (the giant pillars, S31) and Area E B1 E22 N7, not Area Z.)
+Links: NPC5 108-111 (the mysterious man: the iron ship; face my father, who is also
+myself; probably the event harano notes on entering the hall at x10y6), and 107 (a
+separate warning: beyond here is the real world, you aren't ready); SISETU 343 and menu
+357 "Dark God" (a dark god asleep below); Catalog 5:12; NPC2 263 (Balbo saw a statue of
+a giant face; not established that it is this relief).
 
 **S53. The Priestess and the RING OF MEDIUM.** EV 234, 236, 298, 299.
 What: 234 a beautiful woman appears and speaks (color 2, set out in pairs): you who
@@ -738,7 +765,9 @@ ending; after a title is awarded the final boss no longer appears. Tips: after t
 you are teleported to the Shrine altar, and another party waiting there can take the
 golem route again ("carry several LITHOGRAPHS OF SUN"). 304 a strange statue with an X
 on its chest; 305 it answers the LITHOGRAPH, which shines, and you are whisked away.
-**That 304/305 is the golem route's teleporter is Inferred.**
+The Walkthrough places the X statue on the island at x17y3: once the white stone is set
+in the LITHOGRAPH, it warps you to Area X. So 304/305 is that shortcut; whether the golem
+route also uses it is not established.
 
 ### After the ending
 
@@ -934,6 +963,18 @@ the same phrase so 205 reads as a false Priestess before the real vision.
 NPC5 118-121 (they reappear); NPC3 75-89 (Zaril walks out on Fontana); NPC1 207-210,
 NPC2 185-187, NPC4 108-110 (gossip about his new three-member party); Catalog 12:27
 (three adventurers inside the chimera). Keep "Zaril's party" matching the NPC files.
+After the quarrel (Area A B2 x6y11; harano: 以後NPCのパーティー変更) the parties trade
+members: Gaura leaves Balbo for Zaril's new party (NPC2 187, NPC5 66), Reiran joins
+Fontana's (NPC3 9), and Artemisia moves to Balbo's (NPC2 12, 271). So Gaura's and
+Reiran's lines in NPC_MES2 are early-game, and Artemisia's late-game.
+
+**The shadow's warning.** NPC5 103-106. Area B B2 x17y10: through the north door a
+mysterious man appears and only warns you (Walkthrough, 謎の男出現(忠告だけ)). 103-105
+fit: a shadow speaking in a man's voice tells unbelievers in the old god to turn back
+from the holy ground of the Opener of the Door, and calls it a warning (忠告). 106 is
+the same figure later, angry that the warning was ignored (place unknown). NPC1 218-223
+(Guy's party met a man oozing killing intent) and NPC2 195-202 match. harano guesses on
+his Guardian page that the man is Cresson; not established.
 
 **Otaka and Agan.** EV 311 ("not a word to Agan!"), NPC5 112 (Agan, the eternal
 traveler carried into the past by demons, seeking the sealed place below: the Dragon's
@@ -978,7 +1019,8 @@ have stopped); then EV 224 and SISETU 326 (a great tremor when mimicry mode is r
 Different causes; keep them apart.
 
 **The Guardians.** EV 280-285, six speeches. Enc. lists six Guardian parties: Underground
-B2 E7 N22, A B1 E16 N11, B B5 E9 N12, C B4 E5 N11, D B3 E10 N9, and one unknown. The file
+B2 E7 N22, A B1 E16 N11, B B5 E9 N12, C B4 E5 N11, D B3 E10 N9, and a sixth that fights
+beside Cleo and Bergamot in Area E B4 (Walkthrough). The file
 order matches area order, and each speech fits its place (280 the waters, beside the
 lake machine; 281 remaking bodies, beside the zombies; 282 the Priestess's soul, beside
 the vault; 284 hundreds of years; 285 the last). **The pairing is Inferred.** The word
@@ -1136,7 +1178,7 @@ confirming it's an error. Don't "fix" those in the English on this list's say-so
 - **EV 73**'s {ff18} prints a party member's name (checked in the emulator), so the
   English can place it where an epitaph puts a name.
 - **SISETU 342** calls the GAME device a "strange machine" (see above).
-- **NPC2 261:** Balbo's はし can be bridge, ladder or edge; the English says "bridge",
-  which happens to echo the BRIDGE glyph door (245). Not established that either is
-  meant.
+- **NPC2 261:** Balbo's はし can be bridge, ladder or edge; the English says "bridge".
+  The next obstacle after the freezer is the waterway (S15), and Balbo is met just past
+  it (Walkthrough), so "bridge" fits. Any echo of the BRIDGE door (245) is chance.
 - **EV 286, 287, 303** are debug and trade-show leftovers.
