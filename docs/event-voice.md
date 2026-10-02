@@ -45,6 +45,8 @@ do. In English:
 | 巫女 | the Priestess (as in the King's speeches; her 腕輪 is the item RING OF MEDIUM, so the narration calls it a ring) |
 | 神殿 | the Shrine |
 | 伝言板 | *Message Board* |
+| 魔物 | monster (not "fiend"; see `terms.md`) |
+| 悪魔 | demon |
 
 The coloured thoughts (`{ff30}2`) are the party thinking aloud, so they're the one
 place "we" is used.

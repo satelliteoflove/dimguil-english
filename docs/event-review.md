@@ -63,6 +63,8 @@ unreviewed strings are consistent but not yet approved.
 - 130: "Don't forget full gear" ties back to board 1, which Chris rewrote as "Did you
   equip your gear?" (the Japanese asks whether you've forgotten any). Raise whether
   board 1 should keep the "forget" link.
+- 182, 191, 193, 300: 魔物 is still "fiend"; make it "monster" in their scenes. The
+  King's SISETU 322, 334, 336, 338 may keep "fiend" (Chris, 2026-10-01).
 - 174-176: "rubbish" (British) in the rubbish-room strings; use "trash" or "junk".
 - Naming across files: the NPC files say "Lithograph of the Sun" and "the Sun tablet"
   where the event script says LITHOGRAPH OF SUN; 迷宮 is "labyrinth" in some event
