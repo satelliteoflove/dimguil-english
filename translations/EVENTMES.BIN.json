@@ -1463,7 +1463,7 @@
                 {
                     "length": 199,
                     "source": "NA",
-                    "translation": "You open the book on the desk and read.{ff30}6{ff26}\r\"Experiment 1: Land mines\n \n......Success!{ff26}\rExperiment 2: Modification\n \n......Success!{ff26}\rExperiment 3: Growth\n \n.....Failure!?{ff26}\rThe enemy is coming sooner than expected.\nI'll set out the traps now.\nDamn that Royal Guard, they'll pay!\"{ff30}0",
+                    "translation": "You open the book on the desk and read.{ff30}6{ff26}\r\"Experiment 1: Land mines\n \n......Success!{ff26}\rExperiment 2: Modification\n \n......Success!{ff26}\rExperiment 3: Growth\n \n.....Failure!?{ff26}\rAnd the enemy seems to be coming sooner than expected.\nI'll set out the traps now.\nDamn you, Royal Guard, you'll pay for this!\"{ff30}0",
                     "addStringTerminator": true
                 },
                 {
