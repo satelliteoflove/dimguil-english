@@ -1055,19 +1055,19 @@
                 {
                     "length": 65,
                     "source": "NA",
-                    "translation": "This big room is like the inside of\na rubbish bin. There may be a find here.\nWill you search it?",
+                    "translation": "This big room is like the inside of a trash can.\nThere may be something worth digging up.\nWill you search it?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 110,
                     "source": "NA",
-                    "translation": "You rummage for anything useful, but\nfind only stones and dead animals.\n\"Hm?\" Something soft touches your hand.{ff26}\rA huge heap of rubbish attacks!",
+                    "translation": "You rummage for anything useful, but\nfind only stones and dead animals.\n\"Hm?\" Something soft touches your hand.{ff26}\rA huge heap of trash attacks!",
                     "addStringTerminator": true
                 },
                 {
                     "length": 111,
                     "source": "NA",
-                    "translation": "You rummage for anything useful, but\nfind only scrap iron and dead animals.\n\"Hm?\" Something soft touches your hand.{ff26}\rA huge heap of rubbish attacks!",
+                    "translation": "You rummage for anything useful, but\nfind only scrap iron and dead animals.\n\"Hm?\" Something soft touches your hand.{ff26}\rA huge heap of trash attacks!",
                     "addStringTerminator": true
                 },
                 {

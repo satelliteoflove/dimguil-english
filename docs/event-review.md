@@ -6,7 +6,7 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S36, TRASH and the rubbish room (EV 173-177).** See `docs/event-map.md`.
+**Next: scene S37, Area C glyph words (EV 170, 171, 172, 185).** See `docs/event-map.md`.
 
 ## How a scene is reviewed
 
@@ -58,8 +58,9 @@ experiment log 46, 242; S31 right foot, left foot 166-168; S32 other Area B door
 154, 155, 157, 165, 169; S33 the three-ring dial 158-164 (162 and SISETU 339 both say
 "large ring"); S34 the vault, the Ruby Hand and the red stone 149, 274-276, 282; S35
 WAREHOUSE 178, 179 (最近書かれた is "recently": the heretics' planted-hints thread, not
-"readable"). Also done early, out of scene order: the murals 22 (SHIP) and 23 (DEATH),
-and 59 and 61 given the same wording as 35 and 36.
+"readable"); S36 the trash room 173-177 ("trash", not "rubbish"). Also done early, out
+of scene order: the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given the same
+wording as 35 and 36.
 
 Every string also had the present-tense sweep and full-question prompts applied, so
 unreviewed strings are consistent but not yet approved.
@@ -72,7 +73,6 @@ unreviewed strings are consistent but not yet approved.
 - 182, 191, 193, 300: 魔物 is still "fiend"; make it "monster" in their scenes. The
   King's lines (SISETU 322-329) may keep "fiend"; the Fortune Teller's 334, 336 and 338
   were changed to "monster" (Chris, 2026-10-02).
-- 174-176: "rubbish" (British) in the rubbish-room strings; use "trash" or "junk".
 - Naming across files: the NPC files say "Lithograph of the Sun" and "the Sun tablet"
   where the event script says LITHOGRAPH OF SUN; 迷宮 is "labyrinth" in some event
   strings and "maze" elsewhere. Settle these.
