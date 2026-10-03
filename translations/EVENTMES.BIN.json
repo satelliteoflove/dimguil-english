@@ -1835,13 +1835,13 @@
                 {
                     "length": 34,
                     "source": "NA",
-                    "translation": " \nA strange statue, with an X on its chest.",
+                    "translation": " \nA mysterious statue stands here.\nThere's an X on its chest.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 104,
                     "source": "NA",
-                    "translation": " \nA strange statue, with an X on its chest.{ff26}\rIs it answering the LITHOGRAPH OF SUN?\nThe LITHOGRAPH OF SUN shines, and you\nare whisked away somewhere.{ff26}",
+                    "translation": " \nA mysterious statue stands here.\nThere's an X on its chest.{ff26}\rIs it answering the LITHOGRAPH OF SUN?\nThe LITHOGRAPH OF SUN shines, and you\nare whisked away somewhere.{ff26}",
                     "addStringTerminator": true
                 },
                 {

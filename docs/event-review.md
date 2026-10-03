@@ -6,7 +6,7 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S54, the golem route and the X statue (EV 304, 305).** See `docs/event-map.md`.
+**Next: scene S55, the Training Maze (EV 246-248, 238-241).** See `docs/event-map.md`.
 
 ## How a scene is reviewed
 
@@ -74,7 +74,8 @@ deactivated"); S48 the egg 206-209 (207 "lying in wait"); S49 the GAME dome 94, 
 DREAMLAND~": the font has no star, and inner asterisks read as censorship in English); S51 the ship-room words 131, 189, 213-217, 244, 245 (the
 broken murals now say "unfamiliar" too, and 215's glyphs spell MEETING, not MEATING); S52 the huge coffin 228-233, 235 (229: the relief
 is "straight ahead", on the wall, not on the coffin); S53 the Priestess 234, 236, 298, 299 (the oracle's
-questions all "do you see... as...?"; 236 curter than 234).
+questions all "do you see... as...?"; 236 curter than 234); S54 the X statue 304, 305 (不思議な is
+"mysterious", apart from 奇妙な "strange").
 見知らぬ古代文字 is "unfamiliar ancient letters" everywhere (48 strings; it had been
 "strange"). Also done early, out
 of scene order: the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given the same
