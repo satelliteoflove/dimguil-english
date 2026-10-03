@@ -6,7 +6,7 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S42, the SHUTTLE and the stone statue (EV 186-188).** See `docs/event-map.md`.
+**Next: scene S43, the holy altar door (EV 180, 181).** See `docs/event-map.md`.
 
 ## How a scene is reviewed
 
@@ -62,7 +62,8 @@ WAREHOUSE 178, 179 (最近書かれた is "recently": the heretics' planted-hint
 panel 183, 146-148; S39 the Greater Golem 182, 288 (182 "you find" the hole: 開いていた is
 what you see, not when it opened).; S40 the silver stone 271-273 (worded like the blue
 and red stones); S41 the snake door and ENERGY 184, 198, and Guardians
-283 ("believers in a false god", one clause per line).
+283 ("believers in a false god", one clause per line); S42 the SHUTTLE and the stone statue
+186-188.
 見知らぬ古代文字 is "unfamiliar ancient letters" everywhere (44 strings; it had been
 "strange"). Also done early, out
 of scene order: the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given the same

@@ -1127,7 +1127,7 @@
                 {
                     "length": 168,
                     "source": "NA",
-                    "translation": "The wreck of some sort of vehicle?\nScrap, perhaps. There's no way in.{ff26}\rUnfamiliar ancient letters are carved on\nits side: ]{ff30}5{ancient_s}{ancient_h}{ancient_u}{ancient_t}{ancient_t}{ancient_l}{ancient_e}{ff30}0[{ff26}\rA stone statue is lodged in one of the\nmachine's tubes. Will you pull it out?",
+                    "translation": "Could this be the wreck of some vehicle?\nIt may just be scrap. You look for a way in,\nbut there's no door to be found.{ff26}\rUnfamiliar ancient letters are carved on\nits side: ]{ff30}5{ancient_s}{ancient_h}{ancient_u}{ancient_t}{ancient_t}{ancient_l}{ancient_e}{ff30}0[{ff26}\rA stone statue is lodged in one of the\nmachine's tubes. Will you pull it out?",
                     "addStringTerminator": true
                 },
                 {
@@ -1139,7 +1139,7 @@
                 {
                     "length": 38,
                     "source": "NA",
-                    "translation": "Sensing it would end badly, you leave\nthe statue where it is.",
+                    "translation": "Fearing something terrible might happen,\nyou leave the statue where it is.",
                     "addStringTerminator": true
                 },
                 {
