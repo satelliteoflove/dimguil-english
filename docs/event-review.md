@@ -6,7 +6,7 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S39, the Greater Golem (EV 182, 288).** See `docs/event-map.md`.
+**Next: scene S40, the silver stone (EV 271-273).** See `docs/event-map.md`.
 
 ## How a scene is reviewed
 
@@ -59,7 +59,8 @@ experiment log 46, 242; S31 right foot, left foot 166-168; S32 other Area B door
 "large ring"); S34 the vault, the Ruby Hand and the red stone 149, 274-276, 282; S35
 WAREHOUSE 178, 179 (最近書かれた is "recently": the heretics' planted-hints thread, not
 "readable"); S36 the trash room 173-177 ("trash", not "rubbish"); S37 Area C glyph words 170-172, 185; S38 the moving-floor
-panel 183, 146-148.
+panel 183, 146-148; S39 the Greater Golem 182, 288 (182 "you find" the hole: 開いていた is
+what you see, not when it opened).
 見知らぬ古代文字 is "unfamiliar ancient letters" everywhere (44 strings; it had been
 "strange"). Also done early, out
 of scene order: the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given the same
@@ -73,7 +74,7 @@ unreviewed strings are consistent but not yet approved.
 - 130: "Don't forget full gear" ties back to board 1, which Chris rewrote as "Did you
   equip your gear?" (the Japanese asks whether you've forgotten any). Raise whether
   board 1 should keep the "forget" link.
-- 182, 191, 193, 300: 魔物 is still "fiend"; make it "monster" in their scenes. The
+- 191, 193, 300: 魔物 is still "fiend"; make it "monster" in their scenes. The
   King's lines (SISETU 322-329) may keep "fiend"; the Fortune Teller's 334, 336 and 338
   were changed to "monster" (Chris, 2026-10-02).
 - Naming across files: the NPC files say "Lithograph of the Sun" and "the Sun tablet"

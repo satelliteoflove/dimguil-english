@@ -1103,7 +1103,7 @@
                 {
                     "length": 47,
                     "source": "NA",
-                    "translation": "The huge fiend falls, and a great hole\nopens in the middle of the floor.{ff26}",
+                    "translation": "When you defeat the huge monster, you find\na large hole in the middle of the room's floor.{ff26}",
                     "addStringTerminator": true
                 },
                 {
@@ -1739,7 +1739,7 @@
                 {
                     "length": 54,
                     "source": "NA",
-                    "translation": "A switch is fixed to the wall.\nYou press it: \"{ff30}6Click.{ff30}0\"",
+                    "translation": "A switch is set into the wall.\nYou press it, and it gives a satisfying \"{ff30}6click.{ff30}0\"",
                     "addStringTerminator": true
                 },
                 {

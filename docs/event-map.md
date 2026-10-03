@@ -592,9 +592,16 @@ MOON, STAR glyph words (S3, S10, S5).
 
 **S39. The Greater Golem.** EV 182, 288.
 Where: Area C B2; Greater Golem at E11 N10 (Enc.).
-What: 182 the huge fiend falls and a great hole opens in the floor. FAQ: the stairs
-beside the hole lead nowhere until the switch at B4F E8 N12 is pressed (reached through
-door C). 288 a switch: "Click." (probably that one).
+What: the golem guards the door on the north side of E11 N10; behind it is a small room
+(about E10-13, N11-14) the party hasn't seen before. 182: when you defeat it, you find a
+large hole in the middle of the room's floor. That is most likely the way down at E12 N12
+(Disc), which the Walkthrough takes next ("after you beat it, take the x12y12 stairs
+down to B3F"). **Inferred** from the site's wall data and the route. 182's 開いていた
+says what you find, not when the hole opened.
+The switch at B4F E8 N12: the FAQ says the stairs beside the hole lead nowhere until it's
+pressed; the Walkthrough calls it a switch on a frog statue that makes the silver-stone
+device appear (S40). Going by the Walkthrough. 288 is a switch set into a wall
+("click."), not a message event on the disc; it may or may not be that switch.
 Links: SISETU 340 and menu 354 "A Made God" (the idol the heretics made of their god was
 unfinished); Catalog 4:8 (the mightiest golem, made in their god's likeness). The Fire
 Golem is also made in the god's likeness (Catalog 4:6). Which golem the Fortune Teller
