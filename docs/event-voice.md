@@ -55,12 +55,17 @@ place "we" is used.
 
 - **Message boards.** Notes from townsfolk, mostly to someone called Jade: casual,
   a little cheeky, signed or not as in the Japanese.
-- **The Guardians.** Stiff and menacing, formal: "We are the Guardians, who rule this
-  land. You shall not cut off the flow of the waters." They call the party 貴様ら,
-  so no warmth at all.
+- **The Guardians.** Stiff and menacing, formal: "We are the Guardians who rule this
+  land. You are not permitted to cut off the flow of the water." They call the party
+  貴様ら; the English keeps a plain "you" and lets the formality carry the menace.
 - **The Priestess's oracle.** Solemn and measured, set out in balanced pairs as in
   the Japanese: "You who know the nature of all things: do you see this place as
-  one, or as all?"
+  one, or as all?" The three questions share one verb (見るか), so all three are "do you
+  see... as...?". 伝える is "carry" both times: she carries the god's word, and you must
+  carry the answer. 234 asks gently (持ち帰りなさい, "Take the proof home with you"); 236,
+  for a party that believes in power alone, commands (持ち帰れ, "Take home the proof.").
+  **Revisit in a later pass** (Chris, 2026-10-03): the oracle's wording was settled in
+  S53 but may need another look.
 - **The dome's voice and the inscriptions.** Terse commands: "Name the god!",
   "Correct! Let us begin!"
 - **Otaka.** A goofy wandering adventurer who calls himself 俺っち and gives away

@@ -178,7 +178,7 @@ with the chapter and the string's new wording, to carry over to the site.
 | Mysterious man | NPC_MES5 110 | This world is too full of the unexpected for me to bear. |
 | Mysterious man | NPC_MES5 111 | Face my father, who is also myself, you who know no fear. |
 | The Fortune Teller | SISETU 343 | I see it! A dark god, asleep below! |
-| The Priestess | EVENTMES 234 | You who have gained every power: is it the end, or the beginning? |
+| The Priestess | EVENTMES 234 | You who have gained every power: do you see it as the end, or as a prologue? |
 | The Priestess | EVENTMES 236 | You who believe in power alone: I have no tale to tell you. |
 
 ## 19. The ending

@@ -6,7 +6,7 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S53, the Priestess and the RING OF MEDIUM (EV 234, 236, 298, 299).** See `docs/event-map.md`.
+**Next: scene S54, the golem route and the X statue (EV 304, 305).** See `docs/event-map.md`.
 
 ## How a scene is reviewed
 
@@ -73,7 +73,8 @@ deactivated"); S48 the egg 206-209 (207 "lying in wait"); S49 the GAME dome 94, 
 (111 keeps "shining demon" for 魔人, a humanlike being of uncanny power, not a devil); S50 the dreamlands 190-193 (the signs' kana-by-kana asterisks become "~MEN'S
 DREAMLAND~": the font has no star, and inner asterisks read as censorship in English); S51 the ship-room words 131, 189, 213-217, 244, 245 (the
 broken murals now say "unfamiliar" too, and 215's glyphs spell MEETING, not MEATING); S52 the huge coffin 228-233, 235 (229: the relief
-is "straight ahead", on the wall, not on the coffin).
+is "straight ahead", on the wall, not on the coffin); S53 the Priestess 234, 236, 298, 299 (the oracle's
+questions all "do you see... as...?"; 236 curter than 234).
 見知らぬ古代文字 is "unfamiliar ancient letters" everywhere (48 strings; it had been
 "strange"). Also done early, out
 of scene order: the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given the same
@@ -103,6 +104,12 @@ event code or by finding the line during the playthrough.
   No message event on the disc names 288. If it turns out to be the B4F E8 N12 switch,
   which harano describes as a switch on a frog statue, then "set into the wall" won't
   match what the player sees, and 288 needs rewording.
+
+## Revisit in a later pass
+
+Wording that was approved but may need another look.
+- 234, 236 (the Priestess's oracle, S53): the questions, "the god's word", "seek
+  further answers", and the gentle and curt farewells. See the voice sheet.
 
 ## After the event script
 

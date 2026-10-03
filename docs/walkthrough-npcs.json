@@ -1434,13 +1434,13 @@
           ],
           "strings": "EVENTMES 233, 234, 236, 298, 299",
           "placement": "Walkthrough: harano says beating the final boss triggers an event that gives the RING OF MEDIUM and teleports the party to Shrine 2F x11y12.",
-          "blurb": "When the thing in the huge coffin falls, the relief parts and a beautiful woman appears: the Priestess, speaking in paired riddles such as \"You who have gained every power: is it the end, or the beginning?\" She gives you the RING OF MEDIUM as proof to take home. A party that came by the golem route gets a shorter speech: \"You who believe in power alone: I have no tale to tell you.\"",
+          "blurb": "When the thing in the huge coffin falls, the relief parts and a beautiful woman appears: the Priestess, speaking in paired riddles such as \"You who have gained every power: do you see it as the end, or as a prologue?\" She gives you the RING OF MEDIUM as proof to take home. A party that came by the golem route gets a shorter speech: \"You who believe in power alone: I have no tale to tell you.\"",
           "quotes": [
             {
               "file": "EVENTMES",
               "idx": 234,
               "speaker": "The Priestess",
-              "text": "You who have gained every power: is it the end, or the beginning?"
+              "text": "You who have gained every power: do you see it as the end, or as a prologue?"
             },
             {
               "file": "EVENTMES",
