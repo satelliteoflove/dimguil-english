@@ -6,7 +6,9 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: Guardian 285 (missed in S51), then "After the event script".** See `docs/event-map.md`.
+**The review is finished** (2026-10-03): every scene in `docs/event-map.md`, S1-S61, has
+been approved and committed. What's left is below: one naming decision, one line to
+check in play, and one passage to revisit in a later pass.
 
 ## How a scene is reviewed
 
@@ -89,7 +91,7 @@ wording as 35 and 36.
 Every string also had the present-tense sweep and full-question prompts applied, so
 unreviewed strings are consistent but not yet approved.
 
-## Waiting for their scene
+## Still open
 
 - Naming across files: the NPC files say "Lithograph of the Sun" and "the Sun tablet"
   where the event script says LITHOGRAPH OF SUN; 迷宮 is "labyrinth" in some event
@@ -117,5 +119,5 @@ Wording that was approved but may need another look.
 
 ## After the event script
 
-Commit it as reviewed, update ROADMAP.md and the README progress, then v0.8.0 when Chris
-tags. The new repo and its name are pending (ROADMAP "Project identity").
+Done: ROADMAP.md records the finished review (2026-10-03). v0.8.0 waits for Chris to
+tag it. The new repo and its name are pending (ROADMAP "Project identity").

@@ -14,9 +14,9 @@ Releases go out as the work progresses. We don't hold everything back for 1.0.
 Japanese, rough, or badly formatted.
 
 **Beta (0.8.x).** Every piece of text the player can reach is in English. The first
-quality pass is still in progress. v0.8.0 will be the first beta, once the text removed
-at the original team's request is translated again. Further 0.8.x releases follow as
-review passes land.
+quality pass is still in progress. v0.8.0 will be the first beta; its condition, that
+the text removed at the original team's request be translated again, was met on
+2026-10-03. Further 0.8.x releases follow as review passes land.
 
 **Release candidate (0.9.x).** v0.9.0 comes once the first quality pass is complete:
 every piece of text the player can reach has been reviewed at least once (see "Quality
@@ -52,15 +52,14 @@ of the redump set, since the build leaves both audio tracks untouched.
 
 ## Work streams
 
-### Text coverage (to reach beta)
+### Text coverage (done)
 
 `scripts/jpinventory.py` sorts every string in the dumped text files into translated,
 needing translation, and deliberately Japanese (with the reason for each exclusion).
-Before the original team's text was removed, every reachable string was translated.
-Now 1,281 strings are left, about 21% of the Japanese by character count: all of
-EVENTMES (316 strings), and parts of SISETU (551), STATUS (195), FIGHTMSG (203) and
-M_CATALG (16). Until they're done, these show up garbled in the patched game, because
-the English font and digraphs replace the kana glyphs.
+Every string that needs translating is translated: 4,245 of 4,245, 100% of the
+Japanese by character count (2026-10-03). The text removed at the original team's
+request has been translated again: all of EVENTMES (317 strings), and parts of SISETU
+(551), STATUS (195), FIGHTMSG (203) and M_CATALG (16).
 
 The rest of the Japanese doesn't need translating: Japanese-mode lists the game doesn't
 use because it has built-in English beside them, placeholder slots, debug text, and two
@@ -76,10 +75,11 @@ Typos in the game's own English monster names are for the quality passes:
 
 1. NPC dialogue cultural review (NPC_MES1-5). In progress; tracked in
    `docs/npc-review.md`.
-2. The retranslated text (see "Text coverage"). The event script is under review
-   scene by scene; `docs/event-review.md` says where it stands. Translate it fresh from
-   the Japanese, to the same standard as the NPC pass, with the terms we've settled on
-   (character names, the game's own spell list) and three periods for ellipses.
+2. The retranslated text (see "Text coverage"). The event script was reviewed scene by
+   scene and finished on 2026-10-03; `docs/event-review.md` lists the few items left
+   to check in play or revisit later. The menus and combat messages (SISETU, STATUS,
+   FIGHTMSG) were translated afresh in September with the term list in
+   `docs/terms.md`.
 3. Our own first-pass text that hasn't had a second look: item and monster
    descriptions (ITEM, M_CATALG), MESSAGE, combat verbs.
 
