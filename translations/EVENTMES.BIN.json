@@ -1385,7 +1385,7 @@
                 {
                     "length": 64,
                     "source": "NA",
-                    "translation": "In the middle of the huge room sits a\nhuge coffin. Will you touch the face-like\nrelief on its front?",
+                    "translation": "In the middle of the vast room sits a\nhuge coffin. Will you touch the face-like\nrelief straight ahead?",
                     "addStringTerminator": true
                 },
                 {
@@ -1403,13 +1403,13 @@
                 {
                     "length": 55,
                     "source": "NA",
-                    "translation": "The relief lies silent, as if nothing\nhad happened. \"{ff30}2We shouldn't have\nforgotten anything...{ff30}0\"",
+                    "translation": "The relief is silent, as if nothing\nwere amiss.\n\"{ff30}2We shouldn't have forgotten anything...{ff30}0\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 63,
                     "source": "NA",
-                    "translation": "You've felled the one in the huge coffin\n(a god?), and the relief before you\nparts in two and opens.{ff26}",
+                    "translation": "When you defeat the one in the huge coffin\n(a god, perhaps?), the relief before you\nsplits in two and opens.{ff26}",
                     "addStringTerminator": true
                 },
                 {
@@ -1421,7 +1421,7 @@
                 {
                     "length": 130,
                     "source": "NA",
-                    "translation": "At once, a wall carved with a face-like\nrelief appears ahead.{ff26}\rAt your touch, the whole room shakes.\nStepping back in alarm, you see the lid\nof the huge coffin begin to open.",
+                    "translation": "In an instant you arrive somewhere new,\nfacing a wall carved with a face-like relief.{ff26}\rAt your touch, the whole room shakes.\nStepping back in alarm, you see the lid\nof the huge coffin begin to open.",
                     "addStringTerminator": true
                 },
                 {

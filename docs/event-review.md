@@ -6,7 +6,7 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S52, the huge coffin (EV 229-233, 235, 228).** See `docs/event-map.md`.
+**Next: scene S53, the Priestess and the RING OF MEDIUM (EV 234, 236, 298, 299).** See `docs/event-map.md`.
 
 ## How a scene is reviewed
 
@@ -72,7 +72,8 @@ for the forgetting chain (130 "Don't forget full protective gear!", 224 "Mimicry
 deactivated"); S48 the egg 206-209 (207 "lying in wait"); S49 the GAME dome 94, 103, 104, 108-112
 (111 keeps "shining demon" for 魔人, a humanlike being of uncanny power, not a devil); S50 the dreamlands 190-193 (the signs' kana-by-kana asterisks become "~MEN'S
 DREAMLAND~": the font has no star, and inner asterisks read as censorship in English); S51 the ship-room words 131, 189, 213-217, 244, 245 (the
-broken murals now say "unfamiliar" too, and 215's glyphs spell MEETING, not MEATING).
+broken murals now say "unfamiliar" too, and 215's glyphs spell MEETING, not MEATING); S52 the huge coffin 228-233, 235 (229: the relief
+is "straight ahead", on the wall, not on the coffin).
 見知らぬ古代文字 is "unfamiliar ancient letters" everywhere (48 strings; it had been
 "strange"). Also done early, out
 of scene order: the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given the same

@@ -740,7 +740,8 @@ to town (harano gives x14y9; the disc gives E9 N14, the two numbers swapped).
 **S52. The huge coffin.** EV 229-233, 235, 228.
 Where: Area Z; Quetzalcoatl at E10 N10 (Enc.). **Inferred** that he is the one in the
 coffin.
-What: 229 a huge coffin in a huge room; touch the face-like relief on its front? 230 the
+What: 229 a huge coffin in a vast room; touch the face-like relief straight ahead (on
+the wall: 正面にある; it later splits open like a door)? 230 the
 room shakes and the lid opens (fight). 231 too soon: "Have we left something undone?"
 232 the relief is silent (after): "We shouldn't have forgotten anything..." 233 you
 felled the one in the coffin (a god?), and the relief parts. 235 a wall with the relief
