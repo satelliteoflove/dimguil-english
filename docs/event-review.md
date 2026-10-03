@@ -6,7 +6,7 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S45, the god's name (EV 199-205; Guardians 284).** See `docs/event-map.md`.
+**Next: scene S46, COCKPIT (EV 243).** See `docs/event-map.md`.
 
 ## How a scene is reviewed
 
@@ -64,7 +64,8 @@ what you see, not when it opened).; S40 the silver stone 271-273 (worded like th
 and red stones); S41 the snake door and ENERGY 184, 198, and Guardians
 283 ("believers in a false god", one clause per line); S42 the SHUTTLE and the stone statue
 186-188; S43 the holy altar door 180, 181; S44 the magic pillars 210-212 (濃い is "richer":
-the pillars carry what the lake holds watered down).
+the pillars carry what the lake holds watered down); S45 the god's name 199-205 and
+Guardians 284 (203: 無機質 is "cold, mechanical", in the COMPUTER room).
 見知らぬ古代文字 is "unfamiliar ancient letters" everywhere (44 strings; it had been
 "strange"). Also done early, out
 of scene order: the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given the same
@@ -84,8 +85,8 @@ unreviewed strings are consistent but not yet approved.
 - Naming across files: the NPC files say "Lithograph of the Sun" and "the Sun tablet"
   where the event script says LITHOGRAPH OF SUN; 迷宮 is "labyrinth" in some event
   strings and "maze" elsewhere. Settle these.
-- 284, 285 (Guardians): 280's intro became "We are the Guardians who rule this land."
-  with no comma; 281-283 match, and these two share that intro and should too. Chris
+- 285 (Guardians): 280's intro became "We are the Guardians who rule this land."
+  with no comma; 281-284 match, and 285 shares that intro and should too. Chris
   decided not to carry the contempt of 貴様ら; plain "you" throughout.
 
 ## To check in play or in the code

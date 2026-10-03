@@ -1211,7 +1211,7 @@
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "Nothing in particular.",
+                    "translation": "You find nothing in particular.",
                     "addStringTerminator": true
                 },
                 {
@@ -1229,7 +1229,7 @@
                 {
                     "length": 117,
                     "source": "NA",
-                    "translation": "You set the LITHOGRAPH OF SUN in the hole.\nThe small tablets light, and a voice rings\nthrough the room.{ff26}\rIt is not a man's voice, nor a beast's,\nbut a lifeless one.{ff26}",
+                    "translation": "You set the LITHOGRAPH OF SUN in the hole.\nThe small tablets begin to glow, and a voice\nrings through the whole room.{ff26}\rIt sounds like neither a person nor a beast.\nIt is a cold, mechanical voice.{ff26}",
                     "addStringTerminator": true
                 },
                 {
@@ -1241,7 +1241,7 @@
                 {
                     "length": 174,
                     "source": "NA",
-                    "translation": "\"{ff30}4Correct!{ff30}0\"\n\"{ff30}4Now receive your final baptism!{ff30}0\"{ff26}\rThe wall ahead crumbles, and a beautiful\nwoman appears before you, but you\nrealize she is an illusion.{ff26}\rA woman's body clad in giant needles.\nThe guardian god of this labyrinth?\nShe shudders, and attacks.",
+                    "translation": "\"{ff30}4Correct!{ff30}0\"\n\"{ff30}4Now receive your final baptism!{ff30}0\"{ff26}\rThe wall ahead crumbles, and a beautiful\nwoman appears before you, but you\nrealize she is an illusion.{ff26}\rShe has a woman's body, clad in giant\nneedles. Is she the guardian god of this\nlabyrinth? She shudders and attacks.",
                     "addStringTerminator": true
                 },
                 {
@@ -1715,7 +1715,7 @@
                 {
                     "length": 217,
                     "source": "NA",
-                    "translation": "{ff30}4       We are the Guardians,\n{ff30}4       who rule this land.{ff26}\r \n{ff30}4   You shall go no further.{ff26}\r{ff30}4  How many hundreds of years it took\n{ff30}4  to raise this land again, you cannot\n{ff30}4  know. Here we finish you.{ff30}0{ff26}",
+                    "translation": "{ff30}4       We are the Guardians\n{ff30}4       who rule this land.{ff26}\r \n{ff30}4   You shall go no further.{ff26}\r{ff30}4  How many hundreds of years it took\n{ff30}4  to raise this land again, you cannot know.\n{ff30}4  Here we shall finish you.{ff30}0{ff26}",
                     "addStringTerminator": true
                 },
                 {
