@@ -6,7 +6,7 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S43, the holy altar door (EV 180, 181).** See `docs/event-map.md`.
+**Next: scene S44, the spell-sealing room and the magic pillars (EV 210-212).** See `docs/event-map.md`.
 
 ## How a scene is reviewed
 
@@ -63,7 +63,7 @@ panel 183, 146-148; S39 the Greater Golem 182, 288 (182 "you find" the hole: 開
 what you see, not when it opened).; S40 the silver stone 271-273 (worded like the blue
 and red stones); S41 the snake door and ENERGY 184, 198, and Guardians
 283 ("believers in a false god", one clause per line); S42 the SHUTTLE and the stone statue
-186-188.
+186-188; S43 the holy altar door 180, 181.
 見知らぬ古代文字 is "unfamiliar ancient letters" everywhere (44 strings; it had been
 "strange"). Also done early, out
 of scene order: the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given the same

@@ -1097,7 +1097,7 @@
                 {
                     "length": 125,
                     "source": "NA",
-                    "translation": "Words are written on the door:\n\"Holy altar beyond. Keep out.\"{ff26}\rYou don't mean to ignore the warning,\nbut at your touch the lock clicks open,\nand the door quietly swings wide.",
+                    "translation": "Words are written on the door:\n\"Holy altar beyond. Keep out.\"{ff26}\rYou don't mean to ignore the warning,\nbut at your touch the lock clicks open,\nand the door quietly swings open.",
                     "addStringTerminator": true
                 },
                 {
