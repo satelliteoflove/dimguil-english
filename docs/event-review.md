@@ -6,7 +6,7 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S50, the dreamlands (EV 190-193).** See `docs/event-map.md`.
+**Next: scene S51, Area E and the ship-room words (EV 131, 189, 213-217, 244, 245).** See `docs/event-map.md`.
 
 ## How a scene is reviewed
 
@@ -70,7 +70,8 @@ Guardians 284 (203: 無機質 is "cold, mechanical", in the COMPUTER room); S46 
 mimicry mode 130, 221-226, 218, 237, with board 1 back to "Have you forgotten any gear?"
 for the forgetting chain (130 "Don't forget full protective gear!", 224 "Mimicry mode
 deactivated"); S48 the egg 206-209 (207 "lying in wait"); S49 the GAME dome 94, 103, 104, 108-112
-(111 keeps "shining demon" for 魔人, a humanlike being of uncanny power, not a devil).
+(111 keeps "shining demon" for 魔人, a humanlike being of uncanny power, not a devil); S50 the dreamlands 190-193 (the signs' kana-by-kana asterisks become "~MEN'S
+DREAMLAND~": the font has no star, and inner asterisks read as censorship in English).
 見知らぬ古代文字 is "unfamiliar ancient letters" everywhere (44 strings; it had been
 "strange"). Also done early, out
 of scene order: the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given the same
@@ -81,7 +82,7 @@ unreviewed strings are consistent but not yet approved.
 
 ## Waiting for their scene
 
-- 191, 193, 300: 魔物 is still "fiend"; make it "monster" in their scenes. The
+- 300: 魔物 is still "fiend"; make it "monster" in its scene. The
   King's lines (SISETU 322-329) may keep "fiend"; the Fortune Teller's 334, 336 and 338
   were changed to "monster" (Chris, 2026-10-02).
 - Naming across files: the NPC files say "Lithograph of the Sun" and "the Sun tablet"

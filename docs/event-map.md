@@ -712,8 +712,8 @@ Fortune Teller); Catalog 12:30 (a guardian made with the maze's knowledge and ma
 **S50. The dreamlands.** EV 190-193.
 Where: Area D' B1; Succubus around E0 N4, Incubus around E23 N4 (Enc.). The doors are
 190 at E3 N4 and 192 at E20 N4 (Disc).
-What: 190 recently carved on a door: MEN'S DREAMLAND; 191 rest on the bed, a beautiful
-woman in a dream, a fiend when you wake. 192 WOMEN'S DREAMLAND; 193 a beautiful man.
+What: 190 recently carved on a door: "~MEN'S DREAMLAND~"; 191 rest on the bed, a
+beautiful woman in a dream, a monster when you wake. 192 WOMEN'S DREAMLAND; 193 a beautiful man.
 Joke. Links: FEMALE and MALE doors (92, 93); the "beautiful woman" motif.
 
 ### Area E and the control room
