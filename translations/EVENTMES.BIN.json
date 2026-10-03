@@ -1709,7 +1709,7 @@
                 {
                     "length": 248,
                     "source": "NA",
-                    "translation": "{ff30}4       We are the Guardians,\n{ff30}4       who rule this land.{ff26}\r{ff30}4  You who defile this precious land,\n{ff30}4  to us you are worshippers of false\n{ff30}4  gods. You shall not leave alive.{ff26}\r{ff30}4  This sword shall drink your blood,\n{ff30}4     and our god shall rise again.{ff30}0{ff26}",
+                    "translation": "{ff30}4       We are the Guardians\n{ff30}4       who rule this land.{ff26}\r{ff30}4  You who defile this precious land,\n{ff30}4  to us you are believers in a false god.\n{ff30}4  You shall not leave alive.{ff26}\r{ff30}4  This sword shall drink your blood,\n{ff30}4     and our god shall rise again.{ff30}0{ff26}",
                     "addStringTerminator": true
                 },
                 {

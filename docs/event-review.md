@@ -6,7 +6,7 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S41, the snake door, the damage floor and ENERGY (EV 184, 198; Guardians 283).** See `docs/event-map.md`.
+**Next: scene S42, the SHUTTLE and the stone statue (EV 186-188).** See `docs/event-map.md`.
 
 ## How a scene is reviewed
 
@@ -61,7 +61,8 @@ WAREHOUSE 178, 179 (最近書かれた is "recently": the heretics' planted-hint
 "readable"); S36 the trash room 173-177 ("trash", not "rubbish"); S37 Area C glyph words 170-172, 185; S38 the moving-floor
 panel 183, 146-148; S39 the Greater Golem 182, 288 (182 "you find" the hole: 開いていた is
 what you see, not when it opened).; S40 the silver stone 271-273 (worded like the blue
-and red stones).
+and red stones); S41 the snake door and ENERGY 184, 198, and Guardians
+283 ("believers in a false god", one clause per line).
 見知らぬ古代文字 is "unfamiliar ancient letters" everywhere (44 strings; it had been
 "strange"). Also done early, out
 of scene order: the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given the same
@@ -81,9 +82,9 @@ unreviewed strings are consistent but not yet approved.
 - Naming across files: the NPC files say "Lithograph of the Sun" and "the Sun tablet"
   where the event script says LITHOGRAPH OF SUN; 迷宮 is "labyrinth" in some event
   strings and "maze" elsewhere. Settle these.
-- 283-285 (Guardians): 280's intro became "We are the Guardians who rule this land."
-  with no comma; 281 and 282 match, and the other three share that intro and should too. Chris decided
-  not to carry the contempt of 貴様ら; plain "you" throughout.
+- 284, 285 (Guardians): 280's intro became "We are the Guardians who rule this land."
+  with no comma; 281-283 match, and these two share that intro and should too. Chris
+  decided not to carry the contempt of 貴様ら; plain "you" throughout.
 
 ## To check in play or in the code
 
