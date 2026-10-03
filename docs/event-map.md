@@ -725,7 +725,7 @@ Bergamot at B4 x12y12 (Walkthrough).
 The ship-room glyph words were all guessed to be in Area E; the disc places most of
 them elsewhere (Disc): 245 BRIDGE, Area E B4 E12 N6; 244 CONTROL, Area X E10 N11; 131
 TRANSPORTER, Area X E9 N14; 213 HEAL, Area B B4 E6 N18; 214 GAS, Area B B4 E5 N6; and
-the broken murals with faint letters 215 MEATING (sic), Area B B1 E17 N4; 216 REVIVAL,
+the broken murals with faint letters 215 MEETING (MEATING in the original glyphs), Area B B1 E17 N4; 216 REVIVAL,
 Area B B1 E16 N18; 217 JUNK, Area B B1 E6 N19. 189 REST isn't a plain message event and
 is still unplaced.
 The control room fight with Cleo and Bergamot is NPC4 44-55 (no event strings). Cleo
@@ -917,7 +917,7 @@ or read to solve something. The needed words are the ones in color 4 (see the tr
 | GAME | board 7 | **needed**: the riddle (94) |
 | A-E | 136-145 (Area X), A-C 146-148 (Area C doors) | area letters |
 | STR ... PRIEST | 240, 241 | the Priestess's Door profile |
-| SHUTTLE, CONTAINER, DANGER, TRAP, CORE, COMPUTER, COLDSLEEP, TRANSPORTER, CONTROL, BRIDGE, HEAL, GAS, REST, MEATING, REVIVAL | various | ship-room labels; no puzzle role found |
+| SHUTTLE, CONTAINER, DANGER, TRAP, CORE, COMPUTER, COLDSLEEP, TRANSPORTER, CONTROL, BRIDGE, HEAL, GAS, REST, MEETING, REVIVAL | various | ship-room labels; no puzzle role found |
 | TREBOR SUX | board 9 | joke; teaches B, X |
 
 No word contains Q, so the Q glyph can only come from the keyboard. Cresson's analysis
@@ -1176,9 +1176,13 @@ confirming it's an error. Don't "fix" those in the English on this list's say-so
   "the stones from the pillars".
 - **EV 222:** only the gauntlets are said to open the small door; all four pieces are
   required.
-- **EV 215 MEATING:** the glyphs spell M-E-A-T-I-N-G. MEETING is a guess at the intent,
-  not established. It's a teaching word, and changing it would change which letters it
-  teaches, so it stays as it is.
+- **EV 215 MEATING:** the original glyphs spell M-E-A-T-I-N-G. The patch spells MEETING
+  (Chris, 2026-10-03). Nothing supports a pun: no text, event or monster near the mural
+  (Area B B1 E17 N4) has anything to do with meat, and the other glyph words are a set of
+  ship-room labels (BRIDGE, REST, HEAL, REVIVAL...) where a meeting room fits. In katakana
+  both are ミー (ミーティング, ミート), an easy slip; harano and Emonoya don't mention it. The
+  player decodes the glyphs with the analysis item, and every letter of the word appears
+  in 9-30 other strings, so the A wasn't needed for decoding.
 - **EV 231:** a typo in the thought (この for こと); the meaning, "is there something we
   left undone?", is clear.
 - **EV 178 and 179** are identical. The FAQ says WAREHOUSE is on a statue's head; the

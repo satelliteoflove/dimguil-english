@@ -11,7 +11,7 @@
                 {
                     "length": 145,
                     "source": "NA",
-                    "translation": "A huge mural covers the wall before you.\nWhat could it mean? And what is that\npainted in the middle?{ff26}\rOh? In the lower right corner, strange\nancient letters are carved:\n]{ff30}4{ancient_d}{ancient_i}{ancient_m}{ancient_g}{ancient_u}{ancient_i}{ancient_l}{ff30}0[",
+                    "translation": "A huge mural covers the wall before you.\nWhat could it mean? And what is that\npainted in the middle?{ff26}\rOh? In the lower right corner, unfamiliar\nancient letters are carved:\n]{ff30}4{ancient_d}{ancient_i}{ancient_m}{ancient_g}{ancient_u}{ancient_i}{ancient_l}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
@@ -803,7 +803,7 @@
                 {
                     "length": 78,
                     "source": "NA",
-                    "translation": "The mural shows people, and strange\nancient letters are carved on it:\n]{ff30}5{ancient_p}{ancient_e}{ancient_o}{ancient_p}{ancient_l}{ancient_e}{ff30}0[",
+                    "translation": "The mural shows people, and unfamiliar\nancient letters are carved on it:\n]{ff30}5{ancient_p}{ancient_e}{ancient_o}{ancient_p}{ancient_l}{ancient_e}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
@@ -941,7 +941,7 @@
                 {
                     "length": 78,
                     "source": "NA",
-                    "translation": "The mural shows people, and strange\nancient letters are carved on it:\n]{ff30}5{ancient_p}{ancient_e}{ancient_o}{ancient_p}{ancient_l}{ancient_e}{ff30}0[",
+                    "translation": "The mural shows people, and unfamiliar\nancient letters are carved on it:\n]{ff30}5{ancient_p}{ancient_e}{ancient_o}{ancient_p}{ancient_l}{ancient_e}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
@@ -953,7 +953,7 @@
                 {
                     "length": 78,
                     "source": "NA",
-                    "translation": "The mural shows people, and strange\nancient letters are carved on it:\n]{ff30}5{ancient_p}{ancient_e}{ancient_o}{ancient_p}{ancient_l}{ancient_e}{ff30}0[",
+                    "translation": "The mural shows people, and unfamiliar\nancient letters are carved on it:\n]{ff30}5{ancient_p}{ancient_e}{ancient_o}{ancient_p}{ancient_l}{ancient_e}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
@@ -1145,7 +1145,7 @@
                 {
                     "length": 84,
                     "source": "NA",
-                    "translation": "The mural is broken beyond reading,\nbut faint ancient letters remain:\n]{ff30}5{ancient_r}{ancient_e}{ancient_s}{ancient_t}{ff30}0[",
+                    "translation": "The mural is too damaged to make out,\nbut faint unfamiliar ancient letters remain:\n]{ff30}5{ancient_r}{ancient_e}{ancient_s}{ancient_t}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
@@ -1301,19 +1301,19 @@
                 {
                     "length": 93,
                     "source": "NA",
-                    "translation": "The mural is broken beyond reading,\nbut faint ancient letters remain:\n]{ff30}5{ancient_m}{ancient_e}{ancient_a}{ancient_t}{ancient_i}{ancient_n}{ancient_g}{ff30}0[",
+                    "translation": "The mural is too damaged to make out,\nbut faint unfamiliar ancient letters remain:\n]{ff30}5{ancient_m}{ancient_e}{ancient_e}{ancient_t}{ancient_i}{ancient_n}{ancient_g}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
                     "length": 93,
                     "source": "NA",
-                    "translation": "The mural is broken beyond reading,\nbut faint ancient letters remain:\n]{ff30}5{ancient_r}{ancient_e}{ancient_v}{ancient_i}{ancient_v}{ancient_a}{ancient_l}{ff30}0[",
+                    "translation": "The mural is too damaged to make out,\nbut faint unfamiliar ancient letters remain:\n]{ff30}5{ancient_r}{ancient_e}{ancient_v}{ancient_i}{ancient_v}{ancient_a}{ancient_l}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
                     "length": 84,
                     "source": "NA",
-                    "translation": "The mural is broken beyond reading,\nbut faint ancient letters remain:\n]{ff30}5{ancient_j}{ancient_u}{ancient_n}{ancient_k}{ff30}0[",
+                    "translation": "The mural is too damaged to make out,\nbut faint unfamiliar ancient letters remain:\n]{ff30}5{ancient_j}{ancient_u}{ancient_n}{ancient_k}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
