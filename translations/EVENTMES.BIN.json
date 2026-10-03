@@ -77,7 +77,7 @@
                 {
                     "length": 133,
                     "source": "NA",
-                    "translation": "Before the Shrine stands a sealed door\nbearing the crest of the sun.{ff26}\rStrange ancient letters are carved into the crest:\n]{ff30}5{ancient_s}{ancient_u}{ancient_n}{ff30}0[\nIn the middle of the door is a square hole.{ff26}",
+                    "translation": "Before the Shrine stands a sealed door\nbearing the crest of the sun.{ff26}\rUnfamiliar ancient letters are carved into the crest:\n]{ff30}5{ancient_s}{ancient_u}{ancient_n}{ff30}0[\nIn the middle of the door is a square hole.{ff26}",
                     "addStringTerminator": true
                 },
                 {
@@ -119,7 +119,7 @@
                 {
                     "length": 57,
                     "source": "NA",
-                    "translation": "Strange ancient letters are carved on\nthe plaque on the door:\n]{ff30}5{ancient_s}{ancient_t}{ancient_a}{ancient_r}{ff30}0[",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe plaque on the door:\n]{ff30}5{ancient_s}{ancient_t}{ancient_a}{ancient_r}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
@@ -143,13 +143,13 @@
                 {
                     "length": 97,
                     "source": "NA",
-                    "translation": "The mural shows people aboard a ship,\nsailing toward the Shrine.{ff26}\rStrange ancient letters are carved in\nthe lower right:\n]{ff30}5{ancient_s}{ancient_h}{ancient_i}{ancient_p}{ff30}0[",
+                    "translation": "The mural shows people aboard a ship,\nsailing toward the Shrine.{ff26}\rUnfamiliar ancient letters are carved in\nthe lower right:\n]{ff30}5{ancient_s}{ancient_h}{ancient_i}{ancient_p}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
                     "length": 122,
                     "source": "NA",
-                    "translation": "A huge mural covers the wall before you.\nA giant figure is drawn like Death itself.{ff26}\rStrange ancient letters are carved in\nthe lower right:\n]{ff30}5{ancient_d}{ancient_e}{ancient_a}{ancient_t}{ancient_h}{ff30}0[",
+                    "translation": "A huge mural covers the wall before you.\nA giant figure is drawn like Death itself.{ff26}\rUnfamiliar ancient letters are carved in\nthe lower right:\n]{ff30}5{ancient_d}{ancient_e}{ancient_a}{ancient_t}{ancient_h}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
@@ -347,19 +347,19 @@
                 {
                     "length": 56,
                     "source": "NA",
-                    "translation": "Strange ancient letters are carved on\nthe door:\n]{ff30}5{ancient_e}{ancient_n}{ancient_t}{ancient_e}{ancient_r}{ff30}0[",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_e}{ancient_n}{ancient_t}{ancient_e}{ancient_r}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
                     "length": 53,
                     "source": "NA",
-                    "translation": "Strange ancient letters are carved on\nthe door:\n]{ff30}5{ancient_e}{ancient_x}{ancient_i}{ancient_t}{ff30}0[",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_e}{ancient_x}{ancient_i}{ancient_t}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
                     "length": 65,
                     "source": "NA",
-                    "translation": "Strange ancient letters are carved on\nthe door:\n]{ff30}5{ancient_c}{ancient_o}{ancient_m}{ancient_p}{ancient_u}{ancient_t}{ancient_e}{ancient_r}{ff30}0[",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_c}{ancient_o}{ancient_m}{ancient_p}{ancient_u}{ancient_t}{ancient_e}{ancient_r}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
@@ -455,7 +455,7 @@
                 {
                     "length": 84,
                     "source": "NA",
-                    "translation": " \nThe mural shows a ruler.{ff26}\rStrange ancient letters are carved in\nthe lower right:\n]{ff30}5{ancient_k}{ancient_i}{ancient_n}{ancient_g}{ff30}0[",
+                    "translation": " \nThe mural shows a ruler.{ff26}\rUnfamiliar ancient letters are carved in\nthe lower right:\n]{ff30}5{ancient_k}{ancient_i}{ancient_n}{ancient_g}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
@@ -467,7 +467,7 @@
                 {
                     "length": 62,
                     "source": "NA",
-                    "translation": "Strange ancient letters are carved on\nthe door:\n]{ff30}5{ancient_l}{ancient_i}{ancient_b}{ancient_r}{ancient_a}{ancient_r}{ancient_y}{ff30}0[",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_l}{ancient_i}{ancient_b}{ancient_r}{ancient_a}{ancient_r}{ancient_y}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
@@ -485,19 +485,19 @@
                 {
                     "length": 62,
                     "source": "NA",
-                    "translation": "Strange ancient letters are carved on\nthe door:\n]{ff30}5{ancient_f}{ancient_r}{ancient_e}{ancient_e}{ancient_z}{ancient_e}{ancient_r}{ff30}0[",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_f}{ancient_r}{ancient_e}{ancient_e}{ancient_z}{ancient_e}{ancient_r}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
                     "length": 164,
                     "source": "NA",
-                    "translation": "This door bears the crest of the moon.\nIn the middle of the door is a square hole.{ff26}\rStrange ancient letters are carved into\nthe crest:\n]{ff30}5{ancient_m}{ancient_o}{ancient_o}{ancient_n}{ff30}0[{ff26}\rYou fit the LITHOGRAPH OF SUN into the hole,\n \n......and the door slowly begins to open.",
+                    "translation": "This door bears the crest of the moon.\nIn the middle of the door is a square hole.{ff26}\rUnfamiliar ancient letters are carved into\nthe crest:\n]{ff30}5{ancient_m}{ancient_o}{ancient_o}{ancient_n}{ff30}0[{ff26}\rYou fit the LITHOGRAPH OF SUN into the hole,\n \n......and the door slowly begins to open.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 153,
                     "source": "NA",
-                    "translation": "This door bears the crest of the moon.\nIn the middle of the door is a square hole.{ff26} \nStrange ancient letters are carved into the crest:\n]{ff30}5{ancient_m}{ancient_o}{ancient_o}{ancient_n}{ff30}0[{ff26}\rCould something be needed? You try everything\nyou can think of, but the door won't budge.",
+                    "translation": "This door bears the crest of the moon.\nIn the middle of the door is a square hole.{ff26} \nUnfamiliar ancient letters are carved into the crest:\n]{ff30}5{ancient_m}{ancient_o}{ancient_o}{ancient_n}{ff30}0[{ff26}\rCould something be needed? You try everything\nyou can think of, but the door won't budge.",
                     "addStringTerminator": true
                 },
                 {
@@ -527,7 +527,7 @@
                 {
                     "length": 53,
                     "source": "NA",
-                    "translation": "Strange ancient letters are carved on\nthe door:\n]{ff30}5{ancient_c}{ancient_o}{ancient_r}{ancient_e}{ff30}0[",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_c}{ancient_o}{ancient_r}{ancient_e}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
@@ -563,13 +563,13 @@
                 {
                     "length": 59,
                     "source": "NA",
-                    "translation": "Strange ancient letters are carved on\nthe door:\n]{ff30}5{ancient_f}{ancient_e}{ancient_m}{ancient_a}{ancient_l}{ancient_e}{ff30}0[",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_f}{ancient_e}{ancient_m}{ancient_a}{ancient_l}{ancient_e}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
                     "length": 53,
                     "source": "NA",
-                    "translation": "Strange ancient letters are carved on\nthe door:\n]{ff30}5{ancient_m}{ancient_a}{ancient_l}{ancient_e}{ff30}0[",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_m}{ancient_a}{ancient_l}{ancient_e}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
@@ -653,7 +653,7 @@
                 {
                     "length": 131,
                     "source": "NA",
-                    "translation": "The mural shows someone wrapped in many tubes.\nIs it some sort of experiment?{ff26}\rStrange ancient letters are carved in\nthe right corner:\n]{ff30}4{ancient_l}{ancient_a}{ancient_b}{ancient_o}{ancient_r}{ancient_a}{ancient_t}{ancient_o}{ancient_r}{ancient_y}{ff30}0[",
+                    "translation": "The mural shows someone wrapped in many tubes.\nIs it some sort of experiment?{ff26}\rUnfamiliar ancient letters are carved in\nthe right corner:\n]{ff30}4{ancient_l}{ancient_a}{ancient_b}{ancient_o}{ancient_r}{ancient_a}{ancient_t}{ancient_o}{ancient_r}{ancient_y}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
@@ -773,7 +773,7 @@
                 {
                     "length": 68,
                     "source": "NA",
-                    "translation": "Strange ancient letters are carved on\nthe wall:\n]{ff30}5{ancient_c}{ancient_o}{ancient_l}{ancient_d}{ancient_s}{ancient_l}{ancient_e}{ancient_e}{ancient_p}{ff30}0[",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe wall:\n]{ff30}5{ancient_c}{ancient_o}{ancient_l}{ancient_d}{ancient_s}{ancient_l}{ancient_e}{ancient_e}{ancient_p}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
@@ -797,7 +797,7 @@
                 {
                     "length": 74,
                     "source": "NA",
-                    "translation": "Strange ancient letters are carved on\nthe door:\n]{ff30}5{ancient_t}{ancient_r}{ancient_a}{ancient_n}{ancient_s}{ancient_p}{ancient_o}{ancient_r}{ancient_t}{ancient_e}{ancient_r}{ff30}0[",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_t}{ancient_r}{ancient_a}{ancient_n}{ancient_s}{ancient_p}{ancient_o}{ancient_r}{ancient_t}{ancient_e}{ancient_r}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
@@ -857,49 +857,49 @@
                 {
                     "length": 44,
                     "source": "NA",
-                    "translation": " Strange ancient letters are carved on\nthe door: ]{ff30}4{ancient_a}{ff30}0[{ff26}",
+                    "translation": " Unfamiliar ancient letters are carved on\nthe door: ]{ff30}4{ancient_a}{ff30}0[{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 44,
                     "source": "NA",
-                    "translation": " Strange ancient letters are carved on\nthe door: ]{ff30}4{ancient_b}{ff30}0[{ff26}",
+                    "translation": " Unfamiliar ancient letters are carved on\nthe door: ]{ff30}4{ancient_b}{ff30}0[{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 44,
                     "source": "NA",
-                    "translation": " Strange ancient letters are carved on\nthe door: ]{ff30}4{ancient_c}{ff30}0[{ff26}",
+                    "translation": " Unfamiliar ancient letters are carved on\nthe door: ]{ff30}4{ancient_c}{ff30}0[{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 44,
                     "source": "NA",
-                    "translation": " Strange ancient letters are carved on\nthe door: ]{ff30}4{ancient_d}{ff30}0[{ff26}",
+                    "translation": " Unfamiliar ancient letters are carved on\nthe door: ]{ff30}4{ancient_d}{ff30}0[{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 44,
                     "source": "NA",
-                    "translation": " Strange ancient letters are carved on\nthe door: ]{ff30}4{ancient_e}{ff30}0[{ff26}",
+                    "translation": " Unfamiliar ancient letters are carved on\nthe door: ]{ff30}4{ancient_e}{ff30}0[{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 44,
                     "source": "NA",
-                    "translation": " Strange ancient letters are carved on\nthe door: ]{ff30}5{ancient_a}{ff30}0[{ff26}",
+                    "translation": " Unfamiliar ancient letters are carved on\nthe door: ]{ff30}5{ancient_a}{ff30}0[{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 44,
                     "source": "NA",
-                    "translation": " Strange ancient letters are carved on\nthe door: ]{ff30}5{ancient_b}{ff30}0[{ff26}",
+                    "translation": " Unfamiliar ancient letters are carved on\nthe door: ]{ff30}5{ancient_b}{ff30}0[{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 44,
                     "source": "NA",
-                    "translation": " Strange ancient letters are carved on\nthe door: ]{ff30}5{ancient_c}{ff30}0[{ff26}",
+                    "translation": " Unfamiliar ancient letters are carved on\nthe door: ]{ff30}5{ancient_c}{ff30}0[{ff26}",
                     "addStringTerminator": true
                 },
                 {
@@ -935,7 +935,7 @@
                 {
                     "length": 53,
                     "source": "NA",
-                    "translation": "Strange ancient letters are carved on\nthe door:\n]{ff30}5{ancient_t}{ancient_r}{ancient_a}{ancient_p}{ff30}0[",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_t}{ancient_r}{ancient_a}{ancient_p}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
@@ -947,7 +947,7 @@
                 {
                     "length": 71,
                     "source": "NA",
-                    "translation": "Strange ancient letters are carved on\nthe door:\n]{ff30}4{ancient_l}{ancient_a}{ancient_b}{ancient_o}{ancient_r}{ancient_a}{ancient_t}{ancient_o}{ancient_r}{ancient_y}{ff30}0[",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}4{ancient_l}{ancient_a}{ancient_b}{ancient_o}{ancient_r}{ancient_a}{ancient_t}{ancient_o}{ancient_r}{ancient_y}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
@@ -1031,25 +1031,25 @@
                 {
                     "length": 56,
                     "source": "NA",
-                    "translation": "Strange ancient letters are carved on\nthe wall:\n]{ff30}5{ancient_d}{ancient_a}{ancient_n}{ancient_g}{ancient_e}{ancient_r}{ff30}0[",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe wall:\n]{ff30}5{ancient_d}{ancient_a}{ancient_n}{ancient_g}{ancient_e}{ancient_r}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
                     "length": 69,
                     "source": "NA",
-                    "translation": "Strange ancient letters are carved on\nthe strange statue:\n]{ff30}5{ancient_s}{ancient_h}{ancient_u}{ancient_t}{ancient_t}{ancient_l}{ancient_e}{ff30}0[",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe strange statue:\n]{ff30}5{ancient_s}{ancient_h}{ancient_u}{ancient_t}{ancient_t}{ancient_l}{ancient_e}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
                     "length": 73,
                     "source": "NA",
-                    "translation": "Strange ancient letters are carved on\nthe huge box:\n]{ff30}5{ancient_c}{ancient_o}{ancient_n}{ancient_t}{ancient_a}{ancient_i}{ancient_n}{ancient_e}{ancient_r}{ff30}0[",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe huge box:\n]{ff30}5{ancient_c}{ancient_o}{ancient_n}{ancient_t}{ancient_a}{ancient_i}{ancient_n}{ancient_e}{ancient_r}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
                     "length": 56,
                     "source": "NA",
-                    "translation": "Strange ancient letters are carved on\nthe floor:\n]{ff30}5{ancient_t}{ancient_r}{ancient_a}{ancient_s}{ancient_h}{ff30}0[",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe floor:\n]{ff30}5{ancient_t}{ancient_r}{ancient_a}{ancient_s}{ancient_h}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
@@ -1079,13 +1079,13 @@
                 {
                     "length": 104,
                     "source": "NA",
-                    "translation": "Words have recently been carved on the pillar's\nhead, along with strange ancient letters.{ff26}\r]{ff30}4{ancient_w}{ancient_a}{ancient_r}{ancient_e}{ancient_h}{ancient_o}{ancient_u}{ancient_s}{ancient_e}{ff30}0[\nGo to the altar",
+                    "translation": "Words have recently been carved on the pillar's\nhead, along with unfamiliar ancient letters.{ff26}\r]{ff30}4{ancient_w}{ancient_a}{ancient_r}{ancient_e}{ancient_h}{ancient_o}{ancient_u}{ancient_s}{ancient_e}{ff30}0[\nGo to the altar",
                     "addStringTerminator": true
                 },
                 {
                     "length": 104,
                     "source": "NA",
-                    "translation": "Words have recently been carved on the pillar's\nhead, along with strange ancient letters.{ff26}\r]{ff30}4{ancient_w}{ancient_a}{ancient_r}{ancient_e}{ancient_h}{ancient_o}{ancient_u}{ancient_s}{ancient_e}{ff30}0[\nGo to the altar",
+                    "translation": "Words have recently been carved on the pillar's\nhead, along with unfamiliar ancient letters.{ff26}\r]{ff30}4{ancient_w}{ancient_a}{ancient_r}{ancient_e}{ancient_h}{ancient_o}{ancient_u}{ancient_s}{ancient_e}{ff30}0[\nGo to the altar",
                     "addStringTerminator": true
                 },
                 {
@@ -1127,7 +1127,7 @@
                 {
                     "length": 168,
                     "source": "NA",
-                    "translation": "The wreck of some sort of vehicle?\nScrap, perhaps. There's no way in.{ff26}\rStrange ancient letters are carved on\nits side: ]{ff30}5{ancient_s}{ancient_h}{ancient_u}{ancient_t}{ancient_t}{ancient_l}{ancient_e}{ff30}0[{ff26}\rA stone statue is lodged in one of the\nmachine's tubes. Will you pull it out?",
+                    "translation": "The wreck of some sort of vehicle?\nScrap, perhaps. There's no way in.{ff26}\rUnfamiliar ancient letters are carved on\nits side: ]{ff30}5{ancient_s}{ancient_h}{ancient_u}{ancient_t}{ancient_t}{ancient_l}{ancient_e}{ff30}0[{ff26}\rA stone statue is lodged in one of the\nmachine's tubes. Will you pull it out?",
                     "addStringTerminator": true
                 },
                 {
@@ -1199,7 +1199,7 @@
                 {
                     "length": 61,
                     "source": "NA",
-                    "translation": "Strange ancient letters are carved on\nthe mural:\n]{ff30}4{ancient_e}{ancient_n}{ancient_e}{ancient_r}{ancient_g}{ancient_y}{ff30}0[",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe mural:\n]{ff30}4{ancient_e}{ancient_n}{ancient_e}{ancient_r}{ancient_g}{ancient_y}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {
@@ -1289,13 +1289,13 @@
                 {
                     "length": 56,
                     "source": "NA",
-                    "translation": "Strange ancient letters are carved on\nthe door:\n ]{ff30}5{ancient_h}{ancient_e}{ancient_a}{ancient_l}{ff30}0[{ff26}",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe door:\n ]{ff30}5{ancient_h}{ancient_e}{ancient_a}{ancient_l}{ff30}0[{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 53,
                     "source": "NA",
-                    "translation": "Strange ancient letters are carved on\nthe door:\n ]{ff30}5{ancient_g}{ancient_a}{ancient_s}{ff30}0[{ff26}",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe door:\n ]{ff30}5{ancient_g}{ancient_a}{ancient_s}{ff30}0[{ff26}",
                     "addStringTerminator": true
                 },
                 {
@@ -1469,19 +1469,19 @@
                 {
                     "length": 66,
                     "source": "NA",
-                    "translation": "Strange ancient letters are carved on\nthe mural:\n]{ff30}4{ancient_c}{ancient_o}{ancient_c}{ancient_k}{ancient_p}{ancient_i}{ancient_t}{ff30}0[{ff26}",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe mural:\n]{ff30}4{ancient_c}{ancient_o}{ancient_c}{ancient_k}{ancient_p}{ancient_i}{ancient_t}{ff30}0[{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 64,
                     "source": "NA",
-                    "translation": "Strange ancient letters are carved on\nthe door:\n]{ff30}5{ancient_c}{ancient_o}{ancient_n}{ancient_t}{ancient_r}{ancient_o}{ancient_l}{ff30}0[{ff26}",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_c}{ancient_o}{ancient_n}{ancient_t}{ancient_r}{ancient_o}{ancient_l}{ff30}0[{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 61,
                     "source": "NA",
-                    "translation": "Strange ancient letters are carved on\nthe door:\n]{ff30}5{ancient_b}{ancient_r}{ancient_i}{ancient_d}{ancient_g}{ancient_e}{ff30}0[{ff26}",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_b}{ancient_r}{ancient_i}{ancient_d}{ancient_g}{ancient_e}{ff30}0[{ff26}",
                     "addStringTerminator": true
                 },
                 {
@@ -1619,19 +1619,19 @@
                 {
                     "length": 190,
                     "source": "NA",
-                    "translation": "There's a square hole in the pedestal of\na small statue. A shining white stone is\nstuck fast to the bottom.{ff26}\rStrange ancient letters are carved beside it:\n \n]{ff30}4{ancient_s}{ancient_t}{ancient_a}{ancient_f}{ancient_f}{ff30}0[{ff26}\rYou fit in the LITHOGRAPH OF SUN.\n \n...The white stone is now set into it.",
+                    "translation": "There's a square hole in the pedestal of\na small statue. A shining white stone is\nstuck fast to the bottom.{ff26}\rUnfamiliar ancient letters are carved beside it:\n \n]{ff30}4{ancient_s}{ancient_t}{ancient_a}{ancient_f}{ancient_f}{ff30}0[{ff26}\rYou fit in the LITHOGRAPH OF SUN.\n \n...The white stone is now set into it.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 183,
                     "source": "NA",
-                    "translation": "There's a square hole in the pedestal of\na small statue. A shining white stone is\nstuck fast inside.{ff26}\rStrange ancient letters are carved beside it:\n \n]{ff30}4{ancient_s}{ancient_t}{ancient_a}{ancient_f}{ancient_f}{ff30}0[{ff26}\rBut you have nothing that would fit the square hole.\n \n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
+                    "translation": "There's a square hole in the pedestal of\na small statue. A shining white stone is\nstuck fast inside.{ff26}\rUnfamiliar ancient letters are carved beside it:\n \n]{ff30}4{ancient_s}{ancient_t}{ancient_a}{ancient_f}{ancient_f}{ff30}0[{ff26}\rBut you have nothing that would fit the square hole.\n \n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 117,
                     "source": "NA",
-                    "translation": "There's a square hole in the pedestal of\na small statue. A shining white stone is\nstuck fast inside.{ff26}\rStrange ancient letters are carved beside it:\n \n]{ff30}4{ancient_s}{ancient_t}{ancient_a}{ancient_f}{ancient_f}{ff30}0[",
+                    "translation": "There's a square hole in the pedestal of\na small statue. A shining white stone is\nstuck fast inside.{ff26}\rUnfamiliar ancient letters are carved beside it:\n \n]{ff30}4{ancient_s}{ancient_t}{ancient_a}{ancient_f}{ancient_f}{ff30}0[",
                     "addStringTerminator": true
                 },
                 {

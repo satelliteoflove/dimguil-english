@@ -35,7 +35,7 @@ do. In English:
 
 | Japanese | English |
 |---|---|
-| 見知らぬ古代文字が刻まれていた | Strange ancient letters are carved there: |
+| 見知らぬ古代文字が刻まれていた | Unfamiliar ancient letters are carved there: |
 | 何か忘れてはいないだろうか? (colored, the party's own thought) | "Aren't we forgetting something?" |
 | 何か必要なのであろうか? | "Do we need something?" |
 | 特におかしな所はない | "There's nothing particularly strange about it." (or "here." when no object is named) |
