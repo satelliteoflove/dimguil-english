@@ -6,7 +6,7 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S48, the egg (EV 206-209).** See `docs/event-map.md`.
+**Next: scene S49, the GAME dome and the gold stone (EV 94, 103, 104, 108-112).** See `docs/event-map.md`.
 
 ## How a scene is reviewed
 
@@ -16,7 +16,8 @@ map), the Japanese read literally, our current English, and a suggestion that fi
 box. Don't quote long Japanese in the repo; chat is fine. After approval, apply it,
 run `scripts/evfit.py` (the only expected flags are string 36's extra page and
 258's restored {ff30}2), then `scripts/wtquotes.py check` (the website walkthrough
-quotes the patch; carry any changed quote over to the site), and move on.
+quotes the patch; update `docs/walkthrough-npcs.json` and the ledger, then message the
+site session, bartoks-trading-post, with the change), and move on.
 Before calling a line a joke or loosening it, search the Japanese for its key nouns
 elsewhere; that's how the sticky paste (17, 44, 45) turned out to be a puzzle clue.
 
@@ -68,7 +69,7 @@ the pillars carry what the lake holds watered down); S45 the god's name 199-205 
 Guardians 284 (203: 無機質 is "cold, mechanical", in the COMPUTER room); S46 COCKPIT 243 (kept); S47 the small door and
 mimicry mode 130, 221-226, 218, 237, with board 1 back to "Have you forgotten any gear?"
 for the forgetting chain (130 "Don't forget full protective gear!", 224 "Mimicry mode
-deactivated").
+deactivated"); S48 the egg 206-209 (207 "lying in wait").
 見知らぬ古代文字 is "unfamiliar ancient letters" everywhere (44 strings; it had been
 "strange"). Also done early, out
 of scene order: the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given the same
