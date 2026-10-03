@@ -1271,19 +1271,19 @@
                 {
                     "length": 113,
                     "source": "NA",
-                    "translation": "Is the great stone pillar filled with\nliquid? It leaks from a crack, thicker\nthan the lake's water.{ff26}\rJust a touch of it, and your magic\nseems restored.",
+                    "translation": "Could the huge stone pillar be filled with\nliquid? Through a crack in the stone seeps\nsomething richer than the lake's water.{ff26}\rA light touch of the water seems to\nrestore your magic.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 113,
                     "source": "NA",
-                    "translation": "Is the great iron pillar filled with\nliquid? It leaks from a seam, thicker\nthan the lake's water.{ff26}\rJust a touch of it, and your magic\nseems restored.",
+                    "translation": "Could the huge iron pillar be filled with\nliquid? Through a seam in the iron seeps\nsomething richer than the lake's water.{ff26}\rA light touch of the water seems to\nrestore your magic.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 47,
                     "source": "NA",
-                    "translation": "This one wall is made of something\nunlike the rest. It must hide a secret.",
+                    "translation": "This one wall is made of something\nunlike the rest. There seems to be some\nsecret to it.",
                     "addStringTerminator": true
                 },
                 {
