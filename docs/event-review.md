@@ -6,7 +6,7 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S35, WAREHOUSE (EV 178, 179).** See `docs/event-map.md`.
+**Next: scene S36, TRASH and the rubbish room (EV 173-177).** See `docs/event-map.md`.
 
 ## How a scene is reviewed
 
@@ -56,9 +56,10 @@ pressed; 248 waits for S55); S28 Zaril's party and the Chimera Warrior 150-152, 
 "It's that thing!": やつ is the monster, not "him"); S29 the frost tank 127, 153; S30 the
 experiment log 46, 242; S31 right foot, left foot 166-168; S32 other Area B doors 132,
 154, 155, 157, 165, 169; S33 the three-ring dial 158-164 (162 and SISETU 339 both say
-"large ring"); S34 the vault, the Ruby Hand and the red stone 149, 274-276, 282. Also
-done early, out of scene order: the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given
-the same wording as 35 and 36.
+"large ring"); S34 the vault, the Ruby Hand and the red stone 149, 274-276, 282; S35
+WAREHOUSE 178, 179 (最近書かれた is "recently": the heretics' planted-hints thread, not
+"readable"). Also done early, out of scene order: the murals 22 (SHIP) and 23 (DEATH),
+and 59 and 61 given the same wording as 35 and 36.
 
 Every string also had the present-tense sweep and full-question prompts applied, so
 unreviewed strings are consistent but not yet approved.
