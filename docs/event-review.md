@@ -6,7 +6,7 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S37, Area C glyph words (EV 170, 171, 172, 185).** See `docs/event-map.md`.
+**Next: scene S38, the moving-floor panel (EV 183, 146-148).** See `docs/event-map.md`.
 
 ## How a scene is reviewed
 
@@ -58,7 +58,9 @@ experiment log 46, 242; S31 right foot, left foot 166-168; S32 other Area B door
 154, 155, 157, 165, 169; S33 the three-ring dial 158-164 (162 and SISETU 339 both say
 "large ring"); S34 the vault, the Ruby Hand and the red stone 149, 274-276, 282; S35
 WAREHOUSE 178, 179 (最近書かれた is "recently": the heretics' planted-hints thread, not
-"readable"); S36 the trash room 173-177 ("trash", not "rubbish"). Also done early, out
+"readable"); S36 the trash room 173-177 ("trash", not "rubbish"); S37 Area C glyph words 170-172, 185.
+見知らぬ古代文字 is "unfamiliar ancient letters" everywhere (44 strings; it had been
+"strange"). Also done early, out
 of scene order: the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given the same
 wording as 35 and 36.
 
