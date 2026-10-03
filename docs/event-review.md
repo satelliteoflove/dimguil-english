@@ -6,7 +6,7 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S58, buried gold (EV 308-310, 316).** See `docs/event-map.md`.
+**Next: scene S59, leftovers (EV 286, 287, 303).** See `docs/event-map.md`.
 
 ## How a scene is reviewed
 
@@ -77,7 +77,7 @@ is "straight ahead", on the wall, not on the coffin); S53 the Priestess 234, 236
 questions all "do you see... as...?"; 236 curter than 234); S54 the X statue 304, 305 (不思議な is
 "mysterious", apart from 奇妙な "strange"); S55 the Training Maze 238-241, 246-248; S56 the Dragon's Cave pedestal 249-255,
 300 (the last "fiend" in the event script is now "monster"); S57 Otaka 311-315 ("What are the odds", not
-the British "Fancy"; his tildes kept).
+the British "Fancy"; his tildes kept); S58 buried gold 308-310, 316.
 見知らぬ古代文字 is "unfamiliar ancient letters" everywhere (48 strings; it had been
 "strange"). Also done early, out
 of scene order: the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given the same

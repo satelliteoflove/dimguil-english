@@ -1859,13 +1859,13 @@
                 {
                     "length": 41,
                     "source": "NA",
-                    "translation": "Someone has ransacked this place.\n \nWill you search it?",
+                    "translation": "There are signs that someone has\nransacked this place.\nWill you search it?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": " \nYou search the rubble on the floor...\n\r",
+                    "translation": " \nYou comb through the rubble on the floor...\n\r",
                     "addStringTerminator": true
                 },
                 {
