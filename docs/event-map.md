@@ -670,7 +670,7 @@ What: 130 words carved recently on a door: danger ahead, don't forget full gear.
 the small door is shut tight. 222 your GOLD GAUNTLETS answer it and it opens; only one
 can enter. 223 who will go in? 218 that character is in no state to. 224 the character
 touches the crystal in the middle of the room; the tremor grows; they crush it; a voice
-from the whole labyrinth, "Danger! Mimicry mode released." (color 6); everything
+from the whole labyrinth, "Danger! Mimicry mode deactivated." (color 6); everything
 changes. 237 the stone walls turn to metal. 225 the character bursts out in flames and
 turns to ash, "Did we forget something?"; 226 flames fill your sight, same thought
 (the failure branches, without all four gold pieces: FAQ).

@@ -17,7 +17,7 @@
                 {
                     "length": 54,
                     "source": "NA",
-                    "translation": " \n*Message Board*{ff26}\r*Attention*\n \n\"Did you equip your gear? Is everyone's status normal?\"",
+                    "translation": " \n*Message Board*{ff26}\r*Attention*\n\"Have you forgotten any gear?\nIs everyone's status normal?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -791,7 +791,7 @@
                 {
                     "length": 57,
                     "source": "NA",
-                    "translation": "Words have been carved on the door recently:\n\"Danger ahead. Don't forget full gear.\"",
+                    "translation": "Words have recently been carved on the door:\n\"Danger ahead. Don't forget full protective gear!\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1355,7 +1355,7 @@
                 {
                     "length": 199,
                     "source": "NA",
-                    "translation": "{ff12} touches the crystal\nin the middle of the room.{ff26}\rAfter a while, the faint tremor\ngrows stronger.{ff26}\rWithout meaning to, they crush\nthe crystal in their grip.{ff26}\rThen a voice comes from the whole labyrinth:\n\"{ff30}6Danger! Mimicry mode released.{ff30}0\"\nEverything around you begins to change.{ff26}",
+                    "translation": "{ff12} touches the crystal\nin the middle of the room.{ff26}\rAfter a while, the faint tremor\ngrows stronger.{ff26}\rWithout meaning to, they crush\nthe crystal in their grip.{ff26}\rThen a voice comes from the whole labyrinth:\n\"{ff30}6Danger! Mimicry mode deactivated.{ff30}0\"\nEverything around you begins to change.{ff26}",
                     "addStringTerminator": true
                 },
                 {
@@ -1367,7 +1367,7 @@
                 {
                     "length": 63,
                     "source": "NA",
-                    "translation": "Flames fill your sight. You can see\nnothing.\n\"{ff30}2Did we forget something?{ff30}0\"",
+                    "translation": "Flames fill your sight.\nYou can see nothing.\n\"{ff30}2Did we forget something?{ff30}0\"",
                     "addStringTerminator": true
                 },
                 {

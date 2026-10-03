@@ -1145,13 +1145,13 @@
           ],
           "strings": "EVENTMES 224, 237",
           "placement": "Walkthrough: harano's character in the full gold set enters the small room on Area D B1F and mimicry mode is released.",
-          "blurb": "Only one character fits through the little door, and only one in all four gold pieces comes out alive. Inside, the crystal cracks in their grip, and the whole labyrinth speaks at once: \"Danger! Mimicry mode released.\" Then the stone walls turn to metal around you.",
+          "blurb": "Only one character fits through the little door, and only one in all four gold pieces comes out alive. Inside, the crystal cracks in their grip, and the whole labyrinth speaks at once: \"Danger! Mimicry mode deactivated.\" Then the stone walls turn to metal around you.",
           "quotes": [
             {
               "file": "EVENTMES",
               "idx": 224,
               "speaker": "the labyrinth's voice",
-              "text": "Danger! Mimicry mode released."
+              "text": "Danger! Mimicry mode deactivated."
             }
           ],
           "flags": "EVENTMES 224 and 237 is in scene S47, which hasn't been reviewed with Chris yet (the review stopped at S30), so the quoted wording may change. If the caller prefers, this and the altar's voice can be merged as one speaker (both are the ship's machine voices).",

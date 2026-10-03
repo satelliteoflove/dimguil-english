@@ -141,7 +141,7 @@ with the chapter and the string's new wording, to carry over to the site.
 | The Guardians | EVENTMES 284 | How many hundreds of years it took to raise this land again, you cannot know. |
 | the altar's voice | EVENTMES 201 | Speak the name of the god! |
 | the altar's voice | EVENTMES 205 | Now receive your final baptism! |
-| the labyrinth's voice | EVENTMES 224 | Danger! Mimicry mode released. |
+| the labyrinth's voice | EVENTMES 224 | Danger! Mimicry mode deactivated. |
 | The Fortune Teller | SISETU 341 | If you would learn the god's name, go to the altar once more. |
 | The King | SISETU 326 | So the depths beneath the Shrine truly are not of this world. |
 | narration | SISETU 326 | you are handed 10000 Gp and shown out of the chamber. |
