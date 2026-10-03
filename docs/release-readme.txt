@@ -1,5 +1,5 @@
 Wizardry: Dimguil English translation, {version}
-https://github.com/satelliteoflove/dimguil-patcher
+https://github.com/satelliteoflove/dimguil-english
 
 This patch translates the Japanese PlayStation release of Wizardry: Dimguil
 (SLPS-02691) into English. It's for the Rev 1 disc only.

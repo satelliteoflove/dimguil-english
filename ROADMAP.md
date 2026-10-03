@@ -34,12 +34,12 @@ of the redump set, since the build leaves both audio tracks untouched.
 
 ## Still to do around releases
 
-- **Project identity.** A name and repo of its own instead of a GitHub fork. Decided
-  2026-09-27: create a fresh repo under the new name and push the full git history
-  there (Remisse's commits and authorship stay in it), keep GPL-3.0, and point to the
-  original repo at the bottom of the README as the origin of the code, as the license
-  and courtesy ask. The local folder, the jar name and paths in scripts follow the new
-  name.
+- **Project identity.** Done 2026-10-03: the project is dimguil-english, in a repo of its
+  own (satelliteoflove/dimguil-english, private until v0.8.0) instead of a GitHub fork.
+  Its history was filtered so the original team's translation never appears in it:
+  the five files that held their strings start at the commit that removed them, and
+  their names are gone from old READMEs. Remisse's commits and authorship stay. It
+  keeps GPL-3.0 and points to the original repo in the README.
 - **The original team's requests (2026-09-26).** Their translation is removed and must not
   come back, and they aren't to be credited. Remisse's code stays under the GPL, with the
   notice in `docs/notice.txt` on the repo (README) and on every release page: no LLMs
@@ -48,7 +48,7 @@ of the redump set, since the build leaves both audio tracks untouched.
   and the readme in the zip. It also goes on the romhacking.net page.
 - **Known issues.** A list players can read before starting, and GitHub issues for
   reports.
-- **romhacking.net.** Submit the release package once the project has its own name.
+- **romhacking.net.** Submit the release package.
 
 ## Work streams
 
@@ -139,6 +139,5 @@ Once 1.0 is out and any early bug reports are dealt with, the repo mostly goes q
 
 ## Open questions
 
-- Project name.
 - Should the version show in-game (title screen) so bug reports say which build they're
   on?

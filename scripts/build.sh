@@ -19,7 +19,7 @@ cd "$(dirname "$0")/.."
 ROOT=$(pwd)
 ARMIPS=${ARMIPS:-armips}
 MKPSXISO=${MKPSXISO:-mkpsxiso}
-JAR=build/libs/dimguil-patcher-1.0-SNAPSHOT.jar
+JAR=build/libs/dimguil-english-1.0-SNAPSHOT.jar
 
 [ -d rips/clean/dimguil ] || { echo "missing rips/clean/dimguil (see header)"; exit 1; }
 [ -f "$JAR" ] || ./gradlew -q jar
