@@ -54,3 +54,6 @@ rips/
 *.bin
 *.BIN
 __pycache__/
+
+### IntelliJ IDEA (whole folder)
+.idea/

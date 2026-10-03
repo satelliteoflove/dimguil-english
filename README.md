@@ -37,6 +37,7 @@ See [docs/building.md](docs/building.md). You'll need your own Rev 1 disc image.
 - `graphics/` has the edited font sheet.
 - `scripts/` has the build, a headless emulator harness built on the Beetle PSX
   libretro core (`emu.py`), and the checkers and viewers used while translating.
+  `docs/building.md` explains how to set up the emulator tooling.
 - `docs/` has notes on the engine, the translation and the review work, plus
   Remisse's original notes in `findings.md`.
 
