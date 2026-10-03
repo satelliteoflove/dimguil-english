@@ -13,17 +13,19 @@ Releases go out as the work progresses. We don't hold everything back for 1.0.
 **Alpha.** The game is believed to be playable to the end, but some text is still
 Japanese, rough, or badly formatted.
 
-**Beta (0.8.x).** Every piece of text the player can reach is in English. Quality passes
-are still in progress. v0.8.0 will be the first beta, once the text removed at the
-original team's request is translated again. Further 0.8.x releases follow as review
-passes land.
+**Beta (0.8.x).** Every piece of text the player can reach is in English. The first
+quality pass is still in progress. v0.8.0 will be the first beta, once the text removed
+at the original team's request is translated again. Further 0.8.x releases follow as
+review passes land.
 
-**Release candidate (0.9).** After the full playthrough, with whatever it turns up fixed.
+**Release candidate (0.9.x).** v0.9.0 comes once the first quality pass is complete:
+every piece of text the player can reach has been reviewed at least once (see "Quality
+passes"). Further 0.9.x release candidates follow as testing turns things up.
 
-**1.0.** Every piece of text the player can reach is in English and has had at least one
-quality check, the game has been played through to the ending and confirmed
-completable, and the disc layout has been reviewed so the patch doesn't slow loading
-(see "Disc layout").
+**1.0.** The release candidates have been tested more completely, and at least one
+playthrough to the ending, by anyone, has confirmed the translation has no obvious or
+game-breaking flaws. The disc layout has also been reviewed so the patch
+doesn't slow loading (see "Disc layout").
 
 Each release gets a version tag and a changelog entry. Pushing a `v*` tag builds the
 patch and publishes the release (`.github/workflows/release.yml`); the notes come from
@@ -70,7 +72,7 @@ and ITEM_CA are never loaded.
 Typos in the game's own English monster names are for the quality passes:
 "Silhoutte", "Drumer", "Maelific", and "Dragonare" (the card game says "Dragonaire").
 
-### Quality passes (to reach 1.0)
+### Quality passes (to reach 0.9)
 
 1. NPC dialogue cultural review (NPC_MES1-5). In progress; tracked in
    `docs/npc-review.md`.
