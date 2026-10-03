@@ -77,6 +77,26 @@ left foot pillars, the stat door. The riddle's answer is still GAME, and the mes
 board that mentions a game of GAME stays, since it's a hint. The ancient-letter words
 (DIMGUIL, SUN, STAR and so on) are already English and stay as they are.
 
+One exception: the broken mural on Area B B1 (EV 215) spells MEATING in the original
+glyphs, and the patch spells it MEETING (decided 2026-10-03). Before changing it we
+looked for any sign the spelling was a deliberate joke and found none:
+- Nothing near the mural (Area B B1 E17 N4) has to do with meat: no event, monster or
+  item, and no line anywhere in the game ties that spot to food.
+- The other glyph words are a set of the ship's room and system labels (BRIDGE,
+  CONTROL, COCKPIT, REST, HEAL, REVIVAL, COLDSLEEP, TRANSPORTER, GAS, JUNK...). A
+  meeting room fits that set; nothing in it is a galley or a food word.
+- In katakana, meeting is ミーティング and meat is ミート. Both start ミー, so MEAT-ING is
+  an easy slip when writing English from katakana. The same team misspelled monster
+  names elsewhere ("Silhoutte", "Drumer", "Maelific", "Dragonare").
+- The game's real jokes (TREBOR SUX, the DREAMLAND signs) are set up where the player
+  sees them. This mural is "too damaged to make out", so a pun would have nothing to
+  land on.
+- harano's ancient-letter page and Emonoya's Dimguil tips don't mention the word, and
+  web searches for it with the game's name turn up nothing.
+- The player decodes the glyphs with the analysis item. Every letter of the word
+  appears in 9 to 30 other strings (the A in 26), so no letter depended on this
+  spelling. Only Z (FREEZER) and J (JUNK) come from a single word.
+
 Murals that carry an ancient-letter word describe the picture with that word, so the
 player can guess the letters (a ship for SHIP, a figure like Death for DEATH).
 
