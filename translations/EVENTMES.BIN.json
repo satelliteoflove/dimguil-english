@@ -1439,25 +1439,25 @@
                 {
                     "length": 32,
                     "source": "NA",
-                    "translation": " \nYour bodies don't match. The door stays shut.",
+                    "translation": " \nIt isn't a match. The door stays firmly shut.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 102,
                     "source": "NA",
-                    "translation": "A match. The door opens on a new room.\nA sudden chill raises gooseflesh, and fear.\nShould you really go on?",
+                    "translation": "It's a match. The door opens on a new room.\nA chill? Goosebumps rise, and fear with them.\nShould you really go on?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 364,
                     "source": "NA",
-                    "translation": "Ancient letters and numbers mark the door:\n{ff30}4]{ancient_s}{ancient_t}{ancient_r}[ 5 ]{ancient_i}{ancient_n}{ancient_t}[18\n{ff30}4]{ancient_p}{ancient_i}{ancient_e}[18 ]{ancient_v}{ancient_i}{ancient_t}[ 5{ff26}\r{ff30}4]{ancient_a}{ancient_g}{ancient_i}[ 5 ]{ancient_l}{ancient_u}{ancient_c}[18\n{ff30}4]{ancient_l}{ancient_v}{ancient_l}[ 5 ]{ancient_a}{ancient_g}{ancient_e}[18\n{ff30}4]{ancient_s}{ancient_e}{ancient_x}[   ]{ancient_f}{ancient_e}{ancient_m}{ancient_a}{ancient_l}{ancient_e}[{ff26}\r{ff30}4]{ancient_r}{ancient_a}{ancient_c}{ancient_e}[  ]{ancient_e}{ancient_l}{ancient_f}[\n{ff30}4]{ancient_c}{ancient_l}{ancient_a}{ancient_s}{ancient_s}[ ]{ancient_p}{ancient_r}{ancient_i}{ancient_e}{ancient_s}{ancient_t}[{ff30}0\nAnd last, in modern letters: ]Priestess's Door[{ff26}\rThe door seems made to fit someone's body.\nWill someone try it?",
+                    "translation": "Unfamiliar ancient letters and numbers mark the door:\n{ff30}4]{ancient_s}{ancient_t}{ancient_r}[ 5 ]{ancient_i}{ancient_n}{ancient_t}[18\n{ff30}4]{ancient_p}{ancient_i}{ancient_e}[18 ]{ancient_v}{ancient_i}{ancient_t}[ 5{ff26}\r{ff30}4]{ancient_a}{ancient_g}{ancient_i}[ 5 ]{ancient_l}{ancient_u}{ancient_c}[18\n{ff30}4]{ancient_l}{ancient_v}{ancient_l}[ 5 ]{ancient_a}{ancient_g}{ancient_e}[18\n{ff30}4]{ancient_s}{ancient_e}{ancient_x}[   ]{ancient_f}{ancient_e}{ancient_m}{ancient_a}{ancient_l}{ancient_e}[{ff26}\r{ff30}4]{ancient_r}{ancient_a}{ancient_c}{ancient_e}[  ]{ancient_e}{ancient_l}{ancient_f}[\n{ff30}4]{ancient_c}{ancient_l}{ancient_a}{ancient_s}{ancient_s}[ ]{ancient_p}{ancient_r}{ancient_i}{ancient_e}{ancient_s}{ancient_t}[{ff30}0\nAnd last, in modern letters: ]Priestess's Door[{ff26}\rThe door seems made to fit someone's body.\nWill someone try it?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 352,
                     "source": "NA",
-                    "translation": "Ancient letters and numbers mark the door:\n{ff30}4]{ancient_s}{ancient_t}{ancient_r}[ 5 ]{ancient_i}{ancient_n}{ancient_t}[18\n{ff30}4]{ancient_p}{ancient_i}{ancient_e}[18 ]{ancient_v}{ancient_i}{ancient_t}[ 5{ff26}\r{ff30}4]{ancient_a}{ancient_g}{ancient_i}[ 5 ]{ancient_l}{ancient_u}{ancient_c}[18\n{ff30}4]{ancient_l}{ancient_v}{ancient_l}[ 5 ]{ancient_a}{ancient_g}{ancient_e}[18\n{ff30}4]{ancient_s}{ancient_e}{ancient_x}[   ]{ancient_f}{ancient_e}{ancient_m}{ancient_a}{ancient_l}{ancient_e}[{ff26}\r{ff30}4]{ancient_r}{ancient_a}{ancient_c}{ancient_e}[  ]{ancient_e}{ancient_l}{ancient_f}[\n{ff30}4]{ancient_c}{ancient_l}{ancient_a}{ancient_s}{ancient_s}[ ]{ancient_p}{ancient_r}{ancient_i}{ancient_e}{ancient_s}{ancient_t}[{ff30}0\nAnd last, in modern letters: ]Priestess's Door[{ff26}\rA heavy door, but it seems to be unlocked.",
+                    "translation": "Unfamiliar ancient letters and numbers mark the door:\n{ff30}4]{ancient_s}{ancient_t}{ancient_r}[ 5 ]{ancient_i}{ancient_n}{ancient_t}[18\n{ff30}4]{ancient_p}{ancient_i}{ancient_e}[18 ]{ancient_v}{ancient_i}{ancient_t}[ 5{ff26}\r{ff30}4]{ancient_a}{ancient_g}{ancient_i}[ 5 ]{ancient_l}{ancient_u}{ancient_c}[18\n{ff30}4]{ancient_l}{ancient_v}{ancient_l}[ 5 ]{ancient_a}{ancient_g}{ancient_e}[18\n{ff30}4]{ancient_s}{ancient_e}{ancient_x}[   ]{ancient_f}{ancient_e}{ancient_m}{ancient_a}{ancient_l}{ancient_e}[{ff26}\r{ff30}4]{ancient_r}{ancient_a}{ancient_c}{ancient_e}[  ]{ancient_e}{ancient_l}{ancient_f}[\n{ff30}4]{ancient_c}{ancient_l}{ancient_a}{ancient_s}{ancient_s}[ ]{ancient_p}{ancient_r}{ancient_i}{ancient_e}{ancient_s}{ancient_t}[{ff30}0\nAnd last, in modern letters: ]Priestess's Door[{ff26}\rThe door looks heavily secured, but it\nseems to be unlocked.",
                     "addStringTerminator": true
                 },
                 {
@@ -1487,7 +1487,7 @@
                 {
                     "length": 78,
                     "source": "NA",
-                    "translation": "A strange little box sits in a corner.\nIt's locked, and won't open.\nThere must be some trick to it.",
+                    "translation": "A strange little box sits in a corner.\nIt's locked, and won't open.\nThere seems to be some trick to it.",
                     "addStringTerminator": true
                 },
                 {
@@ -1499,7 +1499,7 @@
                 {
                     "length": 30,
                     "source": "NA",
-                    "translation": "A switch is fixed to the wall.\nWill you press it?",
+                    "translation": "A switch is set into the wall.\nWill you press it?",
                     "addStringTerminator": true
                 },
                 {

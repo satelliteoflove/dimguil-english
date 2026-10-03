@@ -6,7 +6,7 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S55, the Training Maze (EV 246-248, 238-241).** See `docs/event-map.md`.
+**Next: scene S56, the Dragon's Cave pedestal (EV 249-255, 300).** See `docs/event-map.md`.
 
 ## How a scene is reviewed
 
@@ -75,7 +75,7 @@ DREAMLAND~": the font has no star, and inner asterisks read as censorship in Eng
 broken murals now say "unfamiliar" too, and 215's glyphs spell MEETING, not MEATING); S52 the huge coffin 228-233, 235 (229: the relief
 is "straight ahead", on the wall, not on the coffin); S53 the Priestess 234, 236, 298, 299 (the oracle's
 questions all "do you see... as...?"; 236 curter than 234); S54 the X statue 304, 305 (不思議な is
-"mysterious", apart from 奇妙な "strange").
+"mysterious", apart from 奇妙な "strange"); S55 the Training Maze 238-241, 246-248.
 見知らぬ古代文字 is "unfamiliar ancient letters" everywhere (48 strings; it had been
 "strange"). Also done early, out
 of scene order: the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given the same
@@ -105,6 +105,10 @@ event code or by finding the line during the playthrough.
   No message event on the disc names 288. If it turns out to be the B4F E8 N12 switch,
   which harano describes as a switch on a frog statue, then "set into the wall" won't
   match what the player sees, and 288 needs rewording.
+  Lead (S55): 248 and 288 open with the same sentence (壁にはスイッチが取りつけてあ…).
+  248 is the Training Maze switch's prompt ("Will you press it?"), and 288 reads like its
+  result, followed by 247's box "unlocked". So 288 is probably that switch, where "set
+  into the wall" is right. **Inferred**; confirm in play or in the code.
 
 ## Revisit in a later pass
 
