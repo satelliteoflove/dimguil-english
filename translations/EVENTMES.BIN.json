@@ -1637,19 +1637,19 @@
                 {
                     "length": 85,
                     "source": "NA",
-                    "translation": "In the middle of the room stands a device\nwith a square pedestal.{ff26}\rThe pedestal has a hollow, with a silver\nstone stuck fast to its bottom.",
+                    "translation": "In the middle of the room stands a device\nwith a square pedestal.{ff26}\rThe pedestal has a hollow, and a\nsilver stone is stuck fast to the bottom.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 203,
                     "source": "NA",
-                    "translation": "In the middle of the room stands a device\nwith a square pedestal.{ff26}\rThe pedestal has a hollow, with a silver\nstone stuck fast to its bottom.{ff26}\rThe silver stone can't be pried loose.\nThe LITHOGRAPH OF SUN might fit\nthe hollow.{ff26}\r \n...The silver stone sets itself into the\nLITHOGRAPH OF SUN.",
+                    "translation": "In the middle of the room stands a device\nwith a square pedestal.{ff26}\rThe pedestal has a hollow, and a\nsilver stone is stuck fast to the bottom.{ff26}\rBut the silver stone can't be removed.\nIt looks like the LITHOGRAPH OF SUN\nwould fit into this hollow.{ff26}\r \n...The silver stone is now set into the\nLITHOGRAPH OF SUN.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 192,
                     "source": "NA",
-                    "translation": "In the middle of the room stands a device\nwith a square pedestal.{ff26}\rThe pedestal has a hollow, with a silver\nstone stuck fast to its bottom.{ff26}\rThe silver stone can't be pried loose,\nand you have nothing that would fit\nthe hollow.{ff26}\r \n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
+                    "translation": "In the middle of the room stands a device\nwith a square pedestal.{ff26}\rThe pedestal has a hollow, and a\nsilver stone is stuck fast to the bottom.{ff26}\rBut the silver stone can't be removed, and\nyou have nothing with you that would fit\nthe hollow.{ff26}\r \n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
                     "addStringTerminator": true
                 },
                 {

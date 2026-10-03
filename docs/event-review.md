@@ -6,7 +6,7 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S40, the silver stone (EV 271-273).** See `docs/event-map.md`.
+**Next: scene S41, the snake door, the damage floor and ENERGY (EV 184, 198; Guardians 283).** See `docs/event-map.md`.
 
 ## How a scene is reviewed
 
@@ -60,7 +60,8 @@ experiment log 46, 242; S31 right foot, left foot 166-168; S32 other Area B door
 WAREHOUSE 178, 179 (最近書かれた is "recently": the heretics' planted-hints thread, not
 "readable"); S36 the trash room 173-177 ("trash", not "rubbish"); S37 Area C glyph words 170-172, 185; S38 the moving-floor
 panel 183, 146-148; S39 the Greater Golem 182, 288 (182 "you find" the hole: 開いていた is
-what you see, not when it opened).
+what you see, not when it opened).; S40 the silver stone 271-273 (worded like the blue
+and red stones).
 見知らぬ古代文字 is "unfamiliar ancient letters" everywhere (44 strings; it had been
 "strange"). Also done early, out
 of scene order: the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given the same
