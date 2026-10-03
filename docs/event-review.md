@@ -79,7 +79,8 @@ questions all "do you see... as...?"; 236 curter than 234); S54 the X statue 304
 300 (the last "fiend" in the event script is now "monster"); S57 Otaka 311-315 ("What are the odds", not
 the British "Fancy"; his tildes kept); S58 buried gold 308-310, 316; S59 leftovers 286, 287, 303 (287 now carries
 "END" explicitly); S60 the unplaced one-liners (no change); S61 the glyph-word
-signs, all on the formula now (0 aligned with SHIP, DEATH and KING).
+signs, all on the formula now (0 aligned with SHIP, DEATH and KING); Guardian 285, missed in S51 (no intro comma, one clause
+per line, 悲願 as "long-held dream").
 見知らぬ古代文字 is "unfamiliar ancient letters" everywhere (48 strings; it had been
 "strange"). Also done early, out
 of scene order: the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given the same
@@ -93,9 +94,6 @@ unreviewed strings are consistent but not yet approved.
 - Naming across files: the NPC files say "Lithograph of the Sun" and "the Sun tablet"
   where the event script says LITHOGRAPH OF SUN; 迷宮 is "labyrinth" in some event
   strings and "maze" elsewhere. Settle these.
-- 285 (Guardians): 280's intro became "We are the Guardians who rule this land."
-  with no comma; 281-284 match, and 285 shares that intro and should too. Chris
-  decided not to carry the contempt of 貴様ら; plain "you" throughout.
 
 ## To check in play or in the code
 

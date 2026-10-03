@@ -1721,7 +1721,7 @@
                 {
                     "length": 255,
                     "source": "NA",
-                    "translation": "{ff30}4       We are the Guardians,\n{ff30}4       who rule this land.{ff26}\r{ff30}4  Why do you not believe in our god?\n{ff30}4  Would you not see him live again here?{ff26}\r{ff30}4  Would you not rule every wish, every\n{ff30}4  fate? We shall raise this land and rule\n{ff30}4  all. Would you so defile our dream?{ff30}0{ff26}",
+                    "translation": "{ff30}4       We are the Guardians\n{ff30}4       who rule this land.{ff26}\r{ff30}4  Why do you not believe in our god?\n{ff30}4  Would you not see him live again here?{ff26}\r{ff30}4  Would you not rule every wish, every fate?\n{ff30}4  We shall raise this land again and rule all.\n{ff30}4  Would you so defile our long-held dream?{ff30}0{ff26}",
                     "addStringTerminator": true
                 },
                 {
