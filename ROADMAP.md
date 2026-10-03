@@ -88,7 +88,8 @@ Total translation is about 44,700 words as of 2026-09-26.
 A full playthrough to the ending on a release build, in DuckStation. The emulator
 tooling can check that each string fits its window, but it can't show that the game is
 finishable. Findings go into GitHub issues, or `docs/playtest.html` before the repo is
-public.
+public. `docs/event-review.md` lists event lines to watch for, whose wording
+depends on where they turn up ("To check in play or in the code").
 
 Saves live on the memory card, and as far as we know the patch doesn't touch the save
 format, so a save should carry over from one release to the next. Verify this once

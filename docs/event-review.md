@@ -84,6 +84,16 @@ unreviewed strings are consistent but not yet approved.
   with no comma; 281 and 282 match, and the other three share that intro and should too. Chris decided
   not to carry the contempt of 貴様ら; plain "you" throughout.
 
+## To check in play or in the code
+
+Lines whose wording depends on what the player sees, where neither the disc's message
+events nor the walkthroughs say where they appear. Settle each by disassembling the
+event code or by finding the line during the playthrough.
+- 288 "A switch is set into the wall. You press it, and it gives a satisfying click."
+  No message event on the disc names 288. If it turns out to be the B4F E8 N12 switch,
+  which harano describes as a switch on a frog statue, then "set into the wall" won't
+  match what the player sees, and 288 needs rewording.
+
 ## After the event script
 
 Commit it as reviewed, update ROADMAP.md and the README progress, then v0.8.0 when Chris

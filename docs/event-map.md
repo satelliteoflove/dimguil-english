@@ -601,7 +601,8 @@ says what you find, not when the hole opened.
 The switch at B4F E8 N12: the FAQ says the stairs beside the hole lead nowhere until it's
 pressed; the Walkthrough calls it a switch on a frog statue that makes the silver-stone
 device appear (S40). Going by the Walkthrough. 288 is a switch set into a wall
-("click."), not a message event on the disc; it may or may not be that switch.
+("click."), not a message event on the disc; it may or may not be that switch. **To
+check** (event-review.md, "To check in play or in the code").
 Links: SISETU 340 and menu 354 "A Made God" (the idol the heretics made of their god was
 unfinished); Catalog 4:8 (the mightiest golem, made in their god's likeness). The Fire
 Golem is also made in the god's likeness (Catalog 4:6). Which golem the Fortune Teller
