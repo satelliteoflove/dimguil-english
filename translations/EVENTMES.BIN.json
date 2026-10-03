@@ -1535,13 +1535,13 @@
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "It feels wrong, so you leave the pedestal.",
+                    "translation": "It gives you the creeps, so you back away.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "It feels wrong, so you leave the pedestal.",
+                    "translation": "It gives you the creeps, so you back away.",
                     "addStringTerminator": true
                 },
                 {
@@ -1811,7 +1811,7 @@
                 {
                     "length": 80,
                     "source": "NA",
-                    "translation": "The band of fiends falls, and a strange\ncharm is left on the altar.{ff26}\r \nObtained {ff30}2MAGIC AMULET{ff30}0.",
+                    "translation": "When you defeat the band of monsters, you\nfind a mysterious charm left on the altar.{ff26}\r \nObtained {ff30}2MAGIC AMULET{ff30}0.",
                     "addStringTerminator": true
                 },
                 {

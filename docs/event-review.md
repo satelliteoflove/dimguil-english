@@ -6,7 +6,7 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S56, the Dragon's Cave pedestal (EV 249-255, 300).** See `docs/event-map.md`.
+**Next: scene S57, Otaka (EV 311-315).** See `docs/event-map.md`.
 
 ## How a scene is reviewed
 
@@ -75,7 +75,8 @@ DREAMLAND~": the font has no star, and inner asterisks read as censorship in Eng
 broken murals now say "unfamiliar" too, and 215's glyphs spell MEETING, not MEATING); S52 the huge coffin 228-233, 235 (229: the relief
 is "straight ahead", on the wall, not on the coffin); S53 the Priestess 234, 236, 298, 299 (the oracle's
 questions all "do you see... as...?"; 236 curter than 234); S54 the X statue 304, 305 (不思議な is
-"mysterious", apart from 奇妙な "strange"); S55 the Training Maze 238-241, 246-248.
+"mysterious", apart from 奇妙な "strange"); S55 the Training Maze 238-241, 246-248; S56 the Dragon's Cave pedestal 249-255,
+300 (the last "fiend" in the event script is now "monster").
 見知らぬ古代文字 is "unfamiliar ancient letters" everywhere (48 strings; it had been
 "strange"). Also done early, out
 of scene order: the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given the same
@@ -86,9 +87,6 @@ unreviewed strings are consistent but not yet approved.
 
 ## Waiting for their scene
 
-- 300: 魔物 is still "fiend"; make it "monster" in its scene. The
-  King's lines (SISETU 322-329) may keep "fiend"; the Fortune Teller's 334, 336 and 338
-  were changed to "monster" (Chris, 2026-10-02).
 - Naming across files: the NPC files say "Lithograph of the Sun" and "the Sun tablet"
   where the event script says LITHOGRAPH OF SUN; 迷宮 is "labyrinth" in some event
   strings and "maze" elsewhere. Settle these.
