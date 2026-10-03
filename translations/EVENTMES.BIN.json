@@ -1877,13 +1877,13 @@
                 {
                     "length": 313,
                     "source": "NA",
-                    "translation": "Otaka\n\"Fancy bumping into you here! What luck!\n Name's Otaka, one of the programmers.{ff26}\r Since you're so lucky, I oughta do\n something for you. Hmm, what, what...\n Ooh, this is a tough one...{ff26}\r Oh, I know!\n I'll give you stuff I found in the maze.\n Take as much as you can carry.{ff26}\r \n Oh, and not a word to Agan!\"{ff26}",
+                    "translation": "Otaka\n\"What are the odds of bumping into you here!\n Name's Otaka, one of the programmers.{ff26}\r Since we met, I oughta do something for\n you lucky folks. Lessee~ what'd be good~\n Hmm... this is a tough one...{ff26}\r Oh, I know!\n I'll give you stuff I found in the maze.\n Take as much as you can carry.{ff26}\r \n Oh, and not a word to Agan!\"{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 266,
                     "source": "NA",
-                    "translation": "Otaka\n\"Bumped into you again, huh!\n Were you out lookin' for me, maybe?{ff26}\r Well... can't be helped, I guess.\n I worked hard collectin' this stuff, but\n it's time for my usual item handout.{ff26}\r Don't go sellin' it right off, OK?\n ...Right, off to collect more stuff.\n Hope we meet again!\"{ff26}",
+                    "translation": "Otaka\n\"Bumped into you again, huh~\n Were you out lookin' for me, maybe?{ff26}\r Well... can't be helped, I guess~\n I worked hard collectin' this stuff, but\n it's time for my usual item handout.{ff26}\r Don't go sellin' it right off, OK~?\n ...Right, off to collect more stuff.\n Hope we meet again!\"{ff26}",
                     "addStringTerminator": true
                 },
                 {
@@ -1895,13 +1895,13 @@
                 {
                     "length": 64,
                     "source": "NA",
-                    "translation": "Otaka stuffs the items into your pack,\nand wanders happily off into the dark...",
+                    "translation": "Otaka crams the items into your pack,\nand wanders happily off into the dark...",
                     "addStringTerminator": true
                 },
                 {
                     "length": 108,
                     "source": "NA",
-                    "translation": " \n\"Oh yeah, I had 'em appraised this time!\" {ff26}\n \n\rOtaka stuffs the items into your pack,\nand wanders happily off into the dark...",
+                    "translation": " \n\"Oh yeah, I even appraised 'em for you\n this time, special~\" {ff26}\n \n\rOtaka crams the items into your pack,\nand wanders happily off into the dark...",
                     "addStringTerminator": true
                 },
                 {

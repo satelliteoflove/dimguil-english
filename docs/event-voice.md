@@ -70,8 +70,9 @@ place "we" is used.
   "Correct! Let us begin!"
 - **Otaka.** A goofy wandering adventurer who calls himself 俺っち and gives away
   items, a developer cameo. Chatty, silly and
-  friendly, with sloppy grammar where the Japanese has sloppy writing: "Fancy running
-  into you here! Name's Otaka, one of the programmers." (プログ is short for
+  friendly, with sloppy grammar where the Japanese has sloppy writing: "What are the
+  odds of bumping into you here! Name's Otaka, one of the programmers." His tildes stay
+  where the Japanese has them ("Lessee~ what'd be good~"), as with Lychee. (プログ is short for
   programmer; the FAQ calls this a programmer's hidden event.) His friend Agan stays Agan.
 
 ## Puzzle text
