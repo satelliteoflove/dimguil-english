@@ -6,7 +6,7 @@ review stands and how it's done, so a new session can pick it up cold.
 
 ## Pick up here
 
-**Next: scene S49, the GAME dome and the gold stone (EV 94, 103, 104, 108-112).** See `docs/event-map.md`.
+**Next: scene S50, the dreamlands (EV 190-193).** See `docs/event-map.md`.
 
 ## How a scene is reviewed
 
@@ -69,7 +69,8 @@ the pillars carry what the lake holds watered down); S45 the god's name 199-205 
 Guardians 284 (203: 無機質 is "cold, mechanical", in the COMPUTER room); S46 COCKPIT 243 (kept); S47 the small door and
 mimicry mode 130, 221-226, 218, 237, with board 1 back to "Have you forgotten any gear?"
 for the forgetting chain (130 "Don't forget full protective gear!", 224 "Mimicry mode
-deactivated"); S48 the egg 206-209 (207 "lying in wait").
+deactivated"); S48 the egg 206-209 (207 "lying in wait"); S49 the GAME dome 94, 103, 104, 108-112
+(111 keeps "shining demon" for 魔人, a humanlike being of uncanny power, not a devil).
 見知らぬ古代文字 is "unfamiliar ancient letters" everywhere (44 strings; it had been
 "strange"). Also done early, out
 of scene order: the murals 22 (SHIP) and 23 (DEATH), and 59 and 61 given the same

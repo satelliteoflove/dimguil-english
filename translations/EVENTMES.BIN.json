@@ -575,7 +575,7 @@
                 {
                     "length": 146,
                     "source": "NA",
-                    "translation": " \nStrangely, a voice rings out from the device.{ff26}\r{ff30}4I am no reality, but a thing imagined.\nI call for luck and wit, and hold many\na hardship.{ff26}\rOvercome them, and win a fruitless prize.\nWhat do you call my world?{ff30}0",
+                    "translation": " \nStrangely, a voice rings out from the device.{ff26}\r{ff30}4I am no reality, but a thing imagined.\nI call for luck and wit,\nand many hardships dwell within me.{ff26}\rOvercome them, and win a fruitless prize.\nWhat do you call my world?{ff30}0",
                     "addStringTerminator": true
                 },
                 {
@@ -659,7 +659,7 @@
                 {
                     "length": 174,
                     "source": "NA",
-                    "translation": "An eerily glowing altar stands here.\nSmall tablets are lined up neatly,\nand beyond them sits a clear round dome.{ff26}\r \nAn eerie light glows inside it.{ff26}\rAs you hold up the LITHOGRAPH OF SUN,\nthe small tablets light up.\nWill you touch a small tablet?",
+                    "translation": "An eerily glowing altar stands here.\nSmall tablets are lined up neatly,\nand beyond them sits a clear round dome.{ff26}\r \nAn eerie light glows inside it.{ff26}\rAs you bring the LITHOGRAPH OF SUN close,\nthe small tablets begin to glow.\nWill you touch a small tablet?",
                     "addStringTerminator": true
                 },
                 {
@@ -677,7 +677,7 @@
                 {
                     "length": 65,
                     "source": "NA",
-                    "translation": "The shining demon falls, and a stone that\nglows gold, a piece of it perhaps, sets\nitself into the LITHOGRAPH OF SUN.",
+                    "translation": "When you defeat the shining demon, a stone\nglowing gold, perhaps part of its body, is\nset into the LITHOGRAPH OF SUN.",
                     "addStringTerminator": true
                 },
                 {
