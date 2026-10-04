@@ -28,7 +28,9 @@ first.
      the chalkboards at pre-cellphone Japanese train stations; Alstron's Dragon Quest III
      Sage/Bishop class-change reference; other inside jokes kept.
    - Liberties taken: a few concrete cases where the English departs from the Japanese
-     and why. Candidates still to be picked; collect them as reviews turn them up.
+     and why. Candidates so far:
+     - Murphy's Ghost (Catalog 9:24): the English adds "over and over" to spell out the
+       joke. He was Wizardry I's famous experience farm, and the Japanese only implies it.
 
 4. **What the game is.** Two or three sentences: Wizardry Gaiden, PS1, 2000, ASCII,
    never released in English. Developer credit waits on F1.
