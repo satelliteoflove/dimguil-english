@@ -6,7 +6,7 @@ says where that review stands and how it's done, so a new session can pick it up
 
 ## Pick up here
 
-**34 of 37 reviewed.** Hits 1-34 are approved and committed. Continue with hit 35 in the
+**35 of 37 reviewed.** Hits 1-35 are approved and committed. Continue with hit 36 in the
 list below.
 
 ## What was swept
@@ -128,7 +128,7 @@ the catalog categories: 4 Giants, 5 Mythical, 6 Dragons, 7 Animals, 8 Beastfolk,
 | 32 | I 1:31 | Sword of Slashing | "seasoned" | Done: Chris kept "seasoned" (the sword holds up in the deepest maze) |
 | 33 | I 1:119 | Oodenta | cleaver/cleaving echo | Done: Chris's wording |
 | 34 | I 1:179 | Emerald Robes | "rewarded" | Done: 使用者が制限される分 as "Few can wear it, so its powers are all the finer" |
-| 35 | I 1:203 | | fragment "Not only cursed:" | |
+| 35 | I 1:203 | Helm of Obitus | fragment "Not only cursed:" | Done: Chris's "modeled after that of" (というイメージ), full "Not only is it cursed, but" |
 | 36 | I 1:126 | | "only fair" | |
 | 37 | I 1:304 | | "venerable" | |
 
