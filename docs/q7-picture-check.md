@@ -19,7 +19,7 @@ Spears, then Armor > Robes, Chain and Plate, then Helms, then Other > Cloaks. In
 list, scroll down from the top; the # column is the position in the list. Lines is the
 description's current length (5 is the limit).
 
-## 1. Weapons > Staves (1 items: #1)
+## 1. Weapons > Staves (1 item: #1)
 
 | # | Item | Picture | Lines | Check |
 |---|---|---|---|---|
