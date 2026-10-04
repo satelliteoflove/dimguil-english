@@ -2244,7 +2244,7 @@
                 {
                     "length": 135,
                     "source": "NA",
-                    "translation": "Vitality is a vital stat. If it\ndrops, HP gains shrink and\nyou may even be lost.\nUnlocking its hidden power\nraises Vitality.",
+                    "translation": "Vitality is one of the most\nimportant stats. If it drops,\nnot only do HP gains shrink,\nbut you may even be lost.\nUnlocking its hidden power\nraises Vitality.",
                     "compress": null,
                     "addStringTerminator": true
                 },
