@@ -74,7 +74,9 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   "breastplate of hope"), BENT STAFF (ねじれた杖; Chris leaned toward "Twisted Staff"),
   Astro Zombie (ロストワン, "Lost One"; its entry is about a name meaning "alone"). A
   rename touches the inventory list, the catalog, Boltac's list and the battle copy of
-  the names, and breaks the match with Emonoya and other guides.
+  the names, and breaks the match with Emonoya and other guides. Some are plain
+  misspellings that should be fixed whatever is decided about the rest: Chris spotted
+  "Displaser Robes" for Displacer Robes in the catalog.
 - **Other naming.** "Lithograph of the Sun" vs LITHOGRAPH OF SUN, and "labyrinth" vs
   "maze" for 迷宮 (checklist Q6).
 - **Unidentified monster names.** "Flap Insect(s)" and "Flap Figure(s)" for はばたくかげ;
