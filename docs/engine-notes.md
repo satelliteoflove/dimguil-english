@@ -67,6 +67,11 @@ more of the detail behind each item.
   13 px lines.
 - Tested 2026-10-04 (emulator, six items): offset 26 with the pictures cut to 139 rows
   shows a full 5th line under tall pictures, no overlap, normal items unchanged.
+- Chosen 2026-10-04: offset 30 (`asm/catalog_tall_text.asm`) and pictures cut to 143
+  rows (`scripts/itempics.py`, run by build.sh): 16 trimmed, 11 moved up, 28 shrunk
+  (1-9%). Each picture is a copy of the panel's parchment with the item on it, so only
+  the item is moved or scaled and it goes back onto the bare parchment
+  (`graphics/item_panel_bg.png`); scaling the whole picture misaligned the texture.
 
 ## Battle
 

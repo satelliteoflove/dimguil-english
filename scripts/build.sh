@@ -10,7 +10,8 @@
 #   2. restore the redacted JP `source` fields into staged copies of translations/*.json
 #      (committed files stay redacted; the encoder falls back to `source` for untranslated strings)
 #   3. import the edited font sheet into DATA00/SYSCG.BIN
-#   4. encode text + binary patches into rips/dirty/dimguil
+#   4. encode text + binary patches into rips/dirty/dimguil, then cut the tall item
+#      pictures in ITEM.DAT (scripts/itempics.py)
 #   5. assemble asm/vwf.asm, then the other asm/*.asm in name order (armips)
 #   6. relocate files that outgrew their sectors (scripts/relocate.py)
 #   7. overlay rips/dirty onto rips/clean and rebuild with mkpsxiso -> rips/iso/dimguil-en.cue
@@ -45,6 +46,10 @@ python3 scripts/tim.py import rips/clean/dimguil/DATA00/SYSCG.BIN 0x400 graphics
 
 echo "== encode"
 (cd rips/stage && java -jar "$ROOT/$JAR" encode-all 2>&1 | grep -E "exceeded|ERROR" || true)
+
+echo "== item pictures"
+# Tall catalog pictures cut to 143 rows; asm/catalog_tall_text.asm moves the text up.
+python3 scripts/itempics.py rips/dirty/dimguil/DATA07/ITEM.DAT
 
 echo "== asm"
 # vwf.asm goes first: it copies the clean executable and overlays into dirty/, and the

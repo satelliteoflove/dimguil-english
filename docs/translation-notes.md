@@ -18,7 +18,12 @@ see all of it.
   identified one by one (the Bartok's Trading Post item table, checked against the
   pictures in ITEM.DAT), not guessed from the item type. `scripts/itemfit.py` holds
   every description to its own limit. Rule in `engine-notes.md`, "Item catalog".
-  Fixing the 25 is checklist item Q7.
+  Rather than cut 24 descriptions to 4 lines, the text under tall pictures now starts
+  9 px higher and the tall pictures were cut to 143 rows, so 5 lines fit. Only the item
+  in each picture is moved or shrunk, laid back onto the panel's own parchment so the
+  texture stays aligned (scaling whole pictures misaligned it, which Chris caught). Two
+  descriptions are still over: the Sapphire Robes and 1:24. Chris is checking all 55
+  pictures in the game (`docs/q7-picture-check.md`).
 
 ### Machine-written habits (the Q1 sweep)
 

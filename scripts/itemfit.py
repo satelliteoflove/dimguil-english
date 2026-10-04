@@ -4,10 +4,10 @@
     itemfit.py [translations/ITEM.DAT.json]
 
 The item catalog draws the picture, then the description below it, and clips the text
-at about y=220; it can't scroll. ITEM.DAT holds two picture sizes: 152x108 (text starts
-at y=129, 7 lines of 13 px fit) and 152x152 (text starts 39 px lower, 4 lines fit). The
-Japanese descriptions under tall pictures are all 4 lines or fewer, which confirms the
-limit. Width is 144 px for both.
+at the bottom of the parchment (y=227); it can't scroll. ITEM.DAT holds two picture sizes: 152x108 (text starts
+at y=129, 7 lines of 13 px fit) and 152x152, where the original starts the text 39 px
+lower and 4 lines fit. asm/catalog_tall_text.asm cuts that to 30 px and itempics.py cuts
+the tall pictures to 143 rows, so 5 lines fit. Width is 144 px for both.
 
 TALL lists the ITEM.DAT section 1 indices whose item uses a tall picture. Description k
 belongs to item k up to 24 and to item k+1 from 25 on (24 holds the Battle Axe and
@@ -27,7 +27,7 @@ WIDTH = 144
 
 
 def lines_for(k):
-    return 4 if k in TALL else 7
+    return 5 if k in TALL else 7
 
 
 def main():
