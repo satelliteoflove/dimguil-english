@@ -29,6 +29,12 @@ first.
      Sage/Bishop class-change reference; other inside jokes kept. From the catalog
      sweep: the Fire Rock's 「焼け石に水」, a proverb for futility, kept word for word as
      'water on a hot stone' because the monster literally is one.
+   - Care with the game's own limits: the item catalog shows only 4 lines of text
+     under the tall pictures (robes, cloaks, full armor, polearms, long staves) and 7
+     under the rest, with no scrolling. The Japanese always fit; 25 English descriptions
+     inherited from the earlier work were cut off. Chris caught it on the Emerald Robes,
+     the rule was measured in the emulator and checked against the Japanese, and a
+     checker (`scripts/itemfit.py`) now holds every description to its limit.
    - Liberties taken: a few concrete cases where the English departs from the Japanese
      and why. Candidates so far:
      - Murphy's Ghost (Catalog 9:24): the English adds "over and over" to spell out the
