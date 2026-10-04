@@ -22,8 +22,9 @@ see all of it.
   9 px higher and the tall pictures were cut to 143 rows, so 5 lines fit. Only the item
   in each picture is moved or shrunk, laid back onto the panel's own parchment so the
   texture stays aligned (scaling whole pictures misaligned it, which Chris caught). Two
-  descriptions are still over: the Sapphire Robes and 1:24. Chris is checking all 55
-  pictures in the game (`docs/q7-picture-check.md`).
+  descriptions are still over: the Sapphire Robes and 1:24. Chris checked all 55
+  pictures in the game (`docs/q7-picture-check.md`): no visible flaws, and every other
+  description fits.
 
 ### Machine-written habits (the Q1 sweep)
 

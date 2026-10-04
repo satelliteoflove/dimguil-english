@@ -6,6 +6,10 @@ was cut from 152 to 143 rows: some only lost empty parchment, some had the item 
 up a few pixels, and some had the item shrunk. The item sits on the panel's own
 parchment, so the texture should line up with the parchment around it.
 
+**Result (2026-10-04):** Chris checked every item below. All 55 pictures look right:
+parchment aligned, nothing cut off, no artifacts, and the text fits 5 lines. The one
+exception was the Sapphire Robes description, which ran to a sixth line.
+
 **How to look:** start the English WIP image fresh and load the test save from the
 memory card. Don't use a save state: states keep the old catalog code in memory. In
 town, open Boltac's catalog. The test save has every item marked seen.
