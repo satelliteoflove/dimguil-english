@@ -6,7 +6,7 @@ says where that review stands and how it's done, so a new session can pick it up
 
 ## Pick up here
 
-**12 of 37 reviewed.** Hits 1-12 are approved and committed. Continue with hit 13 in the
+**13 of 37 reviewed.** Hits 1-13 are approved and committed. Continue with hit 14 in the
 list below.
 
 ## What was swept
@@ -92,7 +92,7 @@ the catalog categories: 4 Giants, 5 Mythical, 6 Dragons, 7 Animals, 8 Beastfolk,
 | 10 | M 12:26 | Crystal Man | "untold power" | Done: swapped the phrase only |
 | 11 | M 7:4 | Vorpal Bunny | "fangs loom" | Done: close to literal, "neck" for 首筋 |
 | 12 | M 9:30 | High Zombie | "eyes burn with hostility" | Done: close to literal |
-| 13 | M 12:15 | Mouth | "a being of pure mind" ("pure" added) | |
+| 13 | M 12:15 | Mouth | "a being of pure mind" ("pure" added) | Done: close to literal |
 | 14 | M 5:8 | Oserotoru | invented "Still," contrast | |
 | 15 | M 14:3 | Gremlin | "Proper gremlins… surely" | |
 | 16 | M 14:5 | Ogre | "see it off" | |

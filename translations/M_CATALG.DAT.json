@@ -5761,7 +5761,7 @@
                 {
                     "length": 168,
                     "source": "NA",
-                    "translation": "Frankly, no one\nknows quite what\nthis creature is. It\nseems a being of gas,\nyet adventurers who\nmet it swear it bit\nthem. It casts\nPsionic spells, which\nhints at a being of\npure mind. Either\nway, it's an eerie\nmonster.",
+                    "translation": "Frankly, no one\nknows quite what\nthis creature is. It\nseems a being of gas,\nyet adventurers who\nmet it swear it bit\nthem. Since it casts\nPsionic spells, it\ncould also be taken\nfor a being of the\nmind. Either way,\nit's an eerie monster.",
                     "addStringTerminator": true
                 },
                 {
