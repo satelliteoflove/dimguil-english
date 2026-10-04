@@ -26,7 +26,9 @@ first.
    - Care with the language and culture: Guy and Alstron's introduction; Linaria lying
      about her age with the dated "springy as a fresh fish"; the town board modeled on
      the chalkboards at pre-cellphone Japanese train stations; Alstron's Dragon Quest III
-     Sage/Bishop class-change reference; other inside jokes kept.
+     Sage/Bishop class-change reference; other inside jokes kept. From the catalog
+     sweep: the Fire Rock's 「焼け石に水」, a proverb for futility, kept word for word as
+     'water on a hot stone' because the monster literally is one.
    - Liberties taken: a few concrete cases where the English departs from the Japanese
      and why. Candidates so far:
      - Murphy's Ghost (Catalog 9:24): the English adds "over and over" to spell out the

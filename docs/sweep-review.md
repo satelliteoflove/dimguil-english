@@ -6,7 +6,7 @@ says where that review stands and how it's done, so a new session can pick it up
 
 ## Pick up here
 
-**24 of 37 reviewed.** Hits 1-24 are approved and committed. Continue with hit 25 in the
+**25 of 37 reviewed.** Hits 1-25 are approved and committed. Continue with hit 26 in the
 list below.
 
 ## What was swept
@@ -109,7 +109,7 @@ the catalog categories: 4 Giants, 5 Mythical, 6 Dragons, 7 Animals, 8 Beastfolk,
 | 22 | M 17:4 | Ixtah | "guards slip before her beauty" | Done: matches the 15:0 Mage's wording |
 | 23 | M 9:5 | Vampire | "A bloodsucker, in short." | Done: "What you'd call a bloodsucker" |
 | 24 | M 8:2 | Giant Spider | "the spider-woman of legend perhaps" | Done for now: "an arachne"; **follow up** (see below) |
-| 25 | M 10:9 | Fire Rock | proverb carried over ("water on a hot stone") | |
+| 25 | M 10:9 | Fire Rock | proverb carried over ("water on a hot stone") | Done: kept on purpose (it's a pun), quoted as in the Japanese |
 | 26 | I 1:33 | | "An odd choice, but there it is." | |
 | 27 | I 1:278 | | added pun "Vitality is a vital stat" | |
 | 28 | I 1:5 | | added mirrored antithesis | |
