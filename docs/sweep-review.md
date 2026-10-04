@@ -6,7 +6,7 @@ says where that review stands and how it's done, so a new session can pick it up
 
 ## Pick up here
 
-**27 of 37 reviewed.** Hits 1-27 are approved and committed. Continue with hit 28 in the
+**28 of 37 reviewed.** Hits 1-28 are approved and committed. Continue with hit 29 in the
 list below.
 
 ## What was swept
@@ -76,8 +76,10 @@ After approval, apply with `python3 scripts/descwrap.py "<flat text>" --apply
 translations/<FILE>.json SECTION INDEX`. Run `scripts/wtquotes.py check`, then commit
 one hit per commit, with "Q1 sweep n/37" in the body.
 
-Item refs map to item numbers as index + 1 (I 1:33 is item 34). The Bartok's Trading
-Post item table (`data/items/dim/ps.json`, from Emonoya) gives names and effects. Item
+Item refs don't map to item numbers by a fixed offset (I 1:5 is item 5, the Anointed
+Mace; I 1:33 is item 34, the Bent Staff). Match the description against
+`rips/tl/item_names.json` (Japanese and English names in item order) and the Bartok's
+Trading Post item table (`data/items/dim/ps.json`, from Emonoya), which gives effects. Item
 boxes are 144 px wide and 7 lines at most: `descwrap.py --width 144`.
 
 ## The 37 hits
@@ -116,7 +118,7 @@ the catalog categories: 4 Giants, 5 Mythical, 6 Dragons, 7 Animals, 8 Beastfolk,
 | 25 | M 10:9 | Fire Rock | proverb carried over ("water on a hot stone") | Done: kept on purpose (it's a pun), quoted as in the Japanese |
 | 26 | I 1:33 | Bent Staff | "An odd choice, but there it is." | Done: close to literal |
 | 27 | I 1:278 | Ankh of Life | added pun "Vitality is a vital stat" | Done: close to literal |
-| 28 | I 1:5 | | added mirrored antithesis | |
+| 28 | I 1:5 | Anointed Mace | added mirrored antithesis | Done for now; **follow up** (see below) |
 | 29 | I 1:82 | | "Out of magic mid-quest? This bow has you covered." | |
 | 30 | I 1:189 | | added "of course" | |
 | 31 | I 1:32 | | added "the very" | |
@@ -139,6 +141,11 @@ up. Take them after the 37, or fold them in where they share a string.
   like the Japanese), "arachne" (the modern fantasy term, from Ovid's weaver) and
   "drider" (D&D's exact body, but drow and Lolth baggage). Chris wants this one
   given deeper thought before release.
+- **I 1:5, Anointed Mace: follow up.** Chris approved "…Never touching the metal, they
+  bring its tip down on a monster's skull." on 2026-10-04 but wants another look later.
+  The Japanese: 自らは触れることなく、棒の先端につけた金属で、魔物の脳天に振り降ろす.
+  It is at the 7-line limit, and the "they" refers back to the singular "the fighting
+  cleric".
 - **M 9:17, Astro Zombie.** English players see "Astro Zombie" over a text about a name
   meaning "alone". The Japanese name is ロストワン, Lost One. This is a naming
   question for Chris.
