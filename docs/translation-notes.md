@@ -22,9 +22,10 @@ see all of it.
   9 px higher and the tall pictures were cut to 143 rows, so 5 lines fit. Only the item
   in each picture is moved or shrunk, laid back onto the panel's own parchment so the
   texture stays aligned (scaling whole pictures misaligned it, which Chris caught). Two
-  descriptions are still over: the Sapphire Robes and 1:24. Chris checked all 55
+  descriptions were still over: the Sapphire Robes and 1:24. Chris checked all 55
   pictures in the game (`docs/q7-picture-check.md`): no visible flaws, and every other
-  description fits.
+  description fits. The Sapphire Robes was then cut to 5 lines (Chris's wording, which
+  also fixes "cold" to ice for 氷); 1:24 is the last one over.
 
 ### Machine-written habits (the Q1 sweep)
 
@@ -91,7 +92,6 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 - **Item 1:24.** The Japanese holds two descriptions back to back (Battle Axe and
   Nunchaku), and the English adds a flail sentence. It's also 8 lines, over the limit.
   Check what the game shows.
-- **The 25 cut-off item descriptions** (Q7, above).
 - **Events 234 and 236,** the Priestess's oracle: approved wording that may need another
   look (`event-review.md`).
 - **Event 288,** the switch line: probably the Training Maze switch, where "set into the
