@@ -1559,7 +1559,7 @@
           ],
           "strings": "NPC_MES1 115-127",
           "placement": "Generic: the \"who are you\" topic.",
-          "blurb": "Ask who they are and Guy introduces himself as \"the hero from far across the sea!\" Alstron then introduces everyone else, and when Guy reminds you that he's the leader, Alstron lets it go: \"Of course. If you say so.\"",
+          "blurb": "Ask who they are and Guy introduces himself as \"the hero from far across the sea!\" Alstron then introduces everyone else, and when Guy reminds you that he's the leader, Alstron lets it go: \"Sure. We'll leave it at that.\"",
           "quotes": [
             {
               "file": "NPC_MES1",
@@ -1571,7 +1571,7 @@
               "file": "NPC_MES1",
               "idx": 125,
               "speaker": "Alstron",
-              "text": "Of course. If you say so."
+              "text": "Sure. We'll leave it at that."
             }
           ],
           "source": "NPC_MES1"

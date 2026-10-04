@@ -707,7 +707,7 @@
                 {
                     "length": 105,
                     "source": "NA",
-                    "translation": "Tall man\n\"I am Alstron, a Priest.\n A pleasure to make your acquaintance.\n\r Where are my manners? Let me introduce the others.\n The tall lady here is our Fighter, Linaria.",
+                    "translation": "Tall man\n\"I am Alstron, a Priest.\n A pleasure to make your acquaintance.\n\r I'll introduce the rest of us as well.\n The taller lady here is our Fighter, Linaria.",
                     "addStringTerminator": true
                 },
                 {
@@ -755,13 +755,13 @@
                 {
                     "length": 43,
                     "source": "NA",
-                    "translation": "Guy\n\"Now, just so you know,\n I'm the leader here. Me, the hero!",
+                    "translation": "Guy\n\"Just so we're clear,\n the leader here is me. The hero.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Alstron\n\"Of course. If you say so.",
+                    "translation": "Alstron\n\"Sure. We'll leave it at that.",
                     "addStringTerminator": true
                 },
                 {
@@ -773,7 +773,7 @@
                 {
                     "length": 21,
                     "source": "NA",
-                    "translation": "Alstron\n\"Hm? Did you say something?",
+                    "translation": "Alstron\n\"Did you say something?",
                     "addStringTerminator": true
                 },
                 {
