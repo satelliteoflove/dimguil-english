@@ -49,7 +49,7 @@ written by `scripts/nptnames.py`).
 | Japanese | English | Notes |
 |---|---|---|
 | ガイ / ガイラルディア | Guy / Gaillardia | self-proclaimed hero, party leader |
-| アルストロン | Alstron | priest, polite, dry, flirts; asks to be called "Al-chan" (アルちゃん), the one honorific kept, because the cutesy -chan on a tall formal priest is the joke and anime-literate players know it. His battle record (NPT files) says アルストン, the site's "Alston"; the patch uses Alstron there too, as the dialogue does 59 times |
+| アルストロン | Alstron | priest, polite, dry, flirts; asks to be called "Al-chan" (アルちゃん), the one honorific kept, because the cutesy -chan on a tall formal priest is the joke and anime-literate players know it. His battle record (NPT files) says アルストン, the site's "Alston"; the patch uses Alstron there too, as the dialogue does 59 times. The party is named for plants: Gaillardia, Linaria (toadflax), Lychee, and Alstron from Alstroemeria (アルストロメリア), so the dialogue's spelling is the meaningful one and アルストン looks like a shortening |
 | リナリア | Linaria | fighter, frank, big-sisterly |
 | ライチ | Lychee | mage, childish, calls herself "Lychee" |
 | フリチラリア | Fritillaria | thief, cheeky kid voice (おいら) |

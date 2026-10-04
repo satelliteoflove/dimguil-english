@@ -53,6 +53,10 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 - **Accuracy fixes found along the way.** The Vorpal Bunny goes for the neck (首筋), not
   the throat, which also suits its beheading. The Fire Rock's weakness is ice (氷系), not
   cold. The Ogre's stamina (体力) and the Beast's looks (姿) had been dropped.
+- **Alstron, not "Alston".** The dialogue spells the priest アルストロン 59 times; only
+  his battle record says アルストン, which earlier work rendered "Alston". Guy's party is
+  named for plants (Gaillardia, Linaria, Lychee), and Alstron comes from Alstroemeria
+  (アルストロメリア), so the dialogue's spelling is the one that carries the meaning.
 - **Names stay the developer's English for now.** "BENT STAFF," not "Twisted Staff," and
   so on, pending the naming question below.
 
