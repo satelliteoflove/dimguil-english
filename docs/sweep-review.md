@@ -6,7 +6,7 @@ says where that review stands and how it's done, so a new session can pick it up
 
 ## Pick up here
 
-**31 of 37 reviewed.** Hits 1-31 are approved and committed. Continue with hit 32 in the
+**32 of 37 reviewed.** Hits 1-32 are approved and committed. Continue with hit 33 in the
 list below.
 
 ## What was swept
@@ -122,7 +122,7 @@ the catalog categories: 4 Giants, 5 Mythical, 6 Dragons, 7 Animals, 8 Beastfolk,
 | 29 | I 1:82 | Wizard's Yew Bow | "Out of magic mid-quest? This bow has you covered." | Done: Chris's wording |
 | 30 | I 1:189 | B-Plate of Goodness (希望の胸当て) | added "of course" | Done for now; **follow up** (see below) |
 | 31 | I 1:32 | Demon's Staff | added "the very" | Done for now: Chris's wording; **follow up** |
-| 32 | I 1:31 | | "seasoned" | |
+| 32 | I 1:31 | Sword of Slashing | "seasoned" | Done: Chris kept "seasoned" (the sword holds up in the deepest maze) |
 | 33 | I 1:119 | | added wry closer | |
 | 34 | I 1:179 | | "rewarded" | |
 | 35 | I 1:203 | | fragment "Not only cursed:" | |
