@@ -6,7 +6,7 @@ says where that review stands and how it's done, so a new session can pick it up
 
 ## Pick up here
 
-**21 of 37 reviewed.** Hits 1-21 are approved and committed. Continue with hit 22 in the
+**22 of 37 reviewed.** Hits 1-22 are approved and committed. Continue with hit 23 in the
 list below.
 
 ## What was swept
@@ -106,7 +106,7 @@ the catalog categories: 4 Giants, 5 Mythical, 6 Dragons, 7 Animals, 8 Beastfolk,
 | 19 | M 14:16 | Orc Lord | "Of the Orcs' ruling class stands…" | Done: close to literal |
 | 20 | M 9:24 | Murphy's Ghost | broken "For him, being slain over and over, …" | Done: grammar fixed, "over and over" kept on purpose |
 | 21 | M 9:11 | Guilty | "born of a guilty conscience made flesh" | Done: close to literal, joke left implicit |
-| 22 | M 17:4 | Ixtah | "guards slip before her beauty" | |
+| 22 | M 17:4 | Ixtah | "guards slip before her beauty" | Done: matches the 15:0 Mage's wording |
 | 23 | M 9:5 | Vampire | "A bloodsucker, in short." | |
 | 24 | M 8:2 | Giant Spider | "the spider-woman of legend perhaps" | |
 | 25 | M 10:9 | Fire Rock | proverb carried over ("water on a hot stone") | |
