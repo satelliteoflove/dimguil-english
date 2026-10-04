@@ -54,6 +54,19 @@ more of the detail behind each item.
 - The pictures are stored normal-sized first, then tall, each set in item order, with
   picture 0 a "file not found" placeholder. Description k is item k up to 24 and item
   k+1 from 25 on: description 24 holds the Battle Axe and Nunchaku text together.
+- Only JOUKA.BIN (the castle-town overlay, loaded at 0x800a1000) reads these pictures:
+  the shop catalog and its detail screen. The card game has its own copies
+  (CB/DAT/ITEM_S.DAT and ITEM_L.DAT, the same 252 + 55 split).
+- 0x800de244: the item's picture entry has bit 0x8000 for tall; tall pictures load from
+  sector 0x8dc + 12n, normal ones from 9n, through 0x800e3dcc. The a2 passed there
+  (0x4c/0x36) is only the upload strip size. The upload takes width and height from
+  the TIM header, so a shorter TIM displays cleanly.
+- 0x800deb1c (JOUKA.BIN 0x3db1c): the description's y is a fixed base plus tall × 39,
+  built as ((s3 << 2) + s3) << 3 − s3. `subu v0,zero,s3; andi v0,v0,N; nop; nop` sets
+  the tall offset to N. The parchment ends at y=227; text starts at y=129 + offset, in
+  13 px lines.
+- Tested 2026-10-04 (emulator, six items): offset 26 with the pictures cut to 139 rows
+  shows a full 5th line under tall pictures, no overlap, normal items unchanged.
 
 ## Battle
 
