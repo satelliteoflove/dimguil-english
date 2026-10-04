@@ -16,36 +16,47 @@ first.
    uses kanji, hiragana and katakana), what Chris decided (jokes, cultural adaptation,
    the intent and style of the original), and that AI was used throughout, tooling
    included. Then the aim: quality, with the line-by-line review and the full
-   playthrough as the evidence. The Japanese-reader question goes here too (D1, still
-   open).
+   playthrough as the evidence. The Japanese-reader question goes here too (D1). Decided
+   2026-10-04: the release doesn't wait for a native reviewer, and the care shown in
+   item 3 answers the question instead.
 
-3. **What the game is.** Two or three sentences: Wizardry Gaiden, PS1, 2000, ASCII,
+3. **Translation approach.** The English sticks to the intent and phrasing of the
+   Japanese where possible, and adapts where it has to so the game reads pleasantly and
+   is easy to follow. Give examples of both:
+   - Care with the language and culture: Guy and Alstron's introduction; Linaria lying
+     about her age with the dated "springy as a fresh fish"; the town board modeled on
+     the chalkboards at pre-cellphone Japanese train stations; Alstron's Dragon Quest III
+     Sage/Bishop class-change reference; other inside jokes kept.
+   - Liberties taken: a few concrete cases where the English departs from the Japanese
+     and why. Candidates still to be picked; collect them as reviews turn them up.
+
+4. **What the game is.** Two or three sentences: Wizardry Gaiden, PS1, 2000, ASCII,
    never released in English. Developer credit waits on F1.
 
-4. **Status.** Beta, playable from start to finish (true once Q3 is done). What has been
+5. **Status.** Beta, playable from start to finish (true once Q3 is done). What has been
    reviewed and what hasn't, with numbers (F6). No "100%" claims beyond what is counted:
    all reachable text is in English, but not all of it has been reviewed twice.
 
-5. **Screenshots.** Four current, native-resolution PNGs plus the title screen (R1). A
+6. **Screenshots.** Four current, native-resolution PNGs plus the title screen (R1). A
    Japanese/English pair of the same screen would show the work at a glance.
 
-6. **What you need.** Your own dump of Rev 1 (Redump #60391) with the Track 1 hashes in
+7. **What you need.** Your own dump of Rev 1 (Redump #60391) with the Track 1 hashes in
    the post itself. Say plainly that the original pressing (#10368) won't patch (F3).
 
-7. **How to patch and play.** Delta Patcher with checksum validation on, or the
+8. **How to patch and play.** Delta Patcher with checksum validation on, or the
    `xdelta3 -d -s` line (R4). What it's been tested on (F5). Memory-card saves carry
    over between versions, but save states keep the old text (F4).
 
-8. **Download.** A single link to the GitHub release page. Later posts link the RHDN
+9. **Download.** A single link to the GitHub release page. Later posts link the RHDN
    entry too, once it exists.
 
-9. **Known issues.** The two or three that matter most, then a link to the full list
+10. **Known issues.** The two or three that matter most, then a link to the full list
    (W5).
 
-10. **Bug reports.** GitHub issues, and what a useful report includes (W6). On
+11. **Bug reports.** GitHub issues, and what a useful report includes (W6). On
     r/wizardry, the thread works too (D10).
 
-11. **Origins and credits.** The notice from `docs/notice.txt`, required on every page
+12. **Origins and credits.** The notice from `docs/notice.txt`, required on every page
     that hosts the patch. Remisse's tools named and linked. The tools list, with Claude
     in it (D5).
 
