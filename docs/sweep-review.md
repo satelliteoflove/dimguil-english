@@ -6,7 +6,7 @@ says where that review stands and how it's done, so a new session can pick it up
 
 ## Pick up here
 
-**20 of 37 reviewed.** Hits 1-20 are approved and committed. Continue with hit 21 in the
+**21 of 37 reviewed.** Hits 1-21 are approved and committed. Continue with hit 22 in the
 list below.
 
 ## What was swept
@@ -63,6 +63,11 @@ Learned in this review:
   職業は… (his class is…) for the Kobold King, Orc Healer and Ogre Brother too, and
   職業 is the class word on the Training Grounds screens. When there's no evidence,
   say it's a reading.
+- **Don't spoon-feed a joke the Japanese leaves implicit.** On the Guilty, Chris chose
+  "making adventurers look the same" over spelling out the beheading: the developers
+  left it for the reader to work out, and so should we. Spelling it out is fine when
+  English players would otherwise miss a series reference the Japanese assumes (Murphy's
+  Ghost, "over and over").
 - **Check where names come from.** "Cutie Thief" is the developer's own English. It's
   on the untouched Rev 1 disc in the M_CATALG name table and in the MPT02/03 enemy
   records.
@@ -100,7 +105,7 @@ the catalog categories: 4 Giants, 5 Mythical, 6 Dragons, 7 Animals, 8 Beastfolk,
 | 18 | M 11:9 | Chamalcan | "most unpleasant" | Done: close to literal |
 | 19 | M 14:16 | Orc Lord | "Of the Orcs' ruling class stands…" | Done: close to literal |
 | 20 | M 9:24 | Murphy's Ghost | broken "For him, being slain over and over, …" | Done: grammar fixed, "over and over" kept on purpose |
-| 21 | M 9:11 | Guilty | "born of a guilty conscience made flesh" | |
+| 21 | M 9:11 | Guilty | "born of a guilty conscience made flesh" | Done: close to literal, joke left implicit |
 | 22 | M 17:4 | Ixtah | "guards slip before her beauty" | |
 | 23 | M 9:5 | Vampire | "A bloodsucker, in short." | |
 | 24 | M 8:2 | Giant Spider | "the spider-woman of legend perhaps" | |
