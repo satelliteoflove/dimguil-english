@@ -6,7 +6,7 @@ says where that review stands and how it's done, so a new session can pick it up
 
 ## Pick up here
 
-**32 of 37 reviewed.** Hits 1-32 are approved and committed. Continue with hit 33 in the
+**33 of 37 reviewed.** Hits 1-33 are approved and committed. Continue with hit 34 in the
 list below.
 
 ## What was swept
@@ -123,7 +123,7 @@ the catalog categories: 4 Giants, 5 Mythical, 6 Dragons, 7 Animals, 8 Beastfolk,
 | 30 | I 1:189 | B-Plate of Goodness (希望の胸当て) | added "of course" | Done for now; **follow up** (see below) |
 | 31 | I 1:32 | Demon's Staff | added "the very" | Done for now: Chris's wording; **follow up** |
 | 32 | I 1:31 | Sword of Slashing | "seasoned" | Done: Chris kept "seasoned" (the sword holds up in the deepest maze) |
-| 33 | I 1:119 | | added wry closer | |
+| 33 | I 1:119 | Oodenta | cleaver/cleaving echo | Done: Chris's wording |
 | 34 | I 1:179 | | "rewarded" | |
 | 35 | I 1:203 | | fragment "Not only cursed:" | |
 | 36 | I 1:126 | | "only fair" | |
