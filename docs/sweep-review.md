@@ -6,7 +6,7 @@ says where that review stands and how it's done, so a new session can pick it up
 
 ## Pick up here
 
-**28 of 37 reviewed.** Hits 1-28 are approved and committed. Continue with hit 29 in the
+**29 of 37 reviewed.** Hits 1-29 are approved and committed. Continue with hit 30 in the
 list below.
 
 ## What was swept
@@ -119,7 +119,7 @@ the catalog categories: 4 Giants, 5 Mythical, 6 Dragons, 7 Animals, 8 Beastfolk,
 | 26 | I 1:33 | Bent Staff | "An odd choice, but there it is." | Done: close to literal |
 | 27 | I 1:278 | Ankh of Life | added pun "Vitality is a vital stat" | Done: close to literal |
 | 28 | I 1:5 | Anointed Mace | added mirrored antithesis | Done for now; **follow up** (see below) |
-| 29 | I 1:82 | | "Out of magic mid-quest? This bow has you covered." | |
+| 29 | I 1:82 | Wizard's Yew Bow | "Out of magic mid-quest? This bow has you covered." | Done: Chris's wording |
 | 30 | I 1:189 | | added "of course" | |
 | 31 | I 1:32 | | added "the very" | |
 | 32 | I 1:31 | | "seasoned" | |
