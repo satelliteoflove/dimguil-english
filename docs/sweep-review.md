@@ -6,7 +6,7 @@ says where that review stands and how it's done, so a new session can pick it up
 
 ## Pick up here
 
-**17 of 37 reviewed.** Hits 1-17 are approved and committed. Continue with hit 18 in the
+**18 of 37 reviewed.** Hits 1-18 are approved and committed. Continue with hit 19 in the
 list below.
 
 ## What was swept
@@ -97,7 +97,7 @@ the catalog categories: 4 Giants, 5 Mythical, 6 Dragons, 7 Animals, 8 Beastfolk,
 | 15 | M 14:3 | Gremlin | "Proper gremlins… surely" | Done: close to literal, keeps the writer's "I" |
 | 16 | M 14:5 | Ogre | "see it off" | Done: close to literal, stamina restored |
 | 17 | M 8:8 | Were Amoeba | "Nasty business." | Done: Chris's rewording, fitted |
-| 18 | M 11:9 | Chamalcan | "most unpleasant" | |
+| 18 | M 11:9 | Chamalcan | "most unpleasant" | Done: close to literal |
 | 19 | M 14:16 | Orc Lord | "Of the Orcs' ruling class stands…" | |
 | 20 | M 9:24 | Murphy's Ghost | broken "For him, being slain over and over, …" | |
 | 21 | M 9:11 | Guilty | "born of a guilty conscience made flesh" | |
