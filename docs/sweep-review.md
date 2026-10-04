@@ -6,7 +6,7 @@ says where that review stands and how it's done, so a new session can pick it up
 
 ## Pick up here
 
-**23 of 37 reviewed.** Hits 1-23 are approved and committed. Continue with hit 24 in the
+**24 of 37 reviewed.** Hits 1-24 are approved and committed. Continue with hit 25 in the
 list below.
 
 ## What was swept
@@ -108,7 +108,7 @@ the catalog categories: 4 Giants, 5 Mythical, 6 Dragons, 7 Animals, 8 Beastfolk,
 | 21 | M 9:11 | Guilty | "born of a guilty conscience made flesh" | Done: close to literal, joke left implicit |
 | 22 | M 17:4 | Ixtah | "guards slip before her beauty" | Done: matches the 15:0 Mage's wording |
 | 23 | M 9:5 | Vampire | "A bloodsucker, in short." | Done: "What you'd call a bloodsucker" |
-| 24 | M 8:2 | Giant Spider | "the spider-woman of legend perhaps" | |
+| 24 | M 8:2 | Giant Spider | "the spider-woman of legend perhaps" | Done for now: "an arachne"; **follow up** (see below) |
 | 25 | M 10:9 | Fire Rock | proverb carried over ("water on a hot stone") | |
 | 26 | I 1:33 | | "An odd choice, but there it is." | |
 | 27 | I 1:278 | | added pun "Vitality is a vital stat" | |
@@ -128,6 +128,13 @@ the catalog categories: 4 Giants, 5 Mythical, 6 Dragons, 7 Animals, 8 Beastfolk,
 These aren't LLM habits. They're accuracy and consistency points the deep pass turned
 up. Take them after the 37, or fold them in where they share a string.
 
+- **M 8:2, Giant Spider: follow up.** The Japanese says いわゆる女郎蜘蛛 ("what they call a
+  jorōgumo"): both a common Japanese spider and a yōkai that appears as a seductive
+  woman. The sprite has a woman's upper body on a spider's. "An arachne" went in on
+  2026-10-04 as a stopgap. The options considered were "spider-woman" (plain and folksy,
+  like the Japanese), "arachne" (the modern fantasy term, from Ovid's weaver) and
+  "drider" (D&D's exact body, but drow and Lolth baggage). Chris wants this one
+  given deeper thought before release.
 - **M 9:17, Astro Zombie.** English players see "Astro Zombie" over a text about a name
   meaning "alone". The Japanese name is ロストワン, Lost One. This is a naming
   question for Chris.
