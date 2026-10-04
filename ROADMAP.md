@@ -81,7 +81,10 @@ Typos in the game's own English monster names are for the quality passes:
    FIGHTMSG) were translated afresh in September with the term list in
    `docs/terms.md`.
 3. Our own first-pass text that hasn't had a second look: item and monster
-   descriptions (ITEM, M_CATALG), MESSAGE, combat verbs.
+   descriptions (ITEM, M_CATALG), MESSAGE, combat verbs. A first step before v0.8.0:
+   every item and monster description was read beside the Japanese for LLM habits,
+   and the 37 hits are being reviewed one at a time (`docs/sweep-review.md`, started
+   2026-10-03). That isn't the full second look these files still need.
 
 Total translation is about 44,700 words as of 2026-09-26.
 

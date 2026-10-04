@@ -6,6 +6,10 @@ screening aid only: every hit needs a human look, and most will be fine.
 
   python3 scripts/llmsweep.py            # all patterns
   python3 scripts/llmsweep.py --ngrams   # also repeated 4-word phrases
+  python3 scripts/llmsweep.py --pairs    # write rips/review/pairs-<FILE>.txt: English
+                                         # beside Japanese for ITEM and M_CATALG
+                                         # descriptions (rips/ is ignored; keep the
+                                         # Japanese out of the repo)
 """
 import glob
 import os
@@ -70,7 +74,27 @@ def strings():
                     yield f'{name}:{si}:{i}', clean(t)
 
 
+def pairs():
+    from reviewpage import load as rload
+    for name in ['M_CATALG.DAT', 'ITEM.DAT']:
+        tr = rload(os.path.join(ROOT, f'translations/{name}.json'))['sections']
+        jp = {s['firstHeaderAddress']: s for s in
+              rload(os.path.join(ROOT, f'rips/stage/out/dumps/{name}.json'))['sections']}
+        path = os.path.join(ROOT, f'rips/review/pairs-{name}.txt')
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, 'w', encoding='utf-8') as out:
+            for si, s in enumerate(tr):
+                for i, st in enumerate(s['strings']):
+                    en = clean(st.get('translation') or '')
+                    if len(en.split()) >= 8:
+                        src = jp[s['firstHeaderAddress']]['strings'][i]['source']
+                        out.write(f'{si}:{i}\nJ {clean(src)}\nE {en}\n\n')
+        print(path)
+
+
 def main():
+    if '--pairs' in sys.argv:
+        return pairs()
     hits = defaultdict(list)
     words = lambda ws: re.compile(r'\b(?:' + '|'.join(ws) + r')\b', re.I)
     pats = {
