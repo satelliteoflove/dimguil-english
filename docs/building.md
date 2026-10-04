@@ -65,6 +65,7 @@ need re-making after a build that moves files on the disc.
 The tools:
 
 - Fit checks, which need no emulator: `descfit.py` (item and catalog descriptions),
+  `itemfit.py` (item descriptions against the lines their picture leaves),
   `npcfit.py` (NPC dialogue), `evfit.py` (the event script), `fightfit.py` (battle
   messages).
 - Rendering text in the real boxes: `npcshow.py` and `evshow.py` print NPC or event

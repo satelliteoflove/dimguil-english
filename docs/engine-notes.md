@@ -43,6 +43,18 @@ more of the detail behind each item.
   lookahead at each space (and each digraph ending in one), so words move whole.
   `fightfit.py` simulates it over every combination of name lengths.
 
+## Item catalog
+
+- The catalog draws the item's picture, then the description below it, and clips the
+  text at about y=220 with no scrolling. ITEM.DAT has 252 pictures at 152x108 (text
+  starts at y=129, 7 lines of 13 px) and 55 at 152x152 for polearms, long staves,
+  robes, cloaks and full armor (text starts 39 px lower, 4 lines). The Japanese under
+  tall pictures never runs past 4 lines. `itemfit.py` checks every description against
+  the right limit; found by Chris on the Emerald Robes, 2026-10-04.
+- The pictures are stored normal-sized first, then tall, each set in item order, with
+  picture 0 a "file not found" placeholder. Description k is item k up to 24 and item
+  k+1 from 25 on: description 24 holds the Battle Axe and Nunchaku text together.
+
 ## Battle
 
 - Monster data sits in DATA02/M_DTnnn.BIN at 0x10280 (in RAM, 0xd0-byte records from

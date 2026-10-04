@@ -80,7 +80,9 @@ Item refs don't map to item numbers by a fixed offset (I 1:5 is item 5, the Anoi
 Mace; I 1:33 is item 34, the Bent Staff). Match the description against
 `rips/tl/item_names.json` (Japanese and English names in item order) and the Bartok's
 Trading Post item table (`data/items/dim/ps.json`, from Emonoya), which gives effects. Item
-boxes are 144 px wide and 7 lines at most: `descwrap.py --width 144`.
+boxes are 144 px wide and 7 lines at most, but only **4 lines under a tall picture**
+(robes, cloaks, full armor, polearms, long staves): `descwrap.py --width 144`, then
+`scripts/itemfit.py`, which knows which items have tall pictures.
 
 ## The 37 hits
 
