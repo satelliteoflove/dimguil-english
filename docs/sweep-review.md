@@ -6,7 +6,7 @@ says where that review stands and how it's done, so a new session can pick it up
 
 ## Pick up here
 
-**25 of 37 reviewed.** Hits 1-25 are approved and committed. Continue with hit 26 in the
+**26 of 37 reviewed.** Hits 1-26 are approved and committed. Continue with hit 27 in the
 list below.
 
 ## What was swept
@@ -76,6 +76,10 @@ After approval, apply with `python3 scripts/descwrap.py "<flat text>" --apply
 translations/<FILE>.json SECTION INDEX`. Run `scripts/wtquotes.py check`, then commit
 one hit per commit, with "Q1 sweep n/37" in the body.
 
+Item refs map to item numbers as index + 1 (I 1:33 is item 34). The Bartok's Trading
+Post item table (`data/items/dim/ps.json`, from Emonoya) gives names and effects. Item
+boxes are 144 px wide and 7 lines at most: `descwrap.py --width 144`.
+
 ## The 37 hits
 
 Monster refs are section:index in `translations/M_CATALG.DAT.json`. The sections are
@@ -110,7 +114,7 @@ the catalog categories: 4 Giants, 5 Mythical, 6 Dragons, 7 Animals, 8 Beastfolk,
 | 23 | M 9:5 | Vampire | "A bloodsucker, in short." | Done: "What you'd call a bloodsucker" |
 | 24 | M 8:2 | Giant Spider | "the spider-woman of legend perhaps" | Done for now: "an arachne"; **follow up** (see below) |
 | 25 | M 10:9 | Fire Rock | proverb carried over ("water on a hot stone") | Done: kept on purpose (it's a pun), quoted as in the Japanese |
-| 26 | I 1:33 | | "An odd choice, but there it is." | |
+| 26 | I 1:33 | Bent Staff | "An odd choice, but there it is." | Done: close to literal |
 | 27 | I 1:278 | | added pun "Vitality is a vital stat" | |
 | 28 | I 1:5 | | added mirrored antithesis | |
 | 29 | I 1:82 | | "Out of magic mid-quest? This bow has you covered." | |
