@@ -6,7 +6,7 @@ says where that review stands and how it's done, so a new session can pick it up
 
 ## Pick up here
 
-**9 of 37 reviewed.** Hits 1-9 are approved and committed. Continue with hit 10 in the
+**10 of 37 reviewed.** Hits 1-10 are approved and committed. Continue with hit 11 in the
 list below.
 
 ## What was swept
@@ -48,6 +48,12 @@ For each hit, show:
 - **A close-to-literal English version**, fitted with `scripts/descwrap.py`. The
   catalog box is 108 px wide, and the longest existing entry is 13 lines.
 
+Chris named the unidentified monsters in hits 10-25 from the in-game catalog on
+2026-10-04 (the names in the table are his). Portrait details he gave that may bear on
+the text: the Crystal Man is tiny and alien-looking and barely fills the portrait; the
+Fire Rock is a cyclops that looks like a blacksmith of Hell; Ixtah is a beautiful
+cultist priestess.
+
 Learned in this review:
 
 - **Chris prefers close-to-literal versions** over smoother rewrites. Offer one every
@@ -83,22 +89,22 @@ the catalog categories: 4 Giants, 5 Mythical, 6 Dragons, 7 Animals, 8 Beastfolk,
 | 7 | M 9:17 | Astro Zombie (ロストワン) | "none can say" | Done: close to literal |
 | 8 | M 10:8 | Beast | added "truly" | Done: close to literal |
 | 9 | M 4:3 | Cyclops (inferred) | "Blessed with… without a trace of rage" | Done: close to literal |
-| 10 | M 12:26 | | "untold power" | |
-| 11 | M 7:4 | | "fangs loom" | |
-| 12 | M 9:30 | | "eyes burn with hostility" | |
-| 13 | M 12:15 | | "a being of pure mind" ("pure" added) | |
-| 14 | M 5:8 | | invented "Still," contrast | |
+| 10 | M 12:26 | Crystal Man | "untold power" | Done: swapped the phrase only |
+| 11 | M 7:4 | Vorpal Bunny | "fangs loom" | |
+| 12 | M 9:30 | High Zombie | "eyes burn with hostility" | |
+| 13 | M 12:15 | Mouth | "a being of pure mind" ("pure" added) | |
+| 14 | M 5:8 | Oserotoru | invented "Still," contrast | |
 | 15 | M 14:3 | Gremlin | "Proper gremlins… surely" | |
-| 16 | M 14:5 | | "see it off" | |
-| 17 | M 8:8 | | "Nasty business." | |
-| 18 | M 11:9 | | "most unpleasant" | |
+| 16 | M 14:5 | Ogre | "see it off" | |
+| 17 | M 8:8 | Were Amoeba | "Nasty business." | |
+| 18 | M 11:9 | Chamalcan | "most unpleasant" | |
 | 19 | M 14:16 | Orc Lord | "Of the Orcs' ruling class stands…" | |
-| 20 | M 9:24 | | broken "For him, being slain over and over, …" | |
-| 21 | M 9:11 | | "born of a guilty conscience made flesh" | |
-| 22 | M 17:4 | | "guards slip before her beauty" | |
+| 20 | M 9:24 | Murphy's Ghost | broken "For him, being slain over and over, …" | |
+| 21 | M 9:11 | Guilty | "born of a guilty conscience made flesh" | |
+| 22 | M 17:4 | Ixtah | "guards slip before her beauty" | |
 | 23 | M 9:5 | Vampire | "A bloodsucker, in short." | |
 | 24 | M 8:2 | Giant Spider | "the spider-woman of legend perhaps" | |
-| 25 | M 10:9 | | proverb carried over ("water on a hot stone") | |
+| 25 | M 10:9 | Fire Rock | proverb carried over ("water on a hot stone") | |
 | 26 | I 1:33 | | "An odd choice, but there it is." | |
 | 27 | I 1:278 | | added pun "Vitality is a vital stat" | |
 | 28 | I 1:5 | | added mirrored antithesis | |
