@@ -6,7 +6,7 @@ says where that review stands and how it's done, so a new session can pick it up
 
 ## Pick up here
 
-**29 of 37 reviewed.** Hits 1-29 are approved and committed. Continue with hit 30 in the
+**30 of 37 reviewed.** Hits 1-30 are approved and committed. Continue with hit 31 in the
 list below.
 
 ## What was swept
@@ -120,7 +120,7 @@ the catalog categories: 4 Giants, 5 Mythical, 6 Dragons, 7 Animals, 8 Beastfolk,
 | 27 | I 1:278 | Ankh of Life | added pun "Vitality is a vital stat" | Done: close to literal |
 | 28 | I 1:5 | Anointed Mace | added mirrored antithesis | Done for now; **follow up** (see below) |
 | 29 | I 1:82 | Wizard's Yew Bow | "Out of magic mid-quest? This bow has you covered." | Done: Chris's wording |
-| 30 | I 1:189 | | added "of course" | |
+| 30 | I 1:189 | B-Plate of Goodness (希望の胸当て) | added "of course" | Done for now; **follow up** (see below) |
 | 31 | I 1:32 | | added "the very" | |
 | 32 | I 1:31 | | "seasoned" | |
 | 33 | I 1:119 | | added wry closer | |
@@ -146,6 +146,19 @@ up. Take them after the 37, or fold them in where they share a string.
   The Japanese: 自らは触れることなく、棒の先端につけた金属で、魔物の脳天に振り降ろす.
   It is at the 7-line limit, and the "they" refers back to the singular "the fighting
   cleric".
+- **I 1:189, B-Plate of Goodness: follow up.** The Japanese name is 希望の胸当て,
+  "breastplate of hope", and the description is about hope. The English name doesn't
+  match, and Chris dislikes it. The description now says "Said to be filled with hope"
+  (希望の込められた), which no longer clashes with the name, but the entry needs a second
+  look together with the naming question below.
+- **Naming question: the developer's English names.** Item and monster names follow the
+  game's built-in English list (`docs/event-voice.md`). Chris's view (2026-10-04): the
+  game was never released in English, so these names are almost certainly early,
+  unpolished placeholders, not what a team localizing for the West would have shipped.
+  Candidates so far: B-PLATE OF GOODNESS (希望の胸当て), BENT STAFF (ねじれた杖; Chris
+  leaned toward "Twisted Staff", kept for now), Astro Zombie (ロストワン, below). A
+  rename touches the inventory list (I_NAME_E), the catalog, Boltac's list and the
+  battle copy of the names, and breaks the match with Emonoya and other guides.
 - **M 9:17, Astro Zombie.** English players see "Astro Zombie" over a text about a name
   meaning "alone". The Japanese name is ロストワン, Lost One. This is a naming
   question for Chris.
