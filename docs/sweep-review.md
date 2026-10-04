@@ -6,9 +6,8 @@ says where that review stands and how it's done, so a new session can pick it up
 
 ## Pick up here
 
-**7 of 37 reviewed.** Hits 1-6 are approved and committed. Hit 7 (monster 9:17, Astro
-Zombie) was presented on 2026-10-03 and is waiting for Chris's choice. Then continue
-with hit 8 in the list below.
+**7 of 37 reviewed.** Hits 1-7 are approved and committed. Continue with hit 8 in the
+list below.
 
 ## What was swept
 
@@ -81,7 +80,7 @@ the catalog categories: 4 Giants, 5 Mythical, 6 Dragons, 7 Animals, 8 Beastfolk,
 | 4 | M 16:5 | Cutie Thief | "Truly,"; opening fragment | Done: close to literal |
 | 5 | M 16:2 | Goblin ninja (likely Goblin Assassin) | added "truly" and "indeed" | Done: close to literal |
 | 6 | M 8:13 | Flack (inferred) | "shrouded in mystery" | Done: "largely a mystery" |
-| 7 | M 9:17 | Astro Zombie (ロストワン) | "none can say" | **Proposed**, awaiting Chris |
+| 7 | M 9:17 | Astro Zombie (ロストワン) | "none can say" | Done: close to literal |
 | 8 | M 10:8 | Beast | added "truly" | |
 | 9 | M 4:3 | | "Blessed with… without a trace of rage" | |
 | 10 | M 12:26 | | "untold power" | |
@@ -112,17 +111,6 @@ the catalog categories: 4 Giants, 5 Mythical, 6 Dragons, 7 Animals, 8 Beastfolk,
 | 35 | I 1:203 | | fragment "Not only cursed:" | |
 | 36 | I 1:126 | | "only fair" | |
 | 37 | I 1:304 | | "venerable" | |
-
-### Hit 7, as presented
-
-The Japanese opens 「たった一人」を意味する男, "a man whose name means 'just one
-person'": the writer glossing the Japanese name ロストワン, Lost One. Two options:
-
-- **Fix only the flourish** (recommended): "…yet the face beneath carries an air of
-  loneliness. Whatever his purpose, his level drain steals adventurers' life force."
-- **Closer to the Japanese throughout**: "A man known as 'the one alone'. Perhaps his
-  hood is a life-support device; the face it covers has something lonely about it.
-  Whatever his purpose, he drains adventurers' life force with his level drain."
 
 ## Noted in passing, after the 37
 
