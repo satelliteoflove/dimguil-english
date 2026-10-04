@@ -6,7 +6,7 @@ says where that review stands and how it's done, so a new session can pick it up
 
 ## Pick up here
 
-**30 of 37 reviewed.** Hits 1-30 are approved and committed. Continue with hit 31 in the
+**31 of 37 reviewed.** Hits 1-31 are approved and committed. Continue with hit 32 in the
 list below.
 
 ## What was swept
@@ -121,7 +121,7 @@ the catalog categories: 4 Giants, 5 Mythical, 6 Dragons, 7 Animals, 8 Beastfolk,
 | 28 | I 1:5 | Anointed Mace | added mirrored antithesis | Done for now; **follow up** (see below) |
 | 29 | I 1:82 | Wizard's Yew Bow | "Out of magic mid-quest? This bow has you covered." | Done: Chris's wording |
 | 30 | I 1:189 | B-Plate of Goodness (希望の胸当て) | added "of course" | Done for now; **follow up** (see below) |
-| 31 | I 1:32 | | added "the very" | |
+| 31 | I 1:32 | Demon's Staff | added "the very" | Done for now: Chris's wording; **follow up** |
 | 32 | I 1:31 | | "seasoned" | |
 | 33 | I 1:119 | | added wry closer | |
 | 34 | I 1:179 | | "rewarded" | |
@@ -151,6 +151,13 @@ up. Take them after the 37, or fold them in where they share a string.
   match, and Chris dislikes it. The description now says "Said to be filled with hope"
   (希望の込められた), which no longer clashes with the name, but the entry needs a second
   look together with the naming question below.
+- **I 1:32, Demon's Staff: follow up.** Chris's wording went in on 2026-10-04: "Weak in
+  direct combat, but when used as a magic item it summons demons as allies, making it
+  more useful than an ordinary weapon." It leaves out three things the Japanese has:
+  focusing the mind (精神を集中し), that these are the demons that plague adventurers
+  (冒険者を悩ます悪魔達), and the "probably" (だろう). The Japanese:
+  直接攻撃ではその力を発揮できないが、精神を集中し魔法のアイテムとして使用すれば、
+  冒険者を悩ます悪魔達が味方となって召喚される。その効果は普通の武器よりも頼りになるだろう。
 - **Naming question: the developer's English names.** Item and monster names follow the
   game's built-in English list (`docs/event-voice.md`). Chris's view (2026-10-04): the
   game was never released in English, so these names are almost certainly early,
