@@ -6,7 +6,7 @@ says where that review stands and how it's done, so a new session can pick it up
 
 ## Pick up here
 
-**8 of 37 reviewed.** Hits 1-8 are approved and committed. Continue with hit 9 in the
+**9 of 37 reviewed.** Hits 1-9 are approved and committed. Continue with hit 10 in the
 list below.
 
 ## What was swept
@@ -82,7 +82,7 @@ the catalog categories: 4 Giants, 5 Mythical, 6 Dragons, 7 Animals, 8 Beastfolk,
 | 6 | M 8:13 | Flack (inferred) | "shrouded in mystery" | Done: "largely a mystery" |
 | 7 | M 9:17 | Astro Zombie (ロストワン) | "none can say" | Done: close to literal |
 | 8 | M 10:8 | Beast | added "truly" | Done: close to literal |
-| 9 | M 4:3 | | "Blessed with… without a trace of rage" | |
+| 9 | M 4:3 | Cyclops (inferred) | "Blessed with… without a trace of rage" | Done: close to literal |
 | 10 | M 12:26 | | "untold power" | |
 | 11 | M 7:4 | | "fangs loom" | |
 | 12 | M 9:30 | | "eyes burn with hostility" | |
