@@ -72,7 +72,8 @@ Learned in this review:
   on the untouched Rev 1 disc in the M_CATALG name table and in the MPT02/03 enemy
   records.
 
-After approval, apply with `python3 scripts/descwrap.py "<flat text>" --apply
+After approval, record anything notable (a liberty, a kept joke, a follow-up) in
+`docs/translation-notes.md`. Apply with `python3 scripts/descwrap.py "<flat text>" --apply
 translations/<FILE>.json SECTION INDEX`. Run `scripts/wtquotes.py check`, then commit
 one hit per commit, with "Q1 sweep n/37" in the body.
 
