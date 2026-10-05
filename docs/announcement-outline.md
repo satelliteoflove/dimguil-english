@@ -44,7 +44,14 @@ first.
        joke. He was Wizardry I's famous experience farm, and the Japanese only implies it.
 
 4. **What the game is.** Two or three sentences: Wizardry Gaiden, PS1, 2000, ASCII,
-   never released in English. Developer credit waits on F1.
+   never released in English. Developed by Access, published by ASCII, 20 April 2000
+   (F1; the staff roll ends "©2000ASCII ©2000ACCESS"). Soliton and Thunder Stone, which
+   some English sources name, aren't in the credits.
+   - Trivia, if there's room: "Moon Smile", the tavern song and the ending
+     song, is sung by Akina Nakamori, with words by Seriko Natsuno and music by Ikuro
+     Fujiwara, who also did the original sound design. The orchestral score is played by
+     the Moscow International Symphonic Orchestra. Story by Tsuyoshi Tokunaga, who
+     co-directed with Masahiro Nishiyama.
 
 5. **Status.** Beta, playable from start to finish (true once Q3 is done). What has been
    reviewed and what hasn't, with numbers (F6). No "100%" claims beyond what is counted:
