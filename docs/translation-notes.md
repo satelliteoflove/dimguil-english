@@ -77,7 +77,10 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   English list. Chris's view: the game was never released in English, so these are
   almost certainly unpolished placeholders. Candidates: B-PLATE OF GOODNESS (希望の胸当て,
   "breastplate of hope"), BENT STAFF (ねじれた杖; Chris leaned toward "Twisted Staff"),
-  Astro Zombie (ロストワン, "Lost One"; its entry is about a name meaning "alone"). A
+  Astro Zombie (ロストワン, "Lost One"; its entry is about a name meaning "alone"). STEEL
+  GLOVES (鉄の小手, "iron gauntlets"): the item text otherwise keeps 鉄 as iron and 鋼 as
+  steel, but 1:150 and 1:151 say "steel" to match the name; a rename to Iron Gloves
+  would switch both. A
   rename touches the inventory list, the catalog, Boltac's list and the battle copy of
   the names, and breaks the match with Emonoya and other guides. Some are plain
   misspellings that should be fixed whatever is decided about the rest: Chris spotted
@@ -109,5 +112,4 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   Chris").
 - **Noted in passing in the catalog:** 邪教徒 is "heretics" once (10:24) and "cultists"
   everywhere else; 豹 became "jaguar" for the Were Jaguar (probably fine); "an ordinary
-  woman" at 9:16; "steel" for 鉄 (iron) at items
-  1:150 and 1:151.
+  woman" at 9:16.
