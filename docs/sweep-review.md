@@ -179,6 +179,8 @@ up. Take them after the 37, or fold them in where they share a string.
   so this is probably fine; just confirm.
 - **M 9:16.** "an ordinary human" became "an ordinary woman". It's fine if that entry is
   the female Vampire.
+  Decided 2026-10-04: kept. The entry is Elizabeth (an inference from the catalog order),
+  i.e. Elizabeth Báthory.
 - **I 1:274.** The last "fiends" (魔族) in the game text. The event review replaced the
   others. Done 2026-10-04: "lesser demons should shatter to pieces"; 魔族 = demons in
   terms.md. Flagged for another look in translation-notes.

@@ -64,6 +64,9 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   competent student, and the Japanese doesn't repeat the Western idea that it means a
   master. Excalibur's two hands are a shrug at a drawback (仕方のないことだろう), not "only
   fair."
+- **Elizabeth (catalog 9:16) is Elizabeth Báthory,** the "Blood Countess" said to have
+  kept her youth with young women's blood. 普通の人間 stays "an ordinary woman": she's a
+  woman, and "human... her" would read oddly. Checked and kept.
 - **The Demon Baby's breath (catalog 10:24).** まだどこかおぼつかないブレス had been "still-clumsy
   breath". おぼつかない is the word for a toddler's wobbly first steps, and ブレス is the
   games' loanword for a breath weapon, not 息 or 呼吸. Japanese parenting sites and forums
@@ -117,5 +120,4 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 - **NPC open questions:** Balbo's register, "Kiku" or "Kiki", Lilia's ガイルディア, what
   triggers 同輩, Bergamot's ジジイ and others (`npc-review.md`, "Open questions for
   Chris").
-- **Noted in passing in the catalog:** 豹 became "jaguar" for the Were Jaguar (probably fine); "an ordinary
-  woman" at 9:16.
+- **Noted in passing in the catalog:** 豹 became "jaguar" for the Were Jaguar (probably fine).
