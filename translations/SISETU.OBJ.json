@@ -671,7 +671,7 @@
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "It's equipped. Sell it?",
+                    "translation": "That's equipped. Sell it anyway?",
                     "compress": true,
                     "addStringTerminator": true
                 },
