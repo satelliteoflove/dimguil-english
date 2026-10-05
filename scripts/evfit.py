@@ -10,6 +10,13 @@ Also flags a mid-line " (see npcfit.py), control codes that differ from the Japa
 28,672 bytes: the original 27,623 plus the slack in its 14 sectors, which
 `extendByBytes` lets it use. (The old limit, 25,721, was the section length without the
 header, so the check always said OVER and the real overflow went unnoticed.) --overlay applies {"idx": "text"} on top of the file first.
+
+The box also has a glyph budget: every glyph (space included) is a sprite from a pool
+of POOL, and the box simply stops drawing when it runs out. The box shows 3 lines and
+scrolls; a line that scrolls off gives its sprites back and a new page (\r) frees them
+all, so any 3 lines in a row on a page must hold at most POOL glyph codes. The game
+sized the pool for Japanese, 72; asm/event_window_pool.asm doubles it. Measured in the
+real box at the Shrine door (2026-10-05). {ff12} is priced as an 8-letter name.
 """
 import json, os, re, sys
 sys.path.insert(0, os.path.dirname(__file__))
@@ -17,6 +24,7 @@ import descfit, npcfit
 
 ROOT = os.path.join(os.path.dirname(__file__), '..')
 WIDTH, LINES, LIMIT = 288, 3, 14 * 2048
+POOL = 144
 CODE = re.compile(r'\{ff[0-9a-f]{2}\}')
 
 
@@ -27,6 +35,22 @@ def pages(text):
 def codes(text):
     text = re.sub(r'\{ancient_(\w)\}', lambda m: '{ff35}', text)
     return sorted(c for c in CODE.findall(text) if c != '{ff35}'), text.count('{ff35}')
+
+
+def glyphs(line):
+    """Sprites a line takes: glyph codes, with names at their widest."""
+    line = npcfit.measurable(line)
+    return len([c for c in descfit.encode(line) if c >= 0])
+
+
+def pool_problems(text):
+    out = []
+    for k, pg in enumerate(text.split('\r')):
+        counts = [glyphs(l) for l in pg.replace('{ff26}', '').split('\n')]
+        worst = max(sum(counts[j:j + 3]) for j in range(len(counts)))
+        if worst > POOL:
+            out.append(f'page {k + 1}: 3 lines in view hold {worst} glyphs; the box draws {POOL}')
+    return out
 
 
 def main():
@@ -58,6 +82,7 @@ def main():
                 for w, line in zip(descfit.line_widths(npcfit.measurable(pg)), pg.split('\n')):
                     if w > WIDTH:
                         problems.append(f'{w}px: {line!r}')
+            problems += pool_problems(text)
             enc = descfit.encode(text.replace('\r', '{ff20}'))
             for a, b in zip(enc, enc[1:]):
                 if b == descfit.CHARS['"'] and a in npcfit._KANA:
