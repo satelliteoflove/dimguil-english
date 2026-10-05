@@ -59,7 +59,11 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   both say adventurers "drop their guard."
 - **Accuracy fixes found along the way.** The Vorpal Bunny goes for the neck (首筋), not
   the throat, which also suits its beheading. The Fire Rock's weakness is ice (氷系), not
-  cold. The Ogre's stamina (体力) and the Beast's looks (姿) had been dropped.
+  cold. The Ogre's stamina (体力) and the Beast's looks (姿) had been dropped. The Black
+  Belt marks "advanced skill" (上級者), not "mastery": in Japan a black belt is a
+  competent student, and the Japanese doesn't repeat the Western idea that it means a
+  master. Excalibur's two hands are a shrug at a drawback (仕方のないことだろう), not "only
+  fair."
 - **Alstron, not "Alston".** The dialogue spells the priest アルストロン 59 times; only
   his battle record says アルストン, which earlier work rendered "Alston". Guy's party is
   named for plants (Gaillardia, Linaria, Lychee), and Alstron comes from Alstroemeria
