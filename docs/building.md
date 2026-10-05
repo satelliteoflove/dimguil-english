@@ -66,7 +66,7 @@ The tools:
 
 - Fit checks, which need no emulator: `descfit.py` (item and catalog descriptions),
   `itemfit.py` (item descriptions against the lines their picture leaves),
-  `spellfit.py` (spell descriptions), `npcfit.py` (NPC dialogue), `evfit.py` (the event script), `fightfit.py` (battle
+  `spellfit.py` (spell descriptions), `textbuf.py` (string length against the text buffer, on the built files), `npcfit.py` (NPC dialogue), `evfit.py` (the event script), `fightfit.py` (battle
   messages).
 - Rendering text in the real boxes: `npcshow.py` and `evshow.py` print NPC or event
   strings in the dungeon text box from `maze_door.state`; `battleshow.py` prints battle

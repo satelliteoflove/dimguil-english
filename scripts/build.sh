@@ -50,6 +50,10 @@ echo "$enc" | grep -E "exceeded|ERROR" || true
 # An encoder ERROR means a whole file was left untranslated; never let that through.
 if echo "$enc" | grep -q "ERROR"; then echo "build: encoder error, stopping" >&2; exit 1; fi
 
+echo "== text buffer"
+python3 scripts/textbuf.py | grep -E "^!!|over" || true
+python3 scripts/textbuf.py > /dev/null || { echo "build: a string is too long for the text buffer" >&2; exit 1; }
+
 echo "== item pictures"
 # Tall catalog pictures cut to 143 rows; asm/catalog_tall_text.asm moves the text up.
 python3 scripts/itempics.py rips/dirty/dimguil/DATA07/ITEM.DAT

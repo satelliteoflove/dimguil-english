@@ -78,3 +78,10 @@ another of the same length might get truncated
 
 > Since then: these haven't been rechecked one by one. The shop is still called Boltac's
 > Trading Post, and SISETU still uses the `Tome{of}Rebirth` workaround.
+>
+> Rechecked 2026-10-04 (checklist Q5). Spell descriptions: the bar shows the first 30
+> glyph codes; all fit (`spellfit.py`). Narrator lines: not random. Strings are expanded
+> whole into a buffer whose live neighbour starts 576 bytes in, so long strings lose
+> text from there on; ours are all under 450 bytes (`textbuf.py`, `engine-notes.md`).
+> 転生の書 is now "Book of Movement" and its Edge of Town label shows whole after
+> viewing spells. Boltac's tooltips: not yet rechecked.

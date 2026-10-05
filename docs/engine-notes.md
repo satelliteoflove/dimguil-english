@@ -48,6 +48,17 @@ more of the detail behind each item.
   lookahead at each space (and each digraph ending in one), so words move whole.
   `fightfit.py` simulates it over every combination of name lengths.
 
+## Text buffer
+
+- Dialogue, event and castle strings are expanded whole (every page) by 0x8001dfc0 into
+  a buffer at 0x8008b400 before printing. Nothing bounds it, and 16 bytes of live data
+  sit at 0x8008b640, so a string that expands past byte 576 has that stretch overwritten:
+  measured with filler strings, 557 bytes print whole, and at 625 bytes page 9 shows a
+  run of zeros and loses the rest of the line. This is the "random cutoff" in long
+  narrator lines in Remisse's notes. Our longest are SISETU 326 (445 bytes), EVENTMES 234
+  (424) and NPC_MES4 151 (378). `textbuf.py` holds every string to 544 bytes, leaving
+  room for inserted names, and the build stops if one is over.
+
 ## Spell bar
 
 - Inspect Character > Cast Spell shows the highlighted spell's description (STATUS.OBJ
