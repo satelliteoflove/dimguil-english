@@ -89,7 +89,7 @@
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "Wolfish man\n\"You there... Who might you be?",
+                    "translation": "Wolfish man\n\"You there... Who are you?",
                     "addStringTerminator": true
                 },
                 {
@@ -629,7 +629,7 @@
                 {
                     "length": 45,
                     "source": "NA",
-                    "translation": "Alba\n\"With a bow, I have no equal.\n I am Alba. Well met.",
+                    "translation": "Alba\n\"Put a bow in my hands, and none can\n match me. I am Alba. Well met.",
                     "addStringTerminator": true
                 },
                 {
@@ -1091,7 +1091,7 @@
                 {
                     "length": 84,
                     "source": "NA",
-                    "translation": "Alba\n\"I met a party led by a young samurai...\n\r I wonder whether members so young\n can truly manage on their own......",
+                    "translation": "Alba\n\"I met a party led by a young samurai...\n\r They are all so young...\n Will they be all right, I wonder......",
                     "addStringTerminator": true
                 },
                 {
@@ -1235,7 +1235,7 @@
                 {
                     "length": 66,
                     "source": "NA",
-                    "translation": "Alba\n\"Come to think of it, I didn't give\n my class when I introduced myself.\n\r At present, I am a Ranger.",
+                    "translation": "Alba\n\"Come to think of it, I never told you\n my class when I introduced myself.\n\r For now, I am a Ranger.",
                     "addStringTerminator": true
                 },
                 {
@@ -1307,7 +1307,7 @@
                 {
                     "length": 56,
                     "source": "NA",
-                    "translation": "Alba\n\"......\n\r In a dungeon, the smallest lapse\n can cost you your life.",
+                    "translation": "Alba\n\"......\n\r In a dungeon, one careless moment\n can cost you your life.",
                     "addStringTerminator": true
                 },
                 {
@@ -1373,13 +1373,13 @@
                 {
                     "length": 48,
                     "source": "NA",
-                    "translation": "Alba\n\"Truth be told, I'm better with a katana\n or a sword than I am with a bow.",
+                    "translation": "Alba\n\"Truth is, I'm better with a katana\n or a sword than with a bow.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 89,
                     "source": "NA",
-                    "translation": "Rosea\n\"A long time ago, Balbo and Alba\n saved me...\n\r Ever since, I've traveled\n with them.",
+                    "translation": "Rosea\n\"A long time ago, Balbo and Alba\n saved me...\n\r I've traveled with them\n ever since.",
                     "addStringTerminator": true
                 },
                 {
@@ -1397,7 +1397,7 @@
                 {
                     "length": 113,
                     "source": "NA",
-                    "translation": "Balbo\n\"Talked to Alba?\n\r Way I hear it, he lost his comrades\n in some dungeon a long time back.\n\r I keep tellin' him not to dwell on it,\n but the guy's just too damn gloomy.",
+                    "translation": "Balbo\n\"Talked to Alba?\n\r Way I hear it, he lost his companions in some dungeon a\n long time back.\n\r I keep tellin' him not to take it so hard, but the guy's\n too damn gloomy for his own good.",
                     "addStringTerminator": true
                 },
                 {
@@ -1409,7 +1409,7 @@
                 {
                     "length": 88,
                     "source": "NA",
-                    "translation": "Rosea\n\"Have you ever talked with Alba?\n\r It seems something happened in his past...\n I wish I could ease his suffering...",
+                    "translation": "Rosea\n\"Have you ever talked with Alba?\n\r It seems something happened in his past...\n I want to take that pain away from him...",
                     "addStringTerminator": true
                 },
                 {

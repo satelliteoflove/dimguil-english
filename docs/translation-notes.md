@@ -90,6 +90,17 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 - **Names stay the developer's English for now.** "BENT STAFF," not "Twisted Staff," and
   so on, pending the naming question below.
 
+- **Relationships, not just voices (NPC scene 2, Alba's past, 2026-10-05).** Each
+  character's stock type and speech habits aren't enough on their own; how characters
+  stand toward each other changes the lines too. Rosea calls Alba あの人 (also how a woman
+  speaks of a man she's close to) right after saying he rescued her, so "I wish I could
+  ease his suffering" became "I want to take that pain away from him." Alba's worry
+  for Fontana's young party comes from a man who lost his own, so it's fear for their
+  safety ("Will they be all right, I wonder"), not doubt about their skill.
+- **"Companions," not "comrades" (2:231).** Chris: "comrade" carries a connotation for
+  American players that doesn't fit. Balbo's 仲間 is now "companions"; the other uses
+  are listed under To revisit.
+
 ## To revisit
 
 - **The developer's English names.** Item and monster names follow the game's built-in
@@ -125,6 +136,11 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   look (`event-review.md`).
 - **Event 288,** the switch line: probably the Training Maze switch, where "set into the
   wall" is right. Confirm in play.
+- **Other uses of "comrade"** (see 2:231 above): the talk-menu line "We asked them to
+  rescue our comrades." (仲間, in all five NPC files: 1:301, 2:269, 3:281, 4:165, 5:116),
+  Zaril's "Hey there, comrade." (同輩, "fellow" or "peer"; 3:38, 5:25, tied to the open
+  question of what triggers it), SISETU 367 (a townsman's "my old comrades are all
+  dead", 昔の仲間) and item 1:290, the Book of Life ("revive a comrade").
 - **NPC open questions:** Balbo's register, "Kiku" or "Kiki", Lilia's ガイルディア, what
   triggers 同輩, Bergamot's ジジイ and others (`npc-review.md`, "Open questions for
   Chris").

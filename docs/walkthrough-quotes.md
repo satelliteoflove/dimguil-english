@@ -211,7 +211,7 @@ with the chapter and the string's new wording, to carry over to the site.
 | Balbo | NPC_MES2 144 | That lot had some mighty fine gear on 'em. |
 | Balbo | NPC_MES2 226 | Not that there's anyplace to swim down here. |
 | Reiran | NPC_MES2 235 | Lately I'm, like, totally hooked on setting off teleporter traps on purpose. |
-| Balbo | NPC_MES2 231 | but the guy's just too damn gloomy. |
+| Balbo | NPC_MES2 231 | but the guy's too damn gloomy for his own good. |
 | Rosea | NPC_MES2 54 | It was once a safe way to get home, but now every item you carry vanishes. |
 | Balbo | NPC_MES2 179 | Must be nice, bein' born with a silver spoon. |
 | Reiran | NPC_MES2 184 | kinda sketchy... In, like, more ways than one. |

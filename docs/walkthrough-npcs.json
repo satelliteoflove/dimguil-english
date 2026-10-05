@@ -1780,16 +1780,16 @@
           ],
           "strings": "NPC_MES2 227, 231-233",
           "placement": "Anytime: personal questions about Alba.",
-          "blurb": "Alba lost his comrades in some other dungeon long ago and hasn't gotten over it. Balbo's sympathy runs about as deep as you'd expect: \"but the guy's just too damn gloomy.\" Rosea, who owes Alba and Balbo her life, wishes she could ease his pain.",
+          "blurb": "Alba lost his companions in some other dungeon long ago and hasn't gotten over it. Balbo's sympathy runs about as deep as you'd expect: \"but the guy's too damn gloomy for his own good.\" Rosea, who owes Alba and Balbo her life, wants to take that pain away from him.",
           "quotes": [
             {
               "file": "NPC_MES2",
               "idx": 231,
               "speaker": "Balbo",
-              "text": "but the guy's just too damn gloomy."
+              "text": "but the guy's too damn gloomy for his own good."
             }
           ],
-          "flags": "Rosea's line (233) is review scene 2, with a new wording proposed but not approved, so it's paraphrased rather than quoted. Rosea being saved by Balbo and Alba is 228.",
+          "flags": "Rosea's line (233) was settled in review scene 2 (2026-10-05) and is paraphrased here. Rosea being saved by Balbo and Alba is 228.",
           "source": "NPC_MES2"
         },
         {

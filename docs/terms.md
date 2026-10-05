@@ -78,3 +78,4 @@ or a literal one in the Japanese order.
 | 魔人 | demon | A humanlike being of uncanny power, not a devil. Only EV 111 (the Crystal Man, "the shining demon") and one Catalog entry use it; "demon" is the usual English and nothing competes for it there. |
 | 魔族 | demons | The demon kind as a group: item 1:263 (Demon Bell), 1:274 (Amulet of Matokani), Agan in NPC_MES5. Not "fiends". |
 | 獣 / 猛獣 | beast / wild beast | |
+| 仲間 | companions | Party members and fellow adventurers. Not "comrades", which reads as political to American players (Chris, NPC scene 2). Other uses are in `translation-notes.md`, To revisit. |

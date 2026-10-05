@@ -66,22 +66,24 @@ and age lines and her shady-man line were also applied to NPC_MES3, and Guy's pa
 turned out to be a Dragon Quest III party (see "Guy's party and Dragon Quest III" in
 `npc-translation.md`).
 
-Balbo's party (NPC_MES2): scene 1 (Balbo accidentally turns Good) is done.
+Balbo's party (NPC_MES2): scene 1 (Balbo accidentally turns Good) is done. Scene 2
+(Alba's past) was reviewed in the browser tool and applied on 2026-10-05: nine lines
+changed, with Chris's edit of Balbo's 231 ("companions", not "comrades"). Chris's note
+on it: the characters' relationships to each other shape their lines as much as their
+own voices do.
 
 ## Next up
 
-**NPC_MES2, scene 2: Alba's past (233, 180).** Proposed to Chris, not yet approved:
-Rosea's あの人の苦しみを救ってあげたい as "I want to take that pain away from him..."
-(the quiet hint she cares for him), and Alba's worry about Fontana's young party as
-"With nobody but youngsters in it... will they be all right, I wonder......". Reiran's
-"sword master" line (230) stays ambiguous, as in the Japanese.
+**NPC_MES2, scene 3: Balbo's progress reports (81-89, 142, 261-265).** Needs Chris's
+call on open question 1 (the stiff, haughty register these lines have in the Japanese,
+unlike Balbo anywhere else). Prepare it as a scene for the review tool.
 
 ## Remaining scenes
 
 Priority as the reviewers ranked it. Numbers are string indices.
 
 NPC_MES2 (Balbo, Rosea, Artemisia, Reiran, Alba, Gaura)
-- [ ] 2. Alba's past (233, 180), HIGH, proposed (above)
+- [x] 2. Alba's past (233, 180 and the thread around them), HIGH, done 2026-10-05
 - [ ] 3. Balbo's progress reports (81-89, 142, 261-265), HIGH: the Japanese is stiff
       and haughty here, unlike Balbo anywhere else. Needs a decision (open question 1).
 - [ ] 4. Goodbyes when a party member is dead or lost (34-46), MEDIUM: sincerity, and
