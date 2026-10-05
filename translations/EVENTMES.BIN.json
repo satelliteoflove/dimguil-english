@@ -1,6 +1,6 @@
 {
     "file": "DATA06/EVENTMES.BIN",
-    "extendByBytes": null,
+    "extendByBytes": 1049,
     "sections": [
         {
             "firstHeaderAddress": 0,

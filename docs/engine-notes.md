@@ -22,6 +22,11 @@ more of the detail behind each item.
 - NPC_MES files load when a party is met, after the portrait TIM has gone to VRAM through
   the same buffer. The portrait uploader (0x8001d93c) is called again mid-conversation
   with 0x801a0400, finds no TIM magic there and does nothing, in the original too.
+- EVENTMES.BIN (table 2 index 26) is 27,623 bytes in 14 sectors, so it can grow 1,049
+  bytes in place (`extendByBytes` 1049) without moving. The event review pushed it 326
+  over on 2026-10-03, and until 2026-10-04 the encoder silently dropped every event
+  translation (build.sh only printed the ERROR). build.sh now stops on an encoder
+  ERROR. Checked: the game's loader reads the whole grown file, tail included.
 - String offsets in the text files are 16-bit, so no text file can pass 64 KB.
 - Save states hold loaded files. After a build that changes text, or moves a file, old
   states show stale text or read the wrong sectors; regenerate them (`mkstates.py`).

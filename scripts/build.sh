@@ -45,7 +45,10 @@ python3 scripts/tim.py import rips/clean/dimguil/DATA00/SYSCG.BIN 0x400 graphics
   rips/dirty/dimguil/DATA00/SYSCG.BIN
 
 echo "== encode"
-(cd rips/stage && java -jar "$ROOT/$JAR" encode-all 2>&1 | grep -E "exceeded|ERROR" || true)
+enc=$(cd rips/stage && java -jar "$ROOT/$JAR" encode-all 2>&1)
+echo "$enc" | grep -E "exceeded|ERROR" || true
+# An encoder ERROR means a whole file was left untranslated; never let that through.
+if echo "$enc" | grep -q "ERROR"; then echo "build: encoder error, stopping" >&2; exit 1; fi
 
 echo "== item pictures"
 # Tall catalog pictures cut to 143 rows; asm/catalog_tall_text.asm moves the text up.
