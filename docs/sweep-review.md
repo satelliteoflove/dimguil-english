@@ -173,6 +173,8 @@ up. Take them after the 37, or fold them in where they share a string.
   meaning "alone". The Japanese name is ロストワン, Lost One. This is a naming
   question for Chris.
 - **M 10:24.** 邪教徒 is "heretics" here but "cultists" in 14 other entries.
+  Done 2026-10-04 (Demon Baby, an inference): "cultists", and "still-clumsy breath" became
+  "Its breath still comes out in fits and starts".
 - **M 8:7.** 豹 (leopard or panther) became "jaguar". The English name is Were Jaguar,
   so this is probably fine; just confirm.
 - **M 9:16.** "an ordinary human" became "an ordinary woman". It's fine if that entry is

@@ -29,6 +29,9 @@ first.
      Sage/Bishop class-change reference; other inside jokes kept. From the catalog
      sweep: the Fire Rock's 「焼け石に水」, a proverb for futility, kept word for word as
      'water on a hot stone' because the monster literally is one.
+     The Demon Baby's "wobbly" breath (おぼつかない, a toddler's first steps) was checked
+     against how Japanese parenting sites describe newborn breathing before settling on
+     "fits and starts".
    - Care with the game's own limits: the item catalog shows only 4 lines of text
      under the tall pictures (robes, cloaks, full armor, polearms, long staves) and 7
      under the rest, with no scrolling. The Japanese always fit; 25 English descriptions

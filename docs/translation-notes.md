@@ -64,6 +64,13 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   competent student, and the Japanese doesn't repeat the Western idea that it means a
   master. Excalibur's two hands are a shrug at a drawback (仕方のないことだろう), not "only
   fair."
+- **The Demon Baby's breath (catalog 10:24).** まだどこかおぼつかないブレス had been "still-clumsy
+  breath". おぼつかない is the word for a toddler's wobbly first steps, and ブレス is the
+  games' loanword for a breath weapon, not 息 or 呼吸. Japanese parenting sites and forums
+  describe a newborn's real breathing as irregular, fast then slow, with pauses, and never
+  use おぼつかない for it. So the line is about a newborn's breath attack that hasn't
+  steadied yet: "Its breath still comes out in fits and starts." Same entry: 邪教徒 is
+  "cultists", as in the other 14 entries, not "heretics".
 - **Alstron, not "Alston".** The dialogue spells the priest アルストロン 59 times; only
   his battle record says アルストン, which earlier work rendered "Alston". Guy's party is
   named for plants (Gaillardia, Linaria, Lychee), and Alstron comes from Alstroemeria
@@ -110,6 +117,5 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 - **NPC open questions:** Balbo's register, "Kiku" or "Kiki", Lilia's ガイルディア, what
   triggers 同輩, Bergamot's ジジイ and others (`npc-review.md`, "Open questions for
   Chris").
-- **Noted in passing in the catalog:** 邪教徒 is "heretics" once (10:24) and "cultists"
-  everywhere else; 豹 became "jaguar" for the Were Jaguar (probably fine); "an ordinary
+- **Noted in passing in the catalog:** 豹 became "jaguar" for the Were Jaguar (probably fine); "an ordinary
   woman" at 9:16.
