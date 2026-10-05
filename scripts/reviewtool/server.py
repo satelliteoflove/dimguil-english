@@ -111,25 +111,89 @@ def fit(ref, text):
             'source_lines': [p.count('\n') + 1 for p in npcfit.pages(SOURCES[n][i])]}
 
 
-def rewrap(text):
-    """Refill each page's lines greedily to the box width, keeping pages, the speaker's
-    name, the opening quote and the one-space indent of following lines."""
+WEAK_END = {'a', 'an', 'the', 'to', 'of', 'in', 'on', 'at', 'by', 'for', 'with', 'and', 'but', 'or',
+            'nor', 'so', 'if', 'as', 'from', 'into', 'that', 'my', 'your', 'his', 'her', 'its', 'our',
+            'their', 'this', 'these', 'those', 'i', "i'm", "i'll", "i'd", 'we', 'you', 'he', 'she', 'they'}
+
+
+def line_px(s):
+    return descfit.line_widths(npcfit.measurable(s))[0]
+
+
+def balanced(words, first, lines):
+    """Break words into exactly `lines` lines that fit the box: at sentence ends where
+    possible (the Japanese and our hand-broken lines run a sentence or clause per line),
+    then after commas, otherwise as even as possible, and never leaving an article or
+    preposition at a line's end. Dynamic programming over break points; `first` is
+    the first line's prefix ('"' or ' '). None if the words can't fill that many lines
+    or don't fit in them."""
+    n = len(words)
+    if n < lines:
+        return None
+    total = line_px(first + ' '.join(words))
+    target = total / lines
+    best = {(0, 0): (0.0, None)}
+    for k in range(lines):
+        for i in range(n):
+            if (i, k) not in best:
+                continue
+            for j in range(i + 1, n - (lines - k - 1) + 1):
+                w = line_px((first if k == 0 else ' ') + ' '.join(words[i:j]))
+                if w > npcfit.WIDTH:
+                    break
+                cost = best[(i, k)][0] + ((w - target) / 8) ** 2
+                if j < n:
+                    last = words[j - 1]
+                    if last.lower().strip('"\'') in WEAK_END:
+                        cost += 500
+                    if last.endswith(('.', '!', '?', '.\'', '!\'', '?\'')):
+                        cost -= 600   # a sentence per line, as the Japanese breaks them
+                    elif last.endswith((',', ';', ':')):
+                        cost -= 60
+                if (j, k + 1) not in best or cost < best[(j, k + 1)][0]:
+                    best[(j, k + 1)] = (cost, i)
+    if (n, lines) not in best:
+        return None
+    out, j, k = [], n, lines
+    while k:
+        i = best[(j, k)][1]
+        out.append(' '.join(words[i:j])); j, k = i, k - 1
+    return out[::-1]
+
+
+def rewrap(text, ref=None):
+    """Refill each page with even, phrase-aware line breaks, keeping pages, the speaker's
+    name, the opening quote and the one-space indent of following lines. A page keeps
+    its line count if the words fit; otherwise it gets the next count that does."""
     m = re.match(r'([^\n"]*)\n"', text)
     head, body = (m.group(0)[:-1], text[m.end() - 1:]) if m else ('', text)
     out = []
     for k, pg in enumerate(body.split('\n\r')):
-        words = ' '.join(l.strip() for l in pg.split('\n')).lstrip('"').split()
-        first = '"' if (m and k == 0) else ' '
-        lines, cur = [], []
-        for w in words:
-            prefix = first if not lines else ' '
-            cand = prefix + ' '.join(cur + [w])
-            if cur and descfit.line_widths(npcfit.measurable(cand))[0] > npcfit.WIDTH:
-                lines.append(prefix + ' '.join(cur)); cur = [w]
+        # Lines set apart on purpose (an indented spell name, a colored line) stay as
+        # they are; the ordinary lines between them are refilled.
+        result, run = [], []
+
+        def flush():
+            if not run:
+                return
+            first = '"' if (m and k == 0 and not result) else ' '
+            words = ' '.join(l.strip() for l in run).lstrip('"').split()
+            have, lines = len(run), None
+            for count in [have] + list(range(have + 1, have + 6)) + list(range(have - 1, 0, -1)):
+                lines = balanced(words, first, count)
+                if lines:
+                    break
+            lines = lines or [' '.join(words)]
+            result.extend((first if j == 0 else ' ') + l for j, l in enumerate(lines))
+            run.clear()
+
+        for line in pg.split('\n'):
+            if re.match(r'\s{2,}|\s*\{ff30\}', line.lstrip('"')) and line.strip():
+                flush(); result.append(line)
             else:
-                cur.append(w)
-        lines.append((first if not lines else ' ') + ' '.join(cur))
-        out.append('\n'.join(lines))
+                run.append(line)
+        flush()
+        out.append('\n'.join(result))
     return head + '\n\r'.join(out)
 
 
