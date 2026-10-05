@@ -26,7 +26,7 @@
 }
 
 * { box-sizing: border-box; }
-html { font-size: 16.5px; }
+html { font-size: 20.6px; }
 body {
   margin: 0; background: var(--paper); color: var(--ink);
   font-family: var(--serif); font-size: var(--step-0); line-height: 1.55;
@@ -43,7 +43,7 @@ h1, h2, h3 { font-weight: 700; line-height: 1.2; margin: 0; }
 
 .desk {
   display: grid; height: 100vh;
-  grid-template-columns: 15.5rem minmax(30rem, 1fr) minmax(24rem, 31rem);
+  grid-template-columns: 11.5rem minmax(26rem, 1fr) minmax(20rem, 25rem);
 }
 .scenes, .stage, .inspector { overflow-y: auto; min-height: 0; }
 
@@ -85,7 +85,7 @@ h1, h2, h3 { font-weight: 700; line-height: 1.2; margin: 0; }
 
 .readings { display: flex; flex-wrap: wrap; gap: 0; border-bottom: 1px solid var(--rule); margin-bottom: 1.2rem; position: sticky; top: -2.2rem; background: var(--sheet); z-index: 2; padding-top: 0.6rem; }
 .readings button {
-  border: 0; background: none; padding: 0.5rem 0.9rem 0.55rem; cursor: pointer; color: var(--ink-soft);
+  border: 0; background: none; padding: 0.5rem 0.55rem 0.55rem; cursor: pointer; color: var(--ink-soft);
   border-bottom: 3px solid transparent; margin-bottom: -1px;
 }
 .readings button:hover { color: var(--ink); }
@@ -95,7 +95,7 @@ h1, h2, h3 { font-weight: 700; line-height: 1.2; margin: 0; }
 /* The script ---------------------------------------------------------------------- */
 .script { list-style: none; margin: 0; padding: 0; }
 .line {
-  display: grid; grid-template-columns: 9.5rem 1fr; gap: 0 1.2rem;
+  display: grid; grid-template-columns: 7.2rem 1fr; gap: 0 1rem;
   padding: 0.55rem 0.8rem 0.6rem 0; cursor: pointer; border-radius: 2px;
   border-left: 3px solid transparent; padding-left: 0.6rem;
 }
@@ -247,15 +247,15 @@ dialog h2 { font-size: var(--step-2); margin-bottom: 0.6rem; }
 
 .shape { flex: none; }
 
-@media (max-width: 1100px) {
-  .desk { grid-template-columns: 13rem 1fr; }
+@media (max-width: 1300px) {
+  .desk { grid-template-columns: 11rem 1fr; }
   .inspector { grid-column: 1 / -1; border-left: 0; border-top: 1px solid var(--rule); }
   .desk { height: auto; }
 }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
 
 .tip {
-  position: fixed; z-index: 10; max-width: 330px; background: var(--ink); color: var(--sheet);
+  position: fixed; z-index: 10; max-width: 20rem; background: var(--ink); color: var(--sheet);
   font-size: var(--step--1); line-height: 1.4; padding: 0.35rem 0.6rem; border-radius: 4px; pointer-events: none;
   box-shadow: 0 6px 20px rgba(15, 19, 27, 0.25);
 }
