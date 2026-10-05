@@ -67,6 +67,10 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 - **Elizabeth (catalog 9:16) is Elizabeth Báthory,** the "Blood Countess" said to have
   kept her youth with young women's blood. 普通の人間 stays "an ordinary woman": she's a
   woman, and "human... her" would read oddly. Checked and kept.
+- **The Were Jaguar (catalog 8:7) stays a jaguar.** 豹 is strictly leopard or panther,
+  but the Japanese name is ワージャガー, and dictionaries gloss ジャガー as アメリカ豹, so
+  豹 is just the kanji to hand. Jaguars also suit the game's Maya borrowings (Camazotz,
+  Gucumatz, Mictlan, Ixtah). Checked and kept.
 - **The Demon Baby's breath (catalog 10:24).** まだどこかおぼつかないブレス had been "still-clumsy
   breath". おぼつかない is the word for a toddler's wobbly first steps, and ブレス is the
   games' loanword for a breath weapon, not 息 or 呼吸. Japanese parenting sites and forums
@@ -120,4 +124,3 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 - **NPC open questions:** Balbo's register, "Kiku" or "Kiki", Lilia's ガイルディア, what
   triggers 同輩, Bergamot's ジジイ and others (`npc-review.md`, "Open questions for
   Chris").
-- **Noted in passing in the catalog:** 豹 became "jaguar" for the Were Jaguar (probably fine).

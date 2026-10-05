@@ -177,6 +177,7 @@ up. Take them after the 37, or fold them in where they share a string.
   "Its breath still comes out in fits and starts".
 - **M 8:7.** 豹 (leopard or panther) became "jaguar". The English name is Were Jaguar,
   so this is probably fine; just confirm.
+  Decided 2026-10-04: kept. The Japanese name is ワージャガー; 豹 covers ジャガー (アメリカ豹).
 - **M 9:16.** "an ordinary human" became "an ordinary woman". It's fine if that entry is
   the female Vampire.
   Decided 2026-10-04: kept. The entry is Elizabeth (an inference from the catalog order),
