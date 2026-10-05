@@ -489,7 +489,7 @@ function renderCopies() {
   if (!ln.copies.length) { box.innerHTML = ''; return; }
   const d = S.decisions[ln.ref];
   const on = !d || d.copies !== false;
-  box.innerHTML = `<label class="copies"><input type="checkbox" id="copies-on" ${on ? 'checked' : ''}> Also change ${ln.copies.map(esc).join(', ')}, which ${ln.copies.length === 1 ? 'has' : 'have'} the same Japanese.</label>`;
+  box.innerHTML = `<label class="copies"><input type="checkbox" id="copies-on" ${on ? 'checked' : ''}> Also change ${ln.copies.map(esc).join(', ')}, which ${ln.copies.length === 1 ? 'has' : 'have'} the same Japanese (each keeps its own speaker name).</label>`;
   $('#copies-on').addEventListener('change', e => {
     S.decisions[ln.ref] = { ...(S.decisions[ln.ref] || { choice: null }), copies: e.target.checked };
     saveDraft();

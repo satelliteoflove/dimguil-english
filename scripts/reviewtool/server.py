@@ -66,11 +66,44 @@ def load_src(n):
     return [s['source'] for s in d['sections'][0]['strings']]
 
 
+def body(text):
+    """The text after the speaker line, so 'Man in armor' and 'Balbo' versions match."""
+    k = text.find('\n「')
+    return text[k:] if k > 0 else text
+
+
 SOURCES = {n: load_src(n) for n in NPC_FILES}
-COPIES = {}  # Japanese source -> every ref that has it
+COPIES = {}  # Japanese body -> every ref that has it, whoever the speaker
 for _n in NPC_FILES:
     for _i, _s in enumerate(SOURCES[_n]):
-        COPIES.setdefault(_s, []).append(f'{_n}:{_i}')
+        COPIES.setdefault(body(_s), []).append(f'{_n}:{_i}')
+
+
+def person(ref):
+    """Who speaks ref, from its English speaker tag and cast.json, or None."""
+    if not hasattr(person, 'tags'):
+        cast = read_json(os.path.join(HERE, 'cast.json'), {'people': []})
+        person.tags = {t: p['id'] for p in cast['people'] for t in p.get('tags', [])}
+    return person.tags.get(current(ref).split('\n', 1)[0])
+
+
+def copies_of(ref):
+    """Refs with the same Japanese, or the same lines from the same person under another tag."""
+    n, i = parse_ref(ref)
+    out = []
+    for r in COPIES[body(SOURCES[n][i])]:
+        m, j = parse_ref(r)
+        if r != ref and (SOURCES[m][j] == SOURCES[n][i] or (person(r) and person(r) == person(ref))):
+            out.append(r)
+    return out
+
+
+def as_copy(text, ref):
+    """text with ref's own speaker line, for a copy whose speaker differs."""
+    cur = current(ref)
+    if '\n' not in text or '\n' not in cur or not cur.split('\n', 1)[1].startswith('"'):
+        return text
+    return cur.split('\n', 1)[0] + '\n' + text.split('\n', 1)[1]
 
 
 def parse_ref(ref):
@@ -381,7 +414,7 @@ def scene(sid):
         n, i = parse_ref(line['ref'])
         line['jp'] = SOURCES[n][i]
         line['current'] = current(line['ref'])
-        line['copies'] = [r for r in COPIES[SOURCES[n][i]] if r != line['ref']]
+        line['copies'] = copies_of(line['ref'])
     s['decision'] = read_json(os.path.join(DECISIONS, f'{sid}.json'))
     qs = read_json(QUESTIONS, [])
     s['questions'] = [q for q in qs if q.get('scene') == sid]
@@ -395,15 +428,16 @@ def apply(body):
     with LOCK:
         changes, record = {}, []
         for ln in lines:
-            refs = [ln['ref']] + [r for r in ln.get('copies', []) if r in COPIES.get(SOURCES[parse_ref(ln['ref'])[0]][parse_ref(ln['ref'])[1]], [])]
+            refs = [ln['ref']] + [r for r in ln.get('copies', []) if r in copies_of(ln['ref'])]
             before = current(ln['ref'])
             text = before if ln['choice'] == 'current' else ln['text']
-            f = fit(ln['ref'], text)
-            if not f['ok']:
-                raise ValueError(f"{ln['ref']} doesn't fit: {'; '.join(f['hard'])}")
             if text != before:
                 for r in refs:
-                    changes[r] = text
+                    changes[r] = as_copy(text, r) if r != ln['ref'] else text
+            for r in (refs if text != before else refs[:1]):
+                f = fit(r, changes.get(r, text))
+                if not f['ok']:
+                    raise ValueError(f"{r} doesn't fit: {'; '.join(f['hard'])}")
             record.append({'ref': ln['ref'], 'choice': ln['choice'], 'before': before, 'after': text,
                            'copies': refs[1:] if text != before else [], 'note': ln.get('note', '')})
         files = {}
