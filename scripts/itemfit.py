@@ -10,8 +10,9 @@ lower and 4 lines fit. asm/catalog_tall_text.asm cuts that to 30 px and itempics
 the tall pictures to 143 rows, so 5 lines fit. Width is 144 px for both.
 
 TALL lists the ITEM.DAT section 1 indices whose item uses a tall picture. Description k
-belongs to item k up to 24 and to item k+1 from 25 on (24 holds the Battle Axe and
-Nunchaku text together). Picture per item comes from the Bartok's Trading Post item
+belongs to item k up to 24 and to item k+1 from 25 on: entry 24 holds two strings, the
+Battle Axe's, then after the {ff40} terminator the Nunchaka's (item 25). Each string is
+checked on its own; both items have normal pictures. Picture per item comes from the Bartok's Trading Post item
 table (data/items/dim/ps.json, from Emonoya): files 253-307.gif are the 152x152 set.
 """
 import os, sys
@@ -26,10 +27,6 @@ TALL = {2, 6, 11, 23, 25, 50, 52, 62, 64, 76, 77, 81, 88, 94, 111, 116, 117, 122
 WIDTH = 144
 
 
-def lines_for(k):
-    return 5 if k in TALL else 7
-
-
 def main():
     path = sys.argv[1] if len(sys.argv) > 1 else os.path.join(
         os.path.dirname(__file__), '..', 'translations', 'ITEM.DAT.json')
@@ -39,12 +36,14 @@ def main():
         text = s['translation']
         if not text:
             continue
-        lw = line_widths(text)
-        cap = lines_for(k)
-        if len(lw) > cap or max(lw) > WIDTH:
-            bad += 1
-            print(f'!! 1:{k:<4} {len(lw)} lines (max {cap}{", tall picture" if k in TALL else ""}), '
-                  f'widest {max(lw)}px  {text.splitlines()[0]}')
+        for part, piece in enumerate(text.split('{ff40}')):
+            lw = line_widths(piece)
+            tall = k in TALL and part == 0
+            cap = 5 if tall else 7
+            if len(lw) > cap or max(lw) > WIDTH:
+                bad += 1
+                print(f'!! 1:{k:<4} {len(lw)} lines (max {cap}{", tall picture" if tall else ""}), '
+                      f'widest {max(lw)}px  {piece.splitlines()[0]}')
     print(f'{bad} descriptions over budget')
     sys.exit(1 if bad else 0)
 
