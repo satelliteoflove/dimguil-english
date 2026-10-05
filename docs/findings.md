@@ -84,4 +84,6 @@ another of the same length might get truncated
 > whole into a buffer whose live neighbour starts 576 bytes in, so long strings lose
 > text from there on; ours are all under 450 bytes (`textbuf.py`, `engine-notes.md`).
 > 転生の書 is now "Book of Movement" and its Edge of Town label shows whole after
-> viewing spells. Boltac's tooltips: not yet rechecked.
+> viewing spells. Boltac's captions: cut on the Trade screens (Uncurse, Compare and
+> others), because the shop name and caption share a 28-sprite pool; the pool is enlarged
+> in `asm/shop_caption_layer.asm` (see `engine-notes.md`, "Glyph sprite layers").

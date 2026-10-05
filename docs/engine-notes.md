@@ -59,6 +59,20 @@ more of the detail behind each item.
   (424) and NPC_MES4 151 (378). `textbuf.py` holds every string to 544 bytes, leaving
   room for inserted names, and the build stops if one is over.
 
+## Glyph sprite layers
+
+- Each glyph is drawn as a sprite from a pool ("layer"). A screen sets up four layers
+  when it opens (0x800db3d0 in JOUKA calls 0x8001f150 per layer; 720 sprites in all;
+  table at 0x8008b390: start, size). 0x8001f840 refuses a glyph once its layer is full,
+  so text simply stops: there's no error and no wrap.
+- Boltac's Trade screens put the shop name and the one-line caption in layer 1, sized 28.
+  "Boltac's Trading Post" takes 14, so captions showed only 14 glyph codes ("Choose an
+  item to un", "Which weapon i"); the Japanese name is 7. `asm/shop_caption_layer.asm`
+  makes it 58, taking 30 from layer 0 (270 -> 240; its peak over every Trade flow is
+  130). Measured peaks after the change: layer 1 at most 43.
+- Other screens size layer 1 differently (30, 40, 70, 100, 154). They haven't all been
+  checked for full layers.
+
 ## Spell bar
 
 - Inspect Character > Cast Spell shows the highlighted spell's description (STATUS.OBJ
