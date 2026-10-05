@@ -48,6 +48,16 @@ more of the detail behind each item.
   lookahead at each space (and each digraph ending in one), so words move whole.
   `fightfit.py` simulates it over every combination of name lengths.
 
+## Spell bar
+
+- Inspect Character > Cast Spell shows the highlighted spell's description (STATUS.OBJ
+  420-503) in a one-line bar. It prints the first 30 glyph codes and drops the rest; the
+  cut is by codes (digraphs count once), not pixels. Remisse's "about 40 characters" is
+  this limit. Every current description fits (Wish is exactly 30); `spellfit.py` checks.
+- Writing a test string into RAM while a description is on screen and then moving the
+  cursor can show only the tail of the text. That's an artifact of editing RAM under a
+  drawn string; normal cursor movement, fast or slow, draws correctly.
+
 ## Item catalog
 
 - The catalog draws the item's picture, then the description below it, and clips the
