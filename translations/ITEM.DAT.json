@@ -2216,7 +2216,7 @@
                 {
                     "length": 98,
                     "source": "NA",
-                    "translation": "An amulet that casts the\nchoking spell Matokani.\nLesser fiends shatter to\npieces, leaving only ash\nbehind.",
+                    "translation": "An amulet that casts the\nchoking spell Matokani.\nCast it, and lesser demons\nshould shatter to pieces,\nleaving nothing behind but\nash.",
                     "compress": null,
                     "addStringTerminator": true
                 },

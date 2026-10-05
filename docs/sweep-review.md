@@ -178,7 +178,8 @@ up. Take them after the 37, or fold them in where they share a string.
 - **M 9:16.** "an ordinary human" became "an ordinary woman". It's fine if that entry is
   the female Vampire.
 - **I 1:274.** The last "fiends" (魔族) in the game text. The event review replaced the
-  others.
+  others. Done 2026-10-04: "lesser demons should shatter to pieces"; 魔族 = demons in
+  terms.md. Flagged for another look in translation-notes.
 - **I 1:150, 1:151.** "steel" where the Japanese is 鉄 (iron). Same fix for both.
 - **I 1:24.** The Japanese entry holds two descriptions back to back (the battle axe and
   the nunchaku), and the English adds a flail sentence. Check what the game shows.

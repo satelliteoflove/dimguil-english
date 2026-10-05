@@ -76,4 +76,5 @@ or a literal one in the Japanese order.
 | 魔物 / モンスター | monster | Both mean "monster". 魔物 is the native word the narration and the King use; モンスター is the loanword the adventurers and the combat screens use. "Fiend" only in the King's mouth (SISETU 322-329), where his stuffy register earns it; the Fortune Teller says "monster" like everyone else. |
 | 悪魔 | demon | A monster family in the Catalog, so "demon" is kept for it. |
 | 魔人 | demon | A humanlike being of uncanny power, not a devil. Only EV 111 (the Crystal Man, "the shining demon") and one Catalog entry use it; "demon" is the usual English and nothing competes for it there. |
+| 魔族 | demons | The demon kind as a group: item 1:263 (Demon Bell), 1:274 (Amulet of Matokani), Agan in NPC_MES5. Not "fiends". |
 | 獣 / 猛獣 | beast / wild beast | |

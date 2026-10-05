@@ -93,6 +93,10 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 - **Item 1:32, Demon's Staff.** Chris's wording leaves out focusing the mind, "the demons
   that plague adventurers" and the "probably".
 - **Item 1:189, B-Plate of Goodness.** Goes with the naming question.
+- **Item 1:274, Amulet of Matokani.** Approved close to the Japanese ("lesser demons
+  should shatter to pieces"), flagged for another look. 魔除け is a demon-warding charm,
+  so a demon ward that kills demons; the English "amulet" can't carry that. Matokani
+  looks like MAKANITO with its syllables rotated (an inference).
 - **Item 1:24.** The Japanese holds two descriptions back to back (Battle Axe and
   Nunchaku), and the English adds a flail sentence. It's also 8 lines, over the limit.
   Check what the game shows.
@@ -105,5 +109,5 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   Chris").
 - **Noted in passing in the catalog:** 邪教徒 is "heretics" once (10:24) and "cultists"
   everywhere else; 豹 became "jaguar" for the Were Jaguar (probably fine); "an ordinary
-  woman" at 9:16; the last "fiends" (魔族) at item 1:274; "steel" for 鉄 (iron) at items
+  woman" at 9:16; "steel" for 鉄 (iron) at items
   1:150 and 1:151.
