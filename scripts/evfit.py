@@ -6,15 +6,17 @@
 Like npcfit.py, for EVENTMES: pages break at {ff26} (wait for a button) and \\r, each
 page holds 3 lines (or as many as the Japanese page has), each line at most 288 px.
 Also flags a mid-line " (see npcfit.py), control codes that differ from the Japanese
-({ancient_x} counts as {ff35}X), and the file's encoded size against its original
-25,721 bytes. --overlay applies {"idx": "text"} on top of the file first.
+({ancient_x} counts as {ff35}X), and the file's encoded size (header included) against
+28,672 bytes: the original 27,623 plus the slack in its 14 sectors, which
+`extendByBytes` lets it use. (The old limit, 25,721, was the section length without the
+header, so the check always said OVER and the real overflow went unnoticed.) --overlay applies {"idx": "text"} on top of the file first.
 """
 import json, os, re, sys
 sys.path.insert(0, os.path.dirname(__file__))
 import descfit, npcfit
 
 ROOT = os.path.join(os.path.dirname(__file__), '..')
-WIDTH, LINES, LIMIT = 288, 3, 25721
+WIDTH, LINES, LIMIT = 288, 3, 14 * 2048
 CODE = re.compile(r'\{ff[0-9a-f]{2}\}')
 
 
