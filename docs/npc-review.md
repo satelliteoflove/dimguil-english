@@ -24,6 +24,40 @@ build machine: `NPC_MESn.md` (the reports), `pending.json` (proposed English sti
 review, in `npcfit.py --overlay` format), `approved.json` (what has been applied) and
 `merged.json` (all proposals after syncing shared lines).
 
+## How a scene is presented (from 2026-10-04)
+
+Chris reads the whole scene first, then judges it. Show it three times, complete, in the
+same order of lines: **Literal** (word for word, no help, stiff where the Japanese is
+stiff), **Current** (what the patch has now), **Faithful** (true to the original's
+intent, readable for English players). Notes come after all three, never inside them.
+Research the Japanese and its late-90s context before proposing (dictionaries, role
+language, references) and cite sources. A "scene" scattered across the talk menu is
+assembled in a sensible reading order, and says so.
+
+The review happens in the browser tool (`scripts/reviewtool/`, see `building.md`): the
+three readings plus the Japanese, a Compare view with the differences marked, word
+notes, dictionaries, the line drawn in the game's own font, and Apply, which writes the
+chosen lines after a fit check. Claude prepares each scene as
+`rips/review/scenes/<id>.json` (lines in reading order with their context, the literal
+and faithful readings, why each change, word notes with register, confidence and
+sources, and scene notes), commits each applied scene from
+`rips/review/decisions/<id>.json`, and answers questions asked in the tool by writing
+the answer into `rips/review/questions.json`.
+
+Each speaker gets a fixed marker, the same across every scene (the terminal can't color
+text). Shape is the home party, color is the person. Unnamed tags use the person's
+marker.
+
+| Group | Markers |
+|---|---|
+| Guy's party | 🔴 Guy, 🟠 Linaria, 🟡 Lychee, 🟢 Fritillaria, 🔵 Alstron, 🟣 Lilia |
+| Balbo's party | 🟧 Balbo, 🟦 Alba, 🟪 Rosea, 🟥 Reiran, 🟫 Gaura, 🟨 Artemisia |
+| Fontana's party | 💙 Fontana, 💚 Zaril, 💛 Cephala |
+| The scholars | 📘 Cleo, 📗 Cresson, 📙 Bergamot |
+| Others | 🌑 the shadow (Mysterious figure), 🌘 Mysterious man, 🌟 Agan, 🎮 Otaka, 👑 the King, 🔮 the Priestess, 🗿 the Guardians, 📋 message boards |
+
+Narration and the party's own thoughts get no marker.
+
 ## Done
 
 Guy's party (NPC_MES1) is finished: all 13 flagged scenes, plus the first-door scene.

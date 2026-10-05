@@ -1,0 +1,41 @@
+{
+  "about": "Role language (役割語, yakuwarigo): speech markers that make a Japanese reader picture a stock character type at once, whether or not real people talk that way. The term and the main types are Kinsui Satoshi's (ヴァーチャル日本語 役割語の謎, Iwanami 2003). Notes here describe how each marker reads in fiction of the 1990s; a scene's own notes say how it's used there. 'match' is checked against the tokenizer's surface form and dictionary form.",
+  "sources": [
+    {"label": "Kinsui Satoshi, Virtual Japanese: Enigmas of Role Language (Osaka University Press, 2017; open access English edition of the 2003 Iwanami book)", "url": "https://ir.library.osaka-u.ac.jp/repo/ouka/all/67215/?lang=1"},
+    {"label": "Japan Foundation review of Role Language Research (役割語研究の展開)", "url": "https://www.jpf.go.jp/j/project/japanese/teach/tsushin/bookshelf/201111.html"}
+  ],
+  "terms": [
+    {"match": ["拙者"], "type": "samurai speech", "note": "Humble 'I' of the period-drama samurai. Instantly reads as 'sword-carrying warrior of old'."},
+    {"match": ["おぬし", "お主"], "type": "samurai / elder speech", "note": "Old-fashioned 'you' used to equals or inferiors. In fiction it marks a samurai, a ninja or a wise old man; nobody says it today without playing a part."},
+    {"match": ["貴様"], "type": "hostile address", "note": "Once a respectful 'you'; for centuries now an insult. In games it's the villain's or the enraged fighter's 'you', roughly 'you bastard' in force, though often softer in English."},
+    {"match": ["俺様"], "type": "braggart", "note": "'I' with a self-awarded honorific: 'yours truly, the great me'. Marks a bully, a braggart or a comic blowhard."},
+    {"match": ["わし"], "type": "old man speech", "note": "The stock old man's 'I' (Kinsui's 'professor/old man' language), usually with じゃ. Also real dialect in western Japan, but in a fantasy game it reads as 'old codger'."},
+    {"match": ["じゃ"], "type": "old man speech", "note": "Copula of the stock old man (and of western dialects). Paired with わし it's the voice of the village elder, the hermit, the mad professor."},
+    {"match": ["ござる"], "type": "samurai speech", "note": "Formal copula of period-drama samurai (and ninja in comics). Strongly theatrical."},
+    {"match": ["ぬ"], "type": "archaic / grand", "note": "Classical negative (知らぬ for 知らない). Sounds old, stern or literary: samurai, elders, villains, oracles."},
+    {"match": ["良かろう", "かろう"], "type": "archaic / grand", "note": "Classical presumptive ('it would be...'). Weighty and old-fashioned; elders, warriors, kings."},
+    {"match": ["うむ"], "type": "dignified assent", "note": "A grave 'mm' or 'indeed'. Samurai, elders, superiors; never chirpy."},
+    {"match": ["息災"], "type": "archaic vocabulary", "note": "'In good health', a Buddhist-flavored old word. 'Are you all well?' said like a man from a period drama."},
+    {"match": ["さらば"], "type": "archaic farewell", "note": "'Farewell'. Theatrical, final; the departing swordsman's word."},
+    {"match": ["殿"], "type": "formal honorific", "note": "Honorific suffix '-dono'. Period-drama formality, or stiff officialdom; warmer than it looks when a samurai type uses it of a friend."},
+    {"match": ["我ら"], "type": "grand 'we'", "note": "Archaic, lofty 'we'. Rulers, orders, guardians, villains; from an ordinary adventurer it sounds stiff or pompous."},
+    {"match": ["我々"], "type": "formal 'we'", "note": "Formal 'we' of speeches, organizations and officials. From a rough adventurer it sounds out of character."},
+    {"match": ["たまえ"], "type": "superior's command", "note": "Polite-but-superior imperative ('do go on ahead'). The professor, the boss, the aristocrat speaking down."},
+    {"match": ["かね"], "type": "superior's question", "note": "Sentence-final question of an older man in charge ('is that so, hmm?'). Professorial or patronizing."},
+    {"match": ["ですな"], "type": "gentlemanly", "note": "Polite with a masculine, mature softness ('it is, isn't it'). Older gentlemen, the courteous retainer."},
+    {"match": ["僕"], "type": "soft male 'I'", "note": "Boyish or soft-spoken male 'I'. Earnest youths, polite boys, gentle men."},
+    {"match": ["俺"], "type": "plain male 'I'", "note": "Ordinary casual male 'I', rough or friendly. A switch to it from a formal 私 can show the mask slipping."},
+    {"match": ["私"], "type": "neutral / formal 'I'", "note": "Neutral-polite 'I' (わたし), or formal (わたくし). From a man it reads as reserved, formal or adult."},
+    {"match": ["あたし"], "type": "casual feminine 'I'", "note": "Casual women's 'I'. Lively, informal young women; tomboys and bubbly girls alike."},
+    {"match": ["おいら"], "type": "rustic / boyish 'I'", "note": "Folksy 'I' of kids, country boys and comic sidekicks."},
+    {"match": ["わ"], "type": "feminine ending", "note": "Sentence-final わ with rising tone: the stock feminine ending in fiction (だわ, わよ). Not decisive alone; read with the rest of the line."},
+    {"match": ["かしら"], "type": "feminine ending", "note": "Feminine 'I wonder'. Gentle, ladylike or girlish."},
+    {"match": ["のよ"], "type": "feminine ending", "note": "Feminine emphatic explanation ('it's that..., you see'). Women's speech in fiction."},
+    {"match": ["ぜ"], "type": "rough masculine ending", "note": "Assertive masculine ending ('...I tell ya'). Tough guys, swaggering young men."},
+    {"match": ["ねぇ", "ねえ"], "type": "rough contraction / soft tag", "note": "As a contraction of ない (知らねぇ, 'dunno') it's the rough, Edo-style tough-guy sound. As a tag ('isn't it~') it's soft and friendly. The tokenizer can't always tell these apart; check the line."},
+    {"match": ["やがれ", "やがる"], "type": "contemptuous verb ending", "note": "Adds contempt to a verb ('go and do it, damn you'). Rough men, villains."},
+    {"match": ["のう", "のぅ", "のぉ"], "type": "old man speech", "note": "Old man's sentence-final particle ('eh?', 'y'know'). Part of the stock elder voice."},
+    {"match": ["チッ"], "type": "interjection", "note": "A tongue-click of annoyance: 'tch', 'tsk'."},
+    {"match": ["あの人"], "type": "reference to someone close", "note": "Ordinary 'that person', but from a woman about a man it's also how one speaks of a husband or lover (Daijisen; English Wiktionary: 'my husband, partner (of a female speaker)'). Whether it's meant that way depends on the scene."}
+  ]
+}

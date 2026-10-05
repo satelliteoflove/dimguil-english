@@ -45,6 +45,41 @@ def pages(text):
     return [p for p in re.split(r'\n\r|\{ff40\}\r', text)]
 
 
+def _encodable(text):
+    try:
+        descfit.encode(text.replace('\r', '{ff20}'))
+        return True
+    except ValueError:
+        return False
+
+
+def string_problems(text, src):
+    """Problems with one translated string against its source; 'fine if intended' ones
+    are warnings."""
+    problems = []
+    try:
+        srcpages = pages(src)
+        for k, pg in enumerate(pages(text)):
+            limit = max(LINES, srcpages[k].count('\n') + 1) if k < len(srcpages) else LINES
+            if pg.count('\n') + 1 > limit:
+                problems.append(f'page {k + 1} has {pg.count(chr(10)) + 1} lines')
+            for w, line in zip(descfit.line_widths(measurable(pg)), pg.split('\n')):
+                if w > WIDTH:
+                    problems.append(f'{w}px: {line!r}')
+        codes = descfit.encode(text.replace('\r', '{ff20}'))
+        for a, b in zip(codes, codes[1:]):
+            if b == descfit.CHARS['"'] and a in _KANA:
+                problems.append(f'" after code {a:#x} prints as {_KANA[a]}+voicing mark; '
+                                "use ' for quotes inside a line")
+        if len(pages(text)) != len(srcpages):
+            problems.append(f'{len(pages(text))} pages, source has {len(srcpages)} (fine if intended)')
+    except ValueError as e:
+        problems.append(str(e))
+    if sorted(CODE.findall(text)) != sorted(CODE.findall(src)):
+        problems.append(f'codes {CODE.findall(text)} vs source {CODE.findall(src)}')
+    return problems
+
+
 def check(n, show_all, overlay=None):
     tr = json.load(open(os.path.join(ROOT, f'translations/NPC_MES{n}.OBJ.json'), encoding='utf-8'))
     for key, text in (overlay or {}).items():
@@ -61,28 +96,8 @@ def check(n, show_all, overlay=None):
             if show_all:
                 print(f'   {n}:{i:3d} untranslated')
             continue
-        problems = []
-        try:
-            total += descfit.size(text.replace('\r', '{ff20}'))
-            srcpages = pages(src)
-            for k, pg in enumerate(pages(text)):
-                limit = max(LINES, srcpages[k].count('\n') + 1) if k < len(srcpages) else LINES
-                if pg.count('\n') + 1 > limit:
-                    problems.append(f'page {k + 1} has {pg.count(chr(10)) + 1} lines')
-                for w, line in zip(descfit.line_widths(measurable(pg)), pg.split('\n')):
-                    if w > WIDTH:
-                        problems.append(f'{w}px: {line!r}')
-            codes = descfit.encode(text.replace('\r', '{ff20}'))
-            for a, b in zip(codes, codes[1:]):
-                if b == descfit.CHARS['"'] and a in _KANA:
-                    problems.append(f'" after code {a:#x} prints as {_KANA[a]}+voicing mark; '
-                                    "use ' for quotes inside a line")
-            if len(pages(text)) != len(srcpages):
-                problems.append(f'{len(pages(text))} pages, source has {len(srcpages)} (fine if intended)')
-        except ValueError as e:
-            problems.append(str(e))
-        if sorted(CODE.findall(text)) != sorted(CODE.findall(src)):
-            problems.append(f'codes {CODE.findall(text)} vs source {CODE.findall(src)}')
+        total += descfit.size(text.replace('\r', '{ff20}')) if _encodable(text) else 0
+        problems = string_problems(text, src)
         hard = [p for p in problems if 'fine if intended' not in p]
         bad += bool(hard)
         for p in problems:

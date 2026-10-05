@@ -78,6 +78,16 @@ The tools:
   (`rips/testsave.mcd`), `use_testsave.sh` swaps it into DuckStation's slot (and
   `--restore` puts your own card back), and `publish_test.sh` copies the build next to
   the Rev 1 image as `Wizardry - Dimguil (English WIP).cue`.
+- Reviewing NPC scenes with Chris: `scripts/reviewtool/` is a local web app (Firefox
+  first). Setup, once: `python3 -m venv rips/venv && rips/venv/bin/pip install fugashi
+  unidic-lite pillow` (plus `playwright` and `playwright install firefox` to test it
+  headless), then `python3 scripts/reviewtool/mkdict.py` (downloads JMdict, KANJIDIC2,
+  English Wiktionary's Japanese entries and Tatoeba into `rips/dict/`) and
+  `python3 scripts/reviewtool/mkfont.py` (cuts the dialogue font out of the real box,
+  after a build). Run `rips/venv/bin/python scripts/reviewtool/server.py` and open
+  http://localhost:8777. Scenes are JSON files in `rips/review/scenes/` that Claude
+  writes (they quote the Japanese, so they stay out of the repo); the server's
+  docstring describes the format and what it writes when a scene is applied.
 - Research: `gametext.py` decodes raw game text and maps disc files to the executable's
   load tables, `sjscan.py` and `relsearch.py` search binaries for text, `mipsdis.py`
   disassembles code from RAM, and `cardref.py` exports the card game's data.
