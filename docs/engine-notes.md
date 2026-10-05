@@ -53,7 +53,8 @@ more of the detail behind each item.
   the right limit; found by Chris on the Emerald Robes, 2026-10-04.
 - The pictures are stored normal-sized first, then tall, each set in item order, with
   picture 0 a "file not found" placeholder. Description k is item k up to 24 and item
-  k+1 from 25 on: description 24 holds the Battle Axe and Nunchaku text together.
+  k+1 from 25 on: entry 24 holds two strings, the Battle Axe's, then after its {ff40} terminator the
+  Nunchaka's (item 25). The game shows each on its own.
 - Only JOUKA.BIN (the castle-town overlay, loaded at 0x800a1000) reads these pictures:
   the shop catalog and its detail screen. The card game has its own copies
   (CB/DAT/ITEM_S.DAT and ITEM_L.DAT, the same 252 + 55 split).

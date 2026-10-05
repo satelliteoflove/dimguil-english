@@ -193,3 +193,5 @@ up. Take them after the 37, or fold them in where they share a string.
   and "perhaps out of spite" restored, and "rare treasure" back to "quite valuable".
 - **I 1:24.** The Japanese entry holds two descriptions back to back (the battle axe and
   the nunchaku), and the English adds a flail sentence. Check what the game shows.
+  Done 2026-10-04: two separate strings in game (Chris saw the Battle Axe's at 6 lines);
+  the Nunchaka's two-line stub replaced with the full Japanese (Chris's wording).

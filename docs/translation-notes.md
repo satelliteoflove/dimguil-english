@@ -12,20 +12,20 @@ see all of it.
 - **Item descriptions under tall pictures (2026-10-04).** The item catalog draws the
   picture, then the description below it, and can't scroll. 55 items have a tall
   152x152 picture, which leaves room for 4 lines; the rest have a 152x108 picture and
-  7 lines. The Japanese always fits. 25 English descriptions from the earlier work were
-  cut off: 24 under tall pictures, plus 1:24, the doubled Battle Axe/Nunchaku entry, at
-  8 lines. Chris caught it on the Emerald Robes. The picture for each item was
+  7 lines. The Japanese always fits. 24 English descriptions from the earlier work were
+  cut off, all under tall pictures. (1:24 looked like a 25th at 8 lines, but it holds two
+  separate strings, the Battle Axe's and the Nunchaka's, and each fits.) Chris caught it on the Emerald Robes. The picture for each item was
   identified one by one (the Bartok's Trading Post item table, checked against the
   pictures in ITEM.DAT), not guessed from the item type. `scripts/itemfit.py` holds
   every description to its own limit. Rule in `engine-notes.md`, "Item catalog".
   Rather than cut 24 descriptions to 4 lines, the text under tall pictures now starts
   9 px higher and the tall pictures were cut to 143 rows, so 5 lines fit. Only the item
   in each picture is moved or shrunk, laid back onto the panel's own parchment so the
-  texture stays aligned (scaling whole pictures misaligned it, which Chris caught). Two
-  descriptions were still over: the Sapphire Robes and 1:24. Chris checked all 55
+  texture stays aligned (scaling whole pictures misaligned it, which Chris caught). One
+  description was still over: the Sapphire Robes. Chris checked all 55
   pictures in the game (`docs/q7-picture-check.md`): no visible flaws, and every other
   description fits. The Sapphire Robes was then cut to 5 lines (Chris's wording, which
-  also fixes "cold" to ice for 氷); 1:24 is the last one over.
+  also fixes "cold" to ice for 氷). Every description now fits.
 
 ### Machine-written habits (the Q1 sweep)
 
@@ -64,6 +64,11 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   competent student, and the Japanese doesn't repeat the Western idea that it means a
   master. Excalibur's two hands are a shrug at a drawback (仕方のないことだろう), not "only
   fair."
+- **The Nunchaka (item 25) had a two-line stub.** The earlier English was "A strange
+  Eastern flail of two linked rods", dropping two of the three Japanese sentences. Now
+  the full text, with Chris's "flail" for メイス: the game files it under maces, but that
+  menu also holds whips and clubs, and flail is what it is. The "precision machine"
+  classes (精密機械のように戦闘に長けた職業) are Ninja and Monk, the only two that can equip it.
 - **Elizabeth (catalog 9:16) is Elizabeth Báthory,** the "Blood Countess" said to have
   kept her youth with young women's blood. 普通の人間 stays "an ordinary woman": she's a
   woman, and "human... her" would read oddly. Checked and kept.
@@ -98,7 +103,9 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   rename touches the inventory list, the catalog, Boltac's list and the battle copy of
   the names, and breaks the match with Emonoya and other guides. Some are plain
   misspellings that should be fixed whatever is decided about the rest: Chris spotted
-  "Displaser Robes" for Displacer Robes in the catalog.
+  "Displaser Robes" for Displacer Robes in the catalog, and NUNCHAKA is nunchaku. Chris
+  can't stand leaving them in, though he isn't sure how the community will take fixing
+  them; to be dealt with later.
 - **Other naming.** "Lithograph of the Sun" vs LITHOGRAPH OF SUN, and "labyrinth" vs
   "maze" for 迷宮 (checklist Q6).
 - **Unidentified monster names.** "Flap Insect(s)" and "Flap Figure(s)" for はばたくかげ;
@@ -114,9 +121,6 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   should shatter to pieces"), flagged for another look. 魔除け is a demon-warding charm,
   so a demon ward that kills demons; the English "amulet" can't carry that. Matokani
   looks like MAKANITO with its syllables rotated (an inference).
-- **Item 1:24.** The Japanese holds two descriptions back to back (Battle Axe and
-  Nunchaku), and the English adds a flail sentence. It's also 8 lines, over the limit.
-  Check what the game shows.
 - **Events 234 and 236,** the Priestess's oracle: approved wording that may need another
   look (`event-review.md`).
 - **Event 288,** the switch line: probably the Training Maze switch, where "set into the
