@@ -13,6 +13,9 @@ and per file the encoded size against the 32-sector load buffer (see relocate.py
 the translation files first, to check proposed edits without writing them.
 
 Box measured in the emulator: text starts at x=27, the frame is at x=321 (350-px mode).
+Each glyph (space included) is a sprite from a pool, and a box stops drawing when its
+pool runs out (see evfit.py, where the event box ran out at 72). The talk box drew a
+181-glyph test page whole, so pages are held to that (the busiest has 93).
 Pages are split by "\\n\\r"; lines after the first on a page start with one space,
 as in the Japanese.
 """
@@ -22,6 +25,7 @@ import descfit
 
 ROOT = os.path.join(os.path.dirname(__file__), '..')
 WIDTH = 288
+POOL = 181  # glyphs on one page: what the talk box was seen to draw, not its limit
 LINES = 3
 LIMIT = 32 * 2048
 CODE = re.compile(r'\{ff[0-9a-f]{2}\}')
@@ -71,6 +75,10 @@ def string_problems(text, src):
             if b == descfit.CHARS['"'] and a in _KANA:
                 problems.append(f'" after code {a:#x} prints as {_KANA[a]}+voicing mark; '
                                 "use ' for quotes inside a line")
+        for k, pg in enumerate(pages(text)):
+            n = len([c for c in descfit.encode(measurable(pg).replace('\n', '')) if c >= 0])
+            if n > POOL:
+                problems.append(f'page {k + 1} holds {n} glyphs; the talk box was only seen to draw {POOL}')
         if len(pages(text)) != len(srcpages):
             problems.append(f'{len(pages(text))} pages, source has {len(srcpages)} (fine if intended)')
     except ValueError as e:

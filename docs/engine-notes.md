@@ -70,6 +70,16 @@ more of the detail behind each item.
   item to un", "Which weapon i"); the Japanese name is 7. `asm/shop_caption_layer.asm`
   makes it 58, taking 30 from layer 0 (270 -> 240; its peak over every Trade flow is
   130). Measured peaks after the change: layer 1 at most 43.
+- The maze's event box opens through 0x80021af0 (x, y, rows, columns), which sizes
+  layer 1 at rows x columns, 3 x 24 = 72: one sprite per Japanese character. English
+  ran out (48 event strings were cut, e.g. ".........Sure enough, the" at the Shrine
+  door). Measured in the real box: spaces count, a line that scrolls off gives its
+  sprites back, a new page frees them all. `asm/event_window_pool.asm` doubles the size
+  to 144 (the maze reserves 400 for that layer first); `evfit.py` checks any 3 lines in
+  a row on a page against it. Test rig: `rips/states/shrine_door.state`, search
+  (triangle) at the Shrine door, EVENTMES loaded at 0x801a0400; the expander won't read
+  past the original section, so test text goes over an existing string.
+- The NPC talk box drew a 181-glyph test page whole; `npcfit.py` holds pages to that.
 - Other screens size layer 1 differently (30, 40, 70, 100, 154). They haven't all been
   checked for full layers.
 
