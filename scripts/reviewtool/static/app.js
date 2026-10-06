@@ -50,7 +50,7 @@ function splitBox(text) {
   return { name: m ? m[1] : null, pages };
 }
 function readable(text) {
-  return splitBox(text).pages.map(p => p.join(' ')).join(' ').replace(/\{ff12\}/g, '[leader]').replace(/\{ff11\}0/g, '[number]');
+  return splitBox(text).pages.map(p => p.join(' ')).join(' ').replace(/\{ff12\}/g, '[name]').replace(/\{ff11\}0/g, '[number]');
 }
 function toEditor(text) {
   return splitBox(text).pages.map(p => p.join('\n')).join('\n\n');
@@ -279,7 +279,7 @@ function renderApplyBar() {
   if (prior) msg += prior.status === 'committed' ? ` Committed as ${prior.commit || 'a commit'}.` : ` Applied ${prior.applied_at.slice(0, 16).replace('T', ' ')}; Claude commits next.`;
   $('#apply-status').textContent = msg;
   $('#apply-open').disabled = open > 0 || !!nothingNew;
-  $('#apply-open').textContent = !changes && !prior ? 'Mark as reviewed' : 'Review and apply';
+  $('#apply-open').textContent = !open && !changes && !prior ? 'Mark as reviewed' : 'Review and apply';
 }
 
 // --- inspector -------------------------------------------------------------------------
@@ -537,7 +537,7 @@ async function renderPreview() {
     if (f.pages.length > 1 || page.some(l => l.placeholder)) {
       const cap = document.createElement('p');
       cap.className = 'pagecap';
-      cap.textContent = `Page ${k + 1} of ${f.pages.length}${page.some(l => l.placeholder) ? '. The leader\'s name is drawn at its widest.' : ''}`;
+      cap.textContent = `Page ${k + 1} of ${f.pages.length}${page.some(l => l.placeholder) ? '. The character name is drawn at its widest.' : ''}`;
       well.append(cap);
     }
   });
