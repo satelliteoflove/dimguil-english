@@ -141,7 +141,7 @@ del { color: var(--ink-faint); text-decoration-color: color-mix(in srgb, var(--b
 }
 .applybar p { margin: 0; color: var(--ink-soft); }
 button.primary { background: var(--ink); color: var(--sheet); border: 1px solid var(--ink); border-radius: 4px; padding: 0.45rem 1rem; cursor: pointer; }
-button.primary:disabled { opacity: 0.4; cursor: not-allowed; }
+button.primary:disabled { background: transparent; color: var(--ink-faint); border: 1px dashed var(--rule); cursor: not-allowed; }
 button.primary:hover:not(:disabled) { background: #000; }
 
 /* Inspector ----------------------------------------------------------------------- */

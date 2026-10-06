@@ -95,10 +95,11 @@ function decisionOf(ln) {
   if (d) return d;
   return needsDecision(ln) && !alreadyApplied(ln) ? null : { choice: 'current', auto: true };
 }
-// A line decided in an earlier apply of this scene, whose text is still what was applied.
+// A line decided in an earlier apply of this scene (its text may have been touched since).
 function alreadyApplied(ln) {
   const prior = S.scene && S.scene.decision;
-  return !!(prior && (prior.lines || []).some(p => p.ref === ln.ref && p.after === ln.current));
+  if (!prior) return false;
+  return [prior, ...(prior.earlier || [])].some(rec => (rec.lines || []).some(p => p.ref === ln.ref));
 }
 function textFor(ln, choice) {
   if (choice === 'current') return ln.current;
@@ -271,11 +272,14 @@ function renderApplyBar() {
   const open = ls.filter(l => !decisionOf(l)).length;
   const changes = ls.filter(l => { const d = decisionOf(l); return d && textFor(l, d.choice) !== l.current; }).length;
   const prior = S.scene.decision;
+  const nothingNew = !open && !changes && prior;  // already applied, and nothing to add
   let msg = open ? `${open} proposed ${open === 1 ? 'change needs' : 'changes need'} your decision.`
-    : changes ? `Ready: ${changes} ${changes === 1 ? 'line changes' : 'lines change'}.` : 'Ready: no lines change.';
+    : changes ? `Ready: ${changes} ${changes === 1 ? 'line changes' : 'lines change'}.`
+    : nothingNew ? 'Nothing new to apply.' : 'Ready: no lines change.';
   if (prior) msg += prior.status === 'committed' ? ` Committed as ${prior.commit || 'a commit'}.` : ` Applied ${prior.applied_at.slice(0, 16).replace('T', ' ')}; Claude commits next.`;
   $('#apply-status').textContent = msg;
-  $('#apply-open').disabled = open > 0;
+  $('#apply-open').disabled = open > 0 || !!nothingNew;
+  $('#apply-open').textContent = !changes && !prior ? 'Mark as reviewed' : 'Review and apply';
 }
 
 // --- inspector -------------------------------------------------------------------------
