@@ -440,6 +440,9 @@ def apply(body):
                     raise ValueError(f"{r} doesn't fit: {'; '.join(f['hard'])}")
             record.append({'ref': ln['ref'], 'choice': ln['choice'], 'before': before, 'after': text,
                            'copies': refs[1:] if text != before else [], 'note': ln.get('note', '')})
+        prior = read_json(os.path.join(DECISIONS, f'{sid}.json'))
+        if prior and not changes:
+            return prior  # nothing new; keep the earlier record (and its commit)
         files = {}
         for r, text in changes.items():
             n, i = parse_ref(r)
@@ -450,6 +453,8 @@ def apply(body):
         decision = {'scene': sid, 'status': 'applied' if changes else 'kept',
                     'applied_at': time.strftime('%Y-%m-%dT%H:%M:%S%z'), 'note': note,
                     'changed': sorted(changes), 'lines': record}
+        if prior:  # a follow-up apply: keep what came before
+            decision['earlier'] = [{k: v for k, v in prior.items() if k != 'earlier'}] + prior.get('earlier', [])
         json.dump(decision, open(os.path.join(DECISIONS, f'{sid}.json'), 'w', encoding='utf-8'),
                   ensure_ascii=False, indent=2)
     return decision
