@@ -143,6 +143,30 @@ more of the detail behind each item.
   English name slots too. `nptnames.py` writes the patches in `binary/`, and `nptshow.py`
   forces a fight with any party to check the enemy panel.
 
+## NPC conversations
+
+Partly traced on 2026-10-06, to find what decides which NPC lines play. Addresses are in
+the maze overlay as loaded during a talk.
+- A talk runs as a small script. 0x800c154c builds it on the stack, 43 blocks of 40
+  halfwords, mostly constants with a few values filled in from globals (0x8007969a,
+  0x800796ed, 0x800796e4, 0x800795d6, 0x80079c6c, 0x80079a5a), and copies it to
+  0x801ff118. The interpreter at 0x800b8ccc reads the opcode at the script position
+  (halfword index at 0x80079a26) and dispatches through a 13-entry table at 0x800a1cc4,
+  for opcodes -1 to 11.
+- Opcode 2 prints NPC string N (the next halfword) through 0x8001dfc0 from the file at
+  0x801a0400; -2 and -3 variants insert a character's name. Opcode 6 loads a portrait.
+- Opcode 0 sets a bit (0-19) in bytes +0xc6..+0xc8 of each of your party's roster
+  records (0x8007d708, 0xd0 bytes each). So "have we met them" is remembered per
+  character, not globally: a new character in your party gets the unnamed greetings.
+- Not yet found: what picks the block for a talk topic (News and the rest), and so
+  which progress state gates those lines. The first meeting with Guy at the first door
+  is a scripted event and never reaches the talk menu. Forcing an NPC party through
+  the battle loader (nptshow.py's trick) starts a fight, not a talk; the friendly
+  encounter goes through another path that hasn't been found.
+- Save states from before a build that moved files read the NPC files from the old
+  sectors and show blank boxes. Copying the four file tables (0x80051760-0x80052700)
+  from the built SLPS_026.91 into RAM after loading fixes that.
+
 ## Card battle
 
 See `scripts/cardref.py`'s header for the CMENU.BIN tables (passwords, Lv 1 templates,
