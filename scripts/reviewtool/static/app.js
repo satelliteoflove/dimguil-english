@@ -189,7 +189,7 @@ function setMode(mode, { keepFocus } = {}) {
 
 function renderScript() {
   $('#script').innerHTML = lines().map((ln, i) => {
-    const tag = speakerOf(ln.current) || speakerOf(ln.faithful);
+    const tag = speakerOf(ln.current) || speakerOf(ln.faithful) || ln.speaker;
     const who = personForTag(tag);
     const color = who ? who.color : '#4a5260';
     return `<li class="line" data-i="${i}" style="--who:${color}">
@@ -294,7 +294,7 @@ async function renderInspector() {
   const ln = lines()[S.focus];
   if (!ln) return;
   $('#insp-empty').hidden = true; $('#insp').hidden = false;
-  const tag = speakerOf(ln.current);
+  const tag = speakerOf(ln.current) || ln.speaker;
   const who = personForTag(tag);
   $('#inspector').style.setProperty('--who', who ? who.color : '#1c212a');
   $('#insp-ref').textContent = ln.context ? `${ln.ref}, ${ln.context}` : ln.ref;
