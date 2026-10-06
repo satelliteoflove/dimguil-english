@@ -497,55 +497,55 @@
                 {
                     "length": 93,
                     "source": "NA",
-                    "translation": "Man in armor\n\"Ah, was that you earlier?\n Thanks to you pressing the switch,\n\r we were able to proceed. By way of thanks,\n is there anything you would care to ask?",
+                    "translation": "Man in armor\n\"Was that you back there?\n Thanks to you pushing that switch,\n\r we got through. So, by way of thanks,\n ask me anything ya like.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 161,
                     "source": "NA",
-                    "translation": "Man in armor\n\"I see you too have managed to fit the blue\n stone into the Lithograph of the Sun.\n\r Who'd have thought there was such a mechanism.\n\r We intend to search the vicinity further.\n Something of greater import lies hidden ahead,\n I suspect, so we shall take our leave of you.",
+                    "translation": "Man in armor\n\"So you got the blue stone fitted\n into the Lithograph of the Sun too, eh?\n\r Who'd have thought it was rigged up like that.\n\r We'll be searching around here some more.\n Something bigger's hidden up ahead, I'd say.\n Now, if you'll excuse us, we're going on ahead.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 158,
                     "source": "NA",
-                    "translation": "Balbo\n\"I see you too have managed to fit the blue\n stone into the Lithograph of the Sun.\n\r Who'd have thought there was such a mechanism.\n\r We intend to search the vicinity further.\n Something of greater import lies hidden ahead,\n I suspect, so we shall take our leave of you.",
+                    "translation": "Balbo\n\"So you got the blue stone fitted\n into the Lithograph of the Sun too, eh?\n\r Who'd have thought it was rigged up like that.\n\r We'll be searching around here some more.\n Something bigger's hidden up ahead, I'd say.\n Now, if you'll excuse us, we're going on ahead.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 169,
                     "source": "NA",
-                    "translation": "Man in armor\n\"So this is the center of something.\n The doors on all four sides won't budge.\n\r I suspect those small tablets we saw earlier\n hold some sort of secret,\n but is something still missing?\n\r Forgive me, but kindly don't\n interrupt our strategy meeting.\n ...Farewell.",
+                    "translation": "Man in armor\n\"So this is the center of something.\n Doors on all four sides won't budge an inch.\n\r Them little tablets we saw before\n have gotta be hiding some kind of secret,\n but are we still missing something?\n\r Sorry, but this is a strategy meeting.\n Don't interrupt.\n ...So long.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 166,
                     "source": "NA",
-                    "translation": "Balbo\n\"So this is the center of something.\n The doors on all four sides won't budge.\n\r I suspect those small tablets we saw earlier\n hold some sort of secret,\n but is something still missing?\n\r Forgive me, but kindly don't\n interrupt our strategy meeting.\n ...Farewell.",
+                    "translation": "Balbo\n\"So this is the center of something.\n Doors on all four sides won't budge an inch.\n\r Them little tablets we saw before\n have gotta be hiding some kind of secret,\n but are we still missing something?\n\r Sorry, but this is a strategy meeting.\n Don't interrupt.\n ...So long.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 151,
                     "source": "NA",
-                    "translation": "Man in armor\n\"Well, well. So you lot have made it this far?\n\r We got this far ourselves, but\n something about the iron bars ahead seems off.\n We mean to come back fully prepared,\n\r so don't you go pushing your luck either.\n We shall be heading back by Malor.",
+                    "translation": "Man in armor\n\"Well, well. So you lot made it this far too?\n\r We got this far ourselves, but something\n about them iron bars ahead seems off.\n\r We'll come back fully prepared,\n so don't you go pushing your luck either.\n We're heading back by Malor.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 148,
                     "source": "NA",
-                    "translation": "Balbo\n\"Well, well. So you lot have made it this far?\n\r We got this far ourselves, but\n something about the iron bars ahead seems off.\n We mean to come back fully prepared,\n\r so don't you go pushing your luck either.\n We shall be heading back by Malor.",
+                    "translation": "Balbo\n\"Well, well. So you lot made it this far too?\n\r We got this far ourselves, but something\n about them iron bars ahead seems off.\n\r We'll come back fully prepared,\n so don't you go pushing your luck either.\n We're heading back by Malor.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 177,
                     "source": "NA",
-                    "translation": "Man in armor\n\"This curious door simply refuses to open.\n\r Turning the three discs ought to do it,\n yet it shows no sign of opening.\n\r There must be a clue somewhere.\n We shall keep exploring a while longer.\n\r Well, don't overdo it yourselves, now.",
+                    "translation": "Man in armor\n\"This strange door just won't open.\n\r Turning the three discs ought to do it,\n but it ain't budging.\n\r There's gotta be a clue around here somewhere.\n We'll keep searching a while longer.\n\r Well, don't you lot overdo it.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 174,
                     "source": "NA",
-                    "translation": "Balbo\n\"This curious door simply refuses to open.\n\r Turning the three discs ought to do it,\n yet it shows no sign of opening.\n\r There must be a clue somewhere.\n We shall keep exploring a while longer.\n\r Well, don't overdo it yourselves, now.",
+                    "translation": "Balbo\n\"This strange door just won't open.\n\r Turning the three discs ought to do it,\n but it ain't budging.\n\r There's gotta be a clue around here somewhere.\n We'll keep searching a while longer.\n\r Well, don't you lot overdo it.",
                     "addStringTerminator": true
                 },
                 {
@@ -863,7 +863,7 @@
                 {
                     "length": 186,
                     "source": "NA",
-                    "translation": "Balbo\n\"We Evil types don't usually go in for this,\n but are these friends of yours?\n\r I saw some rotting bodies a while ago.\n The smell's getting pretty strong, you know.\n\r How about it? Not that we're out to tidy the maze,\n but we thought we might carry\n that lot to the Temple for you.",
+                    "translation": "Balbo\n\"Us Evil types ain't fond of this sort of thing,\n but are those companions of yours?\n\r We came across some rotting bodies a while back.\n The smell's getting pretty strong, ya know.\n\r So how about it? Not that we're out\n to tidy up the maze, but we could carry 'em to\n the Temple for ya.",
                     "addStringTerminator": true
                 },
                 {
@@ -1577,31 +1577,31 @@
                 {
                     "length": 86,
                     "source": "NA",
-                    "translation": "Balbo\n\"I saw a frozen man,\n and I can't help thinking it's a trap.\n\r I'd like to go on to the area ahead,\n but isn't there a bridge or something?",
+                    "translation": "Balbo\n\"We saw a frozen man back there,\n and I can't shake the feeling it's a trap.\n\r We need to get to the area up ahead.\n Ain't there a bridge or something?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 82,
                     "source": "NA",
-                    "translation": "Balbo\n\"Isn't fitting the green stone enough?\n Something seems to be missing.\n\r For now, we'll move on to the next area.",
+                    "translation": "Balbo\n\"Fitting the green stone ain't enough?\n Feels like something's missing.\n\r Anyway, we're moving on to the next area.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 99,
                     "source": "NA",
-                    "translation": "Balbo\n\"A room in this area had a statue of a giant face.\n We mean to make haste and tell the scholars.\n\r Kindly go on ahead and examine the statue.",
+                    "translation": "Balbo\n\"One of the rooms here has a statue of a giant face.\n We'll hurry and tell them scholars.\n\r You lot go on ahead and look it over.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 203,
                     "source": "NA",
-                    "translation": "Balbo\n\"Oh, is that {ff12}?\n\r The treasure ahead is beyond\n the likes of you.\n\r Alba went in a while ago, and the moment\n he came out, he turned to ashes.\n\r It seems some fearsome trap\n lies in wait.\n\r We're heading back to the Temple to have Alba\n revived, then we'll decide what to do next.",
+                    "translation": "Balbo\n\"Oh, {ff12}, is it?\n\r The treasure up ahead? You lot won't\n get your hands on it, I'm warning ya.\n\r Alba went in a while back, and the second\n he came out, he turned to ashes.\n\r Looks like there's one nasty trap\n waiting in there.\n\r We're taking Alba back to the Temple\n to be revived, then we'll talk over\n what to do next.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 212,
                     "source": "NA",
-                    "translation": "Man in armor\n\"What's this? Who are you people?\n\r The treasure ahead\n is beyond the likes of you.\n\r Alba went in a while ago, and the moment\n he came out, he turned to ashes.\n\r It seems some fearsome trap\n lies in wait.\n\r We're heading back to the Temple to have Alba\n revived, then we'll decide what to do next.",
+                    "translation": "Man in armor\n\"What's this? And just who are you lot?\n\r The treasure up ahead? You lot won't\n get your hands on it, I'm warning ya.\n\r Alba went in a while back, and the second\n he came out, he turned to ashes.\n\r Looks like there's one nasty trap\n waiting in there.\n\r We're taking Alba back to the Temple\n to be revived, then we'll talk over\n what to do next.",
                     "addStringTerminator": true
                 },
                 {

@@ -70,13 +70,16 @@ Balbo's party (NPC_MES2): scene 1 (Balbo accidentally turns Good) is done. Scene
 (Alba's past) was reviewed in the browser tool and applied on 2026-10-05: nine lines
 changed, with Chris's edit of Balbo's 231 ("companions", not "comrades"). Chris's note
 on it: the characters' relationships to each other shape their lines as much as their
-own voices do.
+own voices do. Scene 3 (Balbo's progress reports) was applied the same day: 15 strings,
+the 'Man in armor' copies included. The stiff register turned out to be shared with
+Fontana's maze encounters, so the English keeps Balbo's words but makes him
+businesslike (see "The leaders' maze-encounter voice" in `translation-notes.md`).
+Chris's edits: 87 keeps "seems off" and is split over three pages, and 142 is rebroken.
 
 ## Next up
 
-**NPC_MES2, scene 3: Balbo's progress reports (81-89, 142, 261-265).** Needs Chris's
-call on open question 1 (the stiff, haughty register these lines have in the Japanese,
-unlike Balbo anywhere else). Prepare it as a scene for the review tool.
+**NPC_MES2, scene 4: goodbyes when a party member is dead or lost (34-46).** Prepare
+it as a scene for the review tool.
 
 ## Remaining scenes
 
@@ -84,11 +87,10 @@ Priority as the reviewers ranked it. Numbers are string indices.
 
 NPC_MES2 (Balbo, Rosea, Artemisia, Reiran, Alba, Gaura)
 - [x] 2. Alba's past (233, 180 and the thread around them), HIGH, done 2026-10-05
-- [ ] 3. Balbo's progress reports (81-89, 142, 261-265), HIGH: the Japanese is stiff
-      and haughty here, unlike Balbo anywhere else. Needs a decision (open question 1).
+- [x] 3. Balbo's progress reports (81-89, 142, 261-265), HIGH, done 2026-10-05
 - [ ] 4. Goodbyes when a party member is dead or lost (34-46), MEDIUM: sincerity, and
       Artemisia's flustered "see each other again" gag (also NPC_MES3 24-26).
-- [ ] 5. Services: body collection offer, Balbo's sarcastic せいぜい (123, 142-145), MEDIUM
+- [ ] 5. Services: body collection offer, Balbo's sarcastic せいぜい (123, 143-145; 142 was done in scene 3), MEDIUM
 - [ ] 6. Rosea's Kadorto warning (130), MEDIUM: currently a question the player can't answer
 - [ ] 7. First meeting, the wolfish man (13, 22), LOW-MEDIUM
 - [ ] 8. Talk odds and ends (70, 173, 199), LOW
@@ -137,8 +139,6 @@ NPC_MES5 (Zaril, Fritillaria, Gaura)
 
 ## Open questions for Chris
 
-- Balbo's progress reports: coarse Balbo voice, or keep the stiff register the
-  Japanese has there? (NPC_MES2 scene 3)
 - Fontana's nickname キクちゃん: "Kiku" or "Kiki"? And now that Alstron is "Al-chan",
   is "Kiku-chan" the consistent choice? (NPC_MES3 193, 194, 224, 226)
 - Lilia calls Guy ガイルディア once (NPC_MES3 186): typo, or her not bothering to

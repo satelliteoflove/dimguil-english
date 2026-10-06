@@ -119,7 +119,7 @@
               "text": "And once it's open, no sneakin' ahead of us."
             }
           ],
-          "flags": "72-74 is the offer to non-Evil parties, 75-78 the same-alignment version (\"Folks of the same alignment oughta team up, eh?\"); 79-80 is the countdown. 81 (\"Ah, was that you earlier?... is there anything you would care to ask?\") is a later meeting after you've helped, merged here as Inferred; it's already in the stiff register of review scene 3. The switch scene itself (72-81) is review scene 9, not yet reviewed. That 75-78 is the version for Evil parties is Inferred from \"same alignment\" and the \"brother\" greeting (75, also 1).",
+          "flags": "72-74 is the offer to non-Evil parties, 75-78 the same-alignment version (\"Folks of the same alignment oughta team up, eh?\"); 79-80 is the countdown. 81 (\"Was that you back there?... ask me anything ya like.\") is a later meeting after you've helped, merged here as Inferred; it was reviewed with scene 3. The switch scene itself (72-81) is review scene 9, not yet reviewed. That 75-78 is the version for Evil parties is Inferred from \"same alignment\" and the \"brother\" greeting (75, also 1).",
           "source": "NPC_MES2"
         },
         {
@@ -205,22 +205,22 @@
           ],
           "strings": "NPC_MES2 261",
           "placement": "Inferred: Balbo has seen the man frozen in the ice (Underground B3F, this chapter) but can't get to the area ahead. Balbo's next report (82-83, chapter 4) assumes the blue stone, so this one comes before it.",
-          "blurb": "Balbo's party is exploring the Underground Shrine as well, and they've found the man frozen in the ice. Balbo is sure it's a trap, and he isn't wrong. He wants to push on to the area ahead, \"but isn't there a bridge or something?\"",
+          "blurb": "Balbo's party is exploring the Underground Shrine as well, and they've found the man frozen in the ice. Balbo is sure it's a trap, and he isn't wrong. He wants to push on to the area ahead: \"Ain't there a bridge or something?\"",
           "quotes": [
             {
               "file": "NPC_MES2",
               "idx": 261,
               "speaker": "Balbo",
-              "text": "I saw a frozen man, and I can't help thinking it's a trap."
+              "text": "We saw a frozen man back there, and I can't shake the feeling it's a trap."
             },
             {
               "file": "NPC_MES2",
               "idx": 261,
               "speaker": "Balbo",
-              "text": "but isn't there a bridge or something?"
+              "text": "Ain't there a bridge or something?"
             }
           ],
-          "flags": "The map's translation-trap note says Balbo's はし could be bridge, ladder or edge. harano's next chapter supports \"bridge\": the way on is the waterway on B2F x7y12, which the blue-stoned Lithograph lets you cross to x3y12, and that's exactly where Balbo turns up next. Balbo's progress reports (81-89, 142, 261-265) are review scene 3 in docs/npc-review.md, still open: the Japanese is stiff and haughty here, unlike Balbo anywhere else, and the English keeps that register for now.",
+          "flags": "The map's translation-trap note says Balbo's はし could be bridge, ladder or edge. harano's next chapter supports \"bridge\": the way on is the waterway on B2F x7y12, which the blue-stoned Lithograph lets you cross to x3y12, and that's exactly where Balbo turns up next. Balbo's progress reports (81-89, 142, 261-265) were reviewed as scene 3 in docs/npc-review.md: the Japanese shifts to a stiff, superior register here (Fontana's party does the same in its maze encounters), and the English keeps Balbo's own words but makes him businesslike and a little lordly.",
           "source": "NPC_MES2"
         },
         {
@@ -312,22 +312,22 @@
           ],
           "strings": "NPC_MES2 82-83",
           "placement": "Walkthrough: harano meets Balbo at x3y14 on B2F, just across the waterway that the blue-stoned Lithograph opens. The line about the blue stone (82-83) fits that moment.",
-          "blurb": "Across the water at x3y14, Balbo's party has gotten there first, and Balbo has noticed what you're carrying: \"I see you too have managed to fit the blue stone into the Lithograph of the Sun.\" He's in an oddly stately mood about it, and his party heads off to search the area, sure something more important lies ahead.",
+          "blurb": "Across the water at x3y14, Balbo's party has gotten there first, and Balbo has noticed what you're carrying: \"So you got the blue stone fitted into the Lithograph of the Sun too, eh?\" He's in an oddly stately mood about it, and his party heads off to search the area, sure something more important lies ahead.",
           "quotes": [
             {
               "file": "NPC_MES2",
               "idx": 83,
               "speaker": "Balbo",
-              "text": "I see you too have managed to fit the blue stone into the Lithograph of the Sun."
+              "text": "So you got the blue stone fitted into the Lithograph of the Sun too, eh?"
             },
             {
               "file": "NPC_MES2",
               "idx": 83,
               "speaker": "Balbo",
-              "text": "Who'd have thought there was such a mechanism."
+              "text": "Who'd have thought it was rigged up like that."
             }
           ],
-          "flags": "82 is the same speech under \"Man in armor\" for players who haven't learned his name. Balbo's progress reports (81-89, 142, 261-265) are review scene 3 in docs/npc-review.md, still open: the Japanese is stiff and haughty here, unlike Balbo anywhere else, and the English keeps that register for now.",
+          "flags": "82 is the same speech under \"Man in armor\" for players who haven't learned his name. Balbo's progress reports (81-89, 142, 261-265) were reviewed as scene 3 in docs/npc-review.md: the Japanese shifts to a stiff, superior register here (Fontana's party does the same in its maze encounters), and the English keeps Balbo's own words but makes him businesslike and a little lordly.",
           "source": "NPC_MES2"
         },
         {
@@ -447,16 +447,16 @@
           ],
           "strings": "NPC_MES2 84-85",
           "placement": "Game: the center of something, with doors on four sides and small tablets, is Area X's central computer (event map S19).",
-          "blurb": "Balbo's party has reached the central computer and worked out that it's the center of something. The four doors won't budge and Balbo suspects the small tablets, but he isn't sharing notes: \"Forgive me, but kindly don't interrupt our strategy meeting.\"",
+          "blurb": "Balbo's party has reached the central computer and worked out that it's the center of something. The four doors won't budge and Balbo suspects the small tablets, but he isn't sharing notes: \"Sorry, but this is a strategy meeting. Don't interrupt.\"",
           "quotes": [
             {
               "file": "NPC_MES2",
               "idx": 85,
               "speaker": "Balbo",
-              "text": "Forgive me, but kindly don't interrupt our strategy meeting."
+              "text": "Sorry, but this is a strategy meeting. Don't interrupt."
             }
           ],
-          "flags": "Balbo's progress reports (81-89, 142, 261-265) are review scene 3 in docs/npc-review.md, still open: the Japanese is stiff and haughty here, unlike Balbo anywhere else, and the English keeps that register for now.",
+          "flags": "Balbo's progress reports (81-89, 142, 261-265) were reviewed as scene 3 in docs/npc-review.md: the Japanese shifts to a stiff, superior register here (Fontana's party does the same in its maze encounters), and the English keeps Balbo's own words but makes him businesslike and a little lordly.",
           "source": "NPC_MES2"
         },
         {
@@ -527,16 +527,16 @@
           ],
           "strings": "NPC_MES2 262",
           "placement": "Game: Balbo has fitted the green stone (Area A B4F, this chapter; event map S22).",
-          "blurb": "Balbo has the green stone in his Lithograph and nothing to show for it: \"Isn't fitting the green stone enough? Something seems to be missing.\" He's right, since the stone still has to light the altar on B4F, but his party gives up and moves on.",
+          "blurb": "Balbo has the green stone in his Lithograph and nothing to show for it: \"Fitting the green stone ain't enough? Feels like something's missing.\" He's right, since the stone still has to light the altar on B4F, but his party gives up and moves on.",
           "quotes": [
             {
               "file": "NPC_MES2",
               "idx": 262,
               "speaker": "Balbo",
-              "text": "Isn't fitting the green stone enough? Something seems to be missing."
+              "text": "Fitting the green stone ain't enough? Feels like something's missing."
             }
           ],
-          "flags": "\"The light altar on B4F\" is harano's next chapter (B4F x11y11: the green-stoned Lithograph turns the light green). Balbo's progress reports (81-89, 142, 261-265) are review scene 3 in docs/npc-review.md, still open: the Japanese is stiff and haughty here, unlike Balbo anywhere else, and the English keeps that register for now.",
+          "flags": "\"The light altar on B4F\" is harano's next chapter (B4F x11y11: the green-stoned Lithograph turns the light green). Balbo's progress reports (81-89, 142, 261-265) were reviewed as scene 3 in docs/npc-review.md: the Japanese shifts to a stiff, superior register here (Fontana's party does the same in its maze encounters), and the English keeps Balbo's own words but makes him businesslike and a little lordly.",
           "source": "NPC_MES2"
         }
       ],
@@ -580,13 +580,13 @@
           ],
           "strings": "NPC_MES2 86-87, 185-187",
           "placement": "Game: the iron bars are the Jail Ogre's cage (event map S24, which links 86-87); the gossip about a new party of three refers to Zaril walking out on Fontana, which harano has at B2F x6y11 in this chapter, \"after which the NPC parties change.\"",
-          "blurb": "Balbo's party has reached the Jail Ogre's cage and doesn't like the look of it: \"something about the iron bars ahead seems off.\" They're going home by Malor to come back fully prepared. By now Gaura has left them, and if you ask about other parties Balbo grumbles that the new three-man party has one of theirs: \"And get this, one of 'em used to be in our party.\"",
+          "blurb": "Balbo's party has reached the Jail Ogre's cage and doesn't like the look of it: \"something about them iron bars ahead seems off.\" They're going home by Malor to come back fully prepared. By now Gaura has left them, and if you ask about other parties Balbo grumbles that the new three-man party has one of theirs: \"And get this, one of 'em used to be in our party.\"",
           "quotes": [
             {
               "file": "NPC_MES2",
               "idx": 87,
               "speaker": "Balbo",
-              "text": "something about the iron bars ahead seems off."
+              "text": "something about them iron bars ahead seems off."
             },
             {
               "file": "NPC_MES2",
@@ -595,7 +595,7 @@
               "text": "And get this, one of 'em used to be in our party."
             }
           ],
-          "flags": "The roster swap is Inferred from the dialogue: Gaura joins Zaril's new party (NPC2 187, Rosea: \"Gaura was in the new party\"; NPC5 66, Gaura: \"Balbo, scary. Ran away.\"); Reiran moves to Fontana's party (NPC3 9, \"I helped these kids out as a part-time gig\"); Artemisia, who was in Fontana's party during the quarrel (NPC3 76, 86), turns up in Balbo's (NPC2 12, \"Long time no see!\"; NPC2 271, the woman with a spear is Artemisia). So from here on Balbo's party is Balbo, Alba, Rosea and Artemisia. Whether the reshuffle has happened by the time you meet Balbo at the bars depends on order; harano's route reaches the cage after the quarrel. Balbo's progress reports (81-89, 142, 261-265) are review scene 3 in docs/npc-review.md, still open: the Japanese is stiff and haughty here, unlike Balbo anywhere else, and the English keeps that register for now.",
+          "flags": "The roster swap is Inferred from the dialogue: Gaura joins Zaril's new party (NPC2 187, Rosea: \"Gaura was in the new party\"; NPC5 66, Gaura: \"Balbo, scary. Ran away.\"); Reiran moves to Fontana's party (NPC3 9, \"I helped these kids out as a part-time gig\"); Artemisia, who was in Fontana's party during the quarrel (NPC3 76, 86), turns up in Balbo's (NPC2 12, \"Long time no see!\"; NPC2 271, the woman with a spear is Artemisia). So from here on Balbo's party is Balbo, Alba, Rosea and Artemisia. Whether the reshuffle has happened by the time you meet Balbo at the bars depends on order; harano's route reaches the cage after the quarrel. Balbo's progress reports (81-89, 142, 261-265) were reviewed as scene 3 in docs/npc-review.md: the Japanese shifts to a stiff, superior register here (Fontana's party does the same in its maze encounters), and the English keeps Balbo's own words but makes him businesslike and a little lordly.",
           "source": "NPC_MES2"
         },
         {
@@ -828,22 +828,22 @@
           ],
           "strings": "NPC_MES2 88-89",
           "placement": "Game: the door worked by three discs is the three-ring dial in Area B (event map S33; harano's B5F x7y11).",
-          "blurb": "Balbo's party has found the three-ring dial and can't crack it: \"This curious door simply refuses to open.\" Balbo figures there must be a clue somewhere, and there is. It's the \"sky fell\" inscription on Underground B4F, which you hopefully copied down.",
+          "blurb": "Balbo's party has found the three-ring dial and can't crack it: \"This strange door just won't open.\" Balbo figures there must be a clue somewhere, and there is. It's the \"sky fell\" inscription on Underground B4F, which you hopefully copied down.",
           "quotes": [
             {
               "file": "NPC_MES2",
               "idx": 89,
               "speaker": "Balbo",
-              "text": "This curious door simply refuses to open."
+              "text": "This strange door just won't open."
             },
             {
               "file": "NPC_MES2",
               "idx": 89,
               "speaker": "Balbo",
-              "text": "There must be a clue somewhere."
+              "text": "There's gotta be a clue around here somewhere."
             }
           ],
-          "flags": "Balbo's progress reports (81-89, 142, 261-265) are review scene 3 in docs/npc-review.md, still open: the Japanese is stiff and haughty here, unlike Balbo anywhere else, and the English keeps that register for now.",
+          "flags": "Balbo's progress reports (81-89, 142, 261-265) were reviewed as scene 3 in docs/npc-review.md: the Japanese shifts to a stiff, superior register here (Fontana's party does the same in its maze encounters), and the English keeps Balbo's own words but makes him businesslike and a little lordly.",
           "source": "NPC_MES2"
         },
         {
@@ -1051,22 +1051,22 @@
           ],
           "strings": "NPC_MES2 264-265",
           "placement": "Game: the treasure behind a door that turned Alba to ash is the small door and crystal in Area D (event map S47, which links 264-265); harano has it on B1F, the step that releases mimicry mode.",
-          "blurb": "Balbo's party got to the small door before you, and it went badly. Balbo warns you off: \"The treasure ahead is beyond the likes of you.\" Alba went in and turned to ash the moment he came out, so they're off to the Temple to have him revived.",
+          "blurb": "Balbo's party got to the small door before you, and it went badly. Balbo warns you off: \"The treasure up ahead? You lot won't get your hands on it, I'm warning ya.\" Alba went in and turned to ash the moment he came out, so they're off to the Temple to have him revived.",
           "quotes": [
             {
               "file": "NPC_MES2",
               "idx": 264,
               "speaker": "Balbo",
-              "text": "The treasure ahead is beyond the likes of you."
+              "text": "The treasure up ahead? You lot won't get your hands on it, I'm warning ya."
             },
             {
               "file": "NPC_MES2",
               "idx": 264,
               "speaker": "Balbo",
-              "text": "Alba went in a while ago, and the moment he came out, he turned to ashes."
+              "text": "Alba went in a while back, and the second he came out, he turned to ashes."
             }
           ],
-          "flags": "265 is the same speech under \"Man in armor\". The blurb says \"turned to ash\" in its own words; the quote keeps the patch's \"ashes\". Balbo's progress reports (81-89, 142, 261-265) are review scene 3 in docs/npc-review.md, still open: the Japanese is stiff and haughty here, unlike Balbo anywhere else, and the English keeps that register for now.",
+          "flags": "265 is the same speech under \"Man in armor\". The blurb says \"turned to ash\" in its own words; the quote keeps the patch's \"ashes\". Balbo's progress reports (81-89, 142, 261-265) were reviewed as scene 3 in docs/npc-review.md: the Japanese shifts to a stiff, superior register here (Fontana's party does the same in its maze encounters), and the English keeps Balbo's own words but makes him businesslike and a little lordly.",
           "source": "NPC_MES2"
         },
         {
@@ -1729,13 +1729,13 @@
           ],
           "strings": "NPC_MES2 142-145",
           "placement": "Anytime: the body-collection service, offered when your dead are left in the maze.",
-          "blurb": "If you've left bodies in the maze, Balbo offers to haul them to the Temple, though \"We Evil types don't usually go in for this.\" Say yes and he admits what caught his eye: \"That lot had some mighty fine gear on 'em.\"",
+          "blurb": "If you've left bodies in the maze, Balbo offers to haul them to the Temple, though \"Us Evil types ain't fond of this sort of thing.\" Say yes and he admits what caught his eye: \"That lot had some mighty fine gear on 'em.\"",
           "quotes": [
             {
               "file": "NPC_MES2",
               "idx": 142,
               "speaker": "Balbo",
-              "text": "We Evil types don't usually go in for this"
+              "text": "Us Evil types ain't fond of this sort of thing"
             },
             {
               "file": "NPC_MES2",
@@ -1744,7 +1744,7 @@
               "text": "That lot had some mighty fine gear on 'em."
             }
           ],
-          "flags": "Review scene 5, not yet reviewed. 142 is in the stiff register of scene 3; 144 is coarse Balbo.",
+          "flags": "Review scene 5, not yet reviewed. 142 is in the stiff register of scene 3 and was reviewed there; 144 is coarse Balbo.",
           "source": "NPC_MES2"
         },
         {
@@ -2320,16 +2320,16 @@
           ],
           "strings": "NPC_MES2 263",
           "placement": "Unknown: \"this area\" has a room with a statue of a giant face, and Balbo means to hurry and tell the scholars. Which area isn't established. Area Z's face-like relief on the coffin (harano area-z x10y10) is a candidate, but Balbo still trusting the scholars suggests a time before chapter 17's reveal.",
-          "blurb": "Balbo has found a room with a statue of a giant face and is hurrying off to tell the scholars. He leaves the examining to you: \"Kindly go on ahead and examine the statue.\"",
+          "blurb": "Balbo has found a room with a statue of a giant face and is hurrying off to tell the scholars. He leaves the examining to you: \"You lot go on ahead and look it over.\"",
           "quotes": [
             {
               "file": "NPC_MES2",
               "idx": 263,
               "speaker": "Balbo",
-              "text": "Kindly go on ahead and examine the statue."
+              "text": "You lot go on ahead and look it over."
             }
           ],
-          "flags": "Balbo's progress reports (81-89, 142, 261-265) are review scene 3 in docs/npc-review.md, still open: the Japanese is stiff and haughty here, unlike Balbo anywhere else, and the English keeps that register for now.",
+          "flags": "Balbo's progress reports (81-89, 142, 261-265) were reviewed as scene 3 in docs/npc-review.md: the Japanese shifts to a stiff, superior register here (Fontana's party does the same in its maze encounters), and the English keeps Balbo's own words but makes him businesslike and a little lordly.",
           "source": "NPC_MES2"
         },
         {

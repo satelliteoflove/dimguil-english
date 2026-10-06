@@ -100,8 +100,25 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 - **"Companions," not "comrades" (2:231).** Chris: "comrade" carries a connotation for
   American players that doesn't fit. Balbo's 仲間 is now "companions"; the other uses
   are listed under To revisit.
+- **The leaders' maze-encounter voice (NPC scene 3, Balbo's progress reports,
+  2026-10-05).** When Balbo's party meets you in the maze, the Japanese drops his own
+  voice (俺様, ねぇ, チッ) for a stiff, superior one: 君たち, 〜たまえ, 〜かね, 我々. The
+  first draft called it a writer's slip. Chris questioned that, and a check found
+  Fontana, polite everywhere else, shifts the same way in his maze encounters (3:72,
+  75, 88, 278), so it looks like one writer's stock voice for party leaders. That's
+  deliberate, though not about Balbo in particular. It isn't the careful-speech shift
+  Japanese has, which goes toward politeness (です/ます); this goes toward a boss
+  talking down. The English meets it halfway: Balbo keeps his words ("ain't", "ya",
+  "you lot", "them"), but the grammar is complete, the g's stay on, and the orders are
+  clipped ("Sorry, but this is a strategy meeting. Don't interrupt."). 2:264-265 also
+  lost a sneer the old English had added ("beyond the likes of you"); the Japanese is a
+  warning.
 
 ## To revisit
+
+- **Fontana's maze encounters (3:72, 75, 88, 278).** Same register shift as Balbo's
+  reports. Handle them the same way when NPC_MES3 is reviewed: his own words, a little
+  more in charge.
 
 - **The developer's English names.** Item and monster names follow the game's built-in
   English list. Chris's view: the game was never released in English, so these are

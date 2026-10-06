@@ -31,8 +31,8 @@ with the chapter and the string's new wording, to carry over to the site.
 |---|---|---|
 | Guy | NPC_MES1 217 | If you're interested, try heading down to the underground library. |
 | Lychee | NPC_MES1 214 | He knows lots and lots of things, I guess, but I couldn't understand a word he said. |
-| Balbo | NPC_MES2 261 | I saw a frozen man, and I can't help thinking it's a trap. |
-| Balbo | NPC_MES2 261 | but isn't there a bridge or something? |
+| Balbo | NPC_MES2 261 | We saw a frozen man back there, and I can't shake the feeling it's a trap. |
+| Balbo | NPC_MES2 261 | Ain't there a bridge or something? |
 | Cleo | NPC_MES4 57 | I'm a Bishop, believe it or not |
 | Cleo | NPC_MES4 67 | This isn't the Temple, you know. |
 | The Fortune Teller | SISETU 335 | His magic will vanish only with his life, and he shall sleep forever. |
@@ -43,8 +43,8 @@ with the chapter and the string's new wording, to carry over to the site.
 |---|---|---|
 | Guy | NPC_MES1 202 | I'm not a Lord, I'm a Hero! |
 | Linaria | NPC_MES1 203 | Yeah, yeah...... |
-| Balbo | NPC_MES2 83 | I see you too have managed to fit the blue stone into the Lithograph of the Sun. |
-| Balbo | NPC_MES2 83 | Who'd have thought there was such a mechanism. |
+| Balbo | NPC_MES2 83 | So you got the blue stone fitted into the Lithograph of the Sun too, eh? |
+| Balbo | NPC_MES2 83 | Who'd have thought it was rigged up like that. |
 | The Guardians | EVENTMES 280 | We are the Guardians who rule this land. |
 | The Guardians | EVENTMES 280 | You are not permitted to cut off the flow of the water. |
 | The Fortune Teller | SISETU 336 | It seems a machine sleeping underground fouled the lake. |
@@ -57,7 +57,7 @@ with the chapter and the string's new wording, to carry over to the site.
 |---|---|---|
 | Guy | NPC_MES1 195 | a party that was nothing but kids |
 | Lychee | NPC_MES1 198 | they gave me an item! Heheee, jealous? |
-| Balbo | NPC_MES2 85 | Forgive me, but kindly don't interrupt our strategy meeting. |
+| Balbo | NPC_MES2 85 | Sorry, but this is a strategy meeting. Don't interrupt. |
 | Fontana | NPC_MES3 68 | I have a feeling these ancient glyphs are some kind of key. |
 | Artemisia | NPC_MES3 71 | That little tablet we saw earlier had the same glyphs as these! |
 | Bergamot | NPC_MES4 33 | With all 26 ancient glyphs laid out like this, our research is bound to get on. |
@@ -67,7 +67,7 @@ with the chapter and the string's new wording, to carry over to the site.
 
 | Who | String | Quote |
 |---|---|---|
-| Balbo | NPC_MES2 262 | Isn't fitting the green stone enough? Something seems to be missing. |
+| Balbo | NPC_MES2 262 | Fitting the green stone ain't enough? Feels like something's missing. |
 
 ## 8. Area A: the yellow stone and the Jail Ogre
 
@@ -75,7 +75,7 @@ with the chapter and the string's new wording, to carry over to the site.
 |---|---|---|
 | Guy | NPC_MES1 80 | that big green brute |
 | Guy | NPC_MES1 80 | We very nearly ended up as its lunch |
-| Balbo | NPC_MES2 87 | something about the iron bars ahead seems off. |
+| Balbo | NPC_MES2 87 | something about them iron bars ahead seems off. |
 | Balbo | NPC_MES2 185 | And get this, one of 'em used to be in our party. |
 | Artemisia | NPC_MES3 76 | All these two ever do is fight! |
 | Zaril | NPC_MES3 78 | You're not fit to be leader |
@@ -102,8 +102,8 @@ with the chapter and the string's new wording, to carry over to the site.
 |---|---|---|
 | Guy | NPC_MES1 288 | Three animals... it's on the tip of my tongue... |
 | Lilia | NPC_MES1 223 | Positively oozing killing intent... |
-| Balbo | NPC_MES2 89 | This curious door simply refuses to open. |
-| Balbo | NPC_MES2 89 | There must be a clue somewhere. |
+| Balbo | NPC_MES2 89 | This strange door just won't open. |
+| Balbo | NPC_MES2 89 | There's gotta be a clue around here somewhere. |
 | Mysterious figure | NPC_MES5 105 | Beyond lies the holy ground of the Opener of the Door! |
 | The Guardians | EVENTMES 282 | Your souls we offer up to our god. We shall absorb them as we did the Priestess's. |
 | The Fortune Teller | SISETU 339 | The key to the secret is hidden on some wall. The large ring stands for the sky, the small ring for the earth. |
@@ -134,8 +134,8 @@ with the chapter and the string's new wording, to carry over to the site.
 |---|---|---|
 | Guy | NPC_MES1 289 | a string of baffling ancient glyphs somewhere on a higher floor |
 | Lychee | NPC_MES1 102 | It wasn't Lychee! I only kicked a teeny little rock, that's all! |
-| Balbo | NPC_MES2 264 | The treasure ahead is beyond the likes of you. |
-| Balbo | NPC_MES2 264 | Alba went in a while ago, and the moment he came out, he turned to ashes. |
+| Balbo | NPC_MES2 264 | The treasure up ahead? You lot won't get your hands on it, I'm warning ya. |
+| Balbo | NPC_MES2 264 | Alba went in a while back, and the second he came out, he turned to ashes. |
 | Fontana | NPC_MES3 278 | I'm sure it isn't the god Kadorto. |
 | Fontana | NPC_MES3 73 | Looks like we teleported into a new maze. |
 | The Guardians | EVENTMES 284 | How many hundreds of years it took to raise this land again, you cannot know. |
@@ -207,7 +207,7 @@ with the chapter and the string's new wording, to carry over to the site.
 | Reiran | NPC_MES2 105 | Shall I lop your head off for you? |
 | Balbo | NPC_MES2 92 | Oh, what terrible things I have done! |
 | Balbo | NPC_MES2 93 | right back to my old ways |
-| Balbo | NPC_MES2 142 | We Evil types don't usually go in for this |
+| Balbo | NPC_MES2 142 | Us Evil types ain't fond of this sort of thing |
 | Balbo | NPC_MES2 144 | That lot had some mighty fine gear on 'em. |
 | Balbo | NPC_MES2 226 | Not that there's anyplace to swim down here. |
 | Reiran | NPC_MES2 235 | Lately I'm, like, totally hooked on setting off teleporter traps on purpose. |
@@ -253,7 +253,7 @@ with the chapter and the string's new wording, to carry over to the site.
 | Lychee | NPC_MES1 96 | I didn't wanna kill the cute little Magical Rabbit. |
 | Guy | NPC_MES1 257 | We need to scout someone from another party. |
 | Alstron | NPC_MES1 120 | the ever-handy Thief, Fritillaria. |
-| Balbo | NPC_MES2 263 | Kindly go on ahead and examine the statue. |
+| Balbo | NPC_MES2 263 | You lot go on ahead and look it over. |
 | Young samurai | NPC_MES3 74 | We're still green, but we're looking for her as well. |
 | Cresson | NPC_MES4 113 | P-please stop. I don't know anything. I never met any heretics. |
 | Cresson | NPC_MES4 143 | but... where do they really go...... |
