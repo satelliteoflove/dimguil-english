@@ -120,6 +120,11 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   can see each other again!", innocent on its face but open to the dating sense. Her
   goodbye for a dead party member (2:46, 3:24) keeps "let's meet again sometime",
   since no fluster follows it.
+- **Alstron's book stays unnamed (1:238).** The Japanese says 例の書物, "that book,
+  you know the one", and leaves the Dragon Quest III player to recognize the Book of
+  Satori. Naming it in English spelled out a joke the original only winks at, so it's
+  "that book to the temple. You know the one." See "Guy's party and Dragon Quest III"
+  in `npc-translation.md`.
 
 ## To revisit
 

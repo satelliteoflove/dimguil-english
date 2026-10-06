@@ -213,6 +213,8 @@ interpretation so either can be checked or overturned on its own.
 
 - Keep "hero" as Guy's word for himself everywhere; it's the running gag. Where he
   names it as a class (128, 202), capitalize it: "Hero".
-- 238 names the book as the English Dragon Warrior III did ("Book of Satori"), so the
-  one explicit reference can be recognized in English.
+- 238 doesn't name the book. The Japanese says only 例の書物, "that book, you know the
+  one", and trusts the player to recognize it. An earlier version named it "Book of
+  Satori" (Dragon Warrior III's English name); Chris thought that pushed the reference
+  too hard, so it's now "that book to the temple. You know the one." (2026-10-05).
 - Don't add Dragon Quest references the Japanese doesn't make.
