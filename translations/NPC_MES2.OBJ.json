@@ -233,7 +233,7 @@
                 {
                     "length": 74,
                     "source": "NA",
-                    "translation": "Alba\n\"I would ask that you\n rescue {ff12}.\n\r There is nothing I can do myself,\n but I will pray for their safety...",
+                    "translation": "Alba\n\"I beg you... save {ff12}.\n\r There is nothing I can do myself,\n but I will pray for their safety...",
                     "addStringTerminator": true
                 },
                 {
@@ -269,13 +269,13 @@
                 {
                     "length": 45,
                     "source": "NA",
-                    "translation": "Gaura\n\"{ff12}... w-wasn't moving.\n N-next time, m-maybe we t-talk...",
+                    "translation": "Gaura\n\"{ff12}... w-wasn't moving.\n N-next time, hope we can talk...",
                     "addStringTerminator": true
                 },
                 {
                     "length": 21,
                     "source": "NA",
-                    "translation": "Artemisia\n\"Let's meet again sometime, okay?",
+                    "translation": "Artemisia\n\"I hope we can see each other again!",
                     "addStringTerminator": true
                 },
                 {

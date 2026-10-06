@@ -113,6 +113,13 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   clipped ("Sorry, but this is a strategy meeting. Don't interrupt."). 2:264-265 also
   lost a sneer the old English had added ("beyond the likes of you"); the Japanese is a
   warning.
+- **Artemisia's "see each other again" (2:44 and 3:25).** また会いましょうね is an
+  ordinary friendly parting, and her next line is "Oh gosh, what am I even saying?"
+  The Japanese joke is that she hears her own warmth as too forward. "Let's meet
+  again sometime" gave an English reader nothing to blush at, so it's now "I hope we
+  can see each other again!", innocent on its face but open to the dating sense. Her
+  goodbye for a dead party member (2:46, 3:24) keeps "let's meet again sometime",
+  since no fluster follows it.
 
 ## To revisit
 

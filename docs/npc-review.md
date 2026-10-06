@@ -75,11 +75,15 @@ the 'Man in armor' copies included. The stiff register turned out to be shared w
 Fontana's maze encounters, so the English keeps Balbo's words but makes him
 businesslike (see "The leaders' maze-encounter voice" in `translation-notes.md`).
 Chris's edits: 87 keeps "seems off" and is split over three pages, and 142 is rebroken.
+Scene 4 (goodbyes when one of yours is dead) was applied the same night: Alba's 37 is
+now a plea, Gaura's 43 a hope, and Artemisia's 44 is "I hope we can see each other
+again!" so her fluster in 45 has something to react to. The copies in NPC_MES3 (25)
+and NPC_MES5 (11) changed with them; 46 keeps "let's meet again sometime".
 
 ## Next up
 
-**NPC_MES2, scene 4: goodbyes when a party member is dead or lost (34-46).** Prepare
-it as a scene for the review tool.
+**NPC_MES2, scene 5: services, the body collection offer and Balbo's sarcastic せいぜい
+(123, 143-145).** Prepare it as a scene for the review tool.
 
 ## Remaining scenes
 
@@ -88,8 +92,7 @@ Priority as the reviewers ranked it. Numbers are string indices.
 NPC_MES2 (Balbo, Rosea, Artemisia, Reiran, Alba, Gaura)
 - [x] 2. Alba's past (233, 180 and the thread around them), HIGH, done 2026-10-05
 - [x] 3. Balbo's progress reports (81-89, 142, 261-265), HIGH, done 2026-10-05
-- [ ] 4. Goodbyes when a party member is dead or lost (34-46), MEDIUM: sincerity, and
-      Artemisia's flustered "see each other again" gag (also NPC_MES3 24-26).
+- [x] 4. Goodbyes when a party member is dead or lost (34-46), MEDIUM, done 2026-10-05
 - [ ] 5. Services: body collection offer, Balbo's sarcastic せいぜい (123, 143-145; 142 was done in scene 3), MEDIUM
 - [ ] 6. Rosea's Kadorto warning (130), MEDIUM: currently a question the player can't answer
 - [ ] 7. First meeting, the wolfish man (13, 22), LOW-MEDIUM
