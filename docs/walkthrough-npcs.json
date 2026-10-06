@@ -312,7 +312,7 @@
           ],
           "strings": "NPC_MES2 82-83",
           "placement": "Walkthrough: harano meets Balbo at x3y14 on B2F, just across the waterway that the blue-stoned Lithograph opens. The line about the blue stone (82-83) fits that moment.",
-          "blurb": "Across the water at x3y14, Balbo's party has gotten there first, and Balbo has noticed what you're carrying: \"So you got the blue stone fitted into the Lithograph of the Sun too, eh?\" He's in an oddly stately mood about it, and his party heads off to search the area, sure something more important lies ahead.",
+          "blurb": "Across the water at x3y14, Balbo's party has gotten there first, and Balbo has noticed what you're carrying: \"So you got the blue stone fitted into the Lithograph of the Sun too, eh?\" He sounds almost impressed: \"Who'd have thought it was rigged up like that.\" Then his party heads off to search the area, sure something more important lies ahead.",
           "quotes": [
             {
               "file": "NPC_MES2",
