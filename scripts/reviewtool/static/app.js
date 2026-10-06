@@ -93,7 +93,12 @@ function needsDecision(ln) { return ln.faithful !== ln.current; }
 function decisionOf(ln) {
   const d = S.decisions[ln.ref];
   if (d) return d;
-  return needsDecision(ln) ? null : { choice: 'current', auto: true };
+  return needsDecision(ln) && !alreadyApplied(ln) ? null : { choice: 'current', auto: true };
+}
+// A line decided in an earlier apply of this scene, whose text is still what was applied.
+function alreadyApplied(ln) {
+  const prior = S.scene && S.scene.decision;
+  return !!(prior && (prior.lines || []).some(p => p.ref === ln.ref && p.after === ln.current));
 }
 function textFor(ln, choice) {
   if (choice === 'current') return ln.current;
@@ -114,7 +119,7 @@ function setChoice(i, choice, { advance = true } = {}) {
   renderApplyBar();
   if (choice === 'edited') { renderInspector(); openEditor(); return; }
   if (advance) {
-    const next = lines().findIndex((l, k) => k > i && needsDecision(l) && !S.decisions[l.ref]);
+    const next = lines().findIndex((l, k) => k > i && !decisionOf(l));
     if (next >= 0) focusLine(next); else renderInspector();
   } else renderInspector();
 }
@@ -263,7 +268,7 @@ function updateHash() {
 
 function renderApplyBar() {
   const ls = lines();
-  const open = ls.filter(l => needsDecision(l) && !S.decisions[l.ref]).length;
+  const open = ls.filter(l => !decisionOf(l)).length;
   const changes = ls.filter(l => { const d = decisionOf(l); return d && textFor(l, d.choice) !== l.current; }).length;
   const prior = S.scene.decision;
   let msg = open ? `${open} proposed ${open === 1 ? 'change needs' : 'changes need'} your decision.`
