@@ -13,19 +13,22 @@ Releases go out as the work progresses. We don't hold everything back for 1.0.
 **Alpha.** The game is believed to be playable to the end, but some text is still
 Japanese, rough, or badly formatted.
 
-**Beta (0.8.x).** Every piece of text the player can reach is in English. The first
-quality pass is still in progress. v0.8.0 will be the first beta; its condition, that
-the text removed at the original team's request be translated again, was met on
-2026-10-03. Further 0.8.x releases follow as review passes land.
+**Beta (0.8.x).** Every piece of text the player can reach is in English. The work is
+fixing glaring and game-breaking bugs and cleaning up rough translations. v0.8.0's
+condition, that the text removed at the original team's request be translated again,
+was met on 2026-10-03. v0.8.0 is tagged and the repo made public without an
+announcement, and the README says not to play it until 0.9.0. Further 0.8.x releases
+follow as fixes land.
 
-**Release candidate (0.9.x).** v0.9.0 comes once the first quality pass is complete:
-every piece of text the player can reach has been reviewed at least once (see "Quality
-passes"). Further 0.9.x release candidates follow as testing turns things up.
+**Release candidate (0.9.x).** v0.9.0 needs three things: the quality pass is complete
+(every piece of text the player can reach has been reviewed at least once, see "Quality
+passes"); Chris's playthrough has reached the ending and what it turned up is fixed; and
+the disc layout is settled (see "Disc layout"). v0.9.0 is announced on r/wizardry and
+RetroGameTalk, for people to play and report the smaller bugs. 0.9.x releases are bug
+fixes and minor translation adjustments only. Testing on a real PlayStation happens
+during 0.9.x.
 
-**1.0.** The release candidates have been tested more completely, and at least one
-playthrough to the ending, by anyone, has confirmed the translation has no obvious or
-game-breaking flaws. The disc layout has also been reviewed so the patch
-doesn't slow loading (see "Disc layout").
+**1.0.** Done and polished: after 1.0, only minor bugs or typos should turn up.
 
 Each release gets a version tag and a changelog entry. Pushing a `v*` tag builds the
 patch and publishes the release (`.github/workflows/release.yml`); the notes come from
@@ -88,9 +91,10 @@ Typos in the game's own English monster names are for the quality passes:
 
 Total translation is about 44,700 words as of 2026-09-26.
 
-### Playthrough (to reach 1.0)
+### Playthrough (to reach 0.9)
 
-A full playthrough to the ending on a release build, in DuckStation. The emulator
+A full playthrough to the ending on a current build, Chris's recorded one in RetroArch
+with the Beetle PSX HW core. The emulator
 tooling can check that each string fits its window, but it can't show that the game is
 finishable. Findings go into GitHub issues, or `docs/playtest.html` before the repo is
 public. `docs/event-review.md` lists event lines to watch for, whose wording
@@ -100,31 +104,30 @@ Saves live on the memory card, and as far as we know the patch doesn't touch the
 format, so a save should carry over from one release to the next. Verify this once
 before telling players they can upgrade mid-game.
 
-### Disc layout (to reach 1.0)
+### Disc layout (to reach 0.9)
 
-Review where the build puts files on the disc, and optimize it. Every file keeps its
-original LBA, except that a file that outgrows its sectors is appended after the last
-data file (`scripts/relocate.py`). As of 2026-09-30 that's five files: SISETU,
+The goal is that the patch loads no slower than the original disc. Right now every file
+keeps its original LBA, except that a file that outgrows its sectors is appended after the
+last data file (`scripts/relocate.py`). As of 2026-09-30 that's five files: SISETU,
 I_NAME_E and NPC_MES1-3 move from around LBA 28,300-29,500 to around 163,300, so each
 load of one of them is a seek across most of the data track and back. NPC_MES loads on
 every NPC encounter.
 
-Consider a complete reorganization of the data track rather than finding nearer
-holes for the moved files, so placement is planned around load order from the start.
-relocate.py already rewrites the executable's four MSF tables for moved files, so a
-full reorder is the same mechanism applied to every file. Before relying on it:
-- Log the real load sequence in play (town, maze, NPC encounters, combat, cards) to
-  see which files load together.
+Decided 2026-10-07: keep the original file order, and let a file that grew push the files
+after it along, instead of moving it to the end. relocate.py already rewrites the
+executable's four MSF tables for moved files, so shifting every later file is the same
+mechanism. Before relying on it:
 - Confirm nothing outside the four tables holds an LBA: overlays, movie or XA streams,
   or files that point into other files.
-- Drop files nothing loads (ITEM_SE and ITEM_CA are believed never to be loaded) from
-  the hot areas, or from the disc if nothing checks for them.
-- Compare load times against the original disc, in DuckStation with accurate CD
-  timing and on real hardware if possible.
+- Compare load times against the original disc in DuckStation with accurate CD timing,
+  for 0.9.0. Real hardware (a burned disc or an ODE) during 0.9.x.
 
 The PS1 drive reads at constant linear velocity, so data comes off at the same rate
-anywhere on the disc. The outer-edge speed advantage of CAV drives doesn't apply here;
-what placement changes is seek distance.
+anywhere on the disc. What placement changes is seek distance.
+
+Loading faster than the original, by reorganizing the data track around the real load
+order or by changing the loading code, isn't a goal for this patch. It could be a
+separate patch later.
 
 ### Build from a clean clone
 
