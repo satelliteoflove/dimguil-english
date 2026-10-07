@@ -34,7 +34,8 @@ see all of it.
   summoning system from 特殊な魔物召喚システム: "Underneath the Fortress City is this
   maze, made to train young adventurers. Summoned monsters keep coming, so earn all the
   experience you can. There's no gold or items dropped, but anyone wiped out is sent to
-  the temple free of charge." It dropped "as a bonus" (特典付き).
+  the temple free of charge." It dropped "as a bonus" (特典付き). Chris confirmed it in play, along with the
+  return prompt ("Press △ to return to the Fortress City.", SISETU 442).
 
 - **Event lines off center (2026-10-07).** The event box centers each line, spaces
   included. 26 event strings still carried the Japanese padding on one side, so their
