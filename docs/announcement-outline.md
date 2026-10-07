@@ -23,8 +23,8 @@ first.
 3. **Translation approach.** The English sticks to the intent and phrasing of the
    Japanese where possible, and adapts where it has to so the game reads pleasantly and
    is easy to follow. Give examples of both:
-   - Care with the language and culture: Guy and Alstron's introduction; Linaria lying
-     about her age with the dated "springy as a fresh fish"; the town board modeled on
+   - Care with the language and culture: Guy and Alstron's introduction; Lilia lying
+     about her age (ピチピチの17才, a stock gag, rendered "seventeen and holding"); the town board modeled on
      the chalkboards at pre-cellphone Japanese train stations; Alstron's Dragon Quest III
      Sage/Bishop class-change reference; other inside jokes kept. From the catalog
      sweep: the Fire Rock's 「焼け石に水」, a proverb for futility, kept word for word as
