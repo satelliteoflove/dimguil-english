@@ -74,6 +74,9 @@ The tools:
 - Screenshots: `play.py` runs a button sequence from a state and screenshots each step;
   `explore.py` and `menushots.py` walk a facility's icon menu; `sheet.py` puts
   screenshots together into one image.
+- The recorded play-through: `playwatch.py` runs beside RetroArch, takes save states and
+  memory-card backups, and pauses the game before a line that `textstatus.py` lists as
+  still to review. `textstatus.py` reads the open NPC scenes from `docs/npc-review.md`.
 - Playtesting in DuckStation: `mktestsave.py` makes a memory card with a ready party
   (`rips/testsave.mcd`), `use_testsave.sh` swaps it into DuckStation's slot (and
   `--restore` puts your own card back), and `publish_test.sh` copies the build next to
