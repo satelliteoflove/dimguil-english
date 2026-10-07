@@ -136,7 +136,9 @@ def main():
         dst_md5=dst['md5'], dst_sha1=dst['sha1'], dst_crc=dst['crc32'])
     readme = readme.replace('\n', '\r\n')  # Notepad-friendly
 
-    zpath = os.path.join(out, name + '.zip')
+    # GitHub drops spaces and parentheses from asset names, so the download gets a plain
+    # one; the files inside keep the descriptive name.
+    zpath = os.path.join(out, f'Wizardry-Dimguil-English-{version}.zip')
     with zipfile.ZipFile(zpath, 'w', zipfile.ZIP_DEFLATED) as z:
         z.write(patch, os.path.basename(patch))
         info = zipfile.ZipInfo('readme.txt', time.localtime()[:6])
