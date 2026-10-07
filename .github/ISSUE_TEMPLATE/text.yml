@@ -1,0 +1,40 @@
+name: Text or translation problem
+description: A typo, odd wording, text cut off or running out of its box, a line that seems mistranslated, or Japanese left in.
+labels: [text]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report this. Please check the [known issues](https://github.com/satelliteoflove/dimguil-english/issues?q=label%3A%22known+issue%22) first, in case it's already there.
+  - type: input
+    id: version
+    attributes:
+      label: Patch version
+      description: It's in the name of the patch file, e.g. v0.8.0.
+    validations:
+      required: true
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshot
+      description: Drag an image in here, or type the text exactly as it appears.
+    validations:
+      required: true
+  - type: textarea
+    id: where
+    attributes:
+      label: Where in the game
+      description: Who says it or what screen it's on, and roughly when.
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What's wrong with it
+      description: If you read Japanese and know what the original says, that's very welcome too.
+    validations:
+      required: true
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested wording (optional)
