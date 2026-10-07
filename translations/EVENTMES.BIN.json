@@ -215,7 +215,7 @@
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "   There is a door adorned with beautiful ornaments.",
+                    "translation": "There is a door adorned with beautiful ornaments.",
                     "addStringTerminator": true
                 },
                 {
@@ -497,7 +497,7 @@
                 {
                     "length": 153,
                     "source": "NA",
-                    "translation": "This door bears the crest of the moon.\nIn the middle of the door is a square hole.{ff26} \nUnfamiliar ancient letters are carved into the crest:\n]{ff30}5{ancient_m}{ancient_o}{ancient_o}{ancient_n}{ff30}0[{ff26}\rCould something be needed? You try everything\nyou can think of, but the door won't budge.",
+                    "translation": "This door bears the crest of the moon.\nIn the middle of the door is a square hole.{ff26}\nUnfamiliar ancient letters are carved into the crest:\n]{ff30}5{ancient_m}{ancient_o}{ancient_o}{ancient_n}{ff30}0[{ff26}\rCould something be needed? You try everything\nyou can think of, but the door won't budge.",
                     "addStringTerminator": true
                 },
                 {
@@ -857,49 +857,49 @@
                 {
                     "length": 44,
                     "source": "NA",
-                    "translation": " Unfamiliar ancient letters are carved on\nthe door: ]{ff30}4{ancient_a}{ff30}0[{ff26}",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe door: ]{ff30}4{ancient_a}{ff30}0[{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 44,
                     "source": "NA",
-                    "translation": " Unfamiliar ancient letters are carved on\nthe door: ]{ff30}4{ancient_b}{ff30}0[{ff26}",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe door: ]{ff30}4{ancient_b}{ff30}0[{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 44,
                     "source": "NA",
-                    "translation": " Unfamiliar ancient letters are carved on\nthe door: ]{ff30}4{ancient_c}{ff30}0[{ff26}",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe door: ]{ff30}4{ancient_c}{ff30}0[{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 44,
                     "source": "NA",
-                    "translation": " Unfamiliar ancient letters are carved on\nthe door: ]{ff30}4{ancient_d}{ff30}0[{ff26}",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe door: ]{ff30}4{ancient_d}{ff30}0[{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 44,
                     "source": "NA",
-                    "translation": " Unfamiliar ancient letters are carved on\nthe door: ]{ff30}4{ancient_e}{ff30}0[{ff26}",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe door: ]{ff30}4{ancient_e}{ff30}0[{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 44,
                     "source": "NA",
-                    "translation": " Unfamiliar ancient letters are carved on\nthe door: ]{ff30}5{ancient_a}{ff30}0[{ff26}",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe door: ]{ff30}5{ancient_a}{ff30}0[{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 44,
                     "source": "NA",
-                    "translation": " Unfamiliar ancient letters are carved on\nthe door: ]{ff30}5{ancient_b}{ff30}0[{ff26}",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe door: ]{ff30}5{ancient_b}{ff30}0[{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 44,
                     "source": "NA",
-                    "translation": " Unfamiliar ancient letters are carved on\nthe door: ]{ff30}5{ancient_c}{ff30}0[{ff26}",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe door: ]{ff30}5{ancient_c}{ff30}0[{ff26}",
                     "addStringTerminator": true
                 },
                 {
@@ -911,7 +911,7 @@
                 {
                     "length": 176,
                     "source": "NA",
-                    "translation": "You meet Zaril's party, but they flee\ninto the darkness as if in terror\nof something.{ff26}\rHuge footsteps echo from far off.\nPeering ahead, you see Zaril's party,\ntwisted together into one.{ff26}\r \"......\" With a voiceless cry,\nthey come at you in the shape of a huge\nmonster.",
+                    "translation": "You meet Zaril's party, but they flee\ninto the darkness as if in terror\nof something.{ff26}\rHuge footsteps echo from far off.\nPeering ahead, you see Zaril's party,\ntwisted together into one.{ff26}\r\"......\" With a voiceless cry,\nthey come at you in the shape of a huge\nmonster.",
                     "addStringTerminator": true
                 },
                 {
@@ -1175,7 +1175,7 @@
                 {
                     "length": 186,
                     "source": "NA",
-                    "translation": "You meet another party, but they flee\ninto the darkness as if in terror\nof something.{ff26}\rHuge footsteps echo from far off.\nPeering ahead, you see the party from\nbefore, twisted together into one.{ff26}\r \"......\" With a voiceless cry,\nthey come at you in the shape of a huge\nmonster.",
+                    "translation": "You meet another party, but they flee\ninto the darkness as if in terror\nof something.{ff26}\rHuge footsteps echo from far off.\nPeering ahead, you see the party from\nbefore, twisted together into one.{ff26}\r\"......\" With a voiceless cry,\nthey come at you in the shape of a huge\nmonster.",
                     "addStringTerminator": true
                 },
                 {
@@ -1289,13 +1289,13 @@
                 {
                     "length": 56,
                     "source": "NA",
-                    "translation": "Unfamiliar ancient letters are carved on\nthe door:\n ]{ff30}5{ancient_h}{ancient_e}{ancient_a}{ancient_l}{ff30}0[{ff26}",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_h}{ancient_e}{ancient_a}{ancient_l}{ff30}0[{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 53,
                     "source": "NA",
-                    "translation": "Unfamiliar ancient letters are carved on\nthe door:\n ]{ff30}5{ancient_g}{ancient_a}{ancient_s}{ff30}0[{ff26}",
+                    "translation": "Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_g}{ancient_a}{ancient_s}{ff30}0[{ff26}",
                     "addStringTerminator": true
                 },
                 {
@@ -1415,7 +1415,7 @@
                 {
                     "length": 457,
                     "source": "NA",
-                    "translation": "A beautiful woman appears there.\nHer lips part, and she speaks softly.{ff26}\r\"{ff30}2You who know the nature of all things:\n  do you see this place as one, or as all?{ff30}0\"{ff26}\r\"{ff30}2You who have gained every power:\n  do you see it as the end, or as a prologue?{ff30}0\"{ff26}\r\"{ff30}2You who shed every light:\n  do you see that light as the past, or the future?{ff30}0\" {ff26}\r    \"{ff30}2You must carry the answer.{ff30}0\"   {ff26}\r\"{ff30}2I, the Priestess who carries the god's\n  word, must wait for those who seek further answers.{ff30}0\"{ff26}\r\"{ff30}2Take the proof home with you,\n  and see everything, as your heart bids.{ff30}0\"{ff26}",
+                    "translation": "A beautiful woman appears there.\nHer lips part, and she speaks softly.{ff26}\r\"{ff30}2You who know the nature of all things:\ndo you see this place as one, or as all?{ff30}0\"{ff26}\r\"{ff30}2You who have gained every power:\ndo you see it as the end, or as a prologue?{ff30}0\"{ff26}\r\"{ff30}2You who shed every light:\ndo you see that light as the past, or the future?{ff30}0\"{ff26}\r\"{ff30}2You must carry the answer.{ff30}0\"{ff26}\r\"{ff30}2I, the Priestess who carries the god's\nword, must wait for those who seek further answers.{ff30}0\"{ff26}\r\"{ff30}2Take the proof home with you,\nand see everything, as your heart bids.{ff30}0\"{ff26}",
                     "addStringTerminator": true
                 },
                 {
@@ -1427,7 +1427,7 @@
                 {
                     "length": 271,
                     "source": "NA",
-                    "translation": "A beautiful woman appears there.\nHer lips part, and she speaks softly.{ff26}\r\"{ff30}2You who believe in power alone:\n  I have no tale to tell you.{ff30}0\"{ff26}\r\"{ff30}2I, the Priestess who carries the god's\n  word, must wait for those who seek further answers.{ff30}0\"{ff26}\r\"{ff30}2Take home the proof. See everything,\n  as your heart bids.{ff30}0\"{ff26}",
+                    "translation": "A beautiful woman appears there.\nHer lips part, and she speaks softly.{ff26}\r\"{ff30}2You who believe in power alone:\nI have no tale to tell you.{ff30}0\"{ff26}\r\"{ff30}2I, the Priestess who carries the god's\nword, must wait for those who seek further answers.{ff30}0\"{ff26}\r\"{ff30}2Take home the proof. See everything,\nas your heart bids.{ff30}0\"{ff26}",
                     "addStringTerminator": true
                 },
                 {
@@ -1691,37 +1691,37 @@
                 {
                     "length": 137,
                     "source": "NA",
-                    "translation": "{ff30}4       We are the Guardians\n{ff30}4       who rule this land.{ff26}\r{ff30}4You are not permitted to cut off the flow of the water.\n{ff30}4        Begone at once!{ff30}0{ff26}",
+                    "translation": "{ff30}4We are the Guardians\n{ff30}4who rule this land.{ff26}\r{ff30}4You are not permitted to cut off the flow of the water.\n{ff30}4Begone at once!{ff30}0{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 111,
                     "source": "NA",
-                    "translation": "{ff30}4       We are the Guardians\n{ff30}4       who rule this land.{ff26}\r \n{ff30}4Your bodies shall serve to remake our own.{ff30}0{ff26}",
+                    "translation": "{ff30}4We are the Guardians\n{ff30}4who rule this land.{ff26}\r \n{ff30}4Your bodies shall serve to remake our own.{ff30}0{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 147,
                     "source": "NA",
-                    "translation": "{ff30}4       We are the Guardians\n{ff30}4       who rule this land.{ff26}\r{ff30}4  Your souls we offer up to our god.\n{ff30}4  We shall absorb them as we did the Priestess's.{ff30}0{ff26}",
+                    "translation": "{ff30}4We are the Guardians\n{ff30}4who rule this land.{ff26}\r{ff30}4Your souls we offer up to our god.\n{ff30}4We shall absorb them as we did the Priestess's.{ff30}0{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 248,
                     "source": "NA",
-                    "translation": "{ff30}4       We are the Guardians\n{ff30}4       who rule this land.{ff26}\r{ff30}4  You who defile this precious land,\n{ff30}4  to us you are believers in a false god.\n{ff30}4  You shall not leave alive.{ff26}\r{ff30}4  This sword shall drink your blood,\n{ff30}4     and our god shall rise again.{ff30}0{ff26}",
+                    "translation": "{ff30}4We are the Guardians\n{ff30}4who rule this land.{ff26}\r{ff30}4You who defile this precious land,\n{ff30}4to us you are believers in a false god.\n{ff30}4You shall not leave alive.{ff26}\r{ff30}4This sword shall drink your blood,\n{ff30}4and our god shall rise again.{ff30}0{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 217,
                     "source": "NA",
-                    "translation": "{ff30}4       We are the Guardians\n{ff30}4       who rule this land.{ff26}\r \n{ff30}4   You shall go no further.{ff26}\r{ff30}4  How many hundreds of years it took\n{ff30}4  to raise this land again, you cannot know.\n{ff30}4  Here we shall finish you.{ff30}0{ff26}",
+                    "translation": "{ff30}4We are the Guardians\n{ff30}4who rule this land.{ff26}\r \n{ff30}4You shall go no further.{ff26}\r{ff30}4How many hundreds of years it took\n{ff30}4to raise this land again, you cannot know.\n{ff30}4Here we shall finish you.{ff30}0{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 255,
                     "source": "NA",
-                    "translation": "{ff30}4       We are the Guardians\n{ff30}4       who rule this land.{ff26}\r{ff30}4  Why do you not believe in our god?\n{ff30}4  Would you not see him live again here?{ff26}\r{ff30}4  Would you not rule every wish, every fate?\n{ff30}4  We shall raise this land again and rule all.\n{ff30}4  Would you so defile our long-held dream?{ff30}0{ff26}",
+                    "translation": "{ff30}4We are the Guardians\n{ff30}4who rule this land.{ff26}\r{ff30}4Why do you not believe in our god?\n{ff30}4Would you not see him live again here?{ff26}\r{ff30}4Would you not rule every wish, every fate?\n{ff30}4We shall raise this land again and rule all.\n{ff30}4Would you so defile our long-held dream?{ff30}0{ff26}",
                     "addStringTerminator": true
                 },
                 {
@@ -1877,19 +1877,19 @@
                 {
                     "length": 313,
                     "source": "NA",
-                    "translation": "Otaka\n\"What are the odds of bumping into you here!\n Name's Otaka, one of the programmers.{ff26}\r Since we met, I oughta do something for\n you lucky folks. Lessee~ what'd be good~\n Hmm... this is a tough one...{ff26}\r Oh, I know!\n I'll give you stuff I found in the maze.\n Take as much as you can carry.{ff26}\r \n Oh, and not a word to Agan!\"{ff26}",
+                    "translation": "Otaka\n\"What are the odds of bumping into you here!\nName's Otaka, one of the programmers.{ff26}\rSince we met, I oughta do something for\nyou lucky folks. Lessee~ what'd be good~\nHmm... this is a tough one...{ff26}\rOh, I know!\nI'll give you stuff I found in the maze.\nTake as much as you can carry.{ff26}\r \nOh, and not a word to Agan!\"{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 266,
                     "source": "NA",
-                    "translation": "Otaka\n\"Bumped into you again, huh~\n Were you out lookin' for me, maybe?{ff26}\r Well... can't be helped, I guess~\n I worked hard collectin' this stuff, but\n it's time for my usual item handout.{ff26}\r Don't go sellin' it right off, OK~?\n ...Right, off to collect more stuff.\n Hope we meet again!\"{ff26}",
+                    "translation": "Otaka\n\"Bumped into you again, huh~\nWere you out lookin' for me, maybe?{ff26}\rWell... can't be helped, I guess~\nI worked hard collectin' this stuff, but\nit's time for my usual item handout.{ff26}\rDon't go sellin' it right off, OK~?\n...Right, off to collect more stuff.\nHope we meet again!\"{ff26}",
                     "addStringTerminator": true
                 },
                 {
                     "length": 101,
                     "source": "NA",
-                    "translation": " \nSadly, you have no room for any items.{ff26} \n\rOtaka: \"Aww... what a shame...\"\nOtaka wanders sadly off into the dark...",
+                    "translation": " \nSadly, you have no room for any items.{ff26}\n\rOtaka: \"Aww... what a shame...\"\nOtaka wanders sadly off into the dark...",
                     "addStringTerminator": true
                 },
                 {
@@ -1901,7 +1901,7 @@
                 {
                     "length": 108,
                     "source": "NA",
-                    "translation": " \n\"Oh yeah, I even appraised 'em for you\n this time, special~\" {ff26}\n \n\rOtaka crams the items into your pack,\nand wanders happily off into the dark...",
+                    "translation": " \n\"Oh yeah, I even appraised 'em for you\nthis time, special~\"{ff26}\n \n\rOtaka crams the items into your pack,\nand wanders happily off into the dark...",
                     "addStringTerminator": true
                 },
                 {

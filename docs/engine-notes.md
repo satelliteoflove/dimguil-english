@@ -83,6 +83,11 @@ more of the detail behind each item.
   a row on a page against it. Test rig: `rips/states/shrine_door.state`, search
   (triangle) at the Shrine door, EVENTMES loaded at 0x801a0400; the expander won't read
   past the original section, so test text goes over an existing string.
+- The event box centers each line, counting its spaces. The Japanese pads lines with
+  spaces on both sides (often to a common width, so a quote's continuation lines
+  indent); padding kept on one side only pushes an English line off center. A page
+  break ({ff20}) without {ff26} before it doesn't wait: the page clears at once.
+  `scripts/evsweep.py` prints every event string through this box and saves each page.
 - The NPC talk box drew a 181-glyph test page whole; `npcfit.py` holds pages to that.
 - Other screens size layer 1 differently (30, 40, 70, 100, 154). They haven't all been
   checked for full layers.

@@ -36,6 +36,12 @@ see all of it.
   experience you can. There's no gold or items dropped, but anyone wiped out is sent to
   the temple free of charge." It dropped "as a bonus" (特典付き).
 
+- **Event lines off center (2026-10-07).** The event box centers each line, spaces
+  included. 26 event strings still carried the Japanese padding on one side, so their
+  lines printed off center; the Guardians' speeches (280-285) were 7 spaces right. The
+  padding is gone. Found by printing all 317 event strings through the real box
+  (`scripts/evsweep.py`): every page printed in full.
+
 ### Machine-written habits (the Q1 sweep)
 
 The English was screened for habits that read as machine-written, and 37 hits were
@@ -187,3 +193,10 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   now repeat 44-55 ("Strength rose." … "Luck fell."). 44-55 show at the training
   grounds; 67-78 are probably the inn's level-up, which hasn't been seen in English yet.
   Confirm at the inn.
+- **One-word last lines in event text** (seen in the 2026-10-07 sweep): "attacks."
+  (48-51), "room." (67), "now?" (68), "happens." (135), "wall." (149), "monster." (150,
+  194), "the hollow." (258 and others). They read fine; rebalancing the breaks would
+  look better.
+- **Event 6,** the moving-floor board: "Work out how the moving floors behave," ends a
+  page and "and don't forget the mask!" starts the next. The Japanese is two sentences
+  (移動床の法則を見つけ出せ! / 仮面をお忘れなく!).

@@ -138,6 +138,13 @@ inside a line use `'`, and `npcfit.py` catches the rest.
 - Save states keep the old text and file tables, so states are remade after any build
   that moves files, and a code fix can be tested in an old state by writing the
   patched instruction into RAM.
+- The event box sweep (2026-10-07). Event text had been screen-checked in the NPC box,
+  which is a different box. `evsweep.py` overwrites the Shrine door's text in RAM with
+  each event string in turn, presses search, and saves the box every time it settles
+  (each {ff26}), then presses circle. 317 strings, 492 pages, about five minutes on 10
+  cores. No page was cut off and none filled the glyph layer. It found 26 strings
+  printing off center: the box centers each line with its spaces, and the English kept
+  the Japanese padding on one side only.
 
 ## Facts that needed checking
 
