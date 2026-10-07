@@ -5,4 +5,4 @@ Remisse's original code. Remisse had no role in this project's development,
 and the original team does not endorse it.
 
 Everything added since, including the whole translation, is my own work, done
-with the help of Claude, an AI model.
+with a lot of help from Claude (the AI model).

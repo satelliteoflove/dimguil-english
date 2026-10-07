@@ -91,3 +91,22 @@ The tools:
 - Research: `gametext.py` decodes raw game text and maps disc files to the executable's
   load tables, `sjscan.py` and `relsearch.py` search binaries for text, `mipsdis.py`
   disassembles code from RAM, and `cardref.py` exports the card game's data.
+
+## What's where
+
+- `translations/` holds the English text, one JSON file per game file. `binary/` holds
+  patches to non-text data (NPC party names).
+- `asm/` has the armips patches: Remisse's VWF hacks in `vwf.asm`, and the rest built
+  on top of them.
+- `src/` is Remisse's Kotlin dumper and encoder. `sections.json` tells it where the
+  text sits in each file, and `tables/` has the character tables.
+- `graphics/` has the edited font sheet and the item catalog's panel background.
+- `scripts/` has the build, a headless emulator harness built on the Beetle PSX
+  libretro core (`emu.py`), and the checkers and viewers used while translating.
+  "Emulator tooling" above explains how to set it up.
+- `docs/` has notes on the engine, the translation and the review work, plus
+  Remisse's original notes in `findings.md`.
+
+The text is compressed by packing common letter pairs into single bytes. If you add or
+change a digraph, the font sheet, `tables/compression.tbl` and the VWF width table in
+`asm/vwf.asm` all have to agree.
