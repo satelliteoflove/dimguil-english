@@ -51,6 +51,17 @@ them gave an error: text just stopped, vanished or came out wrong.
   else loses room. The checkers now count glyphs, not just pixels.
 - The NPC talk box drew a 181-glyph test page whole; the busiest real page uses 93.
 
+**Japanese voicing marks in English text (2026-10-07, 9a955ba).** Chris saw "satisfyin  click."
+at the training maze switch. Glyph 0xb6 is `"` in our font but the voicing mark ゛ to the
+game, and 0xb7 is the digraph "w " but ゜. The printers look one glyph ahead and, on a
+mark, draw the current glyph's voiced form instead. The NPC box only does it after
+kana-like codes, so the earlier fix was a rule (no `"` inside a line) and a checker. The
+event box does it after anything, and the event review had been rendered in the NPC box,
+so it never showed: 91 event strings had a merge, including every "how " and "now ".
+Turning the merge off in the event printer and in the six overlay copies of the helper
+fixed them all, plus one NPC line the rule had missed ("blew" is "le" + "w "). Lesson:
+render in the real box, not a stand-in.
+
 **The training maze sign (2026-10-07, ec26800).** Found in the recorded play-through:
 the sign's text stopped at "but as a b". The maze code sizes that box's glyph layer to
 172, one more than the Japanese text's 171 glyphs; the English needed 207. Tracing the

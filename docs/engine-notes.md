@@ -35,10 +35,14 @@ more of the detail behind each item.
 
 - One printer (reader at 0x8001e0c0) draws dialogue, battle and event text. Codes below
   0xd8 are English glyphs and digraphs, priced by the VWF table at 0x80060e97.
-- Glyph 0xb6 is `"` in the English font but the Japanese voicing mark (゛) to the
-  printer, which merges it into a preceding kana. Several digraph codes double as kana
-  (`y ` is フ), so a mid-line `"` after them prints as a Japanese glyph. Only a `"` that
-  opens a line is safe; inner quotes are single quotes. `npcfit.py` checks this.
+- Glyphs 0xb6 and 0xb7 are `"` and the digraph `w ` in the English font, but the
+  Japanese voicing marks (゛ ゜) to the printers, which drew the glyph before them in its
+  voiced form and swallowed the mark. The maze's event box (0x8001ff04) did it after any
+  glyph ("how hard" printed "ズhard"); the other printers ask a helper that each overlay
+  carries (MAZE, MCARD, JOUKA, CMENU, HAZURE, BATTLE), which did it after kana-like codes
+  (`y "` printed as ブ). `asm/voicing_marks.asm` turns all of it off, so a `"` inside a
+  line is safe now; `npcfit.py` still flags it, which does no harm.
+- The NPC talk runs with MCARD.BIN at 0x800a1000, not MAZE.BIN.
 - The dungeon NPC box is 288 px by 3 lines, pages split by `\n\r`.
 - The battle box wraps at 24 glyph codes per line. Messages are expanded by 0x8001dfc0
   into 0x8008b400; only the battle call (BATTLE.BIN 0x800d1e20) turns wrapping on. The
