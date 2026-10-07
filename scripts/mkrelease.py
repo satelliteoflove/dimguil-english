@@ -13,7 +13,7 @@ Writes rips/release/VERSION/: the zip for players (patch + readme.txt) and notes
 (this version's section of CHANGELOG.md, for the GitHub release). Needs xdelta3 (set
 XDELTA3 if it isn't on PATH).
 """
-import hashlib, os, re, shutil, subprocess, sys, zipfile, zlib
+import hashlib, os, re, shutil, subprocess, sys, time, zipfile, zlib
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 BUILT_CUE = os.path.join(ROOT, 'rips/iso/dimguil-en.cue')
@@ -51,6 +51,20 @@ def digests(path, start=0, length=None):
             md5.update(b); sha1.update(b); crc = zlib.crc32(b, crc)
             left -= len(b)
     return {'md5': md5.hexdigest(), 'sha1': sha1.hexdigest(), 'crc32': f'{crc:08x}'}
+
+
+def unwrap(text):
+    """Join hard-wrapped lines into one line per paragraph or list item."""
+    out = []
+    for para in text.strip().split('\n\n'):
+        lines = []
+        for line in para.split('\n'):
+            if re.match(r'\s*([-*]|\d+\.)\s', line) or not lines:
+                lines.append(line.rstrip())
+            else:
+                lines[-1] += ' ' + line.strip()
+        out.append('\n'.join(lines))
+    return '\n\n'.join(out)
 
 
 def changelog_section(version):
@@ -125,10 +139,15 @@ def main():
     zpath = os.path.join(out, name + '.zip')
     with zipfile.ZipFile(zpath, 'w', zipfile.ZIP_DEFLATED) as z:
         z.write(patch, os.path.basename(patch))
-        z.writestr('readme.txt', readme)
+        info = zipfile.ZipInfo('readme.txt', time.localtime()[:6])
+        info.compress_type = zipfile.ZIP_DEFLATED
+        info.external_attr = 0o644 << 16  # writestr's default unzips as 0600 on Linux
+        z.writestr(info, readme)
     # Markdown for the release page: unwrap the notice's hard-wrapped paragraphs.
-    paras = '\n\n'.join(' '.join(p.split()) for p in notice.split('\n\n'))
-    open(os.path.join(out, 'notes.md'), 'w', encoding='utf-8').write(notes + '\n---\n\n' + paras + '\n')
+    # GitHub shows every newline in release notes as a line break, so the hard-wrapped
+    # CHANGELOG text and notice are unwrapped here; list items keep their own lines.
+    open(os.path.join(out, 'notes.md'), 'w', encoding='utf-8').write(
+        unwrap(notes) + '\n\n---\n\n' + unwrap(notice) + '\n')
     print(zpath)
 
 
