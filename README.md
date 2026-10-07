@@ -64,8 +64,9 @@ It's been tested in DuckStation and Beetle PSX, but not on real hardware.
 
 ## Problems
 
-If something looks wrong or breaks, please open an issue. Known problems are listed in
-[KNOWN-ISSUES.md](KNOWN-ISSUES.md).
+If something looks wrong or breaks, please open an issue. Known problems are listed under
+the [known issue](https://github.com/satelliteoflove/dimguil-english/issues?q=label%3A%22known+issue%22)
+label.
 
 ## Origins
 

@@ -49,8 +49,9 @@ of the redump set, since the build leaves both audio tracks untouched.
   were used in Remisse's original code, Remisse had no role in this project, and the
   original team doesn't endorse it. `scripts/mkrelease.py` adds it to the release notes
   and the readme in the zip. It also goes on the romhacking.net page.
-- **Known issues.** A list players can read before starting, and GitHub issues for
-  reports.
+- **Known issues.** Tracked as GitHub issues with the "known issue" label, which the
+  README links to; there's no separate file to keep in sync (decided 2026-10-07). The
+  release notes name the worst few, for players who download from romhacking.net.
 - **romhacking.net.** Submit the release package.
 
 ## Work streams
