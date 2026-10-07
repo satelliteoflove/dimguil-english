@@ -27,6 +27,15 @@ see all of it.
   description fits. The Sapphire Robes was then cut to 5 lines (Chris's wording, which
   also fixes "cold" to ice for 氷). Every description now fits.
 
+- **The training maze sign (SISETU 492, 2026-10-07).** The sign's box holds as many
+  glyphs as the game gives it, and the game gave it 172, one more than the Japanese.
+  Chris caught it in play (the text stopped at "but as a b"). The box now gets 177 and
+  the text was reworded to fit, in Chris's words, with "Summoned monsters" keeping the
+  summoning system from 特殊な魔物召喚システム: "Underneath the Fortress City is this
+  maze, made to train young adventurers. Summoned monsters keep coming, so earn all the
+  experience you can. There's no gold or items dropped, but anyone wiped out is sent to
+  the temple free of charge." It dropped "as a bonus" (特典付き).
+
 ### Machine-written habits (the Q1 sweep)
 
 The English was screened for habits that read as machine-written, and 37 hits were

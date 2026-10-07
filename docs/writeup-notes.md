@@ -51,6 +51,15 @@ them gave an error: text just stopped, vanished or came out wrong.
   else loses room. The checkers now count glyphs, not just pixels.
 - The NPC talk box drew a 181-glyph test page whole; the busiest real page uses 93.
 
+**The training maze sign (2026-10-07, ec26800).** Found in the recorded play-through:
+the sign's text stopped at "but as a b". The maze code sizes that box's glyph layer to
+172, one more than the Japanese text's 171 glyphs; the English needed 207. Tracing the
+layer calls back from the allocator found the constant. The layer can grow to 192
+before it would run into the next one, so the fix was half code, half wording: Chris
+reworded it to 177 glyphs and the layer gets exactly 177, leaving the rest free.
+`signfit.py` reads the size back out of the built MAZE.BIN, so the check can't drift
+from the patch.
+
 **The spell bar (2026-10-04, 6cc6966).** The one-line spell description bar prints the
 first 30 glyph codes and drops the rest, counted by code, not by pixel. All 84 fit;
 `spellfit.py` keeps it that way.

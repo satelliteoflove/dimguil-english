@@ -82,6 +82,16 @@ more of the detail behind each item.
 - The NPC talk box drew a 181-glyph test page whole; `npcfit.py` holds pages to that.
 - Other screens size layer 1 differently (30, 40, 70, 100, 154). They haven't all been
   checked for full layers.
+- Layers are allocated first-fit from the 720-sprite pool (0x8001f150: size, layer;
+  0x8001f428 frees one, or all with -1; 0x8001d164 frees and reallocates one). The table
+  at 0x8008b390 is 6 bytes per layer (start, size, 0); glyphs in use per layer are at
+  0x80079938, the running total at 0x80079c38. In the maze, layer 0 is 192 at the start
+  of the pool and layer 1 follows it at 192.
+- The training maze's sign (SISETU 492, shown when you search at it) resizes layer 0 to
+  172 at 0x800bef6c in MAZE.BIN, one more than the Japanese text's 171 glyphs. 192 is the
+  most it can get without moving layer 1. `asm/training_sign_pool.asm` sets 177, exactly
+  what the English takes; `signfit.py` checks it after every build. Test rig:
+  `rips/states/training_sign_front.state`, triangle.
 
 ## Spell bar
 
