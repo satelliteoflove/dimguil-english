@@ -466,73 +466,73 @@
                 {
                     "length": 7,
                     "source": "NA",
-                    "translation": "力を 得た",
+                    "translation": "Strength rose.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "知恵を 得た",
+                    "translation": "I.Q. rose.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "信仰心を 得た",
+                    "translation": "Piety rose.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "生命力を 得た",
+                    "translation": "Vitality rose.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "素早さを 得た",
+                    "translation": "Agility rose.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "運の強さを 得た",
+                    "translation": "Luck rose.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 8,
                     "source": "NA",
-                    "translation": "力を 失った",
+                    "translation": "Strength fell.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "知恵を 失った",
+                    "translation": "I.Q. fell.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "信仰心を 失った",
+                    "translation": "Piety fell.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "生命力を 失った",
+                    "translation": "Vitality fell.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "素早さを 失った",
+                    "translation": "Agility fell.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "運の強さを 失った",
+                    "translation": "Luck fell.",
                     "addStringTerminator": true
                 },
                 {

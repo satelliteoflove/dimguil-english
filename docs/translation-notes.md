@@ -182,3 +182,8 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 - **NPC open questions:** Balbo's register, "Kiku" or "Kiki", Lilia's ガイルディア, what
   triggers 同輩, Bergamot's ジジイ and others (`npc-review.md`, "Open questions for
   Chris").
+- **Stat changes, SISETU 67-78** (2026-10-07): the second set of stat messages (力を 得た
+  … 運の強さを 失った) was still Japanese after the original team's text came out. They
+  now repeat 44-55 ("Strength rose." … "Luck fell."). 44-55 show at the training
+  grounds; 67-78 are probably the inn's level-up, which hasn't been seen in English yet.
+  Confirm at the inn.
