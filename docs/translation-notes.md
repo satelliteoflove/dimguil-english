@@ -192,8 +192,9 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 - **Stat changes, SISETU 67-78** (2026-10-07): the second set of stat messages (力を 得た
   … 運の強さを 失った) was still Japanese after the original team's text came out. They
   now repeat 44-55 ("Strength rose." … "Luck fell."). 44-55 show at the training
-  grounds; 67-78 are probably the inn's level-up, which hasn't been seen in English yet.
-  Confirm at the inn.
+  grounds. Seen at the inn in the emulator: a level-up there prints them in English and
+  they match the stat changes ("I.Q. rose." with Int 5 to 6, "Piety fell." with Pie 5
+  to 4). Chris confirmed them in play too.
 - **One-word last lines in event text** (seen in the 2026-10-07 sweep): "attacks."
   (48-51), "room." (67), "now?" (68), "happens." (135), "wall." (149), "monster." (150,
   194), "the hollow." (258 and others). They read fine; rebalancing the breaks would
