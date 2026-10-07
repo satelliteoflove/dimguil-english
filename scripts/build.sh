@@ -64,6 +64,9 @@ echo "== asm"
 (cd rips && "$ARMIPS" ../asm/vwf.asm && for a in ../asm/*.asm; do
   [ "$a" = ../asm/vwf.asm ] || "$ARMIPS" "$a"; done)
 
+echo "== sign"
+python3 scripts/signfit.py || { echo "build: the training maze sign doesn't fit its box" >&2; exit 1; }
+
 echo "== relocate"
 python3 scripts/relocate.py rips/clean/dimguil.xml rips/dirty/dimguil rips/iso/disc.xml
 

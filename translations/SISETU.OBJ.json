@@ -3277,7 +3277,7 @@
                 {
                     "length": 260,
                     "source": "NA",
-                    "translation": "Thank you for visiting.\n\n*** About This Facility ***\nThis maze was built beneath the\nFortress City to train young\nadventurers. Monsters are placed\nhere by a special summoning system,\nso earn all the experience you can.\nThere's no gold or items to be had,\nbut as a bonus, anyone wiped out is\nsent to the temple free of charge.",
+                    "translation": "Thank you for visiting.\n\n*** About This Facility ***\nUnderneath the Fortress City is this\nmaze, made to train young\nadventurers. Summoned monsters keep\ncoming, so earn all the experience\nyou can. There's no gold or items\ndropped, but anyone wiped out is\nsent to the temple free of charge.",
                     "compress": true,
                     "addStringTerminator": true
                 },
