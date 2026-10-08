@@ -207,3 +207,12 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 - **Event 6,** the moving-floor board: "Work out how the moving floors behave," ends a
   page and "and don't forget the mask!" starts the next. The Japanese is two sentences
   (移動床の法則を見つけ出せ! / 仮面をお忘れなく!).
+- **"Jpn" names are garbled** (found 2026-10-08). The settings screen's Item Names
+  switch on "Jpn" loads I_NAME_J, which is still Japanese, and the English font draws
+  it as a jumble. The default is "Eng". Monster Names, Spell Names and Status are
+  untested. Options: point "Jpn" at the English names, or make it a second, polished
+  list. See `castle-sweep-review.html`, section 8.
+- **Long item names crammed in the catalog list** (found 2026-10-08). Names over about
+  10 letters wrap to a second line 6 px lower and touch the next name; 170 names wrap.
+  These are the developer's uppercase names, so the original likely does the same.
+- **"Halycon"** in the built-in monster names is probably Halcyon.
