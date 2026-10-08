@@ -14,17 +14,25 @@ It talks to RetroArch over its network commands (network_cmd_enable, UDP 55355; 
                  so RetroArch never overwrites a state file: overwriting reads the old
                  one into its undo buffer and can drop a frame.
   archive/srm/   a copy of the memory card each time it changes.
+  archive/builds/  the text and code files of each image played, so a later build can
+                 be compared with it (redo.py) and old text recognised (see below).
   logs/          one JSON line per event: every string the game shows, with its file,
-                 index and review status (textstatus.py), each save state, each pause.
+                 index and review status (textstatus.py), each save state, each pause,
+                 each new recording file.
 
 The monitor reads the game's text buffer (0x8008b400). Dialogue, event, castle and
 battle strings are expanded whole into it just before they print, so the monitor sees a
 string before its first page is drawn. It identifies the string against the image being
 played (read from the disc image itself, so it always matches what's on screen) and, if
 textstatus.py says it's open or to be checked, pauses RetroArch and says why. Unpause
-to carry on. Text it can't match is logged; if it has Japanese in it, that pauses too.
+to carry on. Text it can't match is logged; if it has Japanese in it, that pauses too,
+and so does text from an earlier build that this one has changed (after a redo, a line
+the state already had in memory).
+
+After a fix, redo.py restarts the game from a save state on the new build; it runs this
+with --from-state.
 """
-import argparse, hashlib, json, os, re, shutil, socket, struct, subprocess, sys, time
+import argparse, hashlib, json, os, re, shutil, signal, socket, struct, subprocess, sys, time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.join(HERE, '..')
@@ -37,6 +45,8 @@ FRAME = 0x60788                           # frame counter, for lining up with th
 FILES = ['DATA06/EVENTMES.BIN'] + [f'DATA06/NPC_MES{n}.OBJ' for n in range(1, 6)] + \
         ['DATA06/SISETU.OBJ', 'DATA01/FIGHTMSG.OBJ', 'DATA01/STATUS.OBJ']
 STAGED = 6                                # the first six share the staging area
+EXE = 'SLPS_026.91'
+CODE = [EXE] + [f'{n}.BIN' for n in ('BATTLE', 'CMAIN', 'CMENU', 'HAZURE', 'JOUKA', 'MAZE', 'MCARD')]
 
 
 # --- the disc image ---
@@ -100,11 +110,36 @@ def segments(s):
     return out
 
 
+def archive_build(image, play):
+    """Copy the image's text and code files to archive/builds/<key>/, once; return the key
+    (a hash of the files, so two builds from the same commit still differ)."""
+    data = iso_files(image, FILES + CODE)
+    h = hashlib.md5()
+    for p in sorted(data):
+        h.update(p.encode() + data[p])
+    key = h.hexdigest()[:12]
+    d = os.path.join(play, 'archive/builds', key)
+    if not os.path.isdir(d):
+        for p, b in data.items():
+            os.makedirs(os.path.dirname(os.path.join(d + '.tmp', p)), exist_ok=True)
+            open(os.path.join(d + '.tmp', p), 'wb').write(b)
+        ver = re.sub(r'\.bin$', '.version.txt', image)
+        if os.path.exists(ver):
+            shutil.copy(ver, os.path.join(d + '.tmp', 'version.txt'))
+        os.rename(d + '.tmp', d)
+    return key
+
+
+def build_files(play, key):
+    d = os.path.join(play, 'archive/builds', key)
+    return {p: open(os.path.join(d, p), 'rb').read() for p in FILES + CODE}
+
+
 class Text:
     """Every string of the tracked files in one image, and how to recognise them."""
 
-    def __init__(self, image):
-        data = iso_files(image, FILES)
+    def __init__(self, data):
+        """data: {path: bytes} for FILES, from iso_files() or build_files()."""
         self.heads = {}
         self.table = {}
         for p in FILES:
@@ -248,22 +283,34 @@ class Session:
         for d in ('states/auto', 'archive/srm', 'logs'):
             os.makedirs(os.path.join(self.play, d), exist_ok=True)
         self.log_f = open(os.path.join(self.play, 'logs', self.stamp + '.jsonl'), 'a')
-        self.text = Text(a.bin)
+        self.pidfile = os.path.join(self.play, 'logs', 'playwatch.pid')
+        open(self.pidfile, 'w').write(str(os.getpid()))
+        self.build = archive_build(a.bin, self.play)
+        self.text = Text(build_files(self.play, self.build))
+        self.old = []                       # earlier builds, to catch text a state kept
+        for e in sorted(os.scandir(os.path.join(self.play, 'archive/builds')),
+                        key=lambda e: e.stat().st_mtime, reverse=True):
+            if e.is_dir() and e.name != self.build and not e.name.endswith('.tmp'):
+                self.old.append((e.name, Text(build_files(self.play, e.name))))
+        self.recdir = os.path.join(self.play, 'recordings')
+        self.recordings = set(os.listdir(self.recdir)) if os.path.isdir(self.recdir) else set()
         self.status_of = textstatus.table()
         self.last_head = None
         self.last_id = None
+        self.first = True           # what's in the buffer at the start was already shown
+        self.staged = None          # what the staging area holds, as staged_name() says
         self.next_state = time.time() + a.interval
         self.next_srm = 0
         self.srm_hash = None
         ver = open(re.sub(r'\.bin$', '.version.txt', a.bin)).read().strip() \
             if os.path.exists(re.sub(r'\.bin$', '.version.txt', a.bin)) else '?'
-        self.log('start', image=os.path.basename(a.bin), version=ver, interval=a.interval,
-                 pause=not a.no_pause)
+        self.log('start', image=os.path.basename(a.bin), version=ver, build=self.build,
+                 interval=a.interval, pause=not a.no_pause, from_state=a.from_state)
         print(f'playwatch: {os.path.basename(a.bin)} ({ver}); states every {a.interval}s; '
               f'log {self.log_f.name}')
 
     def log(self, kind, **kw):
-        kw = {'t': time.strftime('%H:%M:%S'), 'kind': kind, **kw}
+        kw = {'t': time.strftime('%Y-%m-%d %H:%M:%S'), 'kind': kind, **kw}
         self.log_f.write(json.dumps(kw, ensure_ascii=False) + '\n')
         self.log_f.flush()
 
@@ -271,9 +318,24 @@ class Session:
         d = self.ra.read(FRAME, 4)
         return int.from_bytes(d, 'little') if d else None
 
+    def staged_name(self, head):
+        if head is None:
+            return None
+        return next((f for f, h in self.text.heads.items() if h == head), 'other')
+
+    def check_stage(self):
+        """Log each load into the staging area: meeting a party puts its portrait there
+        for about a second ('other'), then its text; an event loads EVENTMES. redo.py uses
+        these to tell whether a state was taken mid-conversation."""
+        name = self.staged_name(self.ra.read(STAGE, 16))
+        if name and name != self.staged:
+            self.staged = name
+            self.log('load', file=name, frame=self.frame())
+
     def check_text(self):
         head = self.ra.read(BUF, HEAD)
         if head is None or head == self.last_head:
+            self.first = self.first and head is None
             return
         self.last_head = head
         buf = self.ra.read(BUF, BUF_LEN) or head
@@ -291,10 +353,18 @@ class Session:
             f = i = None
             st, why = ('japanese', 'unmatched text with Japanese in it') if japanese(buf) \
                 else ('unmatched', 'not one of the tracked strings')
+            for key, old in self.old:
+                hit = old.identify(buf, staged)
+                if hit:
+                    f, i = hit
+                    st, why = 'stale', f'text from an earlier build ({key}) that this one changed'
+                    break
         self.last_id = f'{f}:{i}' if hit else None
-        pause = st in textstatus.PAUSE or st == 'japanese'
-        self.log('text', file=f, index=i, status=st, frame=self.frame(), text=shown,
-                 paused=pause and not self.a.no_pause)
+        pause = (st in textstatus.PAUSE or st in ('japanese', 'stale')) and not self.first
+        self.log('text', file=f, index=i, status=st, staged=self.staged_name(staged),
+                 frame=self.frame(), text=shown,
+                 paused=pause and not self.a.no_pause, **({'already_shown': True} if self.first else {}))
+        self.first = False
         tag = f'{f}:{i}' if hit else '?'
         print(f'{time.strftime("%H:%M:%S")} {tag:18} {st:11} {shown[:70]!r}')
         if pause:
@@ -333,9 +403,17 @@ class Session:
             time.sleep(0.3)
         name = f'{time.strftime("%Y%m%d-%H%M%S")}.state'
         shutil.move(new, os.path.join(states, 'auto', name))
-        self.log('state', file=name, frame=frame, after=self.last_id)
+        self.log('state', file=name, frame=frame, after=self.last_id, staged=self.staged)
         print(f'{time.strftime("%H:%M:%S")} save state {name} (after {self.last_id})')
         return True
+
+    def check_recordings(self):
+        if not os.path.isdir(self.recdir):
+            return
+        for name in sorted(set(os.listdir(self.recdir)) - self.recordings):
+            self.recordings.add(name)
+            self.log('recording', file=name, frame=self.frame())
+            print(f'{time.strftime("%H:%M:%S")} recording {name}')
 
     def backup_srm(self):
         for e in os.scandir(os.path.join(self.play, 'saves')):
@@ -358,7 +436,9 @@ class Session:
                 time.sleep(1)
                 continue
             waiting = False
+            self.check_stage()
             self.check_text()
+            self.check_recordings()
             now = time.time()
             if now >= self.next_state and self.save_state():
                 self.next_state = now + self.a.interval
@@ -372,7 +452,7 @@ def selftest(states):
     """Identify the text buffer in emulator states, as the monitor would."""
     import emu
     image = os.path.join(ROOT, 'rips/iso/dimguil-en.bin')
-    text = Text(image)
+    text = Text(iso_files(image, FILES))
     status = textstatus.table()
     e = emu.Emu(os.path.join(ROOT, 'rips/iso/dimguil-en.cue'))
     for path in states:
@@ -392,13 +472,18 @@ def main():
     ap.add_argument('--playdir', default=os.path.join(ROOT, '../playthrough'))
     ap.add_argument('--bin', default=os.path.join(ROOT, '../Wizardry - Dimguil (English WIP).bin'))
     ap.add_argument('--selftest', nargs='+', metavar='STATE')
+    ap.add_argument('--from-state', help='set by redo.py: the state this session starts from')
     a = ap.parse_args()
     if a.selftest:
         return selftest(a.selftest)
+    s = Session(a)
+    signal.signal(signal.SIGTERM, signal.default_int_handler)   # stop the same way as Ctrl-C
     try:
-        Session(a).run()
+        s.run()
     except KeyboardInterrupt:
         print('stopped')
+    finally:
+        os.remove(s.pidfile)
 
 
 if __name__ == '__main__':

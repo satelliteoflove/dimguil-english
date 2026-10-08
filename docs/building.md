@@ -77,6 +77,10 @@ The tools:
 - The recorded play-through: `playwatch.py` runs beside RetroArch, takes save states and
   memory-card backups, and pauses the game before a line that `textstatus.py` lists as
   still to review. `textstatus.py` reads the open NPC scenes from `docs/npc-review.md`.
+  After a fix, `redo.py` restarts from the newest save state taken before that
+  conversation, on the new build (with the file tables in RAM brought up to date), and
+  records the replay; `splice.py` then finds the frame where the replay joins the old
+  recording, matching the sound sample for sample, and keeps the cut in `cuts.json`.
 - Playtesting in DuckStation: `mktestsave.py` makes a memory card with a ready party
   (`rips/testsave.mcd`), `use_testsave.sh` swaps it into DuckStation's slot (and
   `--restore` puts your own card back), and `publish_test.sh` copies the build next to
