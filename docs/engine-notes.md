@@ -97,11 +97,29 @@ more of the detail behind each item.
   six items, a full eight with two-line names still drew whole) to layer 1, so the help
   line gets 40. The bar shows x = 18-332 with lines centered on 168, so a help line can
   be about 300 px (roughly 35 glyph codes); past that it spills off both ends.
-- Other screens size layer 1 differently (30, 40, 70, 100, 154). They haven't all been
-  checked for full layers. `scripts/cutsweep.py STATE KEYS` reports lines cut short
-  while KEYS play; a line refused at its first glyph is static text being redrawn into a
-  layer it already filled (name entry and character creation do it every frame), which
-  is harmless.
+- Most town screens ask 0x800db3d0 for 186, 154, 186, 114: 640 of the 720, leaving 80
+  unused, and layer 1 (facility name, menus, the help bar, the tavern's speech boxes)
+  ran out first. The Inn's room list is seven lines padded with spaces to line up the
+  prices, and every space is a sprite, so with the room help on the bar layer 1 was full
+  at 154 and the help lost its end ("Restores all HP for 10000G a"). Nothing in town
+  allocates a layer outside 0x800db3d0 (every 0x8001f150 call logged over a crawl of the
+  town came from it), so `asm/town_text_pool.asm` rewrites it to give layer 1 whatever
+  the other three leave: 234 on those screens, and no change where a screen already
+  uses all 720 (the status screen, Boltac's Trade screens).
+- `scripts/cutsweep.py STATE KEYS` reports lines cut short while KEYS play; a line
+  refused at its first glyph is static text being redrawn into a layer it already
+  filled (name entry and character creation do it every frame), which is harmless.
+- Glyph sprites record their cell: 12 px cells (from v = 0x50, 21 to a row) are the
+  regular font, which has the letter pairs; 8 px cells (21 to a row) are the bold font
+  of the menu labels and names, which has other glyphs in the pair cells (the status
+  screen's "Sort Items", packed, drew as "S∂/I3ms"); 6 px cells are the small font.
+  So a string may be packed only if it's only ever drawn in the 12 px font.
+- `scripts/castlecrawl.py` walks the town's menus from a save state (every button on
+  every screen, breadth first, a screen being the set of live glyph sprites) and logs
+  what each screen shows, read back from the sprite pool, since the game only redraws
+  glyphs that change. `scripts/castlereport.py` matches each line to its string and
+  flags cut-offs, unpacked text in the 12 px font, pair codes in the other fonts and
+  lines near the screen edge.
 - Layers are allocated first-fit from the 720-sprite pool (0x8001f150: size, layer;
   0x8001f428 frees one, or all with -1; 0x8001d164 frees and reallocates one). The table
   at 0x8008b390 is 6 bytes per layer (start, size, 0); glyphs in use per layer are at
