@@ -26,7 +26,12 @@ def strings(d):
     """The file's strings, via the u32 offset table at its start."""
     first = struct.unpack_from('<I', d, 0)[0]
     offs = [struct.unpack_from('<I', d, 4 * i)[0] for i in range(first // 4)] + [len(d)]
-    return [d[offs[i]:offs[i + 1]] for i in range(first // 4)]
+    out = [d[offs[i]:offs[i + 1]] for i in range(first // 4)]
+    # the last string runs to the end of the file, padding included: stop at its {ff40}
+    end = out[-1].find(b'\xff\x40')
+    if end >= 0:
+        out[-1] = out[-1][:end + 2]
+    return out
 
 
 def main():

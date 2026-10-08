@@ -97,6 +97,12 @@ The tools:
   http://localhost:8777. Scenes are JSON files in `rips/review/scenes/` that Claude
   writes (they quote the Japanese, so they stay out of the repo); the server's
   docstring describes the format and what it writes when a scene is applied.
+- Sweeping the town's screens: `castlecrawl.py STATE OUTDIR` presses every button on
+  every screen it can reach from a save state (breadth first, inside the town) and logs
+  each screen's text with a screenshot; `castlereport.py CRAWLDIR` matches the lines to
+  their strings and lists cut-off lines, regular-font text left unpacked, letter pairs
+  in the bold font and lines at the screen edge, with crops of each line to look over.
+  `screentext.py STATE KEYS` prints the lines one key sequence draws.
 - Research: `gametext.py` decodes raw game text and maps disc files to the executable's
   load tables, `sjscan.py` and `relsearch.py` search binaries for text, `mipsdis.py`
   disassembles code from RAM, and `cardref.py` exports the card game's data.
