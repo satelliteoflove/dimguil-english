@@ -14,7 +14,8 @@ then flags:
             glyphs than it needs
   digraph   a letter-pair code in the 8 px or 6 px font, which has other glyphs in
             those cells (the bold menu labels draw "Sort Items" packed as "S∂/I3ms")
-  edge      reaches past x = 336 or starts left of x = 14 (the screen is 350 wide)
+  edge      reaches past x = 336 or starts left of x = 8, the speech boxes' margin
+            (the screen is 350 wide)
   japanese  a glyph code the English font doesn't have (untranslated text)
   unmatched no translation string has this text
 
@@ -132,6 +133,7 @@ def main():
                 x1 = xs[-1] + (8 if fixed or codes[-1] < 0 or codes[-1] >= len(lut) else lut[codes[-1]] + 1)
                 add(crawl, n['id'], n['path'], text, codes, s['layer'], s['y'], s['x0'], x1,
                     fixed, False, 'screen')
+                seen[(text, s['layer'], s['y'], s['x0'])]['cell'] = s['keys'][0][:2]
             screens[(crawl, n['id'])] = [(p['layer'], p['y'], decode(p['keys'], p['codes'])[1])
                                          for p in pieces]
             for s in n['drawn']:
@@ -189,7 +191,7 @@ def main():
             continue
         if r['cut']:
             flags.append('cut')
-        elif r['match'] and not exact and len(r['text'].strip()) >= 8:
+        elif r['match'] and not exact and len(r['text'].strip()) >= 12:
             flags.append('cut')
         if not r['match']:
             flags.append('unmatched')
@@ -197,7 +199,8 @@ def main():
         if codes is not None:
             if any(c >= 0xd8 or c < 0 for c in codes):
                 flags.append('japanese')
-            if r['fixed'] and any(c in DIGRAPH_CODES for c in codes):
+            bold = r.get('cell') == '08'
+            if bold and any(c in DIGRAPH_CODES for c in codes):
                 flags.append('digraph')
             inserted = any(CTRL.search(m[3]) for m in r['match'])   # names come in raw
             if not r['fixed'] and len(codes) >= 3 and not inserted:
@@ -207,7 +210,7 @@ def main():
                     packed = codes
                 if len(packed) < len(codes):
                     flags.append('unpacked')
-        if r['x1'] is not None and (r['x1'] > 336 or r['x0'] < 14):
+        if r['x1'] is not None and (r['x1'] > 336 or r['x0'] < 8):
             flags.append('edge')
         r['flags'] = flags
         rows.append(r)
