@@ -175,6 +175,13 @@ inside a line use `'`, and `npcfit.py` catches the rest.
   the King's, the Inn's level-up lines, the temple's chant; packed now. The longest town
   string went from 445 bytes to 305. Also learned the hard way: the bold label font has
   other glyphs where the letter pairs are, so "Sort Items" packed drew as "S∂/I3ms".
+- The settings screen's names were placed for Japanese: a table of (x, y, string) per
+  line, with x right-aligning 12 px characters at x = 160, so the English was ragged on
+  both edges and "Spell Names" ran into its "(". Every name now starts at x = 80
+  (asm/config_layout.asm; the table is in HAZURE.BIN and again in MAZE.BIN). Which
+  "Sound" switch did what was settled by ear, so to speak: the emulator harness now
+  collects the sound, and the RMS level with each switch off showed サウンドの有無 is
+  the music.
 
 ## Facts that needed checking
 
