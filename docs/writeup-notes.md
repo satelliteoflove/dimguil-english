@@ -156,6 +156,26 @@ inside a line use `'`, and `npcfit.py` catches the rest.
   been left unpacked, apparently copied from the label before it, and is now packed (36
   glyph codes to 22). scripts/cutsweep.py finds such cut-offs in the harness.
 
+- The town sweep (2026-10-08). After three kinds of help-line trouble (untranslated,
+  cut by glyph count, spilling past the bar), every town screen got checked by machine.
+  `castlecrawl.py` presses every button on every screen reachable from a save state,
+  breadth first, and reads what's on screen back out of the glyph sprite pool (the game
+  only redraws glyphs that change, so the draw calls alone show half-lines). Each
+  sprite's texture cell gives its glyph code and its font. `castlereport.py` matches the
+  lines to the script. About 3,000 screens from 12 start states (party with gold, dead
+  and stoned characters at the temple, a character about to level up at the Inn,
+  character creation past the name), about half an hour on 16 cores. The card game and
+  the Monster Compendium draw their text some other way and aren't covered.
+  Found: the Inn's room help lines all cut short ("Restores all HP for 10000G a"),
+  because the room list's padding spaces are sprites too and filled the layer; most
+  town screens leave 80 of the 720 sprites unallocated, so the main text layer now
+  takes them (asm/town_text_pool.asm). Change Name opened the keyboard on hiragana
+  (its own open path still zeroed the character set). 55 strings drawn in the regular
+  font were never packed: shop help lines, the recruits' and fortune teller's speeches,
+  the King's, the Inn's level-up lines, the temple's chant; packed now. The longest town
+  string went from 445 bytes to 305. Also learned the hard way: the bold label font has
+  other glyphs where the letter pairs are, so "Sort Items" packed drew as "S∂/I3ms".
+
 ## Facts that needed checking
 
 - The developer credit (2026-10-04, 9bf5cb1). Some English sources name Soliton or
