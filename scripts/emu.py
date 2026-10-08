@@ -2,7 +2,8 @@
 """Minimal headless libretro frontend for Beetle PSX (mednafen_psx_libretro.so).
 
 Lets scripts boot a disc, step frames with controller input, grab screenshots,
-peek/poke main RAM and save/load states. No audio/video output.
+peek/poke main RAM and save/load states. No audio/video output (set .audio to a
+list to collect the sound).
 
     from emu import Emu
     e = Emu('build/dimguil-en.cue')
@@ -55,6 +56,7 @@ class Emu:
         self.buttons = 0
         self.frame = None
         self.frame_no = 0
+        self.audio = None           # set to a list to collect the sound (int16 stereo bytes)
         self._keep = []
         self._sysdir = C.c_char_p(SYSDIR.encode())
         self._opts = {k.encode(): C.c_char_p(v.encode()) for k, v in OPTIONS.items()}
@@ -65,7 +67,7 @@ class Emu:
         cbs = [(self.lib.retro_set_environment, ENV_CB(self._env)),
                (self.lib.retro_set_video_refresh, VIDEO_CB(self._video)),
                (self.lib.retro_set_audio_sample, AUDIO_CB(lambda l, r: None)),
-               (self.lib.retro_set_audio_sample_batch, AUDIOB_CB(lambda d, n: n)),
+               (self.lib.retro_set_audio_sample_batch, AUDIOB_CB(self._audio)),
                (self.lib.retro_set_input_poll, POLL_CB(lambda: None)),
                (self.lib.retro_set_input_state, STATE_CB(self._input))]
         for setter, cb in cbs:
@@ -126,6 +128,11 @@ class Emu:
             self.lib.retro_run()
             self.frame_no += 1
         self.buttons = 0
+
+    def _audio(self, d, n):
+        if self.audio is not None:
+            self.audio.append(C.string_at(d, 4 * n))
+        return n
 
     def press(self, *btns, hold=4, after=20):
         """Tap button(s) together for `hold` frames, then idle `after` frames."""
