@@ -75,7 +75,7 @@ The tools:
   `explore.py` and `menushots.py` walk a facility's icon menu; `sheet.py` puts
   screenshots together into one image.
 - The recorded play-through: `playwatch.py` runs beside RetroArch, takes save states and
-  memory-card backups, starts RetroArch's recording when the title screen comes up
+  memory-card backups, starts RetroArch's recording as the ASCII logo fades in
   (recording from launch fails at the BIOS screen), and pauses the game before a line
   that `textstatus.py` lists as still to review. `textstatus.py` reads the open NPC
   scenes from `docs/npc-review.md`.

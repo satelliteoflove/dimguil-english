@@ -5,8 +5,9 @@ backups, and a monitor that pauses the game before an unreviewed line is shown.
     playwatch.py [--interval SECONDS] [--no-pause] [--no-record] [--playdir DIR] [--bin IMAGE]
     playwatch.py --selftest STATE...     check the matching on emulator states (emu.py)
 
-It starts RetroArch's recording when the title screen comes up (recording from launch
-fails at the BIOS screen), unless a recording is already going or --no-record.
+It starts RetroArch's recording as the ASCII logo starts to fade in, when the game sets
+up its own screen mode (recording from launch fails at the BIOS screen), unless a
+recording is already going or --no-record.
 
 It talks to RetroArch over its network commands (network_cmd_enable, UDP 55355; see
 ../playthrough/retroarch-dimguil.cfg). Everything goes in the play folder:
@@ -45,8 +46,10 @@ import textstatus
 BUF, BUF_LEN, HEAD = 0x8b400, 576, 64     # text buffer (physical address)
 STAGE = 0x1a0400                          # where EVENTMES / NPC_MESn are loaded
 FRAME = 0x60788                           # frame counter, for lining up with the video
-TITLE = 0x7b51b                           # 0 until the title screen starts (on black,
-                                          # just before it fades in), nonzero from then on
+SCREEN = 0x793ec                          # the game's 320x240 screen setup (two u16s),
+                                          # written as the ASCII logo starts to fade in;
+                                          # 0xff filler before that
+CODE_AT = 0x10000                         # where the executable's code is loaded
 FILES = ['DATA06/EVENTMES.BIN'] + [f'DATA06/NPC_MES{n}.OBJ' for n in range(1, 6)] + \
         ['DATA06/SISETU.OBJ', 'DATA01/FIGHTMSG.OBJ', 'DATA01/STATUS.OBJ']
 STAGED = 6                                # the first six share the staging area
@@ -300,6 +303,8 @@ class Session:
         self.recdir = os.path.join(self.play, 'recordings')
         self.recordings = set(os.listdir(self.recdir)) if os.path.isdir(self.recdir) else set()
         self.record_pending = False if a.no_record else 'check'
+        self.screen_armed = False   # seen the game's code loaded, its screen not yet set
+        self.exe_sig = build_files(self.play, self.build)[EXE][0x800:0x820]
         self.status_of = textstatus.table()
         self.last_head = None
         self.last_id = None
@@ -423,7 +428,7 @@ class Session:
         return any(b[n] != a.get(n) for n in b)
 
     def start_recording(self):
-        """Once, when the title screen comes up (or at once if the game is past it)."""
+        """Once, as the ASCII logo starts (or at once if the game is well past it)."""
         os.makedirs(self.recdir, exist_ok=True)
         if self.record_pending == 'check':  # first time the game runs: recording already?
             if self.recording_now():
@@ -432,11 +437,16 @@ class Session:
                 print('   a recording is already going; leaving it alone')
                 return
             self.record_pending = True
-            print('   recording will start at the title screen')
-        d = self.ra.read(TITLE, 1)
+            print('   recording will start at the ASCII logo')
+        d = self.ra.read(SCREEN, 4)
         fc = self.frame()
-        if not d or fc is None or fc == 0xaaaaaaaa or d[0] in (0, 0xaa):
+        if not d or fc is None or self.ra.read(CODE_AT, len(self.exe_sig)) != self.exe_sig:
+            return                          # still in the BIOS
+        if struct.unpack('<HH', d) != (320, 240):
+            self.screen_armed = True        # black, before the logo
             return
+        if not self.screen_armed and not 3000 < fc < 0xaaaaaaaa:
+            return                          # can't tell yet whether the logo just started
         self.record_pending = False
         before = set(os.listdir(self.recdir))
         self.ra.send('RECORDING_TOGGLE')
@@ -444,9 +454,9 @@ class Session:
             time.sleep(0.25)
             if set(os.listdir(self.recdir)) - before:
                 self.ra.send('SHOW_MSG playwatch: recording')
-                print(f'{time.strftime("%H:%M:%S")} started recording at the title screen'
-                      if fc < 3000 else
-                      f'{time.strftime("%H:%M:%S")} started recording (the game was past the title)')
+                print(f'{time.strftime("%H:%M:%S")} started recording at the ASCII logo'
+                      if self.screen_armed else
+                      f'{time.strftime("%H:%M:%S")} started recording (the game was past the logo)')
                 return
         self.log('recording-failed')
         msg = 'Recording did not start: use Quick Menu > Start Recording'
