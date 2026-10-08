@@ -182,6 +182,17 @@ inside a line use `'`, and `npcfit.py` catches the rest.
   "Sound" switch did what was settled by ear, so to speak: the emulator harness now
   collects the sound, and the RMS level with each switch off showed サウンドの有無 is
   the music.
+- English only. The settings let a player switch item, monster and spell names (and the
+  status words) to Japanese, which the English font, having taken the kana's place,
+  drew as a jumble. Keeping Japanese working would have meant a second font in VRAM and
+  every text routine taught to switch, so the patched game is English-only instead
+  (asm/english_only.asm). Finding every way the switches could change took a write
+  watch on the four bytes: three settings screens (the card battle's goes through a
+  generic spinner, so "Jpn" got a minimum of 1 rather than a skipped branch), two save
+  load paths, a reset in the memory card overlay, and the card game's own packed copy,
+  which it unpacks each time its settings screen opens. Tested by saving with the
+  switches on Japanese: the published build loads that card in Japanese, the new one
+  in English.
 
 ## Facts that needed checking
 

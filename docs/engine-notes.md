@@ -226,3 +226,18 @@ the maze overlay as loaded during a talk.
 
 See `scripts/cardref.py`'s header for the CMENU.BIN tables (passwords, Lv 1 templates,
 EXP scale, Option bonuses, unit records) and `docs/cheats.md` for the card stock in RAM.
+
+## Settings
+
+- The Configuration settings are bytes at 0x80096378: Item, Monster and Spell Names and
+  Status (0 = Japanese, 1 = English), Sound Output (1 stereo, 2 mono), Music, Effects,
+  Sound Effects (1 = on), then message speed at +8. A save holds 12 bytes from here
+  (MCARD.BIN copies them in at 0x800aae88 and 0x800acbb4).
+- Three settings screens change them: Edge of Town (HAZURE.BIN, toggles at 0x800ac5a8),
+  the maze's camp (MAZE.BIN, 0x800d9cb8) and a card battle's SELECT screen (CMAIN.BIN
+  0x800aa904, through a spinner at 0x800adafc given min, max and steps on the stack).
+  A card battle packs the eight bytes into the bits of 0x8008a260 (+1 is the speed)
+  when the screen closes and unpacks them when it opens.
+- The language switches are zeroed in system init, New Game (english_defaults.asm) and
+  a reset in MCARD.BIN (0x800ad250). `asm/english_only.asm` keeps them on English
+  everywhere above.

@@ -146,6 +146,15 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   is literally "sound on/off", which sat next to "Sound Output" and "Sound Effects"
   with no way to tell them apart. Measured in the emulator: switching it off silences
   the music and leaves the menu sounds playing. エフェクトの有無 stays "Effects".
+- **English only: the "Jpn" name switches are locked (2026-10-08).** The settings
+  screen offers Japanese or English names for items, monsters and spells, and for the
+  status words. The English font took the kana's place, so "Jpn" drew the Japanese
+  lists as a jumble of kanji and Latin letters (`castle-sweep-review.html`, section 8).
+  Keeping both working would have needed the original font loaded alongside the English
+  one and every text routine taught to switch between them. Chris decided the patched
+  game is English-only: the switches can't be moved off "Eng" on any of the three
+  settings screens (Edge of Town, the maze's camp, a card battle), and loading a save
+  that says Japanese gives English. "Jpn" stays on screen, dimmed.
 
 ## To revisit
 
@@ -207,11 +216,9 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 - **Event 6,** the moving-floor board: "Work out how the moving floors behave," ends a
   page and "and don't forget the mask!" starts the next. The Japanese is two sentences
   (移動床の法則を見つけ出せ! / 仮面をお忘れなく!).
-- **"Jpn" names are garbled** (found 2026-10-08). The settings screen's Item Names
-  switch on "Jpn" loads I_NAME_J, which is still Japanese, and the English font draws
-  it as a jumble. The default is "Eng". Monster Names, Spell Names and Status are
-  untested. Options: point "Jpn" at the English names, or make it a second, polished
-  list. See `castle-sweep-review.html`, section 8.
+- **The readme and the release announcement should say the patch is English-only**
+  (2026-10-08). The four language switches are locked on "Eng" (see "English only"
+  above), so a player who expects the Japanese names to still be there needs telling.
 - **Long item names crammed in the catalog list** (found 2026-10-08). Names over about
   10 letters wrap to a second line 6 px lower and touch the next name; 170 names wrap.
   These are the developer's uppercase names, so the original likely does the same.
