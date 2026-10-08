@@ -102,6 +102,7 @@ The tools:
   each screen's text with a screenshot; `castlereport.py CRAWLDIR` matches the lines to
   their strings and lists cut-off lines, regular-font text left unpacked, letter pairs
   in the bold font and lines at the screen edge, with crops of each line to look over.
+  The crawl reads Boltac's catalog and the Monster Compendium too (their own renderer).
   `screentext.py STATE KEYS` prints the lines one key sequence draws.
 - Research: `gametext.py` decodes raw game text and maps disc files to the executable's
   load tables, `sjscan.py` and `relsearch.py` search binaries for text, `mipsdis.py`

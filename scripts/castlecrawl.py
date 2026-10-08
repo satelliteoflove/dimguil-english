@@ -13,9 +13,14 @@ but not expanded.
 
 Writes OUTDIR/nodes.jsonl, one record per screen: the path to it, a screenshot, the
 lines on screen (read from the sprite pool, since the game only redraws glyphs that
-change) and the lines drawn on the way there (from the glyph calls, with any glyph a
+change, plus the glyph lists below) and the lines drawn on the way there (from the glyph calls, with any glyph a
 full layer refused). OUTDIR/edges.jsonl has the same for actions that led back to a
 known screen but drew something new on the way.
+
+Boltac's catalog and the Monster Compendium don't use the sprite pool: their glyph-list
+renderer (asm/catalog_vwf.asm) points one GsSPRITE at each glyph in turn and sorts it,
+every frame. GlyphLists watches writes to those structs and logs the struct at each
+sort; their lines come out as layer 4.
 """
 import argparse, ctypes as C, hashlib, json, os, sys, time, zlib
 sys.path.insert(0, os.path.dirname(__file__))
@@ -25,6 +30,69 @@ from screentext import Text, ACCEPT, REFUSE, DEC, ALLOC
 POOL_PTR, LAYERS, COUNTS = 0x8007961c, 0x8008b390, 0x80079938
 JOUKA_MARK = (0x800cbec0, bytes.fromhex('46010424'))   # asm/status_text_pool.asm's addiu a0, 326
 s16 = lambda v: v - 0x10000 if v & 0x8000 else v
+
+
+class GlyphLists:
+    """Glyphs drawn by the glyph-list renderer, from its GsSortSprite calls. Each site:
+    sort call pc -> (GsSPRITE address, register holding it at the call, x offset to the screen: the Compendium draws 14 px
+    right of its sprites' x, as measured on screenshots). The struct is
+    x, y at +4, +6 (from the screen centre), width at +8 (12 for the regular font, 8 for
+    the monster names' font), tpage at +0xc, u, v at +0xe, +0xf."""
+    SITES = {0x800ea120: (0x800ecaf0, 4, 14),      # Monster Compendium (a0)
+             0x800e335c: (0x800ec998, 18, 14)}     # Boltac's catalog (s2; a0 is set in the slot)
+    SYSCG = 0x0f                               # the font's texture page; 0x1f is kanji
+
+    def __init__(self, e):
+        self.e = e
+        self.mem = {}
+
+    def arm(self):
+        """Set the hooks (after Text.start(), which clears them) and read the structs."""
+        for pc, (spr, _, _) in self.SITES.items():
+            self.e.bp(pc)
+            self.e.watch(spr + 4, spr + 0x10, emu.Emu.WRITE)
+            self.mem[spr] = bytearray(self.e.read(spr, 0x10))
+        self.frame = {}
+        return self
+
+    def feed(self, x):
+        """Take one log entry. Returns None if it isn't ours, else a glyph or True."""
+        if x['type'] == 'W':
+            for spr, m in self.mem.items():
+                o = x['addr'] - (spr & 0x1fffffff)
+                if 4 <= o < 0x10:
+                    for k in range(x['size']):
+                        if o + k < 0x10:
+                            m[o + k] = (x['value'] >> 8 * k) & 0xff
+                    return True
+            return None
+        site = self.SITES.get(x['pc']) if x['type'] == 'X' else None
+        if not site:
+            return None
+        spr, reg, dx = site
+        if x['regs'][reg] != spr:        # another overlay's code at this address
+            return True
+        m = self.mem[spr]
+        gx = s16(int.from_bytes(m[4:6], 'little')) + 0xa0 + dx
+        gy = s16(int.from_bytes(m[6:8], 'little')) + 0x78
+        tp = int.from_bytes(m[0xc:0xe], 'little') & 0x3f
+        # a sprite-pool style key for glyph_code: width at [0], u, v at [6], [7]
+        key = bytes([m[8] if tp == self.SYSCG else 0, 0, 0, 0, 0, 0, m[0xe], m[0xf], 0, 0, 0, 0])
+        g = (4, gx, gy, key, b'\0\0\0')
+        if -12 < gx < 350 and -12 < gy < 240:     # parked off screen when hidden
+            self.frame[(gx, gy)] = g
+        return g
+
+    def capture(self, frames=2):
+        """What's drawn now: run a couple of frames and keep each position's glyph."""
+        self.frame = {}
+        for x in self.e.log():
+            self.feed(x)
+        self.frame = {}
+        self.e.run(frames)
+        for x in self.e.log():
+            self.feed(x)
+        return list(self.frame.values())
 
 
 def sprites(e):
@@ -124,15 +192,24 @@ def restore(e, blob):
     assert e.lib.retro_unserialize(d, C.c_size_t(len(d)))
 
 
-def settle(e, t, quiet=40, least=24, most=600):
+def settle(e, t, gl=None, quiet=40, least=24, most=600):
     """Run until no new glyph (position and code) has been drawn for `quiet` frames.
     Some screens redraw the party panel every frame, so repeats don't count."""
     raw, idle, n, seen = [], 0, 0, set()
     while n < most:
         e.run(6)
         n += 6
-        new = False
+        new = listed = False
         for x in e.log():
+            g = gl.feed(x) if gl else None
+            if g is not None:
+                if g is not True:
+                    listed = True
+                    k = (g[1], g[2], g[3])
+                    if k not in seen:
+                        seen.add(k)
+                        new = True
+                continue
             if x['pc'] == ACCEPT:
                 r = x['regs']
                 k = (r[31], r[6], r[4] & 0xffff, r[5] & 0xffff, r[16] & 0xff)
@@ -143,8 +220,8 @@ def settle(e, t, quiet=40, least=24, most=600):
             raw.append(x)
         idle = 0 if new else idle + 6
         # a blank screen is a load or a fade still going, not a settled screen
-        if n >= least and idle >= quiet and int.from_bytes(e.read(0x80079c38, 2), 'little') \
-                and any(e.read(COUNTS, 8)):
+        if n >= least and idle >= quiet and (listed or int.from_bytes(e.read(0x80079c38, 2), 'little')
+                                             and any(e.read(COUNTS, 8))):
             break
     t.raw = raw
     return n
@@ -181,9 +258,10 @@ def main():
     e.load(a.state)
     e.run(2)
     t = Text(e).start()
+    gl = GlyphLists(e).arm()
     if a.prefix:
         e.seq(a.prefix)
-    settle(e, t)
+    settle(e, t, gl)
     nodes_f = open(os.path.join(a.out, 'nodes.jsonl'), 'w')
     edges_f = open(os.path.join(a.out, 'edges.jsonl'), 'w')
     glyphs, drawn_seen = Glyphs(), set()
@@ -201,7 +279,7 @@ def main():
         return out
 
     def screen():
-        sp = sprites(e)
+        sp = sprites(e) + gl.capture()
         glyphs.learn(sp, t.raw)
         return sp, screen_lines(sp, glyphs)
 
@@ -230,8 +308,9 @@ def main():
         for act in acts:
             restore(e, blob)
             t.start()
+            gl.arm()
             e.press(act, hold=4, after=0)
-            settle(e, t)
+            settle(e, t, gl)
             sp, lines = screen()
             sig = signature(sp)
             p = path + [act]

@@ -120,6 +120,13 @@ more of the detail behind each item.
   glyphs that change. `scripts/castlereport.py` matches each line to its string and
   flags cut-offs, unpacked text in the 12 px font, pair codes in the other fonts and
   lines near the screen edge.
+- Boltac's catalog and the Monster Compendium bypass the pool: their glyph-list renderer
+  (`asm/catalog_vwf.asm`) fills one GsSPRITE per glyph and sorts it, every frame. The
+  Compendium's struct is at 0x800ecaf0 (sorted at 0x800ea120), the catalog's at
+  0x800ec998 (sorted at 0x800e335c); x, y at +4, +6 from the screen centre, width at +8
+  (12 or 8), tpage at +0xc (0x0f the font, 0x1f kanji), u, v at +0xe, +0xf. Both draw
+  14 px right of the struct's x. The crawler watches writes to the struct and logs it
+  at each sort; those lines are layer 4 in its output.
 - Layers are allocated first-fit from the 720-sprite pool (0x8001f150: size, layer;
   0x8001f428 frees one, or all with -1; 0x8001d164 frees and reallocates one). The table
   at 0x8008b390 is 6 bytes per layer (start, size, 0); glyphs in use per layer are at
