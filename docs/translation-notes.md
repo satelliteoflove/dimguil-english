@@ -142,6 +142,11 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   "that book to the temple. You know the one." See "Guy's party and Dragon Quest III"
   in `npc-translation.md`.
 
+- **"Music," not "Sound" (STATUS 67, MESSAGE 254).** The settings screen's サウンドの有無
+  is literally "sound on/off", which sat next to "Sound Output" and "Sound Effects"
+  with no way to tell them apart. Measured in the emulator: switching it off silences
+  the music and leaves the menu sounds playing. エフェクトの有無 stays "Effects".
+
 ## To revisit
 
 - **Fontana's maze encounters (3:72, 75, 88, 278).** Same register shift as Balbo's
