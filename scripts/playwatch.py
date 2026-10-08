@@ -2,8 +2,11 @@
 """Run beside RetroArch during the recorded play-through: save states, memory-card
 backups, and a monitor that pauses the game before an unreviewed line is shown.
 
-    playwatch.py [--interval SECONDS] [--no-pause] [--playdir DIR] [--bin IMAGE]
+    playwatch.py [--interval SECONDS] [--no-pause] [--no-record] [--playdir DIR] [--bin IMAGE]
     playwatch.py --selftest STATE...     check the matching on emulator states (emu.py)
+
+It starts RetroArch's recording when the title screen comes up (recording from launch
+fails at the BIOS screen), unless a recording is already going or --no-record.
 
 It talks to RetroArch over its network commands (network_cmd_enable, UDP 55355; see
 ../playthrough/retroarch-dimguil.cfg). Everything goes in the play folder:
@@ -42,6 +45,8 @@ import textstatus
 BUF, BUF_LEN, HEAD = 0x8b400, 576, 64     # text buffer (physical address)
 STAGE = 0x1a0400                          # where EVENTMES / NPC_MESn are loaded
 FRAME = 0x60788                           # frame counter, for lining up with the video
+TITLE = 0x7b51b                           # 0 until the title screen starts (on black,
+                                          # just before it fades in), nonzero from then on
 FILES = ['DATA06/EVENTMES.BIN'] + [f'DATA06/NPC_MES{n}.OBJ' for n in range(1, 6)] + \
         ['DATA06/SISETU.OBJ', 'DATA01/FIGHTMSG.OBJ', 'DATA01/STATUS.OBJ']
 STAGED = 6                                # the first six share the staging area
@@ -294,6 +299,7 @@ class Session:
                 self.old.append((e.name, Text(build_files(self.play, e.name))))
         self.recdir = os.path.join(self.play, 'recordings')
         self.recordings = set(os.listdir(self.recdir)) if os.path.isdir(self.recdir) else set()
+        self.record_pending = False if a.no_record else 'check'
         self.status_of = textstatus.table()
         self.last_head = None
         self.last_id = None
@@ -407,6 +413,47 @@ class Session:
         print(f'{time.strftime("%H:%M:%S")} save state {name} (after {self.last_id})')
         return True
 
+    def recording_now(self):
+        """Whether a recording file is growing (the game is running when this is asked)."""
+        def sizes():
+            return {e.name: e.stat().st_size for e in os.scandir(self.recdir) if e.name.endswith('.mkv')}
+        a = sizes()
+        time.sleep(1)
+        b = sizes()
+        return any(b[n] != a.get(n) for n in b)
+
+    def start_recording(self):
+        """Once, when the title screen comes up (or at once if the game is past it)."""
+        os.makedirs(self.recdir, exist_ok=True)
+        if self.record_pending == 'check':  # first time the game runs: recording already?
+            if self.recording_now():
+                self.record_pending = False
+                self.log('recording-already')
+                print('   a recording is already going; leaving it alone')
+                return
+            self.record_pending = True
+            print('   recording will start at the title screen')
+        d = self.ra.read(TITLE, 1)
+        fc = self.frame()
+        if not d or fc is None or fc == 0xaaaaaaaa or d[0] in (0, 0xaa):
+            return
+        self.record_pending = False
+        before = set(os.listdir(self.recdir))
+        self.ra.send('RECORDING_TOGGLE')
+        for _ in range(20):
+            time.sleep(0.25)
+            if set(os.listdir(self.recdir)) - before:
+                self.ra.send('SHOW_MSG playwatch: recording')
+                print(f'{time.strftime("%H:%M:%S")} started recording at the title screen'
+                      if fc < 3000 else
+                      f'{time.strftime("%H:%M:%S")} started recording (the game was past the title)')
+                return
+        self.log('recording-failed')
+        msg = 'Recording did not start: use Quick Menu > Start Recording'
+        self.ra.send(f'SHOW_MSG playwatch: {msg}')
+        print(f'   {msg}')
+        notify('Dimguil playwatch', msg)
+
     def check_recordings(self):
         if not os.path.isdir(self.recdir):
             return
@@ -436,6 +483,8 @@ class Session:
                 time.sleep(1)
                 continue
             waiting = False
+            if self.record_pending and st == 'PLAYING':
+                self.start_recording()
             self.check_stage()
             self.check_text()
             self.check_recordings()
@@ -469,6 +518,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--interval', type=int, default=180)
     ap.add_argument('--no-pause', action='store_true', help='log only, never pause')
+    ap.add_argument('--no-record', action='store_true', help="don't start RetroArch's recording")
     ap.add_argument('--playdir', default=os.path.join(ROOT, '../playthrough'))
     ap.add_argument('--bin', default=os.path.join(ROOT, '../Wizardry - Dimguil (English WIP).bin'))
     ap.add_argument('--selftest', nargs='+', metavar='STATE')

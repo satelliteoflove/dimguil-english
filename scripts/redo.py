@@ -325,7 +325,8 @@ def main():
     json.dump(record, open(os.path.join(play, 'logs', f'{stamp}-redo.json'), 'w'), indent=1)
     print(f'recording {rec}; RetroArch is paused on the state. Unpause to play.')
     os.execvp(sys.executable, [sys.executable, '-u', os.path.join(HERE, 'playwatch.py'),
-                               '--playdir', play, '--bin', a.bin, '--from-state', chosen])
+                               '--playdir', play, '--bin', a.bin, '--from-state', chosen,
+                               '--no-record'])
 
 
 if __name__ == '__main__':
