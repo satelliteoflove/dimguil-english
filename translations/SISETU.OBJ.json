@@ -2955,6 +2955,7 @@
                     "length": 22,
                     "source": "NA",
                     "translation": "Sorts your belongings automatically.",
+                    "compress": true,
                     "addStringTerminator": true
                 },
                 {

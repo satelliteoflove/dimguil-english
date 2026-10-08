@@ -89,8 +89,17 @@ more of the detail behind each item.
   break ({ff20}) without {ff26} before it doesn't wait: the page clears at once.
   `scripts/evsweep.py` prints every event string through this box and saves each page.
 - The NPC talk box drew a 181-glyph test page whole; `npcfit.py` holds pages to that.
+- The town status screen (Training Grounds and tavern inspect, JOUKA 0x800cbec0) sizes
+  the layers 346, 70, 190, 114. With START's help on, layer 1 holds the five bold command
+  labels (50 glyphs: that font has no digraphs) and the help line, which got the other
+  20: "Spells can only be read here, not ca" (2026-10-07, in the play-through).
+  `asm/status_text_pool.asm` moves 40 from layer 0 (item list and spell grid: 164 with
+  six items, a full eight with two-line names still drew whole) to layer 1.
 - Other screens size layer 1 differently (30, 40, 70, 100, 154). They haven't all been
-  checked for full layers.
+  checked for full layers. `scripts/cutsweep.py STATE KEYS` reports lines cut short
+  while KEYS play; a line refused at its first glyph is static text being redrawn into a
+  layer it already filled (name entry and character creation do it every frame), which
+  is harmless.
 - Layers are allocated first-fit from the 720-sprite pool (0x8001f150: size, layer;
   0x8001f428 frees one, or all with -1; 0x8001d164 frees and reallocates one). The table
   at 0x8008b390 is 6 bytes per layer (start, size, 0); glyphs in use per layer are at
