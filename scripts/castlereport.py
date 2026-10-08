@@ -200,7 +200,9 @@ def main():
             if any(c >= 0xd8 or c < 0 for c in codes):
                 flags.append('japanese')
             bold = r.get('cell') == '08'
-            if bold and any(c in DIGRAPH_CODES for c in codes):
+            # codes that are also single characters ("<" and ">" share cells with
+            # "ta" and "'s") are the bold font's own glyphs
+            if bold and any(c in DIGRAPH_CODES - set(descfit.CHARS.values()) for c in codes):
                 flags.append('digraph')
             inserted = any(CTRL.search(m[3]) for m in r['match'])   # names come in raw
             if not r['fixed'] and len(codes) >= 3 and not inserted:
