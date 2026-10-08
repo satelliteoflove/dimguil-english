@@ -150,8 +150,9 @@ inside a line use `'`, and `npcfit.py` catches the rest.
   session). The bar under a character's stats stopped after 20 glyph codes. It shares a
   70-sprite glyph layer with the five bold command labels below it, which take 50
   because the bold font has no letter pairs. Each screen splits a 720-sprite pool four
-  ways in its own code, so the fix moves 40 sprites from the layer holding the item list
-  (peak about 230 of 346) to the bar's (asm/status_text_pool.asm). The Sort help line had
+  ways in its own code, so the fix moves 20 sprites from the layer holding the item list
+  (peak about 230 of 346) to the bar's, 40 for the help line, about what the bar's
+  300 px can show (asm/status_text_pool.asm). The Sort help line had
   been left unpacked, apparently copied from the label before it, and is now packed (36
   glyph codes to 22). scripts/cutsweep.py finds such cut-offs in the harness.
 

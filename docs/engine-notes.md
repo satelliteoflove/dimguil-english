@@ -93,8 +93,10 @@ more of the detail behind each item.
   the layers 346, 70, 190, 114. With START's help on, layer 1 holds the five bold command
   labels (50 glyphs: that font has no digraphs) and the help line, which got the other
   20: "Spells can only be read here, not ca" (2026-10-07, in the play-through).
-  `asm/status_text_pool.asm` moves 40 from layer 0 (item list and spell grid: 164 with
-  six items, a full eight with two-line names still drew whole) to layer 1.
+  `asm/status_text_pool.asm` moves 20 from layer 0 (item list and spell grid: 164 with
+  six items, a full eight with two-line names still drew whole) to layer 1, so the help
+  line gets 40. The bar shows x = 18-332 with lines centered on 168, so a help line can
+  be about 300 px (roughly 35 glyph codes); past that it spills off both ends.
 - Other screens size layer 1 differently (30, 40, 70, 100, 154). They haven't all been
   checked for full layers. `scripts/cutsweep.py STATE KEYS` reports lines cut short
   while KEYS play; a line refused at its first glyph is static text being redrawn into a
