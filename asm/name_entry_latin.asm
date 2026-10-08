@@ -18,6 +18,14 @@
     sb      v1, -0x6670(v0)
 .org 0x800b8558             ; state 1 (delay slot), was: move a0,zero; s1 = 0x80080000
     lbu     a0, -0x6670(s1)
+; Change Name opens name entry through its own path, which zeroed the charset too, so it
+; came up on hiragana. Was: lui v0 / sb zero,-0x6670(v0) / lui v0 / lui v1 (v0 is still
+; 0x80080000 for the sb in the delay slot of the jump that follows).
+.org 0x800b4560
+    lui     v0, 0x8008
+    addiu   v1, zero, 2
+    sb      v1, -0x6670(v0)
+    lui     v1, 0x8008
 .close
 
 ; City Outskirts, Tome of Rebirth
