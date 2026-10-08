@@ -50,6 +50,8 @@ SCREEN = 0x793ec                          # the game's 320x240 screen setup (two
                                           # written as the ASCII logo starts to fade in;
                                           # 0xff filler before that
 CODE_AT = 0x10000                         # where the executable's code is loaded
+LAYER_USED = 0x79938                      # glyph sprites in use per text layer (4 x s16)
+LAYER_SIZE = 0x8b390                      # per layer: first sprite, size, offset (4 x 3 s16)
 FILES = ['DATA06/EVENTMES.BIN'] + [f'DATA06/NPC_MES{n}.OBJ' for n in range(1, 6)] + \
         ['DATA06/SISETU.OBJ', 'DATA01/FIGHTMSG.OBJ', 'DATA01/STATUS.OBJ']
 STAGED = 6                                # the first six share the staging area
@@ -310,6 +312,7 @@ class Session:
         self.last_id = None
         self.first = True           # what's in the buffer at the start was already shown
         self.staged = None          # what the staging area holds, as staged_name() says
+        self.full = set()           # text layers at their size at the last check
         self.next_state = time.time() + a.interval
         self.next_srm = 0
         self.srm_hash = None
@@ -333,6 +336,20 @@ class Session:
         if head is None:
             return None
         return next((f for f, h in self.text.heads.items() if h == head), 'other')
+
+    def check_layers(self, shown):
+        """Log (not pause) when a text layer fills up as a new string appears. A full
+        layer refuses further glyphs, so the string may be cut off; but static text that
+        fills a layer exactly (character creation) looks the same from here, so these are
+        leads for a check in the emulator harness, not stops."""
+        used, size = self.ra.read(LAYER_USED, 8), self.ra.read(LAYER_SIZE, 24)
+        if not used or not size:
+            return
+        full = {i for i in range(4) if 0 < struct.unpack_from('<h', size, 6 * i + 2)[0]
+                <= struct.unpack_from('<h', used, 2 * i)[0]}
+        for i in sorted(full - self.full):
+            self.log('layer-full', layer=i, text=shown, frame=self.frame())
+        self.full = full
 
     def check_stage(self):
         """Log each load into the staging area: meeting a party puts its portrait there
@@ -378,6 +395,8 @@ class Session:
         self.first = False
         tag = f'{f}:{i}' if hit else '?'
         print(f'{time.strftime("%H:%M:%S")} {tag:18} {st:11} {shown[:70]!r}')
+        time.sleep(0.05)                    # let the string draw
+        self.check_layers(shown)
         if pause:
             self.stop(f'{tag} {st}: {why}', shown)
 
