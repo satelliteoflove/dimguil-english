@@ -202,9 +202,28 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   rename touches the inventory list, the catalog, Boltac's list and the battle copy of
   the names, and breaks the match with Emonoya and other guides. Some are plain
   misspellings that should be fixed whatever is decided about the rest: Chris spotted
-  "Displaser Robes" for Displacer Robes in the catalog, and NUNCHAKA is nunchaku. Chris
-  can't stand leaving them in, though he isn't sure how the community will take fixing
-  them; to be dealt with later.
+  "Displaser Robes" for Displacer Robes in the catalog. Chris can't stand leaving them
+  in, though he isn't sure how the community will take fixing them; to be dealt with
+  later.
+- **Series spellings checked (2026-10-09).** Before calling a developer name a typo,
+  check the earlier games (see "Halycon stays Halycon"). Of the names in the
+  known-issues list:
+  - NUNCHAKA (ヌンチャク) is Sir-Tech's spelling: the Nunchaka is a Ninja weapon in
+    Wizardry VI (145 gold, 1-5) and Wizardry VII (800 gold, 3-9), per the tk421.net
+    item lists. Not a typo.
+  - Maelific (マイルフィック), listed as a typo in the roadmap, is Wizardry I's demon.
+    Not a typo.
+  - Dragonare (ドラゴネアー) is a typo. Wizardry V's monster is the Dragonaire
+    (GameFAQs SNES bestiary, number 115; Five Trials picture 176), and Dimguil's own
+    card game spells it that way.
+  - Displaser Robe (身かわしの衣, "dodging robe") is a typo. No earlier game has the
+    word; Wizardry VII's Displacer Cloak spells it with a c.
+  - Silhoutte, in "Small Silhoutte(s)", the unidentified name for ちいさなかげ ("small
+    shadow") in the M_DT monster records, is a typo with nothing behind it in the
+    series.
+  - Drumer, in "Old Drumer" (オールドドラマー; the Compendium already says Old
+    Drummer), is a typo. No earlier game has an Old Drummer; it seems to be Dimguil's
+    own monster.
 - **Other naming.** "Lithograph of the Sun" vs LITHOGRAPH OF SUN, and "labyrinth" vs
   "maze" for 迷宮 (checklist Q6).
 - **Unidentified monster names.** "Flap Insect(s)" and "Flap Figure(s)" for はばたくかげ;

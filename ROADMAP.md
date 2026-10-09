@@ -73,7 +73,8 @@ Inferred but not seen in play: the ITEM.DAT alignment and sex labels, and that I
 and ITEM_CA are never loaded.
 
 Typos in the game's own English monster names are for the quality passes:
-"Silhoutte", "Drumer", "Maelific", and "Dragonare" (the card game says "Dragonaire").
+"Silhoutte", "Drumer", and "Dragonare" (the card game and Wizardry V say "Dragonaire").
+Maelific (Wizardry I) and NUNCHAKA (Wizardry VI and VII) are the series' own spellings.
 
 ### Quality passes (to reach 0.9)
 

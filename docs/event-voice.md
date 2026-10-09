@@ -93,7 +93,7 @@ looked for any sign the spelling was a deliberate joke and found none:
   meeting room fits that set; nothing in it is a galley or a food word.
 - In katakana, meeting is ミーティング and meat is ミート. Both start ミー, so MEAT-ING is
   an easy slip when writing English from katakana. The same team misspelled monster
-  names elsewhere ("Silhoutte", "Drumer", "Maelific", "Dragonare").
+  names elsewhere ("Silhoutte", "Drumer", "Dragonare").
 - The game's real jokes (TREBOR SUX, the DREAMLAND signs) are set up where the player
   sees them. This mural is "too damaged to make out", so a pun would have nothing to
   land on.
