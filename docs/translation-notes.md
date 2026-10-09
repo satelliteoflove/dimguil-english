@@ -155,6 +155,14 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   game is English-only: the switches can't be moved off "Eng" on any of the three
   settings screens (Edge of Town, the maze's camp, a card battle), and loading a save
   that says Japanese gives English. "Jpn" stays on screen, dimmed.
+- **The card game's level-up arrow (2026-10-09).** A card's level-up screen compares
+  each stat as "1 → 2", but it showed "1 A 2". The arrow is a Shift-JIS string in
+  CMAIN.BIN, which the card game converts to the Japanese font's arrow cell, and in
+  the English font that cell is the letter pair "A " (as in "A Cot"). The original
+  arrow is now drawn into an empty cell (0xb9, a 31 px blank nothing used), and the
+  string is "_", which the converter sends there. MESSAGE 274, a "→" between two
+  numbers that the crawl never showed on screen, encodes there too. Found by the card
+  game crawl.
 
 ## To revisit
 

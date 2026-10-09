@@ -99,4 +99,11 @@
 .area 0x1c
     .asciiz "Choose a Master Card."
 .endarea
+; The level-up screen's arrow between a stat's old and new value. The converter sends
+; "→" to the Japanese font's arrow cell, which is the letter pair "A " in the English
+; font. "_" converts to 0xb9, where vwf.asm's font now has the arrow.
+.org 0x800a1290
+.area 4
+    .asciiz "_"
+.endarea
 .close

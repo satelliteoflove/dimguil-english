@@ -197,6 +197,21 @@ inside a line use `'`, and `npcfit.py` catches the rest.
   which it unpacks each time its settings screen opens. Tested by saving with the
   switches on Japanese: the published build loads that card in Japanese, the new one
   in English.
+- The card game crawl. The card menus and battles draw their text with their own
+  copies of the glyph-list renderer (CMENU.BIN 0x800a6a5c, sprite at 0x800c1650;
+  CMAIN.BIN 0x800a6074, sprite at 0x800cd180), so castlecrawl now arms those sites
+  whenever the overlay is loaded. Roots: the test save, a party formed at the tables,
+  a four-card party, and a Rank E battle. Menus are crawled; battles play on AUTO while
+  a watcher logs each new line (menus don't move a battle along). Found: the level-up
+  arrow drew as "A". The font's arrow cell had become the letter pair "A ", and both
+  the code table and the card game's Shift-JIS converter still sent "→" there. The
+  original arrow went into a blank cell. Fixing the code table alone changed nothing
+  on screen: this arrow is a Shift-JIS string in CMAIN.BIN, so it now reads "_",
+  which the converter maps to that cell. The first pick, 0xb8, broke the build: the shop's "∞" (ITEM.DAT 39, left
+  untranslated) draws there as a blank, so it went into 0xb9, which no text uses and
+  no code loads as a glyph. Before/after: rips/probe/cardcrawl/steps/arrow_zoom.png, and the after
+  shots in rips/probe/arrow/ (levelup_before_after.png). Also learned: the password keys are boxed symbols from
+  the card game's own texture, untouched by the patch, so they're the original's.
 
 ## Facts that needed checking
 
