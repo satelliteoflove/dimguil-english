@@ -190,10 +190,14 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   bestiary, number 115; Five Trials picture 176). The untouched card game also says
   Dragonare; its "Dragonaire" is ours (`cb_strings.asm`, MESSAGE.DAT). DISPLASER ROBE
   (身かわしの衣) is now DISPLACER ROBE, as in Wizardry VII's Displacer Cloak. Old Drumer
-  (オールドドラマー) is now Old Drummer. Each name has several copies: the Compendium's
+  (オールドドラマー) is now Old Drummer. "Small Silhoutte(s)", the unidentified name
+  for ちいさなかげ ("small shadow") and a few others, is now "Tiny Silhouette(s)": each
+  name slot holds 16 glyphs, "Small Silhouettes" is 17, and the Gremlin and Cutie Thief
+  records write it with a two-byte line break, so "Small" had to go; "Tiny" keeps the
+  developer's word and fits every slot exactly. Each name has several copies: the Compendium's
   name lists (M_CATALG), the item lists (I_NAME_E twice, ITEM.DAT, the card game's
   MESSAGE.DAT), the monster records in DATA02 (`scripts/namefixes.py`) and BATTLE.BIN's
-  own record (`asm/name_fixes.asm`). ITEM_CA.DAT keeps DISPLASER; the game doesn't
+  own two records (`asm/name_fixes.asm`). ITEM_CA.DAT keeps DISPLASER; the game doesn't
   load it.
 
 ## To revisit
@@ -224,14 +228,8 @@ The preferred fix is a close-to-literal reading, fitted to the box.
     item lists. Not a typo.
   - Maelific (マイルフィック), listed as a typo in the roadmap, is Wizardry I's demon.
     Not a typo.
-  - Dragonare (ドラゴネア), Displaser Robe and Old Drumer are typos, now fixed (see
-    "Misspelled names fixed" above).
-  - Silhoutte, in "Small Silhoutte(s)", the unidentified name for ちいさなかげ ("small
-    shadow") and a few others in the monster records, is a typo with nothing behind it
-    in the series. Chris wants it fixed, but it doesn't fit: each name slot holds 16
-    glyphs, "Small Silhouettes" is 17, and the Gremlin and Cutie Thief records write it
-    "Small{ff21}Silhouette" (a line break, two bytes), also 17. These fonts have no
-    letter pairs to save room. Open.
+  - Dragonare (ドラゴネア), Displaser Robe, Old Drumer and Small Silhoutte are typos,
+    now fixed (see "Misspelled names fixed" above).
 - **Other naming.** "Lithograph of the Sun" vs LITHOGRAPH OF SUN, and "labyrinth" vs
   "maze" for 迷宮 (checklist Q6).
 - **Unidentified monster names.** "Flap Insect(s)" and "Flap Figure(s)" for はばたくかげ;

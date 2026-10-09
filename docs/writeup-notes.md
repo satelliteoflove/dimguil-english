@@ -238,10 +238,11 @@ inside a line use `'`, and `npcfit.py` catches the rest.
 - The "misspelled" names (2026-10-09). Before fixing a developer name, check the earlier
   games. Halycon is Wizardry V's monster, and NUNCHAKA (Wizardry VI and VII) and Maelific
   (Wizardry I) are Sir-Tech's own spellings, so they stay. Dragonare, Old Drumer and
-  DISPLASER ROBE had nothing behind them and were fixed. A name has up to eight copies:
+  DISPLASER ROBE had nothing behind them and were fixed, and so was "Small
+  Silhoutte(s)", as "Tiny Silhouette(s)". A name has up to eight copies:
   the Compendium lists, three item lists, the card game, the DATA02 monster records
   (18-byte slots, 16 glyphs) and a stray record inside BATTLE.BIN, which has to be
   patched in asm because the asm step copies BATTLE.BIN over the binary patches. The
-  slot size is why "Small Silhouettes" can't simply be spelled right. Shots:
+  slot size is why "Small Silhouettes" couldn't simply be spelled right. Shots:
   `docs/shots/name-dragonaire`, `name-old-drummer`, `name-displacer-robe` (befores from
   the 2026-10-08 crawls).

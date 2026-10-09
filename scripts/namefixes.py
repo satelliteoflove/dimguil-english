@@ -22,6 +22,10 @@ SLOTS = {
     'Dragonare': 'Dragonaire',
     'Dragonares': 'Dragonaires',
     'Old{ff21}Drumer': 'Old{ff21}Drummer',
+    # "Small Silhouettes" is 17 glyphs; "Tiny" keeps the developer's word and fits.
+    'Small Silhoutte': 'Tiny Silhouette',
+    'Small Silhouttes': 'Tiny Silhouettes',
+    'Small{ff21}Silhoutte': 'Tiny{ff21}Silhouette',
 }
 ITEM_DAT = ('DATA07/ITEM.DAT', 'DISPLASER', 'DISPLACER')
 

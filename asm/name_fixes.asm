@@ -1,13 +1,24 @@
 ; Misspelled built-in English names: BATTLE.BIN's copy.
 ;
-; BATTLE.BIN carries a monster record of its own (the 0xd0-byte layout of DATA02's
-; M_DTnnn.BIN, six 18-byte name slots ending in {ff40}). Its Dragonare is fixed here, as
+; BATTLE.BIN carries two monster records of its own (the 0xd0-byte layout of DATA02's
+; M_DTnnn.BIN, six 18-byte name slots ending in {ff40}). Their names are fixed here, as
 ; scripts/namefixes.py fixes the DATA02 records; vwf.asm copies BATTLE.BIN into dirty/
 ; after the binary patches are applied, so the copy has to be patched in asm. Glyph
 ; codes are the single-letter ones from tables/dimguil_enc.tbl.
 .psx
 
 .open "dirty/dimguil/BATTLE.BIN", 0x800a1000
+.org 0x800d709e
+.area 0x12
+    ; Tiny Silhouette (was Small Silhoutte; "Small Silhouettes" won't fit a slot)
+    .db 0x1e, 0x2d, 0x32, 0x3d, 0xba, 0x1d, 0x2d, 0x30, 0x2c, 0x33, 0x39, 0x29, 0x38, 0x38, 0x29, 0xff, 0x40
+    .fill 1, 0
+.endarea
+.org 0x800d70c2
+.area 0x12
+    ; Tiny Silhouettes (was Small Silhouttes)
+    .db 0x1e, 0x2d, 0x32, 0x3d, 0xba, 0x1d, 0x2d, 0x30, 0x2c, 0x33, 0x39, 0x29, 0x38, 0x38, 0x29, 0x37, 0xff, 0x40
+.endarea
 .org 0x800d749c
 .area 0x12
     ; Dragonaire (was Dragonare)
