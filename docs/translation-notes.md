@@ -235,4 +235,6 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 - **Long item names crammed in the catalog list** (found 2026-10-08). Names over about
   10 letters wrap to a second line 6 px lower and touch the next name; 170 names wrap.
   These are the developer's uppercase names, so the original likely does the same.
+  Left as they are (Chris, 2026-10-09): fixing it is a bigger job than it's worth, and
+  the names still read.
 - **"Halycon"** in the built-in monster names is probably Halcyon.
