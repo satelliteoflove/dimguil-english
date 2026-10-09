@@ -82,6 +82,11 @@ first 30 glyph codes and drops the rest, counted by code, not by pixel. All 84 f
   terminator (the Battle Axe and the Nunchaka), so from item 25 on, description k
   belongs to item k+1. The fit checker had been counting both as one and reporting a
   problem that wasn't there.
+- Letter spacing (2026-09-25, 249f928). The catalog, the Monster Compendium and the
+  card game draw text with a different renderer, which spaces each glyph by a width
+  field sized for kana, so single letters were spaced like letter pairs ("W ea p on
+  s"). Its advance now comes from the main text engine's width table
+  (asm/catalog_vwf.asm).
 
 **A quote mark that turns into Japanese (2026-09-25, 9713e23).** Glyph 0xb6 is `"` in
 the English font, but it's also the Japanese voicing mark, and the printer merges it
@@ -155,6 +160,7 @@ inside a line use `'`, and `npcfit.py` catches the rest.
   300 px can show (asm/status_text_pool.asm). The Sort help line had
   been left unpacked, apparently copied from the label before it, and is now packed (36
   glyph codes to 22). scripts/cutsweep.py finds such cut-offs in the harness.
+  Shots: docs/shots/status-help-line/.
 
 - The town sweep (2026-10-08). After three kinds of help-line trouble (untranslated,
   cut by glyph count, spilling past the bar), every town screen got checked by machine.
@@ -172,9 +178,9 @@ inside a line use `'`, and `npcfit.py` catches the rest.
   takes 18 of them (asm/town_text_pool.asm): the list is 133 sprites and the bar shows
   about 39 glyphs. The first version handed it all 80; Chris pointed out a line the
   screen can't show more than ~39 characters of has no use for 70+ more sprites, so it
-  was cut back to what fits. Before/after: rips/probe/tips/inn_rooms.png (cut),
-  rips/probe/innpool/room2.png (172). Change Name opened the keyboard on hiragana
-  (its own open path still zeroed the character set). 55 strings drawn in the regular
+  was cut back to what fits. Shots: docs/shots/inn-help-line/. Change Name opened the
+  keyboard on hiragana (its own open path still zeroed the character set); shots:
+  docs/shots/change-name-keyboard/. 55 strings drawn in the regular
   font were never packed: shop help lines, the recruits' and fortune teller's speeches,
   the King's, the Inn's level-up lines, the temple's chant; packed now. The longest town
   string went from 445 bytes to 305. Also learned the hard way: the bold label font has
@@ -185,7 +191,7 @@ inside a line use `'`, and `npcfit.py` catches the rest.
   (asm/config_layout.asm; the table is in HAZURE.BIN and again in MAZE.BIN). Which
   "Sound" switch did what was settled by ear, so to speak: the emulator harness now
   collects the sound, and the RMS level with each switch off showed サウンドの有無 is
-  the music.
+  the music. Shots: docs/shots/settings-name-layout/ (the after also shows "Music").
 - English only. The settings let a player switch item, monster and spell names (and the
   status words) to Japanese, which the English font, having taken the kana's place,
   drew as a jumble. Keeping Japanese working would have meant a second font in VRAM and
@@ -196,7 +202,8 @@ inside a line use `'`, and `npcfit.py` catches the rest.
   load paths, a reset in the memory card overlay, and the card game's own packed copy,
   which it unpacks each time its settings screen opens. Tested by saving with the
   switches on Japanese: the published build loads that card in Japanese, the new one
-  in English.
+  in English. Shots: docs/shots/jpn-lock/ (the garbled "Jpn" catalog, then "Jpn" dimmed
+  and unmovable on all three settings screens).
 - The card game crawl. The card menus and battles draw their text with their own
   copies of the glyph-list renderer (CMENU.BIN 0x800a6a5c, sprite at 0x800c1650;
   CMAIN.BIN 0x800a6074, sprite at 0x800cd180), so castlecrawl now arms those sites
@@ -209,9 +216,9 @@ inside a line use `'`, and `npcfit.py` catches the rest.
   on screen: this arrow is a Shift-JIS string in CMAIN.BIN, so it now reads "_",
   which the converter maps to that cell. The first pick, 0xb8, broke the build: the shop's "∞" (ITEM.DAT 39, left
   untranslated) draws there as a blank, so it went into 0xb9, which no text uses and
-  no code loads as a glyph. Before/after: rips/probe/cardcrawl/steps/arrow_zoom.png, and the after
-  shots in rips/probe/arrow/ (levelup_before_after.png). Also learned: the password keys are boxed symbols from
-  the card game's own texture, untouched by the patch, so they're the original's.
+  no code loads as a glyph. Shots: docs/shots/card-levelup-arrow/. Also learned: the
+  password keys are boxed symbols from the card game's own texture, untouched by the
+  patch, so they're the original's.
 
 ## Facts that needed checking
 
