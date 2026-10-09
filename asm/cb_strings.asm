@@ -127,6 +127,17 @@
 .area 0x1c
     .asciiz "Choose a Master Card."
 .endarea
+; Each card's mode label over the card row in battle (square). "MANU" and "AUTO" are
+; 32 px each over cards 34 px apart, so the four ran together ("MANUMANUMANUMANU").
+; The MANU slot (8 bytes) now holds "MAN" and "AUT", and the AUTO case points at the
+; new "AUT"; the AUTO/MANUAL menu keeps its own "AUTO".
+.org 0x800a17e8
+.area 8
+    .asciiz "MAN"
+    .asciiz "AUT"
+.endarea
+.org 0x800b5508
+    addiu   a1, a1, 0x17ec      ; was 0x17d4, the menu's "AUTO"
 ; The level-up screen's arrow between a stat's old and new value. The converter sends
 ; "→" to the Japanese font's arrow cell, which is the letter pair "A " in the English
 ; font. "_" converts to 0xb9, where vwf.asm's font now has the arrow.

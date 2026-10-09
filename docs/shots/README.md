@@ -11,7 +11,8 @@ before is from Chris's own play-through state, shown at 2x.
 
 | Folder | Fix | Commit |
 |---|---|---|
-| `inn-help-line` | The Inn's room help lines cut off ("...for 10000G a") | 8072cad, 2a207be |
+| `inn-help-line` | The Inn's room help lines cut off ("...for 10000G a") | 8072cad, 210f6be |
+| `card-mode-labels` | Card battle mode labels ran together ("AUTOAUTOMANUMANU"); now AUT and MAN | next |
 | `card-levelup-arrow` | Card level-up screen showed "1 A 2" for "1 → 2" | ab1771f |
 | `status-help-line` | Status screen help line cut off | 1bc0171, 6764806 |
 | `settings-name-layout` | Settings names placed for Japanese; "Sound" became "Music" | 6e8f023, e1661ce |

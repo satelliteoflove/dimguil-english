@@ -220,7 +220,10 @@ inside a line use `'`, and `npcfit.py` catches the rest.
   on screen: this arrow is a Shift-JIS string in CMAIN.BIN, so it now reads "_",
   which the converter maps to that cell. The first pick, 0xb8, broke the build: the shop's "∞" (ITEM.DAT 39, left
   untranslated) draws there as a blank, so it went into 0xb9, which no text uses and
-  no code loads as a glyph. Shots: docs/shots/card-levelup-arrow/. Also learned: the
+  no code loads as a glyph. Shots: docs/shots/card-levelup-arrow/. Also found: the
+  battle's per-card mode labels ran together ("MANUMANUMANUMANU"); the label shared the
+  menu's "AUTO" string, so "AUT" went into the 8-byte "MANU" slot beside "MAN" and the
+  AUTO case points there. Shots: docs/shots/card-mode-labels/. Also learned: the
   password keys are boxed symbols from the card game's own texture, untouched by the
   patch, so they're the original's.
 
