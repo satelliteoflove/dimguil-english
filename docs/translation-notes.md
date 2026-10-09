@@ -172,6 +172,18 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   (STATUS 222-305), which `terms.md` follows: Kadolto, Nagura and Rios are now
   Kadorto, Nagula and Lios, as the unit names were matched before (`cb_strings.asm`,
   both copies). They show in battle as "Nagula was cast".
+- **Halycon stays Halycon (Chris, 2026-10-09).** It looks like a misspelling of Halcyon,
+  but it's the series' own name. Sir-Tech's Wizardry V: Heart of the Maelstrom has a
+  monster called "Halycons" (number 119 in the SNES bestiary, among the Manes and
+  Greater Fiends), and the Japanese Wizardry V gave it as ハリコン, the katakana Dimguil
+  uses. Wizardry Gaiden: Five Trials reuses the Wizardry V picture as ハリコン / Halycon
+  (Halycons): a white demon whose upper body rises out of a whirlwind. Dimguil's entry
+  (M_CATALG 806; built-in names 453 and 672) keeps the wind theme. The Greek halcyon,
+  a bird that calms the winds, doesn't fit this sickle-wielding wind spirit anyway.
+  Sources: the GameFAQs bestiary PAR codes for Wizardry V (SNES, faqs/29262) and the
+  Five Trials atwiki monster list (w.atwiki.jp/wiz-fo/pages/27.html, picture 202).
+  Before calling any developer name a misspelling, check whether an earlier Wizardry
+  uses it.
 
 ## To revisit
 
@@ -241,4 +253,3 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   These are the developer's uppercase names, so the original likely does the same.
   Left as they are (Chris, 2026-10-09): fixing it is a bigger job than it's worth, and
   the names still read.
-- **"Halycon"** in the built-in monster names is probably Halcyon.
