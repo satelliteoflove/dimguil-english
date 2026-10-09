@@ -184,21 +184,32 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   Five Trials atwiki monster list (w.atwiki.jp/wiz-fo/pages/27.html, picture 202).
   Before calling any developer name a misspelling, check whether an earlier Wizardry
   uses it.
-- **Misspelled names fixed (Chris, 2026-10-09).** Three of the developer's English
+- **Misspelled names fixed (Chris, 2026-10-09).** Four of the developer's English
   names were plain typos with nothing behind them in the series (see "Series spellings
-  checked"): Dragonare is now Dragonaire, Wizardry V's spelling (GameFAQs SNES
-  bestiary, number 115; Five Trials picture 176). The untouched card game also says
-  Dragonare; its "Dragonaire" is ours (`cb_strings.asm`, MESSAGE.DAT). DISPLASER ROBE
-  (身かわしの衣) is now DISPLACER ROBE, as in Wizardry VII's Displacer Cloak. Old Drumer
-  (オールドドラマー) is now Old Drummer. "Small Silhoutte(s)", the unidentified name
-  for ちいさなかげ ("small shadow") and a few others, is now "Tiny Silhouette(s)": each
-  name slot holds 16 glyphs, "Small Silhouettes" is 17, and the Gremlin and Cutie Thief
-  records write it with a two-byte line break, so "Small" had to go; "Tiny" keeps the
-  developer's word and fits every slot exactly. Each name has several copies: the Compendium's
-  name lists (M_CATALG), the item lists (I_NAME_E twice, ITEM.DAT, the card game's
-  MESSAGE.DAT), the monster records in DATA02 (`scripts/namefixes.py`) and BATTLE.BIN's
-  own two records (`asm/name_fixes.asm`). ITEM_CA.DAT keeps DISPLASER; the game doesn't
-  load it.
+  checked"):
+  - Dragonare is now Dragonaire, Wizardry V's spelling (GameFAQs SNES bestiary, number
+    115; Five Trials picture 176). The untouched card game also says Dragonare; its
+    "Dragonaire" is ours (`cb_strings.asm`, MESSAGE.DAT).
+  - DISPLASER ROBE (身かわしの衣) is now DISPLACER ROBE, as in Wizardry VII's
+    Displacer Cloak.
+  - Old Drumer (オールドドラマー) is now Old Drummer.
+  - "Small Silhoutte(s)", an unidentified name, is now "Small Shadow(s)". The right
+    spelling doesn't fit: each name slot holds 16 glyphs, "Small Silhouettes" is 17,
+    and these fonts have no letter pairs to save room. The Gremlin and Cutie Thief
+    records also put a two-byte line break in the name, so even "Small Silhouette" is
+    17 there. Small Shadow is the literal ちいさなかげ, the Japanese behind most of
+    them, and it keeps "Small". It also matches "Winged Shadow(s)", proposed for
+    はばたくかげ below. "Tiny Silhouette(s)" fit too and was tried first; Chris
+    dropped it because none of these monsters is tiny. The developer used the one name
+    for four Japanese ones, and they stay merged: ちいさなかげ (Mad Monkey, Vorpal
+    Bunny, Magical Rabbit), はいずるぶったい "crawling thing" (2-Head Toad, Fang),
+    ひとがたのほのお "human-shaped flame" (Fire Rock) and ちいさなけもの "small beast"
+    (the Gremlins, Cutie Thief).
+
+  Each name has several copies: the Compendium's name lists (M_CATALG), the item lists
+  (I_NAME_E twice, ITEM.DAT, the card game's MESSAGE.DAT), the monster records in
+  DATA02 (`scripts/namefixes.py`) and BATTLE.BIN's own two records
+  (`asm/name_fixes.asm`). ITEM_CA.DAT keeps DISPLASER; the game doesn't load it.
 
 ## To revisit
 

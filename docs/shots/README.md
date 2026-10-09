@@ -26,4 +26,4 @@ No natural before/after pair exists for Boltac's Trade captions (f5d4e8f), the e
 box glyph pool (6dc52dd), the voicing marks in event text (9a955ba), event line
 centering (fc8eabc), catalog letter spacing (249f928), the descriptions under tall item
 pictures (7e46b2f, 6d26caf), the training maze sign (ec26800), the stat-change
-messages (001498f) or the Tiny Silhouette unidentified name (345f445).
+messages (001498f) or the Small Shadow unidentified name (345f445).

@@ -73,7 +73,7 @@ Inferred but not seen in play: the ITEM.DAT alignment and sex labels, and that I
 and ITEM_CA are never loaded.
 
 Typos in the game's own English names are fixed: Dragonaire, Old Drummer, DISPLACER
-ROBE and Tiny Silhouette(s) ("Small Silhouettes" is too long for its name slot). Maelific (Wizardry I) and NUNCHAKA (Wizardry VI and VII) are the
+ROBE and Small Shadow(s) ("Small Silhouettes" is too long for its name slot). Maelific (Wizardry I) and NUNCHAKA (Wizardry VI and VII) are the
 series' own spellings.
 
 ### Quality passes (to reach 0.9)
