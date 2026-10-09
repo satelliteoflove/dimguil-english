@@ -19,8 +19,9 @@ known screen but drew something new on the way.
 
 Boltac's catalog and the Monster Compendium don't use the sprite pool: their glyph-list
 renderer (asm/catalog_vwf.asm) points one GsSPRITE at each glyph in turn and sorts it,
-every frame. GlyphLists watches writes to those structs and logs the struct at each
-sort; their lines come out as layer 4.
+every frame. So does the card game, with its own copies in CMENU.BIN and CMAIN.BIN.
+GlyphLists watches writes to those structs and logs the struct at each sort; their
+lines come out as layer 4.
 """
 import argparse, ctypes as C, hashlib, json, os, sys, time, zlib
 sys.path.insert(0, os.path.dirname(__file__))
@@ -39,7 +40,10 @@ class GlyphLists:
     x, y at +4, +6 (from the screen centre), width at +8 (12 for the regular font, 8 for
     the monster names' font), tpage at +0xc, u, v at +0xe, +0xf."""
     SITES = {0x800ea120: (0x800ecaf0, 4, 14),      # Monster Compendium (a0)
-             0x800e335c: (0x800ec998, 18, 14)}     # Boltac's catalog (s2; a0 is set in the slot)
+             0x800e335c: (0x800ec998, 18, 14),     # Boltac's catalog (s2; a0 is set in the slot)
+             0x800a6a5c: (0x800c1650, 4, 14),      # card game menus (CMENU.BIN)
+             0x800a6074: (0x800cd180, 4, 14)}      # card battles (CMAIN.BIN)
+    SORT = 0x0c00f520                          # jal 0x8003d480 (GsSortSprite)
     SYSCG = 0x0f                               # the font's texture page; 0x1f is kanji
 
     def __init__(self, e):
@@ -47,12 +51,20 @@ class GlyphLists:
         self.mem = {}
 
     def arm(self):
-        """Set the hooks (after Text.start(), which clears them) and read the structs."""
+        """Set the hooks (after Text.start(), which clears them) and read the structs, for
+        the sites whose overlay is loaded."""
+        self.mem = {}
+        self.frame = {}
+        return self.refresh()
+
+    def refresh(self):
+        """Arm any site whose overlay has been loaded since (the card game's, say)."""
         for pc, (spr, _, _) in self.SITES.items():
+            if spr in self.mem or self.e.u32(pc) != self.SORT:
+                continue
             self.e.bp(pc)
             self.e.watch(spr + 4, spr + 0x10, emu.Emu.WRITE)
             self.mem[spr] = bytearray(self.e.read(spr, 0x10))
-        self.frame = {}
         return self
 
     def feed(self, x):
@@ -70,7 +82,7 @@ class GlyphLists:
         if not site:
             return None
         spr, reg, dx = site
-        if x['regs'][reg] != spr:        # another overlay's code at this address
+        if spr not in self.mem or x['regs'][reg] != spr:    # another overlay's code here
             return True
         m = self.mem[spr]
         gx = s16(int.from_bytes(m[4:6], 'little')) + 0xa0 + dx
@@ -85,6 +97,7 @@ class GlyphLists:
 
     def capture(self, frames=2):
         """What's drawn now: run a couple of frames and keep each position's glyph."""
+        self.refresh()
         self.frame = {}
         for x in self.e.log():
             self.feed(x)

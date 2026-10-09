@@ -46,6 +46,14 @@ def strings():
                     if line.strip():
                         out.append((os.path.basename(f), i, k, line, bool(x.get('compress'))))
                 i += 1
+    # The card game's unit and spell names, and the strings cb_strings.asm writes in
+    # place, are ASCII in its overlays; keep every NUL-ended run of 3 or more.
+    for name in ('CMENU.BIN', 'CMAIN.BIN'):
+        d = open(os.path.join(ROOT, 'rips/dirty/dimguil', name), 'rb').read()
+        for i, m in enumerate(re.finditer(rb'(?<![\x20-\x7e])[\x20-\x7e]{3,}(?=\0)', d)):
+            line = m.group().decode().strip()
+            if re.search('[A-Za-z]{2}', line):
+                out.append((name, m.start(), 0, line, False))
     return out
 
 
