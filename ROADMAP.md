@@ -72,9 +72,10 @@ English. Checked in play: the level-up stat messages and the catalog's item name
 Inferred but not seen in play: the ITEM.DAT alignment and sex labels, and that ITEM_SE
 and ITEM_CA are never loaded.
 
-Typos in the game's own English monster names are for the quality passes:
-"Silhoutte", "Drumer", and "Dragonare" (the card game and Wizardry V say "Dragonaire").
-Maelific (Wizardry I) and NUNCHAKA (Wizardry VI and VII) are the series' own spellings.
+Typos in the game's own English names: Dragonare, Old Drumer and DISPLASER ROBE are
+fixed. "Small Silhoutte(s)" is still open, since "Small Silhouettes" is one glyph too
+long for its name slot. Maelific (Wizardry I) and NUNCHAKA (Wizardry VI and VII) are the
+series' own spellings.
 
 ### Quality passes (to reach 0.9)
 

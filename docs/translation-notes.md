@@ -184,6 +184,17 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   Five Trials atwiki monster list (w.atwiki.jp/wiz-fo/pages/27.html, picture 202).
   Before calling any developer name a misspelling, check whether an earlier Wizardry
   uses it.
+- **Misspelled names fixed (Chris, 2026-10-09).** Three of the developer's English
+  names were plain typos with nothing behind them in the series (see "Series spellings
+  checked"): Dragonare is now Dragonaire, Wizardry V's spelling (GameFAQs SNES
+  bestiary, number 115; Five Trials picture 176). The untouched card game also says
+  Dragonare; its "Dragonaire" is ours (`cb_strings.asm`, MESSAGE.DAT). DISPLASER ROBE
+  (身かわしの衣) is now DISPLACER ROBE, as in Wizardry VII's Displacer Cloak. Old Drumer
+  (オールドドラマー) is now Old Drummer. Each name has several copies: the Compendium's
+  name lists (M_CATALG), the item lists (I_NAME_E twice, ITEM.DAT, the card game's
+  MESSAGE.DAT), the monster records in DATA02 (`scripts/namefixes.py`) and BATTLE.BIN's
+  own record (`asm/name_fixes.asm`). ITEM_CA.DAT keeps DISPLASER; the game doesn't
+  load it.
 
 ## To revisit
 
@@ -213,17 +224,14 @@ The preferred fix is a close-to-literal reading, fitted to the box.
     item lists. Not a typo.
   - Maelific (マイルフィック), listed as a typo in the roadmap, is Wizardry I's demon.
     Not a typo.
-  - Dragonare (ドラゴネアー) is a typo. Wizardry V's monster is the Dragonaire
-    (GameFAQs SNES bestiary, number 115; Five Trials picture 176), and Dimguil's own
-    card game spells it that way.
-  - Displaser Robe (身かわしの衣, "dodging robe") is a typo. No earlier game has the
-    word; Wizardry VII's Displacer Cloak spells it with a c.
+  - Dragonare (ドラゴネア), Displaser Robe and Old Drumer are typos, now fixed (see
+    "Misspelled names fixed" above).
   - Silhoutte, in "Small Silhoutte(s)", the unidentified name for ちいさなかげ ("small
-    shadow") in the M_DT monster records, is a typo with nothing behind it in the
-    series.
-  - Drumer, in "Old Drumer" (オールドドラマー; the Compendium already says Old
-    Drummer), is a typo. No earlier game has an Old Drummer; it seems to be Dimguil's
-    own monster.
+    shadow") and a few others in the monster records, is a typo with nothing behind it
+    in the series. Chris wants it fixed, but it doesn't fit: each name slot holds 16
+    glyphs, "Small Silhouettes" is 17, and the Gremlin and Cutie Thief records write it
+    "Small{ff21}Silhouette" (a line break, two bytes), also 17. These fonts have no
+    letter pairs to save room. Open.
 - **Other naming.** "Lithograph of the Sun" vs LITHOGRAPH OF SUN, and "labyrinth" vs
   "maze" for 迷宮 (checklist Q6).
 - **Unidentified monster names.** "Flap Insect(s)" and "Flap Figure(s)" for はばたくかげ;
