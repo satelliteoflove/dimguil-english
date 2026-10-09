@@ -169,7 +169,11 @@ inside a line use `'`, and `npcfit.py` catches the rest.
   Found: the Inn's room help lines all cut short ("Restores all HP for 10000G a"),
   because the room list's padding spaces are sprites too and filled the layer; most
   town screens leave 80 of the 720 sprites unallocated, so the main text layer now
-  takes them (asm/town_text_pool.asm). Change Name opened the keyboard on hiragana
+  takes 18 of them (asm/town_text_pool.asm): the list is 133 sprites and the bar shows
+  about 39 glyphs. The first version handed it all 80; Chris pointed out a line the
+  screen can't show more than ~39 characters of has no use for 70+ more sprites, so it
+  was cut back to what fits. Before/after: rips/probe/tips/inn_rooms.png (cut),
+  rips/probe/innpool/room2.png (172). Change Name opened the keyboard on hiragana
   (its own open path still zeroed the character set). 55 strings drawn in the regular
   font were never packed: shop help lines, the recruits' and fortune teller's speeches,
   the King's, the Inn's level-up lines, the temple's chant; packed now. The longest town
