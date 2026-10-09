@@ -103,12 +103,15 @@ more of the detail behind each item.
   prices, and every space is a sprite, so with the room help on the bar layer 1 was full
   at 154 and the help lost its end ("Restores all HP for 10000G a"). Nothing in town
   allocates a layer outside 0x800db3d0 (every 0x8001f150 call logged over a crawl of the
-  town came from it), so `asm/town_text_pool.asm` rewrites it to give layer 1 18 more
-  where the pool has room: 172 on those screens. The room list without its help line
-  is 133 sprites and the bar shows about 39 glyphs; the fullest four lines the King or
-  the Fortune Teller can show are 158 plus a title of about 10. Screens that ask for
-  703 or more (the status screen, Boltac's Trade screens) are unchanged. A first
-  version gave layer 1 all 80 spare sprites (234), far more than any screen can show.
+  town came from it), so the spare sprites are free to use. The Inn makes no call of
+  its own: it keeps the town map's layers (the call at 0x800a34bc, sizes set from
+  0x800a3488), as do the King's Chambers and Edge of Town. `asm/town_text_pool.asm`
+  has the town map ask for 172 instead of 154: the room list without its help line is
+  133 sprites and the bar shows about 39 glyphs. Nothing else on those screens comes
+  near 154 (the King's fullest page with its title and caption is 129, packed), and
+  every other screen keeps what it asked for. Two earlier versions rewrote the setup
+  routine to hand layer 1 all 80 spares (234), then 18 on every screen with room;
+  both gave sprites to screens that never use them.
 - `scripts/cutsweep.py STATE KEYS` reports lines cut short while KEYS play; a line
   refused at its first glyph is static text being redrawn into a layer it already
   filled (name entry and character creation do it every frame), which is harmless.

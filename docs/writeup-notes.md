@@ -174,11 +174,15 @@ inside a line use `'`, and `npcfit.py` catches the rest.
   the Monster Compendium draw their text some other way and aren't covered.
   Found: the Inn's room help lines all cut short ("Restores all HP for 10000G a"),
   because the room list's padding spaces are sprites too and filled the layer; most
-  town screens leave 80 of the 720 sprites unallocated, so the main text layer now
-  takes 18 of them (asm/town_text_pool.asm): the list is 133 sprites and the bar shows
-  about 39 glyphs. The first version handed it all 80; Chris pointed out a line the
-  screen can't show more than ~39 characters of has no use for 70+ more sprites, so it
-  was cut back to what fits. Shots: docs/shots/inn-help-line/. Change Name opened the
+  town screens leave 80 of the 720 sprites unallocated. The first fix handed the main
+  text layer all 80 on every town screen; Chris pointed out a line the screen can't
+  show more than ~39 characters of has no use for 70+ more sprites. The second gave
+  every screen 18 more; Chris asked why screens that don't need any should get them.
+  Measuring per screen settled it: only the Inn's room list goes over (159 of 154; the
+  Fortune Teller's 157 had been measured before the town text was packed, and is 104
+  now). The Inn keeps the town map's layers, so the one change is the town map asking
+  for 172 instead of 154 (133 for the list, 39 for the bar), and the setup routine is
+  the original again (asm/town_text_pool.asm). Shots: docs/shots/inn-help-line/. Change Name opened the
   keyboard on hiragana (its own open path still zeroed the character set); shots:
   docs/shots/change-name-keyboard/. 55 strings drawn in the regular
   font were never packed: shop help lines, the recruits' and fortune teller's speeches,
