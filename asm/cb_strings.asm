@@ -44,6 +44,20 @@
 .area 0x10
     .asciiz "Ixquic"
 .endarea
+; Spell records: three of the developer's romanizations differ from the main game's
+; built-in English spell names (STATUS.OBJ 222-305), which docs/terms.md follows.
+.org 0x800a25b8
+.area 0x10
+    .asciiz "Kadorto"           ; was Kadolto
+.endarea
+.org 0x800a2600
+.area 0x10
+    .asciiz "Nagula"            ; was Nagura
+.endarea
+.org 0x800a2744
+.area 0x10
+    .asciiz "Lios"              ; was Rios
+.endarea
 .close
 
 .open "dirty/dimguil/CMAIN.BIN", 0x800a1000
@@ -77,6 +91,20 @@
 .org 0x800a1fc4
 .area 0x10
     .asciiz "Ixquic"
+.endarea
+; Spell records: three of the developer's romanizations differ from the main game's
+; built-in English spell names (STATUS.OBJ 222-305), which docs/terms.md follows.
+.org 0x800a2304
+.area 0x10
+    .asciiz "Kadorto"           ; was Kadolto
+.endarea
+.org 0x800a234c
+.area 0x10
+    .asciiz "Nagula"            ; was Nagura
+.endarea
+.org 0x800a2490
+.area 0x10
+    .asciiz "Lios"              ; was Rios
 .endarea
 ; Battle commands and their prompts
 .org 0x800a1724

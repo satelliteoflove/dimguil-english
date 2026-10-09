@@ -163,6 +163,11 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   string is "_", which the converter sends there. MESSAGE 274, a "→" between two
   numbers that the crawl never showed on screen, encodes there too. Found by the card
   game crawl.
+- **Card game spell names (2026-10-09).** The card game's spell table carries the
+  developer's own English, and three differ from the main game's built-in spell list
+  (STATUS 222-305), which `terms.md` follows: Kadolto, Nagura and Rios are now
+  Kadorto, Nagula and Lios, as the unit names were matched before (`cb_strings.asm`,
+  both copies). They show in battle as "Nagula was cast".
 
 ## To revisit
 
