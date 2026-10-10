@@ -1,6 +1,7 @@
 {
     "file": "DATA07/ITEM.DAT",
     "edits": {
-        "5c30b7": "0e 13 1d 1a 16 0b 0d 0f 1c"
+        "5c30b7": "0e 13 1d 1a 16 0b 0d 0f 1c",
+        "5c338a": "0c 1c 0f 0b 1d 1e 1a 16 0b 1e 0f ff 21 19 10 ba 0c 19 19 18 1d"
     }
 }

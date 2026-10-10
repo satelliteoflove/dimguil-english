@@ -153,7 +153,8 @@ up. Take them after the 37, or fold them in where they share a string.
   "breastplate of hope", and the description is about hope. The English name doesn't
   match, and Chris dislikes it. The description now says "Said to be filled with hope"
   (希望の込められた), which no longer clashes with the name, but the entry needs a second
-  look together with the naming question below.
+  look together with the naming question below. Renamed BREASTPLATE OF BOONS on
+  2026-10-10 (translation-notes).
 - **I 1:32, Demon's Staff: follow up.** Chris's wording went in on 2026-10-04: "Weak in
   direct combat, but when used as a magic item it summons demons as allies, making it
   more useful than an ordinary weapon." It leaves out three things the Japanese has:

@@ -9,7 +9,7 @@ checked"); only plain typos and garbled names are fixed, never the series' own
 spellings (NUNCHAKA, Maelific, Halycon). The monster records in DATA02/M_DTnnn.BIN and MPTnn.BIN are the
 0xd0-byte records described in nptnames.py, with six 18-byte name slots ending in
 {ff40}, so a name can't pass 16 glyphs. ITEM.DAT's English item list isn't in a
-translation file, so its one fix is a byte edit too. The same names live in M_CATALG,
+translation file, so its fixes are byte edits too. The same names live in M_CATALG,
 I_NAME_E and MESSAGE.DAT (translations/*.json) and in BATTLE.BIN (asm/name_fixes.asm).
 """
 import glob, json, os, sys
@@ -56,16 +56,20 @@ SLOTS = {
     'Tepeyo{ff21}ryotl': 'Tepe{ff21}yollotl',
     'Tepeyo{ff21}ryotls': 'Tepe{ff21}yollotls',
 }
-ITEM_DAT = ('DATA07/ITEM.DAT', 'DISPLASER', 'DISPLACER')
+# ITEM.DAT's English list, edited in place, so a fix can't grow ({ff21} is two bytes;
+# BREASTPLATE drops the space before the break to fit).
+ITEM_DAT = 'DATA07/ITEM.DAT', [
+    ('DISPLASER', 'DISPLACER'),
+    ('B-PLATE OF {ff21}GOODNESS', 'BREASTPLATE{ff21}OF BOONS'),
+]
+
+
+def glyphs(name):
+    return b'\xff\x21'.join(bytes(GLYPH[c] for c in part) for part in name.split('{ff21}'))
 
 
 def encode(name):
-    b = bytearray()
-    for part in name.split('{ff21}'):
-        if b:
-            b += b'\xff\x21'
-        b += bytes(GLYPH[c] for c in part)
-    b += b'\xff\x40'
+    b = glyphs(name) + b'\xff\x40'
     assert len(b) <= SLOT, name
     return bytes(b).ljust(SLOT, b'\0')
 
@@ -92,15 +96,18 @@ def main():
         if edits and not listing:
             write('DATA02/' + os.path.basename(p), edits)
 
-    f, old, new = ITEM_DAT
+    f, fixes = ITEM_DAT
     d = open(os.path.join(ROOT, 'rips/clean/dimguil', f), 'rb').read()
-    pat = bytes(GLYPH[c] for c in old)
-    assert d.count(pat) == 1, f
-    o = d.find(pat)
-    if listing:
-        print(f'{f} {o:#07x} {old} -> {new}')
-    else:
-        write(f, {f'{o:x}': bytes(GLYPH[c] for c in new).hex(' ')})
+    edits = {}
+    for old, new in fixes:
+        pat, rep = glyphs(old), glyphs(new)
+        assert d.count(pat) == 1 and len(rep) == len(pat), old
+        o = d.find(pat)
+        edits[f'{o:x}'] = rep.hex(' ')
+        if listing:
+            print(f'{f} {o:#07x} {old} -> {new}')
+    if not listing:
+        write(f, edits)
 
 
 if __name__ == '__main__':

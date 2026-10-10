@@ -275,26 +275,31 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   Xicalli, Mictlan, Chai-zanic (no source found), Goblin Canon (a Priest; canon as in
   clergy), and Demon Liche / Dragon Liche (an old spelling of lich).
 
+- **Three more of the developer's names (Chris, 2026-10-10).**
+  - BENT STAFF stays: it's Wizardry I's item (STAFF -2 on the Apple II, BENT STAFF and
+    ねじれたつえ in the later ports). This settles "Twisted Staff".
+  - Astro Zombie (ロストワン, "Lost One") stays. The Shrine is a crashed starship (see
+    `event-map.md`, "The hidden story"), and the entry calls him a man whose name means
+    "the only one", hooded in what may be life-support gear (生命維持装置): the ship's last
+    crewman, or what's left of him (Inferred). The developer's name says the same.
+  - B-PLATE OF GOODNESS (希望の胸当て, "breastplate of hope") is now BREASTPLATE OF BOONS.
+    "Goodness" told the player nothing, and the B- contraction made it worse. Boons is
+    the Vodafone Wizardry's word for the same item (B-Plate of Boons), the only other
+    English name found for it. 20 letters, as long as STRONGEST CHAIN MAIL; the
+    two-line forms break BREASTPLATE / OF BOONS. ITEM.DAT's copy is a byte edit and has
+    no room for the space before the break (`scripts/namefixes.py`).
+
 ## To revisit
 
 - **Fontana's maze encounters (3:72, 75, 88, 278).** Same register shift as Balbo's
   reports. Handle them the same way when NPC_MES3 is reviewed: his own words, a little
   more in charge.
 
-- **The developer's English names.** Item and monster names follow the game's built-in
-  English list. Chris's view: the game was never released in English, so these are
-  almost certainly unpolished placeholders. Candidates: B-PLATE OF GOODNESS (希望の胸当て,
-  "breastplate of hope"), BENT STAFF (ねじれた杖; Chris leaned toward "Twisted Staff"),
-  Astro Zombie (ロストワン, "Lost One"; its entry is about a name meaning "alone"). STEEL
-  GLOVES (鉄の小手, "iron gauntlets"): the item text otherwise keeps 鉄 as iron and 鋼 as
-  steel, but 1:150 and 1:151 say "steel" to match the name; a rename to Iron Gloves
-  would switch both. A
-  rename touches the inventory list, the catalog, Boltac's list and the battle copy of
-  the names, and breaks the match with Emonoya and other guides. Some are plain
-  misspellings that should be fixed whatever is decided about the rest: Chris spotted
-  "Displaser Robes" for Displacer Robes in the catalog. Chris can't stand leaving them
-  in, though he isn't sure how the community will take fixing them; to be dealt with
-  later.
+- **STEEL GLOVES (鉄の小手, "iron gauntlets").** The developer's own English name. The
+  item text otherwise keeps 鉄 as iron and 鋼 as steel, but 1:150 and 1:151 say "steel" to
+  match the name. Wizardry III calls the same item GLOVES of IRON (IRON GLOVES in the
+  console ports), so a rename has series precedent and would switch both descriptions.
+  Waiting on Chris.
 - **Series spellings checked (2026-10-09).** Before calling a developer name a typo,
   check the earlier games (see "Halycon stays Halycon"). Of the names in the
   known-issues list:
@@ -313,7 +318,6 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 - **Item 1:5, Anointed Mace.** Approved but flagged for another look.
 - **Item 1:32, Demon's Staff.** Chris's wording leaves out focusing the mind, "the demons
   that plague adventurers" and the "probably".
-- **Item 1:189, B-Plate of Goodness.** Goes with the naming question.
 - **Item 1:274, Amulet of Matokani.** Approved close to the Japanese ("lesser demons
   should shatter to pieces"), flagged for another look. 魔除け is a demon-warding charm,
   so a demon ward that kills demons; the English "amulet" can't carry that. Matokani
