@@ -5,8 +5,8 @@
     namefixes.py --list   print each slot that would change
 
 The names are the game's built-in English (docs/translation-notes.md, "Series spellings
-checked"); only plain typos are fixed, never the series' own spellings (NUNCHAKA,
-Maelific, Halycon). The monster records in DATA02/M_DTnnn.BIN and MPTnn.BIN are the
+checked"); only plain typos and garbled names are fixed, never the series' own
+spellings (NUNCHAKA, Maelific, Halycon). The monster records in DATA02/M_DTnnn.BIN and MPTnn.BIN are the
 0xd0-byte records described in nptnames.py, with six 18-byte name slots ending in
 {ff40}, so a name can't pass 16 glyphs. ITEM.DAT's English item list isn't in a
 translation file, so its one fix is a byte edit too. The same names live in M_CATALG,
@@ -26,6 +26,12 @@ SLOTS = {
     'Small Silhoutte': 'Small Shadow',
     'Small Silhouttes': 'Small Shadows',
     'Small{ff21}Silhoutte': 'Small{ff21}Shadow',
+    # Mesoamerican names, romanized from the katakana or garbled; no Wizardry precedent.
+    'Shocitnal': 'Xochitonal',
+    'Shocitnals': 'Xochitonals',
+    'Oserotoru': 'Ocelotl',
+    'Inkuintori': 'Itzcuintli',
+    'Cuautori': 'Cuauhtli',
 }
 ITEM_DAT = ('DATA07/ITEM.DAT', 'DISPLASER', 'DISPLACER')
 

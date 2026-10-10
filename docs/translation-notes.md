@@ -213,6 +213,24 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   (I_NAME_E twice, ITEM.DAT, the card game's MESSAGE.DAT), the monster records in
   DATA02 (`scripts/namefixes.py`) and BATTLE.BIN's own two records
   (`asm/name_fixes.asm`). ITEM_CA.DAT keeps DISPLASER; the game doesn't load it.
+- **Mesoamerican names in the Mythical list (Chris, 2026-10-09).** Bartok's Trading
+  Post's monster data for every Wizardry it covers (I-VII, Gaiden I-IV, BUSIN and
+  others) has no precedent for them; only Dimguil has them, so they follow the Nahuatl:
+  - Shocitnal (ショチトナル, "a crocodile monster said to dwell in hell") is now
+    Xochitonal, the Aztec iguana or crocodile that guards the waters on the way to
+    Mictlan, the land of the dead. The katakana reads Xochitonal.
+  - Three of the four temple guardians are Aztec day signs: Oserotoru is now Ocelotl
+    (jaguar; the game's tiger), Inkuintori is now Itzcuintli (dog) and Kuautori, which
+    the battle records spell Cuautori, is now Cuauhtli (eagle; the game's bird).
+    Oserotoru and Kuautori were the katakana romanized; Inkuintori was a garbled
+    Itzcuintli. The fourth, Coatl (serpent), and Quetzalcoatl were already right.
+  - Chany Mask (チャニーマスク, the red mask that works a naked warrior's body; drops
+    the Jade Mask) stays: no source for "Chany" turned up outside Dimguil and Emonoya,
+    which uses the same spelling.
+  - Death Hawk matches Gaiden III and IV. Stone Head is the developer's English for
+    9ヘッド ("9 Head") and is fine.
+  Sources: the Online Nahuatl Dictionary (nahuatl.wired-humanities.org, Xochitonal) and
+  the day-sign list on Wikipedia's Tōnalpōhualli page.
 
 ## To revisit
 
@@ -243,23 +261,8 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   - Maelific (マイルフィック), listed as a typo in the roadmap, is Wizardry I's demon.
     Not a typo.
   - Dragonare (ドラゴネア), Displaser Robe, Old Drumer and Small Silhoutte are typos,
-    now fixed (see "Misspelled names fixed" above).
-- **The Mythical list's other names (checked 2026-10-09).** Bartok's Trading Post's
-  monster data for every Wizardry it covers (I-VII, Gaiden I-IV, BUSIN and others) has
-  no precedent for the Mesoamerican names; only Dimguil has them. Death Hawk matches
-  Gaiden III and IV; Basilisk, Minotaur, Centaur and Medusa are standard. Coatl and
-  Quetzalcoatl are spelled right. Suspect, waiting on Chris:
-  - Shocitnal (ショチトナル, "a crocodile monster said to dwell in hell"): Xochitonal,
-    the Aztec iguana or crocodile that guards the waters on the way to Mictlan, the
-    land of the dead. The katakana reads Xochitonal.
-  - Oserotoru, Inkuintori, Kuautori (the four temple guardians with Coatl; the tiger,
-    dog and bird): the Aztec day signs Ocelotl (jaguar), Itzcuintli (dog) and Cuauhtli
-    (eagle). Oserotoru and Kuautori are romanized katakana; Inkuintori is a garbled
-    Itzcuintli. The battle records spell the bird Cuautori, the Compendium Kuautori.
-  - Chany Mask (チャニーマスク, the red mask that works a naked warrior's body; drops
-    the Jade Mask): no source found outside Dimguil and Emonoya, which uses the same
-    spelling.
-  Stone Head is the developer's English for 9ヘッド ("9 Head"); the English is fine.
+    now fixed (see "Misspelled names fixed" above), as are the Mesoamerican names in
+    the Mythical list.
 - **Other naming.** "Lithograph of the Sun" vs LITHOGRAPH OF SUN, and "labyrinth" vs
   "maze" for 迷宮 (checklist Q6).
 - **Unidentified monster names.** "Flap Insect(s)" and "Flap Figure(s)" for はばたくかげ;

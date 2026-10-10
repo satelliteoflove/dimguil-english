@@ -239,7 +239,10 @@ inside a line use `'`, and `npcfit.py` catches the rest.
   games. Halycon is Wizardry V's monster, and NUNCHAKA (Wizardry VI and VII) and Maelific
   (Wizardry I) are Sir-Tech's own spellings, so they stay. Dragonare, Old Drumer and
   DISPLASER ROBE had nothing behind them and were fixed, and so was "Small
-  Silhoutte(s)", as "Small Shadow(s)". A name has up to eight copies:
+  Silhoutte(s)", as "Small Shadow(s)". The Mythical list's Mesoamerican names have no
+  Wizardry precedent at all, so they follow the Nahuatl: Shocitnal, Oserotoru,
+  Inkuintori and Kuautori became Xochitonal, Ocelotl, Itzcuintli and Cuauhtli
+  (`docs/shots/mythical-names`). A name has up to eight copies:
   the Compendium lists, three item lists, the card game, the DATA02 monster records
   (18-byte slots, 16 glyphs) and a stray record inside BATTLE.BIN, which has to be
   patched in asm because the asm step copies BATTLE.BIN over the binary patches. The
