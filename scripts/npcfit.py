@@ -84,7 +84,10 @@ def string_problems(text, src):
             problems.append(f'{len(pages(text))} pages, source has {len(srcpages)} (fine if intended)')
     except ValueError as e:
         problems.append(str(e))
-    if sorted(CODE.findall(text)) != sorted(CODE.findall(src)):
+    # {ff40} ends a string; one the Japanese has mid-string cuts the line short (2:200,
+    # Reiran), and the English may drop it so the rest shows.
+    if sorted(c for c in CODE.findall(text) if c != '{ff40}') != \
+            sorted(c for c in CODE.findall(src) if c != '{ff40}'):
         problems.append(f'codes {CODE.findall(text)} vs source {CODE.findall(src)}')
     if npcquotes.close(text, src) != text:
         problems.append('speech quote not closed (npcquotes.py)')
@@ -109,6 +112,8 @@ def check(n, show_all, overlay=None):
             continue
         total += descfit.size(text.replace('\r', '{ff20}')) if _encodable(text) else 0
         problems = string_problems(text, src)
+        if not t.get('addStringTerminator', True) and '{ff40}' not in text:
+            problems.append('no {ff40} and addStringTerminator is false: runs into the next string')
         hard = [p for p in problems if 'fine if intended' not in p]
         bad += bool(hard)
         for p in problems:

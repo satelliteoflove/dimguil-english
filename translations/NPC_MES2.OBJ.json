@@ -1211,8 +1211,8 @@
                 {
                     "length": 67,
                     "source": "NA",
-                    "translation": "Reiran\n\"I met this, like, seriously weird guy.\"{ff40}\r He goes 'Begone!' and stuff,\n all high and mighty.\n",
-                    "addStringTerminator": false
+                    "translation": "Reiran\n\"I met this, like, seriously weird guy.\n\r He goes 'Begone!' and stuff,\n all high and mighty.\"",
+                    "addStringTerminator": true
                 },
                 {
                     "length": 51,

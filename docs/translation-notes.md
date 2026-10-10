@@ -62,6 +62,13 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 
 ### Deliberate choices
 
+- **Reiran's cut-off line (NPC_MES2 200, 2026-10-10).** In the original, an {ff40}
+  (end of string) after her first sentence hid the rest: "He goes 'Begone!' and stuff,
+  all high and mighty." The English drops it so both pages show; the string's own
+  terminator had been switched off in the translation file because the Japanese ended
+  there, so it's back on. It's the only cut-off line in the game's text. npcfit.py now
+  flags a string with neither.
+
 - **NPC speech closes its quotes (Chris, 2026-10-10).** The Japanese opens each speech
   with 「 and never closes it, and the English copied that, so every NPC box showed an
   opening " and no closing one (Chris noticed in play). Quotes now close where the
