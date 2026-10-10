@@ -68,7 +68,7 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   sentence ends: 1,064 strings in NPC_MES1-5 and SISETU 127. Replies shown after a
   yes/no prompt, which had no speaker line and no quote, open with " where the Japanese
   has a space in place of 「. Healing boxes close before the spell's name, which isn't
-  spoken. A box that stops mid-sentence (Artemisia's "okay, then," and "Um,", Zaril's
+  spoken, and reopen after it when the healer goes on ("Will that do for first aid?"). A box that stops mid-sentence (Artemisia's "okay, then," and "Um,", Zaril's
   "...but") stays open, and the speaker's next box closes it (Chris). `scripts/npcquotes.py` does it, npcapply.py runs it on reviewed scenes, and
   npcfit.py flags speech left open. No line got too wide, but NPC_MES4 grew past its
   six sectors and is relocated now, like NPC_MES1-3.

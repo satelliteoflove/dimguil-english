@@ -17,7 +17,8 @@ What it reads:
 
 What it writes, only when Chris applies a scene:
   - translations/NPC_MESn.OBJ.json, after every changed line passes npcfit's checks
-    (the same function npcfit.py uses), in npcapply.py's formatting
+    (the same function npcfit.py uses), in npcapply.py's formatting, with its quotes
+    closed (npcquotes.py)
   - rips/review/decisions/<scene>.json: each line's choice, the text before and after,
     and Chris's note. Claude commits from that (one commit per scene) and marks it.
 Questions Chris asks in the tool go to rips/review/questions.json for Claude to answer.
@@ -32,7 +33,7 @@ from urllib.parse import urlparse, parse_qs
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
 sys.path.insert(0, os.path.join(ROOT, 'scripts'))
-import descfit, npcfit  # noqa: E402
+import descfit, npcfit, npcquotes  # noqa: E402
 from reviewpage import load as load_commented  # noqa: E402  (some translation files have comments)
 
 SCENES = os.path.join(ROOT, 'rips/review/scenes')
@@ -137,6 +138,7 @@ def layout(text):
 
 def fit(ref, text):
     n, i = parse_ref(ref)
+    text = npcquotes.close(text, SOURCES[n][i])  # as apply() will write it
     problems = npcfit.string_problems(text, SOURCES[n][i])
     hard = [p for p in problems if 'fine if intended' not in p]
     return {'ok': not hard, 'problems': problems, 'hard': hard, 'pages': layout(text),
@@ -431,6 +433,9 @@ def apply(body):
             refs = [ln['ref']] + [r for r in ln.get('copies', []) if r in copies_of(ln['ref'])]
             before = current(ln['ref'])
             text = before if ln['choice'] == 'current' else ln['text']
+            if ln['choice'] != 'current':
+                n, i = parse_ref(ln['ref'])
+                text = npcquotes.close(text, SOURCES[n][i])
             if text != before:
                 for r in refs:
                     changes[r] = as_copy(text, r) if r != ln['ref'] else text

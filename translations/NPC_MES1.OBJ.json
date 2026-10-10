@@ -899,19 +899,19 @@
                 {
                     "length": 66,
                     "source": "NA",
-                    "translation": "Guy\n\"Got it, that one.\n         {ff30}2Dios{ff30}0\n\r Sorry, that's the best I can do.\"",
+                    "translation": "Guy\n\"Got it, that one.\"\n         {ff30}2Dios{ff30}0\n\r\"Sorry, that's the best I can do.\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 66,
                     "source": "NA",
-                    "translation": "Guy\n\"Got it, that one.\n\r         {ff30}2Dial{ff30}0\n Sorry, that's the best I can do.\"",
+                    "translation": "Guy\n\"Got it, that one.\"\n\r         {ff30}2Dial{ff30}0\n\"Sorry, that's the best I can do.\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 66,
                     "source": "NA",
-                    "translation": "Guy\n\"Got it, that one.\n\r        {ff30}2Dialma{ff30}0\n Sorry, that's the best I can do.\"",
+                    "translation": "Guy\n\"Got it, that one.\"\n\r        {ff30}2Dialma{ff30}0\n\"Sorry, that's the best I can do.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -971,13 +971,13 @@
                 {
                     "length": 84,
                     "source": "NA",
-                    "translation": "Alstron\n\"Let's see, let me have a look.\n\r        {ff30}2Dialma{ff30}0\n It's only first aid, mind you.\"",
+                    "translation": "Alstron\n\"Let's see, let me have a look.\"\n\r        {ff30}2Dialma{ff30}0\n\"It's only first aid, mind you.\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 67,
                     "source": "NA",
-                    "translation": "Alstron\n\"Very well, that one.\n\r          {ff30}2Madi{ff30}0\n I can't do any more than that.\"",
+                    "translation": "Alstron\n\"Very well, that one.\"\n\r          {ff30}2Madi{ff30}0\n\"I can't do any more than that.\"",
                     "addStringTerminator": true
                 },
                 {

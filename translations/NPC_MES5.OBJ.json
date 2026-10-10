@@ -257,7 +257,7 @@
                 {
                     "length": 53,
                     "source": "NA",
-                    "translation": "Zaril\n\"Fine, fine.\n        {ff30}2Dialma{ff30}0\n\r There, how's that!\"",
+                    "translation": "Zaril\n\"Fine, fine.\"\n        {ff30}2Dialma{ff30}0\n\r\"There, how's that!\"",
                     "addStringTerminator": true
                 },
                 {

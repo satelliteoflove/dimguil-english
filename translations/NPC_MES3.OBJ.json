@@ -785,13 +785,13 @@
                 {
                     "length": 57,
                     "source": "NA",
-                    "translation": "Artemisia\n\"All right.\n\r         {ff30}2Dios{ff30}0\n How's that?\"",
+                    "translation": "Artemisia\n\"All right.\"\n\r         {ff30}2Dios{ff30}0\n\"How's that?\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 56,
                     "source": "NA",
-                    "translation": "Artemisia\n\"Got it.\n\r         {ff30}2Dial{ff30}0\n How's that?\"",
+                    "translation": "Artemisia\n\"Got it.\"\n\r         {ff30}2Dial{ff30}0\n\"How's that?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -845,7 +845,7 @@
                 {
                     "length": 114,
                     "source": "NA",
-                    "translation": "Cephala\n\"You don't want the Temple?\n\r Revival magic and Mahaman are the only\n spells I'm never quite sure of, though...\n\r         {ff30}2Kadorto{ff30}0\n Did it work?\"",
+                    "translation": "Cephala\n\"You don't want the Temple?\n\r Revival magic and Mahaman are the only\n spells I'm never quite sure of, though...\"\n\r         {ff30}2Kadorto{ff30}0\n\"Did it work?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -857,19 +857,19 @@
                 {
                     "length": 54,
                     "source": "NA",
-                    "translation": "Cephala\n\"Yes, yes.\n\r         {ff30}2Dial{ff30}0\n There we go.\"",
+                    "translation": "Cephala\n\"Yes, yes.\"\n\r         {ff30}2Dial{ff30}0\n\"There we go.\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 54,
                     "source": "NA",
-                    "translation": "Cephala\n\"Yes, yes.\n\r        {ff30}2Dialma{ff30}0\n There we go.\"",
+                    "translation": "Cephala\n\"Yes, yes.\"\n\r        {ff30}2Dialma{ff30}0\n\"There we go.\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 58,
                     "source": "NA",
-                    "translation": "Cephala\n\"You owe me one, you know.\n\r          {ff30}2Madi{ff30}0\n You're all better now.\"",
+                    "translation": "Cephala\n\"You owe me one, you know.\"\n\r          {ff30}2Madi{ff30}0\n\"You're all better now.\"",
                     "addStringTerminator": true
                 },
                 {

@@ -13,8 +13,9 @@ and closes it where the sentence ends:
     speech) opens with " in place of its leading space, where the Japanese has a space
     in place of 「, and closes too. Narration in the same files starts with two or
     more spaces in the Japanese and is left alone;
-  - a healing box ends on the spell's name, centered and colored on its own line; the
-    quote closes before it, since the spell isn't spoken;
+  - a healing box shows the spell's name, centered and colored on its own line; the
+    quote closes before it, since the spell isn't spoken, and reopens after it when
+    the speaker goes on ("Oh my, how awful!" / Dial / "Will that do for first aid?");
   - {ff40} ends the string, so a quote closes before it;
   - a box that stops mid-sentence (on a comma, or "but") stays open; the sentence goes
     on in the speaker's next box, which closes it.
@@ -25,6 +26,7 @@ import json, os, re, sys
 
 ROOT = os.path.join(os.path.dirname(__file__), '..')
 MIDWAY = re.compile(r'(,|\b(and|but|or|so))$')
+MID = re.compile(r'([^\n"])(\n\r?[ ]*\{ff30\}2[^{\n]*\{ff30\}0\n\r?) (?=\S)')
 SPELL = re.compile(r'\n\r?[ ]*\{ff30\}2[^{\n]*\{ff30\}0\s*$')
 
 
@@ -44,6 +46,7 @@ def close(text, source):
         return text
     if reply and not text.startswith('"'):
         text = '"' + text[1:]
+    text = MID.sub(r'\1"\2"', text)
     cut = len(text)
     if '{ff40}' in text:
         cut = text.index('{ff40}')

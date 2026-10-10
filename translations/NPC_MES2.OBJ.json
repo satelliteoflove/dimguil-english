@@ -731,19 +731,19 @@
                 {
                     "length": 78,
                     "source": "NA",
-                    "translation": "Balbo\n\"Fine, just the once, ya hear?\n\r         {ff30}2Dios{ff30}0\n Sorry it's such a piddly little one.\"",
+                    "translation": "Balbo\n\"Fine, just the once, ya hear?\"\n\r         {ff30}2Dios{ff30}0\n\"Sorry it's such a piddly little one.\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 78,
                     "source": "NA",
-                    "translation": "Balbo\n\"Fine, just the once, ya hear?\n\r         {ff30}2Dial{ff30}0\n Sorry it's such a piddly little one.\"",
+                    "translation": "Balbo\n\"Fine, just the once, ya hear?\"\n\r         {ff30}2Dial{ff30}0\n\"Sorry it's such a piddly little one.\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 77,
                     "source": "NA",
-                    "translation": "Balbo\n\"Fine, just the once, ya hear?\n\r        {ff30}2Madial{ff30}0\n Sorry, that's about the best I got.\"",
+                    "translation": "Balbo\n\"Fine, just the once, ya hear?\"\n\r        {ff30}2Madial{ff30}0\n\"Sorry, that's about the best I got.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -803,19 +803,19 @@
                 {
                     "length": 66,
                     "source": "NA",
-                    "translation": "Rosea\n\"Oh my, how awful!\n\r         {ff30}2Dial{ff30}0\n Will that do for first aid?\"",
+                    "translation": "Rosea\n\"Oh my, how awful!\"\n\r         {ff30}2Dial{ff30}0\n\"Will that do for first aid?\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 66,
                     "source": "NA",
-                    "translation": "Rosea\n\"Oh my, how awful!\n\r        {ff30}2Dialma{ff30}0\n Will that do for first aid?\"",
+                    "translation": "Rosea\n\"Oh my, how awful!\"\n\r        {ff30}2Dialma{ff30}0\n\"Will that do for first aid?\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 54,
                     "source": "NA",
-                    "translation": "Rosea\n\"Oh my, how awful!\n\r          {ff30}2Madi{ff30}0\n There, all better.\"",
+                    "translation": "Rosea\n\"Oh my, how awful!\"\n\r          {ff30}2Madi{ff30}0\n\"There, all better.\"",
                     "addStringTerminator": true
                 },
                 {
