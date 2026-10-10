@@ -207,7 +207,7 @@ Where: the island, at the sun door in front of the Shrine (S3, WT ch. 1).
 What: Guy calls the door locked; Alstron says it's a seal, opened with a tablet, and
 that magical items are placed at regular points around a sealed thing; Guy wants the
 short version. 112 the farewell.
-Links: S2 (the four pillars), S3; the LITHOGRAPH OF SUN.
+Links: S2 (the four pillars), S3; the TABLET OF THE SUN.
 
 **1.12 Introductions (115-141).** Flagged B (done).
 115-127 the first introduction: Guy, "the hero from far across the sea", then Alstron
@@ -341,7 +341,7 @@ Links: S4; EV 42-45, 301-302.
 
 **2.6 Progress report: the blue stone (82-83).** Flagged 3 (open).
 Where: Underground B2F x3y14, across the waterway (WT ch. 4). They too fitted the blue
-stone into the LITHOGRAPH and will search ahead. Links: S14, S15.
+stone into the TABLET and will search ahead. Links: S14, S15.
 
 **2.7 Progress report: the center of something (84-85).** Flagged 3 (open).
 Where: Area X, the central computer (S19, WT ch. 6). Four doors that won't budge, the
@@ -513,8 +513,8 @@ Links: 3:33-38 ~ 5:20-25 (Zaril's versions); 3:39-43 = 2:67-71; 3:44-50 = 1:293-
 **3.4 The STAFF statue (67-71).** Flagged 3 (open).
 Where: Area X north-east, the statue with the white stone (S20, WT ch. 6). 67 unnamed
 version: they forgot "that thing" and hurry back. 68-71: the statue has a slot for the
-Sun tablet; the glyphs are a key; Artemisia: the little tablet had the same glyphs.
-Links: S19, S20; 2:84-85; 4:30-41; the LITHOGRAPH OF SUN naming question.
+Tablet of the Sun; the glyphs are a key; Artemisia: the little tablet had the same glyphs.
+Links: S19, S20; 2:84-85; 4:30-41; the TABLET OF THE SUN (once LITHOGRAPH OF SUN).
 
 **3.5 The maze changes (72-73).** Not flagged.
 After mimicry mode (S47): "Looks like we teleported into a new maze." Unnamed 72, named

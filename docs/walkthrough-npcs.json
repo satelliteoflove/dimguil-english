@@ -4,7 +4,7 @@
     {
       "no": 1,
       "harano": "temple-field",
-      "title": "The four pillars and the Lithograph of Sun",
+      "title": "The four pillars and the Tablet of the Sun",
       "npcs": [
         {
           "who": "Guy's party",
@@ -220,7 +220,7 @@
               "text": "Ain't there a bridge or something?"
             }
           ],
-          "flags": "The map's translation-trap note says Balbo's はし could be bridge, ladder or edge. harano's next chapter supports \"bridge\": the way on is the waterway on B2F x7y12, which the blue-stoned Lithograph lets you cross to x3y12, and that's exactly where Balbo turns up next. Balbo's progress reports (81-89, 142, 261-265) were reviewed as scene 3 in docs/npc-review.md: the Japanese shifts to a stiff, superior register here (Fontana's party does the same in its maze encounters), and the English keeps Balbo's own words but makes him businesslike and a little lordly.",
+          "flags": "The map's translation-trap note says Balbo's はし could be bridge, ladder or edge. harano's next chapter supports \"bridge\": the way on is the waterway on B2F x7y12, which the blue-stoned Tablet lets you cross to x3y12, and that's exactly where Balbo turns up next. Balbo's progress reports (81-89, 142, 261-265) were reviewed as scene 3 in docs/npc-review.md: the Japanese shifts to a stiff, superior register here (Fontana's party does the same in its maze encounters), and the English keeps Balbo's own words but makes him businesslike and a little lordly.",
           "source": "NPC_MES2"
         },
         {
@@ -311,14 +311,14 @@
             "Balbo"
           ],
           "strings": "NPC_MES2 82-83",
-          "placement": "Walkthrough: harano meets Balbo at x3y14 on B2F, just across the waterway that the blue-stoned Lithograph opens. The line about the blue stone (82-83) fits that moment.",
-          "blurb": "Across the water at x3y14, Balbo's party has gotten there first, and Balbo has noticed what you're carrying: \"So you got the blue stone fitted into the Lithograph of the Sun too, eh?\" He sounds almost impressed: \"Who'd have thought it was rigged up like that.\" Then his party heads off to search the area, sure something more important lies ahead.",
+          "placement": "Walkthrough: harano meets Balbo at x3y14 on B2F, just across the waterway that the blue-stoned Tablet opens. The line about the blue stone (82-83) fits that moment.",
+          "blurb": "Across the water at x3y14, Balbo's party has gotten there first, and Balbo has noticed what you're carrying: \"So you got the blue stone fitted into the Tablet of the Sun too, eh?\" He sounds almost impressed: \"Who'd have thought it was rigged up like that.\" Then his party heads off to search the area, sure something more important lies ahead.",
           "quotes": [
             {
               "file": "NPC_MES2",
               "idx": 83,
               "speaker": "Balbo",
-              "text": "So you got the blue stone fitted into the Lithograph of the Sun too, eh?"
+              "text": "So you got the blue stone fitted into the Tablet of the Sun too, eh?"
             },
             {
               "file": "NPC_MES2",
@@ -467,7 +467,7 @@
           ],
           "strings": "NPC_MES3 67-71",
           "placement": "Game: the event map links NPC3 67-71 to S20, the statue with the white stone and the word STAFF in Area X's north-east (harano's x15y16). harano doesn't mention Fontana's party there.",
-          "blurb": "Fontana's party found the statue first and is still puzzling over it. Fontana has spotted a slot for the LITHOGRAPH OF SUN and says, \"I have a feeling these ancient glyphs are some kind of key.\" Then Artemisia makes the connection for you: \"That little tablet we saw earlier had the same glyphs as these!\"",
+          "blurb": "Fontana's party found the statue first and is still puzzling over it. Fontana has spotted a slot for the TABLET OF THE SUN and says, \"I have a feeling these ancient glyphs are some kind of key.\" Then Artemisia makes the connection for you: \"That little tablet we saw earlier had the same glyphs as these!\"",
           "quotes": [
             {
               "file": "NPC_MES3",
@@ -482,7 +482,7 @@
               "text": "That little tablet we saw earlier had the same glyphs as these!"
             }
           ],
-          "flags": "68 calls the item \"the Sun tablet\"; npc-review scene 3 (unreviewed, HIGH-MEDIUM) wants \"Lithograph of the Sun\", so I didn't quote that sentence. If you haven't been introduced, the party shows up as \"Young samurai\" (67), who says only that they forgot to bring \"that thing\" and are going back for it. 71 is all labeled Artemisia, but its second half (\"Yes, they must be connected somehow. Excuse us, but we'll be hurrying on ahead.\") reads like a reply, and might be Fontana in the original.",
+          "flags": "68 called the item \"the Sun tablet\" until the item became TABLET OF THE SUN (2026-10-10); that sentence isn't quoted. If you haven't been introduced, the party shows up as \"Young samurai\" (67), who says only that they forgot to bring \"that thing\" and are going back for it. 71 is all labeled Artemisia, but its second half (\"Yes, they must be connected somehow. Excuse us, but we'll be hurrying on ahead.\") reads like a reply, and might be Fontana in the original.",
           "source": "NPC_MES3"
         },
         {
@@ -527,7 +527,7 @@
           ],
           "strings": "NPC_MES2 262",
           "placement": "Game: Balbo has fitted the green stone (Area A B4F, this chapter; event map S22).",
-          "blurb": "Balbo has the green stone in his Lithograph and nothing to show for it: \"Fitting the green stone ain't enough? Feels like something's missing.\" He's right, since the stone still has to light the altar on B4F, but his party gives up and moves on.",
+          "blurb": "Balbo has the green stone in his Tablet and nothing to show for it: \"Fitting the green stone ain't enough? Feels like something's missing.\" He's right, since the stone still has to light the altar on B4F, but his party gives up and moves on.",
           "quotes": [
             {
               "file": "NPC_MES2",
@@ -536,7 +536,7 @@
               "text": "Fitting the green stone ain't enough? Feels like something's missing."
             }
           ],
-          "flags": "\"The light altar on B4F\" is harano's next chapter (B4F x11y11: the green-stoned Lithograph turns the light green). Balbo's progress reports (81-89, 142, 261-265) were reviewed as scene 3 in docs/npc-review.md: the Japanese shifts to a stiff, superior register here (Fontana's party does the same in its maze encounters), and the English keeps Balbo's own words but makes him businesslike and a little lordly.",
+          "flags": "\"The light altar on B4F\" is harano's next chapter (B4F x11y11: the green-stoned Tablet turns the light green). Balbo's progress reports (81-89, 142, 261-265) were reviewed as scene 3 in docs/npc-review.md: the Japanese shifts to a stiff, superior register here (Fontana's party does the same in its maze encounters), and the English keeps Balbo's own words but makes him businesslike and a little lordly.",
           "source": "NPC_MES2"
         }
       ],
@@ -1119,8 +1119,8 @@
             "the altar's voice"
           ],
           "strings": "EVENTMES 199-205",
-          "placement": "Walkthrough: harano sets the LITHOGRAPH at the altar on Area D B3F x11y19 (behind the door marked COMPUTER), answers DIMGUIL, and fights Mother.",
-          "blurb": "Set the LITHOGRAPH OF SUN in the altar behind the COMPUTER door and the tablets light up, and a voice that is neither a man's nor a beast's fills the room: \"Speak the name of the god!\" Give it the name from the mural in the Shrine's altar room and it answers \"Now receive your final baptism!\", and the wall falls to let a woman clad in giant needles attack.",
+          "placement": "Walkthrough: harano sets the TABLET at the altar on Area D B3F x11y19 (behind the door marked COMPUTER), answers DIMGUIL, and fights Mother.",
+          "blurb": "Set the TABLET OF THE SUN in the altar behind the COMPUTER door and the tablets light up, and a voice that is neither a man's nor a beast's fills the room: \"Speak the name of the god!\" Give it the name from the mural in the Shrine's altar room and it answers \"Now receive your final baptism!\", and the wall falls to let a woman clad in giant needles attack.",
           "quotes": [
             {
               "file": "EVENTMES",

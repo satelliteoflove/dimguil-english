@@ -89,13 +89,13 @@
                 {
                     "length": 142,
                     "source": "NA",
-                    "translation": "The four stones from the pillars look\nlike they'd fit.{ff26}\rThe four pieces fit together into a single tablet.\n \nObtained {ff30}2LITHOGRAPH OF SUN{ff30}0.{ff26}\r \nAnd then......the door slowly begins to open.",
+                    "translation": "The four stones from the pillars look\nlike they'd fit.{ff26}\rThe four pieces fit together into a single tablet.\n \nObtained {ff30}2TABLET OF THE SUN{ff30}0.{ff26}\r \nAnd then......the door slowly begins to open.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 58,
                     "source": "NA",
-                    "translation": "You fit the LITHOGRAPH OF SUN into the hole,\n \n.........and the door slowly begins to open.",
+                    "translation": "You fit the TABLET OF THE SUN into the hole,\n \n.........and the door slowly begins to open.",
                     "addStringTerminator": true
                 },
                 {
@@ -491,7 +491,7 @@
                 {
                     "length": 164,
                     "source": "NA",
-                    "translation": "This door bears the crest of the moon.\nIn the middle of the door is a square hole.{ff26}\rUnfamiliar ancient letters are carved into\nthe crest:\n]{ff30}5{ancient_m}{ancient_o}{ancient_o}{ancient_n}{ff30}0[{ff26}\rYou fit the LITHOGRAPH OF SUN into the hole,\n \n......and the door slowly begins to open.",
+                    "translation": "This door bears the crest of the moon.\nIn the middle of the door is a square hole.{ff26}\rUnfamiliar ancient letters are carved into\nthe crest:\n]{ff30}5{ancient_m}{ancient_o}{ancient_o}{ancient_n}{ff30}0[{ff26}\rYou fit the TABLET OF THE SUN into the hole,\n \n......and the door slowly begins to open.",
                     "addStringTerminator": true
                 },
                 {
@@ -503,7 +503,7 @@
                 {
                     "length": 131,
                     "source": "NA",
-                    "translation": "A strange machine has been set here.\nIt has something like a lever,\nbut the lever won't move.{ff26}\rThere's a hollow in the floor before it.\nIt looks like the LITHOGRAPH OF SUN would fit.\nWill you try it?",
+                    "translation": "A strange machine has been set here.\nIt has something like a lever,\nbut the lever won't move.{ff26}\rThere's a hollow in the floor before it.\nIt looks like the TABLET OF THE SUN would fit.\nWill you try it?",
                     "addStringTerminator": true
                 },
                 {
@@ -515,13 +515,13 @@
                 {
                     "length": 72,
                     "source": "NA",
-                    "translation": "Is it answering the LITHOGRAPH OF SUN?\nThe drum at the machine's center quietly\nbegins to turn, winding in the chain.",
+                    "translation": "Is it answering the TABLET OF THE SUN?\nThe drum at the machine's center quietly\nbegins to turn, winding in the chain.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 72,
                     "source": "NA",
-                    "translation": "Is it answering the LITHOGRAPH OF SUN?\nThe drum at the machine's center quietly\nbegins to turn, paying out the chain.",
+                    "translation": "Is it answering the TABLET OF THE SUN?\nThe drum at the machine's center quietly\nbegins to turn, paying out the chain.",
                     "addStringTerminator": true
                 },
                 {
@@ -539,7 +539,7 @@
                 {
                     "length": 171,
                     "source": "NA",
-                    "translation": "There's a square hole in the floor. It's\nshallow, with nothing at the bottom. It's\nthe same size as the LITHOGRAPH OF SUN.{ff26}\rAs you set the LITHOGRAPH OF SUN in it,\nthe underground stream before you stops\nand splits in two. A new path appears.{ff26}",
+                    "translation": "There's a square hole in the floor. It's\nshallow, with nothing at the bottom. It's\nthe same size as the TABLET OF THE SUN.{ff26}\rAs you set the TABLET OF THE SUN in it,\nthe underground stream before you stops\nand splits in two. A new path appears.{ff26}",
                     "addStringTerminator": true
                 },
                 {
@@ -581,25 +581,25 @@
                 {
                     "length": 67,
                     "source": "NA",
-                    "translation": "You try setting the LITHOGRAPH OF SUN in the hole.\nThe green stone is blinking.\nWill you touch it?",
+                    "translation": "You try setting the TABLET OF THE SUN in the hole.\nThe green stone is blinking.\nWill you touch it?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 67,
                     "source": "NA",
-                    "translation": "You try setting the LITHOGRAPH OF SUN in the hole.\nThe red stone is blinking.\nWill you touch it?",
+                    "translation": "You try setting the TABLET OF THE SUN in the hole.\nThe red stone is blinking.\nWill you touch it?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 85,
                     "source": "NA",
-                    "translation": "You try setting the LITHOGRAPH OF SUN in the hole.\nThe green stone and the red stone are blinking.\nWhich stone will you touch?",
+                    "translation": "You try setting the TABLET OF THE SUN in the hole.\nThe green stone and the red stone are blinking.\nWhich stone will you touch?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 50,
                     "source": "NA",
-                    "translation": "You try setting the LITHOGRAPH OF SUN in the hole.\nBut nothing happens.",
+                    "translation": "You try setting the TABLET OF THE SUN in the hole.\nBut nothing happens.",
                     "addStringTerminator": true
                 },
                 {
@@ -659,7 +659,7 @@
                 {
                     "length": 174,
                     "source": "NA",
-                    "translation": "An eerily glowing altar stands here.\nSmall tablets are lined up neatly,\nand beyond them sits a clear round dome.{ff26}\r \nAn eerie light glows inside it.{ff26}\rAs you bring the LITHOGRAPH OF SUN close,\nthe small tablets begin to glow.\nWill you touch a small tablet?",
+                    "translation": "An eerily glowing altar stands here.\nSmall tablets are lined up neatly,\nand beyond them sits a clear round dome.{ff26}\r \nAn eerie light glows inside it.{ff26}\rAs you bring the TABLET OF THE SUN close,\nthe small tablets begin to glow.\nWill you touch a small tablet?",
                     "addStringTerminator": true
                 },
                 {
@@ -677,7 +677,7 @@
                 {
                     "length": 65,
                     "source": "NA",
-                    "translation": "When you defeat the shining demon, a stone\nglowing gold, perhaps part of its body, is\nset into the LITHOGRAPH OF SUN.",
+                    "translation": "When you defeat the shining demon, a stone\nglowing gold, perhaps part of its body, is\nset into the TABLET OF THE SUN.",
                     "addStringTerminator": true
                 },
                 {
@@ -785,7 +785,7 @@
                 {
                     "length": 160,
                     "source": "NA",
-                    "translation": "There's a square hole in the floor. It's\nshallow, with nothing at the bottom. It\nseems the same size as the LITHOGRAPH OF SUN.{ff26}\rYou try setting the LITHOGRAPH OF SUN in\nit, but nothing happens.\n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
+                    "translation": "There's a square hole in the floor. It's\nshallow, with nothing at the bottom. It\nseems the same size as the TABLET OF THE SUN.{ff26}\rYou try setting the TABLET OF THE SUN in\nit, but nothing happens.\n\"{ff30}2Aren't we forgetting something?{ff30}0\"",
                     "addStringTerminator": true
                 },
                 {
@@ -815,7 +815,7 @@
                 {
                     "length": 132,
                     "source": "NA",
-                    "translation": "In the corner is a pedestal set with\nsmall tablets. There's a big square hole\nin the middle of it.{ff26}\rWhen you fit the LITHOGRAPH OF SUN in,\nthe small tablets light up.\nMaybe you should press one of the buttons?",
+                    "translation": "In the corner is a pedestal set with\nsmall tablets. There's a big square hole\nin the middle of it.{ff26}\rWhen you fit the TABLET OF THE SUN in,\nthe small tablets light up.\nMaybe you should press one of the buttons?",
                     "addStringTerminator": true
                 },
                 {
@@ -1229,7 +1229,7 @@
                 {
                     "length": 117,
                     "source": "NA",
-                    "translation": "You set the LITHOGRAPH OF SUN in the hole.\nThe small tablets begin to glow, and a voice\nrings through the whole room.{ff26}\rIt sounds like neither a person nor a beast.\nIt is a cold, mechanical voice.{ff26}",
+                    "translation": "You set the TABLET OF THE SUN in the hole.\nThe small tablets begin to glow, and a voice\nrings through the whole room.{ff26}\rIt sounds like neither a person nor a beast.\nIt is a cold, mechanical voice.{ff26}",
                     "addStringTerminator": true
                 },
                 {
@@ -1553,7 +1553,7 @@
                 {
                     "length": 165,
                     "source": "NA",
-                    "translation": "You find a strange hollow in the middle\nof the wall. A blue stone is stuck fast\nto the bottom.{ff26}\rBut the blue stone can't be removed.\nIt looks like the LITHOGRAPH OF SUN\nwould fit into this hollow.{ff26}\r \n...The blue stone is now set into the\nLITHOGRAPH OF SUN.",
+                    "translation": "You find a strange hollow in the middle\nof the wall. A blue stone is stuck fast\nto the bottom.{ff26}\rBut the blue stone can't be removed.\nIt looks like the TABLET OF THE SUN\nwould fit into this hollow.{ff26}\r \n...The blue stone is now set into the\nTABLET OF THE SUN.",
                     "addStringTerminator": true
                 },
                 {
@@ -1565,7 +1565,7 @@
                 {
                     "length": 226,
                     "source": "NA",
-                    "translation": "Were these people eaten by something?\nMany skeletons lie scattered about.{ff26}\rNearby is a wall with a square hollow.\nA yellow stone is stuck fast inside it.\nBut the yellow stone can't be removed.{ff26}\rIt looks like the LITHOGRAPH OF SUN\nwould fit into this hollow.{ff26}\r \n...The yellow stone is now set into the\nLITHOGRAPH OF SUN.",
+                    "translation": "Were these people eaten by something?\nMany skeletons lie scattered about.{ff26}\rNearby is a wall with a square hollow.\nA yellow stone is stuck fast inside it.\nBut the yellow stone can't be removed.{ff26}\rIt looks like the TABLET OF THE SUN\nwould fit into this hollow.{ff26}\r \n...The yellow stone is now set into the\nTABLET OF THE SUN.",
                     "addStringTerminator": true
                 },
                 {
@@ -1589,7 +1589,7 @@
                 {
                     "length": 138,
                     "source": "NA",
-                    "translation": "You find a strange hollow in the middle\nof the wall. A green stone is stuck fast\nto the bottom.{ff26}\rIt looks like the LITHOGRAPH OF SUN\nwould fit into this hollow.{ff26}\r \n...The green stone is now set into the\nLITHOGRAPH OF SUN.",
+                    "translation": "You find a strange hollow in the middle\nof the wall. A green stone is stuck fast\nto the bottom.{ff26}\rIt looks like the TABLET OF THE SUN\nwould fit into this hollow.{ff26}\r \n...The green stone is now set into the\nTABLET OF THE SUN.",
                     "addStringTerminator": true
                 },
                 {
@@ -1607,7 +1607,7 @@
                 {
                     "length": 165,
                     "source": "NA",
-                    "translation": "You find a strange hollow in the middle\nof the wall. A green stone is stuck fast\nto the bottom.{ff26}\rBut the green stone can't be removed.\nIt looks like the LITHOGRAPH OF SUN\nwould fit into this hollow.{ff26}\r \n...The green stone is now set into the\nLITHOGRAPH OF SUN.",
+                    "translation": "You find a strange hollow in the middle\nof the wall. A green stone is stuck fast\nto the bottom.{ff26}\rBut the green stone can't be removed.\nIt looks like the TABLET OF THE SUN\nwould fit into this hollow.{ff26}\r \n...The green stone is now set into the\nTABLET OF THE SUN.",
                     "addStringTerminator": true
                 },
                 {
@@ -1619,7 +1619,7 @@
                 {
                     "length": 190,
                     "source": "NA",
-                    "translation": "There's a square hole in the pedestal of\na small statue. A shining white stone is\nstuck fast to the bottom.{ff26}\rUnfamiliar ancient letters are carved beside it:\n \n]{ff30}4{ancient_s}{ancient_t}{ancient_a}{ancient_f}{ancient_f}{ff30}0[{ff26}\rYou fit in the LITHOGRAPH OF SUN.\n \n...The white stone is now set into it.",
+                    "translation": "There's a square hole in the pedestal of\na small statue. A shining white stone is\nstuck fast to the bottom.{ff26}\rUnfamiliar ancient letters are carved beside it:\n \n]{ff30}4{ancient_s}{ancient_t}{ancient_a}{ancient_f}{ancient_f}{ff30}0[{ff26}\rYou fit in the TABLET OF THE SUN.\n \n...The white stone is now set into it.",
                     "addStringTerminator": true
                 },
                 {
@@ -1643,7 +1643,7 @@
                 {
                     "length": 203,
                     "source": "NA",
-                    "translation": "In the middle of the room stands a device\nwith a square pedestal.{ff26}\rThe pedestal has a hollow, and a\nsilver stone is stuck fast to the bottom.{ff26}\rBut the silver stone can't be removed.\nIt looks like the LITHOGRAPH OF SUN\nwould fit into this hollow.{ff26}\r \n...The silver stone is now set into the\nLITHOGRAPH OF SUN.",
+                    "translation": "In the middle of the room stands a device\nwith a square pedestal.{ff26}\rThe pedestal has a hollow, and a\nsilver stone is stuck fast to the bottom.{ff26}\rBut the silver stone can't be removed.\nIt looks like the TABLET OF THE SUN\nwould fit into this hollow.{ff26}\r \n...The silver stone is now set into the\nTABLET OF THE SUN.",
                     "addStringTerminator": true
                 },
                 {
@@ -1661,7 +1661,7 @@
                 {
                     "length": 173,
                     "source": "NA",
-                    "translation": "In the small room is a wall with a square\nhollow. A red stone is stuck fast to the\nbottom.{ff26}\rBut the red stone can't be removed.\nIt looks like the LITHOGRAPH OF SUN\nwould fit into this hollow.{ff26}\r \n...The red stone is now set into the\nLITHOGRAPH OF SUN.",
+                    "translation": "In the small room is a wall with a square\nhollow. A red stone is stuck fast to the\nbottom.{ff26}\rBut the red stone can't be removed.\nIt looks like the TABLET OF THE SUN\nwould fit into this hollow.{ff26}\r \n...The red stone is now set into the\nTABLET OF THE SUN.",
                     "addStringTerminator": true
                 },
                 {
@@ -1673,7 +1673,7 @@
                 {
                     "length": 197,
                     "source": "NA",
-                    "translation": "In the middle of the room stands a device\nwith a square pedestal.{ff26}\rThe square pedestal has a hollow, and a\nblack stone is stuck fast to the bottom.{ff26}\rBut the black stone can't be removed.\nIt looks like the LITHOGRAPH OF SUN\nwould fit into this hollow.{ff26}\r \n...The black stone is now set into the\nLITHOGRAPH OF SUN.",
+                    "translation": "In the middle of the room stands a device\nwith a square pedestal.{ff26}\rThe square pedestal has a hollow, and a\nblack stone is stuck fast to the bottom.{ff26}\rBut the black stone can't be removed.\nIt looks like the TABLET OF THE SUN\nwould fit into this hollow.{ff26}\r \n...The black stone is now set into the\nTABLET OF THE SUN.",
                     "addStringTerminator": true
                 },
                 {
@@ -1841,7 +1841,7 @@
                 {
                     "length": 104,
                     "source": "NA",
-                    "translation": " \nA mysterious statue stands here.\nThere's an X on its chest.{ff26}\rIs it answering the LITHOGRAPH OF SUN?\nThe LITHOGRAPH OF SUN shines, and you\nare whisked away somewhere.{ff26}",
+                    "translation": " \nA mysterious statue stands here.\nThere's an X on its chest.{ff26}\rIs it answering the TABLET OF THE SUN?\nThe TABLET OF THE SUN shines, and you\nare whisked away somewhere.{ff26}",
                     "addStringTerminator": true
                 },
                 {

@@ -5,7 +5,7 @@ not this file. Every patch line the website walkthrough quotes, by chapter. Afte
 quoted string, run `scripts/wtquotes.py check`: it lists each quote that no longer matches,
 with the chapter and the string's new wording, to carry over to the site.
 
-## 1. The four pillars and the Lithograph of Sun
+## 1. The four pillars and the Tablet of the Sun
 
 | Who | String | Quote |
 |---|---|---|
@@ -43,7 +43,7 @@ with the chapter and the string's new wording, to carry over to the site.
 |---|---|---|
 | Guy | NPC_MES1 202 | I'm not a Lord, I'm a Hero! |
 | Linaria | NPC_MES1 203 | Yeah, yeah...... |
-| Balbo | NPC_MES2 83 | So you got the blue stone fitted into the Lithograph of the Sun too, eh? |
+| Balbo | NPC_MES2 83 | So you got the blue stone fitted into the Tablet of the Sun too, eh? |
 | Balbo | NPC_MES2 83 | Who'd have thought it was rigged up like that. |
 | The Guardians | EVENTMES 280 | We are the Guardians who rule this land. |
 | The Guardians | EVENTMES 280 | You are not permitted to cut off the flow of the water. |

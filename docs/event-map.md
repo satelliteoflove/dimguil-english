@@ -45,7 +45,7 @@ fouled and the town shaken by quakes (SISETU 327, EV 66, EV 68).
 
 1. **The island (Field).** Four stone pillars stand at the island's corners, carved
    with a tiger, a dog, a bird and a snake. Each hides a beast; each beast drops a
-   stone piece. The four pieces join into the LITHOGRAPH OF SUN (太陽の石板) and open
+   stone piece. The four pieces join into the TABLET OF THE SUN (太陽の石板) and open
    the sun-crested door in front of the Shrine. (Game: EV 11-13, 24-31, 48-51,
    289-292; Enc. places the four fights at the island corners.) Alstron explains that
    a seal is made by placing magical items at regular points around the thing sealed
@@ -58,12 +58,12 @@ fouled and the town shaken by quakes (SISETU 327, EV 66, EV 68).
    elevator down to B3 (S5; Walkthrough). The scholars' archive, the man frozen in ice,
    the machine that fouls the lake (stopping it ends the quakes and restores the lake:
    SISETU 327), the first Guardian party, the blue stone (the first stone set into the
-   LITHOGRAPH), the waterway, the "sky fell" inscription on B4F, the moon-crested door
-   on B3 (which opens with the LITHOGRAPH once the machine has drained B3's water), and
+   TABLET), the waterway, the "sky fell" inscription on B4F, the moon-crested door
+   on B3 (which opens with the TABLET once the machine has drained B3's water), and
    the 2-Head Snake guarding a winding machine that opens the elevator to Area X
    (Walkthrough).
 4. **Area X,** a hub with four sealed doors (A-D) and a central computer: a pedestal of
-   26 small tablets, one per ancient letter, where the LITHOGRAPH goes and a word is
+   26 small tablets, one per ancient letter, where the TABLET goes and a word is
    typed. The white stone and the word STAFF are in the north-east; typing STAFF opens
    Area A. A door marked TRANSPORTER takes you back to town, and once the white stone is
    set, the X statue on the island (S54) warps you here (Walkthrough). Each later area
@@ -183,8 +183,8 @@ Where: in front of the Shrine (Game: 11). This is the entrance door Guy's party 
 stuck at (NPC1 105).
 What: a sealed door with the sun crest, the glyph word SUN, and a square hole.
 Branches: 15 no stones ("Do we need something?"); 12 some pillar stones but not all
-four; 13 all four join into the LITHOGRAPH OF SUN and the door opens; 14 later visits,
-LITHOGRAPH already made; 16 "Haven't we forgotten something?"; 10 generic "shut tight,
+four; 13 all four join into the TABLET OF THE SUN and the door opens; 14 later visits,
+TABLET already made; 16 "Haven't we forgotten something?"; 10 generic "shut tight,
 no keyhole".
 Links: SUN is the first glyph word most players decode, with the crest as its picture.
 The square hole is the first of many (see "Square holes").
@@ -281,7 +281,7 @@ Where: Underground B3 x19y4. It opens after the lake machine has drained B3's wa
 and leads down toward B4 and round to the 2-Head Snake on B1 (Walkthrough). It isn't the
 way into the Underground Shrine; that's the jewel elevator (S5).
 What: a door with the moon crest, the glyph word MOON, and a square hole. 80 the
-LITHOGRAPH fits and it opens; 81 without it ("Do you need something?").
+TABLET fits and it opens; 81 without it ("Do you need something?").
 Links: SUN door (S3), STAR (S5).
 
 **S11. The library.** EV 76, 106.
@@ -322,19 +322,19 @@ liquid thicker than the lake's water restores magic).
 
 **S14. The blue stone.** EV 256-258.
 Where: Underground; FAQ: start by dropping down the chute on B2F E22 N19.
-What: a hollow in a wall with a blue stone stuck in it. 257 the LITHOGRAPH fits and the
-blue stone sets into it. 256 plain (after). 258 without the LITHOGRAPH.
+What: a hollow in a wall with a blue stone stuck in it. 257 the TABLET fits and the
+blue stone sets into it. 256 plain (after). 258 without the TABLET.
 Slip in 258 (corroborated, see Translation traps): the first line says the stuck stone
 is green, though this is the blue set; its closing thought has a bare "7" where {ff30}2
 belongs. The English says blue and restores the {ff30}2 (S14 review). 258 needs the
-LITHOGRAPH's carrier left behind, so few players would ever have seen it.
-Links: NPC2 82-83 (Balbo: you too fitted the blue stone into the LITHOGRAPH); S15.
+TABLET's carrier left behind, so few players would ever have seen it.
+Links: NPC2 82-83 (Balbo: you too fitted the blue stone into the TABLET); S15.
 
 **S15. The waterway.** EV 87, 88, 129.
 Where: Underground B2 E7 N12; once it's set, you cross to x3y12 (Walkthrough). FAQ:
 crossing the waterway needs the blue stone. Balbo's party is met just past it, at x3y14
 (Walkthrough).
-What: a shallow square hole in the floor, the size of the LITHOGRAPH. 88 set it and the
+What: a shallow square hole in the floor, the size of the TABLET. 88 set it and the
 underground stream stops and parts, opening a path. 129 set it, nothing happens,
 "Aren't we forgetting something?" (the blue stone isn't in yet). 87 plain description.
 **The 87/88/129 split is Inferred from the FAQ.**
@@ -351,7 +351,7 @@ earlier. The FAQ tells players to note it down.
 Where: Underground B1; 2-Head Snake at E15 N12 (Enc.).
 What: 71 something like a log lies in the room; it moves, its end splits into two
 mouths (fight). 82/83 behind it, a strange machine with an immovable lever and a hollow
-in the floor before it; 82 with the LITHOGRAPH (try it?), 83 without ("Aren't we
+in the floor before it; 82 with the TABLET (try it?), 83 without ("Aren't we
 forgetting something?"). 84 the drum winds in the chain; 85 pays it out.
 Result (FAQ): the mural by the elevator disappears and an elevator to Area X appears.
 86 a door reads CORE: Area D B3 E10 N8 (Disc), not near here.
@@ -371,7 +371,7 @@ Links: Catalog 4:7 (a shadow golem cast by a strange statue); NPC1 86-88 and 295
 **S19. The central computer.** EV 134-145, 58; NPC4 30-41.
 Where: the middle of Area X (FAQ). The four doors on its sides are A-D.
 What: 134/135 a pedestal of small tablets with a large square hole; 134 with the
-LITHOGRAPH the tablets light up ("Maybe one of these buttons?"), 135 without. The
+TABLET the tablets light up ("Maybe one of these buttons?"), 135 without. The
 tablets are a keyboard of the 26 ancient letters (NPC4 33); the FAQ's hint for reading
 the script is that the tablets follow a keyboard layout read down the columns. Typing
 the right word lights a letter: 136-140 A to E (color 4), "it seems to have sensed
@@ -387,9 +387,9 @@ altar") probably means one of these keyboard altars.
 **S20. STAFF and the white stone.** EV 268-270.
 Where: Area X north-east (FAQ).
 What: a small statue's pedestal with a square hole and a white shining stone; nearby
-the glyph word STAFF (color 4). 268 the white stone sets into the LITHOGRAPH; 269
+the glyph word STAFF (color 4). 268 the white stone sets into the TABLET; 269
 without it ("Aren't we forgetting something?"); 270 after.
-Links: NPC3 67-71 (Fontana's party at this statue: a hole for the LITHOGRAPH, the
+Links: NPC3 67-71 (Fontana's party at this statue: a hole for the TABLET, the
 glyphs are a key; Artemisia: the small tablets had the same letters). STAFF is the
 first password (S19).
 
@@ -413,7 +413,7 @@ altar is S7's. Which altar he means is not established.
 
 **S22. The green stone.** EV 262-267.
 Where: Area A B4F E5 N13 (FAQ). There are two sets of strings (262-264, 265-267), each
-with plain / set / without-LITHOGRAPH; why there are two is not established.
+with plain / set / without-TABLET; why there are two is not established.
 Links: FAQ: after setting the green stone, find the secret door at B4F E14 N11 to reach
 the green door. NPC2 262 (Balbo: isn't the green stone enough? something is missing).
 
@@ -421,7 +421,7 @@ the green door. NPC2 262 (Balbo: isn't the green stone enough? something is miss
 Where: Area A (FAQ names a green door and a red door in Area A; the rest is Inferred
 from file position and content).
 What: 89 a strange altar sending a shaft of light to the ceiling; 90 nothing fits; 91 an
-altar with a square hole. 95-98 set the LITHOGRAPH: the green stone blinks / the red
+altar with a square hole. 95-98 set the TABLET: the green stone blinks / the red
 stone blinks / both blink, touch which? / nothing happens. 122 a hole in the floor with
 a shaft of light; 123-125 the light is white and warm / green / red like fire; 126
 nothing happens; 133 a device on the ceiling seems to drink the light; 195 a device
@@ -539,7 +539,7 @@ snakes (ground) = small ring, people = middle.
 Where: Area B B5; Ruby Hand at E5 N12, Guardian party at E9 N12 (Enc.).
 What: 149 you reach for a red stone set in the wall; cracks run across it; you have
 woken something sleeping behind it (Ruby Hand). 275 in the small room, a hollow with
-the red stone; it sets into the LITHOGRAPH. 276 without; 274 after. 282 the Guardians:
+the red stone; it sets into the TABLET. 276 without; 274 after. 282 the Guardians:
 your souls go to our god, absorbed like the Priestess's.
 Links: board 5 (the vault robbed, "that red thing" left behind): the vault is the room
 behind the dial, and the red thing is this stone. Catalog 13:3 (a guardian of the
@@ -648,7 +648,7 @@ Links: the lake and the magic water (S13); ENERGY.
 **S45. The god's name.** EV 199-205; Guardians EV 284.
 Where: Area D (FAQ); Mother at D-B3 E11 N19, Guardian party at D-B3 E10 N9 (Enc.).
 What: 199 a wall like a giant needle; an altar with a square hole and many small
-tablets; look closer? 200 declined. 202 nothing fits. 203 the LITHOGRAPH goes in, the
+tablets; look closer? 200 declined. 202 nothing fits. 203 the TABLET goes in, the
 tablets light, a lifeless voice fills the room. 201 "Speak the name of the god!" (color
 4). 204 "Wrong! Leave this place!" and "We seem to be forgetting something." 205
 "Correct! Now receive your final baptism!"; the wall crumbles, a beautiful woman
@@ -699,11 +699,11 @@ Where: Area A' B2; Crystal Man at E6 N5 (Enc.; FAQ: the unexplored part of Area 
 mimicry mode).
 What: 103 an eerily glowing altar, small tablets, a clear round dome with a glow inside;
 touching a tablet does nothing, "Aren't we forgetting something?" 108 with the
-LITHOGRAPH the tablets light; touch one? 94 a voice from the device (color 4): I am not
+TABLET the tablets light; touch one? 94 a voice from the device (color 4): I am not
 reality but a mass of imagination; I need luck and wit and hold many hardships;
 overcome them for a fruitless reward; what do you call my world? 109 you type whatever
 comes to mind (wrong). 110 "Correct! Now, let us begin!" (Crystal Man). 111 the shining
-demon falls and a stone glowing gold sets into the LITHOGRAPH. 112 declined. 104 "But
+demon falls and a stone glowing gold sets into the TABLET. 112 declined. 104 "But
 nothing happens."
 Answer: GAME (FAQ).
 Links: board 7 (GAME at the tavern); SISETU 342 and menu 356 "Strange Device" (a strange
@@ -775,10 +775,10 @@ who seek more"; SISETU 344 and menu 358 "The End".
 FAQ: beat the Fire Golem and the Shadow Golem appears, then the final boss, then the
 ending; after a title is awarded the final boss no longer appears. Tips: after the ring
 you are teleported to the Shrine altar, and another party waiting there can take the
-golem route again ("carry several LITHOGRAPHS OF SUN"). 304 a strange statue with an X
-on its chest; 305 it answers the LITHOGRAPH, which shines, and you are whisked away.
+golem route again ("carry several TABLETS OF SUN"). 304 a strange statue with an X
+on its chest; 305 it answers the TABLET, which shines, and you are whisked away.
 The Walkthrough places the X statue on the island at x17y3: once the white stone is set
-in the LITHOGRAPH, it warps you to Area X. So 304/305 is that shortcut; whether the golem
+in the TABLET, it warps you to Area X. So 304/305 is that shortcut; whether the golem
 route also uses it is not established.
 
 ### After the ending
@@ -929,11 +929,11 @@ the heretics' expert in ancient writing (NPC4 127), claims he can't read the gly
 (NPC4 11) though he helped lay them out (NPC4 50).
 
 **The four pillar stones.** EV 24-31, 48-51 (the pillars and beasts), 289-292 (STONE OF
-TIGER, BIRD, DOG, SNAKE), 12-13 (the pieces join into the LITHOGRAPH), NPC1 105-111
+TIGER, BIRD, DOG, SNAKE), 12-13 (the pieces join into the TABLET), NPC1 105-111
 (the seal and the items around the Shrine), Catalog 5:8-11 (the Four Pillar Gods).
 Keep: "pillar" consistently; 289-292 say "statue" in the Japanese (see the traps).
 
-**The LITHOGRAPH OF SUN and its eight stones.** The tablet opens the sun door (13-14),
+**The TABLET OF THE SUN and its eight stones.** The tablet opens the sun door (13-14),
 the moon door (80), runs the winding machine (82-85), parts the waterway (88), wakes the
 keyboards (108, 134, 203), and teleports (305). Stones in play order (Tips):
 - blue: 256-258, Underground (FAQ chute B2F E22 N19); NPC2 82-83
@@ -945,11 +945,11 @@ keyboards (108, 134, 203), and teleports (305). Stones in play order (Tips):
 - silver: 271-273, Area C
 - gold: 111, Area A' dome (GAME)
 Each stone set opens one more Training Maze floor (FAQ). The "Aren't we forgetting
-something?" branch at each hollow means "you don't have the LITHOGRAPH with you".
-Keep: the item name identical everywhere. The NPC files now say "Lithograph of the Sun"
+something?" branch at each hollow means "you don't have the TABLET with you".
+Keep: the item name identical everywhere. The NPC files now say "Tablet of the Sun"
 (NPC2 82) and "the Sun tablet" (NPC3 68).
 
-**Square holes and hollows.** Every place the LITHOGRAPH goes is a square hole (四角い
+**Square holes and hollows.** Every place the TABLET goes is a square hole (四角い
 穴) or hollow (窪み): 11, 80, 82, 87-88, 91, 129, 134, 199, 257-275. The player learns
 to read "square hole" as "the tablet goes here". Keep "square" wherever the Japanese has
 it, and keep hole and hollow distinct as the Japanese does.
@@ -1123,10 +1123,12 @@ roughly follows the game:
   COCKPIT, the area letters A-E in Area X, the Priestess's Door profile), and {ff30}5
   marks the teaching words. Board 7's GAME has no color. Keep every color code as it
   is; the distinction may be a deliberate signal.
-- **The LITHOGRAPH across files.** Event text: LITHOGRAPH OF SUN. NPC files: "Lithograph
-  of the Sun" (NPC2 82), "the Sun tablet" (NPC3 68). The Japanese uses 石板 both for the
-  LITHOGRAPH and for the keyboard's "small tablets", so NPC lines saying "tablet" (NPC2
-  84, NPC3 278, NPC4 30-34) need to make clear which one they mean.
+- **The TABLET across files.** The developer's name was LITHOGRAPH OF SUN, most likely
+  石版 (lithograph) confused with its homophone 石板 (stone tablet). It's TABLET OF THE SUN
+  since 2026-10-10, in event text and NPC lines alike ("Tablet of the Sun", NPC2 82,
+  NPC3 68). The Japanese uses 石板 both for it and for the keyboard's "small tablets", so
+  NPC lines saying "tablet" (NPC2 84, NPC3 278, NPC4 30-34) need to make clear which one
+  they mean.
 - **Priestess, Medium and the door.** The item is RING OF MEDIUM (fixed English); the
   door says Priestess's Door; the FAQ calls it the Medium's door. EV 298 ("The
   Priestess... offers you a ring. Obtained RING OF MEDIUM.") is the one line that ties
@@ -1167,7 +1169,7 @@ confirming it's an error. Don't "fix" those in the English on this list's say-so
 
 - **EV 258 (corroborated):** the stuck stone is green, then "the blue stone can't be
   removed", and the closing thought has a bare "7" where {ff30}2 belongs. The hollow
-  texts come in sets of three (first look, with the LITHOGRAPH, without it): 256-258
+  texts come in sets of three (first look, with the TABLET, without it): 256-258
   for the blue stone, 262-264 and 265-267 for the green. 258 is the blue set's third
   string, and its green twins 264 and 267 have the same wording with "green" in both
   places and a proper {ff30}2. So "green" in 258's first line is the slip, and the

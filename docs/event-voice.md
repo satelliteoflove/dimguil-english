@@ -41,7 +41,7 @@ do. In English:
 | 特におかしな所はない | "There's nothing particularly strange about it." (or "here." when no object is named) |
 | 触れてみますか? / 押してみますか? | Will you touch it? / Will you press it? |
 | 「X」を手に入れた | Obtained X. |
-| 太陽の石板 | LITHOGRAPH OF SUN (the item's own name) |
+| 太陽の石板 | TABLET OF THE SUN (the item's name; the developer's was LITHOGRAPH OF SUN) |
 | 巫女 | the Priestess (as in the King's speeches; her 腕輪 is the item RING OF MEDIUM, so the narration calls it a ring) |
 | 神殿 | the Shrine |
 | 伝言板 | *Message Board* |

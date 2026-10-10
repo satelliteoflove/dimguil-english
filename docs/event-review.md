@@ -93,9 +93,8 @@ unreviewed strings are consistent but not yet approved.
 
 ## Still open
 
-- Naming across files: the NPC files say "Lithograph of the Sun" and "the Sun tablet"
-  where the event script says LITHOGRAPH OF SUN; 迷宮 is "labyrinth" in some event
-  strings and "maze" elsewhere. Settle these.
+- Naming across files: 迷宮 is "labyrinth" in some event strings and "maze" elsewhere.
+  Settle this. (The Lithograph is settled: TABLET OF THE SUN everywhere, 2026-10-10.)
 
 ## To check in play or in the code
 

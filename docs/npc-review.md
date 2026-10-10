@@ -102,7 +102,7 @@ NPC_MES2 (Balbo, Rosea, Artemisia, Reiran, Alba, Gaura)
 NPC_MES3 (Fontana, Cephala, Artemisia, Lilia, Zaril, Reiran)
 - [ ] 1. Zaril walks out (75-89), HIGH: manzai quarrel that turns on Lilia siding with Zaril
 - [ ] 2. Fontana's god-word hint (278), HIGH: 占い師 is the Diviner, as in Guy's line
-- [ ] 3. The Sun statue (67-71), HIGH-MEDIUM: "Lithograph of the Sun", the item's name
+- [ ] 3. The Sun statue (67-71), HIGH-MEDIUM: "Tablet of the Sun", the item's name
 - [ ] 4. First meeting and goodbyes (0-18, 74), MEDIUM: "Little samurai" tag
 - [ ] 6. Kikunoshin, the name that won't stick (193-194, 220-221, 229-230, 247-248, 255), MEDIUM
 - [ ] 7. Reiran's reunion (9, 11), MEDIUM

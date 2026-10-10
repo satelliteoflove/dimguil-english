@@ -275,7 +275,7 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   Xicalli, Mictlan, Chai-zanic (no source found), Goblin Canon (a Priest; canon as in
   clergy), and Demon Liche / Dragon Liche (an old spelling of lich).
 
-- **Four more of the developer's names (Chris, 2026-10-10).**
+- **Five more of the developer's names (Chris, 2026-10-10).**
   - BENT STAFF stays: it's Wizardry I's item (STAFF -2 on the Apple II, BENT STAFF and
     ねじれたつえ in the later ports). This settles "Twisted Staff".
   - Astro Zombie (ロストワン, "Lost One") stays. The Shrine is a crashed starship (see
@@ -293,6 +293,13 @@ The preferred fix is a close-to-literal reading, fitted to the box.
     developer didn't use "steel" for its steel items either (鋼の兜 is BACINET, 鋼のブーツ
     SOLLERET). Items 1:150 and 1:151, which said steel to match the old name, now say
     iron.
+  - LITHOGRAPH OF SUN (太陽の石板, "stone tablet of the sun") is now TABLET OF THE SUN.
+    The item is a stone tablet assembled from four pieces; a lithograph is a print.
+    The developer most likely took 石版 (sekiban, a lithographic stone) for its
+    homophone 石板 (sekiban, a stone tablet). No earlier Wizardry has the item. Same
+    length, so every event line keeps its breaks; the NPC lines that said "Lithograph
+    of the Sun" (NPC2 82) and "the Sun tablet" (NPC3 68) now say "Tablet of the Sun".
+    The keyboard's "small tablets" are 石板 too, which the new name now matches.
 
 ## To revisit
 
@@ -311,8 +318,7 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   - Dragonare (ドラゴネア), Displaser Robe, Old Drumer and Small Silhoutte are typos,
     now fixed (see "Misspelled names fixed" above), as are the Mesoamerican names in
     the Mythical list.
-- **Other naming.** "Lithograph of the Sun" vs LITHOGRAPH OF SUN, and "labyrinth" vs
-  "maze" for 迷宮 (checklist Q6).
+- **Other naming.** "Labyrinth" vs "maze" for 迷宮 (checklist Q6).
 - **Catalog 8:2, Giant Spider.** 女郎蜘蛛 (jorōgumo) is "an arachne" as a stopgap;
   "spider-woman" and "drider" were the alternatives (`sweep-review.md`).
 - **Item 1:5, Anointed Mace.** Approved but flagged for another look.
