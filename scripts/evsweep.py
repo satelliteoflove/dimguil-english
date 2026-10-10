@@ -9,13 +9,21 @@ loaded at 0x801a0400. Its text is overwritten in RAM with the string under test 
 frame is saved and circle pressed. The state predates the current build, so the code
 patches that touch this box are written into RAM after loading.
 
-Writes OUTDIR/NNN_K.png (the box, 350x64) and OUTDIR/NNN.json: the pages, whether the
-glyph layer filled up (the box's pool was used to the last sprite) and the frame count.
+Writes OUTDIR/NNN_K.png (the box, 350x64) and OUTDIR/NNN.json: the pages, the text
+each page drew (read back from the glyph sprites), whether the glyph layer filled up
+(the box's pool was used to the last sprite) and the frame count.
+
+    evsweep.py --report OUTDIR
+
+compares each page's text with translations/EVENTMES.BIN.json and lists every string
+whose pages, wording or glyph pool don't match. Spaces, the ancient letters (which read
+back as kana) and the ] [ markers around them are left out of the comparison.
 """
-import json, os, struct, sys
+import json, os, re, struct, sys
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../rips/probe'))
 import emu, fixstate
+from castlecrawl import sprites, screen_lines, Glyphs
 
 DIRTY = 'rips/dirty/dimguil'
 EV_RAM, SHRINE = 0x801a0400, 11
@@ -66,7 +74,7 @@ def show(e, s, at, out, idx, P):
         e.write(a, b)
     blank = e.image().crop(BOX)
     e.press('triangle', after=0)
-    pages, full, frames = [], False, 0
+    pages, texts, full, frames = [], [], False, 0
     prev, still, shown = None, 0, False
     while frames < 9000 and len(pages) < want:
         if frames < 330:
@@ -92,17 +100,57 @@ def show(e, s, at, out, idx, P):
             if pages and diff(im, pages[-1]) == 0:
                 break
             pages.append(im)
+            texts.append([l['text'] for l in screen_lines(sprites(e), Glyphs())
+                          if l['layer'] == 1 and l['y'] < BOX[3]])
             e.press('circle', after=0); frames += 4
             still = 0
     names = []
     for k, im in enumerate(pages):
         p = os.path.join(out, f'{idx:03d}_{k}.png'); im.save(p); names.append(os.path.basename(p))
-    json.dump({'index': idx, 'pages': names, 'expected': want, 'pool_full': full, 'frames': frames},
+    json.dump({'index': idx, 'pages': names, 'text': texts, 'expected': want, 'pool_full': full,
+               'frames': frames},
               open(os.path.join(out, f'{idx:03d}.json'), 'w'))
     return names, full
 
 
+def flat(text):
+    """Text as compared: no codes, spaces, ancient letters or ] [ markers."""
+    text = re.sub(r'\]?(\{ff30\}\d)?(\{ancient_\w\})+(\{ff30\}\d)?\[?', '', text)
+    text = re.sub(r'\{ff30\}\d|\{ff[0-9a-f]{2}\}', '', text)
+    return re.sub(r'[\s\]\[?]|[^\x00-\x7f]', '', text)
+
+
+def report(out):
+    sys.path.insert(0, os.path.dirname(__file__))
+    import npcfit
+    tr = npcfit.json.load(open('translations/EVENTMES.BIN.json', encoding='utf-8'))
+    ts = [s.get('translation') or '' for s in tr['sections'][0]['strings']]
+    bad = 0
+    for idx, t in enumerate(ts):
+        path = os.path.join(out, f'{idx:03d}.json')
+        if not os.path.exists(path):
+            continue
+        r = json.load(open(path))
+        got = flat(''.join(''.join(p) for p in r['text']))
+        want = flat(t)
+        probs = []
+        if len(r['pages']) != r['expected']:
+            probs.append(f"{len(r['pages'])} pages, expected {r['expected']}")
+        if r['pool_full']:
+            probs.append('glyph pool full')
+        if got != want:
+            k = next((i for i, (a, b) in enumerate(zip(got, want)) if a != b), min(len(got), len(want)))
+            probs.append(f'text differs at {k}: drew ...{got[max(0, k - 20):k + 20]!r}, '
+                         f'expected ...{want[max(0, k - 20):k + 20]!r}')
+        if probs:
+            bad += 1
+            print(f'{idx:3d}', '; '.join(probs))
+    print(f'{bad} strings with problems')
+
+
 def main():
+    if sys.argv[1] == '--report':
+        return report(sys.argv[2])
     out = sys.argv[1]; os.makedirs(out, exist_ok=True)
     ss, o = strings()
     args = sys.argv[2:]
