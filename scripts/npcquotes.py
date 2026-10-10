@@ -6,8 +6,8 @@
     npcquotes.py --check          list speech that isn't closed, change nothing
 
 The Japanese opens each speech with 「 and never closes it; the English followed it, so
-the box showed an opening " and no closing one. Every box of speech now opens and
-closes its quote:
+the box showed an opening " and no closing one. Every box of speech opens its quote,
+and closes it where the sentence ends:
   - a box with a speaker line ("Balbo\\n\\"...") closes at the end of the speech;
   - a reply with no speaker line (shown after a yes/no prompt, or the next box of a long
     speech) opens with " in place of its leading space, where the Japanese has a space
@@ -15,13 +15,16 @@ closes its quote:
     more spaces in the Japanese and is left alone;
   - a healing box ends on the spell's name, centered and colored on its own line; the
     quote closes before it, since the spell isn't spoken;
-  - {ff40} ends the string, so a quote closes before it.
+  - {ff40} ends the string, so a quote closes before it;
+  - a box that stops mid-sentence (on a comma, or "but") stays open; the sentence goes
+    on in the speaker's next box, which closes it.
 A page break inside one box doesn't reopen the quote. npcapply.py runs this on what it
 applies, so a reviewed scene keeps its closing quotes.
 """
 import json, os, re, sys
 
 ROOT = os.path.join(os.path.dirname(__file__), '..')
+MIDWAY = re.compile(r'(,|\b(and|but|or|so))$')
 SPELL = re.compile(r'\n\r?[ ]*\{ff30\}2[^{\n]*\{ff30\}0\s*$')
 
 
@@ -51,6 +54,8 @@ def close(text, source):
     head, tail = text[:cut], text[cut:]
     body = head.rstrip()
     if body.endswith('"') and body.count('"') % 2 == 0:
+        return text
+    if MIDWAY.search(body):
         return text
     return body + '"' + head[len(body):] + tail
 
