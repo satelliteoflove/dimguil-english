@@ -275,7 +275,7 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   Xicalli, Mictlan, Chai-zanic (no source found), Goblin Canon (a Priest; canon as in
   clergy), and Demon Liche / Dragon Liche (an old spelling of lich).
 
-- **Three more of the developer's names (Chris, 2026-10-10).**
+- **Four more of the developer's names (Chris, 2026-10-10).**
   - BENT STAFF stays: it's Wizardry I's item (STAFF -2 on the Apple II, BENT STAFF and
     ねじれたつえ in the later ports). This settles "Twisted Staff".
   - Astro Zombie (ロストワン, "Lost One") stays. The Shrine is a crashed starship (see
@@ -288,6 +288,11 @@ The preferred fix is a close-to-literal reading, fitted to the box.
     English name found for it. 20 letters, as long as STRONGEST CHAIN MAIL; the
     two-line forms break BREASTPLATE / OF BOONS. ITEM.DAT's copy is a byte edit and has
     no room for the space before the break (`scripts/namefixes.py`).
+  - STEEL GLOVES (鉄の小手) is now IRON GLOVES, the console ports' name for Wizardry III's
+    GLOVES of IRON, the same Japanese item. Dimguil's text keeps 鉄 as iron, and the
+    developer didn't use "steel" for its steel items either (鋼の兜 is BACINET, 鋼のブーツ
+    SOLLERET). Items 1:150 and 1:151, which said steel to match the old name, now say
+    iron.
 
 ## To revisit
 
@@ -295,11 +300,6 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   reports. Handle them the same way when NPC_MES3 is reviewed: his own words, a little
   more in charge.
 
-- **STEEL GLOVES (鉄の小手, "iron gauntlets").** The developer's own English name. The
-  item text otherwise keeps 鉄 as iron and 鋼 as steel, but 1:150 and 1:151 say "steel" to
-  match the name. Wizardry III calls the same item GLOVES of IRON (IRON GLOVES in the
-  console ports), so a rename has series precedent and would switch both descriptions.
-  Waiting on Chris.
 - **Series spellings checked (2026-10-09).** Before calling a developer name a typo,
   check the earlier games (see "Halycon stays Halycon"). Of the names in the
   known-issues list:

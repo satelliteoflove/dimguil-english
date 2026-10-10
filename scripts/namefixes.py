@@ -57,10 +57,12 @@ SLOTS = {
     'Tepeyo{ff21}ryotls': 'Tepe{ff21}yollotls',
 }
 # ITEM.DAT's English list, edited in place, so a fix can't grow ({ff21} is two bytes;
-# BREASTPLATE drops the space before the break to fit).
+# BREASTPLATE drops the space before the break to fit). The list is reached through a
+# pointer table, so a shorter name just ends early.
 ITEM_DAT = 'DATA07/ITEM.DAT', [
     ('DISPLASER', 'DISPLACER'),
     ('B-PLATE OF {ff21}GOODNESS', 'BREASTPLATE{ff21}OF BOONS'),
+    ('STEEL GLOVES', 'IRON GLOVES'),
 ]
 
 
@@ -101,8 +103,11 @@ def main():
     edits = {}
     for old, new in fixes:
         pat, rep = glyphs(old), glyphs(new)
-        assert d.count(pat) == 1 and len(rep) == len(pat), old
+        assert d.count(pat) == 1 and len(rep) <= len(pat), old
         o = d.find(pat)
+        if len(rep) < len(pat):
+            assert d[o + len(pat):o + len(pat) + 2] == b'\xff\x40', old
+            rep += b'\xff\x40' + bytes(len(pat) - len(rep))
         edits[f'{o:x}'] = rep.hex(' ')
         if listing:
             print(f'{f} {o:#07x} {old} -> {new}')

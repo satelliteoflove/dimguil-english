@@ -1348,14 +1348,14 @@
                 {
                     "length": 120,
                     "source": "NA",
-                    "translation": "Steel gauntlets modified for\nease of use, but botched into\njunk. Cursed as well, so\nremoving the curse will cost\nyou.",
+                    "translation": "Iron gauntlets modified for\nease of use, but botched into\njunk. Cursed as well, so\nremoving the curse will cost\nyou.",
                     "compress": null,
                     "addStringTerminator": true
                 },
                 {
                     "length": 105,
                     "source": "NA",
-                    "translation": "Strong, easy-to-use steel\ngauntlets. Many adventurers\nlike their weight. A top\nitem in its class, known for\nits value.",
+                    "translation": "Strong, easy-to-use iron\ngauntlets. Many adventurers\nlike their weight. A top\nitem in its class, known for\nits value.",
                     "compress": null,
                     "addStringTerminator": true
                 },

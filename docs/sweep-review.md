@@ -188,7 +188,8 @@ up. Take them after the 37, or fold them in where they share a string.
   terms.md. Flagged for another look in translation-notes.
 - **I 1:150, 1:151.** "steel" where the Japanese is 鉄 (iron). Same fix for both.
   Decided 2026-10-04: kept, because the item is named STEEL GLOVES; goes with the naming
-  question in translation-notes.
+  question in translation-notes. The item became IRON GLOVES on 2026-10-10, and both now
+  say iron.
 - **I 1:296, Dragon's Tooth.** "spitefully whispers" dropped the hedge in その怨念からか
   ("perhaps out of its grudge"). Done 2026-10-04: Chris's wording, with "quietly" (そっと)
   and "perhaps out of spite" restored, and "rare treasure" back to "quite valuable".
