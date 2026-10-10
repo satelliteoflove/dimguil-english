@@ -32,6 +32,12 @@ SLOTS = {
     'Oserotoru': 'Ocelotl',
     'Inkuintori': 'Itzcuintli',
     'Cuautori': 'Cuauhtli',
+    # Plurals of -y names; Dragon Flies and Vorpal Bunnies are the series' own.
+    'Dragon Flys': 'Dragon Flies',
+    'Faerie Flys': 'Faerie Flies',
+    'Vorpal Bunnys': 'Vorpal Bunnies',
+    'Beautys': 'Beauties',
+    'Stone Sentrys': 'Stone Sentries',
 }
 ITEM_DAT = ('DATA07/ITEM.DAT', 'DISPLASER', 'DISPLACER')
 

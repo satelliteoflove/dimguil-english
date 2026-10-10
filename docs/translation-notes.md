@@ -201,8 +201,7 @@ The preferred fix is a close-to-literal reading, fitted to the box.
     and these fonts have no letter pairs to save room. The Gremlin and Cutie Thief
     records also put a two-byte line break in the name, so even "Small Silhouette" is
     17 there. Small Shadow is the literal ちいさなかげ, the Japanese behind most of
-    them, and it keeps "Small". It also matches "Winged Shadow(s)", proposed for
-    はばたくかげ below. "Tiny Silhouette(s)" fit too and was tried first; Chris
+    them, and it keeps "Small". "Tiny Silhouette(s)" fit too and was tried first; Chris
     dropped it because none of these monsters is tiny. The developer used the one name
     for four Japanese ones, and they stay merged: ちいさなかげ (Mad Monkey, Vorpal
     Bunny, Magical Rabbit), はいずるぶったい "crawling thing" (2-Head Toad, Fang),
@@ -231,6 +230,17 @@ The preferred fix is a close-to-literal reading, fitted to the box.
     9ヘッド ("9 Head") and is fine.
   Sources: the Online Nahuatl Dictionary (nahuatl.wired-humanities.org, Xochitonal) and
   the day-sign list on Wikipedia's Tōnalpōhualli page.
+- **Flap Insect and Flap Figure stay; the -y plurals are fixed (Chris, 2026-10-09).**
+  Both are unidentified names for はばたくかげ ("flapping shadow"): Flap Insect(s) for
+  the Giant Mosquito, Dragon Fly and Faerie Fly, Flap Figure(s) for the Camazotz. Flap
+  Figure is the series' own: Wizardry Gaiden IV (SFC) uses "Flap Figure(s)" for
+  はばたくかげ on its bats, bees, crows and faeries (Bartok's Trading Post,
+  `data/monsters/g4/sfc.json`), and Flap Insect is Dimguil's insect version of it. So the
+  earlier proposal, Flying Insect(s) and Winged Shadow(s), is dropped. The plurals were
+  plain errors: Dragon Flys, Faerie Flys, Vorpal Bunnys, Beautys and Stone Sentrys are
+  now Dragon Flies, Faerie Flies, Vorpal Bunnies, Beauties and Stone Sentries. Dragon
+  Flies (Wizardry I, II, IV and VI) and Vorpal Bunnies (Wizardry I and others) are the
+  series' plurals. 17 slots in DATA02 (`scripts/namefixes.py`).
 
 ## To revisit
 
@@ -265,9 +275,6 @@ The preferred fix is a close-to-literal reading, fitted to the box.
     the Mythical list.
 - **Other naming.** "Lithograph of the Sun" vs LITHOGRAPH OF SUN, and "labyrinth" vs
   "maze" for 迷宮 (checklist Q6).
-- **Unidentified monster names.** "Flap Insect(s)" and "Flap Figure(s)" for はばたくかげ;
-  proposed "Flying Insect(s)" and "Winged Shadow(s)", plus the plurals "Dragon Flys" and
-  "Faerie Flys" (`npc-review.md`).
 - **Catalog 8:2, Giant Spider.** 女郎蜘蛛 (jorōgumo) is "an arachne" as a stopgap;
   "spider-woman" and "drider" were the alternatives (`sweep-review.md`).
 - **Item 1:5, Anointed Mace.** Approved but flagged for another look.

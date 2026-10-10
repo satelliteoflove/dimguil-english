@@ -157,7 +157,6 @@ NPC_MES5 (Zaril, Fritillaria, Gaura)
 
 - Unidentified monster names (DATA02/M_DT*.BIN, the disc's own English): "Flap
   Insect(s)" for the Giant Mosquito, Dragon Fly and Faerie Fly, and "Flap Figure(s)"
-  for the Camazotz. All four are はばたくかげ ("flapping shadow") in Japanese. Proposed:
-  "Flying Insect(s)" and "Winged Shadow(s)" (17-character slots; "Fluttering Insects"
-  doesn't fit), and fixing the plurals "Dragon Flys" and "Faerie Flys". Awaiting
-  Chris's decision.
+  for the Camazotz. All four are はばたくかげ ("flapping shadow") in Japanese. Settled
+  2026-10-09: both names stay (Gaiden IV uses Flap Figure), and the plurals are fixed;
+  see translation-notes.
