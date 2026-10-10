@@ -38,6 +38,23 @@ SLOTS = {
     'Vorpal Bunnys': 'Vorpal Bunnies',
     'Beautys': 'Beauties',
     'Stone Sentrys': 'Stone Sentries',
+    # The rest of the bestiary: a typo, and names garbled from their sources.
+    'Web Spiner': 'Web Spinner',
+    'Web Spiners': 'Web Spinners',
+    'Allo Saurus': 'Allosaurus',
+    'Allo Sauruses': 'Allosauruses',
+    'Uthiu': 'Utiu',
+    'Uthius': 'Utius',
+    'Sopirote': 'Zopilote',
+    'Sopirotes': 'Zopilotes',
+    'Ispusteke': 'Ixpuztec',
+    'Ispustekes': 'Ixpuztecs',
+    # Broken where the Nahuatl words meet: nex(tli) "ash" + tepehua "scatterer",
+    # tepe(tl) "mountain" + yollotl "heart".
+    'Neshu{ff21}teper': 'Nex{ff21}tepehua',
+    'Neshu{ff21}tepers': 'Nex{ff21}tepehuas',
+    'Tepeyo{ff21}ryotl': 'Tepe{ff21}yollotl',
+    'Tepeyo{ff21}ryotls': 'Tepe{ff21}yollotls',
 }
 ITEM_DAT = ('DATA07/ITEM.DAT', 'DISPLASER', 'DISPLACER')
 

@@ -242,7 +242,9 @@ inside a line use `'`, and `npcfit.py` catches the rest.
   Silhoutte(s)", as "Small Shadow(s)". The Mythical list's Mesoamerican names have no
   Wizardry precedent at all, so they follow the Nahuatl: Shocitnal, Oserotoru,
   Inkuintori and Kuautori became Xochitonal, Ocelotl, Itzcuintli and Cuauhtli
-  (`docs/shots/mythical-names`). A name has up to eight copies:
+  (`docs/shots/mythical-names`). The rest of the bestiary got the same check: seven more
+  (Web Spinner, Allosaurus, Utiu, Zopilote, Ixpuztec, Nextepehua, Tepeyollotl;
+  `docs/shots/bestiary-names`). A name has up to eight copies:
   the Compendium lists, three item lists, the card game, the DATA02 monster records
   (18-byte slots, 16 glyphs) and a stray record inside BATTLE.BIN, which has to be
   patched in asm because the asm step copies BATTLE.BIN over the binary patches. The
