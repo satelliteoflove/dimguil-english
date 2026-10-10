@@ -22,6 +22,7 @@ as in the Japanese.
 import json, os, re, sys
 sys.path.insert(0, os.path.dirname(__file__))
 import descfit
+import npcquotes
 
 ROOT = os.path.join(os.path.dirname(__file__), '..')
 WIDTH = 288
@@ -85,6 +86,8 @@ def string_problems(text, src):
         problems.append(str(e))
     if sorted(CODE.findall(text)) != sorted(CODE.findall(src)):
         problems.append(f'codes {CODE.findall(text)} vs source {CODE.findall(src)}')
+    if npcquotes.close(text, src) != text:
+        problems.append('speech quote not closed (npcquotes.py)')
     return problems
 
 

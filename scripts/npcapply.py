@@ -5,10 +5,12 @@
 
 OVERLAY maps "n:idx" to the full new translation of string idx in NPC_MESn (the same
 format `npcfit.py --overlay` checks). With KEYs, only those entries are applied;
-otherwise all of them. The files keep their formatting (4-space JSON, no trailing
+otherwise all of them. Quotes are closed on the way in (npcquotes.py). The files keep their formatting (4-space JSON, no trailing
 newline), so a commit shows only the changed strings.
 """
 import json, os, sys
+sys.path.insert(0, os.path.dirname(__file__))
+from npcquotes import close, sources
 
 ROOT = os.path.join(os.path.dirname(__file__), '..')
 
@@ -22,7 +24,7 @@ def main():
         if n not in files:
             path = os.path.join(ROOT, f'translations/NPC_MES{n}.OBJ.json')
             files[n] = (path, json.load(open(path, encoding='utf-8')))
-        files[n][1]['sections'][0]['strings'][idx]['translation'] = overlay[key]
+        files[n][1]['sections'][0]['strings'][idx]['translation'] = close(overlay[key], sources(n)[idx])
     for path, data in files.values():
         open(path, 'w', encoding='utf-8').write(json.dumps(data, ensure_ascii=False, indent=4))
     print(f'applied {len(keys)} strings to {len(files)} files')

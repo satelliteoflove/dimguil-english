@@ -62,6 +62,17 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 
 ### Deliberate choices
 
+- **NPC speech closes its quotes (Chris, 2026-10-10).** The Japanese opens each speech
+  with 「 and never closes it, and the English copied that, so every NPC box showed an
+  opening " and no closing one (Chris noticed in play). Every box of speech now opens
+  and closes: 1,069 strings in NPC_MES1-5 and SISETU 127. Replies shown after a yes/no
+  prompt, which had no speaker line and no quote, open with " where the Japanese has a
+  space in place of 「. Healing boxes close before the spell's name, which isn't spoken.
+  A box that ends mid-sentence ("okay, then,") closes too, since every box stands on
+  its own. `scripts/npcquotes.py` does it, npcapply.py runs it on reviewed scenes, and
+  npcfit.py flags speech left open. No line got too wide, but NPC_MES4 grew past its
+  six sectors and is relocated now, like NPC_MES1-3.
+
 - **Kept on purpose.** The Fire Rock's 「焼け石に水」 is a proverb for futility, kept
   word for word as 'water on a hot stone' because the monster literally is one. The
   Guilty's beheading joke ("making adventurers look the same") stays as implicit as the

@@ -124,8 +124,8 @@ before telling players they can upgrade mid-game.
 
 The goal is that the patch loads no slower than the original disc. Right now every file
 keeps its original LBA, except that a file that outgrows its sectors is appended after the
-last data file (`scripts/relocate.py`). As of 2026-10-10 that's four files: I_NAME_E
-and NPC_MES1-3 move from around LBA 28,500-29,500 to around 163,300, so each load of
+last data file (`scripts/relocate.py`). As of 2026-10-10 that's five files: I_NAME_E
+and NPC_MES1-4 move from around LBA 28,500-29,500 to around 163,300, so each load of
 one of them is a seek across most of the data track and back. NPC_MES loads on every
 NPC encounter (known issue on GitHub).
 
