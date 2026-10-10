@@ -180,8 +180,11 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   (Halycons): a white demon whose upper body rises out of a whirlwind. Dimguil's entry
   (M_CATALG 806; built-in names 453 and 672) keeps the wind theme. The Greek halcyon,
   a bird that calms the winds, doesn't fit this sickle-wielding wind spirit anyway.
-  Sources: the GameFAQs bestiary PAR codes for Wizardry V (SNES, faqs/29262) and the
-  Five Trials atwiki monster list (w.atwiki.jp/wiz-fo/pages/27.html, picture 202).
+  Sources: the GameFAQs bestiary PAR codes for Wizardry V (SNES, faqs/29262), the
+  Five Trials atwiki monster list (w.atwiki.jp/wiz-fo/pages/27.html, picture 202), and
+  Bartok's Trading Post's monster data, which has Halycon(s) in the Apple II Wizardry V
+  (`data/monsters/5/ap.json`) and the Game Boy Color Wizardry (`data/monsters/2/gbc.json`,
+  あくま "Demonic Figure" unidentified).
   Before calling any developer name a misspelling, check whether an earlier Wizardry
   uses it.
 - **Misspelled names fixed (Chris, 2026-10-09).** Four of the developer's English
@@ -241,6 +244,22 @@ The preferred fix is a close-to-literal reading, fitted to the box.
     Not a typo.
   - Dragonare (ドラゴネア), Displaser Robe, Old Drumer and Small Silhoutte are typos,
     now fixed (see "Misspelled names fixed" above).
+- **The Mythical list's other names (checked 2026-10-09).** Bartok's Trading Post's
+  monster data for every Wizardry it covers (I-VII, Gaiden I-IV, BUSIN and others) has
+  no precedent for the Mesoamerican names; only Dimguil has them. Death Hawk matches
+  Gaiden III and IV; Basilisk, Minotaur, Centaur and Medusa are standard. Coatl and
+  Quetzalcoatl are spelled right. Suspect, waiting on Chris:
+  - Shocitnal (ショチトナル, "a crocodile monster said to dwell in hell"): Xochitonal,
+    the Aztec iguana or crocodile that guards the waters on the way to Mictlan, the
+    land of the dead. The katakana reads Xochitonal.
+  - Oserotoru, Inkuintori, Kuautori (the four temple guardians with Coatl; the tiger,
+    dog and bird): the Aztec day signs Ocelotl (jaguar), Itzcuintli (dog) and Cuauhtli
+    (eagle). Oserotoru and Kuautori are romanized katakana; Inkuintori is a garbled
+    Itzcuintli. The battle records spell the bird Cuautori, the Compendium Kuautori.
+  - Chany Mask (チャニーマスク, the red mask that works a naked warrior's body; drops
+    the Jade Mask): no source found outside Dimguil and Emonoya, which uses the same
+    spelling.
+  Stone Head is the developer's English for 9ヘッド ("9 Head"); the English is fine.
 - **Other naming.** "Lithograph of the Sun" vs LITHOGRAPH OF SUN, and "labyrinth" vs
   "maze" for 迷宮 (checklist Q6).
 - **Unidentified monster names.** "Flap Insect(s)" and "Flap Figure(s)" for はばたくかげ;
