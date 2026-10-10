@@ -265,6 +265,9 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   - Tepeyoryotl (テペヨリョトル, a high Monk) is now Tepeyollotl, "heart of the mountain",
     the Aztec jaguar god.
   - Allo Saurus (アロサウルス) is now Allosaurus.
+  - スメリア, the Alchemist consumed by its potions, was "Smelia" in battle and
+    "Stink Man" in the Compendium (both in the original game). The Compendium now
+    says Smelia too.
   The party pictures break two of them across lines; the breaks fall where the
   Nahuatl words meet: Nex/tepehua ("ash"/"scatterer"), Tepe/yollotl ("mountain"/
   "heart"). Compendium list and 28 record slots (`scripts/namefixes.py`).
@@ -303,8 +306,6 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   - Dragonare (ドラゴネア), Displaser Robe, Old Drumer and Small Silhoutte are typos,
     now fixed (see "Misspelled names fixed" above), as are the Mesoamerican names in
     the Mythical list.
-- **スメリア has two names (found 2026-10-09).** "Smelia" in battle (M_DT016, 235),
-  "Stink Man" in the Compendium. Waiting on Chris.
 - **Other naming.** "Lithograph of the Sun" vs LITHOGRAPH OF SUN, and "labyrinth" vs
   "maze" for 迷宮 (checklist Q6).
 - **Catalog 8:2, Giant Spider.** 女郎蜘蛛 (jorōgumo) is "an arachne" as a stopgap;
