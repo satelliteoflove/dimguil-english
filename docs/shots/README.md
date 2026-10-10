@@ -24,6 +24,7 @@ before is from Chris's own play-through state, shown at 2x.
 | `bestiary-names` | Garbled names in the rest of the bestiary (Uthiu, Sopirote...); now as their sources spell them | 7940121 |
 | `name-smelia` | スメリア was "Stink Man" in the Compendium, "Smelia" in battle; now Smelia in both | e053e3a |
 | `name-breastplate` | Built-in name "B-PLATE OF GOODNESS"; now BREASTPLATE OF BOONS | 859fab6 |
+| `name-iron-gloves` | Built-in name "STEEL GLOVES" for 鉄の小手; now IRON GLOVES, as in Wizardry III's ports | 6c01bd6 |
 | `jpn-lock` | "Jpn" names drew as a jumble; the switches are now locked on "Eng" | 18ea18f |
 
 No natural before/after pair exists for Boltac's Trade captions (f5d4e8f), the event
