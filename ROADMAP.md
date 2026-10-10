@@ -16,7 +16,9 @@ Japanese, rough, or badly formatted.
 **Beta (0.8.x).** Every piece of text the player can reach is in English. The work is
 fixing glaring and game-breaking bugs and cleaning up rough translations. v0.8.0's
 condition, that the text removed at the original team's request be translated again,
-was met on 2026-10-03. v0.8.0 is tagged and the repo made public without an
+was met on 2026-10-03. As of 2026-10-10 v0.8.0 isn't tagged yet and the repo is still
+private. Left to do: the release readme, the changelog entry and the release title
+(Chris writes these), then make the repo public and push the tag. There's no
 announcement, and the README says not to play it until 0.9.0. Further 0.8.x releases
 follow as fixes land.
 
@@ -72,9 +74,20 @@ English. Checked in play: the level-up stat messages and the catalog's item name
 Inferred but not seen in play: the ITEM.DAT alignment and sex labels, and that ITEM_SE
 and ITEM_CA are never loaded.
 
-Typos in the game's own English names are fixed: Dragonaire, Old Drummer, DISPLACER
-ROBE and Small Shadow(s) ("Small Silhouettes" is too long for its name slot). Maelific (Wizardry I) and NUNCHAKA (Wizardry VI and VII) are the
-series' own spellings.
+The patch is English only: the four language switches are locked on "Eng", since the
+Japanese names would draw as a jumble (the README has to say so).
+
+The game's own English names were reviewed on 2026-10-09 and 2026-10-10, checking
+earlier Wizardry games first (`docs/translation-notes.md`). Fixed: typos (Dragonaire,
+Old Drummer, DISPLACER ROBE, Web Spinner, Allosaurus), Small Shadow(s) ("Small
+Silhouettes" is too long for its name slot), -y plurals (Dragon Flies, Vorpal Bunnies
+and others), the Mesoamerican names as their sources spell them (Xochitonal, Ocelotl,
+Itzcuintli, Cuauhtli, Utiu, Zopilote, Ixpuztec, Nextepehua, Tepeyollotl), Smelia in
+the Compendium as in battle, and three items renamed: BREASTPLATE OF BOONS, IRON
+GLOVES (Wizardry III's name for 鉄の小手) and TABLET OF THE SUN. Kept as the series or
+the developer had them: Halycon (Wizardry V), Maelific (Wizardry I), NUNCHAKA (Wizardry
+VI and VII), BENT STAFF (Wizardry I), Flap Figure (Gaiden IV), Astro Zombie and Chany
+Mask. Bartok's Trading Post shows the patch's names with the disc's beside them.
 
 ### Quality passes (to reach 0.9)
 
@@ -88,8 +101,9 @@ series' own spellings.
 3. Our own first-pass text that hasn't had a second look: item and monster
    descriptions (ITEM, M_CATALG), MESSAGE, combat verbs. A first step before v0.8.0:
    every item and monster description was read beside the Japanese for LLM habits,
-   and the 37 hits are being reviewed one at a time (`docs/sweep-review.md`, started
-   2026-10-03). That isn't the full second look these files still need.
+   and the 37 hits were reviewed one at a time (`docs/sweep-review.md`, 2026-10-03 to
+   2026-10-04). That isn't the full second look these files still need; the items
+   flagged for another look are under "To revisit" in `docs/translation-notes.md`.
 
 Total translation is about 44,700 words as of 2026-09-26.
 
@@ -110,10 +124,10 @@ before telling players they can upgrade mid-game.
 
 The goal is that the patch loads no slower than the original disc. Right now every file
 keeps its original LBA, except that a file that outgrows its sectors is appended after the
-last data file (`scripts/relocate.py`). As of 2026-09-30 that's five files: SISETU,
-I_NAME_E and NPC_MES1-3 move from around LBA 28,300-29,500 to around 163,300, so each
-load of one of them is a seek across most of the data track and back. NPC_MES loads on
-every NPC encounter.
+last data file (`scripts/relocate.py`). As of 2026-10-10 that's four files: I_NAME_E
+and NPC_MES1-3 move from around LBA 28,500-29,500 to around 163,300, so each load of
+one of them is a seek across most of the data track and back. NPC_MES loads on every
+NPC encounter (known issue on GitHub).
 
 Decided 2026-10-07: keep the original file order, and let a file that grew push the files
 after it along, instead of moving it to the end. relocate.py already rewrites the
