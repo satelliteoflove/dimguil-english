@@ -93,7 +93,7 @@ NPC_MES2 (Balbo, Rosea, Artemisia, Reiran, Alba, Gaura)
 - [x] 2. Alba's past (233, 180 and the thread around them), HIGH, done 2026-10-05
 - [x] 3. Balbo's progress reports (81-89, 142, 261-265), HIGH, done 2026-10-05
 - [x] 4. Goodbyes when a party member is dead or lost (34-46), MEDIUM, done 2026-10-05
-- [ ] 5. Services: body collection offer, Balbo's sarcastic せいぜい (123, 143-145; 142 was done in scene 3), MEDIUM
+- [x] 5. Services: body collection offer, Balbo's sarcastic せいぜい (123, 143-145; 142 was done in scene 3), MEDIUM, done 2026-10-10
 - [ ] 6. Rosea's Kadorto warning (130), MEDIUM: currently a question the player can't answer
 - [ ] 7. First meeting, the wolfish man (13, 22), LOW-MEDIUM
 - [ ] 8. Talk odds and ends (70, 173, 199), LOW
