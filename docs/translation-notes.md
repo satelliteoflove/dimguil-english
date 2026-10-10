@@ -206,7 +206,13 @@ The preferred fix is a close-to-literal reading, fitted to the box.
     for four Japanese ones, and they stay merged: ちいさなかげ (Mad Monkey, Vorpal
     Bunny, Magical Rabbit), はいずるぶったい "crawling thing" (2-Head Toad, Fang),
     ひとがたのほのお "human-shaped flame" (Fire Rock) and ちいさなけもの "small beast"
-    (the Gremlins, Cutie Thief).
+    (the Gremlins, Cutie Thief). Making room was considered and dropped (Chris): the
+    Japanese slots are dead since the English lock, so the game could be pointed at
+    them, but that means changing the name-fetch code and every record. Measured over
+    all 682 distinct English names in the monster and party records, this is the only
+    one that ever needed more than 16 glyphs; 13 of the developer's names fill all 16
+    (Skeleton Warrior, Giant Mosquitoes...) and none looks cut short, nor differs from
+    the Compendium's separately stored list.
 
   Each name has several copies: the Compendium's name lists (M_CATALG), the item lists
   (I_NAME_E twice, ITEM.DAT, the card game's MESSAGE.DAT), the monster records in
