@@ -91,6 +91,18 @@ wording as 35 and 36.
 Every string also had the present-tense sweep and full-question prompts applied, so
 unreviewed strings are consistent but not yet approved.
 
+## Real event box sweep (2026-10-10)
+
+Every EVENTMES string was printed through the real event box at the Shrine door
+(`scripts/evsweep.py`, 317 strings, 492 pages), each page's text read back from the
+glyph sprites and compared with the translation (`evsweep.py --report`). No glyph pool
+filled, no page count was off and no wording differed, apart from the sweep's own
+artifacts: names where the text has a name code (73, 218, 224, 225), the line the box
+keeps when a page scrolls on without a break (81), and the door's own message after
+the last page (313, 315). Every line sits inside the box (x 32-316). Page 309 ("You comb
+through the rubble...") ends on a page break with no wait before it, so the harness
+caught a blank box; the Japanese is built the same way. Watch it in play.
+
 ## Still open
 
 - Naming across files: 迷宮 is "labyrinth" in some event strings and "maze" elsewhere.
