@@ -279,6 +279,28 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   - Dragonare (ドラゴネア), Displaser Robe, Old Drumer and Small Silhoutte are typos,
     now fixed (see "Misspelled names fixed" above), as are the Mesoamerican names in
     the Mythical list.
+- **The rest of the bestiary checked (2026-10-09).** Of 249 distinct Dimguil monster
+  names (records, unidentified names and the Compendium list), 96 appear in another
+  Wizardry in Bartok's Trading Post's data. Of the rest, the Maya names match the Popol
+  Vuh as Recinos spells them: Ahalmez, Ahalpuh, Chamiabac, Chamiaholom, Cuchumaquic,
+  Camazotz, Gucumatz, Holom-Tucur, Iqui-Balam, Ixquic, Ixtah (the maiden sent to
+  seduce the gods), Tamazul, Tucumbalam, Vucub-Caquix, Xecotcovach; Chamalcan is the
+  Kaqchikel bat god. Suspect, waiting on Chris:
+  - Web Spiner (ウェブスピナー): Web Spinner, a typo.
+  - Sopirote (ソピローテ, the skull-faced bird of ill omen): Zopilote, Mexican Spanish
+    for the black vulture.
+  - Uthiu (ウティウ, the two-headed coyote): Utiu, the Popol Vuh's coyote (Utiú, Utiw).
+  - Ispusteke (イスプステケ, Hell's ripper): Ixpuztec ("Broken Face"), a being of
+    Mictlan; the katakana follows the Spanish Ixpuzteque.
+  - Neshuteper (ネシュテペア, the old man who scatters ash): Nextepehua, "Scatterer of
+    Ashes", another being of Mictlan.
+  - Tepeyoryotl (テペヨリョトル, a high Monk): Tepeyollotl, "heart of the mountain",
+    the Aztec jaguar god.
+  - Allo Saurus (アロサウルス): Allosaurus.
+  - スメリア is "Smelia" in battle and "Stink Man" in the Compendium.
+  Left alone: the developer's own inventions (Hims, Kel, Lala, Ugo, Gigatops...),
+  Xicalli, Mictlan, Chai-zanic (no source found), Goblin Canon (a Priest; canon as in
+  clergy), and Demon Liche / Dragon Liche (an old spelling of lich).
 - **Other naming.** "Lithograph of the Sun" vs LITHOGRAPH OF SUN, and "labyrinth" vs
   "maze" for 迷宮 (checklist Q6).
 - **Catalog 8:2, Giant Spider.** 女郎蜘蛛 (jorōgumo) is "an arachne" as a stopgap;
