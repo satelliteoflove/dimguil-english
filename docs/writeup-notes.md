@@ -251,6 +251,17 @@ inside a line use `'`, and `npcfit.py` catches the rest.
   slot size is why "Small Silhouettes" couldn't simply be spelled right. Shots:
   `docs/shots/name-dragonaire`, `name-old-drummer`, `name-displacer-robe` (befores from
   the 2026-10-08 crawls).
+
+## Reading the game's code
+
+Chris, 2026-10-10: "I'm tired of making guesses about what happens when and how in the
+game." Until then the code had been read only where the translation needed it (the text
+printer, the glyph pools). This is the story of reading the game's rules out of it.
+Findings are in `docs/re/` (index: `docs/re/README.md`); the summary is in
+`engine-notes.md`.
+
+### The question that started it
+
 - What Balbo's body recovery costs (2026-10-10). Chris asked whether "That lot had
   some mighty fine gear on 'em" meant Balbo keeps the gear, and whether the bodies are
   even the player's. The answer came from the code, not the web. The NPC_MES files
@@ -265,8 +276,14 @@ inside a line use `'`, and `npcfit.py` catches the rest.
   gold, Balbo every item, Fontana half the gold and every other item slot. The offer
   only appears when another of the player's parties is wiped out in the maze, and then
   on a coin flip. Nothing was tested in the emulator; it rests on reading the code.
-  Details and addresses: engine-notes.md, "Body recovery by NPC parties". Work files:
-  rips/probe/bodies/.
+  Details and addresses: docs/re/C-talk.md §5 (it began as engine-notes, "Body recovery
+  by NPC parties", since folded into the chapter). Work files:
+  rips/probe/bodies/. Two things from that trace held up when the whole code was read the next day: the
+  three fees, and that the bodies are the player's own. One didn't: the offer isn't a
+  coin flip of its own but the third of the talk's service rolls (C-talk.md §4).
+
+### Setting up
+
 - Setting up a decompiler for the whole game (2026-10-11). Chris asked for the game's
   rules to be read out of its code, not guessed, so the first step was Ghidra 12.1.4 run
   headless with lab313ru's PSX loader, which knows the PS-X EXE format and labels
@@ -284,6 +301,81 @@ inside a line use `'`, and `npcfit.py` catches the rest.
   rebuilt in about 8 minutes and refreshed in under a minute. With the roster and party
   records typed, Balbo's fee reads `roster[i].items[k] = 0xffff`. Map and workflow:
   code-map.md. Tools: scripts/re/.
+  A late catch: the first build read `rips/q7iso`, a copy of our patched build, not the
+  original disc. The difference was only our patch sites (checked byte for byte: none
+  touched the item table), and the projects were rebuilt from `rips/clean` (585c983).
+
+### Seven analysts at once (2026-10-11)
+
+The code was split by subsystem among seven agents working in parallel, each with its own
+symbol file, so nobody overwrote anyone. Each wrote a chapter and ended it with how it was
+traced. The short versions:
+
+- **Maze (A).** Looking for Wizardry's usual random roll per step found none. Following the
+  step's calls led to `roamer_meet` and 16 token positions, and from their writers to the
+  routines that place them and decide which NPC parties may appear. The fixed meeting
+  squares, converted to the fan sites' E/N coordinates, landed exactly on the known
+  meeting places: the check that the reading was right. For the time-decay question, two
+  long emulator runs watched four dead characters' records (40 inn nights, then a walk in
+  the maze); the only writes were record copies and compaction.
+- **Camp (B).** Ghidra flattened the spell code's two jump tables into one function that
+  seemed to cast every heal at once, so the tables were read straight from the file and
+  each case followed in the disassembly; Kadorto only made sense that way. Six claims were
+  then checked by button presses alone from the test save (Halito free in camp, Dumapic
+  failing in the Training Maze and still costing a point, "What?" for a heal with nothing
+  to heal, a potion used up on a healthy ally).
+- **NPC talks (C).** The talk scripts don't exist as data: each handler builds them on its
+  own stack every frame. So `scripts/re/talkscripts.py` runs the handlers' own code, a
+  small MIPS interpreter over a RAM dump taken during a talk with Guy, tagging every value
+  read from a global so run-time slots show up. That gave the table of when each of 1,150
+  NPC lines plays, and a dozen bugs and stretches of text nothing reaches.
+- **Battle (D).** BATTLE had no names, and the way in was the dice: it doesn't use the
+  maze's random routine but two tiny generators in the executable with 75 callers between
+  them, so the rules are in about 70 of its 404 functions. Breakpoints on those generators
+  logged each roll's caller and range; breakpoints on the compare instructions caught roll
+  and threshold together, so the to-hit and initiative formulas were checked roll by roll
+  (26 of 26 monster ticks matched). The wipe's item loss turned up while looking for what
+  happens to bodies.
+- **Town (E).** A regex over the C mapped every constant text index to the function that
+  prints it, which named the town's screens in one pass. The Temple was then checked in
+  the emulator without writing to RAM: the town rolls the dice every frame, so waiting a
+  different number of frames before the same presses gave different rolls, and both
+  sides of each threshold could be seen from one state. The tavern's recruit pools
+  matched a fan's tally from a June 2000 message board exactly.
+- **Edge of Town and saves (F).** Resolving each print call to its text labelled most of
+  the Edge of Town in minutes, and turned up a hidden ninth menu entry (Dragon's Cave). The
+  save's checksum was 0xe9 off until a second reading showed the sum is kept inside the
+  image, so it adds its own bytes at the end. A save made in the emulator and reloaded
+  from a cold boot confirmed the layout.
+- **Records (G).** A count of every field the decompiled code touches put the busiest gaps
+  first. The status screen prints most fields with their label strings, which named them;
+  Boltac's weapon compare named the item fields; the class change code named the race and
+  class tables. A premade Dracon Fighter's experience matched the level-5 entry of the
+  first EXP table exactly.
+
+Two of them hit their turn limit before writing anything down and had to be resumed with
+"save what you have first"; after that every agent committed after each step.
+
+### Checking (2026-10-11)
+
+- **Fallen parties.** Chris asked for every routine that touches a party left wiped in
+  the maze. Every writer of the character records and the party table was read, then the
+  scenario replayed: 40 nights at the inn, back into the maze, onto the bodies' square,
+  with every write logged. Nothing takes from the bodies. Two new bugs came out of it,
+  among them the Temple's failed raise from ashes, which scrambles the party table
+  (fallen-parties.md).
+- **Descriptions.** Every item, spell and Compendium description was checked against the
+  records and code: 18 spell ranges in the original are wrong (Lahalito says 6-58 and
+  rolls 6d6), and three of our own lines mistranslated 力 as the Strength stat
+  (description-check.md).
+- **A garbled battle line** ("Mars looses at Flap Insect wi / th / 0088ththerer...") in
+  the maze analyst's test run looked like a patch bug. It wasn't: the battle text loads
+  once at boot and stays in RAM, and the test state descended from one made on an older
+  build. The same line drawn on the current build was fine. It's a warning for anyone
+  carrying an emulator save state across a patch update.
+- **Merging (phase 4).** The chapters were reconciled with each other and with the code:
+  a dozen corrections, among them the rescue offer being open from the start of the game
+  rather than from the Shrine, and Sogref targeting an ally rather than its caster.
 
 ## Fixing the original game's bugs
 

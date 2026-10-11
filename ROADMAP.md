@@ -89,6 +89,27 @@ the developer had them: Halycon (Wizardry V), Maelific (Wizardry I), NUNCHAKA (W
 VI and VII), BENT STAFF (Wizardry I), Flap Figure (Gaiden IV), Astro Zombie and Chany
 Mask. Bartok's Trading Post shows the patch's names with the disc's beside them.
 
+### The game's code and the original's bugs
+
+On 2026-10-10 and 11 the game's rules were read out of its code with Ghidra, so questions
+about what happens when no longer rest on guesses: the maze and its encounters, the camp,
+every NPC talk and when each line plays, battle, the town, the Edge of Town and the
+save, and the records. The findings are in `docs/re/` (index `docs/re/README.md`),
+summarized in `docs/engine-notes.md`; the tools are in `scripts/re/` (`docs/code-map.md`).
+
+Decided 2026-10-11: the patch fixes the original game's clear bugs, and reopens content
+a bug cut off. Ten are fixed (`asm/bugfix_*.asm`, `docs/re/bugs.md` group 1): NPC lines
+that played in the wrong place or never (Guy's statue warning, Rosea's and Cephala's
+heals, Alstron's Madi, the pit scene, Fritillaria's "walkin' corpse", Cresson's speech
+after the Decipher table, the rerolled chat topics), the Temple scrambling the party
+table after a failed raise from ashes, and the BROKEN ITEM purge clearing the wrong
+slot. Waiting on Chris (`docs/re/decisions.md`): content that looks deliberately cut
+(an NPC identify service, Zaril's healing), fixes that would change the balance (a wipe
+destroys only one character's items), and whether to correct the original's wrong
+numbers in spell and item descriptions (`docs/re/description-check.md`). Still to
+check: a natural-play test of the NPC rescue fees (`docs/re/rescue-test.md`), and
+bugs.md 2.7, 2.8, 3.3 and 3.4.
+
 ### Quality passes (to reach 0.9)
 
 1. NPC dialogue cultural review (NPC_MES1-5). In progress; tracked in
@@ -104,6 +125,9 @@ Mask. Bartok's Trading Post shows the patch's names with the disc's beside them.
    and the 37 hits were reviewed one at a time (`docs/sweep-review.md`, 2026-10-03 to
    2026-10-04). That isn't the full second look these files still need; the items
    flagged for another look are under "To revisit" in `docs/translation-notes.md`.
+   The descriptions were also checked against what the game does
+   (`docs/re/description-check.md`, 2026-10-11), which found three of our lines
+   mistranslating 力 and many wrong numbers in the original.
 
 Total translation is about 44,700 words as of 2026-09-26.
 
@@ -118,7 +142,10 @@ depends on where they turn up ("To check in play or in the code").
 
 Saves live on the memory card, and as far as we know the patch doesn't touch the save
 format, so a save should carry over from one release to the next. Verify this once
-before telling players they can upgrade mid-game.
+before telling players they can upgrade mid-game; the format is now mapped
+(`docs/re/F-edge-save.md`, `scripts/re/savefile.py`). Carry emulator save states across
+a patch update only as far as the memory card: a state keeps the battle text it booted
+with (`docs/engine-notes.md`, "Loading files").
 
 ### Disc layout (to reach 0.9)
 
