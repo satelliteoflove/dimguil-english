@@ -1,0 +1,57 @@
+module,address,name,kind,confidence,source,note,type
+JOUKA,0x800a2198,town_main,function,confirmed,code read 2026-10-11 (E),"Town loop, called from main each frame. town_state 0x80079b18 picks the facility: 10 tavern, 15 inn, 20 Boltac's, 25 temple, 30 Training Grounds, 35 King, 40 Edge of Town, 45 King's ending. On return from the maze it moves dead members (status >= 0x20, or hp <= 0 which it marks 0x80) out of the party and announces each with SISETU 614.",
+JOUKA,0x800a471c,menu_input,function,inferred,code read 2026-10-11 (E),"Grid cursor input for town menus (x, y, columns, rows); returns 4 on confirm, 2 on cancel, 5-8 for the shoulder shortcuts.",
+JOUKA,0x800a4898,king_audience,function,confirmed,code read 2026-10-11 (E),"Audience with the King (SISETU 323-329). Picks one line from party roster +0xc5 bits and story flags: 0x145 restores spell points; 0x146 gives each member 10000 G once (flag 0x80079b28 bit 0x40000, needs 0x80079b44 bit 0x400); 0x147, 0x149 set roster +0xc5 bits 8 and 0x10.",
+JOUKA,0x800a52cc,king_ending,function,inferred,code read 2026-10-11 (E),King's scene with SISETU 322 (the priestess was fated not to return); entered from town_main state 45 after item 0x142 is taken from a returning member.,
+JOUKA,0x800a6c40,boltac_stock_init,function,inferred,globals.json (only JOUKA writer of boltac_stock besides MCARD loads),Writes boltac_stock. Not read in detail.,
+JOUKA,0x800a79d4,tavern_main,function,confirmed,code read 2026-10-11 (E),Gilgamesh's Tavern menu (town_state 10).,
+JOUKA,0x800a846c,tavern_add_member,function,confirmed,code read 2026-10-11 (E),"Add to party. Lists roster entries with status < 0x20, area 0xff, not already in the party. Alignment: good refused if the party has evil, evil refused if it has good, anyone refused if it has both (SISETU 9). Writes the slot's alignment byte (0, 0x40, 0x80) at current party +0x0e.",
+JOUKA,0x800aa0a4,tavern_remove_member,function,inferred,strings 11/12,Remove from party.,
+JOUKA,0x800aa444,tavern_inspect,function,inferred,string 13,Inspect a party member.,
+JOUKA,0x800aab28,tavern_table,function,inferred,string 35,The card table (Go to Table).,
+JOUKA,0x800ab08c,tavern_recruit,function,confirmed,code read 2026-10-11 (E),"Recruit Members: picks one of 20 built-in characters (bios SISETU 361-380, joined bitmask 0x80079700) from pools gated by party alignment, a wiped party anywhere (4, 5, 6, 18), progress_bits 0x10 (good 1, 11, 13; evil 0, 9, 15, 19), roster +0xc5 bit 1 (8) and 0x80079754 bit 0x800000 (3). Always: 2, 7, 10, 12, 14, 16, 17.",
+JOUKA,0x800ac684,fortune_teller,function,confirmed,code read 2026-10-11 (E),Fortune Teller: topic list 0x8007e7c8 built from progress_bits and story flags; topic n prints SISETU 345+n (title) and 331+n (text). Free.,
+JOUKA,0x800ae0c0,training_main,function,confirmed,strings,Training Grounds menu (town_state 30).,
+JOUKA,0x800af5d8,training_create,function,confirmed,strings 158-169,Character creation (name entry calls into HAZURE's patched name code paths are separate). Not read in detail (analyst F).,
+JOUKA,0x800b264c,training_view,function,confirmed,code read 2026-10-11 (E),"View a character (SISETU 170). Cycles through every roster entry with no status filter, so dead and maze-bound characters can be inspected here, items included.",
+JOUKA,0x800b32d4,training_delete,function,inferred,strings 172/173,Delete a character.,
+JOUKA,0x800b3e24,training_rename,function,inferred,strings 174/175,Rename.,
+JOUKA,0x800b6eec,training_reorder,function,inferred,strings 181/182,Reorder the roster.,
+JOUKA,0x800b9f8c,levelup_messages,function,confirmed,code read 2026-10-11 (E),"Prints the level-up results from levelup_flags: stat gained/lost (SISETU 67-78 or 44-55 by config[3]), new spells (56), HP up (581/582).",
+JOUKA,0x800ba6e0,boltac_main,function,confirmed,strings,Boltac's Trading Post (town_state 20).,
+JOUKA,0x800bae4c,boltac_menu,function,inferred,strings,Boltac's: who trades / what to do.,
+JOUKA,0x800bb914,boltac_buy,function,confirmed,code read 2026-10-11 (E),"Purchase: price from item_table; bought items are identified (|0x4000), count items (subtype 0x14/0x15) come with 5; stock -1 if positive. Selling out an item clears 0x80079b44 bit 0x40000000. Beginner/intermediate/advanced sets need 5 free slots and cost the sum of their items.",
+JOUKA,0x800bf9ec,boltac_sell,function,confirmed,code read and emulator test 2026-10-11 (E),"Vend: price 0 can't be sold (SISETU 96); unidentified (no 0x4000) or cursed (0x8000) can't be sold (97 or 113); equipped (0x2000) asks first (98). Pays price/2, or price/10 x count for subtype 0x14/0x15; stock +1 (count items: stock set to 0xff). If nothing is sold out and the flag is clear, gives a free item 0x133 with SISETU 127.",
+JOUKA,0x800c0ef4,boltac_uncurse,function,confirmed,code read 2026-10-11 (E),"Dispel Curse: cost price/2 (items 0x133-0x143 use item_table.sell); the cursed item is destroyed, not freed.",
+JOUKA,0x800c1de8,boltac_identify,function,confirmed,code read 2026-10-11 (E),Identify: cost price/2; sets 0x4000 on the item word.,
+JOUKA,0x800c51e0,inn_main,function,confirmed,strings,Adventurer's Inn (town_state 15).,
+JOUKA,0x800c5e34,inn_stay,function,confirmed,code read and emulator test 2026-10-11 (E),"Rooms 0-5: Stables free (one day, +0x12; no HP), Cot 10 G (+1 HP a week), Economy 50 (+3), Merchant Suite 200 (+7), Royal Suite 500 (+10), Special Room 10000 (full). Paid rooms charge and age the character a week (+0x11) per tick until HP is full or the player cancels; 52 weeks make a year (+0x10, Happy birthday). Then one level-up check.",
+JOUKA,0x800c8b50,temple_main,function,confirmed,code read and emulator test 2026-10-11 (E),"Temple of Cant (town_state 25). Its patient list (rescue_candidates) holds roster entries with status 0x20..0x1ff, area 0xff and not in the party. Menu: 0 Heal, 1 Retrieve, 2 Drop Off, 3 back.",
+JOUKA,0x800c95f0,temple_heal,function,confirmed,code read and emulator test 2026-10-11 (E),"Heal: fee = level x 100 (paralyzed 0x20), 200 (stone 0x40), 250 (dead 0x80), 500 (ashes 0x100), paid by one party member. Paralysis and stone always cure. Dead: rand_upto(99) < 60 + 2 x VIT revives with 1 HP, else ashes. Ashes: < 68 + 2 x VIT revives with full HP, else lost (status 0x200, name cleared, kept in lost_names).",
+JOUKA,0x800cb274,temple_retrieve,function,inferred,string 150,Retrieve a character from the temple into the party.,
+JOUKA,0x800cba20,temple_drop_off,function,confirmed,emulator test 2026-10-11 (E),Drop Off: moves a party member with status >= 0x20 out of the party into the temple's care (string 151 if nobody needs it).,
+JOUKA,0x800da7fc,town_redraw,function,inferred,callers,Redraws the town screen; reads lost_names.,
+JOUKA,0x800dba48,town_bar_print,function,confirmed,code read 2026-10-11 (E),"Prints a centred line: (y, text file, string, layer). File 0 STATUS.OBJ, 4 SISETU.OBJ (pointer table 0x8008a010).",
+JOUKA,0x800dbac8,town_text_expand,function,confirmed,code read 2026-10-11 (E),"text_expand of (file, string) into text_buffer, for the long story boxes.",
+JOUKA,0x800dbcd0,party_down_count,function,confirmed,code read 2026-10-11 (E),Counts members of a party record with status >= 0x20; -1 for an unused or empty party.,
+JOUKA,0x800dbd7c,town_print,function,confirmed,code read 2026-10-11 (E),"Prints string (file, index) at x, y on a glyph layer through text_expand. File 0 STATUS.OBJ, 4 SISETU.OBJ.",
+JOUKA,0x800a1178,recruit_names,table,confirmed,code read 2026-10-11 (E),"20 x 10-byte names of the tavern recruits, checked against the roster so a name can't join twice.",
+RAM,0x80079b18,town_state,global,confirmed,code read 2026-10-11 (E),"town_main's state: 1-5 arrival and menu, then 10 + 5 x facility (0 tavern, 1 inn, 2 Boltac's, 3 temple, 4 Training Grounds, 5 King, 6 Edge of Town), 45 the ending.",u8
+RAM,0x80079984,temple_heal_state,global,confirmed,code read 2026-10-11 (E),"temple_heal's state ('K' chant and pay, 'P' branch, 'U' cure, 'Z' dead roll, '_' ashes roll, 'i' back to the tavern).",u8
+RAM,0x8007998b,inn_state,global,confirmed,code read 2026-10-11 (E),inn_stay's state.,u8
+RAM,0x800797a4,shop_state,global,inferred,code read 2026-10-11 (E),State inside Boltac's sell/uncurse screens.,u8
+RAM,0x80079aac,temple_fee,global,confirmed,code read and emulator test 2026-10-11 (E),The temple fee being paid.,u32
+RAM,0x80079ab8,print_value,global,inferred,code read 2026-10-11 (E),Number the next town_print shows for a number code (gold amounts and the like).,u32
+RAM,0x800798a6,levelup_flags,global,confirmed,code read 2026-10-11 (E),"What a level-up changed: bits 1/2 STR up/down, 4/8 IQ, 0x10/0x20 PIE, 0x40/0x80 VIT, 0x100/0x200 AGI, 0x400/0x800 LUC, 0x1000 new spell, 0x2000 HP up, 0x4000 died of old age.",u16
+RAM,0x80096720,lost_names,table,confirmed,code read 2026-10-11 (E),"Names (10 bytes each) of the last three characters lost, from the temple or old age; read by MAZE, BATTLE and MCARD talk code too.",u8[30]
+RAM,0x80096858,roster_scratch,global,inferred,code read 2026-10-11 (E),A 0xd0-byte copy of a roster record: the inn keeps the pre-level-up record here to show it; recruiting builds the new character here.,
+RAM,0x80079700,recruits_joined,global,confirmed,code read 2026-10-11 (E),"One bit per tavern recruit (20 bits, 0xfffff = all joined).",u32
+RAM,0x8007e7c8,fortune_topics,table,confirmed,code read 2026-10-11 (E),The Fortune Teller's open topics (0xff = none).,u8[14]
+RAM,0x8007e820,cur_party_align,table,confirmed,code read 2026-10-11 (E),"Each slot's alignment as joined: 0 good, 0x40 neutral, 0x80 evil (current party +0x0e).",u8[6]
+RAM,0x80079b44,story_flags,global,inferred,code read 2026-10-11 (E),"Story and game flags read by the King, Fortune Teller and Boltac's: bits 8, 0x100-0x1000, 0x400 (King's reward), 0x40000000 (no item sold out, the free-item reward was given). Also has the table-0 file shift bit 0x400 per load_file's note, so meanings overlap.",u32
+RAM,0x80079b28,oneshot_flags,global,inferred,code read 2026-10-11 (E),Bit 0x40000: the King's 10000 G reward was given.,u32
+RAM,0x80079888,target_char,global,inferred,code read 2026-10-11 (E),Roster index of the patient at the temple; party slot at the inn.,s8
+RAM,0x8008a010,text_files,table,confirmed,code read 2026-10-11 (E),"Pointers to the loaded text files by number: 0 STATUS.OBJ 0x801ce800, 1 item names, 3 FIGHTMSG, 4 SISETU, 5 0x801dd800, 6 NPC text. Set at boot (0x8001d570).",u32[7]
+JOUKA,0x800dcb70,roster_compact,function,confirmed,code read 2026-10-11 (E),"Closes the gaps left by deleted or lost characters (name ff40) and recounts the roster into 0x80079891 (named party_member_count in seed.csv, but it counts roster entries: the temple, tavern and recruit loops run over roster indexes up to it, and recruiting appends at roster[it]).",
+JOUKA,0x800dccc4,roster_clear_entry,function,confirmed,code read 2026-10-11 (E),"Blanks one roster record (name ff40, stats, gold, items 0, location 0).",
+JOUKA,0x800d5250,items_compact,function,confirmed,code read 2026-10-11 (E),Moves a character's items up over empty slots.,
