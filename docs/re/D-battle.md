@@ -281,6 +281,10 @@ dispel lists and the dispel penalties below).
 3. A spell is picked from the monster's spells that match the column (0x800d0c6c).
    If none fits, it fights, or defends if it can't reach anyone. **[code]**
 4. When the monsters surprised the party they never cast in that first round. **[code]**
+5. When the party surprised the monsters, `battle_main` doesn't call `monster_ai` at all
+   that round, so the monsters do nothing. **[code]** (`battle_wriggle.state` opens with
+   "Preemptive attack!" and no monster acts in round 1 **[emu]**) Between groups the loop
+   makes one extra rand(100) call whose result is thrown away. **[code]**
 
 Reach: a monster whose attacks lack the 0x80 reach bit can only hit the front row, and
 in random encounters only groups 1 and 2 can do that; groups 3-4 need reach (or spells,
@@ -436,9 +440,30 @@ for the party) or double it (+0xce). Damage gets the side's bonus (0x800798b0 or
 | Barenes | 8d8 | group | none, then 0x4000 |
 | Dalosto | (varies)d5 | one | none |
 
-**[code]** (Liqurea, Dalqurea, Kaniqua, Maliqua, Bamoqua, Madalqua go through 0x800b2f94
-and Sios, Lios, Masios through 0x800b34b0, with their own arguments in the handlers; not
-decoded yet **[inf]**)
+**[code]**
+
+**Alchemist clouds.** Liqurea, Dalqurea, Kaniqua, Maliqua, Bamoqua and Madalqua don't do
+damage when cast. `alchemist_cloud` (0x800b2f94) puts a cloud on the target group, which
+`cloud_damage` (0x800b3ef0) burns at the end of each round (phase 0x24) as a group damage
+spell, for 3 rounds. A group holds two clouds; a third pushes out the oldest. Groups 8
+and 9 are the party's two rows, so monsters' clouds work the same way. **[code]**
+
+| Spell | Each round | Element | Message (party / monster) |
+|---|---|---|---|
+| Liqurea | 1d4 | 0x80 | 174 / 180 "engulfed in flames" |
+| Dalqurea | 2d4 | 0x100 | 175 / 181 "in cold" |
+| Kaniqua | 3d4 | 0x4000 | 176 / 182 "in unseen flames" |
+| Maliqua | 4d5 | 0x80 | 177 / 183 "in searing flames" |
+| Bamoqua | 5d8 | 0x4000 | 178 / 184 "in an unseen inferno" |
+| Madalqua | 4d15 | 0x4000 | 179 / 185 "in freezing cold" |
+
+**[code]** Madalqua's message says cold, but its element is 0x4000 (Tiltowait's), so
+resisting cold doesn't help against it.
+
+**Psionic damage** (`psionic_damage` 0x800b34b0): dice damage, then, if the target can
+still act, confusion with chance p (a status save of 100 - p), halved if the target
+resists bit 8 and 80% if it's weak to it. Sios 2d2 and 65%, Lios 2d2 and 65% (skips dead
+targets), Masios 8d2 and 60%, Lasios 8d9 and 60%. **[code]**
 
 ### Status spells and saving throws
 
@@ -464,9 +489,13 @@ of level 8 or below that isn't undead") is exactly right.
 
 ### Healing and buffs
 
-- Heals roll dice (or a fixed amount) up to max HP: Dios 2d4, Dial 2d8, Dialma 3d8,
-  Diomas 3d2, Madial 17d4 on each member, Madi and Kadios to full. Messages 143 (recovers
-  N) and 144 (fully healed); 163/164 for monsters. **[code]**
+- Heals (`spell_heal` 0x800b2b78) roll n dice of 1..sides, up to max HP: Dios 2d4 (2-8),
+  Dial 2d8 (2-16), Dialma 3d8 (3-24), Diomas 3d2 (3-6), Madial 17d4 (17-68) on each party
+  member; Madi and Kadios to full. Messages 143 (recovers N) and 144 (fully healed);
+  163/164 for monsters. **[code]** Analyst B found the camp versions give Dios 2-8, Diomas
+  3-6 and Madial 10-50, so Dios and Diomas agree in both modes, the item descriptions
+  (1-8, 2-6) are wrong in both, and Madial differs between camp and battle (the
+  description says 30-60).
 - AC changes (`spell_ac_change` 0x800b083c): Sogref +2 the caster, Porfic +4 the caster,
   Ponti +1, Bamatu +3 the caster's side, Dilto -2 a group, Morlis -4 a group. **[code]**
 - Cortu: the caster's side's magic screen becomes 3/4 of what it was + 2 × caster level,
@@ -483,9 +512,28 @@ of level 8 or below that isn't undead") is exactly right.
 
 ### Summons and Mahaman
 
-Socordi, Bamordi, Gardi and Zakaldi call 0x800b215c(0..3), which summons creatures into
-group 7 ("appears", 284). Monsters can banish them with Mogato. Mahaman (0x800ace4c) and
-its wish menu (0x800ad0a8, FIGHTMSG 267-283) aren't decoded yet. **[inf]**
+Socordi, Bamordi, Gardi and Zakaldi call `summon_creatures` (0x800b215c) with 0-3. Only
+one summoned group can be out at a time (otherwise "The spell has no effect.", 189). The
+caster's level picks a tier, 0 up to level 9 and (level - 10)/3 + 1 above (8 from level
+31). A rand(100) picks one of seven columns of that tier's row (46%, 16%, 10%, 10%, 7%, 7%,
+4%), and the table at 0x800a1270 turns it into one of the spell's nine creatures (records
+at 0x800d5f58, 0xd0 bytes each, in BATTLE). Size and HP are rolled from the record's dice,
+and the group appears as group 7 (284). Monsters can banish them with Mogato. **[code]**
+
+| Spell | Creatures, weakest tier first (level, group size) |
+|---|---|
+| Socordi | Demon Imp (5, 1d4), Gargoyle (8, 1d4), Lesser Demon (12, 1d4+1), Succubus (15, 2d3), Beast (12, 1), Greater Demon (18, 1d3), Hell Master (12, 1d4), Demon Lord (60, 1), Hims (66, 1) |
+| Bamordi | Zombie (6, 1d5), Skeleton (7, 1d5+2), Gucumatz (9, 1), Banshee (8, 2d3), Murphy's Ghost (11, 1), Elizabeth (14, 1), Wight (12, 1), Vampire Lord (17, 1), Maelific (55, 1) |
+| Gardi | Vampire Bat (5, 1d3+2), Basilisk (8, 1d3), Giant Spider (8, 1d4), Magical Rabbit (8, 2d2), Were Jaguar (11, 1d4), Centaur (9, 2d3), Flack (16, 1d3), Dullahan (36, 1d3), Dragonare (48, 2d2) |
+| Zakaldi | Arch Fighter (6, 1d3), Arch Mage (10, 1d3), Arch Priest (8, 1d3), Sylph (8, 1d3), Ixquic (11, 1d3), Beauty (12, 1), Kel (13, 1), Arch Ninja (10, 1d3), Diamond Knight (100, 1) |
+
+The tier rows are [0..6], [1,0,2..6], [2,3,1,0,4,5,6], [3,2,4,5,1,0,6], [4,3,5,6,2,1,0],
+[5,4,6,7,3,2,1], [6,5,7,8,4,3,2], [7,6,8,5,4,3,2], [8,7,6,5,4,3,2]. So a caster of level 9
+or lower gets the first creature 46% of the time and never the last two, and a caster of
+level 31 or above gets the ninth 46% of the time. **[code]** (names decoded from the
+records' English name field at +0x24)
+
+Mahaman (0x800ace4c) and its wish menu (0x800ad0a8, FIGHTMSG 267-283) aren't decoded yet.
 
 ## Breath
 
@@ -561,7 +609,8 @@ The break chance and result are item fields +0x0e (u8) and +0x10 (u16) in G's It
 - The experience pool (the +0x7c of every monster killed or poisoned to death, not
   dispelled or fled) is divided by the number of survivors and added to each survivor
   ("Each survivor gains N experience!", 198). Nobody gets any if the party fled.
-- Gold (262) and items found (261) come from the chest (below) **[inf]**.
+- Gold (262) and items found (261) come only from the chest, when it's opened (below).
+  **[code]**
 
 ## When the party is wiped out
 
@@ -572,7 +621,9 @@ The break chance and result are item fields +0x0e (u8) and +0x10 (u16) in G's It
    every member's location set to the square they fell on (area, x, y, facing): the
    bodies stay in the maze for a rescue (return 2). In the training maze (area classes
    0x1e-0x25) the party is broken up and the members go back to town (area 0xff), so the
-   training maze needs no body recovery (return 1). That matches Emonoya's tip.
+   training maze needs no body recovery (return 1). That matches Emonoya's tip. Both paths
+   then run steps 3-5, so **a wipe in the training maze still destroys items and halves
+   gold**. **[code]** (the training-maze branch jumps to the same tail at 0x800c5b30)
 3. **Items are destroyed** (`wipe_item_loss` 0x800c5be8): each item in a slot is rolled
    with rand(12): items 72-130, 199-240 and 277-324 are destroyed on 0-7 (2 in 3), every
    other item on 0-2 (1 in 4). The high-risk ranges are the rare weapons (Blade Cusinart
@@ -583,8 +634,10 @@ The break chance and result are item fields +0x0e (u8) and +0x10 (u16) in G's It
 4. **But only one character's items are rolled.** The loop should go over the six
    members, but it reads the member at `actor_member` (the last fighter to act) every
    time, so that one character's items are rolled six times and the others keep
-   everything (see bugs). **[code]**, confirmed in the disassembly at 0x800c5c28.
-5. **Gold is halved** for every member. **[code]**
+   everything (see bugs). **[code]**, confirmed in the disassembly at 0x800c5c28, and
+   **[emu]** (below: in a test wipe only the first character lost items).
+5. **Gold is halved** for every member. **[code]** **[emu]**
+6. The current party's member list is cleared to empty (-1). **[emu]**
 
 There is nothing in the battle code that takes items from bodies over time: once the
 battle is over, the battle code never touches the bodies again. (Whether the maze does
@@ -601,6 +654,12 @@ chest record is the encounter's entry in a table loaded from disc (table 1 index
   table 0x800d7cec (0-16). Otherwise it's always trapped. The trap is picked evenly among
   the mask's bits. **[code]**
 - Inspect, Calfo, Calnova, Disarm, Open and Leave are the chest menu (FIGHTMSG 215-220).
+- **What's inside** (`chest_loot` 0x800c7fd0, on opening): gold = (dice at +0x50/+0x51/
+  +0x52) × the u32 at +0x54 × (dice at +0x58/+0x59/+0x5a), divided evenly among the members
+  with status below 0x20 ("Each survivor gains N gold!", 262). Items: if the record's +0
+  byte is 1 and the battle is of type 2 or 4 (or 0x800797f4 is -2), each of three item
+  slots k gives an item when rand(85) <= the u32 at +8 + 4k (0x800c8388, 261). **[code]**
+  (the battle types' meaning **[inf]**)
 
 | Trap | Effect |
 |---|---|
@@ -618,6 +677,33 @@ chest record is the encounter's entry in a table loaded from disc (table 1 index
 | 12 Teleporter | "You've been sent somewhere!" (259); the maze handles the jump |
 
 **[code]** (saves: rand(20) < the save value avoids it)
+
+## Emulator checks
+
+All on `battle_wriggle.state` (Uranus, Venus, Jupiter, Earth against two Wriggle Objects,
+level 2) with the patched build, breakpoints and watchpoints only unless said. The scripts
+are in `scripts/re/battle_checks/` (run from the repo root); raw output went to
+`rips/re/work/D/checks/`.
+
+- **Party initiative** (`melee_init.py`): four rolls logged at 0x800cf990 with the
+  character's agility. Rolls 3, 1, 4, 7 with agility 19, 15, 8, 10 gave ticks 0, 0, 4, 7,
+  as the formula says (3-6 and 1-2 floor at 0; 8-13 unchanged). **[emu]**
+- **Party to-hit**: Uranus (to-hit +0x84 = 14) and Venus (11) against AC 7 in group 1
+  had thresholds 1 and 2 at the rand(20) compare (0x800a9224): 20 - 7 - 14 = -1, floored
+  at 1, and 20 - 7 - 11 = 2. Every swing with roll >= T added a damage roll. **[emu]**
+- **Monster initiative** (`defend.py`, all four Defending for 14 rounds): 26 monster
+  ticks, every one (rand(255) & 7) + 2, seen from 2 to 9. **[emu]**
+- **Monster to-hit**: every swing had threshold 19 (Defend's +4 pushes 24 - AC past the
+  cap for every member's AC of -2..2). Of 22 swings, the one roll of 19 hit and took a
+  point off Uranus; no other roll hit. Attack 2 was chosen 7 times of 26. **[emu]**
+- **The wipe** (`wipe.py`). **Setup used a RAM write**: at the second command phase all
+  four party combatants were set dead (+0xc = 0x80, HP 0); everything after was the
+  game's own code. `party_wiped` ran, `wipe_item_loss` read `actor_member` (0) six times
+  and called rand(12) 12 times: Uranus's six items were rolled on the first pass (four
+  destroyed), then the two left over on each later pass (one more destroyed). Venus,
+  Jupiter and Earth weren't rolled and kept all their items. All four members' gold went
+  from 18 to 9, and their locations stayed on the square (area 0, x 11, y 21). **[emu]**
+  (output `wipe0.txt`)
 
 ## Bugs and oddities
 
@@ -663,6 +749,14 @@ chest record is the encounter's entry in a table loaded from disc (table 1 index
   found in BATTLE's code yet. **[inf]**
 - The site's claims checked: the Gold armor's 50% break chance, and Matokani's level-8
   limit, are both true. **[code]**
+- 174-185 (the "engulfed in" lines) play once a round for each group under an Alchemist
+  cloud, for three rounds after the cast, not when the spell is cast. 179/185 "freezing
+  cold" is Madalqua, whose element isn't cold. **[code]**
+- 189 "The spell has no effect." is also what a summon prints when a summoned group is
+  already out. **[code]**
+- 262 "Each survivor gains N gold!" only plays when a chest is opened; gold is split the
+  same way as experience, among members below status 0x20. **[code]**
+- 284 "{name} appears, N of them." is the summon (and the call for help uses 114). **[code]**
 
 ## How it was traced
 
@@ -684,9 +778,20 @@ a table of 84 code pointers. Most handlers are one call (Halito is `spell_damage
 so the dice table above is read straight off them. Ghidra hadn't made functions at 27 of
 the handler addresses (they have no stack frame), so naming them in the CSV created them.
 
+The emulator checks came last. With breakpoints on the compare instructions rather than
+on functions (0x800a9224 for the party's swing, 0x800ab2ec for a monster's, 0x800d00a4
+for the monster tick), each log entry carried both the roll and the threshold in
+registers, so the formulas could be checked roll by roll against RAM snapshots of AC,
+agility and to-hit. Getting a long enough fight out of two Wriggle Objects meant having
+the party Defend every round, which needed the command menu's flow worked out from
+screenshots (pick a character, open its menu, Defend, then "Confirm actions?").
+
 The wipe's item loss was found looking for what happens to bodies. The disassembly
 confirmed the loop bug the C showed: the member index is loaded from `actor_member`
-inside the loop, and the loop counter is never used.
+inside the loop, and the loop counter is never used. The emulator test (with a RAM-write
+setup, since a level-5 party doesn't die to Wriggle Objects) showed it plainly: six reads
+of `actor_member`, twelve rand(12) calls, all on Uranus's items, and nobody else's items
+touched.
 
 Work files: `rips/re/work/D/` (scripts `round.py`, `look.py`, `mdis.py`; FIGHTMSG and
 STATUS.OBJ dumps).
