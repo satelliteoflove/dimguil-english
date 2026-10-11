@@ -285,3 +285,35 @@ inside a line use `'`, and `npcfit.py` catches the rest.
   records typed, Balbo's fee reads `roster[i].items[k] = 0xffff`. Map and workflow:
   code-map.md. Tools: scripts/re/.
 
+## Fixing the original game's bugs
+
+- 2026-10-11. Chris: fix the clear bugs, reopen content a bug cut off, ask about anything
+  that looks deliberately cut or changes the balance. The phase-2 code analysis had
+  listed bugs and unreached strings; each was re-read against the original disc
+  (rips/clean) and triaged in `docs/re/bugs.md`: 10 clear bugs, 8 cut or unclear, 4 that
+  change the balance, 7 harmless.
+- Most of the fixes are a single changed immediate or branch. Two needed new code and had
+  no room, so they sit over debug routines nothing calls: an encounter-id picker drawn
+  with FntPrint in MCARD (0x800c57c8) and a debug-flag menu in JOUKA (0x800a6c40). "Nothing
+  calls" was checked as no jal, j, pointer or computed address reaching them in any
+  module.
+- How the fixes were tested: load a state, write the case into RAM, lay only the fix's
+  bytes over the overlay, drive it with button presses, and compare runs. Waiting a
+  different number of frames before the same presses gives different rolls, which is how
+  the chat and Temple tests got their spread. Scripts in `rips/re/work/P3-bugs/`.
+  - Alstron's Madi (1976612): 8 of 8 runs "quite all right" before, 8 of 8 Madi after.
+  - Chat specials (a9ed605): Guy's block 9 never came up before, 20 of 22 runs after.
+  - Temple (e4c0da7): the before run showed more than the audit predicted. The current
+    party scrambled on the spot: Venus dropped out and Mars, never a member, joined.
+    The fix's first draft had its own bug, a MIPS load delay: the index was loaded in a
+    jal's delay slot, and the routine's first instruction copied the register before the
+    load landed. The table loop got the right index and the party loop a stale one. The
+    test caught it.
+  - BROKEN ITEM purge (c717515): watchpoints on the pack showed the purge zeroing slot
+    9's uses, then the pack compaction carrying the zeroed count along with the item.
+    Testing the after case took two tries: the CD loads the overlay sector by sector, so
+    the fix bytes had to go in after the sectors holding them had arrived.
+  - The other six are checked against the disassembly only; no state reaches their
+    scenes.
+- No natural before/after shots: every test uses RAM writes. Internal captures of the
+  Temple pair are `rips/re/work/P3-bugs/temple/lost_before.png` and `lost_after.png`.

@@ -319,6 +319,40 @@ The preferred fix is a close-to-literal reading, fitted to the box.
     of the Sun" (NPC2 82) and "the Sun tablet" (NPC3 68) now say "Tablet of the Sun".
     The keyboard's "small tablets" are 石板 too, which the new name now matches.
 
+### Game bug fixes (2026-10-11)
+
+Chris decided the patch fixes the original game's clear bugs and reopens text a bug cut
+off. Anything that looks deliberately cut, or changes the balance, goes to him first.
+The full triage is `docs/re/bugs.md`; each fix is its own `asm/bugfix_*.asm`.
+
+- **Guy's statue warning to a stranger** now plays 1:87, the stranger's copy of the
+  speech, instead of the trap warning 1:89 (29233ff).
+- **Rosea's Madi** plays her Madi line, 2:134, instead of the cancel line "Do take care"
+  (54596b4).
+- **Cephala's healing** was one block off from 11 up: wrong lines and wrong spells. The
+  missing "can't treat" block goes to 3:138, which has the same Japanese (34cd45c).
+- **Alstron's Madi** (1:157) could never be cast; the stage test needed two bits at once
+  (1976612).
+- **The pit scene** now plays its middle block, the rescuer's voice and "Looks like help
+  has arrived" (3:95-96, 99-100) (5b565b9).
+- **Fritillaria's "walkin' corpse"** (5:17) tested kills instead of deaths, named the
+  wrong member, and never showed when both of her lines applied (fc6158f).
+- **Cresson's speech after the control room** (4:24-29) was skipped by any party that
+  had finished the Decipher table, because both used the same flag (3e36a06).
+- **Chat topics** with low block numbers were always rerolled: Guy's area topics
+  (1:195-210), Balbo's "about other parties" (2:174-187) and two of Fontana's (3:181-196)
+  (a9ed605).
+- **A failed raise from ashes at the Temple** scrambled the party table: in the emulator
+  a party member dropped out and a stranger took her place (e4c0da7).
+- **The BROKEN ITEM purge on entering town** wiped the uses left on whatever sat in the
+  tenth pack slot (c717515).
+
+Open questions for Chris (bugs.md groups 2 and 3): the identify service, Zaril's
+healing, Guy's and Fontana's re-introductions, Cresson's "boys", Fontana's block 8,
+Balbo's "heard that already", untraced greeting blocks, the pit with no rescuer, the wipe
+item loss, the weapon-effect level bonus, level drain's save, and the town stat
+recompute.
+
 ## To revisit
 
 - **Fontana's maze encounters (3:72, 75, 88, 278).** Same register shift as Balbo's

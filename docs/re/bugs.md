@@ -33,7 +33,8 @@ ahead's got some crazy trap in it!", the trap warning from handler 10. 1:87 is t
 "Man with a greatsword" copy of the full statue speech, and nothing else uses it.
 Handler 8, the other statue scene, pairs 1:86 with 1:295 the same way. [code]
 
-Fix: 0x57 for 0x59. `asm/bugfix_guy_statue_line.asm`.
+Fix: 0x57 for 0x59. `asm/bugfix_guy_statue_line.asm`, 29233ff. Checked: disassembly only; no state reaches
+the scene with a party that hasn't met Guy.
 
 ### 1.2 Rosea's Madi heal plays the "take care" line (NPC_MES2 135 for 134)
 
@@ -43,7 +44,7 @@ and line, with the Madi cure added. 2:134 ("Oh my, how awful!" / Madi / "There, 
 better.") is her Madi line, and no block uses it. [code, dump]
 
 Fix: block 22's expression 4 → 0 (as 20 and 21) and string 135 → 134.
-`asm/bugfix_rosea_madi_line.asm`.
+`asm/bugfix_rosea_madi_line.asm`, 54596b4. Checked: script dump and patched bytes.
 
 ### 1.3 Cephala's healing table is one block off
 
@@ -64,7 +65,8 @@ Fix: lower the ten block numbers at 0x800d1934 (0x11), 0x800d1994 (0xb), 0x800d1
 (0xc), 0x800d19c8 (0xd), 0x800d1a28 (0xe), 0x800d1a88 (0xf), 0x800d1ae8 (0x10),
 0x800d1b4c (0x12), 0x800d1bb0 (0x13) and 0x800d1c10 (0x14) by one, except stage 1's
 stone/dead (0xb), which goes to 0xe: 3:138, the same line as the missing 3:134 (the
-Japanese of the two is identical). `asm/bugfix_cephala_heal_table.asm`.
+Japanese of the two is identical). `asm/bugfix_cephala_heal_table.asm`, 34cd45c. Checked: block by block against the
+script dump.
 
 ### 1.4 Alstron's Madi can never be cast (NPC_MES1 157)
 
@@ -75,7 +77,8 @@ poisoned or paralyzed with full HP gets "That one seems quite all right, I'd say
 Cephala's matching check is `npc_stage & 0x300` (stage 2 or 3). [code]
 
 Fix: `bne v0, v1` → `beqz v0` at 0x800b74c8 (any of the two bits).
-`asm/bugfix_alstron_madi.asm`.
+`asm/bugfix_alstron_madi.asm`, 1976612. Checked: emulator, RAM-write setup (stage 2,
+everyone poisoned): block 14 in 8 of 8 runs before, block 19 (Madi) in 8 of 8 after.
 
 ### 1.5 The pit scene skips its middle (NPC_MES3 95-96, 99-100)
 
@@ -89,7 +92,8 @@ to 0xf, which picks the rescuer. Block 1 is built, with its two strings filled i
 Fix: state 10 runs block 1 first (talk_block 1, back to state 5), then goes on to 0xf.
 The three spare instructions at 0x800d63f0 jump to a few lines placed over an
 unreferenced debug routine (MCARD 0x800c57c8, an encounter-id picker drawn with
-FntPrint; no caller, pointer or computed address reaches it). `asm/bugfix_pit_scene.asm`.
+FntPrint; no caller, pointer or computed address reaches it). `asm/bugfix_pit_scene.asm`,
+5b565b9. Checked: disassembly only; no state reaches the pit.
 
 ### 1.6 Fritillaria names the wrong "walkin' corpse" (NPC_MES5 17)
 
@@ -105,7 +109,7 @@ FntPrint; no caller, pointer or computed address reaches it). `asm/bugfix_pit_sc
 
 Fix: test deaths in both loops, send the tails path straight to the end (0x800dbb34),
 and send the heads path into the deaths-only branch (0x800dbc38: `addiu v0, zero, 2`
-makes the next `bne s1, v0` take it). `asm/bugfix_fritillaria_corpse.asm`.
+makes the next `bne s1, v0` take it). `asm/bugfix_fritillaria_corpse.asm`, fc6158f. Checked: disassembly only.
 
 ### 1.7 A full Decipher table skips Cresson's speech after the control room (NPC_MES4 24-29)
 
@@ -117,7 +121,7 @@ reads the bit (every access to +0xca in every module was checked). So a party th
 finishes the Decipher table first never hears 4:24-29. [code]
 
 Fix: the decipher check no longer sets the bit (`ori v1, v1, 0`). Its flag had no
-reader of its own, so nothing else changes. `asm/bugfix_decipher_flag.asm`.
+reader of its own, so nothing else changes. `asm/bugfix_decipher_flag.asm`, 3e36a06. Checked: disassembly only.
 
 ### 1.8 Special chat topics with low block numbers are always rerolled
 
@@ -134,7 +138,8 @@ Fix: the first roll stores -1 (no special) instead of a random topic, and the te
 becomes "below 0". The random topic was never used: anything not special is rerolled.
 For each handler, the `jal rand_upto` and its delay slot (which stores `talk_state`)
 are swapped for the store and `addiu v0, zero, -1` (Guy 0x800b670c, Balbo 0x800c951c,
-Fontana 0x800d12b0), and the `slti` immediate becomes 0. `asm/bugfix_chat_specials.asm`.
+Fontana 0x800d12b0), and the `slti` immediate becomes 0. `asm/bugfix_chat_specials.asm`, a9ed605. Checked: emulator, Guy only, RAM-write setup
+(area 1): block 9 never came up before; 20 of 22 runs after.
 
 ### 1.9 A failed raise at the Temple scrambles the party table
 
@@ -145,12 +150,19 @@ From the fallen-party audit. When a raise from ashes fails, `temple_heal`'s Lost
 town entry at 0x800dcf98 and 0x800dd370, the battle, camp Kadorto, the Edge of Town,
 Training Grounds). Parties above the lost character then list the wrong people, and
 the bodies of a fallen party can end up in no party at all, where nothing finds them.
-[code, disassembly; the consequences are inferred]
+[code, disassembly, emu; the stranded bodies are inferred]
 
 Fix: the `jal roster_compact` at 0x800cb030 calls a short routine that runs
 `roster_compact` and then `party_index_fixup` with the Temple's character
 (0x80079888), placed over JOUKA's unreferenced debug menu (0x800a6c40, which toggles
-`debug_flags`; nothing calls it). `asm/bugfix_temple_lost.asm`.
+`debug_flags`; nothing calls it). `asm/bugfix_temple_lost.asm`, e4c0da7.
+
+Checked: emulator, RAM-write setup (Uranus in ashes with VIT 0, a made-up fallen party
+of roster 4 and 5). Before, the current party itself scrambled: Venus dropped out and
+Mars, who was never in it, took her place; the made-up party still listed 4 and 5. After,
+Venus, Jupiter and Earth, and the made-up party listed 3 and 4. The first draft loaded
+the index in the jal's delay slot, which the routine's first instruction reads too early
+(load delay); the test caught it.
 
 ### 1.10 The town's BROKEN ITEM purge clears the wrong slot's state
 
@@ -162,7 +174,10 @@ A potion or scroll in the tenth slot loses its uses left. The camp's copy (MAZE
 
 Fix: the loop is laid out again in place to clear `0x34 + slot`, as the camp's copy
 does. Dropping a redundant sign extension of the loop counter makes room.
-`asm/bugfix_broken_item_state.asm`.
+`asm/bugfix_broken_item_state.asm`, c717515. Checked: emulator, boot to town with a
+RAM-write setup (item 0 in slot 6, a 9-use item in slot 9): before, the purge zeroed
++0x3d and the item was left with 0 uses; after (fix bytes over JOUKA, then again on the built
+disc), it cleared +0x3a and the item kept 9.
 
 ## Group 2: looks cut, or the intent isn't clear
 
@@ -331,4 +346,8 @@ reaches 100% after a few trips to town. That needs a test before deciding.
 Each fix is a separate `asm/bugfix_*.asm`, assembled after `vwf.asm` like the other
 patches. The checks for each one are in its commit message: the decompiled code re-read
 against the patched bytes (`scripts/re/ghidra.py` reads `rips/clean`; the patched
-files are in `rips/dirty`), and an emulator run where a state can reach the code.
+files are in `rips/dirty`), and an emulator run where a state can reach the code. The
+emulator runs lay only the fix bytes over the overlay in RAM, and set up the case with
+RAM writes, so none of them make natural before/after shots. The test scripts are in
+`rips/re/work/P3-bugs/` (`t_alstron.py`, `t_chat.py`, `t_temple.py`, `t_broken.py`).
+Every fix byte was checked in the built overlays after the build (c717515).
