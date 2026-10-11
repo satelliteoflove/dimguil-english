@@ -34,9 +34,13 @@ Recommendation: add it, shown once Zaril has left to lead his own party.
 doesn't exist in the code.
 Recommendation: leave them unused.
 
-**7. Greeting blocks nothing picks** (2.7) and **the pit with no rescuer** (2.8). I'll do it:
-trace the first and test the second in the emulator, then bring back anything that needs a
-decision.
+**7. Greeting blocks nothing picks** (2.7). Settled (1ce9d0f): harmless. Guy's and Zaril's
+unpicked blocks repeat lines that other blocks already play, so nothing is lost.
+**The pit with no rescuer** (2.8) turned out to be a soft lock, confirmed in the emulator:
+a party in which nobody has met Guy, falling into the Area C pit in a certain window, is stuck
+for good. Fixed as a clear bug by falling through to the game's own choice for when Guy
+isn't the rescuer: Balbo's party if someone has met Balbo, otherwise the man in armor. Nothing
+new is written. Say if you'd rather Guy rescue them anyway, with his lines as written.
 
 ## Fixes that change how the game plays
 
@@ -49,8 +53,12 @@ comparing the two.
 **9. Weapon effects ignore level** (3.2). A level bonus is computed and thrown away.
 Recommendation: keep the original, for the same reason.
 
-**10. Level drain check** (3.3) and **resistances building up in town** (3.4). I'll do it:
-read and test these first.
+**10. Level drain is backwards** (3.3, settled in 1ce9d0f). +0x81 is a saving throw, which
+gets better with level, Luck and the Thief's bonus, but drain lands *more* often the better
+it is. Fixing it would take a low-level character from about 9% to about 91% drained.
+Recommendation: keep the original, for the same reason as 8.
+**Resistances building up in town** (3.4) are harmless. The town's recompute does pile up,
+but every battle rebuilds those numbers from scratch before using them. No fix needed.
 
 ## Descriptions that disagree with the game
 
