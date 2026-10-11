@@ -179,7 +179,8 @@ undead, summoned, immunities, and the low bits slaying and protection match), th
 10-byte attacks (+0xac, +0xb6, +0xc0), breath type (+0xc9) and message (+0xca), resist
 and weakness bits (+0xcc, +0xce). G checked the placement (a battle RAM dump's group 1
 record equals M_DT004's tail byte for byte) and the data profile below; +0x6e (inferred:
-the picture) and +0x8f-0xa2 (20 bytes, 0xff = none; inferred: spells) are still open.
+the picture) and +0x8f-0xa2 (four schools of five entries, 0xff none, read by monster_pick_spell; inferred:
+spell levels) are still open.
 
 A byte-by-byte profile of the 215 records is in "How it was traced"; D owns the rest.
 

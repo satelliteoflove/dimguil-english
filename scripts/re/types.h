@@ -197,7 +197,9 @@ typedef struct Monster {
     u8  help_chance;     /* +0x8b rolled on 0-89 (D: act_call_help) */
     s16 companion;       /* +0x8c companion monster id, -1 none (D: code) */
     u8  companion_pct;   /* +0x8e (D: code) */
-    u8  unk8f[0x14];     /* +0x8f 20 bytes, 0xff = none (inferred: spell ids) */
+    u8  spells[4][5];    /* +0x8f per school (Mage, Priest, Alchemist, Psionic) five entries,
+                            0xff none; read by monster_pick_spell 0x800d0c6c and scaled by 7
+                            in groups_reorder (inferred: spell levels) */
     u8  magic_resist[4]; /* +0xa3 percent by school; +0xa5 is also the breath resistance
                             (D: code) */
     u8  unka7;           /* +0xa7 */
