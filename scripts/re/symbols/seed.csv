@@ -1,0 +1,132 @@
+module,address,name,kind,confidence,source,note,type
+MAIN,0x80012f5c,load_file_alt,function,confirmed,"relocate.py, nptshow.py; code read 2026-10-11","Loads a disc file (destination, index, table) through the four file tables at 0x80051760; called from the encounter path (0x80020e10). load_file (0x80012d18) is the one most code uses.",
+MAIN,0x8001cb18,rand_upto,function,confirmed,code read 2026-10-10 (body recovery),Random number 0..n inclusive; rand_upto(1)==0 is a coin flip. State at 0x80079558 and 0x8007955c (0x20 and 0x24 off $gp = 0x80079538).,
+MAIN,0x8001d93c,tim_upload,function,confirmed,docs/engine-notes.md,Uploads a TIM (portrait) to VRAM; does nothing if no TIM magic at the source.,
+MAIN,0x8001dfc0,text_expand,function,confirmed,docs/engine-notes.md,"Expands a message (names, numbers) into text_buffer 0x8008b400; wraps at 24 codes only for the battle call.",
+MAIN,0x8001e0c0,text_read_code,function,confirmed,docs/engine-notes.md,"The printer's reader: dialogue, battle and event text go through it.",
+MAIN,0x8001ff04,event_box_print,function,confirmed,docs/engine-notes.md,"Prints the maze event box (switches, doors, story text).",
+MAIN,0x8001f150,glyph_layer_alloc,function,confirmed,"screentext.py, engine-notes","(size, layer): sets up one of the four glyph sprite layers.",
+MAIN,0x8001f428,glyph_layer_free,function,confirmed,docs/engine-notes.md,"Frees one glyph layer, or all with -1.",
+MAIN,0x8001d164,glyph_layer_realloc,function,confirmed,docs/engine-notes.md,Frees and reallocates one glyph layer.,
+MAIN,0x8001f4d4,glyph_prepare,function,inferred,screentext.py,"Before a glyph: reads the font flags at 0x80079705; lays out a sprite from glyph code (size, texture cell).",
+MAIN,0x8001f840,glyph_put,function,confirmed,"screentext.py, cutsweep.py","(x, y, layer): draws one glyph sprite; a full layer goes to 0x8001f9cc and the glyph is dropped.",
+MAIN,0x8001f9cc,glyph_put_refused,label,confirmed,cutsweep.py,glyph_put's path when the layer is full: the glyph is dropped.,
+MAIN,0x80021af0,event_box_open,function,confirmed,asm/event_window_pool.asm,"Opens the maze event box (x, y, rows, columns, ...) and sizes its glyph layer.",
+MAIN,0x80021268,encounter_load,function,confirmed,"nptshow.py, engine-notes",Loads the enemy file for a battle: table 1 index id+0x2c; NPC parties use id 379+n (DATA02/NPTnn.BIN).,
+MAIN,0x80020bd0,party_copy_build,function,inferred,docs/cheats.md,Rebuilds the party copies (0x80086880) from the roster.,
+MAIN,0x80015ce4,return_triangle_draw,function,confirmed,asm/return_prompt_icon.asm,Draws the separate triangle sprite of the return prompt at a fixed x.,
+MAIN,0x8001d07c,help_bar_layer_setup,function,inferred,asm/return_prompt_icon.asm,Sizes the help bar's glyph layer (32 sprites).,
+RAM,0x8007d708,roster,global,confirmed,docs/cheats.md,"Roster records, 0xd0 bytes each, in roster order. Count 20 is inferred (the next known global is 0x8007e810).",Roster[20]
+RAM,0x80086880,party_copies,global,inferred,docs/cheats.md,"Party copy of each character, rebuilt from the roster; records seem 0x90 apart.",
+RAM,0x8008f8c8,parties,global,confirmed,code read 2026-10-10 (body recovery),20 party records of 0x36 bytes.,PartyRec[20]
+RAM,0x8007e810,current_party_id,global,confirmed,code read 2026-10-10,Id of the party you are walking with (PartyRec.id).,s8
+RAM,0x8008d300,rescue_candidates,global,confirmed,code read 2026-10-10,Indexes of wiped-out parties an NPC party can offer to carry back.,u8[20]
+RAM,0x80079895,rescue_candidate_count,global,confirmed,code read 2026-10-10,Count for rescue_candidates; then the index picked on yes.,s8
+RAM,0x8007986c,progress_bits,global,inferred,code read 2026-10-10 (MCARD talk handlers),"Bits set as the story advances (talk handlers compare it with 6, 0xe, 0x1e, 0x3e ... 0x1fe); the rescue offer needs one of bits 1-4.",u32
+RAM,0x80079668,cur_area,global,confirmed,code read 2026-10-10,Current area; written into Roster.area when a party is left in the maze.,u8
+RAM,0x80079906,cur_x,global,confirmed,code read 2026-10-10,Current x.,u8
+RAM,0x80079916,cur_y,global,confirmed,code read 2026-10-10,Current y.,u8
+RAM,0x80079b34,cur_facing,global,confirmed,code read 2026-10-10,Current facing.,u8
+RAM,0x80079891,party_member_count,global,inferred,code read 2026-10-10,Members in the current party.,u8
+RAM,0x801ff118,talk_script,global,confirmed,docs/engine-notes.md,"A talk's script, copied here by the builder (0x800c154c).",
+RAM,0x80079a26,talk_script_pos,global,confirmed,docs/engine-notes.md,Halfword index of the next opcode in the running talk script.,s16
+RAM,0x800798a4,talk_script_status,global,inferred,code read 2026-10-10,"Set by talk opcodes (1 sets 10, 3 sets 15); -1 when a script block has finished.",s16
+RAM,0x80079bb4,talk_block,global,confirmed,code read 2026-10-10,"Which 30-byte script block runs: 0 main, 1 yes, 2 no (engine-notes said 0x80079be4, a typo).",u8
+RAM,0x8007981c,talk_state,global,confirmed,code read 2026-10-10,"The talk handlers' state machine (0x28 talk menu, 0x41 offer, 0x42 yes/no, 0x43 reply).",s16
+RAM,0x80079c5a,yesno_cursor,global,confirmed,docs/engine-notes.md,Two-option cursor: 0 = first option (yes).,u8
+RAM,0x8008b400,text_buffer,global,confirmed,"textbuf.py, engine-notes","Expanded message text; unbounded, live data from 0x8008b640.",
+RAM,0x80060e97,vwf_widths,table,confirmed,descfit.py,Variable-width font widths by glyph code (English font).,
+RAM,0x8008b390,glyph_layers,table,confirmed,"evsweep.py, castlecrawl.py","Glyph layer table: start, size per layer.",
+RAM,0x80079938,glyph_layer_used,global,confirmed,evsweep.py,"Glyph sprites in use, per layer.",
+RAM,0x80079c38,glyph_total_used,global,confirmed,castlecrawl.py,Running total of glyph sprites in use.,u16
+RAM,0x8007961c,glyph_pool,global,confirmed,castlecrawl.py,Pointer to the glyph sprite pool.,u32
+RAM,0x80079705,font_flags,global,confirmed,screentext.py,Font flags read before each glyph (bit 0: ...).,u8
+RAM,0x80096378,config,global,confirmed,docs/engine-notes.md,"Configuration bytes: Item, Monster, Spell names, Status (0 Japanese, 1 English), sound output, music, effects, SE, then message speed at +8.",u8[12]
+RAM,0x8008a260,card_battle_config,global,confirmed,docs/engine-notes.md,A card battle packs the eight settings bytes into these bits (+1 is the speed).,
+RAM,0x8008a040,items_seen,global,confirmed,docs/cheats.md,40-byte bitfield: items seen (Boltac's catalog).,u8[40]
+RAM,0x8008a068,monsters_seen,global,confirmed,docs/cheats.md,60-byte bitfield: monsters seen (Compendium).,u8[60]
+RAM,0x8008a0b0,boltac_stock,global,confirmed,docs/cheats.md,"Boltac's stock, one byte per item.",
+RAM,0x8008a268,card_parties,global,confirmed,docs/cheats.md,"Card game: 10 parties, 0xc bytes each.",
+RAM,0x8008a2e0,unit_cards,global,confirmed,docs/cheats.md,"Card game: 40 Unit Cards, 0x14 bytes each.",
+RAM,0x8008a600,master_cards,global,confirmed,docs/cheats.md,"Card game: 20 Master Cards, one byte (kind) each; 0xff empty.",u8[20]
+RAM,0x8008a614,option_cards,global,confirmed,docs/cheats.md,"Card game: 30 Option Cards, 8 bytes (kind, level, ...); 0xff empty.",
+RAM,0x80079990,name_entry_charset,global,confirmed,asm/name_entry_latin.asm,"Name entry character set: 0 hiragana, 1 katakana, 2 Latin.",u8
+RAM,0x80079965,name_entry_state,global,confirmed,asm/name_entry_latin.asm,"Name entry state machine, polled every frame.",u8
+RAM,0x801b0680,battle_group_monster,global,confirmed,battleshow.py,In battle: the current group's monster record.,
+RAM,0x8008a918,monster_records,global,confirmed,docs/engine-notes.md,"Monster records loaded from DATA02/M_DTnnn.BIN, 0xd0 bytes each; attack nouns at +0xac/+0xb6/+0xc0.",
+RAM,0x80051760,file_table0,table,confirmed,relocate.py,"File table 0 (u16 sector, MSF), to 0x80051a60.",
+RAM,0x80051bc8,file_table1,table,confirmed,relocate.py,"File table 1 (u8; DATA00-03), to 0x80052234.",
+RAM,0x80052458,file_table2,table,confirmed,relocate.py,"File table 2 (u8; DATA06), to 0x8005258c.",
+RAM,0x800525f4,file_table3,table,confirmed,relocate.py,"File table 3 (u8; DATA05), to 0x800526c8.",
+RAM,0x801a0400,npc_text,global,confirmed,relocate.py,NPC_MES1-5.OBJ load here when a party is met (shared staging buffer).,
+RAM,0x801d8c00,sisetu_text,global,confirmed,relocate.py,SISETU.OBJ (town text) loads here.,
+RAM,0x801d1000,item_names_text,global,confirmed,relocate.py,I_NAME_E.OBJ / I_NAME_J.OBJ load here.,
+RAM,0x801d7000,fightmsg_text,global,confirmed,relocate.py,"FIGHTMSG.OBJ, resident.",
+MCARD,0x800b5694,talk_guy,function,confirmed,code read 2026-10-10,Guy's party talk handler (state machine); body recovery fee: all gold.,
+MCARD,0x800c7264,talk_balbo,function,confirmed,code read 2026-10-10,Balbo's party talk handler; body recovery fee: every item.,
+MCARD,0x800cf8c0,talk_fontana,function,confirmed,code read 2026-10-10,"Fontana's party talk handler; body recovery fee: half the gold and items in slots 1,3,5,7,9.",
+MCARD,0x800c154c,talk_script_builder,function,inferred,docs/engine-notes.md,Builds a talk script on the stack (43 blocks of 40 halfwords) and copies it to 0x801ff118; maybe one party's handler.,
+MCARD,0x800b8ccc,talk_script_run,function,confirmed,docs/engine-notes.md,"Talk script interpreter: opcode at talk_script_pos, dispatch through talk_opcodes.",
+MCARD,0x800a1cc4,talk_opcodes,table,confirmed,docs/engine-notes.md,13 handlers for talk opcodes -1..11.,
+MCARD,0x800b9598,talk_op_end,label,confirmed,docs/engine-notes.md,Talk opcodes -1 and 4.,
+MCARD,0x800b8d40,talk_op0_set_met,label,confirmed,docs/engine-notes.md,Opcode 0: sets a met bit (0-19) in Roster.met_bits of each party member.,
+MCARD,0x800b8e9c,talk_op1,label,confirmed,docs/engine-notes.md,Opcode 1: sets talk_script_status = 10.,
+MCARD,0x800b8ec8,talk_op3,label,confirmed,docs/engine-notes.md,"Opcode 3 (3 args, inferred: speaker face): sets talk_script_status = 15.",
+MCARD,0x800b8ed8,talk_op2_print,label,confirmed,docs/engine-notes.md,Opcode 2: print NPC string N (-2/-3 insert a character name).,
+MCARD,0x800b9004,talk_op6_portrait,label,confirmed,docs/engine-notes.md,Opcode 6 (4 args): loads a portrait.,
+MCARD,0x800b9190,talk_op5,label,confirmed,docs/engine-notes.md,Opcode 5.,
+MCARD,0x800b9220,talk_op7_bar_print,label,confirmed,docs/engine-notes.md,"Opcode 7: print NPC string N in the bottom bar (yes/no questions, topic log lines).",
+MCARD,0x800b9338,talk_op8,label,confirmed,docs/engine-notes.md,Opcode 8.,
+MCARD,0x800b93f8,talk_op9,label,inferred,docs/engine-notes.md,"Opcode 9 (1 arg; follows each healing line, inferred: which cure).",
+MCARD,0x800b944c,talk_op10,label,confirmed,docs/engine-notes.md,Opcode 10.,
+MCARD,0x800b9464,talk_op11,label,confirmed,docs/engine-notes.md,Opcode 11.,
+MCARD,0x800b3c40,bar_print,function,inferred,docs/engine-notes.md,"Prints string N in the bottom bar: bar_print(0xa6, 6, N, 1).",
+MCARD,0x800b0614,yesno_read,function,confirmed,docs/engine-notes.md,"Reads the pad and the yes/no cursor; returns 4 or 2 (inferred: confirm, cancel).",
+MCARD,0x800a1c28,talk_script_guy,table,confirmed,docs/engine-notes.md,"Guy's static talk script (30-byte blocks: main, yes, no ...).",
+MCARD,0x800a4e28,talk_script_balbo,table,confirmed,docs/engine-notes.md,Balbo's static talk script.,
+MCARD,0x800a68b4,talk_script_fontana,table,confirmed,docs/engine-notes.md,Fontana's static talk script.,
+MCARD,0x800c9354,balbo_rescue_scan,label,confirmed,docs/engine-notes.md,Balbo: scan parties for wiped-out ones (to 0x800c9508).,
+MCARD,0x800cac68,balbo_rescue_fee,label,confirmed,docs/engine-notes.md,Balbo: carry the party back (Roster.area = 0xff) and empty every item slot (to 0x800cad64).,
+MCARD,0x800b7e88,guy_rescue_fee,label,confirmed,docs/engine-notes.md,Guy: carry the party back and take all the gold (to 0x800b7f3c).,
+MCARD,0x800d23c4,fontana_rescue_fee,label,confirmed,docs/engine-notes.md,"Fontana: carry the party back, halve the gold, empty slots 1,3,5,7,9 (to 0x800d24dc).",
+MCARD,0x800aed90,body_search_square,label,inferred,docs/engine-notes.md,Compares candidates' Roster.area/x/y with the current square: the player's own body search.,
+MCARD,0x800afd88,party_leave_in_maze,label,inferred,docs/engine-notes.md,"Writes cur_area/x/y/facing into Roster.area..facing for each member (copies at 0x800b0280, 0x800b2250).",
+MCARD,0x800ad2c0,roster_send_home,label,inferred,docs/engine-notes.md,Sets Roster.area = 0xff for six records and clears 32 bytes at 0x8008c4d0 (a reset or new-party path).,
+MCARD,0x800ad250,config_reset,label,confirmed,asm/english_only.asm,A settings reset: zeroes the language switches (patched to English).,
+MCARD,0x800aae88,config_load_a,label,confirmed,asm/english_only.asm,Copies the settings in from a save.,
+MCARD,0x800acbb4,config_load_b,label,confirmed,asm/english_only.asm,Copies the settings in from a save.,
+MCARD,0x800ae4e4,voicing_merge,function,confirmed,asm/voicing_marks.asm,MCARD's voicing-mark helper (patched off).,
+MAZE,0x800a3134,voicing_merge,function,confirmed,asm/voicing_marks.asm,MAZE's voicing-mark helper (patched off).,
+MAZE,0x800bef6c,training_sign_open,label,confirmed,asm/training_sign_pool.asm,Opens the training maze sign; resizes glyph layer 0.,
+MAZE,0x800d9cb8,camp_config_toggles,label,confirmed,docs/engine-notes.md,Camp settings screen toggles.,
+MAZE,0x800a1cbc,config_names,table,confirmed,asm/config_layout.asm,Settings names (camp).,
+JOUKA,0x800dc76c,voicing_merge,function,confirmed,asm/voicing_marks.asm,JOUKA's voicing-mark helper (patched off).,
+JOUKA,0x800db3d0,town_text_layers,function,confirmed,asm/town_text_pool.asm,Sets up a town screen's four glyph layers through glyph_layer_alloc (720 sprites in all).,
+JOUKA,0x800cbec0,status_text_layers,label,confirmed,asm/status_text_pool.asm,"Status screen (Training Grounds, tavern inspect): sizes its glyph layers.",
+JOUKA,0x800ecaf0,compendium_layout,global,confirmed,castlecrawl.py,"Monster Compendium layout struct (x, y at +4, +6 from centre, width at +8).",
+JOUKA,0x800ea120,compendium_draw,label,inferred,castlecrawl.py,Compendium code that uses compendium_layout.,
+JOUKA,0x800ec998,catalog_layout,global,confirmed,castlecrawl.py,Boltac's catalog layout struct.,
+JOUKA,0x800e335c,catalog_draw,label,inferred,castlecrawl.py,Catalog code that uses catalog_layout.,
+JOUKA,0x800de244,item_picture_entry,label,confirmed,docs/engine-notes.md,Item picture entry: bit 0x8000 is a tall picture.,
+JOUKA,0x800deb1c,catalog_desc_y,label,confirmed,asm/catalog_tall_text.asm,Description y: base + tall x 39.,
+JOUKA,0x800b8948,name_entry_cancel,label,confirmed,asm/name_entry_latin.asm,Name entry cancel reset.,
+HAZURE,0x800bd2f8,voicing_merge,function,confirmed,asm/voicing_marks.asm,HAZURE's voicing-mark helper (patched off).,
+HAZURE,0x800ac5a8,outskirts_config_toggles,label,confirmed,docs/engine-notes.md,Edge of Town settings toggles.,
+HAZURE,0x800a10a8,config_names,table,confirmed,asm/config_layout.asm,Settings names (Edge of Town).,
+HAZURE,0x800aef00,name_entry_cancel,label,confirmed,asm/name_entry_latin.asm,Name entry cancel reset.,
+BATTLE,0x800d3510,voicing_merge,function,confirmed,asm/voicing_marks.asm,BATTLE's voicing-mark helper (patched off).,
+BATTLE,0x800d1e20,battle_message,label,confirmed,docs/engine-notes.md,The battle box's call to text_expand with wrapping on.,
+CMENU,0x800be944,voicing_merge,function,confirmed,asm/voicing_marks.asm,CMENU's voicing-mark helper (patched off).,
+CMENU,0x800c1650,cmenu_layout,global,confirmed,castlecrawl.py,Card game menu layout struct.,
+CMAIN,0x800cd180,cmain_layout,global,confirmed,castlecrawl.py,Card battle layout struct.,
+CMAIN,0x800aa904,card_config_screen,label,confirmed,docs/engine-notes.md,Card battle SELECT settings screen.,
+CMAIN,0x800adafc,spinner,function,confirmed,docs/engine-notes.md,"Settings spinner, given (min, max, step down, step up) on the stack.",
+MAIN,0x800114d8,main,function,confirmed,code read 2026-10-11,"Boot, then the main loop: game_mode picks which overlay to load (and clears to 0), game_state picks which overlay routine runs each frame; in talk mode talk_party picks the handler.",
+MAIN,0x80012d18,load_file,function,confirmed,code read 2026-10-11,"Loads a disc file: (destination, index, table 0-3). Overlays: table 0 index 172 JOUKA, 173 BATTLE, 174 HAZURE, 175 MCARD, 178 MAZE, all to 0x800a1000. Index 0x28-0x55 in table 0 shifts by 0x3c when bit 0x400 of 0x80079b44 is set.",
+MAIN,0x800241f8,load_overlay_by_name,function,confirmed,code read 2026-10-11,"Loads \\NAME.BIN;1 to 0x800a1000 through DsSearchFile and DsRead: the card game overlays CMAIN and CMENU, which the file tables don't cover.",
+MAIN,0x80024198,card_overlays_swap,function,inferred,code read 2026-10-11,"Loads CMAIN, then CMENU, by name.",
+MAIN,0x800240c4,card_game_enter,function,inferred,code read 2026-10-11,Game mode 6: loads CMENU by name (the card game).,
+RAM,0x8007967e,game_mode,global,confirmed,code read 2026-10-11 (main),"Set to request an overlay switch, cleared by main: 1 MAZE (from town), 2 BATTLE, 3 JOUKA (town), 4 MAZE (boot), 5 HAZURE, 6 card game, 7 MCARD, 8 catalog/compendium screens then town, 9 talk (MCARD with talk_party).",u8
+RAM,0x800798b3,resident_overlay,global,confirmed,code read 2026-10-11 (main),"Which overlay is loaded: 1 JOUKA, 2 MAZE, 3 BATTLE, 4 HAZURE, 5 MCARD.",u8
+RAM,0x80079a13,game_state,global,inferred,code read 2026-10-11 (main),"Which overlay routine main runs each frame (1, 3, 5, 9, 0x32, 0x33, 0x35 talk ...); per-value meaning to map.",u8
+RAM,0x80079797,talk_party,global,confirmed,code read 2026-10-11 (main),"Talk handler index in game state 0x35: 0 Guy (0x800b5694), 1 Balbo (0x800c7264), 2 Fontana (0x800cf8c0), 3 0x800d65c8, 4 0x800d9b34, 6-0x17 more; also indexes a name table at 0x8005e5c8 (portrait file).",u8
