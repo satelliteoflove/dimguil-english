@@ -144,7 +144,7 @@ typedef struct Item {
     u16 break_into;      /* +0x10 item id it becomes (0 = BROKEN ITEM, then removed) */
     u32 price;           /* +0x12 Boltac's price (confirmed: buying subtracts it) */
     u32 sell;            /* +0x16 what Boltac pays (confirmed: selling) */
-    u8  stock;           /* +0x1a Boltac's starting stock (confirmed: stock reset) */
+    u8  stock;           /* +0x1a Boltac's starting stock: 0 none, 0xff unlimited (confirmed: stock reset) */
     u8  battle_spell;    /* +0x1b spell cast when used in battle, low 7 bits; 0xff none
                             (inferred: battle 0x800a29b4) */
     u16 class_mask;      /* +0x1c bit per class who may equip (confirmed) */
