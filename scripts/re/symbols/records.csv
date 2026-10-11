@@ -1,0 +1,24 @@
+module,address,name,kind,confidence,source,note,type
+RAM,0x80052bf2,item_table,table,confirmed,table scan + code read 2026-10-11 (G),"Item records, 0x4c bytes, ids 0-381, resident in the executable's data. See types.h Item.",Item[382]
+RAM,0x8005e22c,class_min_stats,table,confirmed,code read 2026-10-11 (G),"6 stat minimums per class, 14 classes, checked by class change.",u8[84]
+RAM,0x8005e280,class_alignment,table,confirmed,code read 2026-10-11 (G),"[alignment][class]: the class number if the alignment may take it, -1 if not (3 x 14).",s8[42]
+RAM,0x8005e350,exp_tables,table,confirmed,code read + RAM check 2026-10-11 (G),"7 EXP tables of 13 u32: EXP for levels 2-13, then the step per level past 13.",u32[91]
+RAM,0x8005e4bc,exp_table_index,table,confirmed,code read 2026-10-11 (G),[race][class] -> which of the 7 EXP tables (11 x 14 bytes).,u8[154]
+RAM,0x8008a9e8,monster_records,table,confirmed,RAM dump 2026-10-11 (G),"Battle: the monster record of group g (1-4) at +(g-1)*0xd0, copied from the M_DT file's last 0xd0 bytes. Code reads +0xa8 as 0x8008a9c0 + g*0xd0. Group 7's would be at 0x8008af08 (inferred).",Monster[4]
+MAIN,0x80020bb8,roster_snapshot,function,confirmed,code read 2026-10-11 (G),"Copies all 20 roster records into 0x90-byte images at 0x80086880 (fields +0x00-0x7d, kills, deaths, and the ten bytes from +0xc5). MCARD's save code reads them (F). seed.csv's party_copy_build at 0x80020bd0 is a point inside this function.",
+JOUKA,0x800cffcc,equip_one,function,confirmed,code read 2026-10-11 (G),"Equips one item: sets 0x2000; also 0x8000 (cursed) if the item's alignment bits exclude the wearer or its specials bit 7 is set. Returns 1 can't, 2 cursed.",
+JOUKA,0x800c3f04,item_restricted,function,confirmed,code read 2026-10-11 (G),"1 if the character can't equip the item: class, race or sex bits (alignment only curses). Copies: MAZE 0x800de470, HAZURE 0x800bb4dc.",
+MAZE,0x800de470,item_restricted,function,confirmed,code read 2026-10-11 (G),Same test as JOUKA's item_restricted.,
+HAZURE,0x800bb4dc,item_restricted,function,inferred,code read 2026-10-11 (G),Same test as JOUKA's item_restricted (same field reads).,
+JOUKA,0x800ccc94,equip_menu,function,confirmed,code read 2026-10-11 (G),"Equip command: unequips all but cursed items, then one pass per slot (main, sub, armor, helm, gauntlets, boots, other); then runs Item.equip_effect for equipped items that have one. Copies: MAZE 0x800daa1c, HAZURE 0x800afa9c.",
+MAZE,0x800daa1c,equip_menu,function,confirmed,code read 2026-10-11 (G),Copy of JOUKA's equip_menu.,
+HAZURE,0x800afa9c,equip_menu,function,inferred,code read 2026-10-11 (G),Copy of JOUKA's equip_menu (same field use).,
+JOUKA,0x800dc810,ac_calc,function,confirmed,code read 2026-10-11 (G),"AC = Roster.ac less party spell bonuses, clamped -99..99.",
+JOUKA,0x800d8804,status_draw,function,confirmed,code read 2026-10-11 (G),"Status screen fields: name, level, race, age, sex, alignment, class, the six stats, AC, deaths, status (highest bit), HP, gold, kills, EXP.",
+JOUKA,0x800d9b98,status_items_draw,function,confirmed,code read 2026-10-11 (G),"Pack list; shows uses left for potions and scrolls (subtypes 0x14-0x15), not for item 0x143.",
+JOUKA,0x800d9f00,status_marks_draw,function,confirmed,code read 2026-10-11 (G),Emblems beside the name from Roster.marks.,
+JOUKA,0x800d4574,item_inspect,function,confirmed,code read 2026-10-11 (G),"Boltac's item detail: alignment, sex, class and race bits, AC or the weapon's Main/Sub/2-hand bits.",
+JOUKA,0x800dfab0,catalog_item_card,function,confirmed,code read 2026-10-11 (G),Catalog item page: the same restriction bits as icons; AC for armor.,
+MAZE,0x800e7c24,roster_clear,function,confirmed,code read 2026-10-11 (G),"Clears a roster record's name, race, status, age, stats, gold, pack, EXP, level, HP and location. Copies: BATTLE 0x800c574c, JOUKA 0x800dccc4, HAZURE 0x800be6e4.",
+MAZE,0x800d8b04,item_use_break,function,confirmed,code read 2026-10-11 (G),Rolls Item.break_chance on use and turns the item into Item.break_into.,
+MAZE,0x800c5570,maze_step_hp,function,confirmed,code read 2026-10-11 (G),"Per step: poison takes Roster.poison HP (1 in 4), regen adds Roster.regen (1 in 4).",
