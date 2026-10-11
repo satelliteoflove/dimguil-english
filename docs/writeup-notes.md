@@ -267,3 +267,21 @@ inside a line use `'`, and `npcfit.py` catches the rest.
   on a coin flip. Nothing was tested in the emulator; it rests on reading the code.
   Details and addresses: engine-notes.md, "Body recovery by NPC parties". Work files:
   rips/probe/bodies/.
+- Setting up a decompiler for the whole game (2026-10-11). Chris asked for the game's
+  rules to be read out of its code, not guessed, so the first step was Ghidra 12.1.4 run
+  headless with lab313ru's PSX loader, which knows the PS-X EXE format and labels
+  about 1,150 functions of Sony's PsyQ 4.3 library by signature. Ghidra needs a JDK and
+  the system had only a JRE, so a portable Temurin JDK went in ~/tools. The game's seven
+  overlays all load at 0x800a1000, so each became its own program with the executable
+  mapped beside it. The first try cut Balbo's talk handler short: the executable calls
+  0x800c76f0 in some other overlay, Ghidra started a function there in MCARD, and that
+  split the handler in two, hiding the fee loop. The fix was to analyze the executable
+  with the window empty, then map the overlay and seed only addresses that look like
+  function starts. Two overlays turned out to call into the overlay underneath them:
+  BATTLE into MAZE's leftover tail, HAZURE into JOUKA's. Mapping those tails raised
+  BATTLE's coverage from 82% to 87% and cut the functions thrown out as junk there from
+  20 to 3. In the end: 2,170 game functions, about 195,000 lines of C, eight modules
+  rebuilt in about 8 minutes and refreshed in under a minute. With the roster and party
+  records typed, Balbo's fee reads `roster[i].items[k] = 0xffff`. Map and workflow:
+  code-map.md. Tools: scripts/re/.
+

@@ -31,6 +31,34 @@ more of the detail behind each item.
 - Save states hold loaded files. After a build that changes text, or moves a file, old
   states show stale text or read the wrong sectors; regenerate them (`mkstates.py`).
 
+## Overlays and the main loop
+
+Mapped on 2026-10-11 while setting up the decompiler; the full map is in `code-map.md`.
+Confirmed by code read of `main` (0x800114d8) and by matching 23 RAM dumps against the
+overlay files, unless marked inferred.
+- Seven overlays share 0x800a1000: MAZE, BATTLE, MCARD, JOUKA, HAZURE, CMAIN, CMENU.
+  `load_file` (0x80012d18) loads one: table 0 index 172 JOUKA, 173 BATTLE, 174 HAZURE,
+  175 MCARD, 178 MAZE. The card game's CMAIN and CMENU are loaded by name through
+  DsSearchFile (0x800241f8), though table 0 lists them too (176, 177).
+- `main` loads MAZE at boot and loops. A request in `game_mode` (0x8007967e) makes it
+  load the overlay that mode needs (1 and 4 MAZE, 2 BATTLE, 3 JOUKA, 5 HAZURE, 6 the
+  card game, 7 and 9 MCARD), record which one in 0x800798b3, and set `game_state`
+  (0x80079a13), which picks the overlay routine called each frame.
+- Every NPC talk runs in MCARD. In talk state (0x35) `main` calls one of 23 handlers
+  picked by 0x80079797: 0 Guy (0x800b5694), 1 Balbo (0x800c7264), 2 Fontana
+  (0x800cf8c0), 3 and 4 inferred to be Cresson's and Zaril's parties (0x800d65c8,
+  0x800d9b34), 6 to 0x17 the rest (listed in code-map.md).
+- A smaller overlay leaves the previous one's tail in RAM, and two depend on it. BATTLE
+  calls seven of MAZE's routines at 0x800ee5f4-0x800ef0cc (about 40 call sites), so
+  battles need MAZE underneath, and a patch to MAZE above 0x800db028 changes battles too.
+  HAZURE calls JOUKA's 0x800d9130 (from 0x800afa9c); the outskirts RAM dump has JOUKA's
+  tail under HAZURE. MCARD runs over MAZE's tail in talks but calls nothing past its end.
+- The executable calls overlay routines at fixed addresses, valid only while the right
+  overlay is loaded. One of them, 0x800c76f0, falls in the middle of Balbo's talk
+  handler in MCARD, so it belongs to another overlay.
+- `$gp` is 0x80079538. `rand_upto` (0x8001cb18) keeps its state at 0x80079558 and
+  0x8007955c.
+
 ## Text printer
 
 - One printer (reader at 0x8001e0c0) draws dialogue, battle and event text. Codes below
@@ -265,7 +293,7 @@ Confirmed by code read:
   aren't mapped yet.
 - Static talk scripts are runs of 15-halfword (30-byte) blocks. Block 0 is the main
   script, block 1 runs on "yes" and block 2 on "no". The handler selects one by storing
-  0, 1 or 2 in 0x80079be4 and calling the interpreter on stack copy + 30 × that value.
+  0, 1 or 2 in 0x80079bb4 and calling the interpreter on stack copy + 30 × that value.
   Balbo's is `6,4,0,4,109 3,4,0,109 2,142 7,143 -1`, then `3,4,1,109 2,144 -1`, then
   `2,145 -1`.
 - Opcode arguments, read from the scripts and handlers: 6 takes 4 (portrait), 3 takes
