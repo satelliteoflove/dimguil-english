@@ -207,8 +207,8 @@ with the chapter and the string's new wording, to carry over to the site.
 | Reiran | NPC_MES2 105 | Shall I lop your head off for you? |
 | Balbo | NPC_MES2 92 | Oh, what terrible things I have done! |
 | Balbo | NPC_MES2 93 | right back to my old ways |
-| Balbo | NPC_MES2 142 | Us Evil types ain't fond of this sort of thing |
-| Balbo | NPC_MES2 144 | That lot had some mighty fine gear on 'em. |
+| Balbo | NPC_MES2 142 | Us Evil types ain't fond of doin' good deeds |
+| Balbo | NPC_MES2 144 | Besides, that lot had some mighty fine gear on 'em. |
 | Balbo | NPC_MES2 226 | Not that there's anyplace to swim down here. |
 | Reiran | NPC_MES2 235 | Lately I'm, like, totally hooked on setting off teleporter traps on purpose. |
 | Balbo | NPC_MES2 231 | but the guy's too damn gloomy for his own good. |

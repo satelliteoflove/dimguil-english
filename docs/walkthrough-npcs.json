@@ -1729,22 +1729,22 @@
           ],
           "strings": "NPC_MES2 142-145",
           "placement": "Anytime: the body-collection service, offered when your dead are left in the maze.",
-          "blurb": "If you've left bodies in the maze, Balbo offers to haul them to the Temple, though \"Us Evil types ain't fond of this sort of thing.\" Say yes and he admits what caught his eye: \"That lot had some mighty fine gear on 'em.\"",
+          "blurb": "If you've left bodies in the maze, Balbo offers to haul them to the Temple, though \"Us Evil types ain't fond of doin' good deeds.\" Say yes and he admits what caught his eye: \"Besides, that lot had some mighty fine gear on 'em.\"",
           "quotes": [
             {
               "file": "NPC_MES2",
               "idx": 142,
               "speaker": "Balbo",
-              "text": "Us Evil types ain't fond of this sort of thing"
+              "text": "Us Evil types ain't fond of doin' good deeds"
             },
             {
               "file": "NPC_MES2",
               "idx": 144,
               "speaker": "Balbo",
-              "text": "That lot had some mighty fine gear on 'em."
+              "text": "Besides, that lot had some mighty fine gear on 'em."
             }
           ],
-          "flags": "Review scene 5, not yet reviewed. 142 is in the stiff register of scene 3 and was reviewed there; 144 is coarse Balbo.",
+          "flags": "Reviewed in scene 5 (2026-10-10).",
           "source": "NPC_MES2"
         },
         {

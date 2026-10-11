@@ -863,25 +863,25 @@
                 {
                     "length": 186,
                     "source": "NA",
-                    "translation": "Balbo\n\"Us Evil types ain't fond of this sort of thing,\n but are those companions of yours?\n\r We came across some rotting bodies a while back.\n The smell's getting pretty strong, ya know.\n\r So how about it?\n Not that we're out to beautify the maze,\n but we could carry 'em to the Temple for ya.\"",
+                    "translation": "Balbo\n\"Us Evil types ain't fond of doin' good deeds,\n but are those companions of yours?\n\r We came across some rotting bodies a while back.\n The smell's getting pretty strong, ya know.\n\r So how about it?\n Not that we're out to beautify the maze,\n but we could carry 'em to the Temple for ya.\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "Ask them to collect the bodies?",
+                    "translation": "Ask them to recover the bodies?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 52,
                     "source": "NA",
-                    "translation": "\"That lot had some mighty fine gear on 'em.\n Well, no need to thank us.\n So long.\"",
+                    "translation": "\"Besides, that lot had some mighty fine gear on 'em.\n Finders keepers, right? No need to thank us. So long.\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 56,
                     "source": "NA",
-                    "translation": "\"Suit yourselves. Let's hope they don't end up\n as monster chow.\n Not that it's any of our business, mind you.\"",
+                    "translation": "\"Suit yourselves. Let's hope they don't end up\n as monster chow.\n Not that we really care, mind you.\"",
                     "addStringTerminator": true
                 },
                 {
