@@ -18,7 +18,7 @@ MAZE,0x800e8450,buff_oslo,function,confirmed,code read 2026-10-11 (B),Oslo: atta
 MAZE,0x800e8480,buff_maoslo,function,confirmed,code read 2026-10-11 (B),Maoslo: attack boost level 2 for 2500 steps.,
 MAZE,0x800e84ac,buff_fofic,function,confirmed,code read 2026-10-11 (B),"Fofic and the Potion of Fofic: magic defence level 10 (0x8007e834) for 1250 steps (0x8007e836), only if none is running.",
 MAZE,0x800e859c,remove_lost_members,function,confirmed,code read 2026-10-11 (B),"After Kadorto leaves someone Lost (status >= 0x200): blanks the record's name, compacts the roster and renumbers every party's members.",
-MAZE,0x800e7ad0,roster_compact,function,inferred,code read 2026-10-11 (B),Closes the gap left by a deleted roster record and recounts party_member_count.,
+MAZE,0x800e7ad0,roster_compact,function,inferred,code read 2026-10-11 (B),Closes the gap left by a deleted roster record and recounts roster_count.,
 MAZE,0x800e7d4c,party_drop_member,function,inferred,code read 2026-10-11 (B),"Removes a roster index from every party record and from the current party, shifting higher indexes down by one.",
 MAZE,0x800d579c,camp_items_menu,function,confirmed,code read 2026-10-11 (B); emulator test,"Items: Identify (Bishops only; greyed for others), Use, Give, Equip, Drop.",
 MAZE,0x800d5f24,camp_identify,function,confirmed,code read 2026-10-11 (B),"Bishop's Identify in camp: chance (level - item level + 1) x 20%, held to 5-75%. On a miss, a Bishop whose level is no more than twice the item's may touch it: becomes afraid, and a cursed item is equipped and cursed on them. Also shows an identified item's details screen.",

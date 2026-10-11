@@ -78,7 +78,7 @@ Action codes: -1 fight, -2 defend (0xfe), -4 dispel, -7 ambush from hiding, -8 h
 
 | Bit | Meaning | Can act? |
 |---|---|---|
-| 0x001 | afraid **[inf]**: acts only 7 rounds in 8 | yes |
+| 0x001 | afraid (label おそれ, F **[code]**): acts only 7 rounds in 8 | yes |
 | 0x002 | confused: random targets | yes |
 | 0x004 | poisoned | yes |
 | 0x008 | asleep | no |
@@ -86,7 +86,7 @@ Action codes: -1 fight, -2 defend (0xfe), -4 dispel, -7 ambush from hiding, -8 h
 | 0x020 | paralyzed | no |
 | 0x040 | stoned | no |
 | 0x080 | dead | no |
-| 0x100 | ashes **[inf]** | no |
+| 0x100 | ashes (label はい, F **[code]**) | no |
 | 0x200 | lost (level drained to 0) | no |
 
 Status below 8 can act; 0x20 and above counts as a body for the NPC rescue offer and
@@ -118,7 +118,7 @@ Group g's monster record is at `monster_records` + g*0xd0 (0x8008a918; group 1 a
 | +0x8c | companion monster id (-1 none), +0x8e companion chance % **[code]** |
 | +0xa3..+0xa6 | magic resistance % by school (Mage, Priest, Alchemist, Psionic) **[code]** |
 | +0xa5 | breath resistance (capped 60) **[code]**; overlaps the Alchemist byte, so **[inf]** |
-| +0xa8 | u32 type flags: 0x80000 undead (dispel, Zilwan, Matokani), 0x100000 summoned (Mogato), 0x400000/0x1000000 death-immune, 0x1000000 decapitation-immune; low bits are the monster class matched by slaying weapons and protection **[code]**, names **[inf]** |
+| +0xa8 | u32 type flags: 0x80000 undead (dispel, Zilwan, Matokani), 0x100000 summoned (Mogato), 0x400000/0x1000000 death-immune (0x400000 is also the Magical class bit, 22, so every Magical monster is death-immune: description-check.md **[record]**), 0x1000000 decapitation-immune; low bits are the monster class matched by slaying weapons and protection **[code]**, names **[inf]** |
 | +0xac, +0xb6, +0xc0 | three attacks of 10 bytes: +0 noun (I_NAME index - 427; >= 2000 picks the other particle), +2 verb, +3 swings, +4/+5/+6 damage dice, +7 effect bits (0x80 = reaches the back row), +8 effect chance % **[code]** |
 | +0xc9 | breath type: low bits the side effect, 0xe0 the element **[code]** |
 | +0xca | breath message: FIGHTMSG index + 50 **[code]** |
@@ -262,9 +262,12 @@ reaches a group from the character's row (or Ambush while hidden); Hide for clas
 8, 0xc and 0xd (not while hidden); Defend always; Spell if the character has a spell
 point left, the +3 counter is clear (or a 26% roll passes), the party isn't surprised and
 0x8007967d is clear; Dispel for class 2, class 5 from level 9 and class 0xb from level 4.
-**[code]** Class numbers are the roster's +0x0b; which class each is belongs to G (3 is
-probably Thief and 7 Ninja, 2 Priest, 5 Bishop, 0xb Lord **[inf]**, from the hide and
-dispel lists and the dispel penalties below).
+**[code]** Class numbers are the roster's +0x0b, in G's confirmed order (G-records.md,
+"Races and classes"): Hide is for the Thief (3), Ranger (7), Bard (8), Ninja (0xc) and
+Monk (0xd); Dispel is for the Priest (2), the Lord (5) from level 9 and the Bishop (0xb)
+from level 4. (This doc first guessed 7 Ninja, 5 Bishop and 0xb Lord; G's class table
+corrects that. The Training Grounds help text agrees: STATUS 205, 211, checked in
+description-check.md.)
 
 ## Monster AI
 
@@ -496,7 +499,9 @@ of level 8 or below that isn't undead") is exactly right.
   3-6 and Madial 10-50, so Dios and Diomas agree in both modes, the item descriptions
   (1-8, 2-6) are wrong in both, and Madial differs between camp and battle (the
   description says 30-60).
-- AC changes (`spell_ac_change` 0x800b083c): Sogref +2 the caster, Porfic +4 the caster,
+- AC changes (`spell_ac_change` 0x800b083c): Sogref +2 to one ally the player picks (a
+  monster casting it targets itself; `spell_sogref` 0x800c9ae0 keeps the chosen
+  `target_member` for the party), Porfic +4 the caster,
   Ponti +1, Bamatu +3 the caster's side, Dilto -2 a group, Morlis -4 a group. **[code]**
 - Cortu: the caster's side's magic screen becomes 3/4 of what it was + 2 × caster level,
   up to 90. Bacortu: the target side's sealing level + caster level, up to 255.
@@ -568,8 +573,8 @@ quarter...). The first breath of a battle from a character above level 8 hits ev
   1.25 × attacker level and the attacker is spotted ("But they're spotted.", 124) and the
   attack fails. While hidden, monsters skip that member 70% of the time. **[code]**
 - **Dispel** (-4): only on undead (+0xa8 0x80000). Each standing monster in the group
-  rolls rand(100) < 5 × caster level + 50 - 10 × monster level, -26 for class 5, -18 for
-  class 0xb, clamped 10-255. Dispelled monsters give **no experience** and no kill credit.
+  rolls rand(100) < 5 × caster level + 50 - 10 × monster level, -26 for a Lord (class 5),
+  -18 for a Bishop (class 0xb), clamped 10-255. Dispelled monsters give **no experience** and no kill credit.
   (106 / 107) **[code]**
 - **Monster calls for help** (-10): if the group has under 9 and +0xcc has 0x800: rand(90)
   < +0x8b adds one fresh monster (114), else "no help comes" (117). **[code]**

@@ -177,8 +177,10 @@ English; Look for Companions prints them by the highest bit set) **[code]**:
 | 0x100 | ash |
 | 0x200 | lost |
 
-"Can act" is status below 0x20. A party counts as wiped when nobody can act: dead, ash,
-stoned and paralyzed all count, which is why the fan trick of a paralysis wipe works.
+Status below 0x20 counts as standing. A party counts as wiped when nobody is standing:
+dead, ash, stoned and paralyzed all count, which is why the fan trick of a paralysis wipe
+works. (In battle the line for taking an action is lower: asleep and knocked out, 0x08
+and 0x10, can't act either; D-battle.md, "Status bits".)
 
 <a id="wipes"></a>
 ## 4. When the party is wiped out
@@ -403,8 +405,8 @@ which you can hear coming.
 ### Which party, where
 
 Parties 0-4 are the five random-meeting parties. 0 is Guy's, 1 Balbo's, 2 Fontana's
-**[code]**. 3 and 4 are, from the handlers, Cresson's party and Zaril's **[inf]**,
-which is C's to confirm.
+**[code]**. 3 is Cresson's party (the archive scholars) and 4 Zaril's, confirmed by C
+from their handlers and text files (C-talk.md §1).
 
 The fixed meetings 6-0x19 are separate talk ids, each on one square. Their owners
 below come from which party bit each one clears in `npc_fixed_pending`. "npc_flags N"

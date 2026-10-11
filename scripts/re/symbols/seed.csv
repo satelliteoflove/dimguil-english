@@ -22,7 +22,7 @@ RAM,0x8008f8c8,parties,global,confirmed,code read 2026-10-10 (body recovery),20 
 RAM,0x8007e810,current_party_id,global,confirmed,code read 2026-10-10,Id of the party you are walking with (PartyRec.id).,s8
 RAM,0x8008d300,rescue_candidates,global,confirmed,code read 2026-10-10,Indexes of wiped-out parties an NPC party can offer to carry back.,u8[20]
 RAM,0x80079895,rescue_candidate_count,global,confirmed,code read 2026-10-10,Count for rescue_candidates; then the index picked on yes.,s8
-RAM,0x8007986c,progress_bits,global,inferred,code read 2026-10-10 (MCARD talk handlers),"Bits set as the story advances (talk handlers compare it with 6, 0xe, 0x1e, 0x3e ... 0x1fe); the rescue offer needs one of bits 1-4.",u32
+RAM,0x8007986c,progress_bits,global,confirmed,"code read 2026-10-10 (MCARD talk handlers); MAZE 0x800a45b0 read 2026-10-11 (C, phase 4)","Bit k is set the first time the party enters area tier k (MAZE 0x800a45b0: area 0 bit 1, areas 1-4 bit 2, 5-8 bit 3 ...), so it grows 2, 6, 0xe, 0x1e ... 0x7fe. The rescue offer needs any of bits 1-4, which is true from the first trip into the Grounds.",u32
 RAM,0x80079668,cur_area,global,confirmed,code read 2026-10-10,Current area; written into Roster.area when a party is left in the maze.,u8
 RAM,0x80079906,cur_x,global,confirmed,code read 2026-10-10,Current x.,u8
 RAM,0x80079916,cur_y,global,confirmed,code read 2026-10-10,Current y.,u8

@@ -631,7 +631,8 @@ initial roster, the six premade characters, comes from code not traced here.
 - **G:**
   - The record fields above (+0x0a, +0x0b, +0x10 to +0x18), and the character image's
     mapping to the roster.
-  - `party_member_count` (0x80079891) is the roster count, as E noted.
+  - `party_member_count` (0x80079891) is the roster count, as E noted (now renamed
+    `roster_count` in seed.csv).
   - The race base stats table is 0x8005e1e8, 6 bytes per race, 11 races.
 - **A:**
   - Investigate (maze menu entry 0) runs MAZE 0x800cc5e0.

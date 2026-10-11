@@ -1,8 +1,8 @@
 # Code map
 
 The layout of Wizardry: Dimguil's code (SLPS-02691 Rev 1), and how to work on it with the
-tools in `scripts/re/`. This file is the map. What the code *does* is written up in
-`engine-notes.md`, which stays the narrative home of findings.
+tools in `scripts/re/`. This file is the map. What the code *does* is written up in the
+chapters in `docs/re/` (index: `docs/re/README.md`), summarized in `engine-notes.md`.
 
 Everything here is read from the original disc's files (`rips/clean/dimguil/`), not our
 patched build. Where our `asm/` patches change code, see "Patch sites" below.
@@ -111,14 +111,15 @@ through pointers set up at run time, or they're dead code. A function's
   8 the catalog or Compendium screens (0x800e38fc or 0x800ea6c8, by 0x800796d2), then
   town, 9 a talk (MCARD, `talk_state` 0, portrait file from a name table at 0x8005e5c8).
 - `game_state` (0x80079a13) picks the overlay routine main calls each frame: 1, 3, 5, 9,
-  0x32, 0x33 and 0x35 at least. The maze loop's return value (0x800a2cd8 in MAZE) picks
-  what happens next (2, 3, 4, 5, 7 are handled). Mapping each value is phase 2 work.
-- In state 0x35 (talk), `talk_party` (0x80079797) picks one of 23 handlers in MCARD:
-  0 Guy `talk_guy`, 1 Balbo `talk_balbo`, 2 Fontana `talk_fontana`, 3 0x800d65c8,
-  4 0x800d9b34 (inferred: Cresson's and Zaril's parties), then 6-0x17 at 0x800bff60,
-  0x800c064c, 0x800c08d0, 0x800c0b68, 0x800c12f4, 0x800ce4ec, 0x800cea7c, 0x800cebc8,
-  0x800cee54, 0x800cf0dc, 0x800cf364, 0x800cf5f0, 0x800d5750, 0x800d5910, 0x800d5d2c,
-  0x800d5f8c, 0x800d902c, 0x800d9334.
+  0x32, 0x33 and 0x35 at least. With MAZE resident, main runs `maze_frame` (0x800a31d8),
+  which dispatches on `game_state` (A-maze.md §2); the camp's `maze_exit_code`
+  (0x800799a8) tells main what to do after `camp_main`. (Phase 1 called 0x800a2cd8 the
+  maze loop; it's BATTLE's `battle_main`.)
+- In state 0x35 (talk), `talk_party` (0x80079797) picks a handler in MCARD: 0 Guy
+  `talk_guy`, 1 Balbo `talk_balbo`, 2 Fontana `talk_fontana`, 3 Cresson's scholars
+  `talk_cresson` (0x800d65c8), 4 Zaril `talk_zaril` (0x800d9b34), and the one-scene
+  handlers 6-28 (there's no 5). Phase 1 counted 23 and left 3 and 4 inferred; C mapped
+  all 28 (C-talk.md §1).
 
 The executable calls into overlays at fixed addresses. Each call only makes sense with
 the right overlay resident, so in each module's program some of MAIN's calls into the
@@ -128,8 +129,10 @@ like starts.
 
 ## Known entry points and tables
 
-The named symbols are in `scripts/re/symbols/seed.csv` (131 so far, every address in
-engine-notes, cheats, the asm patches and the scripts). The main ones:
+The named symbols are in `scripts/re/symbols/*.csv`: `seed.csv` (every address in the
+old engine-notes, cheats, the asm patches and the scripts) and one file per subsystem
+(`maze`, `camp`, `talk`, `battle`, `town`, `edge`, `records`, `fallen`). The main ones
+from phase 1:
 
 - MAIN: `main`, `load_file`, `load_file_alt` (encounter path), `load_overlay_by_name`,
   `rand_upto` (0..n inclusive), `text_expand`, `text_read_code`, `event_box_open`,
@@ -151,16 +154,20 @@ engine-notes, cheats, the asm patches and the scripts). The main ones:
 the decompiler print `roster[i].items[k] = 0xffff` instead of
 `(&DAT_8007d728)[i * 0x68 + k] = 0xffff`.
 
-## Phase 2: suggested split
+## Phase 2: the split (as planned)
 
-By subsystem, with what each owns. Sizes are decompiled C lines; the biggest functions
-are state machines and read slowly.
+How phase 2 (2026-10-11) divided the code, kept as the record of who owns what; each
+row's chapter is in `docs/re/` (A-maze, B-camp, C-talk, D-battle, E-town,
+F-edge-save, G-records). Sizes are decompiled C lines. Two "start from" entries proved
+wrong: 0x800a2cd8 is BATTLE's `battle_main`, not the maze loop (MAZE's is `maze_frame`
+0x800a31d8), and HAZURE's 0x800a4ef8 is `edge_cast_spell`. The Training Grounds code
+turned out to be in JOUKA, not HAZURE.
 
 | Subsystem | Owns | Size | Start from |
 |---|---|---|---|
 | A. Maze: movement, events, encounters | MAZE, apart from the camp; the encounter roll and how a friendly NPC meeting starts (handing off to mode 9); event triggers and their flags; what a wipe does | ~25,000 | the maze loop 0x800a2cd8 and its return codes; `encounter_load` callers; MAZE's biggest functions (0x800d0514, 0x800bb790, 0x800daa1c) |
 | B. Camp and maze menus | MAZE's camp: spells and items used outside battle, the party menus, settings | ~12,000 | `camp_config_toggles` 0x800d9304; MAZE functions not claimed by A |
-| C. NPC talks | MCARD 0x800b0000 up: all 23 handlers, the script interpreter and opcodes, the scripts as data (a script dumper would help), which lines play when (`progress_bits`, `met_bits`) | ~28,000 | `talk_script_run`, `talk_balbo` (calibrated), `talk_party` |
+| C. NPC talks | MCARD 0x800b0000 up: all 23 handlers (28 in the end), the script interpreter and opcodes, the scripts as data (a script dumper would help), which lines play when (`progress_bits`, `met_bits`) | ~28,000 | `talk_script_run`, `talk_balbo` (calibrated), `talk_party` |
 | D. Battle | BATTLE: turn order, attacks, spells, status effects, rewards, fleeing, NPC parties as enemies; the MAZE routines it calls (0x800ee5f4-0x800ef0cc) | 27,700 | main's calls into BATTLE per game state |
 | E. Town | JOUKA: tavern, inn (aging, level-up?), Boltac's (buy, sell, identify, uncurse), temple (raising: costs and odds), training grounds, Compendium and catalog | 33,700 | main's calls into JOUKA per game state; the patched screens listed above (temple 0x800c95f0, shops, status) |
 | F. Edge of Town and save/load | HAZURE, and MCARD 0x800a1000-0x800b0000 (memory card, save format, settings) | ~17,000 | the memory card cluster 0x800a9554-0x800aa9e0; HAZURE's 0x800a4ef8, 0x800afa9c |
@@ -186,8 +193,10 @@ and aging. Whoever finds a routine first names it; the other reads the CSV.
    re-read. `ghidra.py check` validates every CSV first: unknown modules or kinds,
    addresses outside the module, and the same address named two ways in one module.
    A full `build` is only needed if the analysis itself changes.
-4. **Write it up** in `engine-notes.md`: what the code does, with addresses, each claim
-   marked confirmed or inferred. Add the story of a hard trace to `writeup-notes.md`.
+4. **Write it up** in the subsystem's chapter in `docs/re/`: what the code does, with
+   addresses, each claim marked confirmed or inferred, and add a line to the summary in
+   `engine-notes.md` if it changes a rule there. Add the story of a hard trace to
+   `writeup-notes.md`.
 
 Parallel work is safe across modules. Each module is its own Ghidra project, and every
 run takes a per-module lock (`rips/re/locks/`), so two analysts on the same module take

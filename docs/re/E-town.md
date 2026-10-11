@@ -53,8 +53,8 @@ which isn't in today's translation. Read their wording as stale.
   - the recruit pool
   - the list of bodies announced when a party comes home
   - [code]
-- 0x80079891 (seed.csv calls it `party_member_count`) counts **roster entries**, not
-  party members. [code]
+- 0x80079891 counts **roster entries**, not party members, and is now named
+  `roster_count` in seed.csv (it was `party_member_count`). [code]
   - The temple, tavern and recruit loops run over roster indexes up to it.
   - Recruiting writes the new character at `roster[it]` and adds one.
   - `roster_compact` (0x800dcb70) recounts it after deleting.
@@ -113,9 +113,11 @@ So 614 is **not** the NPC rescue. It's the bodies a surviving party brings home.
   - JOUKA writes items only in a few places: Boltac's (buy, sell, uncurse, identify),
     equipping and trading, the ring taken in step 3, and blanking a deleted or lost
     record (`roster_clear_entry` 0x800dccc4).
-  - Time does pass in HAZURE: 0x800a4ef8, line ~1058 of its C, adds weeks and can make
-    a character Lost on a VIT roll. That's analyst F's.
-  - Whether the maze or HAZURE wears anything away is for A and F.
+  - HAZURE's 0x800a4ef8 is `edge_cast_spell` (F): the weeks it adds and its VIT roll
+    are Kadorto cast from the Edge of Town (rand(0..80) < VIT × 4, 1-52 weeks older),
+    not time passing. (This doc first read it as time decay.)
+  - Settled since: nothing anywhere takes items, gold or status from bodies left in the
+    maze (A-maze.md §5, fallen-parties.md).
 
 ## The temple (Temple of Cant)
 
@@ -431,10 +433,9 @@ What the game's text says about itself, checked against the code:
 
 - **Rosea, NPC_MES2 130** ("Revival at the Temple has better odds..."). The Temple's
   odds for the dead are 60 + 2 × VIT percent. A failure means ashes, which is then
-  68 + 2 × VIT. Whether that beats Rosea's own Kadorto depends on her spell's formula.
-  Her healing in `talk_balbo` picks script blocks; the result is in the talk script
-  opcodes, which are analyst C's. So her claim isn't settled here. If her Kadorto turns
-  out to be a flat or lower chance, the line is true as written.
+  68 + 2 × VIT. Settled by C (C-talk.md §5): an NPC's Kadorto (cure 6) never fails,
+  costs nothing and works on ashes, so her claim is false in this code. The line stays
+  as written (decisions.md 13).
 - The bodies an NPC party carries back appear in the Temple with no message. Text that
   says they're "carried to the Temple" (Balbo's 142, the log lines) matches what the
   code does.
@@ -466,10 +467,8 @@ What the game's text says about itself, checked against the code:
 
 ## Open
 
-- **Rosea's claim.** Her Kadorto's odds (analyst C, talk opcodes).
-- **Time decay.** HAZURE's 0x800a4ef8 adds weeks and can make a character Lost on a
-  VIT roll (rand 0-80 < VIT × 4). It may be the Edge of Town's rescue or rebirth path
-  (analyst F).
+- ~~Rosea's claim~~: settled, see Translation impact.
+- ~~Time decay~~: settled, see "Coming home from the maze".
 - **Fields for analyst G.** roster +0x8b (item bonus total), +0xc5 (King and story bits
   1, 4, 8, 0x10), 0x80079b44 and 0x80079754 (story flags).
 - **Shared variables.** 0x80079669 and 0x80079a5a are shared by town and camp and have

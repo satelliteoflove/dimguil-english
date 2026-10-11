@@ -162,8 +162,12 @@ card game), 0x2f sets the stats to 5/18/18/5/5/18. Item 0x133 is handled on its 
 
 ## Monster record (0xd0 bytes)
 
-The last 0xd0 bytes of each DATA02/M_DTnnn.BIN (339 files, 215 distinct records, ids
-0-334), and of each member of an NPC party file NPTnn.BIN. In battle, group g's record
+Monster records sit at the end of each DATA02/M_DTnnn.BIN, one per group in the
+encounter, with the first group last (339 files; correction from description-check.md
+**[record]**). This doc first read only the last 0xd0 bytes of each file, which gave
+215 distinct records (ids 0-334) and missed 17 monsters that exist only as earlier
+groups: Medusa, Dullahan, the demon lords, Quetzalcoatl and others. Each member of an
+NPC party file NPTnn.BIN is a record in the same layout. In battle, group g's record
 is `monster_records` (0x8008a918) + g*0xd0, so group 1 is at 0x8008a9e8; groups 1-4 are
 byte-for-byte copies of the file's (confirmed: RAM dump against M_DT004). seed.csv's
 monster_records row is now typed Monster[5] (group 0 is the party's slot).
@@ -182,7 +186,8 @@ record equals M_DT004's tail byte for byte) and the data profile below; +0x6e (i
 the picture) and +0x8f-0xa2 (four schools of five entries, 0xff none, read by monster_pick_spell; inferred:
 spell levels) are still open.
 
-A byte-by-byte profile of the 215 records is in "How it was traced"; D owns the rest.
+A byte-by-byte profile of those 215 records (the last group of each file only) is in "How
+it was traced"; D owns the rest.
 
 ## Races and classes
 
@@ -321,9 +326,10 @@ if under a random cap and rand(0..level-1) > 3. Else it rises by 1 when under th
 + 10 (+ 11 for a male's Str or a female's Vit) and rand(0..41) > the stat. The flags it sets
 (0x800798a6) pick the level-up messages.
 
-Age: the inn adds a day per stay (seven make a week), camp resurrection adds weeks, class
-change adds three years, and some items move it by a year (equip_effect 0xd, 0xe). E has
-the inn rules.
+Age: the inn adds a week for each paid week and a day for a night in the Stables (seven
+days make a week; E-town.md, emulator-checked), Kadorto adds 1-52 weeks to the character
+it raises (B), class change adds three years, "Retrain?" at creation adds a year (F), and
+some items move it by a year (equip_effect 0xd, 0xe).
 
 ## Class change
 

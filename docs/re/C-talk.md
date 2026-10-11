@@ -150,7 +150,7 @@ Per-NPC flags found (all [code]):
 | Address | Name | What it holds |
 |---|---|---|
 | 0x80079618 | `npc_stage` | Each party's story stage, one bit per stage: Guy bits 1-3, Balbo 4-6, Fontana 7-9, Cresson 10-12. A new game has 0x492, stage 1 for each. MAZE 0x800a45b0 moves them on as you first reach deeper areas, clearing the old bit as it sets the new one; handlers 20 and 25 move Fontana and Cresson. [code] |
-| 0x8007986c | `progress_bits` | Bit k is set the first time you enter area tier k (MAZE 0x800a45b0): 1-4 tier 2, 5-8 tier 3, 0x12 tier 4, 0x13-0x16 tier 5, 0x17-0x1b tier 6, 0x1c-0x1f tier 7, 0x20-0x23 tier 8, 0x24-0x27 tier 9, 0x2b tier 10. So it grows 2, 6, 0xe, 0x1e ... 0x7fe. [code] |
+| 0x8007986c | `progress_bits` | Bit k is set the first time you enter area tier k (MAZE 0x800a45b0): area 0 (the Grounds) tier 1, 1-4 tier 2, 5-8 tier 3, 0x12 tier 4, 0x13-0x16 tier 5, 0x17-0x1b tier 6, 0x1c-0x1f tier 7, 0x20-0x23 tier 8, 0x24-0x27 tier 9, 0x2b tier 10. So it grows 2, 6, 0xe, 0x1e ... 0x7fe. [code] |
 | 0x80079b28 | `oneshot_flags` | Bits 10/11: Guy's party is Evil/Good. Bits 12/13: Balbo's party is Good/Evil. A new game has 0x2800: Guy Good, Balbo Evil. Bits 1-4: "the maze has changed" greetings seen (Guy, Balbo, Fontana, Cresson). [code; alignment meaning inferred from the strings] |
 | 0x80079b44 | `story_flags` | Bit 10: the maze has changed (the metal walls), tested by every greeting selector. Bit 29: Cresson has handed over the decipher primer, which turns on camp's Decipher. [code] |
 | 0x80079754 | `npc_flags` (A's) | Story bits for NPC meetings. Each scene handler sets its own bit, which A finds the maze uses to decide which NPC can turn up next (`npc_availability`). [code] |
@@ -240,7 +240,7 @@ characters cast it:
 For comparison: the Temple revives the dead with 60 + 2×VIT out of 100, at 1 HP, else
 they turn to ashes. Ashes come back with 68 + 2×VIT, else the character is lost. The fee
 is taken before the roll (E, `docs/re/E-town.md`). Camp Kadorto works if rand(0..80)
-< VIT×4, costs 0-1 VIT and ages the caster 1-52 weeks (B, `docs/re/B-camp.md`). So every
+< VIT×4, costs 0-1 VIT and ages the target 1-52 weeks (B, `docs/re/B-camp.md`). So every
 NPC warning that the Temple is safer is false in this code: the NPCs' Kadorto is free,
 certain and complete. [code; not tested in the emulator]
 
@@ -290,9 +290,11 @@ scan and no offer. [code; Cresson's and Zaril's read in full for this]
 - **Candidates**: a party that's in use, isn't the current party, and whose members
   all have status > 0x1f. So paralyzed, stoned, dead, ashes or lost all count, not
   only dead. [code]
-- **Offer**: `progress_bits` & 0x1e (true from tier 2 on; a new game is 2, so the
-  first time you reach areas 1-4), at least one candidate, and the third 50% service
-  roll. [code]
+- **Offer**: `progress_bits` & 0x1e, at least one candidate, and the third 50% service
+  roll. [code] The mask includes bit 1, which MAZE 0x800a45b0 sets the first time you
+  enter the Grounds (area 0), so in practice the gate is open from the first trip into
+  the maze, not only from tier 2. (Corrected in phase 4, from the code: this doc first
+  said "from tier 2 on".)
 - **Yes**: one candidate party is picked at random (`rand_upto(count - 1)`). Each member
   gets `area` = 0xff (back in town), status unchanged, and pays the fee. [code]
 
