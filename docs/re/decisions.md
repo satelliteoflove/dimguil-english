@@ -49,6 +49,9 @@ items. Fixing it gives everyone one roll per item, which makes every wipe much h
 Recommendation: keep the original behavior and document it. Players of the Japanese game have
 always had it, and a translation patch that makes wipes harsher would surprise anyone
 comparing the two.
+**Decided (Chris, 2026-10-11): keep the original and document it on the site; may revisit
+later.** In practice the one character rolled is whoever stands in the party's first
+position (`bugs.md` 3.1).
 
 **9. Weapon effects ignore level** (3.2). A level bonus is computed and thrown away.
 Recommendation: keep the original, for the same reason.
