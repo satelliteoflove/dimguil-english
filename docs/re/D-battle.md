@@ -745,8 +745,14 @@ are in `scripts/re/battle_checks/` (run from the repo root); raw output went to
 - 196 "is lost" means the character is deleted (level drained to 0). **[code]**
 - 198 "Each survivor gains N experience!": survivors means status below 0x20, so a
   paralyzed or stoned member gets nothing. **[code]** The line is accurate.
-- 199 "Carried to the temple." and 200 "Press a button to return to the castle." weren't
-  found in BATTLE's code yet. **[inf]**
+- 199 "Carried to the temple." and 200 "Press a button to return to the castle." aren't
+  used as immediates anywhere in BATTLE. After a wipe, `battle_main` goes to phases
+  0x4a-0x54 (seen in the emulator wipe test **[emu]**): it loads picture file 0x1b7, draws
+  each member's name with string 0x186 (390, not a FIGHTMSG index), waits for a press, then
+  hands back to the executable with mode 2 (0x8001c440). **[code]** Which text that screen
+  actually shows, and whether 199 plays anywhere, is still open. Since a wipe outside the
+  training maze leaves the bodies in the maze, "Carried to the temple" can't describe that
+  case.
 - The site's claims checked: the Gold armor's 50% break chance, and Matokani's level-8
   limit, are both true. **[code]**
 - 174-185 (the "engulfed in" lines) play once a round for each group under an Alchemist
