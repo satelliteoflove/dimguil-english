@@ -251,7 +251,7 @@ there. **They don't.** Evidence:
   - the town's stat recompute (JOUKA 0x800d0574, for every roster record), which only
     changes derived bytes (+0x84, +0x98, +0xb0-0xbd), see [section 11](#other-findings);
   - the NPC parties' rescue, which charges its fee then (C's handlers; see
-    engine-notes "Body recovery by NPC parties").
+    C-talk.md §5).
 
   E (town), F (Edge of Town, saves, resume) and D (battle) each report that nothing
   in their code takes from characters left in the maze. Aging at the inn applies only

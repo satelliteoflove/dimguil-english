@@ -289,7 +289,7 @@ What this part of the code shows, for the body questions in engine-notes.md:
   resuming.
 - **Getting them back:**
   - Look for Companions on the exact square **[code]**: everything kept.
-  - An NPC party's offer (engine-notes.md, "Body recovery by NPC parties"): with a fee.
+  - An NPC party's offer (C-talk.md §5): with a fee.
   - Resume Adventure, only if someone is still standing **[code]**.
 
 ## Training Grounds (JOUKA): creation and class change

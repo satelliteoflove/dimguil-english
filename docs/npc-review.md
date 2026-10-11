@@ -160,7 +160,7 @@ NPC_MES5 (Zaril, Fritillaria, Gaura)
   for the Camazotz. All four are はばたくかげ ("flapping shadow") in Japanese. Settled
   2026-10-09: both names stay (Gaiden IV uses Flap Figure), and the plurals are fixed;
   see translation-notes.
-- The body-recovery fees (engine-notes.md, "Body recovery by NPC parties"): Guy's
+- The body-recovery fees (docs/re/C-talk.md §5): Guy's
   party takes all the rescued characters' gold, Balbo's takes all their items, and
   Fontana's takes half the gold and every other item. Their offer lines sound
   generous, so check the irony when their scenes come up. Balbo's (NPC_MES2 142-145)
