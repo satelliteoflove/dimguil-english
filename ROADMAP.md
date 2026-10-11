@@ -54,6 +54,13 @@ of the redump set, since the build leaves both audio tracks untouched.
 - **Known issues.** Tracked as GitHub issues with the "known issue" label, which the
   README links to; there's no separate file to keep in sync (decided 2026-10-07). The
   release notes name the worst few, for players who download from romhacking.net.
+- **Game changes up front.** Every fix to the original game's code, and every piece of
+  restored or reopened content, is listed plainly in the README, the release notes and the
+  romhacking.net page, where a player sees it before patching (Chris, 2026-10-11: players
+  may feel either way about content that's suddenly patched in, so they need to know up
+  front). It also covers deliberate non-fixes players might ask about, such as the wipe's
+  one-character item loss. The source list is `docs/re/bugs.md` and the "Game bug fixes"
+  section of `docs/translation-notes.md`. The wording is Chris's.
 - **romhacking.net.** Submit the release package.
 
 ## Work streams
