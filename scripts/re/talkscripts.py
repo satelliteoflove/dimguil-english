@@ -23,7 +23,7 @@ Opcodes (talk_script_run 0x800b8ccc, halfwords): see OPS below.
 import json, os, struct, sys
 
 ROOT = os.path.join(os.path.dirname(__file__), '..', '..')
-MCARD = os.path.join(ROOT, 'rips/q7iso/dimguil/MCARD.BIN')
+MCARD = os.path.join(ROOT, 'rips/clean/dimguil/MCARD.BIN')
 BASE = 0x800a1000
 RUN = 0x800b8ccc
 MEMSET = 0x80024c50
@@ -520,7 +520,12 @@ def main():
             if off in snaps:
                 view = Machine(m.ram, set())
                 view.stack = snaps[off]
+            # an array ends where the next one starts (arrays are laid out back to back,
+            # and decoding past the end shows the next array's scripts out of step)
+            nxt = min([o for o, _ in arrays if o > off] + [1 << 30])
             for b in range(64 if stride else 1):
+                if stride and b > 0 and off + b * stride >= nxt and off not in snaps:
+                    break
                 hw = halfwords(view, sp + off + b * stride, stride // 2 if stride else 400)
                 if all(x is None for x in hw):
                     break

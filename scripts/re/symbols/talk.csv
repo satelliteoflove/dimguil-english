@@ -1,0 +1,62 @@
+module,address,name,kind,confidence,source,note,type
+MCARD,0x800d65c8,talk_cresson,function,confirmed,code read 2026-10-11 (C),"talk_party 3: the archive scholars (Cresson, Cleo, Bergamot), NPC_MES4. Heal (Cleo or Bergamot), decipher check (state 0x3c), the primer that sets story_flags bit 29 (camp Decipher), chat; no rescue, no sale. See docs/re/C-talk.md.",
+MCARD,0x800d9b34,talk_zaril,function,confirmed,code read 2026-10-11 (C),"talk_party 4: Zaril, Fritillaria, Gaura, NPC_MES5. Intro, sale, chat, fight (encounter 0xe); no healing, no rescue.",
+MCARD,0x800bff60,talk_scene_guy_tablet,function,confirmed,code read 2026-10-11 (C),"talk_party 6: Guy's party (Lychee's mishap), then the seal/tablet explanation (1:105-112); sets met bits 0-3, npc_flags bit 21, flag 21.",
+MCARD,0x800c064c,talk_scene_guy_statue_a,function,confirmed,code read 2026-10-11 (C),"talk_party 7: Guy's statue warning, 1:88 if met Guy, else 1:89 (bug: 1:87 intended, immediate at 0x800c0814); npc_flags bit 17.",
+MCARD,0x800c08d0,talk_scene_guy_statue_b,function,confirmed,code read 2026-10-11 (C),"talk_party 8: Guy's statue warning, 1:86 if met Guy, else 1:295; npc_flags bit 15.",
+MCARD,0x800c0b68,talk_scene_guy_slippers,function,confirmed,code read 2026-10-11 (C),"talk_party 9: Guy asks for the Ruby Slippers (item 0x11e). Giving them removes the item, clears npc_flags bit 7, sets flag 20 (met_bits[2] 0x10); no gold here (the 10000 G comes in Guy's next greeting).",
+MCARD,0x800c12f4,talk_scene_guy_trap,function,confirmed,code read 2026-10-11 (C),"talk_party 10: Guy resting, crazy trap ahead (1:91-93 or 296/89/90); npc_flags bit 8.",
+MCARD,0x800ce4ec,talk_scene_balbo_switch,function,confirmed,code read 2026-10-11 (C),"talk_party 11: Balbo's two-switch door; same alignment 2:75-78, else 2:72-74; yes ends with talk_state -3, no with -4.",
+MCARD,0x800cea7c,talk_scene_balbo_thanks,function,confirmed,code read 2026-10-11 (C),"talk_party 12: 2:81 after the switches, then talk_balbo's menu; npc_flags bit 19.",
+MCARD,0x800cebc8,talk_scene_balbo_stone,function,confirmed,code read 2026-10-11 (C),"talk_party 13: 2:83 (met Balbo) / 2:82; npc_flags bit 16.",
+MCARD,0x800cee54,talk_scene_balbo_center,function,confirmed,code read 2026-10-11 (C),"talk_party 14: 2:85 / 2:84; npc_flags bit 12.",
+MCARD,0x800cf0dc,talk_scene_balbo_bars,function,confirmed,code read 2026-10-11 (C),"talk_party 15: 2:87 / 2:86; npc_flags bit 10.",
+MCARD,0x800cf364,talk_scene_balbo_discs,function,confirmed,code read 2026-10-11 (C),"talk_party 16: 2:89 / 2:88; npc_flags bit 26.",
+MCARD,0x800cf5f0,talk_scene_balbo_treasure,function,confirmed,code read 2026-10-11 (C),"talk_party 17: 2:264 / 2:265; npc_flags bit 4.",
+MCARD,0x800d5750,talk_scene_fontana_meet,function,confirmed,code read 2026-10-11 (C),"talk_party 18: 3:74, then talk_fontana's menu; npc_flags bit 20.",
+MCARD,0x800d5910,talk_scene_fontana_statue,function,confirmed,code read 2026-10-11 (C),"talk_party 19: the statue with the Tablet of the Sun slot, 3:67 or 3:68-71; npc_flags bit 13.",
+MCARD,0x800d5d2c,talk_scene_fontana_split,function,confirmed,code read 2026-10-11 (C),"talk_party 20: Fontana's party splits, Zaril leaves (3:75-89); npc_flags bit 11; npc_stage &= ~0x1d0, |= 0x220 (Fontana stage 3, Balbo stage 2).",
+MCARD,0x800d5f8c,talk_scene_pit,function,confirmed,code read 2026-10-11 (C),"talk_party 21: the pit trap (3:90-107); rescuer Guy (npc_flags bit 7 set) or Balbo; block 1 never selected; npc_flags bit 3.",
+MCARD,0x800d902c,talk_scene_cresson_mourning,function,confirmed,code read 2026-10-11 (C),"talk_party 22: Cresson on Cleo and Bergamot (4:24-29) when npc_flags bit 2 is set and nobody has marks[0] bit 1; then talk_cresson.",
+MCARD,0x800d9334,talk_scene_tablet,function,confirmed,code read 2026-10-11 (C),"talk_party 23: the stone tablet of 26 glyphs, 4:30-35 or 4:36-41; npc_flags bit 14.",
+MCARD,0x800d9558,talk_scene_cleo_report,function,confirmed,code read 2026-10-11 (C),"talk_party 24: Cleo, 4:42 / 4:43; npc_flags bit 24.",
+MCARD,0x800d97e4,talk_scene_control_room,function,confirmed,code read 2026-10-11 (C),"talk_party 25: Cleo and Bergamot reveal themselves (4:45-54, or 4:55), then a battle (encounter 0xf); npc_flags bit 2; Cresson stage 1 -> 2.",
+MCARD,0x800dbdd4,talk_scene_warning,function,confirmed,code read 2026-10-11 (C),"talk_party 26: the mysterious man's warnings, 5:105-107 by talk_script_status on entry, or 5:108-111 (4); 0x80079b48 |= 0x80.",
+MCARD,0x800dc114,talk_scene_agan,function,confirmed,code read 2026-10-11 (C),"talk_party 27: Agan, 5:112; npc_flags bit 23.",
+MCARD,0x800dc2d8,talk_scene_zaril_attacked,function,confirmed,code read 2026-10-11 (C),"talk_party 28: Zaril's party appears under attack (5:118-121); ends with talk_state -5.",
+MCARD,0x800bfe4c,talk_load,function,confirmed,code read 2026-10-11 (C),"Loads the NPC_MES file named by DAT_800796bf and, for the five party files, runs the greeting selector (0x33 greet_guy ... 0x37 greet_zaril).",
+MCARD,0x800b9ed0,greet_guy,function,confirmed,code read 2026-10-11 (C),Guy's greeting selector: builds greet_flags and returns the greeting block.,
+MCARD,0x800cbaa8,greet_balbo,function,confirmed,code read 2026-10-11 (C),Balbo's greeting selector.,
+MCARD,0x800d2f60,greet_fontana,function,confirmed,code read 2026-10-11 (C),Fontana's greeting selector.,
+MCARD,0x800d8210,greet_cresson,function,confirmed,code read 2026-10-11 (C),The scholars' greeting selector; sets oneshot_flags bit 4 on the maze-changed greeting and talk_flags 8 on the first.,
+MCARD,0x800db730,greet_zaril,function,confirmed,code read 2026-10-11 (C),Zaril's greeting selector; talk_flags 0x10 marks the first meeting.,
+MCARD,0x800d85e8,greet_bergamot_line,function,confirmed,code read 2026-10-11 (C),"Bergamot's greeting line (4:9-13, 4:134): ages, all spells known, Decipher started, names Marguda and Arabik, one exact stat line.",
+MCARD,0x800d8c98,greet_cresson_line,function,confirmed,code read 2026-10-11 (C),"Cresson's greeting line (4:14-16, 18, 21): a member named DIMGUIL, max HP > 9999, level >= 100; else 4:18 (4:19/20 never chosen).",
+MCARD,0x800d9a68,greet_cleo_line,function,confirmed,code read 2026-10-11 (C),Cleo's greeting line: talk_str_b = 0x38/2/4.,
+MCARD,0x800dba44,greet_fritillaria_line,function,confirmed,code read 2026-10-11 (C),"Fritillaria's greeting: 5:16 if 10000+ kills, 5:17 if 10+ deaths (names the wrong member: searches kills, runs to index 6), else 5:13-15.",
+MCARD,0x800dc604,greet_gaura_line,function,confirmed,code read 2026-10-11 (C),Gaura's greeting: 5:18 or 5:19.,
+MCARD,0x800c2564,talk_chat_builder,function,inferred,code read 2026-10-11 (C),Builds Guy's chat-topic script array (state 0x28).,
+MCARD,0x800c7128,talk_farewell_builder,function,inferred,code read 2026-10-11 (C),Builds Guy's farewell script array (40-byte blocks).,
+MCARD,0x800b42d0,npc_cure,function,confirmed,code read 2026-10-11 (C),"Talk opcode 9: cure n on a roster index: 0 Dios 2d4, 1 Dialko (clear 0x20), 2 Dial 2d8, 3 Latumofis (clear 4, poison = 0), 4 Dialma 3d8, 5 Madi (clear 0x64, full HP), 6 Kadorto (clear 0x180, full HP; no roll, no cost).",
+MCARD,0x800b9898,npc_sale,function,confirmed,code read 2026-10-11 (C),"An NPC party's item sale from npc_sale_table set n: shows three items and the price, takes the gold (first member who can pay, else pooled), gives the item to the first free slot; returns -1 bought, -2 can't pay, -3 declined.",
+MCARD,0x800a1cf8,npc_sale_table,table,confirmed,code read 2026-10-11 (C),"54 sets of 3 item ids and a price (8 bytes each), copied to the stack by npc_sale.",
+MCARD,0x800c5a54,portrait_load,function,confirmed,code read 2026-10-11 (C),Loads character n's portrait TIM into a free portrait slot (0x8007957c/d).,
+MCARD,0x800b49dc,portrait_show,function,inferred,code read 2026-10-11 (C),Talk opcode 0's fade-in of a portrait at x.,
+MCARD,0x800b4c88,portrait_hide,function,inferred,code read 2026-10-11 (C),Talk opcode 1's fade-out; returns -1 when done.,
+MCARD,0x800b4f44,portrait_face,function,inferred,code read 2026-10-11 (C),Talk opcode 3: sets a portrait's expression.,
+MCARD,0x800b3dcc,bit_test,function,confirmed,code read 2026-10-11 (C),"Returns word >> n & 1.",
+MCARD,0x800d9ae4,decipher_score,function,confirmed,code read 2026-10-11 (C),Counts decipher_table entries where the guess for ancient letter i is A-Z letter i (0-26).,
+MCARD,0x800bf94c,talk_narration,function,inferred,code read 2026-10-11 (C),Draws a say2 string in the centered narration box.,
+MCARD,0x800b1ddc,pack_compact,function,confirmed,code read 2026-10-11 (C),"Closes gaps in a character's pack: moves items and item_state down over empty (0xffff) slots.",
+RAM,0x80079618,npc_stage,global,confirmed,code read 2026-10-11 (C),"Each NPC party's story stage, one bit per stage: Guy bits 1-3, Balbo 4-6, Fontana 7-9, Cresson 10-12; new game 0x492. Advanced by MAZE 0x800a45b0 on first entering deeper areas and by talk_scene_fontana_split / talk_scene_control_room; saved.",u32
+RAM,0x800799b0,greet_flags,global,confirmed,code read 2026-10-11 (C),"Bits a greeting selector builds for its choice (meaning per party in docs/re/C-talk.md); bit 0 is also 'compatible', tested for NPC sales.",u32
+RAM,0x80079b40,talk_speaker,global,confirmed,code read 2026-10-11 (C),Which member of the NPC party speaks the greeting or farewell (random).,u8
+RAM,0x800795d6,talk_str_a,global,confirmed,code read 2026-10-11 (C),NPC string number filled into a greeting's second say at run time.,s16
+RAM,0x80079c6c,talk_str_b,global,confirmed,code read 2026-10-11 (C),"NPC string number filled into a say slot at run time (greetings, farewells, scene lines).",s16
+RAM,0x800796d0,talk_topic_str,global,confirmed,code read 2026-10-11 (C),Guy's chat topic bar string (1:281-285).,s16
+RAM,0x80079b50,talk_menu,global,confirmed,code read 2026-10-11 (C),"The talk menu's options: 7 Talk/Fight/Leave, 5 Talk/Leave; bit 0 cleared after a heal or three sales.",u8
+RAM,0x80079b8c,talk_menu_cursor,global,confirmed,code read 2026-10-11 (C),Cursor on the talk menu.,s8
+RAM,0x80079be8,talk_count,global,confirmed,code read 2026-10-11 (C),Talk presses this meeting (talk_cresson and talk_zaril only).,u8
+RAM,0x80079991,npc_sale_set,global,confirmed,code read 2026-10-11 (C),"Set number for the next npc_sale, picked from progress_bits on yes; kept between talks.",u8
+RAM,0x800796bf,talk_file,global,confirmed,code read 2026-10-11 (C),Table-2 index of the NPC text file a talk loads: 0x33-0x37 = NPC_MES1-5.,u8
+RAM,0x8007957e,talk_narration_pending,global,confirmed,code read 2026-10-11 (C),Set by talk opcode 11 (say2); the scene handler then draws the narration box.,u8
