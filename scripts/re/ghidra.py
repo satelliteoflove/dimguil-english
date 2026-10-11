@@ -32,7 +32,7 @@ import csv, fcntl, glob, json, os, subprocess, sys, time
 from concurrent.futures import ThreadPoolExecutor
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
-DISC = os.path.join(ROOT, 'rips/q7iso/dimguil')        # the original disc's files
+DISC = os.path.join(ROOT, 'rips/clean/dimguil')        # the original disc's files
 RE = os.path.join(ROOT, 'rips/re')
 SYMS = os.path.join(ROOT, 'scripts/re/symbols')
 SCRIPTS = os.path.join(ROOT, 'scripts/re/ghidra_scripts')

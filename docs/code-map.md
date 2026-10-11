@@ -4,7 +4,7 @@ The layout of Wizardry: Dimguil's code (SLPS-02691 Rev 1), and how to work on it
 tools in `scripts/re/`. This file is the map. What the code *does* is written up in
 `engine-notes.md`, which stays the narrative home of findings.
 
-Everything here is read from the original disc's files (`rips/q7iso/dimguil/`), not our
+Everything here is read from the original disc's files (`rips/clean/dimguil/`), not our
 patched build. Where our `asm/` patches change code, see "Patch sites" below.
 
 ## Tools

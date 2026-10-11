@@ -15,7 +15,7 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 sys.path.insert(0, os.path.join(ROOT, 'scripts'))
 from gametext import dec
 
-DISC = os.path.join(ROOT, 'rips/q7iso/dimguil')
+DISC = os.path.join(ROOT, 'rips/clean/dimguil')
 RACES = 'Human Elf Dwarf Gnome Hobbit Faerie Lizardman Dracon Rawulf Mook Felpurr'.split()
 CLASSES = ('Fighter Mage Priest Thief Samurai Lord Valkyrie Ranger Bard Alchemist Psionic '
            'Bishop Ninja Monk').split()

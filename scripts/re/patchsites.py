@@ -4,7 +4,7 @@
     patchsites.py            table of every .org in asm/*.asm, with the function it lands in
     patchsites.py --md       the same as a markdown table (for docs/code-map.md)
 
-Analysis reads the original disc (rips/q7iso/dimguil), so the decompiled C shows the
+Analysis reads the original disc (rips/clean/dimguil), so the decompiled C shows the
 game's own code. Where a patch site falls in a function, the patched build behaves
 differently there; read the .asm file named before trusting the C for that spot.
 Needs rips/re/decomp/*/index.json (scripts/re/ghidra.py build).
