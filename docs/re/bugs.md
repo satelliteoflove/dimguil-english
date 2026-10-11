@@ -17,10 +17,12 @@ him first. So each entry is in one of three groups:
 
 | Group | Count |
 |---|---|
-| 1. Clear bugs, fixed | 10 |
-| 2. Cut or unclear, ask | 8 |
-| 3. Balance, ask | 4 |
-| Not bugs, or harmless | 7 |
+| 1. Clear bugs | 11 (10 fixed; 2.8, the pit soft lock, confirmed and waiting on one choice) |
+| 2. Cut or unclear, ask | 6 |
+| 3. Balance, ask | 3 |
+| Not bugs, or harmless | 9 (2.7 and 3.4 moved here after the follow-ups) |
+
+Entries keep their numbers after a follow-up moves them to another group.
 
 ## Group 1: clear bugs
 
@@ -258,21 +260,65 @@ there's no "tell" topic in the code. [code]
 
 Question for Chris: looks like a cut topic. Leave unused?
 
-### 2.7 Greeting blocks nothing picks
+### 2.7 Greeting blocks nothing picks: harmless duplicates
 
-Guy's greeting blocks 38, 39, 41 and 42, and Zaril's 2 and 3. [code; not traced further]
+Traced 2026-10-11. **Harmless; nothing is lost.** Every one of these blocks plays the same
+lines as a block that is picked.
 
-Question for Chris: these need tracing before they can be judged.
+- **Guy 38/39 and 41/42.** `greet_guy` (MCARD 0x800b9ed0) returns them from the branches
+  for "met all four of Guy's party, stage 2" (`greet_flags & 0x4101 == 0x4100`, line 1056
+  of the C) and the same at stage 3 (`& 0x8101 == 0x8100`), in the sub-case where the
+  party has already had that stage's first greeting (`met_bits[1]` 0x40, or 0x10 at
+  stage 3). But an earlier branch of the same if/else chain, `& 0x4181 == 0x4180` (and
+  `& 0x8141 == 0x8140`), matches exactly that case first and returns 33/34 (35/36 at
+  stage 3). So only the first-greeting sub-case of the later branch (block 37, or 40) is
+  ever reached. [code]
+  - Block 38 is Guy's 1:18 alone, and block 39 is 1:18 with a member's reply (1:20-22, or
+    Fritillaria's 1:14); 33 and 34 are the same lines. Block 41 is 1:19 alone, and 42 is
+    1:19 with a reply; 35 and 36 are the same lines. The only difference is which global
+    carries the reply's string and face (`talk_str_b`/0x800796e4 against
+    `talk_str_a`/0x800796ed). [dump]
+- **Zaril 2/3.** `greet_zaril` (MCARD 0x800db730) returns 0, 1, 4 or 5, never 2 or 3
+  (its last `else` can't be reached either: with `greet_flags` bit 3 set, bits 3 and 1
+  are always 8 or 10). Blocks 2 and 3 are identical to 4 and 5: Zaril's 5:2, alone or
+  with Gaura's or Fritillaria's reply. [code, dump]
 
-### 2.8 The pit scene with no rescuer
+No question for Chris: picking these would change nothing on screen.
+
+### 2.8 The pit scene with no rescuer: a soft lock (now group 1)
 
 When `npc_flags` bit 7 is set (Guy is the rescuer) but nobody in the party has met Guy,
-`talk_scene_pit` picks no rescuer block, and the last block played runs again in state
-0x14, which has no way out except a block that ends with `close`. [code; the hang is
-inferred]
+`talk_scene_pit` (MCARD 0x800d5f8c) picks no rescuer block in state 0xf, so `talk_block`
+keeps the block that just played. State 0x14 runs it again; it ends with `end`, not
+`close`, so `talk_state` stays 0x14 for good. `talk_script_run` does nothing once the
+status is -1, and nothing else ends the talk. [code]
 
-Question for Chris: worth testing in the emulator first. If it hangs, the fix would pick
-the stranger's version (block 4) for that case.
+**Confirmed in the emulator** (2026-10-11, `rips/re/work/P3-follow/pit_test2.py`). The
+setup used RAM writes: from `npc_talkmode.state` (a real talk, window open), the current
+build's MCARD.BIN and file tables were laid into RAM, the talk was switched to handler
+21, `npc_flags` bit 7 was set and every member's "met Guy" bit (`met_bits[0]` bit 0) was
+cleared or set. Circle was pressed every 30 frames for 3,000 frames.
+- Nobody met Guy, our build: blocks 0 and 1 play, then block 1 plays again in state
+  0x14, then the screen sits on Fontana's portrait and an empty text window with
+  `talk_state` 0x14, status -1, for the rest of the run. The game can't be continued.
+- Nobody met Guy, original MCARD: the same, except block 0 (the fall) plays twice.
+- Control, a member met Guy: Guy's block 2 plays, `close` ends the talk, and the game is
+  back in the maze within 90 frames.
+
+When it can happen: bit 7 is set the first time the party enters areas 0x13-0x16 (MAZE
+0x800a45b0, while progress tier 5 is new) and cleared by giving Guy the Ruby Slippers or
+on first reaching areas 0x20-0x23. The pit is in Area C's trash rooms (C-B2). So a party
+in which no member has been introduced to Guy (new recruits, or a party rebuilt after a
+loss) that falls into the pit in that window is stuck. [code]
+
+Fix: in state 0xf, when bit 7 is set and nobody has met Guy, fall through to the
+bit-7-clear choice: block 3 (Balbo) if a member has met Balbo, else block 4 (the man in
+armor). Guy has no stranger version, and his block 2 ("Besides, I owed you one") assumes
+an introduction. Not implemented yet.
+
+Question for Chris: the soft lock is a clear bug. The only choice is who rescues a party
+that has never met Guy: Balbo's party (the bit-7-clear rescuer, as above, recommended),
+or Guy anyway with his lines as written.
 
 ## Group 3: fixes that would change how the game plays
 
@@ -300,27 +346,77 @@ Question for Chris: fixing it makes a weapon's poison, sleep, stone and death ef
 more often on weaker monsters and less often on stronger ones. Fix it, or keep the flat
 odds?
 
-### 3.3 Level drain reads +0x81 the other way round
+### 3.3 Level drain reads +0x81 the other way round: confirmed backwards
 
-Traps and breath save on `rand(20) < +0x81`, but drain lands on
-`(rand(255) & 31) < +0x81`. Either +0x81 isn't a save, or the drain check is backwards.
-[inferred (D)]
+Traced 2026-10-11. +0x7e..+0x82 are five Wizardry-style saving throws (`unk7e` and
+`saves[0..3]` in `types.h`), rebuilt at every battle start by `battle_derive_saves`
+(BATTLE 0x800a1b84): each is level / 5 + Luck / 6, held to 1-14, plus class bonuses of
+1-3 (`save_bonus`, 0x800a2aac, capped at 33). +0x81 is the fourth, and the Thief's +3
+goes there. [code]
 
-Question for Chris: needs more reading before anything is changed.
+Every other reader treats it as a save, higher is better:
+- breath (`monster_breath`, BATTLE 0x800b39c4): save (+5 with a matching resistance, at
+  most 18) passed to `saving_throw`; a pass halves the damage;
+- the chest's gas trap (`chest_trap_effect` 0x800c7010): a pass escapes the poison.
 
-### 3.4 The town's stat recompute may accumulate
+`saving_throw` (0x800cbdbc) returns 0, a pass, when rand(20) < save. [code]
 
-JOUKA 0x800d0574 (run on entering town for every character, and in the shops, inn and
-Training Grounds) copies the record, resets AC and regen, then adds every equipped
-item's bonuses. It doesn't reset the resistances (+0xb0-0xbd), which it adds to and caps
-at 100, and a mis-aligned item lowers to-hit by one each pass. A saw some of these bytes
-drift on dead characters in 40 inn nights. [code; emu (A), drift only]
+Level drain (`apply_status_effects`, BATTLE 0x800aa190, once per member per battle) lands
+when `(rand(255) & 31) < +0x81` and `rand(100) >` the drain resistance (+0xba). So the
+better a character's save, the more often they're drained, and the comparison is
+backwards against every other use of the field. [code] What it means in play, before
+drain resistance:
 
-Question for Chris: if it really accumulates for living characters too, resistance gear
-reaches 100% after a few trips to town. That needs a test before deciding.
+| +0x81 | Drained now (save / 32) | Drained if fixed ((32 - save) / 32) |
+|---|---|---|
+| 1 (a new character) | 3% | 97% |
+| 3 (level 5, Luck 12) | 9% | 91% |
+| 7 (level 20, Luck 18) | 22% | 78% |
+| 10 (the same, a Thief) | 31% | 69% |
+
+Question for Chris: almost certainly a reversed comparison, but the fix makes level drain
+far more common, especially for low-level characters (about 1 in 11 becomes about 9 in
+10). Keep the original, which players of the Japanese game have always had, or fix it?
+The numbers suggest keeping it.
+
+### 3.4 The town's stat recompute accumulates, but nothing reads the result
+
+`town_stat_recompute` (JOUKA 0x800d0574) copies the record to `new_char`, resets only AC
+and regen, then adds each equipped item's bonuses (`town_item_bonuses` 0x800d0754,
+`town_item_bonus_one` 0x800d08f4, `town_unarmed_bonus` 0x800d0d24 for Ninja and Monk):
+to-hit, the weapons' damage bonus, magic and effect resistances (held to 100), effect
+chances, and OR'd masks. A mis-aligned item takes 1 off to-hit each pass. Nothing is
+reset first, so every pass adds again. [code] MAZE's camp has a copy that does the same.
+
+It runs very often: on the town screen with a party it ran about twice a frame, and 66
+times on the walk from the town menu to the inn.
+
+**Confirmed in the emulator, on the original disc too** (2026-10-11,
+`rips/re/work/P3-follow/jp_tohit.py`, the same button presses as `mkstates.py`, no RAM
+writes). The four premade characters' to-hit (+0x84) went 4, 5, 1, 2 → 2116, 2145, 329,
+458 after forming the party → 3316, 3645, 629, 1058 after 600 frames idle in town. The
+JP Rev 1 disc and our build gave the same numbers. Venus's damage bonus byte (+0x98)
+wraps round past 255.
+
+**But nothing outside battle reads those fields.** `fielduse.py` finds every reader of
+to-hit, damage dice, resistances, effect chances and masks in BATTLE. And
+`battle_derive_stats` (BATTLE 0x800a1830) rebuilds the whole block from scratch at the
+start of every battle: dice reset to 2d2 plus a Strength bonus, resistances and masks
+zeroed, the saving throws worked out again, then the gear added once. Watched in the
+emulator (`fight_test.py` and a watchpoint, button presses only): walking from the
+inflated state into a fight, to-hit went 3976, 4470, 794, 1388 → 14, 11, 4, 4, written
+at 0x800a1b50 in that rebuild. The swing thresholds and damage rolls logged in that
+fight used the rebuilt values (damage bonus 9, 4, 0, 0). [emu]
+
+So the drift is real in the original but never reaches play. Not a bug worth fixing;
+moved to "harmless". No question for Chris.
 
 ## Not bugs, or harmless
 
+- **2.7, the greeting blocks nothing picks**: duplicates of blocks that are picked, with
+  the same lines. See 2.7 above.
+- **3.4, the town stat recompute**: it accumulates, but battle rebuilds every field it
+  touches before reading them. See 3.4 above.
 - **Every spell has a 1% failure floor** through magic resistance (+1 in the formula). Very
   likely intended. (D)
 - **`party_store_pos`** (MAIN 0x8001bbc8) writes the area only for roster index 0, but the
