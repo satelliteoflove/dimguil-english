@@ -1,10 +1,220 @@
 # Engine notes
 
-What we learned about Wizardry: Dimguil (SLPS-02691 Rev 1) while translating it, beyond
-Remisse's notes in `findings.md`. Addresses are RAM unless a file is named. Commit messages carry
-more of the detail behind each item.
+What we know about how Wizardry: Dimguil (SLPS-02691 Rev 1) works, beyond Remisse's
+notes in `findings.md`. This file is the front door. It summarizes the game's rules and
+keeps the notes the translation itself depends on (text printing, file loading, glyph
+pools). The detail is in the chapters in `docs/re/`, listed in `docs/re/README.md`,
+and the layout of the code and the tools are in `code-map.md`.
 
-## Loading files
+Addresses are RAM unless a module or file is named. Overlays share the window at
+0x800a1000, so an overlay address only means something with its module named. Every
+finding in the chapters is marked confirmed (by code read, RAM read or an emulator
+test, named each time) or inferred; the summaries below link to them rather than
+repeating the marks, and say "inferred" where a summary rests on an inference.
+
+The rules were read from the original disc's code (`rips/clean/dimguil`) with Ghidra,
+on 2026-10-10 and 11; the earlier notes below came from translating the game.
+
+## How the game is put together
+
+- **Modules.** The executable (MAIN) stays resident. Seven overlays take turns at
+  0x800a1000: MAZE (the maze and its camp; also loaded at boot), BATTLE, MCARD (every
+  NPC talk, the maze's START menu, and the memory card), JOUKA (the castle town and
+  the Training Grounds), HAZURE (the Edge of Town), and the card game's CMAIN and
+  CMENU. `load_file` (0x80012d18) loads them from file table 0 (indexes 172-178); the
+  card game's two are loaded by name. Sizes, coverage and patch sites: `code-map.md`.
+- **Main loop.** `main` (0x800114d8) loops forever. A request in `game_mode`
+  (0x8007967e) makes it load an overlay (1 and 4 MAZE, 2 BATTLE, 3 JOUKA, 5 HAZURE,
+  6 the card game, 7 and 9 MCARD, 8 the catalog or Compendium) and set `game_state`
+  (0x80079a13), which picks the routine it calls each frame. With MAZE loaded that's
+  `maze_frame` (0x800a31d8); with BATTLE, `battle_main` (0x800a2cd8); a talk is state
+  0x35, which calls the handler picked by `talk_party` (0x80079797).
+- **Underlays.** A smaller overlay leaves the previous one's tail in RAM, and two rely
+  on it: BATTLE calls seven of MAZE's routines at 0x800ee5f4-0x800ef0cc (so a patch to
+  MAZE above 0x800db028 changes battles too), and HAZURE calls JOUKA's 0x800d9130.
+- **Fixed calls.** The executable calls overlay routines at fixed addresses, valid only
+  while the right overlay is loaded (0x800c76f0, for one, falls in the middle of
+  Balbo's talk handler in MCARD).
+- **Randomness.** `rand_upto(n)` (0x8001cb18, 0..n inclusive) keeps its state at
+  0x80079558 and 0x8007955c; `$gp` is 0x80079538. BATTLE doesn't use it: it rolls
+  with two small LCGs in the executable (D-battle.md, "Randomness"). The town calls `rand_upto(2)` every frame, so
+  waiting a different number of frames before the same button presses changes the next
+  roll: that's how the emulator tests checked both sides of a threshold without
+  writing to RAM.
+- **Records.** Twenty characters at 0x8007d708 (0xd0 bytes each), twenty party records
+  at 0x8008f8c8 (54 bytes), the party you walk with mirrored at 0x8007e810, 382 item
+  records at 0x80052bf2 in the executable, and monster records loaded per battle at
+  0x8008a918. Every field is in `docs/re/G-records.md` and `scripts/re/types.h`.
+- **Story state.** `progress_bits` (0x8007986c) gets bit k the first time the party
+  enters area tier k (bit 1 the Grounds, bit 2 the Shrine, and so on), so it grows 2, 6,
+  0xe ... 0x7fe; many talks and shops pick their lines and stock by it. `npc_stage`
+  (0x80079618) holds each NPC party's story stage, `npc_flags` (0x80079754) which
+  meetings and scenes have happened, `story_flags` (0x80079b44) and `oneshot_flags`
+  (0x80079b28) the rest. Each character remembers which NPCs it has met (`met_bits`,
+  roster +0xc6), and the save keeps it.
+
+## The game's rules
+
+The formulas players care most about are collected in `docs/re/README.md`, "Rules at a
+glance". By subsystem:
+
+### The maze (A-maze.md)
+
+- **Steps.** After each step, in order: a wandering token on your square starts a
+  fight or a talk; poison (1 in 4 per step, its strength off HP) and regeneration
+  (1 in 4) run, and the party's spell timers count down; a party with nobody standing
+  is wiped (`wipe_check`, so poison or a pit wipes a party exactly as a battle does);
+  then the square's event runs, and the tokens move.
+- **Encounters.** There's no per-step encounter roll. Fights come from fight squares
+  (each a single percentage chance per visit to the floor), from up to 16 wandering
+  tokens per floor that you meet by sharing a square (you can hear them within one
+  square), and from fixed fights set by events.
+- **NPC parties.** On most floors exactly one token is an NPC party, picked at random
+  from the parties the story allows there. A party's random meetings only start after
+  its fixed first meeting, and on the Grounds and in the Shrine no party wanders at all
+  while any fixed meeting there is pending. The full table of who can be met where:
+  A-maze.md §8.
+- **Events.** Each floor has a 24 x 24 map of event records (teleports, chutes, lifts,
+  fight squares, signs, doors, pillars...); stepping on a square runs `square_arrive`,
+  Investigate runs `square_examine`. Hidden doors are found by a search roll on each
+  step. A-maze.md §9-10.
+
+### Wipes and bodies (A-maze.md §4-6, D-battle.md, fallen-parties.md)
+
+- **A wipe** deletes anyone Lost, halves every member's gold, and rolls one member's
+  items for destruction six times over (2 in 3 per roll for rare items, the Tablet of
+  the Sun among them; 1 in 4 for the rest). That's a bug: the loop should go over each
+  member (bugs.md 3.1, left as is pending Chris's decision). Outside the Training Maze
+  the bodies stay on the square where they fell; in it they go straight to town, but
+  still lose items and gold.
+- **Bodies don't decay.** Nothing takes items, gold or status from a party left in the
+  maze, however long it lies there: every routine that writes characters or the party
+  table was read, and two emulator runs (40 inn nights; a trip back into the maze to the
+  bodies' square) logged no such write. fallen-parties.md has the full table.
+- **Getting them back.** Look for Companions (the maze's START menu) picks up bodies
+  on your exact square for free, items and gold included; one square off it says
+  "There are faint traces, but no one was found." Or an NPC party carries them home for
+  a fee (below). Either way they reach town still dead, and the Temple raises them.
+
+### NPC talks (C-talk.md, C-talk-lines.md)
+
+- **Handlers.** Every talk runs in MCARD. `talk_party` picks one of 28 handlers: 0-4
+  are the parties met at random (Guy, Balbo, Fontana, Cresson's scholars, Zaril), 6-28
+  one-off scenes. Each builds its scripts on its own stack every frame and runs them
+  through `talk_script_run` (0x800b8ccc), a small interpreter of 13 opcodes (say,
+  bar, show and hide a portrait, cure, gold, close...). `scripts/re/talkscripts.py`
+  dumps them, and `C-talk-lines.md` says when each NPC_MES string plays.
+- **A Talk press.** Introductions first, while no member has met the leader. After
+  that, half the time a service is tried, in order: healing (when someone is hurt or
+  has a status), a sale (when someone has an empty pack slot), a rescue (when another
+  of your parties lies wiped in the maze), each on its own 50% roll. Otherwise a chat
+  topic.
+- **Healing** is free, from two healers per party chosen 50/50, and what they can cure
+  grows with their party's story stage; most roll a 20% "out of magic" first. An NPC's
+  Kadorto never fails: no roll, no fee, no VIT loss, no aging, and it works on ashes.
+- **Sales** are sets of three items at one price (5 to 20,000 G), chosen by
+  `progress_bits`; some of the items are cursed.
+- **The rescue.** Guy's, Balbo's and Fontana's parties offer it; Cresson's and Zaril's
+  never do. A party counts if every member is paralyzed or worse. On yes, one such party
+  goes back to town, still dead, and the NPC party takes a fee from each member: Guy all
+  the gold; Balbo every item (all ten slots, equipped and cursed ones too); Fontana half
+  the gold and the items in slots 1, 3, 5, 7 and 9. The gate (`progress_bits` & 0x1e)
+  is open from the first trip into the Grounds.
+- **Bugs and cut content.** C found a dozen. Ten clear bugs are fixed (bugs.md group
+  1); the cut-looking ones (an identify service with no code, Zaril's healing, missing
+  re-introductions, Cresson's greeting scan) wait on Chris (decisions.md).
+- Earlier notes, now in C-talk.md: the 2026-10-06 trace had the interpreter at
+  0x800b8ccc right but read two opcodes' arguments wrong (opcode 0 takes two and sets
+  met bits only during introductions; opcode 6 takes one). The 2026-10-10 body-recovery
+  trace, from a RAM dump taken during a talk with Guy (`rips/probe/ram_talk94.bin`),
+  stands, except that the offer is the third service roll, not a coin flip of its own.
+  Forcing an NPC party through the battle loader (`nptshow.py`'s trick) starts a fight,
+  not a talk; the first meeting with Guy at the Shrine door is a fixed meeting like
+  the others (A-maze.md §8).
+
+### The camp (B-camp.md)
+
+- **Spells.** 26 spells work in camp. Dumapic and Malor fail in areas 9-17, Loktofeit
+  there too, and a 232-step no-magic countdown set by some squares makes every camp
+  spell fail; each failure still spends the point. A heal with nothing to heal says
+  "What?" and spends it. Camp Kadorto works on rand(0..80) < VIT × 4, takes 0-1 VIT and
+  adds 1-52 weeks of age; below 4 VIT the dead turn to ashes and the ashes are Lost.
+  Loktofeit empties every pack slot of every member.
+- **Items.** Effects are hard-coded by item id. A Bishop identifies with
+  (level - item level + 1) × 20%, held to 5-75%; a miss may make the Bishop afraid and
+  put a cursed item on them. Equipping an item of the wrong alignment curses it.
+- **Heal ranges** in camp: Dios 2-8, Diomas 3-6, Madial 10-50 per member.
+
+### Battle (D-battle.md)
+
+- **Initiative.** Every fighter gets a tick 0-10 each round; lower acts first. The
+  party's is rand(10) adjusted by agility; monsters' is 2-9, so a fast character often
+  beats every monster.
+- **To hit.** A swing hits on rand(20) >= T, where T depends on the target's AC, the
+  attacker's to-hit and the target group (party: base 20-23 by group, capped at 19, at
+  least 1); 5% to 95% a swing. Damage is the weapon's dice, up to nearly double against
+  a target that's confused, poisoned or worse (or from hiding), and doubled by a
+  slaying weapon that matches the monster's class.
+- **Spells.** Most battle spells are one call to a dice routine (Halito 2d4). Magic
+  resistance is a per-school percentage, and every spell has at least a 1% chance of
+  being resisted. The Alchemist's damage spells
+  are three-round clouds. Battle heals: Dios 2-8, Dial 2-16, Dialma 3-24, Diomas 3-6,
+  Madial 17-68 per member.
+- **Surprise and fleeing.** 19% the party surprises the monsters, else 15.4% the
+  monsters surprise the party. The party flees on 80 (+5 × the level ratio when
+  stronger) minus 2 × the area's danger level; fixed battles can't be fled.
+- **After.** Experience is split among members below status 0x20; chest gold the same.
+  Chests are trapped by the area's danger level, and traps are picked from the chest's
+  mask.
+
+### The town (E-town.md)
+
+- **Temple.** The fee (level × 100 paralysis, × 200 stone, × 250 dead, × 500 ashes) is
+  paid before the roll. Paralysis and stone always cure. The dead come back with
+  1 HP on rand(0..99) < 60 + 2 × VIT, else turn to ashes; ashes come back with full HP
+  on < 68 + 2 × VIT, else the character is Lost and deleted. Ashes are easier to raise
+  than the dead.
+- **Inn.** Rooms cost 0, 10, 50, 200, 500 or 10,000 G a week for +0, 1, 3, 7, 10 HP or
+  full; each paid week ages the character a week (the Stables a day), and one level-up
+  is tried per stay.
+- **Boltac's** pays half the price for anything sold; uncursing destroys the item;
+  selling out nothing earns a free Book of Movement, more than once.
+- **Tavern recruits** come from pools gated by alignment, wipes and progress, matching
+  a June 2000 fan tally.
+
+### The Edge of Town, the Training Grounds and the save (F-edge-save.md)
+
+- **Creation.** Bonus points are 7-10 (about 95%), 17-20 (4.5%) or 27-30 (0.2%). The
+  class list follows the stats and the alignment table. Declining a character with
+  under 10 points offers "Retrain?", which ages them a year and gives a level.
+- **Class change** resets each stat to the higher of the race base and the new class's
+  minimum, adds three years and unequips everything not cursed.
+- **The save** is one file of two blocks: a header and a 0x2400-byte image whose layout
+  is fully mapped (`scripts/re/savefile.py` decodes it). Nothing in saving, loading or
+  resuming touches characters left in the maze.
+
+### Records (G-records.md)
+
+- The character record's fields (status bits, age, stats, the pack's flag bits:
+  sub hand, main hand, equipped, identified, cursed), the item table (restrictions,
+  curse, break chance, price, stock, AC, to-hit, damage, swings, slaying, battle spell),
+  monster records, race and class tables, the seven EXP tables, HP dice, spell points
+  and learning, level-up stat rolls and death of old age.
+
+### Bugs, descriptions and open decisions
+
+- `docs/re/bugs.md`: every bug found, in three groups. Group 1 (ten clear bugs) is fixed
+  in `asm/bugfix_*.asm`.
+- `docs/re/description-check.md`: item, spell, Compendium and help text checked against
+  the records and the code (18 spell ranges in the original are wrong).
+- `docs/re/decisions.md`: what's waiting on Chris.
+
+## Notes the translation depends on
+
+These came from fitting the English into the game. They're the reason for most of the
+patches in `asm/`.
+
+### Loading files
 
 - The executable holds four tables of file locations (MSF + sector count); a loader call
   takes (destination, index, table). `scripts/gametext.py --files` lists them, and
@@ -30,36 +240,17 @@ more of the detail behind each item.
 - String offsets in the text files are 16-bit, so no text file can pass 64 KB.
 - Save states hold loaded files. After a build that changes text, or moves a file, old
   states show stale text or read the wrong sectors; regenerate them (`mkstates.py`).
+  - A state from before a build that moved files reads the NPC files from the old
+    sectors and shows blank boxes. Copying the four file tables (0x80051760-0x80052700)
+    from the built SLPS_026.91 into RAM after loading fixes that.
+  - FIGHTMSG.OBJ is loaded once at boot and stays resident, so a state made on an older
+    build keeps that build's battle text for as long as it runs, and with newer code
+    around it prints garbage ("Mars looses at Flap Insect wi / th / 0088ththerer...",
+    seen 2026-10-11 in a test state descended from an old one). The same goes for an
+    emulator save state carried across a patch update in play: continue from the
+    memory card instead.
 
-## Overlays and the main loop
-
-Mapped on 2026-10-11 while setting up the decompiler; the full map is in `code-map.md`.
-Confirmed by code read of `main` (0x800114d8) and by matching 23 RAM dumps against the
-overlay files, unless marked inferred.
-- Seven overlays share 0x800a1000: MAZE, BATTLE, MCARD, JOUKA, HAZURE, CMAIN, CMENU.
-  `load_file` (0x80012d18) loads one: table 0 index 172 JOUKA, 173 BATTLE, 174 HAZURE,
-  175 MCARD, 178 MAZE. The card game's CMAIN and CMENU are loaded by name through
-  DsSearchFile (0x800241f8), though table 0 lists them too (176, 177).
-- `main` loads MAZE at boot and loops. A request in `game_mode` (0x8007967e) makes it
-  load the overlay that mode needs (1 and 4 MAZE, 2 BATTLE, 3 JOUKA, 5 HAZURE, 6 the
-  card game, 7 and 9 MCARD), record which one in 0x800798b3, and set `game_state`
-  (0x80079a13), which picks the overlay routine called each frame.
-- Every NPC talk runs in MCARD. In talk state (0x35) `main` calls one of 23 handlers
-  picked by 0x80079797: 0 Guy (0x800b5694), 1 Balbo (0x800c7264), 2 Fontana
-  (0x800cf8c0), 3 and 4 inferred to be Cresson's and Zaril's parties (0x800d65c8,
-  0x800d9b34), 6 to 0x17 the rest (listed in code-map.md).
-- A smaller overlay leaves the previous one's tail in RAM, and two depend on it. BATTLE
-  calls seven of MAZE's routines at 0x800ee5f4-0x800ef0cc (about 40 call sites), so
-  battles need MAZE underneath, and a patch to MAZE above 0x800db028 changes battles too.
-  HAZURE calls JOUKA's 0x800d9130 (from 0x800afa9c); the outskirts RAM dump has JOUKA's
-  tail under HAZURE. MCARD runs over MAZE's tail in talks but calls nothing past its end.
-- The executable calls overlay routines at fixed addresses, valid only while the right
-  overlay is loaded. One of them, 0x800c76f0, falls in the middle of Balbo's talk
-  handler in MCARD, so it belongs to another overlay.
-- `$gp` is 0x80079538. `rand_upto` (0x8001cb18) keeps its state at 0x80079558 and
-  0x8007955c.
-
-## Text printer
+### Text printer
 
 - One printer (reader at 0x8001e0c0) draws dialogue, battle and event text. Codes below
   0xd8 are English glyphs and digraphs, priced by the VWF table at 0x80060e97.
@@ -80,7 +271,7 @@ overlay files, unless marked inferred.
   lookahead at each space (and each digraph ending in one), so words move whole.
   `fightfit.py` simulates it over every combination of name lengths.
 
-## Text buffer
+### Text buffer
 
 - Dialogue, event and castle strings are expanded whole (every page) by 0x8001dfc0 into
   a buffer at 0x8008b400 before printing. Nothing bounds it, and 16 bytes of live data
@@ -91,7 +282,7 @@ overlay files, unless marked inferred.
   (424) and NPC_MES4 151 (378). `textbuf.py` holds every string to 544 bytes, leaving
   room for inserted names, and the build stops if one is over.
 
-## Glyph sprite layers
+### Glyph sprite layers
 
 - Each glyph is drawn as a sprite from a pool ("layer"). A screen sets up four layers
   when it opens (0x800db3d0 in JOUKA calls 0x8001f150 per layer; 720 sprites in all;
@@ -172,7 +363,7 @@ overlay files, unless marked inferred.
   what the English takes; `signfit.py` checks it after every build. Test rig:
   `rips/states/training_sign_front.state`, triangle.
 
-## Spell bar
+### Spell bar
 
 - Inspect Character > Cast Spell shows the highlighted spell's description (STATUS.OBJ
   420-503) in a one-line bar. It prints the first 30 glyph codes and drops the rest; the
@@ -182,7 +373,7 @@ overlay files, unless marked inferred.
   cursor can show only the tail of the text. That's an artifact of editing RAM under a
   drawn string; normal cursor movement, fast or slow, draws correctly.
 
-## Item catalog
+### Item catalog
 
 - The catalog draws the item's picture, then the description below it, and clips the
   text at about y=220 with no scrolling. ITEM.DAT has 252 pictures at 152x108 (text
@@ -213,7 +404,7 @@ overlay files, unless marked inferred.
   the item is moved or scaled and it goes back onto the bare parchment
   (`graphics/item_panel_bg.png`); scaling the whole picture misaligned the texture.
 
-## Battle
+### Battle text and monster files
 
 - Monster data sits in DATA02/M_DTnnn.BIN at 0x10280 (in RAM, 0xd0-byte records from
   0x8008a918). Each of up to three attacks has a u16 noun at +0xac/+0xb6/+0xc0 and a verb
@@ -232,129 +423,12 @@ overlay files, unless marked inferred.
   English name slots too. `nptnames.py` writes the patches in `binary/`, and `nptshow.py`
   forces a fight with any party to check the enemy panel.
 
-## NPC conversations
-
-Partly traced on 2026-10-06, to find what decides which NPC lines play. Addresses are in
-the maze overlay as loaded during a talk.
-- A talk runs as a small script. 0x800c154c builds it on the stack, 43 blocks of 40
-  halfwords, mostly constants with a few values filled in from globals (0x8007969a,
-  0x800796ed, 0x800796e4, 0x800795d6, 0x80079c6c, 0x80079a5a), and copies it to
-  0x801ff118. The interpreter at 0x800b8ccc reads the opcode at the script position
-  (halfword index at 0x80079a26) and dispatches through a 13-entry table at 0x800a1cc4,
-  for opcodes -1 to 11.
-- Opcode 2 prints NPC string N (the next halfword) through 0x8001dfc0 from the file at
-  0x801a0400; -2 and -3 variants insert a character's name. Opcode 6 loads a portrait.
-- Opcode 0 sets a bit (0-19) in bytes +0xc6..+0xc8 of each of your party's roster
-  records (0x8007d708, 0xd0 bytes each). So "have we met them" is remembered per
-  character, not globally: a new character in your party gets the unnamed greetings.
-- Not yet found: what picks the block for a talk topic (News and the rest), and so
-  which progress state gates those lines. The first meeting with Guy at the first door
-  is a scripted event and never reaches the talk menu. Forcing an NPC party through
-  the battle loader (nptshow.py's trick) starts a fight, not a talk; the friendly
-  encounter goes through another path that hasn't been found.
-- Save states from before a build that moved files read the NPC files from the old
-  sectors and show blank boxes. Copying the four file tables (0x80051760-0x80052700)
-  from the built SLPS_026.91 into RAM after loading fixes that.
-
-### Body recovery by NPC parties
-
-Traced on 2026-10-10 to settle what Balbo's offer (NPC_MES2 142-145) does. All of it is
-a static code read of the talk overlay in a RAM dump taken during a talk with Guy
-(`rips/probe/ram_talk94.bin`; the same bytes are in ram_t, ram_hit and ram_w), unless
-marked otherwise. Nothing here was run in the emulator: meeting Balbo's party with a
-wiped party of your own in the maze needs a state nobody has made yet. Work files are
-in `rips/probe/bodies/`.
-
-The offer is real, and it's about your own characters. When Guy's, Balbo's or
-Fontana's party meets you and another of your parties lies wiped out in the maze, the
-leader can offer to carry it back to town. Say yes and every member of one wiped party
-goes back to town, still dead, and the NPC party takes a fee from each of them. The fee
-depends on the party:
-
-| Party | Handler | Script | Fee from each rescued character |
-|---|---|---|---|
-| Guy (NPC_MES1 163-166) | 0x800b5694 | 0x800a1c28 | all gold (+0x1c set to 0); items kept |
-| Balbo (NPC_MES2 142-145) | 0x800c7264 | 0x800a4e28 | every item (all ten slots emptied); gold kept |
-| Fontana (NPC_MES3 151-154) | 0x800cf8c0 | 0x800a68b4 | half the gold (+0x1c shifted right by 1) and the items in slots 1, 3, 5, 7 and 9 |
-
-The fees match what each leader says on "yes". Guy's いただけるところから,いただきますから
-is "we'll take what we can from where we can", Balbo's line says that lot had fine
-gear, and Fontana's says he won't do you wrong. Cresson's and Zaril's parties have the
-"rescue our companions" log line (4:165, 5:116) but no offer string and no recovery
-code, so they never offer. That last part is inferred from the absence of both.
-
-Confirmed by code read:
-- Each party's talk has its own large handler, a state machine with a static script
-  copied to the stack. Balbo's handler copies 0x800a4e28 to sp+0x16b8 (0x800c8748),
-  Guy's copies 0x800a1c28 to sp+0x3d48 (0x800b5a10) and Fontana's copies 0x800a68b4 to
-  sp+0x1ed8 (0x800d0610). Each handler's yes/no code later runs its own copy. The
-  other big-frame functions (0x800bff60, 0x800c154c, 0x800c2564, 0x800d65c8,
-  0x800d9b34) are probably the other parties' handlers or shared talk code. They
-  aren't mapped yet.
-- Static talk scripts are runs of 15-halfword (30-byte) blocks. Block 0 is the main
-  script, block 1 runs on "yes" and block 2 on "no". The handler selects one by storing
-  0, 1 or 2 in 0x80079bb4 and calling the interpreter on stack copy + 30 × that value.
-  Balbo's is `6,4,0,4,109 3,4,0,109 2,142 7,143 -1`, then `3,4,1,109 2,144 -1`, then
-  `2,145 -1`.
-- Opcode arguments, read from the scripts and handlers: 6 takes 4 (portrait), 3 takes
-  3 (inferred: the speaker's face), 2 takes 1 (print string N; -2/-3 variants add a
-  name), and 7 takes 1. Opcode 7 (0x800b9220) prints string N in the bottom bar
-  through 0x800b3c40(0xa6, 6, N, 1). That's how the yes/no question (143) and the topic
-  log lines ("We asked them who they were", 7,302 in Guy's runtime script) show. 9
-  takes 1 and follows each healing line (inferred: which cure). Opcode 1 (0x800b8e9c)
-  sets 0x800798a4 = 10, and opcode 3's slot (0x800b8ec8) sets 0x800798a4 = 15.
-  Opcode handlers by table slot: -1 and 4 → 0x800b9598, 0 → 0x800b8d40, 1 → 0x800b8e9c,
-  2 → 0x800b8ed8, 3 → 0x800b8ec8, 5 → 0x800b9190, 6 → 0x800b9004, 7 → 0x800b9220,
-  8 → 0x800b9338, 9 → 0x800b93f8, 10 → 0x800b944c, 11 → 0x800b9464.
-- When the offer is made (Balbo's handler, 0x800c9354-0x800c9508; Guy's and Fontana's
-  have the same scan near 0x800b6544 and 0x800d10e8). The handler walks the 20 party
-  records at 0x8008f8c8, 54 bytes each: +0 an id (-1 = unused), +1 the member count,
-  +2..+7 roster indexes (-1 = empty). A party is a candidate if it's in use, isn't the
-  party you're walking with (the id in 0x8007e810), and every member's roster
-  halfword +0x0e is 0x20 or more. Candidates go in the list at 0x8008d300, with the
-  count in 0x80079895. If any of bits 1-4 of 0x8007986c are set and the count is above
-  0, a coin flip (0x8001cb18(1) == 0) decides whether the leader opens with the offer
-  (state 0x41). Otherwise the talk goes on as usual (state 0x28).
-- The yes/no (state 0x42): 0x800b0614 reads the pad and the two-option cursor at
-  0x80079c5a. It returns 4 or 2, inferred to mean confirm and cancel. A 4 with the
-  cursor on the first option is yes. A 4 on the second option, or a 2, is no. On yes the handler picks one candidate at random,
-  0x8001cb18(count - 1) into 0x80079895. For each of its members it sets roster +0x7a
-  to 0xff (back in town) and takes the fee (Balbo: 0x800cac68-0x800cad64; Guy:
-  0x800b7e88-0x800b7f3c; Fontana: 0x800d23c4-0x800d24dc). Nothing in these loops
-  touches the status at +0x0e. So the bodies arrive in town as they were, and the
-  Temple still has to raise them.
-- 0x8001cb18(n) is the random number routine (state in 0x20($gp) and 0x24($gp)). It's
-  called all over the talk handlers.
-- Fontana's version also walks your current party afterwards (count at 0x80079891),
-  calling 0x800b3cb8 and 0x800b1ddc for each member. Inferred: it redraws the panel.
-
-Roster record fields learned along the way (0x8007d708, 0xd0 bytes each; see also
-`docs/cheats.md`):
-- +0x0e, u16: status. 0 for healthy characters (RAM read in several states). The
-  offer treats 0x20 and above as dead; the exact values for dead, ashes and lost
-  aren't mapped yet (inferred).
-- +0x1c gold (u32) and +0x20 ten item slots (u16, 0xffff = empty). Already known;
-  the fees above use them.
-- +0x34..+0x3d: one byte per item slot. The fee code sets it to 0xff when it empties
-  a slot. Inferred: a per-slot state, such as equipped, cursed or identified.
-- +0x7a: where the character is. 0xff means in town (RAM read: everyone in town has
-  0xff, and characters in the maze with you have 0x00). +0x7b and +0x7c are x and y,
-  +0x7d is the facing. Code read: 0x800afd88-0x800afe5c and two copies
-  (0x800b0280, 0x800b2250) write the current area (0x80079668), x (0x80079906),
-  y (0x80079916) and facing (0x80079b34) into +0x7a..+0x7d for each member of a party.
-  That's where a party is left in the maze. Inferred: area 0 is the first area.
-- 0x800aed90-0x800aee3c compares each candidate's +0x7a..+0x7c with the square you're
-  standing on. Inferred: that's the player's own body search, finding a wiped party on
-  the current square.
-- 0x800ad2c0 sets +0x7a = 0xff for six records and clears a 32-byte table at 0x8008c4d0.
-  Inferred: a reset or new-party path.
-
-## Card battle
+### Card battle
 
 See `scripts/cardref.py`'s header for the CMENU.BIN tables (passwords, Lv 1 templates,
 EXP scale, Option bonuses, unit records) and `docs/cheats.md` for the card stock in RAM.
 
-## Settings
+### Settings
 
 - The Configuration settings are bytes at 0x80096378: Item, Monster and Spell Names and
   Status (0 = Japanese, 1 = English), Sound Output (1 stereo, 2 mono), Music, Effects,
