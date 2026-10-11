@@ -1,0 +1,63 @@
+module,address,name,kind,confidence,source,note,type
+HAZURE,0x800a1394,edge_main,function,confirmed,code read + emulator 2026-10-11 (F),"Edge of Town, game_state 9. Snapshots the roster and parties every frame, runs the 8-item menu (9 with Dragon's Cave when story_flags bit 31 is set) and dispatches by edge_state: 10 Begin Adventure, 15 Training Maze, 20 Dragon's Cave, 25 Resume, 30 Prepare, 35 Suspend, 40 Book of Movement, 45 Settings, 50 Back to Town.",
+HAZURE,0x800a1f50,menu_input,function,confirmed,code read 2026-10-11 (F),"Reads the pad for a menu: returns 4 for circle (confirm), 2 for cross (cancel), 3 square, 1 triangle, 5-10 shoulder/select/start, 11-14 for the d-pad, and moves the two cursors passed in.",
+HAZURE,0x800a2034,edge_enter_maze,function,confirmed,code read 2026-10-11 (F),"Begin Adventure / Training Maze / Dragon's Cave: fades out (edge_fade_out), prints 'One moment, please', reloads FIGHTMSG and the maze data. The destination is next_place (0xff, 0xfe, 0xf6), set by the caller.",
+HAZURE,0x800a21b0,edge_resume_adventure,function,confirmed,code read + emulator 2026-10-11 (F),"Resume Adventure: restores parties from parties_saved, lists every member of other parties who is out of town, and makes the chosen one's party current if any member's status is below 0x20; enters the maze at the first member's saved area/x/y/facing (next_place 0xfc). Moves anyone saved at area 0x17 (4,11) to (5,11).",
+HAZURE,0x800a3998,edge_suspend_game,function,confirmed,code read + emulator 2026-10-11 (F),"Suspend Game: copies parties to parties_saved, sets next_place 0xfb (save screen), then 'Thank you for playing ... press O to resume'.",
+HAZURE,0x800a3be0,edge_prepare,function,confirmed,code read 2026-10-11 (F),Prepare for Adventure: Inspect Character (edge_inspect) / Reorganize Party (edge_reorder) / Back.,
+HAZURE,0x800a3f50,edge_inspect,function,inferred,code read 2026-10-11 (F),"Inspect Character at the Edge of Town: status screen, Cast Spell, Items, Sort Items.",
+HAZURE,0x800a4ef8,edge_cast_spell,function,inferred,code read 2026-10-11 (F),"Casting outside battle from the Edge of Town: healing (2d4, 2d8, 3d8, full), cures by status bit, raising from dead or ashes (vitality test), identify, and a stat-or-alignment boon menu (SISETU 0x11e-0x127).",
+HAZURE,0x800a8d9c,status_has,function,confirmed,code read 2026-10-11 (F),"status_has(char, k): 0 alive and hurt; 1 poison 0x04; 2 paralyzed 0x20; 3 stone 0x40; 4 dead 0x80; 5 ashes 0x100; 6 afraid 0x01; 7 K.O. 0x10; 8 confused 0x02; 9 asleep 0x08.",
+HAZURE,0x800a9034,edge_identify_menu,function,inferred,code read 2026-10-11 (F),Item identify submenu (SISETU 0x6a).,
+HAZURE,0x800a982c,edge_identify_item,function,inferred,code read 2026-10-11 (F),"Identifying an item: fail, touched it, cursed, identified (SISETU 0xf0-0xf2, 0x76).",
+HAZURE,0x800aa160,edge_use_item,function,inferred,code read 2026-10-11 (F),Using an item outside battle at the Edge of Town.,
+HAZURE,0x800ab728,edge_reorder,function,inferred,code read 2026-10-11 (F),Reorganize Party: move a member to another position.,
+HAZURE,0x800abbd4,edge_settings,function,inferred,code read 2026-10-11 (F),Change Settings screen at the Edge of Town (Jpn/Eng rows patched by english_only.asm).,
+HAZURE,0x800ac9f4,book_of_movement,function,confirmed,code read 2026-10-11 (F),"Book of Movement (転生の書): imports a character from Gaiden III (Scripture of the Dark) or Gaiden IV (Throb of the Demon's Heart) by name, password and sex.",
+HAZURE,0x800af668,edge_fade_out,function,confirmed,code read 2026-10-11 (F),Fades the screen's sprites and the music out over 32 frames.,
+HAZURE,0x800b3c6c,edge_give_item,function,inferred,code read 2026-10-11 (F),Give an item to another member.,
+HAZURE,0x800b6258,edge_drop_item,function,inferred,code read 2026-10-11 (F),Drop an item (refuses equipped ones).,
+HAZURE,0x800bc780,edge_bar_print,function,confirmed,code read 2026-10-11 (F),"Prints text file F string N at row Y: (y, file, n, flag). File numbers index text_files.",
+HAZURE,0x800bc99c,edge_text_at,function,confirmed,code read 2026-10-11 (F),"Prints text file F string N at (x, y): (x, y, file, n, flag).",
+HAZURE,0x800becf8,dice,function,confirmed,code read 2026-10-11 (F),"dice(n, sides, bonus): n dice of 'sides' plus bonus, the sum of n rolls of 0..sides-1 plus n.",
+MCARD,0x800a9554,card_check,function,inferred,code read 2026-10-11 (F),"Polls the card (_card_info, then _card_clear/_card_load on a new card), up to 10 tries; result in card_status.",
+MCARD,0x800a9850,card_poll,function,confirmed,code read 2026-10-11 (F),"One _card_info: card_status 0 ready, 1 error, 2 new card, 4 no card.",
+MCARD,0x800a997c,card_free_space,function,confirmed,code read 2026-10-11 (F),Sums the sizes of the files on the card; sets card_status bit 8 when 14 or more of 15 blocks are used.,
+MCARD,0x800a9ad4,card_find_save,function,confirmed,code read 2026-10-11 (F),"Looks for bu00:BISLPS-02691PSWIZDIM; erases it if it isn't 0x4000 bytes (bit 0x40), sets bit 0x10 when there's none.",
+MCARD,0x800a9cac,card_format,function,inferred,code read 2026-10-11 (F),"Formats bu00: (up to 8 tries).",
+MCARD,0x800a9d70,card_create_save,function,inferred,code read 2026-10-11 (F),Creates the save file with its icon and title header (via 0x800ab27c).,
+MCARD,0x800aa1f4,save_write,function,confirmed,code read + emulator 2026-10-11 (F),"Builds the 0x2400-byte save image at save_image (layout in docs/re/F-edge-save.md), checksums it and writes it to the card after the 0x200-byte header. Checked against two game-made saves (scripts/re/savefile.py).",
+MCARD,0x800aa9e0,save_read,function,confirmed,code read + emulator 2026-10-11 (F),"Reads the image back into RAM, restores every block, then checks the checksum (card_status 0x20 if it differs).",
+MCARD,0x800ab3b0,save_screen,function,confirmed,code read + emulator 2026-10-11 (F),"game_state 0x32: the Save screen (check card, format, overwrite, saving, failed, stop saving?).",
+MCARD,0x800abf10,load_screen,function,confirmed,code read + emulator 2026-10-11 (F),"game_state 0x33: Load Data from the title. On a bad checksum prints 'data is corrupt' and resets the game data (save_data_reset); else rebuilds the roster and parties and goes to town.",
+MCARD,0x800ac670,roster_restore,function,confirmed,code read + RAM compare 2026-10-11 (F),Rebuilds all 20 roster records from the 0x90-byte images at 0x80086880 (the reverse of roster_snapshot).,
+MCARD,0x800ac8d0,save_image_unpack,function,inferred,code read 2026-10-11 (F),"Restores the game data from the save image still in RAM (save_image), as save_read does after reading the card, and checks its checksum.",
+MCARD,0x800acd78,continue_from_ram,function,inferred,code read 2026-10-11 (F),"game_state 0x36: the title's first option after a save this session (ram_save_valid): restores from the RAM image without reading the card, then goes to town.",
+MCARD,0x800ad018,save_data_reset,function,confirmed,code read 2026-10-11 (F),"Resets the saved game data: map bits, story flags, progress_bits, party table, settings, Boltac's stock (from Item +0x1a), the seen bitfields. Only called when a loaded save's checksum fails.",
+MCARD,0x800ad440,parties_restore,function,confirmed,code read 2026-10-11 (F),Copies parties_saved (0x8008e620) into parties (0x8008f8c8).,
+MCARD,0x800ad524,mcard_print,function,confirmed,code read 2026-10-11 (F),"MCARD's text printer: (x, y, file, n, flag); expands text_files[file] string n and draws it.",
+MCARD,0x800ae6b4,maze_menu,function,confirmed,code read + emulator 2026-10-11 (F),"game_state 0x34, START in the maze: Investigate / Look for Companions / Save and Suspend / Go On with Another Party / Back (SISETU 0x1ae-0x1b2).",
+MCARD,0x800aebe0,look_for_companions,function,confirmed,code read 2026-10-11 (F),"Finds members of other parties on the party's exact square (area, x, y); adjacent squares only give 'faint traces'. Lists them with their worst status and lets them join (up to six); removes them from their old party. Doesn't touch items or gold.",
+MCARD,0x800afd54,maze_save_suspend,function,confirmed,code read + emulator 2026-10-11 (F),"Save and Suspend in the maze: writes the square into each member's roster area/x/y/facing, copies the current party into parties, snapshots both, then the Save screen (next_place 0xf9).",
+MAIN,0x80021a0c,party_snapshot,function,confirmed,code read 2026-10-11 (F),Copies parties (0x8008f8c8) into parties_saved (0x8008e620); the save holds the copy.,
+MAIN,0x8001744c,title_screen,function,inferred,code read 2026-10-11 (F),"game_state 5, the title: first option is New Game, or Continue (state 0x36) once ram_save_valid is set; second is Load Data (state 0x33).",
+MAIN,0x8001bd0c,mode_bytes_store,function,confirmed,code read 2026-10-11 (F),"Stores five mode globals into 0x8008c4d0-0x8008c4d8 before a save. Swapped with mode_bytes_load: 0x800796aa goes to +7 and 0x8007966a to +6, but they come back from +6 and +7.",
+MAIN,0x8001bcd4,mode_bytes_load,function,confirmed,code read 2026-10-11 (F),Restores the five mode globals after a load (two of them swapped; see mode_bytes_store).,
+RAM,0x8008e620,parties_saved,global,confirmed,code read 2026-10-11 (F),"20 party records (0x36 each), the copy the save holds; party_snapshot fills it, parties_restore and Resume Adventure read it.",PartyRec[20]
+RAM,0x800f0000,save_image,global,confirmed,code read + emulator 2026-10-11 (F),The 0x2400-byte save image (layout in docs/re/F-edge-save.md); stays in RAM after a save.,
+RAM,0x800797f2,card_status,global,confirmed,code read 2026-10-11 (F),"Memory card result bits: 1 error, 2 new card, 4 no card, 8 not enough space, 0x10 no save, 0x20 bad checksum, 0x40 erased a wrong-sized save.",u8
+RAM,0x800796d2,next_place,global,confirmed,code read 2026-10-11 (F),"Where a screen sends the game next (main reads it): 0 town, 0xff Begin Adventure, 0xfe Training Maze, 0xf6 Dragon's Cave, 0xfc resume in the maze, 0xfb save from Edge of Town, 0xfa save from the maze, 0xf9 save from the maze menu, 0xf8 save from town, 0xfd back to Edge of Town; 1-2 catalog/Compendium.",u8
+RAM,0x800796c6,ram_save_valid,global,inferred,code read 2026-10-11 (F),Set to 1 when a save completes; the title then offers Continue (from the RAM image) as its first option. Cleared by Load Data.,u8
+RAM,0x80079905,ram_save_bad,global,inferred,code read 2026-10-11 (F),Set by save_data_reset and when the RAM image fails its checksum; Continue is refused while it's set. Cleared on entering town.,u8
+RAM,0x80079614,edge_substate,global,confirmed,code read 2026-10-11 (F),State within an Edge of Town entry.,u8
+RAM,0x80079560,debug_flags,global,inferred,code read 2026-10-11 (F),"Bits toggled only by an unreferenced debug menu in JOUKA (0x800a6c40): 4 a new character gets EXP 0xffffffff, 8 gold 0x7fffffff, 0x10 class change sets EXP 0xffffffff.",u16
+RAM,0x8008ff10,new_char,global,confirmed,code read 2026-10-11 (F),"Work record for character creation (a Roster), copied to roster[roster count] at the end.",Roster
+RAM,0x8005e2ac,class_hp_die,table,confirmed,code read 2026-10-11 (F),"Starting HP: class_hp_base[c] + rand 0..class_hp_die[c]-1 (14 classes, 16 bytes).",u8[16]
+RAM,0x8005e2bc,class_hp_base,table,confirmed,code read 2026-10-11 (F),Starting HP base per class.,u8[16]
+RAM,0x8005e2cc,class_start_weapon,table,confirmed,code read 2026-10-11 (F),"Starting weapon per class (item id; index 14 is the Faerie's), given with flags 0x7000.",u8[16]
+RAM,0x8005e2dc,class_start_armor,table,confirmed,code read 2026-10-11 (F),"Starting armor per class (index 14 the Faerie's), flags 0x6000.",u8[16]
+RAM,0x8005e2ec,class_start_extra,table,confirmed,code read 2026-10-11 (F),"The 5% extra item per class (index 14 the Faerie's): rand_upto(99) > 94.",u8[16]
+JOUKA,0x800af5d8,training_create,function,confirmed,code read 2026-10-11 (F),"Character creation: name, race (base stats), sex (+1 Str male, +1 Vit female), alignment, bonus_roll, class (by alignment, Valkyrie female only, minimums reachable with the bonus), stat distribution, then age 15-20, 100 gold, HP and starting gear.",
+JOUKA,0x800b3e24,training_rename,function,inferred,code read 2026-10-11 (F),Change Name.,
+JOUKA,0x800b4934,training_class_change,function,confirmed,code read 2026-10-11 (F),"Change Class: level 1, EXP 0, age +3, stats reset to max(race base, new class minimum), equipment unequipped except cursed, first-level spells of the new class's school.",
+JOUKA,0x800ba44c,bonus_roll,function,confirmed,code read 2026-10-11 (F),"Bonus points: 7-10 (20/21), 17-20 (20/441), 27-30 (1/441); each value in a band equally likely.",
