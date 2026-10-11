@@ -337,6 +337,18 @@ last, or nobody if that slot is empty) is rolled six times: 82% per ordinary ite
 99.9% per rare one, the Tablet of the Sun included. The rest lose only half their gold.
 [code, disassembly; emu with a RAM-write setup (D)]
 
+Who that is, in practice: the party's first position. `battle_main` zeroes
+`actor_member` at the start of each round, and `battle_run_actions` steps it through every
+combatant, back to 0 at each new group. Once the party is down, `FUN_800a8878` makes every
+monster's action a no-op, so the round runs out and leaves `actor_member` at 0. [code] Both
+emulator wipes agree: in D's, Uranus in position 0; in `rips/probe/bodies/wipe5`, roster 3,
+whom the party record (0x8008f8c8, bytes 2-7 = `03 ff ff 00 01 02`) puts in position 0.
+[emu] The exception is a chest trap that wipes the party: `chest_open` sets
+`actor_member` to whoever handled the chest before calling `party_wiped`, so that
+character is the one rolled. [code] If position 0 is empty (the record above shows that
+positions can be), nobody loses items. Whether a player can leave position 0 empty is
+not checked. [inf]
+
 Question for Chris: fixing it gives every member one roll per item, as the loop was
 written to do: each character would lose about a quarter of their ordinary items and
 two-thirds of their rare ones in every wipe. As it stands, one character loses nearly
