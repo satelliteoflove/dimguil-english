@@ -1,0 +1,60 @@
+module,address,name,kind,confidence,source,note,type
+MAZE,0x800ce564,camp_main,function,confirmed,"code read 2026-10-11 (B); emulator: Cross opens it, game_state 3","The camp (game_state 3, main calls it each frame). camp_state picks the screen: 1 entry (writes the party's position into each member's Roster.area/x/y/facing), 3 icons, 5 menu, 10 Inspect, 15 Reorganize, 20 Save, 25 Settings, 30 Decipher (only with story_flags bit 0x20000000), 35 leave. Also the 'who takes it' picker for a found item when packs are full (DAT_80079be0 holds the item).",
+MAZE,0x800cf7f8,menu_cursor,function,inferred,code read 2026-10-11 (B),"Moves a two-axis menu cursor (pointers to the x and y bytes) from the pad; returns 4 confirm, 2 cancel, 5 and 7 next/previous character (L/R).",
+MAZE,0x800cf8dc,camp_inspect,function,confirmed,code read 2026-10-11 (B); emulator test,"Inspect Character: pick a member, then Cast Spell (only if any spell is known and status < 0x20), Items, Pool Gold, Back. L/R step through the party.",
+MAZE,0x800d0514,camp_cast_spell,function,confirmed,code read 2026-10-11 (B); emulator test (Dumapic in the field and the Training Maze; Dios on a full-HP ally),"Casting outside battle. Pick realm (row, defaults to the class's book), level (column 1-7), spell (one of three). Spell points are per realm and level (Roster+0x5c). Only 26 spells have a camp effect (camp_spell_id). See docs/re/B-camp.md.",
+MAZE,0x800a1b88,camp_spell_select,table,confirmed,code read 2026-10-11 (B),26 code pointers: what camp_cast_spell does when spell id N is chosen (target picker or immediate effect).,u32[26]
+MAZE,0x800a1bf0,camp_spell_effect,table,confirmed,code read 2026-10-11 (B),"23 code pointers, for spell ids 3-25: the effect on the chosen target.",u32[23]
+MAZE,0x800a1c4c,kandi_regions,table,confirmed,code read 2026-10-11 (B),"12 regions x 9 area ids (-1 pad) for Kandi's answer: Field 0; Shrine Interior 1-4; Underground Shrine 5-8; Area X 18; Area A 19-22; Area B 23-27; Area C 28-31; Area D 32-34; Area E 36-39; Training Maze 9-16; Area G 40-42; group 11 (area 43) answers 'Not in this area'. Region N prints SISETU 0x10d+N.",s8[108]
+MAZE,0x800a1b78,camp_icon_ids,table,inferred,code read 2026-10-11 (B),"Icon numbers for the six camp menu icons (camp_main copies them to the stack).",u8[6]
+MAZE,0x800d510c,kandi_locate,function,confirmed,code read 2026-10-11 (B),"Kandi's answer for a character in the maze: same region as the caster gives floor (not for Field or Area X), N (23 - y) and E (x); otherwise the region's name.",
+MAZE,0x800d5504,status_has,function,confirmed,code read 2026-10-11 (B),"Tests a character for a condition: 0 'can be healed' (not dead or ash, HP < max), 1 poison (0x04), 2 paralysis (0x20), 3 stone (0x40), 4 dead (0x80), 5 ash (0x100), 6 afraid (0x01), 7 KO (0x10), 8 confused (0x02), 9 asleep (0x08).",
+MAZE,0x800e59a0,camp_spell_failed,function,confirmed,code read 2026-10-11 (B); emulator test,"Prints 'Failed!' (SISETU 284) and spends the spell point. Used for Dumapic, Malor and Loktofeit where they don't work.",
+MAZE,0x800e8238,dice,function,confirmed,code read 2026-10-11 (B),"Rolls N dice of S sides and adds B: (N, S, B) -> NdS+B, each die 1..S (rand_below(S)+1).",
+MAZE,0x800e82d0,buff_litofeit,function,confirmed,code read 2026-10-11 (B),Litofeit and the Winged Boots: levitation for 1000 steps (0x8007e82e).,
+MAZE,0x800e8328,buff_latumapic,function,confirmed,code read 2026-10-11 (B),"Latumapic: identifies monsters for 2000 steps (0x8007e82c), and marks the groups on screen identified.",
+MAZE,0x800e83a4,buff_maporfic,function,confirmed,code read 2026-10-11 (B),Maporfic: party AC -2 (0x8007e82a = 2) for 1250 steps (0x8007e828).,
+MAZE,0x800e8450,buff_oslo,function,confirmed,code read 2026-10-11 (B),Oslo: attack boost level 2 (0x8007e830) and 60 more steps (0x8007e832).,
+MAZE,0x800e8480,buff_maoslo,function,confirmed,code read 2026-10-11 (B),Maoslo: attack boost level 2 for 2500 steps.,
+MAZE,0x800e84ac,buff_fofic,function,confirmed,code read 2026-10-11 (B),"Fofic and the Potion of Fofic: magic defence level 10 (0x8007e834) for 1250 steps (0x8007e836), only if none is running.",
+MAZE,0x800e859c,remove_lost_members,function,confirmed,code read 2026-10-11 (B),"After Kadorto leaves someone Lost (status >= 0x200): blanks the record's name, compacts the roster and renumbers every party's members.",
+MAZE,0x800e7ad0,roster_compact,function,inferred,code read 2026-10-11 (B),Closes the gap left by a deleted roster record and recounts party_member_count.,
+MAZE,0x800e7d4c,party_drop_member,function,inferred,code read 2026-10-11 (B),"Removes a roster index from every party record and from the current party, shifting higher indexes down by one.",
+MAZE,0x800d579c,camp_items_menu,function,confirmed,code read 2026-10-11 (B); emulator test,"Items: Identify (Bishops only; greyed for others), Use, Give, Equip, Drop.",
+MAZE,0x800d5f24,camp_identify,function,confirmed,code read 2026-10-11 (B),"Bishop's Identify in camp: chance (level - item level + 1) x 20%, held to 5-75%. On a miss, a Bishop whose level is no more than twice the item's may touch it: becomes afraid, and a cursed item is equipped and cursed on them. Also shows an identified item's details screen.",
+MAZE,0x800d7150,camp_use_item,function,confirmed,code read 2026-10-11 (B); emulator test (Potion of Dios on a full-HP ally is used up),"Use: effects are hard-coded by item id, not read from the item record. See docs/re/B-camp.md for the list.",
+MAZE,0x800de34c,equip_curse_check,function,confirmed,code read 2026-10-11 (B),"Equips one item (sets 0x2000). If the item's alignment bits don't include the wearer's alignment, or its flags05 bit 0x80 is set, it becomes cursed and equipped (0xa000) and returns 2.",
+MAZE,0x800ddb4c,stat_adjust,function,confirmed,code read 2026-10-11 (B),"Changes one stat (0 Str .. 5 Luck) by +/-1, only if the result stays at 3 or more and below the race's base + 13 (+14 for a man's Strength or a woman's Vitality).",
+MAZE,0x800ddecc,equip_slot_prompt,function,inferred,code read 2026-10-11 (B),Lists the candidates for the current equip slot and prompts (SISETU 0xe5 + slot).,
+MAZE,0x800de578,camp_give,function,confirmed,code read 2026-10-11 (B),"Give: equipped items can't be given ('It's equipped...'), cursed ones show 'Cursed!'; a full pack offers a swap.",
+MAZE,0x800e0a5c,camp_drop,function,confirmed,code read 2026-10-11 (B),"Drop: equipped items can't be dropped; ids 310 and up ask 'This is an important item. Drop it?'. Also used to make room for a found item.",
+MAZE,0x800e6144,camp_pool_gold,function,confirmed,code read 2026-10-11 (B),Pool Gold: calls pool_gold.,
+MAZE,0x800e12b0,pool_gold,function,confirmed,code read 2026-10-11 (B),"Moves every party member's gold onto the chosen character, capped at 0x7fffffff.",
+MAZE,0x800d8bcc,camp_reorganize,function,confirmed,code read 2026-10-11 (B),"Reorganize Party: swap two of the six slots (members and their alignment bytes at 0x8007e81e). Needs two or more members.",
+MAZE,0x800d903c,camp_save,function,confirmed,code read 2026-10-11 (B),"Save Adventure: writes the position into each member's roster record, copies the current party (0x8007e810, 0x36 bytes) back into its parties[] record, then hands off to MCARD's save screen (DAT_800796d2 = 0xfa, main sets game_mode 7).",
+MAZE,0x800d9304,camp_settings,function,confirmed,code read 2026-10-11 (B),"Camp settings screen: eight rows on config[0..7] (names x3, status, sound output, music, sound effects, effects); toggling music restarts or stops the maze track (0xb).",
+MAZE,0x800d9e60,camp_decipher,function,confirmed,code read 2026-10-11 (B),"Decipher Ancient Script: the player's own table of 26 ancient letters to A-Z, kept at 0x80089b40 (0xff unset). Only offered once story_flags bit 0x20000000 is set (MCARD 0x800d65c8, talk handler 3).",
+MAZE,0x800e6628,help_line,function,confirmed,code read 2026-10-11 (B),"Prints a camp help line: SISETU string N at (x, y) on glyph layer 1.",
+MAZE,0x800a1ecc,text_at,function,confirmed,code read 2026-10-11 (B),"Expands string N of text file T (text_files[T]: 0 STATUS.OBJ, 1 item names, 3 FIGHTMSG, 4 SISETU, 6 NPC text) and draws it at (x, y) on a glyph layer.",
+MAZE,0x800a201c,text_draw,function,inferred,code read 2026-10-11 (B),"Draws an expanded string glyph by glyph (glyph_put), handling ff codes.",
+MAZE,0x800e66a4,items_menu_labels,function,inferred,code read 2026-10-11 (B),"Draws the Items menu labels (Identify, Use, Give, Equip, Drop); Identify greyed unless the flag says Bishop.",
+MAZE,0x800e2834,camp_icon,function,inferred,code read 2026-10-11 (B),Puts one camp menu icon sprite on screen (highlighted or not).,
+RAM,0x8005e2fc,spell_camp_ok,table,confirmed,code read 2026-10-11 (B),"One byte per spell, realm x 0x15 + level x 3 + slot: above 0 means it's offered (not greyed) in the camp's spell list.",u8[84]
+RAM,0x80079669,camp_state,global,confirmed,code read 2026-10-11 (B); RAM watch,"camp_main's screen (see camp_main). main zeroes it when a talk starts.",u8
+RAM,0x80079964,camp_sub_state,global,confirmed,code read 2026-10-11 (B); RAM watch,State of the screen camp_state picked (Inspect's own steps: 10 pick member .. 15 menu .. 20 spells .. 25 items).,u8
+RAM,0x800799e6,camp_spell_state,global,confirmed,code read 2026-10-11 (B); RAM watch,"camp_cast_spell's step: 5 level, 10 spell, 15 checks, 20 dispatch, 25/30 target, 45 'Spell cast', 50 done, 40 'What?'.",u8
+RAM,0x800798f0,camp_spell_id,global,confirmed,code read 2026-10-11 (B); RAM watch,"The camp spell chosen: 0 Dumapic, 1 Litofeit, 2 Malor, 3 Dios, 4 Kandi, 5 Latumapic, 6 Dialko, 7 Maporfic, 8 Latumofis, 9 Dial, 10 Dialma, 11 Madi, 12 Kadorto, 13 Madial, 14 Oslo, 15 Maoslo, 16 Fofic, 17 Morfis, 18 Kadios, 19 Diomas, 20 Diafic, 21 Calko, 22 Loktofeit, 23 Madios, 24 Caldu, 25 Ihalon; 0xff not usable in camp.",s8
+RAM,0x80079a5a,camp_char,global,confirmed,code read 2026-10-11 (B),Roster index of the character acting in camp (caster or item user).,s8
+RAM,0x80079948,camp_target,global,confirmed,code read 2026-10-11 (B),Roster index of the target of a camp spell or item.,s8
+RAM,0x800799a8,maze_exit_code,global,inferred,code read 2026-10-11 (B),"What the maze does after the camp closes: 0xfe Dumapic's map, 0xfd Loktofeit (back to the castle), 0xfc Malor (teleport), 0xff plain exit. main reads -1..-4.",u8
+RAM,0x80089b40,decipher_table,table,confirmed,code read 2026-10-11 (B),"The player's guesses in Decipher Ancient Script: for each of 26 ancient letters, the A-Z index chosen, 0xff unset. Saved (MCARD reads and writes it).",u8[26]
+RAM,0x8007e828,buff_maporfic_steps,global,confirmed,code read 2026-10-11 (B),"Steps left on Maporfic (current party record +0x18; the per-step routine 0x800c5570 counts it down).",u16
+RAM,0x8007e82a,buff_maporfic_ac,global,confirmed,code read 2026-10-11 (B),AC bonus while Maporfic runs (2).,u8
+RAM,0x8007e82c,buff_latumapic_steps,global,confirmed,code read 2026-10-11 (B),Steps left on Latumapic.,u16
+RAM,0x8007e82e,buff_litofeit_steps,global,confirmed,code read 2026-10-11 (B),Steps left on Litofeit (levitation).,u16
+RAM,0x8007e830,buff_oslo_level,global,confirmed,code read 2026-10-11 (B),"Attack boost (Oslo, Maoslo); cleared when the steps run out.",u8
+RAM,0x8007e832,buff_oslo_steps,global,confirmed,code read 2026-10-11 (B),Steps left on the attack boost.,u16
+RAM,0x8007e834,buff_fofic_level,global,confirmed,code read 2026-10-11 (B),"Magic defence (Fofic); cleared when the steps run out.",u8
+RAM,0x8007e836,buff_fofic_steps,global,confirmed,code read 2026-10-11 (B),Steps left on Fofic.,u16
+RAM,0x8007e839,buff_diafic_steps,global,confirmed,code read 2026-10-11 (B),Steps left on Diafic (finds secret doors); set to 232.,u8
+RAM,0x8007e83a,nomagic_steps,global,confirmed,code read 2026-10-11 (B),"Set to 232 on a square whose word in 0x8005b9d0 is negative, counted down each step; while it's above 0, every camp spell fails ('Failed!', point spent).",u8
