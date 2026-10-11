@@ -251,3 +251,19 @@ inside a line use `'`, and `npcfit.py` catches the rest.
   slot size is why "Small Silhouettes" couldn't simply be spelled right. Shots:
   `docs/shots/name-dragonaire`, `name-old-drummer`, `name-displacer-robe` (befores from
   the 2026-10-08 crawls).
+- What Balbo's body recovery costs (2026-10-10). Chris asked whether "That lot had
+  some mighty fine gear on 'em" meant Balbo keeps the gear, and whether the bodies are
+  even the player's. The answer came from the code, not the web. The NPC_MES files
+  hold only strings, so the first step was finding Balbo's offer in a RAM dump taken
+  during a talk. That meant searching for the halfword pair "2, 142" (print string
+  142). It turned up a static script in the talk overlay: offer, yes/no question
+  (143), yes line (144), no line (145). Next was finding the code that copies that
+  script to the stack. That gave Balbo's handler, one of several big state machines in the
+  overlay. Then I searched it for stores to the roster's location byte
+  (+0x7a). Three loops send a wiped party's members back to town, one in each of Guy's,
+  Balbo's and Fontana's handlers, and each takes a different fee: Guy takes all the
+  gold, Balbo every item, Fontana half the gold and every other item slot. The offer
+  only appears when another of the player's parties is wiped out in the maze, and then
+  on a coin flip. Nothing was tested in the emulator; it rests on reading the code.
+  Details and addresses: engine-notes.md, "Body recovery by NPC parties". Work files:
+  rips/probe/bodies/.

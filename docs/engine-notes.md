@@ -228,6 +228,99 @@ the maze overlay as loaded during a talk.
   sectors and show blank boxes. Copying the four file tables (0x80051760-0x80052700)
   from the built SLPS_026.91 into RAM after loading fixes that.
 
+### Body recovery by NPC parties
+
+Traced on 2026-10-10 to settle what Balbo's offer (NPC_MES2 142-145) does. All of it is
+a static code read of the talk overlay in a RAM dump taken during a talk with Guy
+(`rips/probe/ram_talk94.bin`; the same bytes are in ram_t, ram_hit and ram_w), unless
+marked otherwise. Nothing here was run in the emulator: meeting Balbo's party with a
+wiped party of your own in the maze needs a state nobody has made yet. Work files are
+in `rips/probe/bodies/`.
+
+The offer is real, and it's about your own characters. When Guy's, Balbo's or
+Fontana's party meets you and another of your parties lies wiped out in the maze, the
+leader can offer to carry it back to town. Say yes and every member of one wiped party
+goes back to town, still dead, and the NPC party takes a fee from each of them. The fee
+depends on the party:
+
+| Party | Handler | Script | Fee from each rescued character |
+|---|---|---|---|
+| Guy (NPC_MES1 163-166) | 0x800b5694 | 0x800a1c28 | all gold (+0x1c set to 0); items kept |
+| Balbo (NPC_MES2 142-145) | 0x800c7264 | 0x800a4e28 | every item (all ten slots emptied); gold kept |
+| Fontana (NPC_MES3 151-154) | 0x800cf8c0 | 0x800a68b4 | half the gold (+0x1c shifted right by 1) and the items in slots 1, 3, 5, 7 and 9 |
+
+The fees match what each leader says on "yes". Guy's いただけるところから,いただきますから
+is "we'll take what we can from where we can", Balbo's line says that lot had fine
+gear, and Fontana's says he won't do you wrong. Cresson's and Zaril's parties have the
+"rescue our companions" log line (4:165, 5:116) but no offer string and no recovery
+code, so they never offer. That last part is inferred from the absence of both.
+
+Confirmed by code read:
+- Each party's talk has its own large handler, a state machine with a static script
+  copied to the stack. Balbo's handler copies 0x800a4e28 to sp+0x16b8 (0x800c8748),
+  Guy's copies 0x800a1c28 to sp+0x3d48 (0x800b5a10) and Fontana's copies 0x800a68b4 to
+  sp+0x1ed8 (0x800d0610). Each handler's yes/no code later runs its own copy. The
+  other big-frame functions (0x800bff60, 0x800c154c, 0x800c2564, 0x800d65c8,
+  0x800d9b34) are probably the other parties' handlers or shared talk code. They
+  aren't mapped yet.
+- Static talk scripts are runs of 15-halfword (30-byte) blocks. Block 0 is the main
+  script, block 1 runs on "yes" and block 2 on "no". The handler selects one by storing
+  0, 1 or 2 in 0x80079be4 and calling the interpreter on stack copy + 30 × that value.
+  Balbo's is `6,4,0,4,109 3,4,0,109 2,142 7,143 -1`, then `3,4,1,109 2,144 -1`, then
+  `2,145 -1`.
+- Opcode arguments, read from the scripts and handlers: 6 takes 4 (portrait), 3 takes
+  3 (inferred: the speaker's face), 2 takes 1 (print string N; -2/-3 variants add a
+  name), and 7 takes 1. Opcode 7 (0x800b9220) prints string N in the bottom bar
+  through 0x800b3c40(0xa6, 6, N, 1). That's how the yes/no question (143) and the topic
+  log lines ("We asked them who they were", 7,302 in Guy's runtime script) show. 9
+  takes 1 and follows each healing line (inferred: which cure). Opcode 1 (0x800b8e9c)
+  sets 0x800798a4 = 10, and opcode 3's slot (0x800b8ec8) sets 0x800798a4 = 15.
+  Opcode handlers by table slot: -1 and 4 → 0x800b9598, 0 → 0x800b8d40, 1 → 0x800b8e9c,
+  2 → 0x800b8ed8, 3 → 0x800b8ec8, 5 → 0x800b9190, 6 → 0x800b9004, 7 → 0x800b9220,
+  8 → 0x800b9338, 9 → 0x800b93f8, 10 → 0x800b944c, 11 → 0x800b9464.
+- When the offer is made (Balbo's handler, 0x800c9354-0x800c9508; Guy's and Fontana's
+  have the same scan near 0x800b6544 and 0x800d10e8). The handler walks the 20 party
+  records at 0x8008f8c8, 54 bytes each: +0 an id (-1 = unused), +1 the member count,
+  +2..+7 roster indexes (-1 = empty). A party is a candidate if it's in use, isn't the
+  party you're walking with (the id in 0x8007e810), and every member's roster
+  halfword +0x0e is 0x20 or more. Candidates go in the list at 0x8008d300, with the
+  count in 0x80079895. If any of bits 1-4 of 0x8007986c are set and the count is above
+  0, a coin flip (0x8001cb18(1) == 0) decides whether the leader opens with the offer
+  (state 0x41). Otherwise the talk goes on as usual (state 0x28).
+- The yes/no (state 0x42): 0x800b0614 reads the pad and the two-option cursor at
+  0x80079c5a. It returns 4 or 2, inferred to mean confirm and cancel. A 4 with the
+  cursor on the first option is yes. A 4 on the second option, or a 2, is no. On yes the handler picks one candidate at random,
+  0x8001cb18(count - 1) into 0x80079895. For each of its members it sets roster +0x7a
+  to 0xff (back in town) and takes the fee (Balbo: 0x800cac68-0x800cad64; Guy:
+  0x800b7e88-0x800b7f3c; Fontana: 0x800d23c4-0x800d24dc). Nothing in these loops
+  touches the status at +0x0e. So the bodies arrive in town as they were, and the
+  Temple still has to raise them.
+- 0x8001cb18(n) is the random number routine (state in 0x20($gp) and 0x24($gp)). It's
+  called all over the talk handlers.
+- Fontana's version also walks your current party afterwards (count at 0x80079891),
+  calling 0x800b3cb8 and 0x800b1ddc for each member. Inferred: it redraws the panel.
+
+Roster record fields learned along the way (0x8007d708, 0xd0 bytes each; see also
+`docs/cheats.md`):
+- +0x0e, u16: status. 0 for healthy characters (RAM read in several states). The
+  offer treats 0x20 and above as dead; the exact values for dead, ashes and lost
+  aren't mapped yet (inferred).
+- +0x1c gold (u32) and +0x20 ten item slots (u16, 0xffff = empty). Already known;
+  the fees above use them.
+- +0x34..+0x3d: one byte per item slot. The fee code sets it to 0xff when it empties
+  a slot. Inferred: a per-slot state, such as equipped, cursed or identified.
+- +0x7a: where the character is. 0xff means in town (RAM read: everyone in town has
+  0xff, and characters in the maze with you have 0x00). +0x7b and +0x7c are x and y,
+  +0x7d is the facing. Code read: 0x800afd88-0x800afe5c and two copies
+  (0x800b0280, 0x800b2250) write the current area (0x80079668), x (0x80079906),
+  y (0x80079916) and facing (0x80079b34) into +0x7a..+0x7d for each member of a party.
+  That's where a party is left in the maze. Inferred: area 0 is the first area.
+- 0x800aed90-0x800aee3c compares each candidate's +0x7a..+0x7c with the square you're
+  standing on. Inferred: that's the player's own body search, finding a wiped party on
+  the current square.
+- 0x800ad2c0 sets +0x7a = 0xff for six records and clears a 32-byte table at 0x8008c4d0.
+  Inferred: a reset or new-party path.
+
 ## Card battle
 
 See `scripts/cardref.py`'s header for the CMENU.BIN tables (passwords, Lv 1 templates,
