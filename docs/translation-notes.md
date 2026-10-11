@@ -346,11 +346,14 @@ The full triage is `docs/re/bugs.md`; each fix is its own `asm/bugfix_*.asm`.
   a party member dropped out and a stranger took her place (e4c0da7).
 - **The BROKEN ITEM purge on entering town** wiped the uses left on whatever sat in the
   tenth pack slot (c717515).
+- **The pit scene with no rescuer** locked the game: a party in which nobody had met Guy,
+  falling into the Area C pit while Guy was the rescuer, sat on an empty talk window for
+  good. It now gets the game's own rescuer for that case, Balbo's party if someone has
+  met Balbo, otherwise the man in armor (5ff86d2).
 
 Open questions for Chris (bugs.md groups 2 and 3): the identify service, Zaril's
 healing, Guy's and Fontana's re-introductions, Cresson's "boys", Fontana's block 8,
-Balbo's "heard that already", untraced greeting blocks, the pit with no rescuer, the wipe
-item loss, the weapon-effect level bonus, level drain's save, and the town stat
+Balbo's "heard that already", the wipe item loss, the weapon-effect level bonus, level drain's save, and the town stat
 recompute.
 
 ## To revisit

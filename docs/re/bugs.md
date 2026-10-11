@@ -311,14 +311,21 @@ on first reaching areas 0x20-0x23. The pit is in Area C's trash rooms (C-B2). So
 in which no member has been introduced to Guy (new recruits, or a party rebuilt after a
 loss) that falls into the pit in that window is stuck. [code]
 
-Fix: in state 0xf, when bit 7 is set and nobody has met Guy, fall through to the
-bit-7-clear choice: block 3 (Balbo) if a member has met Balbo, else block 4 (the man in
-armor). Guy has no stranger version, and his block 2 ("Besides, I owed you one") assumes
-an introduction. Not implemented yet.
+**Fixed in 5ff86d2** (`asm/bugfix_pit_rescuer.asm`). When the Guy loop picks nobody,
+state 0xf now falls through to the bit-7-clear choice: block 3 (Balbo) if a member has met
+Balbo, else block 4 (the man in armor). Guy has no stranger version, and his block 2
+("Besides, I owed you one") assumes an introduction, so the game's own choice for a party
+that isn't Guy's acquaintance is used and nothing new is written. The loop's exit jumps to
+a few lines in the unused debug routine at 0x800c5800, after the pit-scene fix (1.5).
 
-Question for Chris: the soft lock is a clear bug. The only choice is who rescues a party
-that has never met Guy: Balbo's party (the bit-7-clear rescuer, as above, recommended),
-or Guy anyway with his lines as written.
+Tested in the emulator on the built MCARD (`rips/re/work/P3-pit/pit_rescuer_test.py`, the
+same RAM-write setup as above):
+- nobody met Guy or Balbo: the man in armor (block 4) plays, `close` ends the talk, and the
+  game is back in the maze by frame 840;
+- Balbo met, Guy not: Balbo's party (block 3), back in the maze by frame 840;
+- Guy met (control): Guy's block 2, as before, back by frame 900.
+
+Chris can still choose Guy for this case instead, with his lines as written.
 
 ## Group 3: fixes that would change how the game plays
 

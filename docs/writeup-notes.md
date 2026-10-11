@@ -407,5 +407,13 @@ Two of them hit their turn limit before writing anything down and had to be resu
     the fix bytes had to go in after the sectors holding them had arrived.
   - The other six are checked against the disassembly only; no state reaches their
     scenes.
+  - The pit soft lock (5ff86d2) came out of a follow-up test of a "harmless-looking"
+    entry. A party in which nobody had met Guy, falling into the Area C pit while Guy was
+    the rescuer, got no rescuer block; the scene replayed the last block, which ends
+    without closing the talk, and sat on an empty window for good, on the original MCARD
+    too. The fix reuses the game's own rescuer for parties that don't know Guy (Balbo's
+    party, or the man in armor) in eight instructions over the same debug routine as the
+    pit-scene fix. Tested on the built overlay: all three cases (nobody met, Balbo met,
+    Guy met) close the talk and return to the maze within 900 frames.
 - No natural before/after shots: every test uses RAM writes. Internal captures of the
   Temple pair are `rips/re/work/P3-bugs/temple/lost_before.png` and `lost_after.png`.

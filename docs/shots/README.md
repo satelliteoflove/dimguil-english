@@ -34,5 +34,5 @@ pictures (7e46b2f, 6d26caf), the training maze sign (ec26800), the stat-change
 messages (001498f), the Small Shadow unidentified name (345f445), TABLET OF THE SUN
 (8336160; no capture reaches the item), NPC speech closing its quotes (b440faa), or the
 original game's bug fixes (29233ff, 54596b4, 34cd45c, 1976612, 5b565b9, fc6158f, 3e36a06,
-a9ed605, e4c0da7, c717515; their tests set the case up with RAM writes, see
+a9ed605, e4c0da7, c717515, 5ff86d2; their tests set the case up with RAM writes, see
 docs/re/bugs.md).
