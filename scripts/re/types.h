@@ -63,31 +63,36 @@ typedef struct Roster {
     u8  x;               /* +0x7b (confirmed: code read) */
     u8  y;               /* +0x7c */
     u8  facing;          /* +0x7d */
-    /* +0x7e-0xbf: values derived from equipment and class, recomputed when the gear
-       changes; read mostly by battle. Monster records (0xd0 too) share some offsets
-       (+0xa8). Battle analyst D maps these. */
+    /* +0x7e-0xbf: values derived from class and gear, recomputed when the gear changes and
+       read mostly by battle (D-battle.md, "Roster fields used in battle"). */
     u8  unk7e;           /* +0x7e */
-    u8  resist[4];       /* +0x7f four chances read through 0x800cbdbc in battle (inferred) */
+    u8  saves[4];        /* +0x7f four saving throws, rolled as rand(20) < value (D: code) */
     u8  unk83;           /* +0x83 */
-    u16 unk84;           /* +0x84 subtracted in the party hit roll (code: party_melee) */
+    u16 to_hit;          /* +0x84 to-hit bonus (D: code) */
     s8  ac;              /* +0x86 armor class (confirmed: status screen, 0x800dc810) */
-    u8  unk87[4];        /* +0x87 +0x87 set to 100 in battle (0x800ad658) */
-    s8  regen;           /* +0x8b HP gained (or, negative, lost) per step in the maze; items
-                            with a positive Item.regen add to it while carried, negative ones
-                            while equipped (confirmed: 0x800c5570 and the item routines) */
-    u8  unk8c[8];        /* +0x8c +0x8c read in melee_apply_hits */
-    s8  hit_bonus;       /* +0x94 added to the swing roll (inferred: party_melee) */
-    u8  unk95[7];        /* +0x95 */
-    s8  reach[2];        /* +0x9c main and sub weapon reach (inferred: weapon_reach) */
+    u8  magic_resist[4]; /* +0x87 percent, by school Mage/Priest/Alchemist/Psionic (D: code;
+                            battle sets +0x87 to 100 in 0x800ad658) */
+    s8  regen;           /* +0x8b HP gained (or, negative, lost) per step in the maze and per
+                            round in battle; items with a positive Item.regen add to it while
+                            carried, negative ones while equipped (confirmed: 0x800c5570,
+                            the shop and equip code; D) */
+    u8  hit_effects;     /* +0x8c status bits the weapons inflict (D: code) */
+    u8  hit_effect_pct[7]; /* +0x8d chances of those effects, percent (D: code) */
+    s8  swings[2];       /* +0x94 extra swings, first and second weapon (D: code) */
+    u8  dice[2][3];      /* +0x96 damage dice of the two weapons: n, sides, bonus (D: code) */
+    s8  reach[2];        /* +0x9c reach of the two weapons (D: weapon_reach) */
     u8  unk9e[2];        /* +0x9e */
-    u32 unka0;           /* +0xa0 copied to +0xa4 at battle start (0x800a5b0c) */
-    u32 unka4;           /* +0xa4 */
-    u32 slay_mask;       /* +0xa8 monster families the weapon is strong against, tested
-                            against Monster.family (inferred: melee_apply_hits) */
+    u32 protect_mask;    /* +0xa0 monster classes whose hits are halved (D: code); copied to
+                            +0xa4 at battle start (0x800a5b0c) */
+    u32 unka4;           /* +0xa4 battle copy of protect_mask (inferred) */
+    u32 slay_mask;       /* +0xa8 monster classes that take double damage, tested against
+                            Monster.flags (D: code) */
     u16 unkac;           /* +0xac copied to +0xae at battle start */
-    u16 unkae;           /* +0xae flag bits tested in battle */
-    u8  unkb0[10];       /* +0xb0 +0xba (b0[10]) a percentage resist (apply_status_effects) */
-    u8  unkba[6];        /* +0xba */
+    u16 resist_bits;     /* +0xae element and status resist bits (D: code) */
+    u8  effect_resist[7]; /* +0xb0 resistance to the seven hit effects, percent (D: code) */
+    u8  unkb7[3];        /* +0xb7 */
+    u8  drain_resist;    /* +0xba resistance to level drain, percent (D: code) */
+    u8  unkbb[5];        /* +0xbb */
     u32 kills;           /* +0xc0 monsters killed (confirmed: status screen label
                             さっしょうすう) */
     u8  deaths;          /* +0xc4 times died (confirmed: status screen, +1 on death) */
@@ -167,23 +172,45 @@ typedef struct Item {
 } Item;
 
 /* Monster record, 0xd0 bytes: the last 0xd0 bytes of each DATA02/M_DTnnn.BIN and of the
- * NPC party files NPTnn.BIN (one per member). In battle the record of group g (1-4) sits
- * at 0x8008a9e8 + (g-1)*0xd0, copied byte for byte from the file (confirmed: RAM dump
- * against M_DT004). The offsets below 0x6c are names; the rest is mapped by battle
- * analyst D. */
+ * NPC party files NPTnn.BIN (one per member). In battle the record of group g is at
+ * monster_records (0x8008a918) + g*0xd0, groups 1-4 copied byte for byte from the file
+ * (confirmed: RAM dump against M_DT004). Most fields are from battle analyst D's code
+ * reads (D-battle.md, "Monster record fields used in battle"). */
 typedef struct Monster {
     u8  names[6][0x12];  /* +0x00 Japanese, Japanese unidentified, English, English
                             unidentified, English plural, English unidentified plural
                             (confirmed: nptnames.py, RAM) */
     u16 id;              /* +0x6c monster number (confirmed: table scan, 0-334) */
-    u8  unk6e[0x1c];     /* +0x6e */
+    u8  unk6e;           /* +0x6e (12, 13, 10 most common; inferred: picture) */
+    u8  group_dice[3];   /* +0x6f group size: count, sides, bonus (D: code) */
+    u16 max_hp;          /* +0x72 heals and regeneration stop here (D: code) */
+    u16 level;           /* +0x74 (D: code) */
+    u16 hp_sides;        /* +0x76 HP = level d sides + bonus (D: code) */
+    u16 hp_bonus;        /* +0x78 (D: code) */
+    s16 ac;              /* +0x7a (D: code) */
+    u32 exp;             /* +0x7c experience per monster (D: code) */
+    u8  drain;           /* +0x80 levels drained per hit (D: code) */
+    u8  regen;           /* +0x81 HP regenerated per round (D: code) */
+    u8  unk82[6];        /* +0x82 */
+    u16 ai;              /* +0x88 AI type, row of the action table, 1-based (D: code) */
     u8  flee_chance;     /* +0x8a percent (D: act_monster_flee) */
-    u8  help_chance;     /* +0x8b percent, rolled on 0-89 (D: act_call_help) */
-    u8  unk8c[0x1c];     /* +0x8c +0x8f-0xa2 a list of spell ids, 0xff = none (inferred);
-                            +0xa3-0xa6 four percentages (inferred: resistances) */
-    u32 family;          /* +0xa8 one bit for the monster's family, tested against
-                            weapons' slay masks (inferred: melee_apply_hits) */
-    u8  unkac[0x24];     /* +0xac three attack records of 10 bytes at +0xac, +0xb6, +0xc0
-                            (inferred: noun u16, dice...) */
+    u8  help_chance;     /* +0x8b rolled on 0-89 (D: act_call_help) */
+    s16 companion;       /* +0x8c companion monster id, -1 none (D: code) */
+    u8  companion_pct;   /* +0x8e (D: code) */
+    u8  unk8f[0x14];     /* +0x8f 20 bytes, 0xff = none (inferred: spell ids) */
+    u8  magic_resist[4]; /* +0xa3 percent by school; +0xa5 is also the breath resistance
+                            (D: code) */
+    u8  unka7;           /* +0xa7 */
+    u32 flags;           /* +0xa8 0x80000 undead, 0x100000 summoned, 0x400000/0x1000000
+                            death-immune, 0x1000000 decapitation-immune; low bits the monster
+                            class matched by slaying and protection (D: code) */
+    u8  attacks[3][10];  /* +0xac three attacks: +0 noun (u16), +2 verb, +3 swings, +4-+6
+                            damage dice, +7 effect bits (0x80 reaches the back row), +8
+                            effect chance (D: code) */
+    u8  breath_msg;      /* +0xca breath message: FIGHTMSG index + 50 (D: code). +0xc9, the
+                            last byte of attacks[2], is the breath type (D) */
+    u8  unkcb;           /* +0xcb */
+    u16 resist_bits;     /* +0xcc status and element resist bits (D: code) */
+    u16 weak_bits;       /* +0xce weaknesses: double dice, lower saves (D: code) */
 } Monster;
 #pragma pack(pop)

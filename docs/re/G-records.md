@@ -55,16 +55,23 @@ is no separate in-maze copy. The party you walk with is a list of roster indexes
 | +0xca | 2 | marks | +0xca bit 7 and +0xcb bits 0-3 pick the emblems beside the name; +0xca bits 0-1 set in talks | confirmed: status_marks_draw 0x800d9f00 |
 | +0xcc | 4 | | | |
 
-The derived block (+0x7e to +0xbf) is recomputed when gear changes and mostly read in
-battle; D is mapping it. What's clear so far: +0x7f-0x82 four chances read through
-0x800cbdbc (inferred: resistances), +0x84 subtracted in the party's hit roll, **+0x86 AC**
-(confirmed: status screen and ac_calc 0x800dc810), +0x87 set to 100 in battle, **+0x8b
-regen** (confirmed, see items), +0x94 a hit bonus, +0x9c/+0x9d main and sub weapon reach,
-+0xa0 and +0xac copied to +0xa4 and +0xae at battle start (base and current values),
-+0xa8 the weapon's slay mask, tested against the monster record's +0xa8 (inferred), +0xba
-a percentage resist used by apply_status_effects.
+The derived block (+0x7e to +0xbf) is recomputed when gear changes and is read mostly in
+battle. D mapped its uses (D-battle.md, "Roster fields used in battle"), and types.h
+names them: +0x7f-0x82 four saving throws (rand(20) < value), +0x84 to-hit bonus, **+0x86
+AC** (confirmed here too: status screen, ac_calc 0x800dc810), +0x87-0x8a magic resistance
+by school, **+0x8b regen** (confirmed here: maze steps; D: battle rounds), +0x8c the status
+bits the weapons inflict and +0x8d-0x93 their chances, +0x94/+0x95 extra swings and
++0x96-0x9b damage dice of the two weapons, +0x9c/+0x9d their reach, +0xa0 protection
+(monster classes whose hits are halved; copied to +0xa4 at battle start), +0xa8 slaying,
++0xae resist bits, +0xb0-0xb6 resistance to the seven hit effects, +0xba resistance to
+level drain. What fills the block from the items (+0x22-0x34 and +0x42-0x47 of the item
+record, most likely) hasn't been traced yet.
 
 ### Status bits in practice
+
+Lost (0x200) ends a character: the town deletes the record, closes the gap and adds the
+name to a list of the last three lost at 0x80096720 (E, code read). Level-up makes an old
+character Lost when Vit falls under 4 (below), and level drain to 0 does too (D).
 
 "0x20 or more" (paralyzed, stoned, dead, ashes or lost) is the game's test for a character
 who can't act: the inn won't take them, the rescue offer looks for parties whose members
@@ -97,6 +104,8 @@ wipe, zero otherwise), +0xe six bytes per member that are set to 0xff when a mem
 (confirmed: code read in tavern and edge of town), +0x14 unknown. The party you walk with
 is mirrored at 0x8007e810 in the same layout (confirmed: RAM dumps): `current_party_id`,
 `cur_party_count` (0x8007e811) and `cur_party_members` (0x8007e812, read 963 times).
+0x80079891, named party_member_count in phase 1, counts the roster instead (E:
+roster_compact 0x800dcb70 recounts it); renamed `roster_count`.
 
 `roster_snapshot` (MAIN 0x80020bb8; seed.csv's `party_copy_build` at 0x80020bd0 is a point
 inside it) is not a party copy: it copies all 20 roster records into 0x90-byte images at
@@ -155,20 +164,22 @@ card game), 0x2f sets the stats to 5/18/18/5/5/18. Item 0x133 is handled on its 
 
 The last 0xd0 bytes of each DATA02/M_DTnnn.BIN (339 files, 215 distinct records, ids
 0-334), and of each member of an NPC party file NPTnn.BIN. In battle, group g's record
-(g = 1-4) is at 0x8008a9e8 + (g-1)*0xd0, a byte-for-byte copy of the file's (confirmed:
-RAM dump against M_DT004). Code that reads +0xa8 addresses it as 0x8008a9c0 + g*0xd0.
+is `monster_records` (0x8008a918) + g*0xd0, so group 1 is at 0x8008a9e8; groups 1-4 are
+byte-for-byte copies of the file's (confirmed: RAM dump against M_DT004). seed.csv's
+monster_records row is now typed Monster[5] (group 0 is the party's slot).
 
-| Off | What | How we know |
-|---|---|---|
-| +0x00 | six 0x12-byte names: Japanese, Japanese unidentified, English, English unidentified, English plural, English unidentified plural | confirmed: nptnames.py, RAM |
-| +0x6c | id | confirmed |
-| +0x88, +0x8c | an id again (the same, or another monster's: inferred, a follow-up group) | data |
-| +0x8a | flee chance, percent (needs flag 0x400) | D's code read |
-| +0x8b | call-for-help chance, rolled on 0-89 (needs flag 0x800) | D's code read |
-| +0x8f-0xa2 | 20 bytes, 0xff = none; inferred spell ids | data |
-| +0xa3-0xa6 | four percentages; inferred resistances | data |
-| +0xa8 | family bit, tested against weapons' slay masks (Pink Mushroom 0x00400000, Smoke Demon 0x00100000) | inferred: melee_apply_hits; data |
-| +0xac, +0xb6, +0xc0 | three 10-byte attack records: u16 attack noun, then dice | inferred: data and D's monster_attack_roll |
+The fields are named in types.h `Monster`, almost all from D's battle code reads
+(D-battle.md, "Monster record fields used in battle"): names (+0x00, six 0x12-byte slots:
+Japanese, Japanese unidentified, English, English unidentified, English plural, English
+unidentified plural), id (+0x6c), group size dice (+0x6f), max HP (+0x72), level and HP
+dice (+0x74-0x79), AC (+0x7a), EXP (+0x7c, u32), level drain (+0x80), regeneration
+(+0x81), AI type (+0x88), flee and call-for-help chances (+0x8a, +0x8b), companion monster
+and chance (+0x8c, +0x8e), magic resistance by school (+0xa3-0xa6), type flags (+0xa8:
+undead, summoned, immunities, and the low bits slaying and protection match), three
+10-byte attacks (+0xac, +0xb6, +0xc0), breath type (+0xc9) and message (+0xca), resist
+and weakness bits (+0xcc, +0xce). G checked the placement (a battle RAM dump's group 1
+record equals M_DT004's tail byte for byte) and the data profile below; +0x6e (inferred:
+the picture) and +0x8f-0xa2 (20 bytes, 0xff = none; inferred: spells) are still open.
 
 A byte-by-byte profile of the 215 records is in "How it was traced"; D owns the rest.
 

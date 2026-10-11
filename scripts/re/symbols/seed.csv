@@ -27,7 +27,7 @@ RAM,0x80079668,cur_area,global,confirmed,code read 2026-10-10,Current area; writ
 RAM,0x80079906,cur_x,global,confirmed,code read 2026-10-10,Current x.,u8
 RAM,0x80079916,cur_y,global,confirmed,code read 2026-10-10,Current y.,u8
 RAM,0x80079b34,cur_facing,global,confirmed,code read 2026-10-10,Current facing.,u8
-RAM,0x80079891,party_member_count,global,inferred,code read 2026-10-10,Members in the current party.,u8
+RAM,0x80079891,roster_count,global,inferred,"code read 2026-10-10; corrected 2026-10-11 (E, G)","Number of characters in the roster, recounted by roster_compact (JOUKA 0x800dcb70). Was named party_member_count; the party count is cur_party_count (0x8007e811).",u8
 RAM,0x801ff118,talk_script,global,confirmed,docs/engine-notes.md,"A talk's script, copied here by the builder (0x800c154c).",
 RAM,0x80079a26,talk_script_pos,global,confirmed,docs/engine-notes.md,Halfword index of the next opcode in the running talk script.,s16
 RAM,0x800798a4,talk_script_status,global,inferred,code read 2026-10-10,"Set by talk opcodes (1 sets 10, 3 sets 15); -1 when a script block has finished.",s16
@@ -53,7 +53,7 @@ RAM,0x8008a614,option_cards,global,confirmed,docs/cheats.md,"Card game: 30 Optio
 RAM,0x80079990,name_entry_charset,global,confirmed,asm/name_entry_latin.asm,"Name entry character set: 0 hiragana, 1 katakana, 2 Latin.",u8
 RAM,0x80079965,name_entry_state,global,confirmed,asm/name_entry_latin.asm,"Name entry state machine, polled every frame.",u8
 RAM,0x801b0680,battle_group_monster,global,confirmed,battleshow.py,In battle: the current group's monster record.,
-RAM,0x8008a918,monster_records,global,confirmed,docs/engine-notes.md,"Monster records loaded from DATA02/M_DTnnn.BIN, 0xd0 bytes each; attack nouns at +0xac/+0xb6/+0xc0.",
+RAM,0x8008a918,monster_records,table,confirmed,docs/engine-notes.md; RAM dump and D code read 2026-10-11,"Battle monster records, 0xd0 bytes, indexed by group: group g at +g*0xd0 (0 the party slot, 1-4 the monster groups, copied from the last 0xd0 bytes of M_DTnnn.BIN). See types.h Monster.",Monster[5]
 RAM,0x80051760,file_table0,table,confirmed,relocate.py,"File table 0 (u16 sector, MSF), to 0x80051a60.",
 RAM,0x80051bc8,file_table1,table,confirmed,relocate.py,"File table 1 (u8; DATA00-03), to 0x80052234.",
 RAM,0x80052458,file_table2,table,confirmed,relocate.py,"File table 2 (u8; DATA06), to 0x8005258c.",
