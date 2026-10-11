@@ -160,3 +160,17 @@ NPC_MES5 (Zaril, Fritillaria, Gaura)
   for the Camazotz. All four are はばたくかげ ("flapping shadow") in Japanese. Settled
   2026-10-09: both names stay (Gaiden IV uses Flap Figure), and the plurals are fixed;
   see translation-notes.
+- The body-recovery fees (engine-notes.md, "Body recovery by NPC parties"): Guy's
+  party takes all the rescued characters' gold, Balbo's takes all their items, and
+  Fontana's takes half the gold and every other item. Their offer lines sound
+  generous, so check the irony when their scenes come up. Balbo's (NPC_MES2 142-145)
+  was done 2026-10-10 ("Finders keepers").
+  - Fontana, NPC_MES3 153: あなたたちもお人好しですね is "you're a trusting bunch"
+    more than "soft-hearted"; お人好し leans toward "easy mark". And
+    悪いようにはしませんから ("we won't do you wrong") is the classic reassurance of
+    someone about to. The current "soft-hearted" and "We'll take good care of them"
+    lose both. 151's ここだけの話 ("just between us") may be part of the same act.
+  - Guy, NPC_MES1 163-165: 我々の好意として ("as our goodwill") in the offer, then
+    いただけるところから,いただきますから ("we'll take what we can, from where we
+    can") on yes. The current "We'll just help ourselves to our fee" is close; check
+    that "as a favor to you" in 163 lands as the setup.
