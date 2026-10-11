@@ -371,9 +371,9 @@ C-talk-lines.md. The selectors' logic is summarized here. All [code] unless mark
 - 37 and 40: Fritillaria and Lilia introduce themselves.
 - 38, 39, 41 and 42 are never picked.
 
-**Chat:** `rand_upto(11)` × stage picks the topic. The bottom-bar topic line is one of
-1:281-285. Location topics take over about 90% of the time in some areas (details in
-C-talk-lines.md).
+**Chat:** `rand_upto(11)` picks a topic, each with a block per stage (0-8 and 12-39).
+The bottom-bar topic line is one of 1:281-285. Location and story topics (33, 40-44)
+are kept 90% of the time; 9-11 never are (bug 8).
 
 **Farewells:** built by FUN_800c7128.
 
@@ -578,14 +578,31 @@ All found by code read. None has been seen in the emulator yet.
    about Cleo and Bergamot". A party that finishes the Decipher table before the
    control-room battle never hears 4:24-29. [code; whether 100% is reachable before
    that battle is inferred]
-8. **Balbo's "other parties" chat never plays.** Chat blocks 6-8 (2:174-187) are
-   assigned by stage, then always rerolled by the `slti talk_block, 0xc` check at
-   0x800c9a20. Blocks 27 and 28 (2:243-247, 253, "heard that already") are never
-   assigned. [code]
+8. **Some chat topics never play.** Guy's, Balbo's and Fontana's chat code first picks a
+   special topic (by location, stage or story flag), then keeps it 90% of the time,
+   but only if its block number is above the random range (`slti talk_block, 0xc` at
+   0x800b6b28 for Guy and 0x800c9a20 for Balbo; `> 7` for Fontana). Specials with low
+   block numbers are always thrown away and rerolled. [code]
+   - Guy blocks 9-11 (1:195-210): the areas 1-4 and 0x17-0x1b topics.
+   - Balbo blocks 6-8 (2:174-187), "about other parties", by stage.
+   - Fontana blocks 6 and 7 (3:181-196), two of the stage-1 specials. Block 8
+     (3:197-200) is never picked at all.
+   - Balbo blocks 27 and 28 (2:243-247, 253, "heard that already") are never picked
+     either.
 9. **Cresson calls every party "boys".** His fallback greeting 4:18 "Well, boys, any
    progress?" is the only one of the three picked. 4:19 ("girls") and 4:20 ("my good
    fellows") are never used: the variant function only ever stores 0x12. [code]
 10. **Never-picked greeting blocks**: Guy 38, 39, 41 and 42, and Zaril 2 and 3. [code]
+11. **Cut services.** The text has an identify service that no code offers. Rosea
+    (2:137-141), Cephala (3:145-150) and Cleo (4:78-83) have full "identify an item?"
+    exchanges, with success, failure and curse outcomes, and every file has the log
+    line "We asked them to identify items." Zaril has a whole healing table (5:35-42),
+    but his handler has no heal offer. No handler stores any of these string numbers.
+    [code]
+12. **No re-introductions for Guy and Fontana.** Their handlers replay the full
+    introductions whenever any member hasn't met the leader. Their "didn't we do this
+    already?" lines (1:134-139, 3:117-123) and a second Guy line-up (1:128-133) never
+    play. Balbo, Cresson and Zaril do have a partial-introduction branch. [code]
 
 ## 9. How it was traced
 
@@ -632,11 +649,14 @@ watchpoints on `talk_block` and `camp_char` during a real heal offer, a RAM read
    knowing for npc2-06's proposal on 2:130.
 2. **Unused strings.** They needn't be polished first, and a reviewer shouldn't hunt
    for them in play:
-   - 1:87, 1:157
+   - 1:87, 1:157, 1:195-210
    - 2:134, 2:174-187, 2:243-247, 2:253
-   - 3:95-96, 3:99-100
+   - 3:95-96, 3:99-100, 3:181-200
    - 4:19, 4:20
+   - the identify lines and Zaril's healing (bug 11), and the re-introductions (bug 12)
    - the never-picked greeting blocks
+
+   C-talk-lines.md lists all 88 strings no script reaches.
 3. **Context for lines that play in the wrong place.** These are worth a look:
    - 1:89 in handler 7
    - 2:135 after a Madi cast
