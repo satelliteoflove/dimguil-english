@@ -13,6 +13,10 @@
 ; ("e ", "s ", ", " and so on); they end a word too, and the break goes after them.
 ; Otherwise the old rule stands: break once the line is full.
 ;
+; Every break in plain text also drops a plain space that comes straight after it in the
+; source. Without that, a word that fills the line exactly ("...Xicalli with") left the
+; following space to start the next line (" BLOW GUN."), one half-space off centre.
+;
 ; The function has three inline copies of its "write {ff21}" sequence at 21
 ; instructions each. The two in the name path are compacted, which makes room for the
 ; helpers.
@@ -30,13 +34,17 @@ SPACE equ 0xba
 .area 0x8001e1f0-.
     lui     t0, 0x8008
     lh      v0, -0x676e(t0)
-    nop
+    move    s0, zero
     addu    v1, v0, s1
     sb      s3, 0(v1)
     sb      s2, 1(v1)
     addiu   v0, v0, 2
-    sh      v0, -0x676e(t0)
     j       0x8001e1f0
+    sh      v0, -0x676e(t0)
+
+; The end of break_at (no room for it there).
+break_end:
+    j       0x8001e410
     move    s0, zero
 
 ; t5 = nonzero if code t4 is a space or a digraph ending in one (0x8b-0x92, 0xad, 0xae,
@@ -60,24 +68,30 @@ is_space:
 .area 0x8001e350-.
     lui     t0, 0x8008
     lh      v0, -0x676e(t0)
-    nop
+    move    s0, zero
     addu    v1, v0, s1
     sb      s3, 0(v1)
     sb      s2, 1(v1)
     addiu   v0, v0, 2
-    sh      v0, -0x676e(t0)
     j       0x8001e350
-    move    s0, zero
+    sh      v0, -0x676e(t0)
 
-; Plain text: write {ff21} at t6 and carry on (t0 = 0x80080000).
+; Plain text: write {ff21} at t6 and carry on (t0 = 0x80080000). A plain space next in
+; the source is skipped, so it can't start the new line.
 break_at:
+    lw      t3, -0x6614(t0)         ; source: the next byte
+    subu    v0, t6, s1
+    lbu     t4, 0(t3)
+    addiu   t3, t3, 1
+    xori    t4, t4, SPACE
+    bnez    t4, @@keep
+    addiu   v0, v0, 2               ; new position, after the {ff21}
+    sw      t3, -0x6614(t0)         ; a plain space: skip it
+@@keep:
     sb      s3, 0(t6)
     sb      s2, 1(t6)
-    subu    v0, t6, s1
-    addiu   v0, v0, 2
+    j       break_end
     sh      v0, -0x676e(t0)
-    j       0x8001e410
-    move    s0, zero
 .endarea
 
 ; Plain text (a0 < 0xf0).

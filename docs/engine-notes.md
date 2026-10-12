@@ -272,6 +272,13 @@ patches in `asm/`.
   lengths ("Jupiter sweeps Cuautori wi / th LANCE."). `asm/word_wrap.asm` adds a
   lookahead at each space (and each digraph ending in one), so words move whole.
   `fightfit.py` simulates it over every combination of name lengths.
+  When a word filled the line exactly, the plain space after it started the next line
+  ("Mercury peppers Xicalli with / BLOW GUN.", 2 px right of center; 19 strings could do
+  it, found by the play harness, 2026-10-12). An automatic break now skips a plain space
+  that follows it (advancing the source pointer); explicit {ff21} breaks are untouched.
+  Still open, no room left in the two areas: a break before a name leaves the space
+  before the name at the end of the line, half a space left of center ("Xicalli whips
+  Venus with / vines.", 4 of 187 wrapped messages in a run).
 
 ### Text buffer
 

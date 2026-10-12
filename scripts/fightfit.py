@@ -9,8 +9,10 @@ current one, and with asm/word_wrap.asm it also looks ahead at each space and br
 there if the next word won't fit. The layout depends on the lengths of the names, so
 every combination is tried: monster 3-17 ("Skeleton Warriors"), character 1-8, item or
 attack noun 3-18, spell 3-9, number 1-5, and each length the verbs actually have.
-Reports messages that can run past 3 lines, or split a word (only possible for text
-stuck to a name with no space, like "{ff13}'s"). String 297 (the Tree of Stillness
+A plain space that comes straight after a break in plain text is dropped (word_wrap.asm),
+so it can't start the next line. Reports messages that can run past 3 lines, split a word
+(only possible for text stuck to a name with no space, like "{ff13}'s"), or start a line
+with a space. String 297 (the Tree of Stillness
 mural) is shown in the event box and is skipped.
 """
 import itertools, os, re, sys
@@ -44,9 +46,12 @@ def tokens(text):
 
 
 def simulate(toks, lens):
-    """(lines, a word was split)"""
-    lines, col, split = 1, 0, False
+    """(lines, a word was split, a line starts with a space)"""
+    lines, col, split, lead = 1, 0, False, False
+    skip = None
     for k, t in enumerate(toks):
+        if k == skip:
+            continue
         if t[0] == 'nl':
             lines, col = lines + 1, 0
         elif t[0] == 'var':
@@ -55,7 +60,10 @@ def simulate(toks, lens):
                 lines, col = lines + 1, 0
             col += n
         else:
+            if col == 0 and lines > 1 and t[1] == 0xba:
+                lead = True
             col += 1
+            brk = False
             if t[1] in SPACES:
                 w = col
                 for u in toks[k + 1:]:
@@ -65,13 +73,17 @@ def simulate(toks, lens):
                         w += u[1] != 0xba
                         break
                     w += 1
-                if col >= CAP or w > CAP:
-                    lines, col = lines + 1, 0
+                brk = col >= CAP or w > CAP
             elif col >= CAP:
-                lines, col = lines + 1, 0
+                brk = True
                 nxt = toks[k + 1] if k + 1 < len(toks) else None
                 split |= bool(nxt and nxt[0] == 'code' and nxt[1] not in SPACES)
-    return lines, split
+            if brk:
+                lines, col = lines + 1, 0
+                nxt = toks[k + 1] if k + 1 < len(toks) else None
+                if nxt == ('code', 0xba):
+                    skip = k + 1
+    return lines, split, lead
 
 
 def main():
@@ -87,13 +99,14 @@ def main():
         names = sorted({t[1] for t in toks if t[0] == 'var' and t[1] in ranges})
         for combo in itertools.product(*(ranges[n] for n in names)):
             lens = dict(zip(names, combo))
-            lines, split = simulate(toks, lens)
-            if split or lines > 3:
+            lines, split, lead = simulate(toks, lens)
+            if split or lead or lines > 3:
                 bad += 1
-                print(f'!! {i:3d} {lines} lines{", splits a word" if split else ""} '
+                print(f'!! {i:3d} {lines} lines{", splits a word" if split else ""}'
+                      f'{", starts a line with a space" if lead else ""} '
                       f'with lengths {lens}: {text!r}')
                 break
-    print(f'{bad} battle messages can overflow or split a word')
+    print(f'{bad} battle messages can overflow, split a word or start a line with a space')
     return 1 if bad else 0
 
 
