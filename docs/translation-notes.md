@@ -372,10 +372,16 @@ ROADMAP.md "Game changes up front"):
   2026-10-11: it looks as if the developers meant to have it, ran out of time and cut it
   rather than implement it. The release notes say the lines exist and the service was
   never in the game.
+- **Balbo's party's "heard that already"** (bugs.md 2.6; 2:243-247, 253, and the log
+  line 2:249 "We told them everything we knew.") stays unused. Every talk topic is the
+  player asking; there's no way to tell an NPC party news, and nothing records what
+  they've heard, so reopening it would mean designing that feature. Chris, 2026-10-11:
+  leave it, and say so in the release notes.
 
-Still open for Chris (`docs/re/decisions.md`): Guy's and Fontana's
-re-introductions, Cresson's "boys", Fontana's block 8, Balbo's "heard that already", the
-weapon-effect level bonus, and level drain's save.
+Approved and in progress (2026-10-11): Guy's and Fontana's re-introductions, Cresson's
+boys/girls/fellows check, and Fontana's block 8 after the split. Still open for Chris
+(`docs/re/decisions.md`): the weapon-effect level bonus, level drain's save, and items
+11-16 (descriptions and labels).
 
 ## To revisit
 

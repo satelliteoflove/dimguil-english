@@ -43,6 +43,7 @@ Cephala has joined).
 **6. Balbo's party's "heard that already"** (2.6). These answer a "tell them news" topic that
 doesn't exist in the code.
 Recommendation: leave them unused.
+**Decided (Chris, 2026-10-11): leave them unused, and say so in the release notes.**
 
 **7. Greeting blocks nothing picks** (2.7). Settled (1ce9d0f): harmless. Guy's and Zaril's
 unpicked blocks repeat lines that other blocks already play, so nothing is lost.
