@@ -18,6 +18,9 @@ the identification system.
 **2. Zaril's healing** (2.2). He has a full healing table (5:35-42) and no offer.
 Recommendation: reopen it. His lines say which spells he casts, and the offer can copy the
 other parties' 50% roll, so very little would be invented.
+**Decided (Chris, 2026-10-11): reopen it.** Zaril is a Dracon Lord, so the Priest spells
+in his lines (Dialko, Latumofis, Dialma) fit, and his party has no other healer ("No
+Bishop in our party, see.", 5:43).
 
 **3. Guy's and Fontana's re-introductions** (2.3). Their "didn't we do this already?" lines
 never play; they replay the full introductions instead.
