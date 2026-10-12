@@ -118,6 +118,10 @@ hardcore-mode candidate (ROADMAP.md).
 **14. "Sane" for confused** (STATUS 208, the disc's own English). Confused characters show
 "Sane".
 Recommendation: "Confused", to match the status.
+**Decided (Chris, 2026-10-11): "Confused".** The series says insane (Wizardry VI and VII;
+Gaiden IV's psionic spells cause 発狂), but Dimguil renamed the status 混乱 on purpose
+(Emonoya's Dimguil spell page notes the change), and our battle text says "is confused".
+"Sane" is most likely a mangled leftover of the older "Insane".
 
 **15. "Retrain?"** (SISETU 167, 再訓練). Yes ages the character a year and gives a level; it
 isn't a re-roll.
