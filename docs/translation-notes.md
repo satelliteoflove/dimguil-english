@@ -351,10 +351,21 @@ The full triage is `docs/re/bugs.md`; each fix is its own `asm/bugfix_*.asm`.
   good. It now gets the game's own rescuer for that case, Balbo's party if someone has
   met Balbo, otherwise the man in armor (5ff86d2).
 
-Open questions for Chris (bugs.md groups 2 and 3): the identify service, Zaril's
-healing, Guy's and Fontana's re-introductions, Cresson's "boys", Fontana's block 8,
-Balbo's "heard that already", the wipe item loss, the weapon-effect level bonus, level drain's save, and the town stat
-recompute.
+Decided and left as the original had it (each one goes in the release notes, per
+ROADMAP.md "Game changes up front"):
+
+- **The wipe's item loss** (bugs.md 3.1) stays: one character, in practice whoever stands
+  in the party's first position, has every item rolled six times, and the others keep
+  theirs. Chris, 2026-10-11: keep it, document it on the site, maybe revisit later.
+- **The NPC identify service** (bugs.md 2.1) stays unused. Rosea, Cephala and Cleo have
+  the full exchange and every party log has its line, but no code offers it. Chris,
+  2026-10-11: it looks as if the developers meant to have it, ran out of time and cut it
+  rather than implement it. The release notes say the lines exist and the service was
+  never in the game.
+
+Still open for Chris (`docs/re/decisions.md`): Zaril's healing, Guy's and Fontana's
+re-introductions, Cresson's "boys", Fontana's block 8, Balbo's "heard that already", the
+weapon-effect level bonus, and level drain's save.
 
 ## To revisit
 

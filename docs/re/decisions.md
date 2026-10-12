@@ -11,6 +11,9 @@ an item?" dialogue, and every party file has its log line, but no code offers th
 Bringing it back means writing a new service with odds we'd choose.
 Recommendation: leave it unused for now. The text survives, but the mechanics would be ours,
 not the developers'.
+**Decided (Chris, 2026-10-11): leave it unused, and say so in the release notes.** It
+looks as if the developers wanted it, ran out of time, and cut it rather than implement
+the identification system.
 
 **2. Zaril's healing** (2.2). He has a full healing table (5:35-42) and no offer.
 Recommendation: reopen it. His lines say which spells he casts, and the offer can copy the
