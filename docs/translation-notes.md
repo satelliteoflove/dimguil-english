@@ -62,6 +62,12 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 
 ### Deliberate choices
 
+- **Attack verb 9 is "bashes" (FIGHTMSG 9, を 打ち降ろした; Chris, 2026-10-12).** The
+  battle line is "{attacker} {verb} {target} with {weapon}.", and the Japanese verb takes
+  the weapon as its object, so "brings down on" read oddly ("Cy brings down on Giant
+  Mosquito with ANOINTED MACE."). Now "Cy bashes Giant Mosquito with ANOINTED MACE."
+  "ANOINTED" is spelled right (anoint, one n before the o); it's the disc's own English
+  item name. Found by the harness.
 - **"There's no trap" has no full stop (FIGHTMSG 221, 罠は かかっていない; Chris,
   2026-10-12).** It's the first name in the trap list (221-233), and a fumbled chest
   inspection prints "Oops! {trap}!!" (242), so the full stop gave "Oops! There's no
