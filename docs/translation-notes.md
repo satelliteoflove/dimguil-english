@@ -62,6 +62,16 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 
 ### Deliberate choices
 
+- **"Retrain?" stays (SISETU 167, 再訓練をしますか?; Chris, 2026-10-12, decisions.md item
+  15).** It's asked after Yes to "Use this character?" when the creation roll was 9 or
+  under. Yes trains three years: level 4, three years older (F-edge-save.md §9, [emu]).
+  "Train for three years first?" was considered and dropped. Retraining is a convention of
+  the Japanese line: Emonoya's pages describe the same offer in Gaiden IV (bonus 10 or
+  under) and Dimguil (9 or under), and a 2001 Emonoya BBS post says it started with Gaiden
+  IV (外伝4から再訓練できる). Emonoya's pages for I-V, FC III / SFC V and Gaiden I-III don't
+  mention it [tertiary; not code-checked]. Dimguil's players know it, the Japanese doesn't
+  explain it either, and a mistaken Yes only gives a level-4 character three years older.
+  The site explains the three years.
 - **"Sane" is now "Confused" (STATUS 208, 627, 197; Chris, 2026-10-11, decisions.md item
   14).** The disc's own English labelled status bit 0x02, こんらん (confused), "Sane", so a
   confused character showed "Sane" on the status screen and in Look for Companions, and

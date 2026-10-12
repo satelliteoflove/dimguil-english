@@ -128,6 +128,9 @@ after Yes to "Use this character?" when the creation roll was under 10 bonus poi
 rolls). Yes trains three years: +3 levels, +3 years of age (a level-1 Fighter aged 15
 came out level 4, aged 18). No registers the character as rolled. It isn't a re-roll.
 Recommendation: "Train for three years first?", if it fits the box.
+**Decided (Chris, 2026-10-12): keep "Retrain?" as it is.** Retraining is a convention of
+the Japanese line (Gaiden IV on, per Emonoya's pages and BBS), so its players know what it
+means; see translation-notes, "Deliberate choices".
 
 **16. "Magic Item" / "EVENT Item"** (SISETU 603/604, the disc's own English, on the camp's
 item details screen).
