@@ -1246,7 +1246,7 @@
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff23}desufnoC",
                     "addStringTerminator": true
                 },
                 {
@@ -1312,7 +1312,7 @@
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff24}Confused",
                     "addStringTerminator": true
                 },
                 {
@@ -3911,7 +3911,7 @@
                 {
                     "length": 15,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff30}C{ff10}40{ff30}0／Conf",
                     "addStringTerminator": true
                 },
                 {
