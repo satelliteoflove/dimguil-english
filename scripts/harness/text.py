@@ -9,8 +9,7 @@ hooks are patched into the core's interpreter, so this needs the dynarec off.
 
 Menus and the battle's command labels call text_expand on every frame they're drawn.
 A message counts once while it's being redrawn: a (base, index, caller, text) repeat
-seen in the previous poll extends the earlier record instead of adding one, so poll
-often (every wait step does).
+within GAP frames of its last sighting extends the earlier record instead of adding one.
 
 The text file at a base can change as overlays load. Each record's file is the one whose
 string at that index matches the unexpanded text; when none matches exactly (the
@@ -104,6 +103,8 @@ class Capture:
     as dicts: frame, last, idx, base, wrap, ra, src (unexpanded text), text (expanded),
     where (list of (file, index) matches)."""
 
+    GAP = 12   # a repeat within this many frames is the same message being redrawn
+
     def __init__(self, e, index=None):
         self.e = e
         self.index = index or StringIndex()
@@ -137,7 +138,7 @@ class Capture:
             text = decode(exp)
             key = (r['idx'], r['base'], r['ra'], text)
             prev = self._recent.get(key)
-            if prev is not None and prev['last'] >= self._last_poll:
+            if prev is not None and f - prev['last'] <= self.GAP:
                 prev['last'] = f
                 continue
             try:

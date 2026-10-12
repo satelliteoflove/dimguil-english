@@ -138,6 +138,35 @@ the rescue test's disc copy (build c5dee12).
   message.
 - **Found on the way:** FIGHTMSG 118, "Hits {ff11}0 times!", prints "Hits 1 times!".
 
+## T2 results (2026-10-12)
+
+Full notes in `rips/harness/t2/README.md`; code in `scripts/harness/` (`game`, `ui`,
+`town`, `maze`, `battle`, `camp`, `flow`, `trials`). Fresh copy of build f068468, all
+states from a cold boot by button presses.
+
+- **The chain works** (`flow.chain`): power-on, New Game, three characters created, a
+  party of six formed, into the maze, walking until at least one fight or talk, back to
+  the entrance and out to town. 100/100, twice, no wipes; about 50 s a trial, 8 minutes
+  for 100 with 10 processes.
+- **Every macro 100/100:** create character (300/300), form party, Edge of Town into the
+  maze, walking with fights and talks, back to town, a fight, talk (Leave), camp spell,
+  inn, temple, Boltac's buy and sell, doors. The fight, talk and door trials start from
+  few states, so they vary little; the chain carries the variety.
+- **Fixed on the way:** fade-ins that ignore input (81 frames after camp, 34 after a
+  battle); roaming parties read as walls; water and trees open in RAM's wall map (routing
+  uses the site's no-entry squares); doors open with circle; the facility-ready check;
+  dead characters in the tavern list; early presses at the inn and Boltac's; the "Gather
+  gold?" prompts.
+- **Found:** "Oops! There's no trap.!!" (FIGHTMSG 242 + 221); battle lines wrapped before
+  "with" start with a space (98, 99, 108, 109); "Cy brings down on Giant Mosquito with
+  ANOINTED MACE." reads oddly; the site's map data marks the Shrine's outer front door
+  locked, though only the inner one is.
+- **Blocks T3:** lock picking never reached (the Grounds' only locked door is the sealed
+  Shrine door); event-box text (EVENTMES, MESSAGE.DAT) isn't captured, only shot; some
+  first-sighting shots catch the previous box; only the Grounds is handled (no stairs,
+  chutes or other floors); wipe-to-temple tested once by hand; basic battle policy, chests
+  left, no equipping or leveling, talks always Leave.
+
 ## How the work splits
 
 **The harness, with no LLM in the loop:**
