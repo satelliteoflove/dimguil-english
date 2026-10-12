@@ -126,3 +126,30 @@ Recommendation: "Train for another year?", if it fits the box.
 **16. "Magic Item" / "EVENT Item"** (SISETU 603/604, the disc's own English, on the camp's
 item details screen).
 Recommendation: "Magic item" and "Event item", in the case the other labels use.
+
+## From the description sweep (2026-10-11)
+
+Left alone by the corrections run (38fa241), for Chris. Details in `description-check.md`.
+
+**17. What the item descriptions don't mention.** Six curses; restrictions; hidden powers
+such as the Worst Sword's Vit-1 and a year older, the Dragon Kite's Str+1, the PK
+Crystal's IQ+1 and regeneration. Adding them may give away what the developers hid.
+
+**18. SISETU 219, Luck.** Says Luck helps disarm traps and dodge attacks. In the code,
+disarming uses Agility, level and the area's danger, and monster to-hit has no Luck term;
+Luck feeds the saving throws.
+
+**19. SISETU 65/66, "has died of old age".** The character is actually Lost and deleted.
+
+**20. SISETU 492, the Training Maze sign.** Accurate, but doesn't say a wipe there still
+halves gold and costs the front member's items.
+
+**21. Compendium claims with no support in the code.** Smoke Demon "swords barely harm it"
+(nothing cuts weapon damage); Venus Man Trap "burns well with fire spells" (no fire
+weakness, 40% Mage resistance).
+
+**22. FIGHTMSG 179/185, Madalqua's "in freezing cold".** Its element is Tiltowait's, not
+cold. Battle narration, so left alone.
+
+Not yet checked: EVENTMES 210/211 (the pillar water "seems to restore your magic"), and
+Calnova on doors.
