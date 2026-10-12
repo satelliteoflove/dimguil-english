@@ -173,7 +173,7 @@ a year older), the Dragon Kite's (Str+1), and the PK Crystal's IQ+1 and +3 regen
 
 | Item | Record | Mark |
 |---|---|---|
-| Holy Crown (231, #230) | Human only; classes Fighter, Priest, Lord, Valkyrie, Bishop. The text says "clergy and any fighter type" | [record] |
+| Holy Crown (231, #230) | Human only; classes Fighter, Priest, Lord, Valkyrie, Bishop. The text said "clergy and any fighter type"; corrected 2026-10-12 to name the classes | [record] |
 | Perfection Dougi (233, #232) | Monk, Dwarf only | [record] |
 | Armor of Master (237, #236) | Samurai; Human and Mook only | [record] |
 | Bloodsucker (124, #123) | Thief and Bard; Hobbit only | [record] |

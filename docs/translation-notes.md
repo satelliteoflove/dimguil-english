@@ -527,14 +527,18 @@ Item descriptions (ITEM.DAT §1, Boltac's catalog; da781e2):
   → "It's cursed, and lowers both accuracy and defense" (no swing penalty).
 - 35 Axe of Woe: "you must get very close to cut with it, so you lose attacks" → "you
   must get very close to cut with it." (no swing penalty).
+- 230 Holy Crown: "Clergy and any fighter type can wear it." → "Clergy can wear it, as
+  can Fighters, Lords and Valkyries." (its classes are Fighter, Priest, Lord, Valkyrie
+  and Bishop; Samurai, Ninja and Ranger can't. Decided 2026-10-12, decisions.md item 17.)
 
 Compendium (M_CATALG; a25c54c):
 - 7.16 2-Head Snake: "Worse still, it can drain levels." dropped (no drain; its bite
   poisons).
 
-Left as they are, for Chris (description-check.md, "Sweep"): six unmentioned curses and
-some unmentioned restrictions and hidden powers (adding them may spoil what the
-developers hid), the Luck help line (SISETU 219), the Training Maze sign (492), "has died
+Left as they are: six unmentioned curses, and the unmentioned restrictions and hidden
+powers. Chris decided (2026-10-12, decisions.md item 17) that the descriptions stay silent
+about them, as the developers wrote them; the item details screen already shows who can
+use an item. Still for Chris (description-check.md, "Sweep"): the Luck help line (SISETU 219), the Training Maze sign (492), "has died
 of old age" (65/66), the Smoke Demon and Venus Man Trap entries, and Madalqua's "freezing
 cold" battle lines.
 

@@ -146,8 +146,12 @@ Left alone by the corrections run (38fa241), for Chris. Details in `description-
 such as the Worst Sword's Vit-1 and a year older, the Dragon Kite's Str+1, the PK
 Crystal's IQ+1 and regeneration. Adding them may give away what the developers hid.
 **Curses decided (Chris, 2026-10-12): the descriptions stay silent about curses**, as the
-developers wrote them; you find a curse by equipping (the site shows them). Restrictions
-and hidden powers: asked separately.
+developers wrote them; you find a curse by equipping (the site shows them).
+**Restrictions and hidden powers decided (Chris, 2026-10-12): silent too.** The item
+details screen already shows who can use an item, and hidden powers are found by invoking
+them. The one false claim, the Holy Crown's "Clergy and any fighter type can wear it"
+(戦士系; Samurai, Ninja and Ranger can't), now reads "Clergy can wear it, as can Fighters,
+Lords and Valkyries", with the rest of the description unchanged.
 
 **18. SISETU 219, Luck.** Says Luck helps disarm traps and dodge attacks. In the code,
 disarming uses Agility, level and the area's danger, and monster to-hit has no Luck term;
