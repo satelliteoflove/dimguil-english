@@ -145,6 +145,9 @@ Left alone by the corrections run (38fa241), for Chris. Details in `description-
 **17. What the item descriptions don't mention.** Six curses; restrictions; hidden powers
 such as the Worst Sword's Vit-1 and a year older, the Dragon Kite's Str+1, the PK
 Crystal's IQ+1 and regeneration. Adding them may give away what the developers hid.
+**Curses decided (Chris, 2026-10-12): the descriptions stay silent about curses**, as the
+developers wrote them; you find a curse by equipping (the site shows them). Restrictions
+and hidden powers: asked separately.
 
 **18. SISETU 219, Luck.** Says Luck helps disarm traps and dodge attacks. In the code,
 disarming uses Agility, level and the area's danger, and monster to-hit has no Luck term;
