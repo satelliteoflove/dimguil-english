@@ -29,7 +29,7 @@
 ; and for Artemisia and Reiran, the ones Balbo's re-introduction gives the same lines
 ; (2:113, 2:111).
 ;
-; Space: the never-run blocks 19-24 of Cresson's chat array (0x800a7e14-0x800a827f, zeros;
+; Space: the never-run blocks 19-24 of Cresson's chat array (0x800a7e14-0x800a81ff, zeros;
 ; his chat picks blocks 0-18 only). The array is copied to his stack each frame; nothing
 ; there is ever run. docs/re/bugs.md 2.3.
 .psx
@@ -53,7 +53,7 @@
     nop                         ; was: lb v0, talk_block(v0)
 
 .org 0x800a7e14
-.area 0x800a8280 - .            ; bugfix_cresson_greeting.asm follows
+.area 0x800a8200 - .            ; bugfix_fontana_chat8.asm, then bugfix_cresson_greeting.asm follow
 guy_reintro:                    ; count the members who haven't met Guy (met_bits[0] bit 0)
     lui     t0, 0x8008
     addiu   t0, t0, -0x17ee     ; party slots, 0x8007e812
