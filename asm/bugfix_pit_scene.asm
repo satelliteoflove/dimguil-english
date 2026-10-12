@@ -23,7 +23,7 @@
     nop
 
 .org 0x800c57c8
-.area 0x800c589c - .
+.area 0x800c5800 - .             ; bugfix_pit_rescuer.asm follows
 pit_state10:                    ; v0 = 0xf, s0 = 0x80080000
     lui     v1, 0x8008
     lb      a0, -0x644c(v1)     ; talk_block

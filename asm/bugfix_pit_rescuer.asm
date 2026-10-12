@@ -22,7 +22,7 @@
     j       pit_rescuer
 
 .org 0x800c5800
-.area 0x800c589c - .
+.area 0x800c5820 - .             ; bugfix_zaril_heal.asm follows
 pit_rescuer:                    ; v1 = 0x80080000 (set in the delay slot)
     lb      v0, -0x644c(v1)     ; talk_block
     addiu   a1, zero, 2         ; (a1 is set again by either loop)
