@@ -32,6 +32,7 @@ exactly this case.
 never written, so every party is "boys".
 Recommendation: write the scan, with no women meaning "boys", only women "girls" and a mixed
 party "my good fellows". All three lines exist.
+**Decided (Chris, 2026-10-11): write the check.**
 
 **5. Fontana's chat about Zaril's new party** (2.5, 3:197-200). It's missing from his list of
 topics.
