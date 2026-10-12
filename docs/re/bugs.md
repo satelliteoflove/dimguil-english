@@ -283,6 +283,65 @@ Reopening needs a new branch in each handler's Talk state, modeled on Balbo's.
 Question for Chris: a missing branch, probably, since the lines are written for exactly
 that case. Should Guy and Fontana get it?
 
+**Correction (2026-10-11).** Only Guy replays the full introductions. Fontana's handler
+plays them only when *nobody* has met him (`cVar4 == party count`, MCARD 0x800d0e28); with
+some met, Talk goes straight to services and chat, so newcomers are never introduced to
+his party at all. [code]
+
+**Reopened in 7498b1c** (`asm/bugfix_reintroductions.asm`), Chris's decision 2026-10-11
+(decisions.md item 3). Modeled on Balbo's Talk state: count the members who haven't met
+the leader; all of them: the introductions, unchanged; some: the re-introduction; none:
+services and chat, unchanged. [code]
+- **Guy** (hook 0x800b62f8, after the stage's introduction block is chosen): with some
+  met, `talk_block` 3, one block for every stage: Guy 134 (Guy at 109), Alstron 135 (178,
+  stays up), Linaria 136 (8), Lychee 137-139 (8), under the bar line 1:302 "We asked them
+  who they were." His "again" lines name only the founding four; Fritillaria and Lilia,
+  who join at stages 2 and 3, have no "again" line, and the game already gives each of
+  them a self-introduction in Guy's greetings (1:140, 1:141, greeting blocks 37 and 40)
+  for a party in which nobody has met them. [code]
+- **Fontana** (hook 0x800d0e80, where the not-all-unmet path began): with some met,
+  `talk_block` 3, 4 or 5 by stage, mirroring his introductions 0-2: stage 1 Fontana 117,
+  Zaril 118, Artemisia 119, Lilia 120-121, Cephala 122; stage 2 the same without Zaril
+  (he has left); stage 3 Fontana 117, Cephala 122, Reiran 123. Same places as the
+  introductions, bar line 3:282. [code]
+- **State 0x23** in both handlers now runs these static scripts for the new block numbers
+  and the stack-built introductions otherwise (hooks 0x800b6f48, 0x800d1574). Opcode 0
+  sets the shown characters' met bits for every member during state 0x23, so newcomers
+  are marked just as by the introductions (Guy's re-introduction doesn't show Fritillaria
+  or Lilia, as said above). [code]
+- **The second Guy line-up (1:128-133) stays unplaced.** Guy: "Seems some of you are
+  meeting us for the first time (初めてのお方もいるようだし), so let's do quick
+  introductions", then Linaria, Alstron ("Al-chan"), Lychee, Fritillaria and Lilia, all in
+  one set, though no stage of his party has both of the last two. It reads like a
+  re-introduction too, which leaves two sets for one case. Possible homes: the stage-2/3
+  re-introduction (it has the two later members), or an alignment variant, as Balbo has
+  two introduction sets picked by his alignment (`oneshot_flags` bits 12/13, 2:96 and
+  2:102). Nothing in the code or the data picks between them: no handler stores 128-133,
+  and no leftover script in MCARD uses them. [code] Chris can choose.
+- **Expressions** are the introduction's for each character, except where the line's mood
+  differs: then the one the character uses for that mood elsewhere (Guy 3, as for "what the
+  heck happened to this maze?"; Linaria 3; Lychee 1 and 5 for "Ehehe"; Fontana 3; Lilia 3
+  then 1; Cephala 1), and for Artemisia and Reiran the ones Balbo's re-introduction gives
+  the same lines (2:113, 2:111). [code; choice]
+- **Space**: blocks 19-24 of Cresson's chat array (0x800a7e14-0x800a82c3). The array is
+  25 blocks of 200 bytes copied to his stack each frame; his chat picks blocks 0-18 only
+  (`rand_upto(8)` + 10 at most), so these zero blocks never run. [code]
+
+**Tested in the emulator** (`rips/re/work/P3-zaril/reintro_test.py`, output in
+`rips/re/work/P3-zaril/ri/`). The setup used RAM writes, as the other talk tests did: from
+`npc_talkmode.state`, the current MCARD and file tables laid in, the talk switched to the
+handler, the leader's stage set in `npc_stage` and each member's "met the leader" bit set
+or cleared. Then button presses only. [emu]
+- Guy, stage 1: one member met → block 3 (the re-introduction, every page as above);
+  nobody met → block 0, the full introductions; everyone met → chat. Stage 3, one met →
+  block 3.
+- Fontana: one member met, stages 1, 2, 3 → blocks 3, 4, 5, each with the right members;
+  nobody met → block 0; everyone met → chat.
+- Every case ends with all four members marked as having met the leader, and the next Talk
+  goes to chat or a sale.
+Contact sheets: `ri/guy_mixed_1_sheet.png`, `ri/fontana_mixed_1_sheet.png`,
+`ri/fontana_mixed_3_sheet.png`.
+
 ### 2.4 Cresson calls every party "boys" (NPC_MES4 18-20)
 
 `greet_cresson_line` (MCARD 0x800d8c98) chooses among 4:18 "Well, boys", 4:19 "Well,

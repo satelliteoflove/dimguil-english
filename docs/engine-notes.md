@@ -121,8 +121,9 @@ glance". By subsystem:
   the gold and the items in slots 1, 3, 5, 7 and 9. The gate (`progress_bits` & 0x1e)
   is open from the first trip into the Grounds.
 - **Bugs and cut content.** C found a dozen. The clear bugs are fixed (bugs.md group
-  1). Of the cut-looking ones, Zaril's healing is reopened (9135ef5), the identify
-  service stays unused, and the rest wait on Chris (decisions.md).
+  1). Of the cut-looking ones, Zaril's healing (9135ef5) and Guy's and Fontana's
+  re-introductions (7498b1c) are reopened, the identify service stays unused, and the
+  rest wait on Chris (decisions.md).
 - Earlier notes, now in C-talk.md: the 2026-10-06 trace had the interpreter at
   0x800b8ccc right but read two opcodes' arguments wrong (opcode 0 takes two and sets
   met bits only during introductions; opcode 6 takes one). The 2026-10-10 body-recovery

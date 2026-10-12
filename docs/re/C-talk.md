@@ -181,7 +181,8 @@ All five party handlers share one shape. The states are values of `talk_state`.
 - **0x19 → 0x1e "Talk"**: what happens depends on introductions to the leader.
   - If no member has been introduced, play the introductions (0x23). The block depends
     on alignment and stage, and opcode 0 sets the met bits.
-  - If only some members have been introduced, play the re-introduction.
+  - If only some members have been introduced, play the re-introduction (Balbo, Cresson,
+    Zaril; Guy and Fontana had no such branch until the patch, bugs.md 2.3).
   - Otherwise, 50% of the time try a service, in order:
     1. a heal offer, when someone has status ≠ 0 or HP ≤ max/5, at 50% (state 0x2d)
     2. a sale, when some member has an empty pack slot and the party is compatible, at 50% (0x3c)
@@ -604,10 +605,13 @@ All found by code read. None has been seen in the emulator yet.
     line "We asked them to identify items." Zaril has a whole healing table (5:35-42),
     but his handler has no heal offer. No handler stores any of these string numbers.
     [code]
-12. **No re-introductions for Guy and Fontana.** Their handlers replay the full
-    introductions whenever any member hasn't met the leader. Their "didn't we do this
-    already?" lines (1:134-139, 3:117-123) and a second Guy line-up (1:128-133) never
-    play. Balbo, Cresson and Zaril do have a partial-introduction branch. [code]
+12. **No re-introductions for Guy and Fontana.** Guy's handler replays the full
+    introductions whenever any member hasn't met him; Fontana's plays them only when
+    nobody has, so newcomers to a party that knows him are never introduced. Their
+    "didn't we do this already?" lines (1:134-139, 3:117-123) and a second Guy line-up
+    (1:128-133) never play. Balbo, Cresson and Zaril do have a partial-introduction
+    branch. [code] The patch adds it for both (7498b1c, bugs.md 2.3); 1:128-133 stays
+    unplaced.
 
 ## 9. How it was traced
 

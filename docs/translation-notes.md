@@ -360,6 +360,12 @@ Reopened content (each one goes in the release notes too):
   first and keeps its original odds; the heal offer comes only when the sale doesn't, so
   25% of Talk presses with someone hurt, or 12.5% when a sale was possible (98b0c5e,
   after Chris asked that the sale not be buried).
+- **Guy's and Fontana's re-introductions** (NPC_MES1 134-139, NPC_MES3 117-123) never
+  played: when only some of the party had met the leader, Guy replayed his full
+  introductions and Fontana skipped introducing the newcomers. Chris, 2026-10-11: add
+  them. Modeled on Balbo's branch; Fontana's has a block per stage, Guy's one block, since
+  his lines cover only his founding four (7498b1c). Guy's second line-up (1:128-133) is
+  still unplaced; the evidence doesn't say where it goes (bugs.md 2.3).
 
 Decided and left as the original had it (each one goes in the release notes, per
 ROADMAP.md "Game changes up front"):

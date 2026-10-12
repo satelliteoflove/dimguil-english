@@ -444,5 +444,23 @@ Two of them hit their turn limit before writing anything down and had to be resu
     40 not) showed the sale at the same rate both ways. The first sample showed no sales
     at all: the sale's "compatible" bit is rebuilt by the greeting selector from the
     members' met bits, so setting it directly did nothing.
+- Guy's and Fontana's re-introductions (7498b1c). Reading the code corrected the triage:
+  only Guy replays the full introductions; Fontana's handler simply never introduces
+  newcomers to a party that already knows him. The branch is Balbo's (all unmet: the
+  introductions; some: the re-introduction; none: services). Fontana's re-introduction is
+  built per stage from his introduction blocks, member for member. Guy's "again" lines
+  stop at his founding four, so his is one block; Fritillaria and Lilia already have their
+  own self-introductions in his greetings.
+  - The open question is 1:128-133, a second Guy line-up that also reads like a
+    re-introduction ("some of you are meeting us for the first time"), naming both later
+    members at once. A search of MCARD's data for leftover scripts using these lines
+    turned up only Cresson's chats, which share the string numbers in his own file. Left
+    unplaced for Chris.
+  - Space came from Cresson's chat array: 25 blocks of 200 bytes, but his chat only picks
+    0-18, so 1,200 bytes of zeros are copied to the stack every frame and never run.
+  - armips warned about a load delay (a byte loaded, then compared in the next
+    instruction); a nop fixed it before any test ran.
+  - Tested nine cases (Guy and Fontana; nobody, some, everyone met; Fontana at each
+    stage); contact sheets in `rips/re/work/P3-zaril/ri/`.
 - No natural before/after shots: every test uses RAM writes. Internal captures of the
   Temple pair are `rips/re/work/P3-bugs/temple/lost_before.png` and `lost_after.png`.
