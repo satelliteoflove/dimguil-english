@@ -99,6 +99,12 @@ game.
 **12. Our three mistranslations.** 力 rendered as the Strength stat on the Skull Dagger, the
 Mace of Power and the Golden Axe. None of them raises Strength.
 Recommendation: fix them.
+**Decided (Chris, 2026-10-11): fix all three, with the wording he reviewed as diffs:**
+Skull Dagger "It hits harder / and truer, and even adds"; Mace of Power "A mace that adds
+power and / accuracy just by equipping / it. Its hidden power raises / Strength itself. It
+truly / lives up to its name."; Golden Axe "Vitality and age. It also / hits harder and
+truer."
+
 
 **13. NPC Kadorto's warnings** (`C-talk.md` §5). Five characters warn that their Kadorto
 might fail, but it never does.
