@@ -159,8 +159,11 @@ states from a cold boot by button presses.
   gold?" prompts.
 - **Found:** "Oops! There's no trap.!!" (FIGHTMSG 242 + 221); battle lines wrapped before
   "with" start with a space (98, 99, 108, 109); "Cy brings down on Giant Mosquito with
-  ANOINTED MACE." reads oddly; the site's map data marks the Shrine's outer front door
-  locked, though only the inner one is.
+  ANOINTED MACE." reads oddly. (T2 also reported the site's data marking the Shrine's
+  outer door locked; that was a coordinate slip. The site marks only the inner door, E11N3
+  north is the open outer one. Its lock list is the raw bit 25 of each square's flags, and
+  5 of the 19 lock bits sit on sides with no door, e.g. E11N5 north inside the Shrine; the
+  harness shouldn't treat a lock bit alone as a door.)
 - **Blocks T3:** lock picking never reached (the Grounds' only locked door is the sealed
   Shrine door); event-box text (EVENTMES, MESSAGE.DAT) isn't captured, only shot; some
   first-sighting shots catch the previous box; only the Grounds is handled (no stairs,
