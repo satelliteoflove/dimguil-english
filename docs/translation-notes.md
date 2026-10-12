@@ -62,6 +62,14 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 
 ### Deliberate choices
 
+- **"EVENT Item" is now "Event Item" (SISETU 604; Chris, 2026-10-12, decisions.md item
+  16).** The disc's own English on the item details screen (Boltac's and camp Identify on
+  an identified item), shown for category 6-7 items other than instruments, potions and
+  scrolls: event items, specials, monster cards. Every other label there is Title Case
+  ("<Alignment>", "Male / Female"), so "Magic Item" (603) stays and only the capitals
+  went. Built and decoded from the disc image (8e03a3f); not seen on screen, since the
+  test party carries no such item. 601/602 are the Japanese-mode labels and never show
+  in English (`config[3]`). Shot of the screen: rips/re/work/P3-label/itemdetails/bi_02.png.
 - **"Retrain?" stays (SISETU 167, 再訓練をしますか?; Chris, 2026-10-12, decisions.md item
   15).** It's asked after Yes to "Use this character?" when the creation roll was 9 or
   under. Yes trains three years: level 4, three years older (F-edge-save.md §9, [emu]).

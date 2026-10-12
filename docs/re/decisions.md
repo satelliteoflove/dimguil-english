@@ -135,6 +135,8 @@ means; see translation-notes, "Deliberate choices".
 **16. "Magic Item" / "EVENT Item"** (SISETU 603/604, the disc's own English, on the camp's
 item details screen).
 Recommendation: "Magic item" and "Event item", in the case the other labels use.
+**Decided (Chris, 2026-10-12): only "EVENT Item" → "Event Item"** (8e03a3f). The screen's
+other labels turned out to be Title Case, so "Magic Item" already matches.
 
 ## From the description sweep (2026-10-11)
 
