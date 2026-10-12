@@ -203,6 +203,9 @@ patch later. Nothing is decided about whether it happens. The list so far:
   none.
 - **Weapon effects and level** (`bugs.md` 3.2). The level adjustment the game computes
   and throws away is applied: about 1 point per 4 levels, +30 at most, -20 at least.
+- **Level drain's save** (`bugs.md` 3.3). The comparison is turned round so a better save
+  resists drain, as it does against breath and traps. That takes drain from about 9% to
+  about 91% of draining hits on a level-5 character.
 
 ## Open questions
 

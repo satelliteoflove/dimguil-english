@@ -76,6 +76,7 @@ possible later "hardcore mode" (ROADMAP.md), along with item 8.
 gets better with level, Luck and the Thief's bonus, but drain lands *more* often the better
 it is. Fixing it would take a low-level character from about 9% to about 91% drained.
 Recommendation: keep the original, for the same reason as 8.
+**Decided (Chris, 2026-10-11): keep the original; on the hardcore-mode list** (ROADMAP.md).
 **Resistances building up in town** (3.4) are harmless. The town's recompute does pile up,
 but every battle rebuilds those numbers from scratch before using them. No fix needed.
 

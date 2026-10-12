@@ -377,6 +377,9 @@ ROADMAP.md "Game changes up front"):
   other effects land at their flat chance, whatever the levels. Chris, 2026-10-11: keep
   it; a candidate, with the wipe's item loss, for a possible later "hardcore mode"
   (ROADMAP.md).
+- **Level drain's save** (bugs.md 3.3) stays backwards: the better a character's save,
+  the more often they're drained. Fixing it would make drain nearly certain. Chris,
+  2026-10-11: keep it; on the hardcore-mode list.
 - **The NPC identify service** (bugs.md 2.1) stays unused. Rosea, Cephala and Cleo have
   the full exchange and every party log has its line, but no code offers it. Chris,
   2026-10-11: it looks as if the developers meant to have it, ran out of time and cut it
@@ -390,7 +393,7 @@ ROADMAP.md "Game changes up front"):
 
 Approved and in progress (2026-10-11): Guy's and Fontana's re-introductions, Cresson's
 boys/girls/fellows check, and Fontana's block 8 after the split. Still open for Chris
-(`docs/re/decisions.md`): level drain's save, and items
+(`docs/re/decisions.md`): items
 11-16 (descriptions and labels).
 
 ## To revisit
