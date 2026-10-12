@@ -317,7 +317,8 @@ services and chat, unchanged. [code]
   re-introduction (it has the two later members), or an alignment variant, as Balbo has
   two introduction sets picked by his alignment (`oneshot_flags` bits 12/13, 2:96 and
   2:102). Nothing in the code or the data picks between them: no handler stores 128-133,
-  and no leftover script in MCARD uses them. [code] Chris can choose.
+  and no leftover script in MCARD uses them. [code] Chris left it unused (2026-10-11),
+to be listed in the release notes with the other unused lines.
 - **Expressions** are the introduction's for each character, except where the line's mood
   differs: then the one the character uses for that mood elsewhere (Guy 3, as for "what the
   heck happened to this maze?"; Linaria 3; Lychee 1 and 5 for "Ehehe"; Fontana 3; Lilia 3

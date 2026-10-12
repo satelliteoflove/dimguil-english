@@ -399,9 +399,15 @@ ROADMAP.md "Game changes up front"):
   player asking; there's no way to tell an NPC party news, and nothing records what
   they've heard, so reopening it would mean designing that feature. Chris, 2026-10-11:
   leave it, and say so in the release notes.
+- **Guy's second line-up** (bugs.md 2.3, 1:128-133, "Looks like we've got some new faces
+  here...") stays unused. It covers the same case as the re-introduction now in place
+  (1:134-139) and introduces Fritillaria and Lilia together, which no stage of Guy's party
+  has, so it reads like a draft roster the developers replaced. Chris, 2026-10-11: leave
+  it, and say so in the release notes.
 
-Approved and in progress (2026-10-11): Guy's and Fontana's re-introductions, Cresson's
-boys/girls/fellows check, and Fontana's block 8 after the split. Still open for Chris
+Done 2026-10-11 (see "Reopened content"): Zaril's healing, Guy's and Fontana's
+re-introductions, Cresson's boys/girls/fellows check, and Fontana's block 8 after the
+split. Still open for Chris
 (`docs/re/decisions.md`): items
 11-16 (descriptions and labels).
 

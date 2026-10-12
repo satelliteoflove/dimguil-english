@@ -26,7 +26,9 @@ Bishop in our party, see.", 5:43).
 never play; they replay the full introductions instead.
 Recommendation: add the short branch Balbo's party already has. The lines were written for
 exactly this case.
-**Decided (Chris, 2026-10-11): add them.**
+**Decided (Chris, 2026-10-11): add them.** Guy's second line-up (1:128-133), which introduces Fritillaria
+and Lilia together though his party never has both, stays unused and goes in the release
+notes.
 
 **4. Cresson's "boys"** (2.4). The scan that picks "boys", "girls" or "my good fellows" was
 never written, so every party is "boys".
