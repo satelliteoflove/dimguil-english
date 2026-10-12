@@ -497,7 +497,8 @@ details]
 - Then a sale (see above) or a chat topic: `rand_upto(13)`, rerolling 1. On the second
   Talk press of a meeting, the chat is always block 1 (5:99 + 57-59).
 - There's no healing and no rescue. His healing lines (5:35-42, 114) are complete; the patch
-  adds the offer, copied from Guy's and Balbo's (bugs.md 2.2, 9135ef5).
+  adds the offer, copied from Guy's and Balbo's, checked only when the sale roll didn't
+  fire, so the sale keeps its odds (bugs.md 2.2, 9135ef5, 98b0c5e).
 
 [code]
 

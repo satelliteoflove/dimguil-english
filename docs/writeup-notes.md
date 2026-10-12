@@ -435,5 +435,14 @@ Two of them hit their turn limit before writing anything down and had to be resu
     for the picker before pressing.
   - Tested on the built overlay, seven cases (each cure, dead, healthy, cancel, out of
     spells), all returning to the maze. Shots in `rips/re/work/P3-zaril/`.
+  - Follow-up (98b0c5e): putting the heal check ahead of the sale, as the other parties
+    order them, cut Zaril's sale from 50% to 37.5% of Talk presses whenever anyone was
+    hurt. Chris: "zaril's code needs to be fixed, so that his item sale option isn't
+    buried if the party has hurt characters." The hook moved to the one store all four
+    no-sale paths share, the chat state, so the sale runs exactly as the original and
+    healing only fills presses that would have been chat. A sampled run (80 trials hurt,
+    40 not) showed the sale at the same rate both ways. The first sample showed no sales
+    at all: the sale's "compatible" bit is rebuilt by the greeting selector from the
+    members' met bits, so setting it directly did nothing.
 - No natural before/after shots: every test uses RAM writes. Internal captures of the
   Temple pair are `rips/re/work/P3-bugs/temple/lost_before.png` and `lost_after.png`.

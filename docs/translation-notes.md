@@ -356,7 +356,10 @@ Reopened content (each one goes in the release notes too):
 - **Zaril's healing** (NPC_MES5 35-42, and the log line 114) never played: his handler
   had no heal offer. Chris, 2026-10-11: reopen it; Zaril is a Lord and his lines name
   Priest spells. The offer and its outcomes are copied from Guy's and Balbo's healing,
-  with the same odds, and only his own lines are used (9135ef5).
+  with the same odds, and only his own lines are used (9135ef5). His sale is rolled
+  first and keeps its original odds; the heal offer comes only when the sale doesn't, so
+  25% of Talk presses with someone hurt, or 12.5% when a sale was possible (98b0c5e,
+  after Chris asked that the sale not be buried).
 
 Decided and left as the original had it (each one goes in the release notes, per
 ROADMAP.md "Game changes up front"):

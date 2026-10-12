@@ -216,11 +216,16 @@ make his party a little more useful, and his lines would be heard.
 
 **Reopened in 9135ef5** (`asm/bugfix_zaril_heal.asm`), Chris's decision 2026-10-11
 (decisions.md item 2). Copied from Guy's and Balbo's healing, nothing added:
-- **The offer.** On Talk, once everyone is introduced, if a member has a status or HP at or
-  under max/5: a 50% service roll, then a 50% heal roll (25% in all, as for the other
-  parties), checked before Zaril's sale roll. His handler never had the others' outer 50%
-  roll for its sale, so the sale keeps its own odds when nobody is hurt; when someone is,
-  the heal offer comes first, as it does for the others. [code]
+- **The offer.** On Talk, once everyone is introduced, Zaril's sale roll runs first,
+  untouched. Where it doesn't fire (the four paths that went on to a chat topic), if a
+  member has a status or HP at or under max/5: a 50% service roll, then a 50% heal roll,
+  25% per check as for the other parties. [code] So the sale keeps exactly its original
+  odds, hurt party or not, and healing comes up 25% of the Talk presses when no sale can
+  be offered (no empty pack slot, not compatible, or `progress_bits` under 0xe) and 12.5%
+  when one can (50% no sale × 25%). The first version (9135ef5) checked the heal before
+  the sale, which cut the sale to 37.5% whenever someone was hurt; Chris asked for the
+  sale not to be buried, and 98b0c5e moved the hook to the chat-state store
+  (0x800daae0). [code]
 - **The picker and the result** (states 0x2d, 0x32, 0x37), with one healer and the
   stage-3 table Guy and Balbo share, which is the one his lines fit: nothing wrong (5:36)
   or stone/dead/ashes (5:37, "can't") picks again; then 20% out of spells (5:40);
@@ -231,8 +236,8 @@ make his party a little more useful, and his lines would be heard.
   (offer, healthy, can't, Dialko, Latumofis, out of magic, HP spells, cancel), with the
   one HP spell, Dialma. Expressions: 0 plain, 2 annoyed for "quit wasting my time", 3
   sorry for "can't" and "out of spells", as his other lines use them. [code]
-- **Space.** Hooks at the state dispatch (0x800da4b8) and the Talk branch after the
-  introductions check (0x800da9b8). The code and scripts sit in three routines nothing
+- **Space.** Hooks at the state dispatch (0x800da4b8) and the chat-state store after the
+  sale roll (0x800daae0). The code and scripts sit in three routines nothing
   calls: 0x800b4100 (a yes/no box), 0x800ab09c-0x800ab1cb (two card-status checks) and
   0x800c5820-0x800c58db (the rest of the debug routine after the pit fixes, through
   FUN_800c589c). Each was checked for jal, j, word and lui/addiu references in every
@@ -254,6 +259,17 @@ picker, Leave. [emu]
 - Every run: Talk drops from the menu (talk_menu 7 → 6), Leave plays the farewell, and
   the game is back in the maze. The log line shows in the bottom bar from the offer on.
 Shots: `rips/re/work/P3-zaril/<case>/` (`*_text.png` are the outcome lines).
+
+**The sale after the reorder** (98b0c5e), sampled (`rips/re/work/P3-zaril/sale_sample.py`,
+same RAM-write setup, plus the sale's conditions made true: every member's met_bits[1]
+bit 0, which `greet_zaril` turns into the "compatible" bit, `progress_bits` at least 0xe,
+one empty pack slot). Each trial pressed Talk once, on a different frame. [emu]
+- One member paralyzed, 80 trials: sale 44, heal offer 8, chat 28.
+- Nobody hurt, 40 trials: sale 26, chat 14.
+The sale comes up at the same rate either way (the trials on consecutive frames make the
+sample lumpy; 50% is what the code says), and heal offers appear only on presses where
+the sale didn't. The paralysis, Dialma and dead cases were rerun on this build with the
+same results as above (`r2_*`).
 
 ### 2.3 Guy and Fontana never re-introduce themselves
 
