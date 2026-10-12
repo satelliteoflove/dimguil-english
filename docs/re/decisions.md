@@ -90,6 +90,11 @@ Winter Wand casting Ladalto, six unmentioned curses, and weapons called useless 
 Recommendation: correct the English to match what the game does, and list each change in
 translation-notes. The player can't see the code, so the text is their only guide. Where it's
 known, the code also matches earlier Wizardry (Lahalito is 6d6 in Wizardry I).
+**Decided (Chris, 2026-10-11): correct the English to match the code, and list every
+correction in the release notes.** The site's item tables (Emonoya's, from the item data)
+already match the code; its spell page repeats the game's wrong ranges, so the site
+session was sent the code's values. Chris also asked for a sweep of similar places in the
+game.
 
 **12. Our three mistranslations.** 力 rendered as the Strength stat on the Skull Dagger, the
 Mace of Power and the Golden Axe. None of them raises Strength.
