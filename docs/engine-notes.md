@@ -186,8 +186,9 @@ glance". By subsystem:
 ### The Edge of Town, the Training Grounds and the save (F-edge-save.md)
 
 - **Creation.** Bonus points are 7-10 (about 95%), 17-20 (4.5%) or 27-30 (0.2%). The
-  class list follows the stats and the alignment table. Declining a character with
-  under 10 points offers "Retrain?", which ages them a year and gives a level.
+  class list follows the stats and the alignment table. Accepting a character that rolled
+  under 10 points offers "Retrain?": Yes trains them three years, to level 4 and three
+  years older (emulator-checked 2026-10-12; first written as "declining" and "a year").
 - **Class change** resets each stat to the higher of the race base and the new class's
   minimum, adds three years and unequips everything not cursed.
 - **The save** is one file of two blocks: a header and a 0x2400-byte image whose layout

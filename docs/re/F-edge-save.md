@@ -440,15 +440,29 @@ Felpurr (STATUS.OBJ 0x97 + n).
    | Ninja | NINJA-TO | SHINOBI'S ROBE | SANDALS |
    | Monk | ROD | ROBES | SANDALS |
 
-9. **"Use this character?"** Answering no with fewer than 10 bonus points offers
-   "Retrain?" (SISETU 0xa7). Yes then gives:
-   - "A year has passed." (0xa8)
-   - "Happy birthday!" (0x2a)
-   - A level-up to level 2, with "Gained a level!" (0x2b). It runs the level-up routines
-     0x800b9540, 0x800b9090, 0x800b99dc and 0x800b9e6c, which are E's or G's.
-   - Age +1.
+9. **"Use this character?"** (SISETU 0xa6, state 'd'). Corrected 2026-10-12; the first
+   reading had Yes and No the wrong way round and one year instead of three.
+   - **No** (or cancel) goes to state 'n': the character is thrown away and nothing is
+     registered. **[code]**; **[emu]** the roster count stayed 6.
+   - **Yes** goes to state 's'. If the bonus points rolled at creation (`0x800798b4`, the
+     total; the points still unassigned are `0x800796b5`) are under 10, state 'x' asks
+     "Retrain?" (0xa7). With 10 or more, state 0x9b registers the character at once.
+     **[code]**; **[emu]** a natural roll of 9 got the question and a roll of 10 didn't.
+     Since 7-10 points come up about 95% of the time, and 7-9 three times in four of
+     those, most new characters are offered it.
+   - **Yes at "Retrain?"** runs three training years. State 0x82 shows "A year has
+     passed." (0xa8), then "Happy birthday!" (0x2a), then state -0x6f adds a level and a
+     year, runs the level-up routines (0x800b9540, 0x800b9090, 0x800b99dc, 0x800b9e6c)
+     and prints "Gained a level!" (0x2b) with the stat changes. State 0x96 counts the
+     years in `0x80079c5e` and loops back to 0x82 until it reaches 3, then registers the
+     character. **[code]**; **[emu]** (`rips/re/work/P3-retrain/`, a natural roll, button
+     presses only): a level-1 Human Fighter aged 15 with 8 HP came out level 4, aged 18,
+     with 28 HP and 2,638 EXP, after three "A year has passed." cycles.
+   - **No (or cancel) at "Retrain?"** registers the character as rolled. **[emu]** level 1,
+     age 15, as before.
 
-   So retraining trades a year of age for a level. It isn't a re-roll.
+   So the offer is a consolation for a poor roll: three years of age for three levels.
+   It isn't a re-roll.
 
 The unreferenced debug menu at JOUKA 0x800a6c40 toggles `debug_flags` (0x80079560). Bit 4
 gives a new character EXP 0xffffffff, and bit 8 gold 0x7fffffff **[code]**. Nothing in
@@ -685,11 +699,12 @@ initial roster, the six premade characters, comes from code not traced here.
   (now "{ff23}desufnoC"). [emu, RAM-write setup] In that check the Tavern and Training
   Grounds lists showed level and class for a confused character, not the status; the
   status screen, the party panel and Look for Companions showed the label.
-- **"Retrain?" (SISETU 0xa7).** This isn't a re-roll. It's offered when declining a new
-  character with under 10 bonus points. Yes ages them a year and gains a level ("A year
-  has passed. Happy birthday! Gained a level!"). An English player may well read
-  "Retrain?" as "start over". Something like "Train for another year?" would say what it
-  does.
+- **"Retrain?" (SISETU 0xa7).** This isn't a re-roll. It's offered after answering Yes to
+  "Use this character?" when the character rolled under 10 bonus points. Yes trains them
+  for three years: three rounds of "A year has passed. Happy birthday! Gained a level!",
+  so level 4 and three years older (corrected 2026-10-12 from "No" and "a year"; see §9).
+  An English player may well read "Retrain?" as "start over". The wording should say
+  what it does, and that it's three years, not one.
 - **"Suspend Game" (Edge of Town) and "Save and Suspend" (maze)** both save to the card;
   Suspend Game doesn't quit. The labels are fine. The walkthrough could say plainly that
   this is how you save.

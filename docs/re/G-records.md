@@ -328,7 +328,7 @@ if under a random cap and rand(0..level-1) > 3. Else it rises by 1 when under th
 
 Age: the inn adds a week for each paid week and a day for a night in the Stables (seven
 days make a week; E-town.md, emulator-checked), Kadorto adds 1-52 weeks to the character
-it raises (B), class change adds three years, "Retrain?" at creation adds a year (F), and
+it raises (B), class change adds three years, "Retrain?" at creation adds three years (F, emulator-checked), and
 some items move it by a year (equip_effect 0xd, 0xe).
 
 ## Class change

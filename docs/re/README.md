@@ -136,7 +136,8 @@ unless it says inclusive; `rand_upto(n)` is 0..n inclusive.
 ### Creating a character ([F-edge-save.md](F-edge-save.md#creating-a-character))
 
 - Bonus points: 7-10 (20/21, about 95.2%), 17-20 (about 4.5%), 27-30 (about 0.23%).
-- "Retrain?" (declining with under 10 points): a year older and a level up.
+- "Retrain?" (after accepting a character with under 10 points): three years older and
+  three levels up, to level 4.
 - Class change: each stat to the higher of the race base and the class minimum, three
   years older, everything not cursed unequipped.
 

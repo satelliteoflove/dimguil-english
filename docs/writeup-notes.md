@@ -376,6 +376,16 @@ Two of them hit their turn limit before writing anything down and had to be resu
 - **Merging (phase 4).** The chapters were reconciled with each other and with the code:
   a dozen corrections, among them the rescue offer being open from the start of the game
   rather than from the Shrine, and Sogref targeting an ally rather than its caster.
+- **"Retrain?" (2026-10-12).** Chris questioned the reading while deciding the label's
+  wording: he remembered the offer coming after answering *Yes* to "Use this character?".
+  He was right. The training-grounds analyst had read the yes/no cursor the wrong way
+  round, and missed that a counter loops the training three times. Re-read in the C and
+  then played through on the current build with a natural low roll (9 points): No at
+  "Use this character?" throws the character away; Yes with under 10 points asks
+  "Retrain?"; Yes there plays "A year has passed" three times and the level-1 Fighter
+  aged 15 comes out level 4, aged 18. A roll of 10 skips the question. Shots and scripts:
+  `rips/re/work/P3-retrain/` (retrain_yes_sheet.png). Lesson: a menu cursor's 0 isn't
+  always the answer you expect, so check the menu's order on screen.
 
 ## Fixing the original game's bugs
 
