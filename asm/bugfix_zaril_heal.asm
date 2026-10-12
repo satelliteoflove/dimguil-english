@@ -6,10 +6,12 @@
 ; Dracon Lord, and his lines name Priest spells.
 ;
 ; Copied from the other party handlers (talk_guy, talk_balbo), adding nothing they don't do:
-; - Talk, with everyone introduced: if a member has a status or HP at or under max/5, a 50%
-;   service roll and then a 50% heal roll (25% in all, as for the other parties) offer
-;   healing (state 0x2d) before Zaril's sale roll. Zaril's handler never had the others'
-;   outer 50% roll for his sale, so his sale keeps its own odds when nobody is hurt.
+; - Talk, with everyone introduced: Zaril's sale roll runs first, exactly as before. Only
+;   when it doesn't fire (where the original goes on to a chat topic) and a member has a
+;   status or HP at or under max/5, a 50% service roll and then a 50% heal roll (25% per
+;   check, as for the other parties) offer healing (state 0x2d). So his sale keeps its
+;   original odds; healing comes up 25% of the time when no sale can be offered, and 12.5%
+;   when one could (50% no sale x 25%).
 ; - The offer, then the shared member picker (state 0x32), then the result (0x37). One
 ;   healer, so no 50/50 between two. His lines match Guy's and Balbo's stage-3 table:
 ;   healthy (5:36) and "can't" (5:37, stone/dead/ashes) let you pick again; 20% out of
@@ -17,8 +19,8 @@
 ;   Dialma (5:41, cure 4); cancel (5:42). As in the others, any outcome but healthy uses
 ;   up Talk for this meeting (talk_menu bit 0).
 ;
-; Hooks: talk_zaril's state dispatch (0x800da4b8) and its Talk branch after the
-; introductions check (0x800da9b8). Space: the unreferenced routines at 0x800b4100 (a
+; Hooks: talk_zaril's state dispatch (0x800da4b8) and the store of the chat state after
+; the sale roll (0x800daae0), which all four no-sale paths reach. Space: the unreferenced routines at 0x800b4100 (a
 ; yes/no box) and 0x800ab09c-0x800ab1cb (two card-status checks), and the rest of the
 ; unused debug routine after the pit fixes (0x800c5820-0x800c58db, through FUN_800c589c,
 ; also unreferenced). docs/re/bugs.md 2.2.
@@ -28,7 +30,7 @@
 .org 0x800da4b8                 ; state dispatch, was: lh v1, talk_state(s0) (next: nop)
     j       zaril_states
 
-.org 0x800da9b8                 ; Talk, all introduced, was: move a0, zero (next: move fp, a0)
+.org 0x800daae0                 ; no sale, was: sh v0 (0x28), talk_state(v1) (next: lui v0, 0x8008)
     j       zaril_offer
 
 ; The states. s0 = 0x80080000 here; every exit goes to the handler's epilogue, which
@@ -180,7 +182,7 @@ zaril_heal_scripts:
     .halfword 3,10,0,109, 2,42, -1, 0,0,0,0,0,0,0           ; 7 declined
 .endarea
 
-; The offer, on Talk once everyone is introduced, before the sale roll.
+; The offer, on Talk once everyone is introduced, when the sale roll didn't fire.
 .org 0x800c5820
 .area 0x800c58dc - .
 zaril_offer:
@@ -211,10 +213,11 @@ zaril_offer:
 @@next:
     bne     t0, t2, @@scan
     nop
-@@resume:                           ; no offer: the original code, from the sale roll
-    move    a0, zero
-    j       0x800da9c0
-    move    fp, zero
+@@resume:                           ; no offer: on to a chat topic, as the original
+    lui     v1, 0x8008
+    addiu   v0, zero, 0x28
+    j       0x800daae4
+    sh      v0, -0x67e4(v1)         ; talk_state = 0x28
 @@hurt:
     jal     0x8001cb18              ; rand_upto(1): the 50% service roll
     addiu   a0, zero, 1
