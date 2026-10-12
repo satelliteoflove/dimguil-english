@@ -161,6 +161,8 @@ and escaping traps." (Chris's "escaping traps"; six of the twelve chest traps gi
 member a save, D-battle.md). "Sways many things" stays.
 
 **19. SISETU 65/66, "has died of old age".** The character is actually Lost and deleted.
+**Decided (Chris, 2026-10-12): leave it.** "Died of old age" reads as final, the character
+vanishes right after it, and it's what the Japanese says (お亡くなりになりました).
 
 **20. SISETU 492, the Training Maze sign.** Accurate, but doesn't say a wipe there still
 halves gold and costs the front member's items.

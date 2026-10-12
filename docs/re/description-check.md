@@ -342,7 +342,7 @@ true)
   the front member's items six times (D-battle.md). The sign doesn't say otherwise; left
   as it is, for Chris. **[code]**
 - SISETU 65/66, "has died of old age": the character is Lost and deleted, not dead
-  (E-town.md). Left, for Chris.
+  (E-town.md). Left as written, decided 2026-10-12 (decisions.md item 19).
 - SISETU 218, Agility: the order of attacks, spotting traps (Inspect's chance is a class
   factor × Agility, up to 95%) and disarming (a failed disarm sets the trap off unless
   rand(20) + a class penalty ≤ Agility): right. **[code]**
