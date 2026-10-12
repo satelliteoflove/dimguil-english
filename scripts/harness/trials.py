@@ -132,7 +132,7 @@ def t_boltac(g, k, rng):
     f0 = g.frame
     b = town.boltac_buy(g, slot, 0, 0, item)
     f1 = g.frame
-    idx = town.town_party(g)[slot]
+    idx = town.town_slots(g)[slot]
     s = town.boltac_sell(g, slot, len(g.char(idx)['items']) - 1)
     town.boltac_leave(g)
     town.to_town_bar(g)
@@ -189,6 +189,12 @@ def run_one(args):
         rec.update(ok=False, outcome='fail', kind=getattr(e, 'what', '%s: %s' % (type(e).__name__, e)),
                    leg=info.get('leg'), legs=info.get('legs_done', {}),
                    info={a: b for a, b in info.items() if a not in ('legs_done',)})
+        try:
+            from harness import regress
+            regress.add_case(dict(id='trial:%s:%d' % (macro, k), kind='trial', macro=macro, k=k,
+                                  what=rec['kind'], source='trials'))
+        except Exception:
+            pass
         try:
             g.save(os.path.relpath(os.path.join(out, 'fail', str(k)), os.path.join(ROOT, 'rips/harness')))
             g.shot(os.path.relpath(os.path.join(out, 'fail', str(k)), os.path.join(ROOT, 'rips/harness')))

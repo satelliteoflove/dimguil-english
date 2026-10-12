@@ -235,8 +235,9 @@ def _chest_tap_until(g, cond, limit=900, what='chest'):
 
 
 def chest(g, mode='leave', who=0, since=None):
-    """The chest menu after a battle. mode 'leave', or 'inspect' (inspect with member
-    `who`; open only if it reports no trap; leave a named trap). Returns what happened."""
+    """The chest menu after a battle. mode 'leave', 'open' (open at once: only where the
+    chests are known to be untrapped), or 'inspect' (inspect with member `who`; open only
+    if it reports no trap; leave a named trap). Returns what happened."""
     if since is None:
         since = max(0, len(g.cap.messages) - 40)
     ui.wait_until(g, lambda: chest_menu_ready(g, since), 600, 'chest menu')
@@ -245,6 +246,15 @@ def chest(g, mode='leave', who=0, since=None):
         ui.move_cursor(g, LIST, CHEST_LEAVE, 'down', 'up', what='chest option')
         ui.confirm_until(g, gone, 300, 'leave chest')
         return 'left'
+    if mode == 'open':
+        # open straight away (for chests known to be untrapped, e.g. on the Grounds)
+        n3 = len(g.cap.messages)
+        ui.move_cursor(g, LIST, CHEST_OPEN, 'down', 'up', what='chest option')
+        ui.confirm_until(g, lambda: _since(g, n3, 'FIGHTMSG.OBJ', (250,)) or gone(), 120, 'open')
+        if not gone():
+            _chest_pick_member(g, who)
+            _chest_tap_until(g, gone, what='opening')
+        return 'opened'
     n = len(g.cap.messages)
     ui.move_cursor(g, LIST, CHEST_INSPECT, 'down', 'up', what='chest option')
     ui.confirm_until(g, lambda: _since(g, n, 'FIGHTMSG.OBJ', (246,)), 120, 'inspect')

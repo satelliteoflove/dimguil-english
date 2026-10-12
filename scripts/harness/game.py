@@ -55,7 +55,9 @@ class Stuck(Exception):
 class Game:
     def __init__(self, disc=DISC, capture=True, shots_dir=None):
         self.e = Emu(disc)
-        self.e.keep_frames = False
+        # with shots on, every frame is kept (about 1% of speed, T1) so the frame before a
+        # press is at hand
+        self.e.keep_frames = bool(shots_dir)
         self.cap = None
         self.shots_dir = shots_dir
         self.seen_shot = set()
@@ -68,42 +70,82 @@ class Game:
         self._due = []            # (frame, key, message) shots still to take
 
     # --- frames ---
-    SHOT_DELAY = 24           # frames after a new string's first print: the box is drawn
+    SETTLE = 6                # a press this soon after a string's first print is too early
 
     def _poll(self):
-        """Every frame: poll the capture; the first time a string id is printed, take a
-        shot SHOT_DELAY frames later (frame copying is on for that frame only). Shots go
-        to shots_dir/<file>_<idx>.png, skipped if another process already took it."""
+        """Every frame: poll the capture and note strings seen for the first time (by
+        file and index) as wanting a shot."""
         c = self.cap
         c.poll()
-        if not self.shots_dir:
+        if not self.shots_dir or len(c.messages) <= self._nmsg:
             return
-        if len(c.messages) > self._nmsg:
-            for m in c.messages[self._nmsg:]:
-                key = (m['file'], m['idx'])
-                if m['file'] and key not in self.seen_shot:
-                    self.seen_shot.add(key)
-                    p = os.path.join(self.shots_dir, '%s_%d.png' % (m['file'].split('.')[0], m['idx']))
-                    if not os.path.exists(p):
-                        self._due.append((self.frame + self.SHOT_DELAY, p))
-            self._nmsg = len(c.messages)
-        if self._due:
-            f = self.frame
-            if any(d - 3 <= f for d, _ in self._due):
-                self.e.keep_frames = True
-            for d, p in [x for x in self._due if x[0] <= f]:
-                self._due.remove((d, p))
-                try:
-                    self.e.shot(p, scale=1)
-                except Exception:
-                    pass
-            if not any(d - 3 <= f for d, _ in self._due):
-                self.e.keep_frames = False
+        for m in c.messages[self._nmsg:]:
+            key = (m['file'], m['idx'])
+            if m['file'] and key not in self.seen_shot:
+                self.seen_shot.add(key)
+                p = os.path.join(self.shots_dir, '%s_%d.png' % (m['file'].split('.')[0], m['idx']))
+                if not os.path.exists(p):
+                    self._due.append([m['frame'], p, None])
+        self._nmsg = len(c.messages)
+
+    def _before_press(self):
+        """Shot timing (2026-10-12, T3). The game shows a message until a press moves it
+        on, so the screen just before a press shows whatever is waiting. A string still
+        wanting a shot takes the frame before every press while no newer string has
+        been printed; its last such frame is its shot. Strings printed together (a
+        battle box's "Hits 1 times!" and "takes 4 damage.") share one. A string printed
+        early ("Oops!...", 90 frames before it shows) first gets the previous box, then
+        the right one at the press that dismisses it."""
+        if not self._due:
+            return
+        newest = self.cap.messages[-1]['frame'] if self.cap.messages else 0
+        keep = []
+        for d in self._due:
+            first, p, img = d
+            if first < newest:                      # superseded: final
+                if img is not None:
+                    self._write_shot(p, img)
+                continue
+            if self.frame - first >= self.SETTLE and self.e.frame:
+                d[2] = self.e.frame
+            keep.append(d)
+        self._due = keep
+
+    def _write_shot(self, p, frame):
+        from PIL import Image
+        data, w, h, pitch = frame
+        if self.e.pixfmt == 1:
+            im = Image.frombuffer('RGB', (w, h), data, 'raw', 'BGRX', pitch, 1)
+        else:
+            im = Image.frombuffer('RGB', (w, h), data, 'raw', 'BGR;16', pitch, 1)
+        try:
+            os.makedirs(os.path.dirname(p), exist_ok=True)
+            im.save(p)
+        except Exception:
+            pass
+
+    def flush_shots(self):
+        """Write the shots still pending (end of a run)."""
+        for first, p, img in self._due:
+            if img is not None:
+                self._write_shot(p, img)
+        self._due = []
+
+    budget_end = None         # a frame past which step/tap raise Stuck('frame budget')
+
+    def _check_budget(self):
+        if self.budget_end is not None and self.e.frame_no > self.budget_end:
+            self.budget_end = None
+            raise Stuck('frame budget', where=self.where())
 
     def step(self, n=1):
+        self._check_budget()
         self.t.step(n)
 
     def tap(self, *btns, hold=None):
+        self._check_budget()
+        if self.shots_dir and self.cap:
+            self._before_press()
         self.t.tap(*btns, **({} if hold is None else {'hold': hold}))
 
     @property
@@ -129,11 +171,12 @@ class Game:
 
     def shot(self, name, scale=1):
         """Draw a frame with frame copying on and save it (rips/harness/<name>.png)."""
+        keep = self.e.keep_frames
         self.e.keep_frames = True
         self.step(1)
         p = self.path(name, '.png')
         self.e.shot(p, scale=scale)
-        self.e.keep_frames = False
+        self.e.keep_frames = keep
         return p
 
     # --- RAM ---

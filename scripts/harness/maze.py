@@ -36,7 +36,46 @@ SITE = os.path.expanduser('~/Documents/bartoks-trading-post/data/maps/dim')
 
 
 def in_maze(g):
-    return g.overlay() == 'MAZE'
+    """The maze is running. After the START menu (MCARD.BIN: Investigate, items, spells)
+    the resident-overlay byte stays MCARD while the party walks on (found 2026-10-12,
+    rips/harness/t3/probe_event3.py), so MCARD counts too when the town state reads 0xff
+    (outside town)."""
+    o = g.overlay()
+    return o == 'MAZE' or (o == 'MCARD' and g.u8(0x80079b18) == 0xff)
+
+
+BOX_GLYPHS = 0x8007993a # u16: glyph sprites in use in layer 1, the event box's
+PRINTER = 0x80079992    # the event printer's state; 0x64 idle
+                        # Some boxes ("The pillar begins to shake...") wait for a press
+                        # with MSG and EVENT_BOX clear. Neither byte alone shows them: the
+                        # printer can sit at 4 with no box (after a battle), and 13 glyphs
+                        # stay in the layer after a box closes until the next screen. A box
+                        # is up when both say so (box_up). Found 2026-10-12 (T3).
+
+
+def box_up(g):
+    sig = (g.u16(BOX_GLYPHS), g.u8(PRINTER))
+    stale = getattr(g, 'stale_box', None)
+    if stale is not None:
+        if sig == stale:
+            return False
+        g.stale_box = None
+    return sig[0] != 0 and sig[1] != 0x64
+
+
+def mark_stale_box(g):
+    """The box on screen is a leftover, not waiting for anything: the last line of the
+    Shrine door's sequence ("And then.....the door slowly begins to open.") stays up,
+    printer 4, while the party walks on (T3, 2026-10-12). box_up ignores it until the
+    glyph count or printer changes."""
+    g.stale_box = (g.u16(BOX_GLYPHS), g.u8(PRINTER))
+
+
+def calm_but_box(g):
+    """calm() apart from box_up: the walking state with nothing else pending."""
+    return (in_maze(g) and g.u8(GAME_STATE) == 0 and g.u8(MOVING) == 0
+            and g.u8(MSG) in (0, 1) and g.u8(EVENT_BOX) == 0 and g.u8(0x8007967e) == 0
+            and g.u8(FADE_A) == 0 and g.u8(FADE_B) == 0)
 
 
 FADE_A, FADE_B = 0x80079854, 0x800796ab   # nonzero while the view fades in (after the
@@ -49,13 +88,13 @@ def calm(g):
     fade-in."""
     return (in_maze(g) and g.u8(GAME_STATE) == 0 and g.u8(MOVING) == 0
             and g.u8(MSG) in (0, 1) and g.u8(EVENT_BOX) == 0 and g.u8(0x8007967e) == 0
-            and g.u8(FADE_A) == 0 and g.u8(FADE_B) == 0)
+            and g.u8(FADE_A) == 0 and g.u8(FADE_B) == 0 and not box_up(g))
 
 
 def interrupted(g):
     """Something other than walking has the game: battle, talk, an event, a box."""
     return (not in_maze(g) or g.u8(GAME_STATE) != 0 or g.u8(0x8007967e) != 0
-            or g.u8(MSG) in (2, 3) or g.u8(EVENT_BOX) != 0)
+            or g.u8(MSG) in (2, 3) or g.u8(EVENT_BOX) != 0 or box_up(g))
 
 
 def wallmap(g):
@@ -103,15 +142,20 @@ def site_check(g):
 
 def site_locked(area):
     """Locked doors from the site's data, as blocked (x, y, dir) steps in game coordinates,
-    both sides of each door. The site's rows run y = 23 - row and its n/s sides are the
-    game's S/N (checked on the Grounds: (11,4,n) and (11,5,n) are RAM's doors at
-    (11,19,S) and (11,18,S), the Shrine's two front doors)."""
+    both sides of each door. The site's rows run y = 23 - row; its sides are the game's
+    (n = 0 N; checked against RAM at the Shrine doors, where site (11,4,n) is the sealed
+    door north of (11,19) and (11,3,n) the outer one north of (11,20)). The site's `locked` list is raw bit 25 of each square's flags, and 5 of
+    its 19 bits sit on sides with no door (site session, 2026-10-12: E11N5 north, inside
+    the Shrine, is one), so only sides the site also draws as a door ('2') count. Not
+    used for routing: walk_to learns a locked door from "The door is locked." instead."""
     d = site_map(area)
     if not d:
         return set()
-    flip = {'n': 2, 'e': 1, 's': 0, 'w': 3}
+    flip = {'n': 0, 'e': 1, 's': 2, 'w': 3}
     out = set()
     for L in d.get('locked', []):
+        if d['walls'][L['side']][L['y']][L['x']] != '2':
+            continue
         x, y, k = L['x'], 23 - L['y'], flip[L['side']]
         out.add((x, y, k))
         out.add((x + DIRV[k][0], y + DIRV[k][1], (k + 2) % 4))
@@ -179,7 +223,14 @@ def face(g, d):
             return False
         cur = g.u8(FACE)
         btn = 'right' if (d - cur) % 4 in (1, 2) else 'left'
-        ui.press_until(g, btn, lambda: g.u8(FACE) != cur or interrupted(g), 120, 'turn')
+        try:
+            ui.press_until(g, btn, lambda: g.u8(FACE) != cur or interrupted(g), 120, 'turn')
+        except Stuck:
+            if calm(g):
+                # walking, nothing pending, and a turn does nothing: the game has stopped
+                # taking input (T4: "You've met someone!" with no meeting after it)
+                raise Stuck('game not responding', where=g.where(), at=g.pos())
+            raise
         ui.wait_until(g, lambda: g.u8(MOVING) == 0 or interrupted(g), 120, 'turn end')
         if interrupted(g):
             return False
@@ -235,6 +286,8 @@ def walk_to(g, tx, ty, on_interrupt=None, limit_moves=400, avoid=()):
     Returns a dict: moves, frames, interruptions, blocked."""
     f0 = g.frame
     blocked = set(avoid)
+    refused = set()
+    shuffles = 0
     moves = inter = 0
     last = None
     while True:
@@ -250,6 +303,24 @@ def walk_to(g, tx, ty, on_interrupt=None, limit_moves=400, avoid=()):
         if moves > limit_moves:
             raise Stuck('walk too long', at=(x, y), goal=(tx, ty))
         p = bfs(wallmap(g), (x, y), (tx, ty), blocked, site_closed(g.u8(AREA)))
+        soft = {b for b in blocked if b not in set(avoid) and side(wallmap(g), *b) == 0}
+        if not p and soft and shuffles < 4:
+            # Sides RAM calls open were learned shut, usually a roamer standing in the
+            # way: "You've met someone!" and then nothing, for as long as it stays (T4,
+            # round 7, t4v1/t4v4 at (1, 12)). Roamers only move when the party steps, so
+            # forget those sides, step somewhere else, and plan again.
+            shuffles += 1
+            blocked -= soft
+            refused.clear()
+            wm = wallmap(g)
+            closed = site_closed(g.u8(AREA))
+            for d2 in range(4):
+                nx, ny = x + DIRV[d2][0], y + DIRV[d2][1]
+                if (side(wm, x, y, d2) == 0 and (nx, ny) not in closed
+                        and (x, y, d2) not in soft):
+                    step(g, d2)
+                    break
+            continue
         if not p:
             raise Stuck('no path', at=(x, y), goal=(tx, ty), blocked=sorted(blocked))
         d = p[0]
@@ -258,6 +329,13 @@ def walk_to(g, tx, ty, on_interrupt=None, limit_moves=400, avoid=()):
         if r == 'moved':
             continue
         if r == 'interrupted':
+            continue
+        if r == 'blocked' and side(wallmap(g), x, y, d) == 0 and (x, y, d) not in refused:
+            # RAM says open: give it one more try before learning it as shut. A step can
+            # be refused once for timing (T4, round 6: west from (2, 12) was learned shut,
+            # leaving the tiger pillar with no path; it steps fine)
+            refused.add((x, y, d))
+            g.step(20)
             continue
         blocked.add((x, y, d))
         nx, ny = x + DIRV[d][0], y + DIRV[d][1]

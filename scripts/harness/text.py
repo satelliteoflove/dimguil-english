@@ -74,12 +74,21 @@ def _norm(s):
     return re.sub(r'\s+', ' ', s).strip()
 
 
+def _fuzzy(s):
+    """A looser key for text whose JSON and disc forms differ in markup: the JSON writes a
+    page break as \r and the ancient letters as {ancient_x}, the disc as {ff20} and glyph
+    codes. Keep letters and digits outside braces, up to 60 of them."""
+    s = re.sub(r'\{[^}]*\}', '', s)
+    return re.sub(r'[^A-Za-z0-9]', '', s)[:60]
+
+
 class StringIndex:
     """Text -> [(file, index)] over translations/*.json (the English, or the Japanese
     where the disc's own text is kept)."""
 
     def __init__(self):
         self.by_text = {}
+        self.by_fuzzy = {}
         tdir = os.path.join(ROOT, 'translations')
         for fn in sorted(os.listdir(tdir)):
             if not fn.endswith('.json'):
@@ -92,10 +101,18 @@ class StringIndex:
                     t = st.get('translation') or st.get('source') or ''
                     for part in t.split('{ff40}'):
                         self.by_text.setdefault(_norm(part), []).append((fn[:-5], n))
+                        k = _fuzzy(part)
+                        if len(k) >= 12:
+                            self.by_fuzzy.setdefault(k, []).append((fn[:-5], n))
                     n += 1
 
     def find(self, text):
-        return self.by_text.get(_norm(text), [])
+        hit = self.by_text.get(_norm(text), [])
+        if not hit:
+            k = _fuzzy(text)
+            if len(k) >= 12:
+                hit = self.by_fuzzy.get(k, [])
+        return hit
 
 
 class Capture:

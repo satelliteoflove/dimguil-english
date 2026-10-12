@@ -32,7 +32,17 @@ def open_camp(g):
         if not maze.calm(g):
             maze.settle(g)
         ui.cancel_until(g, lambda: in_camp(g), 300, 'open camp')
-    ui.wait_until(g, lambda: g.u8(CAMP_STATE) == 5, 300, 'camp menu')
+        ui.wait_until(g, lambda: g.u8(CAMP_STATE) == 5, 300, 'camp menu')
+        return
+    # already in camp, maybe still on a member's screen after a cast ("Cast the spell."):
+    # back out to the icon menu, one screen at a time
+    end = g.frame + 900
+    while g.u8(CAMP_STATE) != 5:
+        if g.frame > end:
+            raise Stuck('camp menu', cs=g.u8(CAMP_STATE), sub=g.u8(SUB), sp=g.u8(SPELL_STATE))
+        s0 = (g.u8(CAMP_STATE), g.u8(SUB), g.u8(SPELL_STATE))
+        ui.press_until(g, 'cross', lambda: (g.u8(CAMP_STATE), g.u8(SUB), g.u8(SPELL_STATE)) != s0
+                       or g.u8(CAMP_STATE) == 5, 120, 'camp back')
 
 
 def close_camp(g):
@@ -41,9 +51,29 @@ def close_camp(g):
     while in_camp(g):
         if g.frame > end:
             raise Stuck('close camp', cs=g.u8(CAMP_STATE), sub=g.u8(SUB))
-        s0 = (g.u8(CAMP_STATE), g.u8(SUB), g.u8(SPELL_STATE), g.u8(maze.GAME_STATE))
-        ui.press_until(g, 'cross', lambda: (g.u8(CAMP_STATE), g.u8(SUB), g.u8(SPELL_STATE),
-                                            g.u8(maze.GAME_STATE)) != s0, 120, 'camp back')
+        # one press, then up to 30 frames for it to land: a burst of presses can leave
+        # one over after the camp closes, which opens it again (T4, t4v0 at the dog
+        # pillar: camp, close, camp... for 6 retries)
+        # From the icon menu (5) the camp takes several frames to close, and a cross
+        # that lands after it has closed opens it again; so from there wait for the
+        # walking state before anything else. Elsewhere, wait for the screen to settle
+        # (8 frames unchanged) between presses.
+        sig = lambda: (g.u8(CAMP_STATE), g.u8(SUB), g.u8(SPELL_STATE), g.u8(maze.GAME_STATE))
+        at_menu = g.u8(CAMP_STATE) == 5
+        g.tap('cross')
+        if at_menu:
+            for _ in range(90):
+                if g.u8(maze.GAME_STATE) != 3:
+                    break
+                g.step()
+            continue
+        s, same = sig(), 0
+        for _ in range(60):
+            g.step()
+            same = same + 1 if sig() == s else 0
+            s = sig()
+            if same >= 8:
+                break
     ui.wait_until(g, lambda: maze.calm(g), 600, 'after camp')
 
 
@@ -68,6 +98,11 @@ def cast(g, caster, school, level, index, target=None):
     ui.confirm_until(g, lambda: g.u8(SPELL_STATE) == 10, 300, 'level')
     ui.move_cursor(g, SLOT, index, 'down', 'up', what='spell')
     ui.confirm_until(g, lambda: g.u8(SPELL_STATE) != 10, 300, 'spell')
+    # the state passes through others before "Cast it on whom?" (30) comes up: wait for a
+    # settled one, or the target pick is skipped and the confirm lands on the default
+    # slot (T3, 2026-10-12: it landed on an empty slot and the cast never happened)
+    ui.wait_until(g, lambda: g.u8(SPELL_STATE) in (30, 45, 50, 0) or g.u8(SUB) != 20
+                  or not in_camp(g), 300, 'spell target screen')
     if g.u8(SPELL_STATE) == 30 and target is not None:
         _pick_member(g, target, 'target')
     # confirm the target and press through "Spell cast" and its result

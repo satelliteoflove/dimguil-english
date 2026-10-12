@@ -139,7 +139,9 @@ def type_name(g, name):
         row = next(r for r, s in enumerate(GRID) if ch in s)
         col = GRID[row].index(ch)
         ui.move_cursor(g, NAME_Y, row, 'down', 'up', what='name row')
-        ui.move_cursor(g, NAME_X, col, 'right', 'left', wrap=17 if row < 3 else 16, what='name col')
+        # no wrapping: left from the first column goes to the end of the row above, not
+        # this row's (T4, 2026-10-12: "Jo" came out "w", "Max" "za")
+        ui.move_cursor(g, NAME_X, col, 'right', 'left', what='name col')
         before = g.e.read(NAME_BUF, 10)
         ui.confirm_until(g, lambda: g.e.read(NAME_BUF, 10) != before, 120, 'type ' + ch)
     want = bytes(ENC[c] for c in name) + b'\xff\x40'
@@ -147,7 +149,7 @@ def type_name(g, name):
     if got != want:
         raise Stuck('name typed wrong', want=want.hex(), got=got.hex())
     ui.move_cursor(g, NAME_Y, 3, 'down', 'up', what='name row')
-    ui.move_cursor(g, NAME_X, 15, 'right', 'left', wrap=16, what='End')
+    ui.move_cursor(g, NAME_X, 15, 'right', 'left', what='End')
 
 
 def choose_list(g, n, size=None, what='list'):
@@ -159,14 +161,45 @@ def yes_no(g, yes, what='yes/no'):
     ui.move_cursor(g, LIST, 0 if yes else 1, 'down', 'up', what=what)
 
 
-def create_character(g, name, race, sex, align, cls, retrain=None, reroll_limit=40,
+def create_character(g, name, race, sex, align, cls, retrain=None, reroll_limit=400,
                      reroll_delay=lambda k: 3 + (k * 7) % 23):
     """Training Grounds -> Create Character, start to finish. race/sex/align/cls by name
-    ('Human', 'M'/'F', 'Good', 'Fighter'). If the class isn't offered, back out to the
-    alignment and roll the bonus again (as a player does), waiting reroll_delay(k) frames
-    first so each roll differs. retrain: True/False at "Retrain?", None = Yes only when
-    asked. Returns a dict: roster index, bonus, rerolls, retrained, frames."""
+    ('Human', 'M'/'F', 'Good', 'Fighter'). If the class isn't offered, finish the
+    character as something else and answer No to "Use this character?" (it's thrown
+    away), then start again, as a player rerolls: the class screen has no way back to
+    the roll (T4, 2026-10-12: cross and every other button do nothing there). Waits
+    reroll_delay(k) frames before each roll so they differ. retrain: True/False at
+    "Retrain?", None = Yes only when asked. Returns a dict: roster index, bonus,
+    rerolls, retrained, frames."""
     f0 = g.frame
+    rerolls = 0
+    while True:
+        r = _create_once(g, name, race, sex, align, cls, retrain, reroll_delay(rerolls))
+        if r is not None:
+            r.update(rerolls=rerolls, frames=g.frame - f0)
+            return r
+        rerolls += 1
+        if rerolls > reroll_limit:
+            raise Stuck('class not offered', cls=cls, rerolls=rerolls)
+
+
+def _spend_bonus(g, cls):
+    """Spend what's left, in the class's order; a stat that won't take more is skipped."""
+    for stat in STAT_PREF.get(cls, []) + [0, 1, 2, 3, 4, 5]:
+        if not g.u8(BONUS_LEFT):
+            break
+        choose_list(g, stat, 6, 'stat')
+        while g.u8(BONUS_LEFT):
+            left = g.u8(BONUS_LEFT)
+            try:
+                ui.press_until(g, 'right', lambda: g.u8(BONUS_LEFT) != left, 40, 'add point')
+            except Stuck:
+                break
+
+
+def _create_once(g, name, race, sex, align, cls, retrain, delay):
+    """One pass through creation. None if the roll didn't offer cls (the character was
+    finished and thrown away), else the registered character's dict."""
     if g.overlay() != 'JOUKA' or g.u8(TOWN_STATE) != 30:
         enter(g, 'training')
     count0 = g.u8(ROSTER_COUNT)
@@ -180,33 +213,34 @@ def create_character(g, name, race, sex, align, cls, retrain=None, reroll_limit=
     choose_list(g, 0 if sex == 'M' else 1, 2, 'sex')
     ui.confirm_until(g, lambda: g.u8(CS) == 55, 300, 'sex')
     want = CLASSES.index(cls)
-    rerolls = 0
-    while True:
-        choose_list(g, ALIGN.index(align), 3, 'alignment')
-        ui.confirm_until(g, lambda: g.u8(CS) == 60, 300, 'alignment')
-        g.step(reroll_delay(rerolls))
-        ui.confirm_until(g, lambda: g.u8(CS) == 70, 300, 'bonus roll')
-        offered = class_list(g)
-        if want in offered:
-            break
-        rerolls += 1
-        if rerolls > reroll_limit:
-            raise Stuck('class not offered', cls=cls, rerolls=rerolls)
-        ui.cancel_until(g, lambda: g.u8(CS) == 55, 300, 'back to alignment')
+    choose_list(g, ALIGN.index(align), 3, 'alignment')
+    ui.confirm_until(g, lambda: g.u8(CS) == 60, 300, 'alignment')
+    g.step(delay)
+    ui.confirm_until(g, lambda: g.u8(CS) == 70, 300, 'bonus roll')
+    offered = class_list(g)
+    if want not in offered:
+        choose_list(g, 0, len(offered), 'class')
+        ui.confirm_until(g, lambda: g.u8(CS) == 80, 300, 'class')
+        _spend_bonus(g, CLASSES[offered[0]])
+        ui.confirm_until(g, lambda: g.u8(CS) == 90, 300, 'distribute')
+        yes_no(g, True, 'is this all right')
+        ui.confirm_until(g, lambda: g.u8(CS) == 105, 300, 'all right')
+        # cancel is No here (state 'n', 110); moving the list cursor to No and confirming
+        # registered the character anyway (state 's', 115) in the Bishop reroll test
+        ui.cancel_until(g, lambda: g.u8(CS) != 105, 300, 'throw away')
+        if g.u8(CS) == 115:
+            raise Stuck('throw away took Yes')
+        ui.press_until(g, 'circle', lambda: g.u8(CS) == 0 and facility_ready(g), 1200,
+                       'back to the Training Grounds')
+        g.step(30)
+        if g.u8(ROSTER_COUNT) != count0:
+            raise Stuck('thrown-away character registered', count=g.u8(ROSTER_COUNT))
+        return None
+
     bonus = g.u8(BONUS)
     choose_list(g, offered.index(want), len(offered), 'class')
     ui.confirm_until(g, lambda: g.u8(CS) == 80, 300, 'class')
-    # spend what's left, in the class's order; a stat that won't take more is skipped
-    for stat in STAT_PREF[cls] + [0, 1, 2, 3, 4, 5]:
-        if not g.u8(BONUS_LEFT):
-            break
-        choose_list(g, stat, 6, 'stat')
-        while g.u8(BONUS_LEFT):
-            left = g.u8(BONUS_LEFT)
-            try:
-                ui.press_until(g, 'right', lambda: g.u8(BONUS_LEFT) != left, 40, 'add point')
-            except Stuck:
-                break
+    _spend_bonus(g, cls)
     ui.confirm_until(g, lambda: g.u8(CS) == 90, 300, 'distribute')
     yes_no(g, True, 'is this all right')
     ui.confirm_until(g, lambda: g.u8(CS) == 105, 300, 'all right')
@@ -229,8 +263,7 @@ def create_character(g, name, race, sex, align, cls, retrain=None, reroll_limit=
             retrained = take
         ui.confirm_until(g, lambda: g.u8(CS) != cs or g.u8(CS) == 0, 600, 'creation end')
     ui.wait_until(g, lambda: g.u8(ROSTER_COUNT) == count0 + 1, 120, 'registered')
-    return dict(index=count0, name=name, cls=cls, bonus=bonus, rerolls=rerolls,
-                retrained=retrained, frames=g.frame - f0)
+    return dict(index=count0, name=name, cls=cls, bonus=bonus, retrained=retrained)
 
 
 def _is_retrain_prompt(g, since):
@@ -250,9 +283,18 @@ GRID_X, GRID_Y = 0x80079c59, 0x80079c5c
 PARTY_REC = 0x8007e810      # [id, count, members x6, ...]
 
 
-def town_party(g):
+def town_slots(g):
+    """The party's six positions, as the member grids show them: roster index or None.
+    A member who died leaves a hole (0xff, "Empty" in the grid) and the count drops, but
+    the others keep their positions (seen 2026-10-12: [1, None, 5, 6, 7, 8] with count 5)."""
     d = g.e.read(PARTY_REC, 8)
-    return [x for x in d[2:2 + min(d[1], 6)]]
+    return [None if x == 0xff else x for x in d[2:8]]
+
+
+def town_party(g):
+    """The party's roster indices, in position order (holes skipped). To pick a member in a
+    grid, use the position from town_slots."""
+    return [x for x in town_slots(g) if x is not None]
 
 
 def tavern_candidates(g):
@@ -372,7 +414,7 @@ def inn_stay(g, slot, room='Stables', weeks=None, gather=False, limit=600):
         raise Stuck('inn needs text capture')
     if g.overlay() != 'JOUKA' or g.u8(TOWN_STATE) != 15:
         enter(g, 'inn')
-    idx = town_party(g)[slot]
+    idx = town_slots(g)[slot]
     n = len(g.cap.messages)
     ui.move_cursor(g, FAC_CURSOR, 0, 'right', 'left', wrap=4, what='Stay')
     ui.confirm_until(g, lambda: g.u8(FAC_SUB) == 10 and g.u8(FAC_PANEL) == 1, limit, 'Stay')
@@ -443,7 +485,7 @@ def pool_gold(g, slot, place='tavern', limit=600):
     ui.move_cursor(g, FAC_CURSOR, POOL_ICON[place], 'right', 'left', wrap=icons, what='Pool Gold')
     ui.confirm_until(g, lambda: g.u8(FAC_SUB) == POOL_PICK and g.u8(TOWN_MSG) == 0, limit, 'Pool Gold')
     _pick_party_member(g, slot, 'gold holder')
-    idx = town_party(g)[slot]
+    idx = town_slots(g)[slot]
     total = sum(g.char(i)['gold'] for i in town_party(g))
     ui.confirm_until(g, lambda: g.char(idx)['gold'] == total, limit, 'pool')
     ui.wait_until(g, lambda: facility_ready(g) or g.u8(FAC_SUB) == POOL_PICK and g.u8(TOWN_MSG) == 0,
@@ -602,7 +644,7 @@ def boltac_buy(g, slot, cat, typ, item, limit=600):
     f0 = g.frame
     if not _at_trade_menu(g):
         boltac_trade(g, slot)
-    idx = town_party(g)[slot]
+    idx = town_slots(g)[slot]
     gold0, items0 = g.char(idx)['gold'], len(g.char(idx)['items'])
     ui.move_cursor(g, LIST, 0, 'down', 'up', what='Buy')
     n = len(g.cap.messages)
@@ -651,7 +693,7 @@ def boltac_sell(g, slot, item, limit=600):
     f0 = g.frame
     if not _at_trade_menu(g):
         boltac_trade(g, slot)
-    idx = town_party(g)[slot]
+    idx = town_slots(g)[slot]
     gold0, items0 = g.char(idx)['gold'], len(g.char(idx)['items'])
     pack0 = g.char(idx)['items']
     ui.move_cursor(g, LIST, 1, 'down', 'up', what='Sell')
