@@ -725,7 +725,7 @@
                 {
                     "length": 113,
                     "source": "NA",
-                    "translation": "A dagger with a distinctive\nbone hilt. Raises strength\nand accuracy, and even adds\nattacks. Fighting at such\nclose range adds risk, but\nthat can't be helped.",
+                    "translation": "A dagger with a distinctive\nbone hilt. It hits harder\nand truer, and even adds\nattacks. Fighting at such\nclose range adds risk, but\nthat can't be helped.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -921,7 +921,7 @@
                 {
                     "length": 106,
                     "source": "NA",
-                    "translation": "A mace that raises Strength\nand accuracy just by\nequipping it. Its hidden\npower raises Strength for\ngood. It lives up to its name.",
+                    "translation": "A mace that adds power and\naccuracy just by equipping\nit. Its hidden power raises\nStrength itself. It truly\nlives up to its name.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -1124,7 +1124,7 @@
                 {
                     "length": 126,
                     "source": "NA",
-                    "translation": "A pricey axe, with\ndestructive power to match.\nIts hidden power raises\nVitality and age. Strength\nand accuracy rise too.",
+                    "translation": "A pricey axe, with\ndestructive power to match.\nIts hidden power raises\nVitality and age. It also\nhits harder and truer.",
                     "compress": null,
                     "addStringTerminator": true
                 },
