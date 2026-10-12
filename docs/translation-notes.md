@@ -370,6 +370,11 @@ Reopened content (each one goes in the release notes too):
   picked among the three with flags nothing set, so every party was "boys". Chris,
   2026-10-11: write the check. No women: "boys"; only women: "girls"; a mixed party: "my
   good fellows" (7166f5d).
+- **Fontana's chat about Zaril's new party** (NPC_MES3 197, 199-200) was a whole chat
+  block nothing picked. Chris, 2026-10-11: add it, after the split only. It's a ninth
+  topic in his stage-3 roll, so each of the other eight goes from 1/8 to 1/9 there;
+  stages 1 and 2 are unchanged (7c99607). 3:198, Artemisia's line about Zaril, isn't in
+  the block and stays unused.
 
 Decided and left as the original had it (each one goes in the release notes, per
 ROADMAP.md "Game changes up front"):

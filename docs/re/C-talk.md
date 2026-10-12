@@ -432,7 +432,9 @@ in.
 - 10-16: met Fontana, using six member-variant functions.
 
 **Chat:** `rand_upto(7)` gives a topic pair, played by stage. Stage 1 has its own
-specials. Areas 0x20-0x23 add a location topic before the maze changes.
+specials. Areas 0x20-0x23 add a location topic before the maze changes. Block 8 (3:197,
+199-200, Zaril's new party) was never picked; the patch adds it as a ninth topic at
+stage 3 only, `rand_upto(8)` there (bugs.md 2.5, 7c99607).
 
 ### The scholars (handler 3, selector `greet_cresson` 0x800d8210)
 

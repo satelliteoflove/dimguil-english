@@ -399,6 +399,38 @@ Adding it would mean replacing one of the seven, or widening the roll.
 Question for Chris: a slip, or cut? It's about Zaril leaving to lead his own party, so
 it belongs once that's happened.
 
+**Reopened in 7c99607** (`asm/bugfix_fontana_chat8.asm`), Chris's decision 2026-10-11
+(decisions.md item 5): only after the split, at Fontana's stage 3.
+- **Block 8**: bar 3:276 "We asked about other parties.", Fontana 3:197 "Zaril, who used
+  to be with us, has formed a party of his own...", Cephala 3:199-200. Both are in
+  Fontana's stage-3 party. 3:198 (Artemisia, "I ran into Zaril the other day") isn't in
+  the block and stays unused; Artemisia isn't with him at stage 3. [code]
+- **Stage 3** is what the split scene (handler 20) leaves: `npc_stage` & ~0x1d0 | 0x220, so
+  0x200 set and 0x80/0x100 clear. The patch tests it as the topic code does:
+  (`npc_stage` & 0x180) == 0 and & 0x200. [code]
+- **How it's picked.** Fontana's chat (state 0x28): at areas 0x20-0x23 an area special
+  (block 24); at stage 1 one of seven "other parties" specials; a special is kept 90% of
+  the time. Otherwise `rand_upto(7)` picks one of eight topics, each played as its
+  stage-1/2 or stage-3 block. At stage 3 the patch makes that roll `rand_upto(8)`, 8
+  meaning block 8. [code]
+- **What it costs the others**: at stage 3, each of the eight topics drops from 1/8 to 1/9
+  of the topic rolls (12.5% to 11.1%), the same share for each, and block 8 gets 1/9. The
+  area special keeps its 90%. Stages 1 and 2 don't change at all. Of the other ways in,
+  a stage-3 special would play 90% of the time, and replacing a topic would take one away,
+  so a ninth topic is the lightest touch. [code]
+- **Hook**: the topic roll (0x800d13b4); the code sits in Cresson's never-run chat blocks
+  (bugs.md 2.3), at 0x800a8200. [code]
+
+**Tested in the emulator** (`rips/re/work/P3-zaril/chat8_sample.py`, output in `c8/`). The
+setup used RAM writes, as the other talk tests did: from `npc_talkmode.state`, the
+current MCARD and file tables laid in, the talk switched to Fontana's party, every member
+introduced to him, nobody hurt, his stage set in `npc_stage`, the state's pending message
+box cleared, and the RNG state varied per trial. One Talk press per trial. [emu]
+- Stage 3, 90 trials: block 8 nine times; the eight stage-3 topics 7-12 times each.
+- Stage 1, 40 trials: only the seven specials (6, 7, 9, 10, 15, 16, 19); no block 8.
+- Stage 2, 40 trials: only the stage-1/2 topic blocks; no block 8.
+Contact sheet of block 8 playing: `c8/sheet.png`.
+
 ### 2.6 Balbo's "heard that already" (NPC_MES2 243-247, 253)
 
 Blocks 27 and 28 have each member say they've heard that one before. Nothing picks them.

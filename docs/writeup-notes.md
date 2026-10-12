@@ -474,5 +474,13 @@ Two of them hit their turn limit before writing anything down and had to be resu
   - Then the greeting's speaker is random (Cresson 1 in 3); the trials vary the RNG
     state at 0x80079558.
   - All male → 4:18, all female → 4:19, mixed → 4:20, each seen on screen.
+- Fontana's block 8 (7c99607). The choice was where to let it in. His stage-1 chat is
+  mostly specials kept 90% of the time; a stage-3 special would have drowned his other
+  topics. Adding it as a ninth topic to the stage-3 roll takes the same small share from
+  each (12.5% to 11.1%) and leaves stages 1 and 2 untouched. The split scene sets stage 3
+  directly from stage 1 (`& ~0x1d0 | 0x220`), which is why "after the split" and "stage 3"
+  are the same test.
+  - Sampled: stage 3, 90 Talk presses, block 8 nine times; stages 1 and 2, 40 each, never.
+  - 3:198 (Artemisia on Zaril) turned out not to be part of block 8 at all.
 - No natural before/after shots: every test uses RAM writes. Internal captures of the
   Temple pair are `rips/re/work/P3-bugs/temple/lost_before.png` and `lost_after.png`.
