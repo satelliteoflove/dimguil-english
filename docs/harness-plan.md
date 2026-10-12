@@ -100,6 +100,44 @@ human play, one instance at 6× takes 10 hours, and 8 runs finish overnight toge
 Menus will go faster than a human's and grinding may go slower. The pilot measures this
 per chapter.
 
+## T1 results (2026-10-12)
+
+Full notes and scripts in `rips/harness/t1/README.md`; code in `scripts/harness/`. All on
+the rescue test's disc copy (build c5dee12).
+
+- **Text capture works.** A breakpoint on `text_expand` (0x8001dfc0) plus a write watch
+  on the text buffer catches every message with its file, string number and full text,
+  names and numbers filled in (e.g. FIGHTMSG 98 "Uranus attacks Ocelotl with LONG
+  SWORD."). Menus redraw through the same routine every frame; the capture keeps one copy
+  of each. Cost: 19% of speed (260 → 211 frames/s), almost all of it the core's
+  breakpoint check.
+- **Message speed doesn't apply to the main game.** config[8] is read only by the card
+  games' text routines and can only be set from a card battle's SELECT screen. Battle
+  narration never advances by itself; every message waits for a press. Pressing as fast
+  as possible loses nothing: tapping every 4 frames gave the same 91 messages (file,
+  number, text, order) as the slow fixed-wait run.
+- **No idle input** (`scripts/harness/inputs.py`): commands are pressed until RAM shows
+  them taken (battle phase, the member being commanded at 0x80079786, menu depth at
+  0x80079b15), retrying every 4 frames. The same battle finished at frame 2982 instead of
+  4429 (−33%), identical messages, no stalls. Every 2 frames or 1-frame taps double-enter
+  or drop commands. In the maze a step took 16 frames and a turn 16-21, against 34 and 28
+  (one sample).
+- **The dynarec is out while capturing.** The breakpoints never fire under it (0 hits
+  against 2555). It's about 30% faster, consistent with itself, but its RAM differs from
+  the interpreter's on the same inputs.
+- **Skipping drawing isn't worth it.** Profiled: walking is about 58% CPU emulation, 12%
+  drawing, 10% sound; a battle 43%, 25%, 7%. The core never skips drawing, so it would
+  need a core change for at most 12-25%. Copying frames into Python was about 1% and is
+  now done only when a screenshot is wanted.
+- **So a capturing instance runs at about 3.5× real time,** but does about a third less
+  work per battle than the rescue test's waits. A faster breakpoint check in the core's
+  debug hooks could win back most of the 19%.
+- **For T2:** one emulator per process (the debug hooks are global to the loaded core);
+  rt.py's `settle()` and `msgbox()` read pixels, and "calm" in the maze needs a RAM
+  indicator; two of three rescue states couldn't walk at the start, probably an open
+  message.
+- **Found on the way:** FIGHTMSG 118, "Hits {ff11}0 times!", prints "Hits 1 times!".
+
 ## How the work splits
 
 **The harness, with no LLM in the loop:**
