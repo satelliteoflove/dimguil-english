@@ -37,6 +37,8 @@ party "my good fellows". All three lines exist.
 **5. Fontana's chat about Zaril's new party** (2.5, 3:197-200). It's missing from his list of
 topics.
 Recommendation: add it, shown once Zaril has left to lead his own party.
+**Decided (Chris, 2026-10-11): add it, after the split only** (Fontana's stage 3, where
+Cephala has joined).
 
 **6. Balbo's party's "heard that already"** (2.6). These answer a "tell them news" topic that
 doesn't exist in the code.
