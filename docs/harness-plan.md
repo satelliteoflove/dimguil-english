@@ -66,13 +66,29 @@ What that means:
 - **8 instances is the natural setting.** It gets about 80% of the machine's throughput
   and leaves the extra threads free for you. 12 is about the most worth running.
 - **Each instance runs about 4-7 times faster than real time.** That's slower than I'd
-  hoped, and it's the number that decides how long a run takes. Ways to raise it, all
-  untested:
-  - Set the game's message speed to fastest.
-  - Press on as soon as RAM shows the game is waiting, rather than after fixed waits.
-  - Use the dynarec (about +30%, once we've confirmed it gives the same results).
-  - Tell the core that video is off. libretro has a frontend flag for this; whether
-    Beetle skips its software renderer when it's set is untested.
+  hoped, and it's the number that decides how long a run takes. Ways to raise it:
+  - **The game's fastest message speed**, only if it loses nothing. Text is captured from
+    RAM when the game starts printing it (the expander at 0x8001dfc0 and the other
+    printers), not read off the screen. The test: play the same stretch, battles
+    included, at the slowest and the fastest speed, and compare the captured messages one
+    by one. Fastest is used only if the lists match. (Chris, 2026-10-12: nothing may be
+    missed because text goes by too fast.)
+  - **No idle time.** Every wait is "run until RAM shows the game wants input", then
+    press at once. No fixed waits. (Chris, 2026-10-12.)
+  - **The dynarec** (dynamic recompiler: it translates the PS1's code into native code
+    once instead of interpreting each instruction), about +30%. Our core's debug hooks
+    (breakpoints, watchpoints, coverage) are patched into the interpreter
+    (`mednafen/psx/cpu.c`), so they probably don't fire under the dynarec. If text
+    capture needs them, the dynarec stays off, or capture moves to polling RAM.
+  - **Not drawing when no text is on screen.** Pixels are needed to catch layout bugs:
+    a misplaced triangle (as at the Training Maze exit), overlaps, clipping, leftover
+    Japanese graphics. Those come from the drawing code and can't be predicted from the
+    data without copying that code, bugs and all. So drawing stays on whenever a text box
+    or menu is up, and each new box is captured as a screenshot. It's off only for walking
+    and battle animations. Whether Beetle can skip its software renderer at all is
+    untested: its `retro_run` sets `espec->skip = false` every frame, and mednafen's GPU
+    may rasterize into VRAM regardless. `emu.py` also copies every frame into Python,
+    which can be made lazy.
 
 How long a full run takes isn't known yet. If the bot needs as many frames as 60 hours of
 human play, one instance at 6× takes 10 hours, and 8 runs finish overnight together.
@@ -99,8 +115,10 @@ per chapter.
   screen.
 - **Recovery:** a save state at every goal, so a wipe or a stuck run reloads and tries
   again.
-- **Text capture:** every text box with its string ID, a screenshot, and checks for
-  width, glyphs and anything left untranslated.
+- **Text capture:** every text box with its string ID and a screenshot. Data checks
+  catch width, line count, missing glyphs and anything left untranslated. Image checks
+  flag text pixels outside the box border and a triangle that overlaps text or sits far
+  from the last line. Flagged shots go to the LLM before anyone else.
 
 **The LLM:**
 - **Building the harness.** This is most of the cost, mainly getting the menu macros and
