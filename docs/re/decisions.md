@@ -40,7 +40,10 @@ unpicked blocks repeat lines that other blocks already play, so nothing is lost.
 a party in which nobody has met Guy, falling into the Area C pit in a certain window, is stuck
 for good. Fixed as a clear bug by falling through to the game's own choice for when Guy
 isn't the rescuer: Balbo's party if someone has met Balbo, otherwise the man in armor. Nothing
-new is written. Say if you'd rather Guy rescue them anyway, with his lines as written.
+new is written. **Decided (Chris, 2026-10-11): keep the fix.** Guy still rescues every party
+in which someone has met him, as written; the fix only fills the case the developers left
+empty. It only happens to a party made entirely of characters who joined after the Guy
+meeting (a fresh rescue party, say), in the mid-game window, at the Area C pit.
 
 ## Fixes that change how the game plays
 

@@ -325,7 +325,10 @@ same RAM-write setup as above):
 - Balbo met, Guy not: Balbo's party (block 3), back in the maze by frame 840;
 - Guy met (control): Guy's block 2, as before, back by frame 900.
 
-Chris can still choose Guy for this case instead, with his lines as written.
+Chris kept the fix (2026-10-11): Guy still rescues every party that knows him, and the fix
+only fills the case the developers left empty. In practice that needs a party made
+entirely of characters who never met Guy, such as fresh recruits sent to rescue a wiped
+party, so a steady single party never meets it.
 
 ## Group 3: fixes that would change how the game plays
 
