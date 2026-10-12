@@ -324,8 +324,8 @@ against the chapters and the decomp:
 - Cloud elements: Fire Mist and Flame Mist are fire (0x80), Ice Mist cold (0x100), Glow,
   Ray and Low Mist 0x4000. No cloud description names a wrong element; Madalqua's ("Low
   Mist: 4-60 damage to a group") names none. Its battle lines, FIGHTMSG 179/185 "in
-  freezing cold", do say cold though its element isn't; that's narration and stays, for
-  Chris. **[code]**
+  freezing cold", do say cold though its element isn't; that's narration and stays (decided
+  2026-10-12, decisions.md item 22; the site notes it). **[code]**
 
 **Items**
 - Breath and resist bits: see "Wrong or overstated claims".

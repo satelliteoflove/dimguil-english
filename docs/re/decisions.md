@@ -180,6 +180,8 @@ Xicalli) makes the same fire claim, but it is weak to fire, so its advice holds.
 
 **22. FIGHTMSG 179/185, Madalqua's "in freezing cold".** Its element is Tiltowait's, not
 cold. Battle narration, so left alone.
+**Decided (Chris, 2026-10-12): leave it; the site notes that cold resistance doesn't help
+against Madalqua** (its element is Tiltowait's, 0x4000).
 
 Not yet checked: EVENTMES 210/211 (the pillar water "seems to restore your magic"), and
 Calnova on doors.

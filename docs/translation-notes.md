@@ -549,8 +549,8 @@ Lost and deleted: it reads as final and matches the Japanese (decisions.md item 
 The Training Maze sign (492) stays as well; it never says a wipe there is free, its box
 is full, and the site documents the cost (decisions.md item 20). The Smoke Demon and Venus Man
 Trap Compendium entries stay too (in-world lore; the site gives the real resistances;
-decisions.md item 21). Still for Chris (description-check.md, "Sweep"): Madalqua's "freezing
-cold" battle lines.
+decisions.md item 21). Madalqua's "freezing cold" battle lines stay
+too, though its element is Tiltowait's; the site notes it (decisions.md item 22).
 
 ### Our mistranslation corrections (2026-10-11)
 
