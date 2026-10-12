@@ -62,6 +62,28 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 
 ### Deliberate choices
 
+- **"Sane" is now "Confused" (STATUS 208, 627, 197; Chris, 2026-10-11, decisions.md item
+  14).** The disc's own English labelled status bit 0x02, こんらん (confused), "Sane", so a
+  confused character showed "Sane" on the status screen and in Look for Companions, and
+  "Sane" in the party panel. Most likely a clipped "Insane", the series' old word. But
+  Dimguil renamed the status: Gaiden IV's Psionic spells drive the target 発狂 (insane),
+  while every mention of it in Dimguil is 混乱, and Emonoya's spell page notes the
+  effect message was changed to 「混乱した」. Our battle text already says "is confused."
+  - 208 `{ff24}Confused`: the full label (status screen, Look for Companions, every
+    other 0xce + n site). Right-aligned to the same edge as the original's "Paralyze",
+    which is as long.
+  - 627 `／Conf`: the party panel's four-letter label beside current HP (the panel has
+    its own set, STATUS 626-635: Afra, Pois, Slee, Para, Ston...). Found because the
+    panel still said "Sane" after 208 changed.
+  - 197 `{ff23}desufnoC`: the reversed copy in a right-aligned set (195-205, "KO",
+    "peelS"...) that no code reads: every status-label site uses 0xce + n (English) or
+    0x261 + n (Japanese), and a read watch on 188-205 saw only 188 ("Luck" on the status
+    screen) across the status screen, camp and the maze. Changed so no "Sane" is left.
+  Checked in the emulator on the built disc with a RAM-write setup (a member's status
+  set to 0x02; Mars put in a second party record on the square for Look for Companions):
+  shots in `rips/re/work/P3-label/` (before.png, after.png, width_cmp.png). The Tavern
+  and Training Grounds lists don't show status; the battle screens weren't checked.
+
 - **Reiran's cut-off line (NPC_MES2 200, 2026-10-10).** In the original, an {ff40}
   (end of string) after her first sentence hid the rest: "He goes 'Begone!' and stuff,
   all high and mighty." The English drops it so both pages show; the string's own

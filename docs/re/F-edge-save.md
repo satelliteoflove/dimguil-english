@@ -679,6 +679,12 @@ initial roster, the six premade characters, comes from code not traced here.
   confused characters show "Sane" on the Tavern, Training Grounds and Look for Companions
   lists. It's probably a slip for "Insane" (Wizardry's usual word) or should be
   "Confused". Worth a look.
+  **Resolved 2026-10-11: "Confused"** (Chris; translation-notes, "Deliberate choices").
+  Two more copies turned up: STATUS 627, the party panel's four-letter "／Sane" (now
+  "／Conf"), and 197, a reversed "{ff23}enaS" in a right-aligned set that no code reads
+  (now "{ff23}desufnoC"). [emu, RAM-write setup] In that check the Tavern and Training
+  Grounds lists showed level and class for a confused character, not the status; the
+  status screen, the party panel and Look for Companions showed the label.
 - **"Retrain?" (SISETU 0xa7).** This isn't a re-roll. It's offered when declining a new
   character with under 10 bonus points. Yes ages them a year and gains a level ("A year
   has passed. Happy birthday! Gained a level!"). An English player may well read

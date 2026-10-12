@@ -511,3 +511,21 @@ even where the Japanese is wrong, since the description is the player's only gui
   both builds. `docs/shots/description-corrections/`: Dios's spell bar, the Gem of
   Exorcism, the Worst Sword, the Rod of Raising and the 2-Head Snake. The Compendium
   capture also confirmed the entry-to-monster match the check had only inferred.
+
+**"Sane" becomes "Confused" (2026-10-11, decisions.md item 14).** The disc's own English
+called the confused status "Sane".
+- Why "Confused": the series' word was insane, and Gaiden IV's Psionic spells still drive
+  the target 発狂. But every mention of the status in Dimguil is 混乱, and Emonoya's spell
+  page notes the message was changed to 「混乱した」. So "Sane" looks like a clipped
+  leftover of the older "Insane" that survived the rename. Chris chose "Confused" after
+  a check of the site.
+- One label turned out to be three. Changing STATUS 208 fixed the status screen and Look
+  for Companions, but the maze's party panel still said "29/Sane": the panel has its own
+  four-letter set (STATUS 626-635, "／Afra", "／Para", "／Ston"...), so 627 became
+  "／Conf". A third copy, a reversed "{ff23}enaS" in a right-aligned set (195-205), is
+  read by no code: a read watch on the block across the status screen, camp and maze saw
+  only "Luck" (188), and every label site indexes 0xce + n or 0x261 + n. It was changed
+  anyway so no "Sane" is left.
+- "Confused" is as long as the original's "Paralyze" and right-aligns to the same edge.
+- Checked with a RAM-write setup, so the shots stay in `rips/re/work/P3-label/`
+  (before.png, after.png), not docs/shots.
