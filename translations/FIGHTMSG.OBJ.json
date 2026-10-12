@@ -1549,7 +1549,7 @@
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "There's no trap.",
+                    "translation": "There's no trap",
                     "compress": true,
                     "addStringTerminator": true
                 },

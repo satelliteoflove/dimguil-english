@@ -62,6 +62,11 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 
 ### Deliberate choices
 
+- **"There's no trap" has no full stop (FIGHTMSG 221, 罠は かかっていない; Chris,
+  2026-10-12).** It's the first name in the trap list (221-233), and a fumbled chest
+  inspection prints "Oops! {trap}!!" (242), so the full stop gave "Oops! There's no
+  trap.!!". The Japanese has none, and neither do the other trap names. Found by the
+  harness (rips/harness/t2/issues/oops_no_trap.png).
 - **"Hits 1 times!" stays (FIGHTMSG 118, {ff11}0回 Hit!; Chris, 2026-10-12).** One string
   serves every count, so a single hit reads "Hits 1 times!". The Japanese gets around it
   because 回 works for any number. "Hit ×{n}!" was considered and dropped: the plural-less
