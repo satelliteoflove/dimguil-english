@@ -2683,7 +2683,7 @@
                 {
                     "length": 39,
                     "source": "NA",
-                    "translation": "Ward: walls enemies off from casting",
+                    "translation": "Ward: enemy spells may be sealed; stacks",
                     "compress": true,
                     "addStringTerminator": true
                 },
