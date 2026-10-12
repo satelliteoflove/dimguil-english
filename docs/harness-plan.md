@@ -238,6 +238,23 @@ at.
 **Done means:** several runs with different parties reach the ending, with no hang or
 crash left unexplained, and every captured screen either passes or has been looked at.
 
+## The ratchet (Chris, 2026-10-12)
+
+"We need to be certain we aren't just stumbling through these tests; we're building a
+solid self-improving system." So every fix has to stick:
+
+1. A run gets stuck; the harness saves the state, a screenshot and what it was doing.
+2. That moment becomes a permanent regression case (`rips/harness/regress/cases.jsonl`).
+3. The fix goes into the shared code.
+4. The whole suite runs: the T2 trials (every macro and the chain) plus every saved case,
+   at most 10 processes, about 8 minutes.
+5. Only a change that passes the whole suite is committed.
+6. Each round logs cases passed and failed, stuck counts by cause, frames and wall time
+   (`rips/harness/regress/rounds.jsonl`), so the trend shows whether it's improving.
+
+The 8-party run (T4) waits until this is in place and T3 passes through it from a cold
+boot.
+
 ## The pilot: what it takes to find out
 
 The pilot answers three questions: how reliable the harness is, how fast it runs, and how
