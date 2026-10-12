@@ -531,6 +531,12 @@ Item descriptions (ITEM.DAT §1, Boltac's catalog; da781e2):
   can Fighters, Lords and Valkyries." (its classes are Fighter, Priest, Lord, Valkyrie
   and Bishop; Samurai, Ninja and Ranger can't. Decided 2026-10-12, decisions.md item 17.)
 
+Help text (SISETU; decided 2026-10-12, decisions.md item 18):
+- 219 Luck: "like disarming traps and dodging enemy attacks" → "like weathering breath
+  attacks and escaping traps" (disarming uses class, level, Agility and the area; monster
+  to-hit has no Luck term; Luck feeds the saving throws, which halve breath and dodge six
+  of the twelve chest traps).
+
 Compendium (M_CATALG; a25c54c):
 - 7.16 2-Head Snake: "Worse still, it can drain levels." dropped (no drain; its bite
   poisons).
@@ -538,7 +544,7 @@ Compendium (M_CATALG; a25c54c):
 Left as they are: six unmentioned curses, and the unmentioned restrictions and hidden
 powers. Chris decided (2026-10-12, decisions.md item 17) that the descriptions stay silent
 about them, as the developers wrote them; the item details screen already shows who can
-use an item. Still for Chris (description-check.md, "Sweep"): the Luck help line (SISETU 219), the Training Maze sign (492), "has died
+use an item. Still for Chris (description-check.md, "Sweep"): the Training Maze sign (492), "has died
 of old age" (65/66), the Smoke Demon and Venus Man Trap entries, and Madalqua's "freezing
 cold" battle lines.
 

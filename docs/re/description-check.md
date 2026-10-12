@@ -350,7 +350,7 @@ true)
   code does: chest disarming uses class, level, the area's danger and Agility, and a
   monster's to-hit has no Luck term. Luck goes into the saving throws (level / 5 + Luck /
   6), which soften traps and breath. Help text, but the original's own claim and loosely
-  worded ("sways many things"); not changed, for Chris. **[code]**
+  worded ("sways many things"). Corrected 2026-10-12 (decisions.md item 18). **[code]**
 - SISETU 214-217 and the class lines 200-213 match (the spell schools agree with
   `spell_point_rules`). **[code]**
 

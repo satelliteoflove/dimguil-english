@@ -156,6 +156,9 @@ Lords and Valkyries", with the rest of the description unchanged.
 **18. SISETU 219, Luck.** Says Luck helps disarm traps and dodge attacks. In the code,
 disarming uses Agility, level and the area's danger, and monster to-hit has no Luck term;
 Luck feeds the saving throws.
+**Decided (Chris, 2026-10-12): correct the examples** to "like weathering breath attacks /
+and escaping traps." (Chris's "escaping traps"; six of the twelve chest traps give each
+member a save, D-battle.md). "Sways many things" stays.
 
 **19. SISETU 65/66, "has died of old age".** The character is actually Lost and deleted.
 
