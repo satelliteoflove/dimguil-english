@@ -510,8 +510,11 @@ of level 8 or below that isn't undead") is exactly right.
 - Oslo / Maoslo: for a monster, +2 / +4 damage bonus on each of its attacks; for the
   party, the attack bonus 0x8007e830 = 2 for 60 more rounds / 2500 rounds. **[code]**
 - Fofic: the party's magic screen gains 10 a round for 1250 rounds. Banoka: 3 rounds of
-  0x80079bc0 (party) or 0x80079b6b (monsters), which turn monsters' melee on their own
-  side 34% / 30% of the time **[code]**, meaning **[inf]**.
+  0x80079bc0 (party) or 0x80079b6b (monsters). `cast_spell` reads them: while the party's
+  counter runs, a monster's hostile spell turns on its own group 34% of the time; while a
+  monster's runs, a party member's hostile spell turns on the caster 30% of the time. One
+  bounce uses the counter up. **[code]** (Corrected 2026-10-11, description sweep: an
+  earlier reading here had it turning melee.)
 - Durations count down at the end of every battle round: Oslo, Fofic, Maporfic, and the
   party counters 0x8007e83a-0x8007e83d. **[code]** (the maze counts them down too: A/B)
 

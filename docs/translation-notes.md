@@ -415,7 +415,101 @@ Done 2026-10-11 (see "Reopened content"): Zaril's healing, Guy's and Fontana's
 re-introductions, Cresson's boys/girls/fellows check, and Fontana's block 8 after the
 split. Still open for Chris
 (`docs/re/decisions.md`): items
-11-16 (descriptions and labels).
+14-16 (labels).
+
+### Description corrections (the original's errors, 2026-10-11)
+
+Chris decided (decisions.md item 11) that descriptions should say what the game does, since
+the text is the player's only guide, and that every change goes in the release notes. The
+Japanese has these errors too; our English had copied them faithfully. Values are from the
+code and the records (`docs/re/description-check.md`). Before and after captures:
+`docs/shots/description-corrections/`.
+
+Spell descriptions (STATUS.OBJ, the one-line spell bar; 0f0a69b, Bacortu d798054):
+- 421 Halito: "Flame: 1-8 damage to one enemy" → "Flame: 2-8 damage to one enemy" (2d4).
+- 423 Melito: "Sparks: 1-8 damage to an enemy group" → "Sparks: 2-8 damage to an enemy
+  group" (2d4).
+- 426 Morlis: "Fear: enemy group AC +4, and held fast" → "Fear: startles a group; their
+  AC +4" (only the AC changes; nothing holds them).
+- 428 Cortu: "Barrier: a wall that stops enemy spells" → "Barrier: enemy spells fail
+  more; stacks" (a magic screen of 3/4 the old one + 2 × level, up to 90%).
+- 429 Tzalik: "Heaven: 24-58 damage to one enemy" → "Heaven: 24-48 damage to one enemy"
+  (24d2).
+- 430 Lahalito: "Inferno: 6-58 damage to a group" → "Inferno: 6-36 damage to a group"
+  (6d6, as in Wizardry I).
+- 434 Bacortu: "Ward: walls enemies off from casting" → "Ward: enemy spells may be
+  sealed; stacks" (sealing is a roll that grows with each cast; found in the sweep).
+- 435 Zilwan: "Dispel: 1000 damage to one undead" → "Dispel: 255-2550 damage to one
+  undead" (255d10).
+- 436 Ladalto: "Ice Storm: 44-98 damage to a group" → "Ice Storm: 10-100 damage to a
+  group" (10d10).
+- 437 Lazalik: "Smite: 64-80 damage to one enemy" → "Smite: 40-80 damage to one enemy"
+  (40d2).
+- 441 Dios: "Bless: heals one ally 1-8 HP" → "Bless: heals one ally 2-8 HP" (2d4).
+- 442 Badios: "Pain: 1-8 damage to one enemy" → "Pain: 2-8 damage to one enemy" (2d4).
+- 459 Kadorto: "Revive: raises the dead or ash, full HP" → "Revive: may raise dead or
+  ash; full HP" (in camp it rolls on Vitality and can fail).
+- 461 Madial: "Great Prayer: party heals 30-60 HP" → "Great Prayer: party 17-68; camp
+  10-50" (17d4 in battle, 10d5 in camp).
+- 480 Alikus: "Blast: 80-130 damage to one enemy" → "Blast: 48-144 damage to one enemy"
+  (48d3).
+- 483 Sios: "Mind Blast: 1-10 mental damage to one" → "Mind Blast: 2-4 mental damage to
+  one" (2d2).
+- 484 Diomas: "Secret Art: heals one ally 2-6 HP" → "Secret Art: heals one ally 3-6 HP"
+  (3d2).
+- 486 Lios: "Spirit Blast: 2-10 mental damage, group" → "Spirit Blast: 2-4 mental
+  damage, group" (2d2, the same as Sios).
+- 492 Masios: "Psi Blast: 2-16 mental damage, group" → "Psi Blast: 8-16 mental damage,
+  group" (8d2).
+- 497 Dalosto: "Frost: 36-64 damage to one enemy" → "Frost: 14-70 damage to one enemy"
+  (14d5).
+- 501 Galtomas: "Alch Wave: 12-48 to all, plus ailments" → "Alch Wave: 4-48 to all, plus
+  ailments" (4d12).
+- 502 Lasios: "Psi Wave: 9-72 mental damage to all" → "Psi Wave: 8-72 mental damage to
+  all" (8d9).
+
+Item descriptions (ITEM.DAT §1, Boltac's catalog; da781e2):
+- 46 Winter Wand: "holding the cold spell Madalto" → "Ladalto" (its battle spell).
+- 69 Rod of Raising: "Nearly useless as a weapon, but thanks to its spell..." → "It's no
+  bad weapon either, and thanks to its spell..." (3d8, to-hit +3).
+- 107 Wand of Mystery: "The wand itself has no attack power." → "As a weapon it hits
+  lightly, but often." (1d7+2, two extra swings).
+- 275 Gem of Exorcism: "you can't be hit by undead attacks" → "undead attacks do half
+  damage" (its protection halves their hits).
+- 301 PK Crystal: "a barrier ... strong enough to nullify sword and magic attacks" → "a
+  barrier around the body that can turn magic aside" (20% magic resistance per school;
+  nothing against weapons).
+- 225 Mythril Plate: "neutralizes all kinds of breath" → "blunts many kinds of breath"
+  (resists fire, cold, poison and paralysis, which halves matching breath).
+- 228 Dragon Kite: "block all magic and breath attacks" → "ward off magic and breath
+  attacks" (10% magic resistance, 15% fire, cold and poison).
+- 59 Worst Sword: "It's cursed, cuts your attacks, and lowers both accuracy and defense"
+  → "It's cursed, and lowers both accuracy and defense" (no swing penalty).
+- 35 Axe of Woe: "you must get very close to cut with it, so you lose attacks" → "you
+  must get very close to cut with it." (no swing penalty).
+
+Compendium (M_CATALG; a25c54c):
+- 7.16 2-Head Snake: "Worse still, it can drain levels." dropped (no drain; its bite
+  poisons).
+
+Left as they are, for Chris (description-check.md, "Sweep"): six unmentioned curses and
+some unmentioned restrictions and hidden powers (adding them may spoil what the
+developers hid), the Luck help line (SISETU 219), the Training Maze sign (492), "has died
+of old age" (65/66), the Smoke Demon and Venus Man Trap entries, and Madalqua's "freezing
+cold" battle lines.
+
+### Our mistranslation corrections (2026-10-11)
+
+Our own error, not the original's: 力 ("power") on three weapons was rendered as the
+Strength stat, which none of them raises while equipped. Chris approved the wording
+(decisions.md item 12); 8ace280. Shots: `docs/shots/strength-mistranslation/` (after
+only).
+- 61 Skull Dagger: "Raises strength and accuracy, and even adds attacks" → "It hits
+  harder and truer, and even adds attacks".
+- 89 Mace of Power: "A mace that raises Strength and accuracy just by equipping it. Its
+  hidden power raises Strength for good." → "A mace that adds power and accuracy just by
+  equipping it. Its hidden power raises Strength itself. It truly lives up to its name."
+- 118 Golden Axe: "Strength and accuracy rise too." → "It also hits harder and truer."
 
 ## To revisit
 

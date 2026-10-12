@@ -484,3 +484,30 @@ Two of them hit their turn limit before writing anything down and had to be resu
   - 3:198 (Artemisia on Zaril) turned out not to be part of block 8 at all.
 - No natural before/after shots: every test uses RAM writes. Internal captures of the
   Temple pair are `rips/re/work/P3-bugs/temple/lost_before.png` and `lost_after.png`.
+
+**Descriptions corrected to match the code (2026-10-11; 0f0a69b, da781e2, a25c54c,
+d798054; our 力 slip 8ace280).** Chris decided the English should say what the game does,
+even where the Japanese is wrong, since the description is the player's only guide.
+- What was wrong: 18 spell ranges (Lahalito "6-58" for 6d6, Zilwan "1000" for 255d10,
+  Ladalto "44-98" for 10d10...), Morlis and Cortu promising more than they do, Kadorto in
+  camp not mentioning it can fail, nine item claims (the Winter Wand naming the wrong
+  spell, two "useless" weapons that aren't, "can't be hit" for "half damage") and one
+  Compendium drain that doesn't exist. Our English had copied the Japanese faithfully.
+- The site check first: Emonoya's item tables already matched the code (they were built
+  from the item data), while its spell page repeated the game's numbers, which says the
+  spell page was copied from the game's own text.
+- The spell bar holds 30 codes (digraphs count once). Madial's two values, "Great Prayer:
+  party 17-68; camp 10-50", fill it exactly.
+- The sweep turned up one more: Bacortu "walls enemies off from casting", but sealing is a
+  roll, rand(8191) / (level + seal + 1) < seal, so one cast seals about 5% of a weaker
+  monster's spells. It also corrected an analyst's reading of Banoka (it bounces hostile
+  spells, not melee), and confirmed Calfo (95%), Calnova (85% disarm, 1.5% sets it off),
+  Mahaman (level 13+, minus a level) and Quremor (+4 spell damage, up to 12).
+- Breath turned out to be resisted through the ordinary resist bits: a match halves the
+  damage and adds 5 to the breath save. So the Mythril Plate does blunt fire and cold
+  breath; "neutralizes all kinds" was the overstatement.
+- Natural before/after pairs: the old text was built from 479845b, the same button-press
+  chain (`rips/re/work/P3-desc2/chain.py`, from a cold boot with the test card) captured
+  both builds. `docs/shots/description-corrections/`: Dios's spell bar, the Gem of
+  Exorcism, the Worst Sword, the Rod of Raising and the 2-Head Snake. The Compendium
+  capture also confirmed the entry-to-monster match the check had only inferred.

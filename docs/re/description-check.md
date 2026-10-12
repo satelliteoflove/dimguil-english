@@ -24,7 +24,15 @@ rips/re/work/P3-desc/ (items.txt, spells.txt, monsters.txt, catalg_claims.txt).
 | Help text (SISETU 184-219) | race, alignment, class and stat lines | none found | none found |
 
 Our English follows the Japanese numbers faithfully, so every wrong spell range is the
-original's. The three mistranslations are all the same slip: 力 ("power") rendered as the
+original's.
+
+**Corrected 2026-10-11** (Chris, decisions.md item 11: the English now says what the game
+does). Spells in 0f0a69b, items in da781e2, the Compendium in a25c54c, Bacortu (found in
+the sweep below) in d798054, and our three mistranslations, with Chris's wording, in
+8ace280. Each change is listed with old and new wording in translation-notes.md,
+"Description corrections". Checked on the real screens of the built disc: before and
+after captures in `docs/shots/description-corrections/` and
+`docs/shots/strength-mistranslation/`. The three mistranslations are all the same slip: 力 ("power") rendered as the
 Strength stat on weapons that don't raise it.
 
 ## Spells
@@ -35,6 +43,9 @@ Battle damage and healing go through `spell_damage_one` (0x800b0b50),
 n to n×sides. Camp values come from B-camp.md's spell table. **[code]**
 
 ### Wrong ranges (all the original's)
+
+All 18 corrected in 0f0a69b. Madial's bar now gives both values ("party 17-68; camp
+10-50"), the most the 30-code bar holds.
 
 | STATUS | Spell | Japanese claim | Our English | Code | Mark |
 |---|---|---|---|---|---|
@@ -69,6 +80,10 @@ descriptions don't say. **[code]**
 
 ### Effects stated wrongly or loosely
 
+Morlis, Cortu and Kadorto corrected in 0f0a69b. Morlis also sets the group's result
+message to FIGHTMSG 170 "is startled" (`spell_morlis` stores 0xaa in the results table
+0x8008d560), which the new wording uses; nothing else reads it. **[code]**
+
 | STATUS | Spell | Claim | Code | Mark |
 |---|---|---|---|---|
 | 426 | Morlis | 敵1グループのACを4上昇し動きを封じる / "enemy group AC +4, and held fast" | `spell_ac_change` only: the group's AC modifier −4 (easier to hit). Nothing stops them acting. | [code] for the AC; [inf] that no hold exists elsewhere |
@@ -76,7 +91,7 @@ descriptions don't say. **[code]**
 | 459 | Kadorto | 死,灰の状態を蘇生させHPを完全回復 / "raises the dead or ash, full HP" | camp Kadorto rolls for success and can fail (B-camp.md, "Kadorto"); the description doesn't say so. The Rod of Raising never fails | [code] |
 | 424 | Sogref | 味方一人のACを2低下 / "one ally's AC drops by 2" | correct: it targets one ally. **D-battle.md's line "Sogref +2 the caster" is wrong and needs correcting there.** | [code] |
 
-Not checked: Banoka, Calfo, Calnova, Mahaman, Quremor.
+Banoka, Calfo, Calnova, Mahaman and Quremor were checked in the sweep (below).
 
 ## Items
 
@@ -120,6 +135,12 @@ entry 24 also holds item 25 (after `{ff40}`), and item *i* ≥ 26 is entry *i*�
 
 ### Wrong or overstated claims (the original's)
 
+All nine corrected in da781e2. Mythril Plate and Dragon Kite: breath is resisted through
+the resist bits, not a breath field. `monster_breath` halves the damage and adds 5 to the
+breath save when the member's resist bits match the breath's element or effect, so their
+fire, cold, poison and paralysis bits do help; the claim "neutralizes all kinds" is still
+too strong. **[code]**
+
 | §1 # | Item | Japanese claim | Our English | Record | Mark |
 |---|---|---|---|---|---|
 | 46 | Winter Wand (47) | 「マダルト」の呪文が封じ込めてある | "holding the cold spell Madalto" | battle spell is **Ladalto** | [record] |
@@ -137,12 +158,18 @@ is close enough; the overstatement (中和 "neutralizes") is the original's.
 
 ### Cursed, and the description doesn't say so (the original's)
 
+Not changed: adding a warning may give away what the developers hid on purpose. For Chris.
+
 Queen's Whip (67, §1 #66, also female only), Soul Bow (87, #86), Ring of Skulls (263,
 #262), Cloak of Capricorn (268, #267; reads like a good item: "various special
 protections"), Trollkin Ring (290, #289), Sword of Swishes (15, #15; described as junk, but
 not as cursed). All have bit 7 of +5 set. **[record]**
 
 ### Notable restrictions the description leaves out (the original's)
+
+Not changed, for the same reason. Also unmentioned: the Worst Sword's hidden power (Vit−1,
+a year older), the Dragon Kite's (Str+1), and the PK Crystal's IQ+1 and +3 regeneration.
+**[record]**
 
 | Item | Record | Mark |
 |---|---|---|
@@ -191,6 +218,10 @@ the stat (its hidden power is Str+1), so that one stays.
 
 Wording is a suggestion only; Chris decides.
 
+**Fixed in 8ace280** with Chris's wording: the Skull Dagger "It hits harder and truer",
+the Mace of Power "adds power and accuracy ... raises Strength itself", the Golden Axe
+"It also hits harder and truer".
+
 ## Compendium (M_CATALG)
 
 The descriptions are sections 4-17 of M_CATALG.DAT, one per category in the order of §0
@@ -209,7 +240,7 @@ confusion, 0x10 paralysis. **[record]**, element names **[inf]**
 
 | Entry | Monster | Japanese claim | Our English | Record | Mark |
 |---|---|---|---|---|---|
-| 7.16 | 2-Head Snake (154) | ドレイン能力も持っているのだ | "Worse still, it can drain levels." | drain 0 (+0x80); its only effect is poison 50% | [record], match [inf] |
+| 7.16 | 2-Head Snake (154) | ドレイン能力も持っているのだ | "Worse still, it can drain levels." | drain 0 (+0x80); its only effect is poison 50%. **Corrected in a25c54c** (the sentence is dropped) | [record]; match [emu]: the entry shows under the 2-Head Snake in the Compendium |
 | 10.0 | Smoke Demon (13) | 剣で攻撃してもなかなかダメージを与えられない | "swords barely harm it" | no physical-damage reduction in the record (AC 4); nothing in D's melee code for it | [inf] |
 | 12.3 | Venus Man Trap (36) | 炎系の呪文で燃やしてしまうのが一番 | "it burns well with fire spells" | no fire weakness (+0xce empty); the smaller plants (Pink Mushroom, Xicalli) do have it | [record], match [inf] |
 
@@ -255,6 +286,84 @@ is the likeliest, and has none).
 | 217 | Vitality sways the odds of coming back from death | E-town.md, the temple: 60 + 2 × VIT and 68 + 2 × VIT | [code] |
 
 The inn and temple text was already checked in E-town.md.
+
+## Sweep (2026-10-11)
+
+Chris asked for a check of other places that state a number or a rule. What was read,
+against the chapters and the decomp:
+
+**Spells not checked before**
+- Banoka (STATUS 473, "may bounce enemy spells back"): right. In `cast_spell`, while the
+  party's Banoka counter (0x80079bc0, 3 rounds) runs, a monster's hostile spell turns on
+  its own group 34% of the time; a monster's Banoka (0x80079b6b) turns a party member's
+  hostile spell on the caster 30% of the time. One bounce uses the counter up. **[code]**
+  D-battle.md read these counters as melee; corrected there.
+- Calfo (444, "nearly always spots chest traps"): right. It names the trap 95% of the
+  time, otherwise one of the 13 at random (`FUN_800c697c`). **[code]**
+- Calnova (481, "can fail"): right for chests. It disarms 85% of the time; otherwise 90%
+  nothing happens and 10% the trap goes off, 1.5% in all (`FUN_800c6d50`). **[code]** Doors
+  weren't read.
+- Mahaman (439, "special effects, but lose a level"): right. Under level 13 it fails; at 13
+  or more it offers three of seven wishes (a second set in five special encounters) and
+  the caster loses a level (`spell_mahaman`). **[code]**
+- Quremor (493, "party's attack spells grow stronger"): right. Each cast adds 4 to the
+  caster's side's spell damage bonus, up to 12 (`spell_quremor`). **[code]**
+- **Bacortu (434), corrected in d798054.** "Walls enemies off from casting" was too
+  strong. Each cast adds the caster's level to the target group's sealing level (up to
+  255, `spell_bacortu`), and a sealed group's spell is lost only when rand(8191) / (its
+  caster's level + sealing + 1) is below the sealing level (`cast_spell`). One cast by a
+  level-15 caster stops a level-10 monster's spell about 5% of the time; it takes several
+  casts to seal a group reliably. New wording: "Ward: enemy spells may be sealed; stacks".
+  **[code]**
+- The rest of the buffs, cures and AC spells match: Sogref 2 one ally, Porfic 4 the
+  caster, Bamatu 3 and Maporfic 2 (1250 steps) the party, Ponti AC 1 (plus 1, up to 10, on the action record's first byte, read as attacks **[inf]**),
+  Poba ±1, Mapoba ±2, Dilto −2, Morlis −4; Nagula is the caster's current HP halved, then
+  quartered on the next cast, and so on; Madi cures all but death and ash, Morfis all but
+  death and stone, Kadios and Madi to full HP, Labadi leaves 1-8 HP, Loktofeit empties
+  every pack. **[code]**
+- Cloud elements: Fire Mist and Flame Mist are fire (0x80), Ice Mist cold (0x100), Glow,
+  Ray and Low Mist 0x4000. No cloud description names a wrong element; Madalqua's ("Low
+  Mist: 4-60 damage to a group") names none. Its battle lines, FIGHTMSG 179/185 "in
+  freezing cold", do say cold though its element isn't; that's narration and stays, for
+  Chris. **[code]**
+
+**Items**
+- Breath and resist bits: see "Wrong or overstated claims".
+
+**Town and system text** (E-town.md had checked the inn, temple and Boltac's text; all
+true)
+- SISETU 322, the ending: "Accept this title and 1,000,000 Gp." `king_ending` adds
+  1,000,000 to the first party member's gold (capped at 0x7fffffff). The text doesn't
+  say "each", so it fits. **[code]**
+- SISETU 326: 10000 Gp each, right (E-town.md).
+- SISETU 492, the Training Maze sign: "no gold or items dropped" is right (no chests
+  there), and "sent to the temple free of charge" is right (the members go back to town,
+  where the Temple lists them). But a wipe there still halves everyone's gold and rolls
+  the front member's items six times (D-battle.md). The sign doesn't say otherwise; left
+  as it is, for Chris. **[code]**
+- SISETU 65/66, "has died of old age": the character is Lost and deleted, not dead
+  (E-town.md). Left, for Chris.
+- SISETU 218, Agility: the order of attacks, spotting traps (Inspect's chance is a class
+  factor × Agility, up to 95%) and disarming (a failed disarm sets the trap off unless
+  rand(20) + a class penalty ≤ Agility): right. **[code]**
+- **SISETU 219, Luck: "like disarming traps and dodging enemy attacks".** Not what the
+  code does: chest disarming uses class, level, the area's danger and Agility, and a
+  monster's to-hit has no Luck term. Luck goes into the saving throws (level / 5 + Luck /
+  6), which soften traps and breath. Help text, but the original's own claim and loosely
+  worded ("sways many things"); not changed, for Chris. **[code]**
+- SISETU 214-217 and the class lines 200-213 match (the spell schools agree with
+  `spell_point_rules`). **[code]**
+
+**Compendium, the two unsupported claims**
+- Smoke Demon (10.0, "swords barely harm it"): no field or code found that cuts weapon
+  damage. **[inf]** Left, for Chris.
+- Venus Man Trap (12.3, "burns well with fire spells"): no fire weakness, and it resists
+  Mage spells 40%, so Mahalito and Lahalito do worse than usual; the Alchemist's fire
+  clouds aren't resisted (Alchemist 0%). **[record]** Left, for Chris.
+
+**Event text.** EVENTMES lines stating mechanics are few. 210/211 (the pillars' water
+"seems to restore your magic") weren't traced; the wording hedges. 310 ("Obtained N
+Gp") prints the amount given. **[inf]**
 
 ## Notes for other docs
 

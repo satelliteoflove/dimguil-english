@@ -26,6 +26,8 @@ before is from Chris's own play-through state, shown at 2x.
 | `name-breastplate` | Built-in name "B-PLATE OF GOODNESS"; now BREASTPLATE OF BOONS | 859fab6 |
 | `name-iron-gloves` | Built-in name "STEEL GLOVES" for 鉄の小手; now IRON GLOVES, as in Wizardry III's ports | 6c01bd6 |
 | `jpn-lock` | "Jpn" names drew as a jumble; the switches are now locked on "Eng" | 18ea18f |
+| `description-corrections` | The original's wrong spell ranges and item and Compendium claims (Dios 1-8, Gem of Exorcism "can't be hit", Worst Sword, Rod of Raising, 2-Head Snake); now the code's values | 0f0a69b, da781e2, a25c54c |
+| `strength-mistranslation` | 力 rendered as Strength on the Skull Dagger, Mace of Power and Golden Axe (after only; no before was captured) | 8ace280 |
 
 No natural before/after pair exists for Boltac's Trade captions (f5d4e8f), the event
 box glyph pool (6dc52dd), the voicing marks in event text (9a955ba), event line
