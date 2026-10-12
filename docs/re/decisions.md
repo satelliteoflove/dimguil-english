@@ -166,6 +166,8 @@ vanishes right after it, and it's what the Japanese says (お亡くなりにな�
 
 **20. SISETU 492, the Training Maze sign.** Accurate, but doesn't say a wipe there still
 halves gold and costs the front member's items.
+**Decided (Chris, 2026-10-12): leave the sign as it is** (its box is full); the site
+documents that a wipe in the Training Maze costs what a wipe anywhere does.
 
 **21. Compendium claims with no support in the code.** Smoke Demon "swords barely harm it"
 (nothing cuts weapon damage); Venus Man Trap "burns well with fire spells" (no fire

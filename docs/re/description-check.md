@@ -339,8 +339,9 @@ true)
 - SISETU 492, the Training Maze sign: "no gold or items dropped" is right (no chests
   there), and "sent to the temple free of charge" is right (the members go back to town,
   where the Temple lists them). But a wipe there still halves everyone's gold and rolls
-  the front member's items six times (D-battle.md). The sign doesn't say otherwise; left
-  as it is, for Chris. **[code]**
+  the front member's items six times (D-battle.md). The sign doesn't say otherwise. Left
+  as it is (box full), decided 2026-10-12; the site documents the cost (decisions.md
+  item 20). **[code]**
 - SISETU 65/66, "has died of old age": the character is Lost and deleted, not dead
   (E-town.md). Left as written, decided 2026-10-12 (decisions.md item 19).
 - SISETU 218, Agility: the order of attacks, spotting traps (Inspect's chance is a class
