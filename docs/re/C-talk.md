@@ -201,7 +201,8 @@ rescue. [code]
 
 ### Healing
 
-Every party offers healing (Zaril's doesn't). There are two healers per party, chosen
+Every party offers healing (Zaril's didn't; the patch reopens it, see bugs.md 2.2).
+There are two healers per party, chosen
 50/50 for each offer. [code] The offer comes in state 0x2d, you pick a member, and the
 healer checks in order: healthy (full HP and status 0) gives a "doesn't need it" line
 and lets you pick again. Then, for most healers, a 20% "out of magic" roll, then what
@@ -495,7 +496,8 @@ details]
 - Introductions: block 0 if nobody has met Zaril, block 1 if only some have.
 - Then a sale (see above) or a chat topic: `rand_upto(13)`, rerolling 1. On the second
   Talk press of a meeting, the chat is always block 1 (5:99 + 57-59).
-- There's no healing and no rescue.
+- There's no healing and no rescue. His healing lines (5:35-42, 114) are complete; the patch
+  adds the offer, copied from Guy's and Balbo's (bugs.md 2.2, 9135ef5).
 
 [code]
 

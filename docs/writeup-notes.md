@@ -415,5 +415,25 @@ Two of them hit their turn limit before writing anything down and had to be resu
     party, or the man in armor) in eight instructions over the same debug routine as the
     pit-scene fix. Tested on the built overlay: all three cases (nobody met, Balbo met,
     Guy met) close the talk and return to the maze within 900 frames.
+- Zaril's healing (9135ef5), the first reopened content rather than a fix. His handler is
+  the same skeleton as the others' but stops short: Talk goes straight from the
+  introductions check to his sale roll, and there are no heal states at all, though
+  NPC_MES5 has the whole exchange and the log line. Chris approved reopening it.
+  - The lines map onto Guy's and Balbo's stage-3 table one for one (same order, one HP
+    spell), so the patch copies their logic and invents nothing: 25% offer when someone
+    is hurt, 20% out of spells, Dialko/Latumofis/Dialma by status. The one judgment call:
+    Zaril's sale never had the others' outer 50% service roll, so the heal check goes in
+    ahead of it rather than halving his sale odds.
+  - Space was the hard part: about 900 bytes of code and scripts. It fits in three MCARD
+    routines nothing calls (a yes/no box, two card-status checks) plus the rest of the
+    debug routine the pit fixes use, each checked for references across every module.
+    Two other "uncalled" candidates turned out to be the tails of real functions that
+    Ghidra had split off, and were left alone. The first build overflowed by 8 bytes;
+    reordering so the offer state falls through into the picker setup fixed it.
+  - A test-harness slip worth noting: the first run's text-advance press landed in the
+    frame the member picker opened and picked the default member. The harness now waits
+    for the picker before pressing.
+  - Tested on the built overlay, seven cases (each cure, dead, healthy, cancel, out of
+    spells), all returning to the maze. Shots in `rips/re/work/P3-zaril/`.
 - No natural before/after shots: every test uses RAM writes. Internal captures of the
   Temple pair are `rips/re/work/P3-bugs/temple/lost_before.png` and `lost_after.png`.

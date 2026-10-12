@@ -214,6 +214,47 @@ Question for Chris: Zaril is the party leader who can't do anything right, and t
 lines read like his healing was meant to be grudging. Should his party heal? It would
 make his party a little more useful, and his lines would be heard.
 
+**Reopened in 9135ef5** (`asm/bugfix_zaril_heal.asm`), Chris's decision 2026-10-11
+(decisions.md item 2). Copied from Guy's and Balbo's healing, nothing added:
+- **The offer.** On Talk, once everyone is introduced, if a member has a status or HP at or
+  under max/5: a 50% service roll, then a 50% heal roll (25% in all, as for the other
+  parties), checked before Zaril's sale roll. His handler never had the others' outer 50%
+  roll for its sale, so the sale keeps its own odds when nobody is hurt; when someone is,
+  the heal offer comes first, as it does for the others. [code]
+- **The picker and the result** (states 0x2d, 0x32, 0x37), with one healer and the
+  stage-3 table Guy and Balbo share, which is the one his lines fit: nothing wrong (5:36)
+  or stone/dead/ashes (5:37, "can't") picks again; then 20% out of spells (5:40);
+  paralysis Dialko (5:38, cure 1); poison Latumofis (5:39, cure 3); HP below max Dialma
+  (5:41, cure 4); cancel 5:42. Any outcome but "nothing wrong" uses up Talk for the
+  meeting, as in the others. The offer block opens with the log line 5:114. [code]
+- **Mapping.** 5:35-42 run in the same order as Guy's 1:142-151 and Balbo's 2:114-123
+  (offer, healthy, can't, Dialko, Latumofis, out of magic, HP spells, cancel), with the
+  one HP spell, Dialma. Expressions: 0 plain, 2 annoyed for "quit wasting my time", 3
+  sorry for "can't" and "out of spells", as his other lines use them. [code]
+- **Space.** Hooks at the state dispatch (0x800da4b8) and the Talk branch after the
+  introductions check (0x800da9b8). The code and scripts sit in three routines nothing
+  calls: 0x800b4100 (a yes/no box), 0x800ab09c-0x800ab1cb (two card-status checks) and
+  0x800c5820-0x800c58db (the rest of the debug routine after the pit fixes, through
+  FUN_800c589c). Each was checked for jal, j, word and lui/addiu references in every
+  module. [code]
+
+**Tested in the emulator** on the built MCARD (`rips/re/work/P3-zaril/zaril_heal_test.py`).
+The setup used RAM writes, as the pit tests did: from `npc_talkmode.state` (a real talk),
+the current MCARD and file tables were laid into RAM, the talk switched to handler 4,
+every member marked introduced to Zaril, and the members given a status. Everything after
+was button presses: Talk until the offer came (chats in between played through), the
+picker, Leave. [emu]
+- Paralyzed member: Dialko, status 0x20 → 0.
+- Poisoned: Latumofis, status 4 → 0 and the poison counter 5 → 0.
+- HP 1/30: Dialma, HP 12/30.
+- Dead: "can't cure this one", the picker again, cancel: "That so? ...", status unchanged.
+- Healthy: "quit wasting my time", the picker again, cancel.
+- Cancel at the picker: 5:42, nothing changed.
+- One run rolled the 20%: "I've used up all my healing spells", nothing changed.
+- Every run: Talk drops from the menu (talk_menu 7 → 6), Leave plays the farewell, and
+  the game is back in the maze. The log line shows in the bottom bar from the offer on.
+Shots: `rips/re/work/P3-zaril/<case>/` (`*_text.png` are the outcome lines).
+
 ### 2.3 Guy and Fontana never re-introduce themselves
 
 Balbo's, Cresson's and Zaril's handlers play a short re-introduction when only some of

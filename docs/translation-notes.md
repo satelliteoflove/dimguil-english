@@ -351,6 +351,13 @@ The full triage is `docs/re/bugs.md`; each fix is its own `asm/bugfix_*.asm`.
   good. It now gets the game's own rescuer for that case, Balbo's party if someone has
   met Balbo, otherwise the man in armor (5ff86d2).
 
+Reopened content (each one goes in the release notes too):
+
+- **Zaril's healing** (NPC_MES5 35-42, and the log line 114) never played: his handler
+  had no heal offer. Chris, 2026-10-11: reopen it; Zaril is a Lord and his lines name
+  Priest spells. The offer and its outcomes are copied from Guy's and Balbo's healing,
+  with the same odds, and only his own lines are used (9135ef5).
+
 Decided and left as the original had it (each one goes in the release notes, per
 ROADMAP.md "Game changes up front"):
 
@@ -363,7 +370,7 @@ ROADMAP.md "Game changes up front"):
   rather than implement it. The release notes say the lines exist and the service was
   never in the game.
 
-Still open for Chris (`docs/re/decisions.md`): Zaril's healing, Guy's and Fontana's
+Still open for Chris (`docs/re/decisions.md`): Guy's and Fontana's
 re-introductions, Cresson's "boys", Fontana's block 8, Balbo's "heard that already", the
 weapon-effect level bonus, and level drain's save.
 
