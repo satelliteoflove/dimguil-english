@@ -183,5 +183,6 @@ cold. Battle narration, so left alone.
 **Decided (Chris, 2026-10-12): leave it; the site notes that cold resistance doesn't help
 against Madalqua** (its element is Tiltowait's, 0x4000).
 
-Not yet checked: EVENTMES 210/211 (the pillar water "seems to restore your magic"), and
-Calnova on doors.
+Checked 2026-10-12, both accurate, nothing to decide: EVENTMES 210/211 (the pillar water
+is a free, repeatable full spell-point refill) and Calnova on doors (95%, no penalty on a
+miss, fails on anti-magic squares). Details in `description-check.md`.

@@ -301,8 +301,16 @@ against the chapters and the decomp:
 - Calfo (444, "nearly always spots chest traps"): right. It names the trap 95% of the
   time, otherwise one of the 13 at random (`FUN_800c697c`). **[code]**
 - Calnova (481, "can fail"): right for chests. It disarms 85% of the time; otherwise 90%
-  nothing happens and 10% the trap goes off, 1.5% in all (`FUN_800c6d50`). **[code]** Doors
-  weren't read.
+  nothing happens and 10% the trap goes off, 1.5% in all (`FUN_800c6d50`). **[code]** Right for doors too (traced
+  2026-10-12): a locked door (`square_examine` cases 2 and 0x1e) sets game_state 8,
+  `FUN_800ae1c8`, whose "Unlock with a spell" (SISETU 523) needs Calnova (`spells_known[2][3]
+  & 2`) and a point in `spell_points[2][6]`. The point is always spent; `rand_upto(99)` > 94,
+  or any `nomagic_steps`, fails (SISETU 521) with no other penalty, otherwise
+  `FUN_800cda04` sets the door's bit in 0x800795fc for good. 95% then, 0% on anti-magic
+  squares, no class or level term, and the forcing penalty at 0x8007e838 doesn't apply.
+  Calnova can't be cast from camp (`camp_cast_spell` 0x800d0514 has no entry; SISETU 283,
+  no cost). Sealed doors (type 99, EVENTMES 10, no keyhole) never open the lock menu.
+  **[code]**
 - Mahaman (439, "special effects, but lose a level"): right. Under level 13 it fails; at 13
   or more it offers three of seven wishes (a second set in five special encounters) and
   the caster loses a level (`spell_mahaman`). **[code]**
@@ -363,7 +371,13 @@ true)
   clouds aren't resisted (Alchemist 0%). **[record]** Left as written, decided 2026-10-12 (decisions.md item 21).
 
 **Event text.** EVENTMES lines stating mechanics are few. 210/211 (the pillars' water
-"seems to restore your magic") weren't traced; the wording hedges. 310 ("Obtained N
+"seems to restore your magic"): accurate (traced 2026-10-12). Square event 0x50 in
+`square_examine` (MAZE 0x800bb790), on Investigate facing side p1; no flag or cost, so it
+repeats. 211 (iron) if `story_flags` & 0x400 (set by `maze_prompt_result` prompt 0x18),
+else 210 (stone). Every member without status 0x380 gets `FUN_800be8e0` (a MAZE copy of
+JOUKA's `spell_points_recalc`, rule table byte-identical), a full spell-point refill as at
+the inn; HP and status untouched, paralyzed and stoned members included. Prompt 0x1f
+(0x800c0478, the Gold Gauntlets room) calls the same refill. **[code]** 310 ("Obtained N
 Gp") prints the amount given. **[inf]**
 
 ## Notes for other docs
