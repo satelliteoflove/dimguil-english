@@ -543,7 +543,7 @@
                 {
                     "length": 123,
                     "source": "NA",
-                    "translation": "An axe with a cracked haft.\nIt works, but you must get\nvery close to cut with it, so\nyou lose attacks. And its\npower is nothing much\nanyway.",
+                    "translation": "An axe with a cracked haft.\nIt works, but you must get\nvery close to cut with it.\nAnd its power is nothing\nmuch anyway.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -620,7 +620,7 @@
                 {
                     "length": 120,
                     "source": "NA",
-                    "translation": "A spellcaster-only staff\nholding the cold spell\nMadalto. It too is best used\nas an item. As a weapon it's\nall but useless.",
+                    "translation": "A spellcaster-only staff\nholding the cold spell\nLadalto. It too is best used\nas an item. As a weapon it's\nall but useless.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -711,7 +711,7 @@
                 {
                     "length": 104,
                     "source": "NA",
-                    "translation": "Wondering what's so bad\nabout it? Try equipping it.\nIt's cursed, cuts your\nattacks, and lowers both\naccuracy and defense. A\nfitting name for the worst\nsword.",
+                    "translation": "Wondering what's so bad\nabout it? Try equipping it.\nIt's cursed, and lowers both\naccuracy and defense. A\nfitting name for the worst\nsword.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -725,7 +725,7 @@
                 {
                     "length": 113,
                     "source": "NA",
-                    "translation": "A dagger with a distinctive\nbone hilt. Raises strength\nand accuracy, and even adds\nattacks. Fighting at such\nclose range adds risk, but\nthat can't be helped.",
+                    "translation": "A dagger with a distinctive\nbone hilt. It hits harder\nand truer, and even adds\nattacks. Fighting at such\nclose range adds risk, but\nthat can't be helped.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -781,7 +781,7 @@
                 {
                     "length": 126,
                     "source": "NA",
-                    "translation": "Inscribed with Kadorto, the\nspell that raises the dead.\nNearly useless as a weapon,\nbut thanks to its spell you\ncan skip the temple's steep\ndonation.",
+                    "translation": "Inscribed with Kadorto, the\nspell that raises the dead.\nIt's no bad weapon either,\nand thanks to its spell you\ncan skip the temple's steep\ndonation.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -921,7 +921,7 @@
                 {
                     "length": 106,
                     "source": "NA",
-                    "translation": "A mace that raises Strength\nand accuracy just by\nequipping it. Its hidden\npower raises Strength for\ngood. It lives up to its name.",
+                    "translation": "A mace that adds power and\naccuracy just by equipping\nit. Its hidden power raises\nStrength itself. It truly\nlives up to its name.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -1047,7 +1047,7 @@
                 {
                     "length": 94,
                     "source": "NA",
-                    "translation": "A weapon fit for\nspellcasters. It casts the\nPsionic spell Masios. The\nwand itself has no attack\npower.",
+                    "translation": "A weapon fit for\nspellcasters. It casts the\nPsionic spell Masios. As a\nweapon it hits lightly, but\noften.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -1124,7 +1124,7 @@
                 {
                     "length": 126,
                     "source": "NA",
-                    "translation": "A pricey axe, with\ndestructive power to match.\nIts hidden power raises\nVitality and age. Strength\nand accuracy rise too.",
+                    "translation": "A pricey axe, with\ndestructive power to match.\nIts hidden power raises\nVitality and age. It also\nhits harder and truer.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -1873,7 +1873,7 @@
                 {
                     "length": 77,
                     "source": "NA",
-                    "translation": "Top-grade Plate Mail made\nentirely of magic ore.\nPurified with holy water, it\nneutralizes all kinds of\nbreath.",
+                    "translation": "Top-grade Plate Mail made\nentirely of magic ore.\nPurified with holy water, it\nblunts many kinds of breath.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -1894,7 +1894,7 @@
                 {
                     "length": 101,
                     "source": "NA",
-                    "translation": "Dragon scales laid over its\nface block all magic and\nbreath attacks. Its flaw is\nweight: only races born\nstrong can hold it.",
+                    "translation": "Dragon scales laid over its\nface ward off magic and\nbreath attacks. Its flaw is\nweight: only races born\nstrong can hold it.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -2223,7 +2223,7 @@
                 {
                     "length": 107,
                     "source": "NA",
-                    "translation": "Its effect is slight, but it\ncan seal enemy spells. While\nequipped, you can't be hit\nby undead attacks, and it\nresists level drain.",
+                    "translation": "Its effect is slight, but it\ncan seal enemy spells. While\nequipped, undead attacks do\nhalf damage, and it resists\nlevel drain.",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -2405,7 +2405,7 @@
                 {
                     "length": 134,
                     "source": "NA",
-                    "translation": "The finest item a Psionic\ncan hold. It raises mental\npower, and merely wearing\nit puts a barrier around the\nbody strong enough to\nnullify sword and magic\nattacks.",
+                    "translation": "The finest item a Psionic\ncan hold. It raises mental\npower, and merely wearing\nit puts a barrier around the\nbody that can turn magic\naside.",
                     "compress": null,
                     "addStringTerminator": true
                 },
