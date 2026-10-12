@@ -462,5 +462,17 @@ Two of them hit their turn limit before writing anything down and had to be resu
     instruction); a nop fixed it before any test ran.
   - Tested nine cases (Guy and Fontana; nobody, some, everyone met; Fontana at each
     stage); contact sheets in `rips/re/work/P3-zaril/ri/`.
+- Cresson's boys/girls/fellows (7166f5d). The disassembly showed the whole decision chain
+  intact, testing `s0`, `s1` and `t6`, with only the setting of them missing. Eight
+  instructions in the member loop set `s0` for a woman and `s1` for a man; `t6` stays a
+  mystery and stays unset.
+  - The first test runs got nothing: the scholars' handler sat on state 0. Coverage
+    showed it returning early every frame, because the save state had a message box
+    pending (0x80079a3e = 3), which `talk_overlay_message` waits out. The other
+    handlers' tests had dismissed it with their first button press. Clearing it fixed
+    the harness.
+  - Then the greeting's speaker is random (Cresson 1 in 3); the trials vary the RNG
+    state at 0x80079558.
+  - All male → 4:18, all female → 4:19, mixed → 4:20, each seen on screen.
 - No natural before/after shots: every test uses RAM writes. Internal captures of the
   Temple pair are `rips/re/work/P3-bugs/temple/lost_before.png` and `lost_after.png`.

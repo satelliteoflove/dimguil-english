@@ -357,6 +357,37 @@ The sex bit is +0x0b bit 7.
 Question for Chris: fix it with that rule, or make 4:18's English neutral instead ("Well,
 everyone, any progress?")? The second is a text change only.
 
+**Reopened in 7166f5d** (`asm/bugfix_cresson_greeting.asm`), Chris's decision 2026-10-11
+(decisions.md item 4).
+- **What the flags select**, from the disassembly (0x800d8f48-0x800d9010), after the
+  special cases (DIMGUIL, max HP over 9,999, everyone level 100+): `s0` clear → 4:18
+  "boys"; else `s1` clear → 4:19 "girls"; else `t6` clear → 4:20 "my good fellows"; else
+  4:21 if the Decipher table has no blank entry, or string 0x98 with expression 0 if it
+  has. The DIMGUIL branch's random pick reaches the same three for its fourth case (and
+  with `s0` and `s1` both set it leaves the line as it was). [code, disassembly]
+- **The rule**: `s0` = a woman in the party, `s1` = a man. No women: "boys"; only women:
+  "girls"; mixed: "my good fellows". [code]
+- **Female is bit 7 set** in `class_sex` (+0x0b): character creation sets it for a
+  female, and a Valkyrie needs it (F-edge-save.md, G-records.md). [code]
+- **`t6`** stays unset, as it always was, so the 4:21/0x98 branch after "my good fellows"
+  stays unreachable. What it was for can't be recovered: it sits where a third kind of
+  member would be tested, but the records have only two sexes. A guess: some other
+  party trait the developers meant to single out. [inf]
+- **The change**: the member loop's level load (0x800d8dbc) jumps to eight instructions
+  that set `s0` or `s1` from the member's sex bit, then do the load. They sit at
+  0x800a8280, in the never-run end of Cresson's chat array (bugs.md 2.3). [code]
+
+**Tested in the emulator** (`rips/re/work/P3-zaril/cresson_test.py`, output in `cr/`).
+The setup used RAM writes, as the other talk tests did: from `npc_talkmode.state`, the
+current MCARD and file tables laid in, the talk switched to the scholars (handler 3),
+every member seen before and introduced to Cleo, Bergamot and Cresson, Cresson's stage 1,
+the state's pending message box cleared, each member's sex bit set by the case, and the
+RNG state varied until Cresson spoke the greeting. Four level-5 members. [emu]
+- All male: `talk_str_a` 18, "Well, boys, any progress?"
+- All female: 19, "Well, girls, any progress?"
+- Two and two: 20, "Well, my good fellows, any progress?"
+Contact sheet: `cr/sheet.png`.
+
 ### 2.5 Fontana's chat block 8 (NPC_MES3 197-200)
 
 Fontana's stage-1 specials are picked from a list of seven (6, 7, 9, 10, 15, 16, 19 at

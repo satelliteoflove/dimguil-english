@@ -460,7 +460,9 @@ specials. Areas 0x20-0x23 add a location topic before the maze changes.
     - a member named DIMGUIL (4:14, "the very name of so dreadful a god")
     - max HP > 9,999 (4:15)
     - level ≥ 100 for everyone (4:16)
-    - otherwise 4:18
+    - otherwise 4:18 "boys"; the checks for 4:19 "girls" and 4:20 "my good fellows" were
+      never written, so it was always 4:18. The patch adds them: no women, only women,
+      mixed (bugs.md 2.4, 7166f5d).
 - 6 and 7: stage 2, Cresson alone (nameless or named).
 
 [code; the Bergamot branch order is tangled in the decompile and is inferred in its

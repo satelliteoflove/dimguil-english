@@ -366,6 +366,10 @@ Reopened content (each one goes in the release notes too):
   them. Modeled on Balbo's branch; Fontana's has a block per stage, Guy's one block, since
   his lines cover only his founding four (7498b1c). Guy's second line-up (1:128-133) is
   still unplaced; the evidence doesn't say where it goes (bugs.md 2.3).
+- **Cresson's "girls" and "my good fellows"** (NPC_MES4 19, 20) never played: his greeting
+  picked among the three with flags nothing set, so every party was "boys". Chris,
+  2026-10-11: write the check. No women: "boys"; only women: "girls"; a mixed party: "my
+  good fellows" (7166f5d).
 
 Decided and left as the original had it (each one goes in the release notes, per
 ROADMAP.md "Game changes up front"):
