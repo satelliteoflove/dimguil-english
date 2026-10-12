@@ -123,9 +123,11 @@ Gaiden IV's psionic spells cause 発狂), but Dimguil renamed the status 混乱 
 (Emonoya's Dimguil spell page notes the change), and our battle text says "is confused".
 "Sane" is most likely a mangled leftover of the older "Insane".
 
-**15. "Retrain?"** (SISETU 167, 再訓練). Yes ages the character a year and gives a level; it
-isn't a re-roll.
-Recommendation: "Train for another year?", if it fits the box.
+**15. "Retrain?"** (SISETU 167, 再訓練). Corrected 2026-10-12 (d47df20, [emu]): it's asked
+after Yes to "Use this character?" when the creation roll was under 10 bonus points (most
+rolls). Yes trains three years: +3 levels, +3 years of age (a level-1 Fighter aged 15
+came out level 4, aged 18). No registers the character as rolled. It isn't a re-roll.
+Recommendation: "Train for three years first?", if it fits the box.
 
 **16. "Magic Item" / "EVENT Item"** (SISETU 603/604, the disc's own English, on the camp's
 item details screen).
