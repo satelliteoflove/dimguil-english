@@ -62,6 +62,11 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 
 ### Deliberate choices
 
+- **"Hits 1 times!" stays (FIGHTMSG 118, {ff11}0回 Hit!; Chris, 2026-10-12).** One string
+  serves every count, so a single hit reads "Hits 1 times!". The Japanese gets around it
+  because 回 works for any number. "Hit ×{n}!" was considered and dropped: the plural-less
+  "HITS 1 TIMES" is a Wizardry tradition (from memory of the early games, not checked
+  against a disc). Found by the harness's text capture (harness-plan.md, T1).
 - **"EVENT Item" is now "Event Item" (SISETU 604; Chris, 2026-10-12, decisions.md item
   16).** The disc's own English on the item details screen (Boltac's and camp Identify on
   an identified item), shown for category 6-7 items other than instruments, potions and
