@@ -6,6 +6,11 @@ maze, fighting, answering prompts and solving the puzzles. The LLM writes the pr
 handles the cases it can't, rather than pressing buttons. Several copies can run at once
 with different parties.
 
+**The release gate (Chris, 2026-10-12).** These runs are what let the repo and patch go
+public: they have to show, to Chris's satisfaction, that the patched game behaves properly
+and can be finished without major issues or breakage. They won't catch everything, and
+Chris still plays it through himself, but they mean the release doesn't wait on that.
+
 What it's for, in order:
 1. **Translation QA.** Every text box the game shows in real play, captured and checked
    for overflow and anything left untranslated, including branches one play-through
@@ -115,10 +120,8 @@ per chapter.
   screen.
 - **Recovery:** a save state at every goal, so a wipe or a stuck run reloads and tries
   again.
-- **Text capture:** every text box with its string ID and a screenshot. Data checks
-  catch width, line count, missing glyphs and anything left untranslated. Image checks
-  flag text pixels outside the box border and a triangle that overlaps text or sits far
-  from the last line. Flagged shots go to the LLM before anyone else.
+- **Text capture:** every text box with its string ID and a screenshot, checked as in
+  "What the checks look for" below. Flagged shots go to the LLM before anyone else.
 
 **The LLM:**
 - **Building the harness.** This is most of the cost, mainly getting the menu macros and
@@ -129,6 +132,41 @@ per chapter.
   recent log), and a session reads it and fixes the harness or the goal. If the harness
   is good, a full run should need tens of these, not thousands. A cheaper model can sort
   the reports; Opus does the fixes.
+
+## What the checks look for
+
+The misplaced triangle at the Training Maze exit is one example of a class, not the
+target. The checks cover:
+
+**On screen (from the screenshots):**
+- Text cut short. A glyph pool that runs out just stops drawing, with no error (the
+  event box's 72-sprite limit, Boltac's captions, the status help line). So: are all the
+  glyphs in the string actually on screen?
+- Text past a box's border, off the screen, or over another box, label or the picture.
+- Lines off center where the box centers them, and wrong page breaks.
+- Wrong glyphs: garbage tiles, leftover Japanese, voicing-mark damage, the 〓 fallback.
+- The page triangle and the menu cursors in the wrong place or on top of text.
+- Names, item names and numbers that don't fit their fields, in menus as well as
+  messages.
+- Corrupted text: a run of blanks or garbage partway through, as from the text buffer
+  overflow at 0x8008b640.
+
+The strongest check is matching the text itself. We have the font and its width table,
+so the expected line can be rendered exactly as the game should draw it and matched
+against the screenshot. That catches cut-off, garbled, shifted and overlapping text in one
+test, with no OCR guesswork. Where a screen can't be matched that way, simpler checks
+apply (pixels outside the box, cursor position), and anything odd goes to the LLM to look
+at.
+
+**In play (from RAM):**
+- Hangs and soft locks: no progress for a set number of frames.
+- Crashes, and the game going to a state the route doesn't expect.
+- Events that don't fire, and flags or items that don't change when they should.
+- The reopened content and bug fixes behaving as written (Zaril's healing, the
+  re-introductions, Cresson's greeting, the pit rescuer, and the rest).
+
+**Done means:** several runs with different parties reach the ending, with no hang or
+crash left unexplained, and every captured screen either passes or has been looked at.
 
 ## The pilot: what it takes to find out
 
@@ -156,7 +194,7 @@ test got about that far by hand, so its states and notes are a head start.
 | T2 | Each macro 100 times from varied states: create a character, form a party, walk to a square, open a door, a battle, cast in camp, inn, temple | success rate; frames per action | at least 99% per macro |
 | T3 | Chapter 1 from a cold boot, one instance, no help | wall time; frames; reports; LLM time per report | finishes with 5 or fewer reports |
 | T4 | T3 with 8 instances at once, different parties and classes | total throughput; how the runs differ; reports per run | all 8 finish; no new kinds of failure |
-| T5 | Text capture across T3 and T4 | strings seen; any overflow or untranslated glyph found | every captured box checked |
+| T5 | Text capture and screen checks across T3 and T4, including the rendered-text match | strings seen; issues found; false alarms | every captured box checked; few enough false alarms to review by hand |
 
 **What the pilot tells us:**
 - **Frames per chapter**, so the length of a full run can be estimated.
