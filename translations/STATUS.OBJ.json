@@ -2592,7 +2592,7 @@
                 {
                     "length": 20,
                     "source": "NA",
-                    "translation": "Flame: 2-8 damage to one enemy",
+                    "translation": "Flame: 1-8 damage to one enemy",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -2606,7 +2606,7 @@
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "Sparks: 2-8 damage to an enemy group",
+                    "translation": "Sparks: 1-8 damage to an enemy group",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -2627,7 +2627,7 @@
                 {
                     "length": 33,
                     "source": "NA",
-                    "translation": "Fear: startles a group; their AC +4",
+                    "translation": "Fear: enemy group AC +4, and held fast",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -2641,21 +2641,21 @@
                 {
                     "length": 33,
                     "source": "NA",
-                    "translation": "Barrier: enemy spells fail more; stacks",
+                    "translation": "Barrier: a wall that stops enemy spells",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 22,
                     "source": "NA",
-                    "translation": "Heaven: 24-48 damage to one enemy",
+                    "translation": "Heaven: 24-58 damage to one enemy",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "Inferno: 6-36 damage to a group",
+                    "translation": "Inferno: 6-58 damage to a group",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -2683,28 +2683,28 @@
                 {
                     "length": 39,
                     "source": "NA",
-                    "translation": "Ward: enemy spells may be sealed; stacks",
+                    "translation": "Ward: walls enemies off from casting",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "Dispel: 255-2550 damage to one undead",
+                    "translation": "Dispel: 1000 damage to one undead",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 26,
                     "source": "NA",
-                    "translation": "Ice Storm: 10-100 damage to a group",
+                    "translation": "Ice Storm: 44-98 damage to a group",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 22,
                     "source": "NA",
-                    "translation": "Smite: 40-80 damage to one enemy",
+                    "translation": "Smite: 64-80 damage to one enemy",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -2732,14 +2732,14 @@
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "Bless: heals one ally 2-8 HP",
+                    "translation": "Bless: heals one ally 1-8 HP",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "Pain: 2-8 damage to one enemy",
+                    "translation": "Pain: 1-8 damage to one enemy",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -2858,7 +2858,7 @@
                 {
                     "length": 33,
                     "source": "NA",
-                    "translation": "Revive: may raise dead or ash; full HP",
+                    "translation": "Revive: raises the dead or ash, full HP",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -2872,7 +2872,7 @@
                 {
                     "length": 30,
                     "source": "NA",
-                    "translation": "Great Prayer: party 17-68; camp 10-50",
+                    "translation": "Great Prayer: party heals 30-60 HP",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -3005,7 +3005,7 @@
                 {
                     "length": 23,
                     "source": "NA",
-                    "translation": "Blast: 48-144 damage to one enemy",
+                    "translation": "Blast: 80-130 damage to one enemy",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -3026,14 +3026,14 @@
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "Mind Blast: 2-4 mental damage to one",
+                    "translation": "Mind Blast: 1-10 mental damage to one",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "Secret Art: heals one ally 3-6 HP",
+                    "translation": "Secret Art: heals one ally 2-6 HP",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -3047,7 +3047,7 @@
                 {
                     "length": 32,
                     "source": "NA",
-                    "translation": "Spirit Blast: 2-4 mental damage, group",
+                    "translation": "Spirit Blast: 2-10 mental damage, group",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -3089,7 +3089,7 @@
                 {
                     "length": 32,
                     "source": "NA",
-                    "translation": "Psi Blast: 8-16 mental damage, group",
+                    "translation": "Psi Blast: 2-16 mental damage, group",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -3124,7 +3124,7 @@
                 {
                     "length": 22,
                     "source": "NA",
-                    "translation": "Frost: 14-70 damage to one enemy",
+                    "translation": "Frost: 36-64 damage to one enemy",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -3152,14 +3152,14 @@
                 {
                     "length": 32,
                     "source": "NA",
-                    "translation": "Alch Wave: 4-48 to all, plus ailments",
+                    "translation": "Alch Wave: 12-48 to all, plus ailments",
                     "compress": true,
                     "addStringTerminator": true
                 },
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Psi Wave: 8-72 mental damage to all",
+                    "translation": "Psi Wave: 9-72 mental damage to all",
                     "compress": true,
                     "addStringTerminator": true
                 },

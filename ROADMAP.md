@@ -206,6 +206,9 @@ patch later. Nothing is decided about whether it happens. The list so far:
 - **Level drain's save** (`bugs.md` 3.3). The comparison is turned round so a better save
   resists drain, as it does against breath and traps. That takes drain from about 9% to
   about 91% of draining hits on a level-5 character.
+- **NPC Kadorto** (`docs/re/C-talk.md` §5). Five NPCs warn that their Kadorto may fail,
+  but it never does. A hardcore version would give it a real chance of failing, with odds
+  to be chosen (camp Kadorto's VIT roll is the obvious model).
 
 ## Open questions
 

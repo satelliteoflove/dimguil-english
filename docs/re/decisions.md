@@ -110,6 +110,8 @@ truer."
 might fail, but it never does.
 Recommendation: keep them as written. They're in character, and nothing in the game
 contradicts them on screen.
+**Decided (Chris, 2026-10-11): keep them as written and document the difference.** A
+hardcore-mode candidate (ROADMAP.md).
 
 ## Untranslated or misleading labels
 

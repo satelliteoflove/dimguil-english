@@ -389,6 +389,12 @@ ROADMAP.md "Game changes up front"):
 - **Level drain's save** (bugs.md 3.3) stays backwards: the better a character's save,
   the more often they're drained. Fixing it would make drain nearly certain. Chris,
   2026-10-11: keep it; on the hardcore-mode list.
+- **The NPC Kadorto warnings** (2:130, 1:158, 3:139, 4:67, 4:74) stay as written: Rosea,
+  Alstron, Cephala, Cleo and Bergamot warn that their Kadorto may fail, but an NPC's
+  Kadorto always works, free, with no VIT loss or aging, on ashes too (C-talk.md §5,
+  [code]). The Japanese warns the same way, and they're characters speaking, not the game
+  stating a rule. Chris, 2026-10-11: keep them and document the difference; a
+  hardcore-mode candidate. The site's spell page already notes it.
 - **The NPC identify service** (bugs.md 2.1) stays unused. Rosea, Cephala and Cleo have
   the full exchange and every party log has its line, but no code offers it. Chris,
   2026-10-11: it looks as if the developers meant to have it, ran out of time and cut it
