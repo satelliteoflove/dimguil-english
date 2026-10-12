@@ -373,6 +373,10 @@ ROADMAP.md "Game changes up front"):
 - **The wipe's item loss** (bugs.md 3.1) stays: one character, in practice whoever stands
   in the party's first position, has every item rolled six times, and the others keep
   theirs. Chris, 2026-10-11: keep it, document it on the site, maybe revisit later.
+- **Weapon effects ignore level** (bugs.md 3.2) stays: a weapon's poison, sleep, stone and
+  other effects land at their flat chance, whatever the levels. Chris, 2026-10-11: keep
+  it; a candidate, with the wipe's item loss, for a possible later "hardcore mode"
+  (ROADMAP.md).
 - **The NPC identify service** (bugs.md 2.1) stays unused. Rosea, Cephala and Cleo have
   the full exchange and every party log has its line, but no code offers it. Chris,
   2026-10-11: it looks as if the developers meant to have it, ran out of time and cut it
@@ -386,7 +390,7 @@ ROADMAP.md "Game changes up front"):
 
 Approved and in progress (2026-10-11): Guy's and Fontana's re-introductions, Cresson's
 boys/girls/fellows check, and Fontana's block 8 after the split. Still open for Chris
-(`docs/re/decisions.md`): the weapon-effect level bonus, level drain's save, and items
+(`docs/re/decisions.md`): level drain's save, and items
 11-16 (descriptions and labels).
 
 ## To revisit

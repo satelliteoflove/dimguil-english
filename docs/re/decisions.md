@@ -64,11 +64,13 @@ Recommendation: keep the original behavior and document it. Players of the Japan
 always had it, and a translation patch that makes wipes harsher would surprise anyone
 comparing the two.
 **Decided (Chris, 2026-10-11): keep the original and document it on the site; may revisit
-later.** In practice the one character rolled is whoever stands in the party's first
+later.** Also a hardcore-mode candidate (ROADMAP.md). In practice the one character rolled is whoever stands in the party's first
 position (`bugs.md` 3.1).
 
 **9. Weapon effects ignore level** (3.2). A level bonus is computed and thrown away.
 Recommendation: keep the original, for the same reason.
+**Decided (Chris, 2026-10-11): keep the flat odds, and document it.** A candidate for a
+possible later "hardcore mode" (ROADMAP.md), along with item 8.
 
 **10. Level drain is backwards** (3.3, settled in 1ce9d0f). +0x81 is a saving throw, which
 gets better with level, Luck and the Thief's bonus, but drain lands *more* often the better

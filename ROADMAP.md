@@ -193,6 +193,17 @@ Once 1.0 is out and any early bug reports are dealt with, the repo mostly goes q
 - The disc token can be left to expire. The private disc repo only matters if another
   release is ever needed, and that would need a new token too.
 
+## Maybe later: a "hardcore mode"
+
+Chris, 2026-10-11: original bugs that make the game easier are kept in the main patch, to
+match the Japanese release, but each one is a candidate for an optional "hardcore mode"
+patch later. Nothing is decided about whether it happens. The list so far:
+- **The wipe's item loss** (`docs/re/bugs.md` 3.1). Every member gets their one roll per
+  item, as the loop was written, instead of the first position getting six and the rest
+  none.
+- **Weapon effects and level** (`bugs.md` 3.2). The level adjustment the game computes
+  and throws away is applied: about 1 point per 4 levels, +30 at most, -20 at least.
+
 ## Open questions
 
 - Should the version show in-game (title screen) so bug reports say which build they're
