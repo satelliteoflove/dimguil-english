@@ -255,6 +255,69 @@ solid self-improving system." So every fix has to stick:
 The 8-party run (T4) waits until this is in place and T3 passes through it from a cold
 boot.
 
+`scripts/harness/regress.py` runs it; each round's harness code is a sha1 over
+`scripts/harness/*.py`, and the commit must match the hash of a passing round. The cases
+and their states (16 MB each) live in `rips/`, which is gitignored, so the suite isn't
+reproducible from the repo yet.
+
+## T3 and T4 results (2026-10-12)
+
+Full notes in `rips/harness/t3/README.md`; code committed in 7026414 (`chapter1.py`,
+`run_ch1.py`, `regress.py` and fixes across the macros). Same disc copy as T2.
+
+**The suite.** Ten rounds. One change broke 50 of 124 cases (a talk-menu rewrite) and was
+caught before it went in.
+
+| Round | Passed | Note |
+|---|---|---|
+| 1 | 105/121 | baseline after the first T3 fixes |
+| 2 | 74/124 | talk rewrite broke the T2 talk, door and chain trials |
+| 4 | 124/124 | first full pass |
+| 8 | 175/175 | roamers no longer learned as walls |
+| 10 | 185/185 | committed (code 28d9dd7fed46) |
+
+**T3.** From a cold boot, one run finished chapter 1 with no stuck points: party, 13
+training trips to level 7, the four pillars, the sealed door. 290,108 frames, 23 minutes
+(with 8 other emulators running). The run before it took all four pillars on the first try
+and stuck at the door; that moment became a case and round 5 fixed it.
+
+**T4.** Eight parties at once, each with different classes, names and seeds:
+
+| Party | Result | Retries | Frames | Wall |
+|---|---|---|---|---|
+| v0 | done | 0 | 234,134 | 20 min |
+| v1 | done | 0 | 263,833 | 22 min |
+| v2 | done | 0 | 298,960 | 24 min |
+| v3 | done | 1 (pillar hang) | 235,773 | 21 min |
+| v4 | done on rerun | 0 on rerun (door ×6 first, fixed in round 9) | 253,894 | 20 min |
+| v5 | done | 1 (roamer in the way) | 343,849 | 28 min |
+| v6 | done | 1 (roamer in the way) | 356,580 | 29 min |
+| v7 | done | 1 (START at a meeting) | 357,212 | 29 min |
+
+So chapter 1 takes 230,000 to 360,000 frames, and 8 runs finish in about half an hour.
+Earlier T4 attempts also fixed name entry, rerolling at the class screen, alignments that
+can't be made (no Good Thief), the camp reopening on a late press, and roamers standing
+in the way.
+
+**Text seen:** 386 distinct strings (STATUS 140, SISETU 124, NPC_MES1 66, FIGHTMSG 41,
+EVENTMES 15), 227 shots.
+
+**Game issues found:**
+- **Pillar soft lock.** Pressing START on the exact frame the party arrives in front of a
+  pillar leaves "The pillar begins to shake... attacks." on screen with input locked
+  (0x800796ab stays 1) and the event script dropped. The picture and timers keep going,
+  but no fight starts in 60,000 frames. One frame later and the fight starts normally.
+  Deterministic repro: `rips/harness/t3/freeze/snake6_arrive.state`. Not yet separated
+  between the game, our patch and the emulator; next is a code read from that state.
+  Chris has seen the picture stop at a pillar in his own play; that may be the same
+  thing or a different one.
+- **"You've met someone!" with no meeting,** twice at (2,12), then no button works. May
+  share a cause with the soft lock.
+
+**What blocks chapters 2-5:** goal lists beyond the door; battles on the Japanese disc
+don't end cleanly in the harness, which limits comparisons; lock picking still untested
+(chapter 1 has no ordinary locked door).
+
 ## The pilot: what it takes to find out
 
 The pilot answers three questions: how reliable the harness is, how fast it runs, and how
