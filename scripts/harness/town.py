@@ -75,15 +75,43 @@ def facility_ready(g):
     return g.u8(FAC_SUB) == 5 and g.u8(TOWN_MSG) == 0
 
 
+BAR_HOLD = 30               # frames the town bar must hold after backing out to it
+
+
 def in_town_bar(g):
     return g.overlay() == 'JOUKA' and g.u8(TOWN_STATE) == TOWN_BAR
 
 
 def to_town_bar(g, limit=1200):
-    """Back out (cross) until the town's icon bar has the input."""
-    if in_town_bar(g):
-        return 0
-    return ui.cancel_until(g, lambda: in_town_bar(g), limit, 'back to the town bar')
+    """Back out (cross) until the town's icon bar has the input. One press at a time,
+    waiting for it to land: cross at the bar itself means the Edge of Town, and a press
+    tapped just before the bar came up landed there (f1v1, f1v3b 2026-10-13: after Pool
+    Gold the party went to the Edge of Town and the temple was never reached; "town
+    icon" and "no route" stucks). After a press the bar has to hold for BAR_HOLD frames;
+    already at the bar, it returns at once (the hold changed creation's timing and so its
+    rolls: party:t4v7, round 24)."""
+    f0 = g.frame
+    pressed = False
+    while True:
+        if in_town_bar(g):
+            if not pressed:
+                return 0
+            f1 = g.frame
+            while g.frame - f1 < BAR_HOLD and in_town_bar(g):
+                g.step()
+            if in_town_bar(g):
+                return g.frame - f0
+            continue
+        if g.frame - f0 > limit:
+            raise Stuck('back to the town bar', where=g.where(), state=g.u8(TOWN_STATE))
+        sig = lambda: (g.overlay(), g.u8(TOWN_STATE), g.u8(FAC_SUB), g.u8(TOWN_MSG))
+        s0 = sig()
+        g.tap('cross')
+        pressed = True
+        f1 = g.frame
+        while g.frame - f1 < 90 and sig() == s0 and not in_town_bar(g):
+            g.step()
+        g.step(6)
 
 
 def enter(g, place, limit=900):
@@ -362,6 +390,26 @@ def form_party(g, members, limit=900):
 # --- the Edge of Town ---
 
 EDGE_CURSOR = 0x80079c5a    # the Edge of Town's menu (0 Begin Adventure)
+EDGE_ICON = 0x80079c58      # its icon row: 0 Begin Adventure, 1 Go to the Training Maze,
+                            # 2 Resume, 3 Prepare, 4 Suspend Game, 5 Book of Movement,
+                            # 6 Change Settings, 7 Back to Town (dev/edge_captions.png)
+
+
+def remove_member(g, pos, limit=600):
+    """Tavern, Remove Member (icon 1, "Who will leave the party?", the party grid MX/MY):
+    take party position `pos` out; they wait in the tavern. Each press removes the member
+    under the cursor and the screen stays up for the next, so it's left with cross
+    (traced 2026-10-13, dev/remove_probe.py)."""
+    if g.u8(TOWN_STATE) != 10 or g.overlay() != 'JOUKA':
+        enter(g, 'tavern')
+    ui.wait_until(g, lambda: facility_ready(g), limit, 'tavern menu')
+    ui.move_cursor(g, FAC_CURSOR, 1, 'right', 'left', what='Remove Member')
+    ui.confirm_until(g, lambda: g.u8(FAC_SUB) != 5, limit, 'open Remove Member')
+    g.step(20)
+    _pick_party_member(g, pos, 'leaver')
+    ui.press_until(g, 'circle', lambda: town_slots(g)[pos] is None, limit, 'remove member')
+    ui.cancel_until(g, lambda: facility_ready(g), limit, 'back to the tavern menu')
+    return town_party(g)
 
 
 def begin_adventure(g, limit=1800):
@@ -373,8 +421,13 @@ def begin_adventure(g, limit=1800):
         enter(g, 'edge')
     ui.wait_until(g, lambda: g.u8(FAC_SUB) == 5 or g.u8(EDGE_CURSOR) == 0, 300, 'edge menu')
     ui.move_cursor(g, EDGE_CURSOR, 0, 'down', 'up', what='Begin Adventure')
+    # the icon row's own cursor: left on Go to the Training Maze (icon 1), the confirm
+    # took the party to area 9 (f1v1, f1v6 2026-10-13: "no route" home from there)
+    ui.move_cursor(g, EDGE_ICON, 0, 'right', 'left', what='Begin Adventure icon')
     ui.confirm_until(g, lambda: g.overlay() == 'MAZE', limit, 'Begin Adventure')
     ui.wait_until(g, lambda: camp.in_camp(g) and g.u8(camp.CAMP_STATE) == 5, limit, 'arrive in camp')
+    if g.u8(0x80079668) != 0:
+        raise Stuck('Begin Adventure went elsewhere', area=g.u8(0x80079668))
     camp.close_camp(g)
     return g.frame - f0
 
@@ -517,6 +570,7 @@ def pool_gold(g, slot, place='tavern', limit=600):
 #   157 lost. (Traced 2026-10-12.)
 
 TEMPLE_GRID_X, TEMPLE_GRID_Y = 0x80079c59, 0x80079c5c
+PAY_X, PAY_Y = 0x80079c5d, 0x80079c60      # "Who will pay?" (traced 2026-10-13)
 
 
 def temple_patients(g):
@@ -547,12 +601,19 @@ def temple_heal(g, patient, payer_slot=0, limit=600):
     said = lambda i: any(m['file'] == 'SISETU.OBJ' and m['idx'] == i for m in g.cap.messages[n:])
     ui.confirm_until(g, lambda: said(147) and g.u8(TOWN_MSG) == 0 and g.u8(FAC_PANEL) == 1,
                      limit, 'Heal Character')
-    ui.move_cursor(g, TEMPLE_GRID_Y, k // 3, 'down', 'up', what='patient row')
-    ui.move_cursor(g, TEMPLE_GRID_X, k % 3, 'right', 'left', what='patient col')
+    # four patients to a row (f1v1 2026-10-13: the fourth, at k // 3 = 1, was "patient
+    # row" stuck; the grid's x runs 0-3 and down doesn't move with four)
+    ui.move_cursor(g, TEMPLE_GRID_Y, k // 4, 'down', 'up', what='patient row')
+    ui.move_cursor(g, TEMPLE_GRID_X, k % 4, 'right', 'left', what='patient col')
     n = len(g.cap.messages)
     ui.confirm_until(g, lambda: said(148) and g.u8(TOWN_MSG) == 0 and g.u8(FAC_PANEL) == 1,
                      limit, 'pick patient')
-    _pick_party_member(g, payer_slot, 'payer')
+    # "Who will pay?" has its own cursor, PAY_X/PAY_Y; MX/MY don't move with it. Only
+    # slot 0 worked before (the cursor starts there): f1v3d chapter 3, 2026-10-13, with
+    # slot 0 empty after a death, sat on "Empty" for 16 recover trips holding 56,824 gold
+    # while the Tablet's holder waited at the temple ('temple stuck', 'pay').
+    ui.move_cursor(g, PAY_Y, payer_slot // 3, 'down', 'up', what='payer row')
+    ui.move_cursor(g, PAY_X, payer_slot % 3, 'right', 'left', what='payer col')
     n = len(g.cap.messages)
     OUT = {153: 'healed', 155: 'alive', 156: 'ashes', 157: 'lost', 57: 'poor'}
     ui.confirm_until(g, lambda: any(said(i) for i in OUT), limit, 'pay')

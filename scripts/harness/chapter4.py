@@ -20,7 +20,7 @@ from harness.game import Stuck
 
 NPC_FLAGS = 0x80079754
 STORY = 0x80079b44
-TRAIN_LEVEL = 11  # one lower 2026-10-13: r3v0 and r3v1 were still short of 11 after 24 trips of ~22k frames on B3 and B2
+TRAIN_LEVEL = 12  # 2026-10-13: the Guardians (Arch Mage, Madalto for up to 64 on everyone) wiped f1v0 at 11 and 12 with every blow on the front row; aimed at the mage first (battle.aim) the same party won at 11-12 (dev/qtest_guard_f1v0c.out)
 TRAIN_AREAS = (6, 7)
 
 

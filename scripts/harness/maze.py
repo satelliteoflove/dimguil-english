@@ -218,6 +218,7 @@ def settle(g, limit=600, on_box=None):
 
 def face(g, d):
     """Turn to face d. Returns True, or False if something interrupted the turn."""
+    nudged = False
     while g.u8(FACE) != d:
         if not calm(g) and not settle(g):
             return False
@@ -226,6 +227,22 @@ def face(g, d):
         try:
             ui.press_until(g, btn, lambda: g.u8(FACE) != cur or interrupted(g), 120, 'turn')
         except Stuck:
+            if calm(g) and not nudged:
+                # after the stream parts on B2 (7, 11) the screen stays black and turns do
+                # nothing until the party steps forward (f1v0 chapter 4, 2026-10-13); wait,
+                # then step once and let the caller plan again from wherever that leads
+                nudged = True
+                g.step(TURN_WAIT)
+                if g.u8(FACE) == cur:
+                    a = (g.u8(AREA),) + g.pos()
+                    try:
+                        ui.press_until(g, 'up', lambda: (g.u8(AREA),) + g.pos() != a
+                                       or g.u8(MOVING) == 1 or interrupted(g), 60, 'nudge')
+                    except Stuck:
+                        pass
+                    ui.wait_until(g, lambda: g.u8(MOVING) == 0 or interrupted(g), 600, 'nudge end')
+                    return False
+                continue
             if calm(g):
                 # walking, nothing pending, and a turn does nothing: the game has stopped
                 # taking input (T4: "You've met someone!" with no meeting after it)
@@ -237,6 +254,7 @@ def face(g, d):
     return True
 
 
+TURN_WAIT = 300     # frames left alone before a turn that won't take is nudged
 MET_WAIT = 60
 MET_DOOR_WAIT = 900
 

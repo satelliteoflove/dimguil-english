@@ -101,6 +101,7 @@ class Policy:
 
 SCENE = 0x80079878         # a maze scene in progress (5 a meeting's approach, 9 the jewel lift)
 SCENE_COUNT = 0x8008a000   # its countdown
+QUIET_WAIT = 900           # close_box's wait without presses before "not responding"
 BOX_MAX = 20000            # frames one close_box may take in all
 SCENE_MAX = 3000           # the longest wait on one (the B3 lift ride up is ~1,050 frames)
 
@@ -232,6 +233,19 @@ def close_box(g, limit=600, react=20):
             # presses do nothing, yet the party could walk: a leftover box
             maze.mark_stale_box(g)
             return
+        if dead == 12:
+            # before calling it hung, leave it alone a while: crossing the parted stream
+            # on B2 (7, 11) blacks the screen with the box flags up and no scene byte, and
+            # it comes back by itself about 200 frames later (f1v0 chapter 4, 2026-10-13:
+            # "game not responding" six times)
+            f1 = g.frame
+            while g.frame - f1 < QUIET_WAIT and not closed() and sig() == s0:
+                g.step(4)
+            if closed() or sig() != s0:
+                dead = 0
+                f0 = g.frame
+                continue
+            dead += 1
         if dead >= 12:
             # nothing on screen reacts to presses: the game (or the emulator) has hung.
             # Seen once (t3c retry 2): "The pillar begins to shake..." with the box driver

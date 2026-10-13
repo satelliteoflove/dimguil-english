@@ -340,6 +340,7 @@ def town_upkeep(g, log):
             except Stuck as s:
                 log.append((g.frame, 'rejoin stuck', ri, s.what))
             town.to_town_bar(g)
+    tablet_back(g, log)
     # recruit only for a member who can't come back (refused, "Their alignments won't
     # mix."): one who is merely dead stays out of the party so they can rejoin once the
     # temple can raise them (r2v0: the Tablet's holder was replaced and the Shrine shut)
@@ -349,9 +350,51 @@ def town_upkeep(g, log):
     for pos, ri in enumerate(town.town_slots(g)):
         if ri is None or g.char(ri)['status'] != 0:
             continue
+        c = g.char(ri)
+        if c['max_hp'] and c['hp'] < c['max_hp'] * COT_BELOW:
+            # the Stables restore spell points but no HP: a member left at 1 HP with no
+            # healer's points sent every trip straight home (f1v1c chapter 2, 2026-10-13:
+            # 30 recover trips of 2,800 frames). A Cot heals, week by week, while the
+            # gold lasts (gathered from the party)
+            try:
+                r = town.inn_stay(g, pos, 'Cot', weeks=None, gather=True)
+                log.append((g.frame, 'cot', pos, r['weeks'], r['hp']))
+                town.to_town_bar(g)
+                continue
+            except Stuck as s:
+                log.append((g.frame, 'cot stuck', pos, s.what))
+                town.to_town_bar(g)
         r = town.inn_stay(g, pos, 'Stables', weeks=1)
         log.append((g.frame, 'stables', pos, r['weeks']))
         town.to_town_bar(g)
+    town.to_town_bar(g)
+
+
+COT_BELOW = 0.6               # a member under this share of max HP rests in a Cot
+
+
+def tablet_back(g, log):
+    """The Tablet's holder raised and waiting in the tavern while the party is full of
+    recruits: take out the lowest-level member and put the holder back (r3v0 chapter 3,
+    2026-10-13: Mercury came back from the temple with the Tablet, "rejoin stuck", and
+    30 recover trips followed)."""
+    if TABLET in party_items(g):
+        return
+    holder = next((i for i in town.tavern_candidates(g)
+                   if any((it & 0xfff) == TABLET for it in g.char(i)['items'])), None)
+    if holder is None:
+        return
+    try:
+        slots = town.town_slots(g)
+        if len(town.town_party(g)) >= 6:
+            pos = min((p for p, ri in enumerate(slots) if ri is not None),
+                      key=lambda p: g.char(slots[p])['level'])
+            town.remove_member(g, pos)
+            log.append((g.frame, 'removed', slots[pos], g.char(slots[pos])['name']))
+        town.form_party(g, [holder])
+        log.append((g.frame, 'tablet back', holder, g.char(holder)['name']))
+    except Stuck as s:
+        log.append((g.frame, 'tablet back stuck', holder, s.what))
     town.to_town_bar(g)
 
 

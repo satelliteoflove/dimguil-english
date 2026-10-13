@@ -15,8 +15,11 @@ Cases live in rips/harness/regress/cases.jsonl, one JSON object per line:
   id        unique name
   kind      'trial' (a T2 macro trial: macro, k), 'stuck' (a saved stuck state),
             'screen' (a T5 known-bad screen, scripts/harness/t5bad.py: case; with expect
-            'proof' it passes when the checks catch the bug put back), or 'boot' (made
-            each round, not saved: see below)
+            'proof' it passes when the checks catch the bug put back), 'pick' (a battle
+            state at its command phase: one round of commands, every enemy group pick
+            aimed and confirmed in RAM; want_id, a monster id some member must aim at;
+            min_aims, default 1: a lone group's Fight shows no pick),
+            or 'boot' (made each round, not saved: see below)
   state     for 'stuck': the state to load (rips/harness/<state>.state); none for the
             party goal, which starts from power-on (creation can't resume midway)
   variant, seed   the chapter-1 run's party variant and seed
@@ -120,6 +123,20 @@ def disc_build():
         return None
 
 
+def disc_md5():
+    """md5 of the bin under test (rips/harness/disc/dimguil-en.bin): BUILD.txt is a label
+    and was wrong once (2026-10-13: rounds 21 and 22 ran on the fix2 build, labelled
+    bf1eac6)."""
+    h = hashlib.md5()
+    try:
+        with open(os.path.join(OUTR, 'disc', 'dimguil-en.bin'), 'rb') as f:
+            for b in iter(lambda: f.read(1 << 22), b''):
+                h.update(b)
+    except OSError:
+        return None
+    return h.hexdigest()
+
+
 def boot_cases(n):
     return [dict(id='boot:s%d:v%d' % sv, kind='boot', seed=sv[0], variant=sv[1], expect='proof')
             for sv in (BOOTS * (n // len(BOOTS) + 1))[:n]]
@@ -138,6 +155,26 @@ def run_boot(case):
     done = [x['goal'] for x in run.goals]
     return dict(result='tablet_door' in done or str(done[-1:]), frames=g.frame - f0,
                 goals=len(done), stuck=len(run.stuck))
+
+
+def run_pick(case):
+    """One command phase from a battle state: every group pick aimed (battle.aim), none
+    failed, and if the case names want_id, some member aimed at that monster."""
+    from harness.game import Game
+    from harness import battle, ui
+    g = Game(capture=True)
+    g.load(case['state'])
+    f0 = g.frame
+    ui.wait_until(g, lambda: battle.in_battle(g) and g.u8(battle.PHASE) == battle.CMD_PHASE,
+                  1200, 'command phase')
+    log = []
+    battle.command_phase(g, battle.default_policy, log)
+    aims = [x for x in log if x[1] == 'aim']
+    bad = [x for x in log if x[1] == 'aim failed']
+    ok = len(aims) >= case.get('min_aims', 1) and not bad and (not case.get('want_id')
+                                     or any(x[3] == case['want_id'] for x in aims))
+    return dict(result=True if ok else 'aims %s failed %s' % (aims, bad), frames=g.frame - f0,
+                aims=[list(x) for x in aims])
 
 
 def trial_cases(n):
@@ -213,7 +250,8 @@ def run_case(case):
             r = t5bad.ratchet(case['case'])
         else:
             r = run_stuck(case) if case['kind'] == 'stuck' else \
-                run_boot(case) if case['kind'] == 'boot' else run_trial(case)
+                run_boot(case) if case['kind'] == 'boot' else \
+                run_pick(case) if case['kind'] == 'pick' else run_trial(case)
         rec.update(r)
         ok = r['result'] is True if case.get('expect') == 'proof' else True
         if case.get('expect') == 'frozen':
@@ -277,7 +315,7 @@ def record_aborted(reason):
     recs = ROUND.get('recs', [])
     failed = sorted(r['id'] for r in recs if not r['ok'])
     rnd = dict(date=ROUND.get('stamp'), code=ROUND.get('hash0'), code_end=code_hash(),
-               valid=False, disc=ROUND.get('disc'), aborted=reason, note=ROUND.get('note', ''),
+               valid=False, disc=ROUND.get('disc'), disc_md5=ROUND.get('disc_md5'), aborted=reason, note=ROUND.get('note', ''),
                cases_planned=ROUND.get('planned'), cases=len(recs),
                passed=len(recs) - len(failed), failed=failed,
                frames=sum(r.get('frames', 0) for r in recs),
@@ -314,7 +352,7 @@ def main():
 def _main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--trials', type=int, default=10, help='T2 trials per macro')
-    ap.add_argument('--only', choices=['stuck', 'trial', 'screen', 'boot'])
+    ap.add_argument('--only', choices=['stuck', 'trial', 'screen', 'boot', 'pick'])
     ap.add_argument('--boots', type=int, default=len(BOOTS), help='cold-boot chapter 1 cases')
     ap.add_argument('--procs', type=int, default=MAX_PROCS)
     ap.add_argument('--collect', action='store_true')
@@ -332,6 +370,8 @@ def _main():
         cases += [c for c in saved if c['kind'] == 'stuck']
     if a.only in (None, 'screen'):
         cases += [c for c in saved if c['kind'] == 'screen']
+    if a.only in (None, 'pick'):
+        cases += [c for c in saved if c['kind'] == 'pick']
     if a.only in (None, 'trial'):
         gen = trial_cases(a.trials)
         ids = {c['id'] for c in gen}
@@ -340,7 +380,8 @@ def _main():
     cases.sort(key=lambda c: ({'boot': 0, 'stuck': 1}.get(c['kind'], 2), c['id']))
     procs = min(a.procs, MAX_PROCS)
     hash0 = code_hash()
-    ROUND.update(hash0=hash0, note=a.note, planned=len(cases), t0=time.time(), disc=disc_build())
+    ROUND.update(hash0=hash0, note=a.note, planned=len(cases), t0=time.time(), disc=disc_build(),
+                 disc_md5=disc_md5())
     t0 = time.time()
     recs = []
     ROUND['recs'] = recs
@@ -362,12 +403,18 @@ def _main():
         print('!' * 78 + '\nWARNING: scripts/harness/*.py changed during this round (%s at the start, '
               '%s at the end).\nThe round ran on mixed code and is recorded as invalid: it '
               "can't count for a commit.\n" % (hash0, hash1) + '!' * 78, flush=True)
-    rnd = dict(date=stamp, code=hash0, code_end=hash1, valid=valid, disc=disc_build(),
+    md5_end = disc_md5()
+    if md5_end != ROUND.get('disc_md5'):
+        valid = False
+        print('WARNING: the disc changed during this round (%s -> %s): invalid'
+              % (ROUND.get('disc_md5'), md5_end), flush=True)
+    rnd = dict(date=stamp, code=hash0, code_end=hash1, valid=valid, disc=ROUND.get('disc'),
+               disc_md5=ROUND.get('disc_md5'), disc_md5_end=md5_end,
                note=a.note, cases=len(recs),
                passed=len(recs) - len(failed), failed=failed,
                by_kind={k: dict(n=sum(1 for r in recs if r['kind'] == k),
                                 ok=sum(1 for r in recs if r['kind'] == k and r['ok']))
-                        for k in ('boot', 'stuck', 'trial', 'screen')},
+                        for k in ('boot', 'stuck', 'trial', 'screen', 'pick')},
                frames=sum(r.get('frames', 0) for r in recs), wall=round(time.time() - t0),
                stuck_causes=latest_stuck_causes())
     ROUND['written'] = True

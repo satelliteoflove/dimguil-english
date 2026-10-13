@@ -250,7 +250,8 @@ class Run(chapter1.Run):
                 sqs = list(F['fights'])
                 self.rng.shuffle(sqs)
                 for sq in sqs:
-                    if self.fights() - n0 >= fights or chapter1.needs_town(g):
+                    if self.fights() - n0 >= fights or (chapter1.needs_town(g)
+                                                        and self.town_helps()):
                         break
                     if chapter1.hurt(g, 0.6) and chapter1.priests(g):
                         chapter1.heal_in_camp(g, self.log, on_int=self.on_int)
@@ -268,12 +269,28 @@ class Run(chapter1.Run):
         """(name, fn) training trips, yielded lazily while min level < level (a
         chapter's goals() can `yield from` this)."""
         k = 0
-        while k < most and min(self.levels()) < level:
+        while k < most and self.party_level() < level:
             k += 1
             yield '%s_%02d' % (prefix, k), (lambda: self.train(areas))
 
+    def town_helps(self):
+        """Whether a trip home can do anything: with under TOWN_GOLD in the party the
+        temple and the Cots turn everyone away, and a hurt party with no healer's points
+        went home and straight back out thirty times running (f1v1d chapter 2,
+        2026-10-13: 2,600-frame recover trips, no fights). Then it fights on for gold."""
+        g = self.g
+        gold = sum(g.char(i)['gold'] for i in (g.party() or town.town_party(g)))
+        return gold >= TOWN_GOLD
+
+    def party_level(self):
+        """The median member's level: a recruit taken on at level 5 or 6 held the minimum
+        down for dozens of trips (f1v6b chapter 4, 2026-10-13: [6, 11, 7, 12, 12, 12])."""
+        lv = sorted(self.levels())
+        return lv[len(lv) // 2]
+
 
 FIGHT_WAIT = 2400
+TOWN_GOLD = 100             # party gold under which a trip home can't buy anything
 
 
 class NoTablet(Exception):

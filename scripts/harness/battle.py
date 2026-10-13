@@ -19,7 +19,7 @@ RAM (BATTLE resident; docs/re/D-battle.md, and probe.py on the harness disc 2026
   0x8007e812 the party's roster indices
 """
 import struct
-from harness import ui
+from harness import ui, pick
 from harness.game import Stuck
 
 PHASE = 0x800796fa
@@ -52,6 +52,15 @@ SPELL_DAMAGE = {
     81: (30, 'all'), 82: (40, 'all'),
 }
 SPELL_NAME = {}
+# spells the battle's spell list never shows (no battle-use flag): they don't count for
+# the list index (rips/re/work/grouppick/README.md: the priest's level 2 list showed only
+# Montino, so 62 sat one lower than castable() counted when 61 was known)
+NOT_IN_BATTLE = {2, 11, 24, 26, 39, 61, 67, 68, 78, 83}
+FIXED = 0x80079bde          # 1 in a fixed battle (up to 6 groups on a 3x2 grid)
+# monsters to kill first, by battle_groups +2 id: lower goes first. Walkthrough chapter 4
+# (04-lake-machine.json): at the Guardians "Kill the mage first" (Madalto over the whole
+# party for up to 64), and the priest's Badi kills a character outright.
+KILL_FIRST = {366: 0, 358: 1}       # Arch Mage, Arch Priest (Underground B2 E7 N22)
 
 
 def in_battle(g):
@@ -70,12 +79,54 @@ def member_state(g, m):
     return hp, st
 
 
+def max_group(g):
+    # random fights have up to 4 groups; a fixed one up to 6 (the Guardians have 5, and
+    # the Arch Mage, group 5, went uncounted before)
+    return 6 if g.u8(FIXED) else 4
+
+
 def monsters_standing(g):
-    return sum(g.u8(GROUPS + k * 8 + 5) for k in range(1, 5))
+    return sum(g.u8(GROUPS + k * 8 + 5) for k in range(1, max_group(g) + 1))
 
 
 def groups_alive(g):
-    return [k for k in range(1, 5) if g.u8(GROUPS + k * 8 + 5)]
+    return [k for k in range(1, max_group(g) + 1) if g.u8(GROUPS + k * 8 + 5)]
+
+
+def group_id(g, k):
+    return struct.unpack('<H', g.e.read(GROUPS + k * 8 + 2, 2))[0]
+
+
+def choose_group(g, offered, prefer=None, spread=False):
+    """The group to aim at, among the groups the pick offers: a kill-first monster, then
+    the policy's choice, then (group spells) the most monsters standing, then the lowest
+    number, so the party's blows stay on one group. Groups reorder between rounds, so
+    this goes by what stands now."""
+    alive = [k for k in offered if g.u8(GROUPS + k * 8 + 5)] or list(offered)
+    if not alive:
+        return None
+    return min(alive, key=lambda k: (KILL_FIRST.get(group_id(g, k), 9), k != prefer,
+                                     -g.u8(GROUPS + k * 8 + 5) if spread else 0, k))
+
+
+def aim(g, m, prefer, log):
+    """At a group pick (Fight, a spell, Dispel...): choose the group and confirm it,
+    checked in the member's command record (pick.pick_group). False if it couldn't."""
+    try:
+        lay = pick.layout(g)
+    except pick.PickError:
+        return False
+    want = choose_group(g, lay['choices'], prefer, spread=lay['screen'] in (0x34, 0x54))
+    if want is None:
+        return False
+    gid = group_id(g, want)
+    try:
+        r = pick.pick_group(g, want)
+    except pick.PickError as e:
+        log.append((m, 'aim failed', want, gid, str(e)[:80]))
+        return False
+    log.append((m, 'aim', want, gid, r['target'], lay['mode']))
+    return True
 
 
 def known_spells(rec, school, level):
@@ -92,7 +143,7 @@ def castable(g, roster_i):
         for level in range(1, 8):
             if rec[0x5c + school * 7 + level - 1] == 0:
                 continue
-            ks = known_spells(rec, school, level)
+            ks = [s for s in known_spells(rec, school, level) if s not in NOT_IN_BATTLE]
             for i, sid in enumerate(ks):
                 out.append((sid, school, level, i))
     return out
@@ -238,8 +289,9 @@ def command_member(g, policy, log):
             slot = target[1]
             ui.move_cursor(g, PGRID_Y, slot // 3, 'down', 'up', what='target row')
             ui.move_cursor(g, PGRID_X, slot % 3, 'right', 'left', what='target col')
-    # a target step (a group, a member) takes what's selected; stop at the next member
-    # or the overview
+    # a target step: an enemy group pick is aimed (aim); anything else (a member) takes
+    # what's selected. Stop at the next member or the overview.
+    prefer = act[-1][1] if act[0] == 'spell' and act[-1][0] == 'group' else None
     end = g.frame + 600
     while in_battle(g) and g.u8(PHASE) == CMD_PHASE and g.u8(MEMBER) == m \
             and g.u8(SCREEN) not in WAITING:
@@ -247,6 +299,11 @@ def command_member(g, policy, log):
             raise Stuck('target step', sig=sig(g))
         if g.u8(SCREEN) in TRANSIENT or g.u8(SCREEN) == 9:
             g.step(1)
+            continue
+        if pick.pick_screen(g) is not None:
+            if not aim(g, m, prefer, log) and pick.pick_screen(g) is not None \
+                    and g.u8(MEMBER) == m:
+                _press_change(g, 'circle', what='target')
             continue
         _press_change(g, 'circle', what='target')
 
@@ -270,6 +327,12 @@ def command_phase(g, policy, log):
             s = sig(g)
             still = still + 1 if s == last else 0
             last = s
+            if still >= 8 and pick.pick_screen(g) is not None:
+                # a group pick left waiting (a state saved on one): aim it
+                if not aim(g, g.u8(MEMBER), None, log) and pick.pick_screen(g) is not None:
+                    _press_change(g, 'circle', 120, 'waiting pick')
+                still = 0
+                continue
             if still >= 60 and g.u8(SCREEN) not in TRANSIENT:
                 _press_change(g, 'circle', 120, 'waiting pick')
                 still = 0
@@ -364,6 +427,11 @@ def chest(g, mode='leave', who=0, since=None):
 THIEVES = (3, 12)            # Thief, Ninja (G-records class ids)
 
 
+def pack_full(g, slot):
+    ri = g.party_slots()[slot]
+    return ri is None or len(g.char(ri)['items']) >= 10
+
+
 def thief_slot(g):
     """Party slot of a standing Thief or Ninja, or None."""
     for slot, ri in enumerate(g.party_slots()):
@@ -405,6 +473,15 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
                     # inspects and opens only an untrapped one; else leave it
                     who = thief_slot(g)
                     mode = 'open' if g.u8(0x80079668) == 0 else 'inspect' if who is not None else 'leave'
+                    if mode == 'open':
+                        who = 0
+                    if mode != 'leave' and (who is None or pack_full(g, who)
+                                            or g.char(g.party_slots()[who])['status'] != 0):
+                        # nowhere to put what's inside, or nobody standing where the
+                        # opener's cursor starts (slot 0; moving it isn't reliable): leave
+                        # it (f1v6c chapter 4, 2026-10-13: "Who will open the chest?" on
+                        # an empty slot 0, then "opening" six times)
+                        mode = 'leave'
                     who = who or 0
                 chest_result = chest(g, mode, who=who, since=chest_mark)
                 continue
@@ -429,6 +506,11 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
                         ui.move_cursor(g, LIST, CHEST_LEAVE, 'down', 'up', what='chest option')
                         ui.confirm_until(g, lambda: not in_battle(g) or g.u8(PHASE) != CHEST_PHASE
                                          or g.u8(LEVEL) != 1, 300, 'leave chest')
+                    elif g.u8(LEVEL) == 2:
+                        # a member pick ("Who will open the chest?"): back to the menu
+                        # (a state saved there, f1v6c, comes up with no text seen)
+                        g.tap('cross', hold=6)
+                        g.step(30)
                     else:
                         g.tap('circle')
                         g.step(16)

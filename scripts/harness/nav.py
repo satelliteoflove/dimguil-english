@@ -57,6 +57,11 @@ SCENE, SCENE_COUNT = 0x80079878, 0x8008a000
 # The stream on B2 west of E7 N12 (record type 0x24 at (7, 11)) lets nobody across until
 # the Tablet parts it (npc_flags bit 28, chapter 4's stream goal); chapter 3's training
 # walked into it (r2v1d, r2v3c 2026-10-13: "no path" at B2 (7, 11)).
+# Sides that are shut though both the site's walls and RAM's wall map call them open:
+# area -> {(x, y, side)}. The parted stream's bed on B3 (5, 11) is one square between two
+# stairs (B3 (4, 11) up to B2's far bank (3, 11), B3 (6, 11) up to B2 (7, 11)); its north
+# and south can't be walked (f1v0b chapter 4, 2026-10-13: "no path" to the rest of B3).
+EXTRA_SHUT = {6: {(5, 11, 0), (5, 11, 2), (5, 10, 2), (5, 12, 0)}}
 NPC_FLAGS = 0x80079754
 EXTRA_SEALED = {7: {(7, 11, 3): [(NPC_FLAGS, 28)], (6, 11, 1): [(NPC_FLAGS, 28)]}}
 
@@ -104,10 +109,11 @@ def floor(area):
                     sealed[(s[0], s[1], DIRS[side])] = fl
     transfers.update(EXTRA_TRANSFERS.get(area, {}))
     sealed.update(EXTRA_SEALED.get(area, {}))
+    shut = set(EXTRA_SHUT.get(area, ()))
     closed = {(x, 23 - r) for r, row in enumerate(d.get('no_entry', [])) for x, c in enumerate(row)
               if c == 'f'}
     _floor[area] = dict(walls=walls, transfers=transfers, arrive=arrive, voids=voids,
-                        secret=secret, sealed=sealed, closed=closed, fights=fights)
+                        secret=secret, sealed=sealed, closed=closed, fights=fights, shut=shut)
     return _floor[area]
 
 
@@ -127,7 +133,7 @@ def side_state(g, F, x, y, d, wm=None):
         w = maze.side(wm, x, y, d)
     else:
         w = F['walls'][(x, y)][d]
-    if w == 1:
+    if w == 1 or (x, y, d) in F['shut']:
         return 'shut'
     p1 = F['secret'].get((x, y, d))
     if p1 is not None:
@@ -247,11 +253,13 @@ def avoid_squares(g, area, target):
 
 
 def hidden_blocked(g, area):
-    """Sides that RAM draws as doors but are still hidden (walk_to's avoid)."""
+    """Sides that RAM draws as doors but are still hidden, sealed ones, and EXTRA_SHUT
+    (walk_to's avoid)."""
     F = floor(area)
     out = set()
     if not F:
         return out
+    out |= F['shut']
     for (x, y, d), p1 in F['secret'].items():
         if not hidden_found(g, p1):
             out.add((x, y, d))
