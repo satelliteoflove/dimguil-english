@@ -265,7 +265,7 @@ reproducible from the repo yet.
 Full notes in `rips/harness/t3/README.md`; code committed in 7026414 (`chapter1.py`,
 `run_ch1.py`, `regress.py` and fixes across the macros). Same disc copy as T2.
 
-**The suite.** Ten rounds. One change broke 50 of 124 cases (a talk-menu rewrite) and was
+**The suite.** Thirteen rounds by 2026-10-13. One change broke 50 of 124 cases (a talk-menu rewrite) and was
 caught before it went in.
 
 | Round | Passed | Note |

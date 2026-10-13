@@ -84,7 +84,8 @@ glance". By subsystem:
 - **A wipe** deletes anyone Lost, halves every member's gold, and rolls one member's
   items for destruction six times over (2 in 3 per roll for rare items, the Tablet of
   the Sun among them; 1 in 4 for the rest). That's a bug: the loop should go over each
-  member (bugs.md 3.1, left as is pending Chris's decision). Outside the Training Maze
+  member (bugs.md 3.1). Chris decided to keep it (decisions.md item 8); it's on the
+  hardcore-mode list in ROADMAP.md. Outside the Training Maze
   the bodies stay on the square where they fell; in it they go straight to town, but
   still lose items and gold.
 - **Bodies don't decay.** Nothing takes items, gold or status from a party left in the
@@ -121,9 +122,10 @@ glance". By subsystem:
   the gold and the items in slots 1, 3, 5, 7 and 9. The gate (`progress_bits` & 0x1e)
   is open from the first trip into the Grounds.
 - **Bugs and cut content.** C found a dozen. The clear bugs are fixed (bugs.md group
-  1). Of the cut-looking ones, Zaril's healing (9135ef5) and Guy's and Fontana's
-  re-introductions (7498b1c) are reopened, the identify service stays unused, and the
-  rest wait on Chris (decisions.md).
+  1). Of the cut-looking ones, Zaril's healing (9135ef5), Guy's and Fontana's
+  re-introductions (7498b1c), Cresson's greeting (7166f5d) and Fontana's chat about
+  Zaril's new party (7c99607) are reopened, and the identify service and Balbo's party's
+  "heard that already" stay unused (decisions.md).
 - Earlier notes, now in C-talk.md: the 2026-10-06 trace had the interpreter at
   0x800b8ccc right but read two opcodes' arguments wrong (opcode 0 takes two and sets
   met bits only during introductions; opcode 6 takes one). The 2026-10-10 body-recovery
@@ -205,11 +207,11 @@ glance". By subsystem:
 
 ### Bugs, descriptions and open decisions
 
-- `docs/re/bugs.md`: every bug found, in three groups. Group 1 (ten clear bugs) is fixed
-  in `asm/bugfix_*.asm`.
+- `docs/re/bugs.md`: every bug found, in three groups. Group 1 (thirteen clear bugs,
+  two of them found by the harness runs) is fixed in `asm/bugfix_*.asm`.
 - `docs/re/description-check.md`: item, spell, Compendium and help text checked against
   the records and the code (18 spell ranges in the original are wrong).
-- `docs/re/decisions.md`: what's waiting on Chris.
+- `docs/re/decisions.md`: the open questions and Chris's decision on each (all decided).
 
 ## Notes the translation depends on
 

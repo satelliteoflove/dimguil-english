@@ -127,8 +127,7 @@ Left unused by decision (the notes say these go in the release notes):
 11. **Other untraced NPC strings** (1:45, 1:292, 2:5, 2:50, 3:198, 4:144-146, 5:20-25 and
     others). Not proven dead: they may come from computed stores. [bugs.md "Not bugs"]
 
-Still waiting on a decision: nothing in decisions.md is open. ROADMAP's "Waiting on Chris"
-paragraph still lists the identify service and Zaril's healing (see the disagreements).
+Still waiting on a decision: nothing in decisions.md is open (ROADMAP now says the same).
 
 ## 3. Engine and display changes for English
 
@@ -400,9 +399,9 @@ frontend in `scripts/emu.py`). Button presses from a cold boot; RAM is only read
    There's no trap.!!" (fixed 86e45de), wrapped battle lines starting with a space (fixed
    71d14dd), "brings down on" (now "bashes", 095e0c2).
 3. **Regression suite ("ratchet"):** every stuck moment becomes a permanent case; a
-   change is committed only if the whole suite passes. hp's table ends at round 10,
-   185/185; bugs.md cites 187/187 and round 13. The cases and states live in gitignored
-   `rips/`, so the suite isn't reproducible from the repo.
+   change is committed only if the whole suite passes. 187/187 on the disc with the
+   pillar fix (round 12) and with the CD-library fix (round 13). The cases and states
+   live in gitignored `rips/`, so the suite isn't reproducible from the repo.
 4. **T3:** one run through chapter 1 (party, 13 training trips to level 7, four pillars,
    sealed door) from a cold boot, no stuck points; 290,108 frames, 23 minutes.
 5. **T4:** eight parties with different classes and seeds, all eight finished chapter 1
@@ -461,37 +460,41 @@ frontend in `scripts/emu.py`). Button presses from a cold boot; RAM is only read
 
 ## Where the docs disagree
 
-1. bugs.md's summary table says group 1 is "13 (12 fixed; 2.8 ... waiting on one choice)";
-   2.8 is fixed (5ff86d2) and kept (decisions 7), so all 13 are fixed.
-2. ROADMAP "The game's code" says "Ten are fixed" plus 1.11 and 1.12, and its list leaves
-   out the pit rescuer (2.8). It still lists the identify service, Zaril's healing, the
-   wipe and the description corrections as waiting on Chris; all were decided 2026-10-11/12.
-   It lists bugs.md 2.7, 2.8, 3.3 and 3.4 as still to check; bugs.md has settled all four.
-3. decisions.md's intro says "Ten clear bugs are already fixed".
-4. engine-notes says group 1 is "ten clear bugs", the wipe is "left as is pending Chris's
-   decision" (decided: keep), and the cut-looking content other than Zaril and the
-   re-introductions "wait on Chris" (all decided).
-5. translation-notes says decisions 14-16 (labels) are "still open for Chris"; all three
-   are decided in decisions.md.
-6. writeup-notes' pillar section calls the "You've met someone!" stall "Still open"; it
-   was fixed in 0ef275c. Its triage count (10 clear, 8 cut, 4 balance, 7 harmless) differs
-   from bugs.md's current table (13, 6, 3, 9) after reclassification.
-7. harness-plan's T4 notes put the pillar lock down to pressing START on an exact frame
-   and say it may share a cause with the "met someone" lock; bugs.md 1.11 and
-   writeup-notes say START only shifted the dust's random seed, and 1.12 is a separate
-   cause. harness-plan's suite table stops at round 10 (185/185); bugs.md cites 187/187
-   and round 13.
-8. bugs.md 1.11 and 1.12 give no commit hash; git has c13dea2 and 0ef275c.
-9. Pillar lock rate: "about 3% of pillar events" (bugs.md, en) and "about one
-   play-through in nine" (wn). Different measures, not a conflict, but worth using one.
-10. The notice's origin: ROADMAP says the original team's requests; a comment in
-    `scripts/mkrelease.py` says "Remisse asked for this on the repo and on every release
-    page."
-11. description-check.md says "Nothing here was checked in the emulator yet" at the top
-    but later "Checked on the real screens of the built disc"; its summary table says no
-    help-text errors, while its sweep found Luck (SISETU 219).
-12. ROADMAP and docs/re/README.md point to `docs/re/rescue-test.md`, which isn't in the
-    repo.
-13. writeup-notes' first Zaril bullet says the heal check goes ahead of his sale; that was
-    the first version (9135ef5), superseded by 98b0c5e (sale first), as its follow-up
-    bullet and bugs.md 2.2 say.
+Fixed on 2026-10-13 (status updates only, not committed yet):
+
+1. bugs.md's summary table: group 1 is now "13, all fixed" (2.8 moved there, fixed and
+   kept); groups 2 and 3 marked all decided. 2.1, 2.6 and 3.1-3.3 gained a "Decided" line
+   pointing to decisions.md.
+2. bugs.md 1.11 and 1.12 now carry their commits (c13dea2, with the runs and suite in
+   824943d; 0ef275c).
+3. ROADMAP "The game's code": thirteen fixed, the pit rescuer listed, the "waiting on
+   Chris" list replaced by what was decided, and the settled bugs.md 2.7, 2.8, 3.3 and 3.4
+   dropped from "still to check". Quality pass 3 notes the description errors as
+   corrected. Nothing about the notice, the original team or Remisse was touched.
+4. decisions.md's intro: all thirteen clear bugs fixed, every item decided.
+5. engine-notes: thirteen clear bugs; the wipe's item loss kept (decisions 8) and on the
+   hardcore-mode list; the cut-looking content listed as decided; decisions.md described
+   as all decided.
+6. translation-notes: decisions 14-16 marked decided, with their outcomes.
+7. writeup-notes: the CD stall marked fixed (0ef275c); the triage counts dated as the
+   2026-10-11 first triage, with today's 13, 6, 3 and 9 beside them.
+8. Pillar rate: writeup-notes and bugs.md 1.11 now say about 3% per pillar event (the
+   bird's rate), which comes to about one play-through in nine across the four pillars.
+9. description-check.md: header and summary table match its later sections (corrections
+   made and screen-checked; Bacortu, the Holy Crown and Luck counted).
+10. writeup-notes' Zaril bullet: left as is. Its follow-up bullet already records the
+    change to sale-first (98b0c5e), so it reads as history, not a conflict.
+
+Left for Chris, or for others:
+
+11. The notice's origin: ROADMAP says it comes from the original team's requests; a
+    comment in `scripts/mkrelease.py` says "Remisse asked for this on the repo and on
+    every release page."
+12. `docs/re/rescue-test.md` doesn't exist, in the working tree or anywhere in git
+    history. ROADMAP and docs/re/README.md still point to it. The test's working files are
+    in `rips/re/work/P3-rescue/` (gitignored): a `plan.md` and scripts whose last log ends
+    at the pillar fights, with no fee results.
+13. README.md, CHANGELOG.md and docs/release-readme.txt don't mention the English-only
+    lock yet (public writing, Chris's).
+14. docs/harness-plan.md: the coordinator updated it in 63d5f64. Its "The suite" line
+    still says "Ten rounds" above a table that now runs to round 13.

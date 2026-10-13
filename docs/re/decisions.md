@@ -1,8 +1,8 @@
 # Decisions from the code analysis
 
 These are the open questions that came out of the code analysis (2026-10-11), each with a
-recommendation. The evidence for each is in the doc named beside it. Ten clear bugs are
-already fixed (`bugs.md`, group 1), and the items marked "I'll do it" need no decision.
+recommendation. The evidence for each is in the doc named beside it. All thirteen clear
+bugs are fixed (`bugs.md`, group 1), and every item below has been decided.
 
 ## Content that looks cut
 

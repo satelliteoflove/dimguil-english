@@ -3,13 +3,14 @@
 Phase 3 of the code analysis. Every item description, every spell description, the
 Compendium's mechanical claims and the race/class/stat help text were read against the
 records on the original disc and the decompiled code (rips/re/decomp, from commit 585c983).
-No translation was changed. Where the Japanese itself is wrong the error is the original's,
-and whether to correct it is Chris's call; our own mistranslations are listed separately as
-fixes to approve.
+The check itself changed no translation. Where the Japanese itself is wrong the error is the
+original's, and our own mistranslations are listed separately. Chris then decided what to
+correct (decisions.md items 11, 12, 17 and 18); the corrections are listed below.
 
 Marks: **[record]** the record field was read; **[code]** the routine was read;
 **[inf]** inferred (a field's meaning or a monster-to-description match not proven).
-Nothing here was checked in the emulator yet.
+The checks were made against the records and the code; the 2026-10-11 corrections were
+then checked on the real screens of the built disc (below, "Corrected").
 
 Tool: `scripts/re/desccheck.py` (`items`, `flags`, `monsters`). Scratch output is in
 rips/re/work/P3-desc/ (items.txt, spells.txt, monsters.txt, catalg_claims.txt).
@@ -18,10 +19,10 @@ rips/re/work/P3-desc/ (items.txt, spells.txt, monsters.txt, catalg_claims.txt).
 
 | Kind | Checked | Original's errors | Our mistranslations |
 |---|---|---|---|
-| Spell descriptions (STATUS 420-503) | every damage/heal spell, AC and screen spells | 18 wrong ranges, 3 overstated effects | none (we copy the Japanese numbers) |
-| Item descriptions (ITEM.DAT §1, 307 entries) | every claim the record can test | 9 wrong or overstated claims, 6 unmentioned curses, 7 notable unmentioned restrictions | 3 ("力" read as Strength) |
+| Spell descriptions (STATUS 420-503) | every damage/heal spell, AC and screen spells | 18 wrong ranges, 4 overstated effects (Bacortu found in the sweep) | none (we copy the Japanese numbers) |
+| Item descriptions (ITEM.DAT §1, 307 entries) | every claim the record can test | 9 wrong or overstated claims, plus the Holy Crown's class claim; 6 unmentioned curses, 7 notable unmentioned restrictions | 3 ("力" read as Strength) |
 | Compendium (M_CATALG §4-17) | the 99 entries with a mechanical claim | 1 wrong (2-Head Snake drain), 2 unsupported | none found |
-| Help text (SISETU 184-219) | race, alignment, class and stat lines | none found | none found |
+| Help text (SISETU 184-219) | race, alignment, class and stat lines | 1 (Luck, SISETU 219, found in the sweep) | none found |
 
 Our English follows the Japanese numbers faithfully, so every wrong spell range is the
 original's.
@@ -29,7 +30,8 @@ original's.
 **Corrected 2026-10-11** (Chris, decisions.md item 11: the English now says what the game
 does). Spells in 0f0a69b, items in da781e2, the Compendium in a25c54c, Bacortu (found in
 the sweep below) in d798054, and our three mistranslations, with Chris's wording, in
-8ace280. Each change is listed with old and new wording in translation-notes.md,
+8ace280. Corrected 2026-10-12: the Holy Crown's classes (0f6a811) and Luck's help text
+(c4b344d). Each change is listed with old and new wording in translation-notes.md,
 "Description corrections". Checked on the real screens of the built disc: before and
 after captures in `docs/shots/description-corrections/` and
 `docs/shots/strength-mistranslation/`. The three mistranslations are all the same slip: 力 ("power") rendered as the

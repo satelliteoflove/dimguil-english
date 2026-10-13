@@ -483,9 +483,10 @@ ROADMAP.md "Game changes up front"):
 
 Done 2026-10-11 (see "Reopened content"): Zaril's healing, Guy's and Fontana's
 re-introductions, Cresson's boys/girls/fellows check, and Fontana's block 8 after the
-split. Still open for Chris
-(`docs/re/decisions.md`): items
-14-16 (labels).
+split. The labels (`docs/re/decisions.md` items 14-16) are decided too: "Sane" is now
+"Confused" (14, 2026-10-11), "Retrain?" stays (15, 2026-10-12), and only "EVENT Item"
+changed, to "Event Item" (16, 2026-10-12); see "Deliberate choices". Nothing in
+decisions.md is open.
 
 ### Description corrections (the original's errors, 2026-10-11)
 

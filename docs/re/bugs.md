@@ -18,9 +18,9 @@ him first. So each entry is in one of three groups:
 
 | Group | Count |
 |---|---|
-| 1. Clear bugs | 13 (12 fixed; 2.8, the pit soft lock, confirmed and waiting on one choice) |
-| 2. Cut or unclear, ask | 6 |
-| 3. Balance, ask | 3 |
+| 1. Clear bugs | 13, all fixed (2.8, the pit soft lock, moved here; fixed in 5ff86d2 and kept) |
+| 2. Cut or unclear, ask | 6, all decided (2.2-2.5 reopened, 2.1 and 2.6 left unused) |
+| 3. Balance, ask | 3, all decided (kept as the original; decisions.md 8-10) |
 | Not bugs, or harmless | 9 (2.7 and 3.4 moved here after the follow-ups) |
 
 Entries keep their numbers after a follow-up moves them to another group.
@@ -197,14 +197,16 @@ Original code, but the Japanese disc never hits it: its line finishes typing 78-
 frames before the dust settles. Our English line is about three times as long and
 finishes 84 frames later, which leaves -6 to +10 frames, and about 3% of pillar events
 locked up (200 seeds of the BIOS `rand()` the dust uses, at the bird: 6 hangs on our
-disc, none on the Japanese one; message speed makes no difference).
+disc, none on the Japanese one; message speed makes no difference). Over the four
+pillars that comes to about one play-through in nine.
 `docs/engine-notes.md`, "Pillar guardians: the box and the dust race", has the trace.
 
 Fix: the dust step counts an open box (0x80079838) as dust still alive, so the request
 is only set once the box has closed. Two `nop`s at 0x800cca20 (`lbu a0, -0x67c8(s0)`)
-and 0x800cca28 (`or v0, v0, a0`), no extra space. `asm/bugfix_pillar_race.asm`.
+and 0x800cca28 (`or v0, v0, a0`), no extra space. `asm/bugfix_pillar_race.asm`, c13dea2.
 
-Checked: emulator, on the built disc. MAZE.BIN loads from the disc on entering the maze,
+Checked (c13dea2; the chapter 1 runs and the suite in 824943d): emulator, on the built
+disc. MAZE.BIN loads from the disc on entering the maze,
 after the START menu and after a battle, and RAM then reads 92049838 and 00441025 at the
 two addresses. The bird, 200 seeds from a fresh boot on the built disc: no hangs. The
 snake, the same 200 seeds from matched states on the old and new discs: 11 hangs before,
@@ -246,7 +248,7 @@ harness. In about 60 hours of harness play it locked twice, both at the same spo
 timed chapter 1 runs made 10,337 reads with none in the window, and at the t4v1 meeting
 1 of 100 timing shifts locks.
 
-**Fixed** (`asm/bugfix_dspacket_race.asm`). Why it's fixed rather than listed as a known
+**Fixed** (`asm/bugfix_dspacket_race.asm`, 0ef275c). Why it's fixed rather than listed as a known
 issue: it's rare, but a lock costs everything since the last save, Beetle in RetroArch
 (what most players will use) hits it more often than hardware, and the fix only reorders
 stores the library already makes. Chris weighed documenting it instead, given the fix
@@ -303,6 +305,9 @@ Question for Chris: the text is all there, but the code was never written, or wa
 removed. Should NPC parties offer identification? If yes, the odds would be ours (the
 Bishop's (level - item level + 1) × 20%, held to 5-75%, is one model). If not, the
 lines stay in the files, unused.
+
+**Decided (Chris, 2026-10-11): left unused, and said so in the release notes**
+(decisions.md item 1).
 
 ### 2.2 Zaril's healing
 
@@ -543,6 +548,9 @@ there's no "tell" topic in the code. [code]
 
 Question for Chris: looks like a cut topic. Leave unused?
 
+**Decided (Chris, 2026-10-11): left unused, and said so in the release notes**
+(decisions.md item 6).
+
 ### 2.7 Greeting blocks nothing picks: harmless duplicates
 
 Traced 2026-10-11. **Harmless; nothing is lost.** Every one of these blocks plays the same
@@ -641,6 +649,9 @@ two-thirds of their rare ones in every wipe. As it stands, one character loses n
 everything and the others keep all of theirs. Fix it, or keep what players have always
 had?
 
+**Decided (Chris, 2026-10-11): kept as the original, and documented on the site**
+(decisions.md item 8). On the hardcore-mode list (ROADMAP.md).
+
 ### 3.2 Weapon effects ignore the level difference
 
 `melee_apply_hits` computes a bonus (a quarter of the level difference, up to 30) or a
@@ -650,6 +661,9 @@ and fourth arguments. [code, disassembly (D)]
 Question for Chris: fixing it makes a weapon's poison, sleep, stone and death effects land
 more often on weaker monsters and less often on stronger ones. Fix it, or keep the flat
 odds?
+
+**Decided (Chris, 2026-10-11): kept, and documented** (decisions.md item 9). On the
+hardcore-mode list (ROADMAP.md).
 
 ### 3.3 Level drain reads +0x81 the other way round: confirmed backwards
 
@@ -683,6 +697,9 @@ Question for Chris: almost certainly a reversed comparison, but the fix makes le
 far more common, especially for low-level characters (about 1 in 11 becomes about 9 in
 10). Keep the original, which players of the Japanese game have always had, or fix it?
 The numbers suggest keeping it.
+
+**Decided (Chris, 2026-10-11): kept as the original** (decisions.md item 10). On the
+hardcore-mode list (ROADMAP.md).
 
 ### 3.4 The town's stat recompute accumulates, but nothing reads the result
 

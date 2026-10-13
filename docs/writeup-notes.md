@@ -411,8 +411,9 @@ Two of them hit their turn limit before writing anything down and had to be resu
 - 2026-10-11. Chris: fix the clear bugs, reopen content a bug cut off, ask about anything
   that looks deliberately cut or changes the balance. The phase-2 code analysis had
   listed bugs and unreached strings; each was re-read against the original disc
-  (rips/clean) and triaged in `docs/re/bugs.md`: 10 clear bugs, 8 cut or unclear, 4 that
-  change the balance, 7 harmless.
+  (rips/clean) and triaged in `docs/re/bugs.md`. As of 2026-10-11, the first triage: 10
+  clear bugs, 8 cut or unclear, 4 that change the balance, 7 harmless. The follow-ups and
+  the harness runs later made it 13, 6, 3 and 9.
 - Most of the fixes are a single changed immediate or branch. Two needed new code and had
   no room, so they sit over debug routines nothing calls: an encounter-id picker drawn
   with FntPrint in MCARD (0x800c57c8) and a debug-flag menu in JOUKA (0x800a6c40). "Nothing
@@ -572,7 +573,8 @@ found, and one the translation set off.
 - Why only the English: the code is byte-identical to the Japanese disc, and the dust takes
   the same time on both. The Japanese line finishes typing 78-94 frames ahead of it. Ours
   is about three times as long and lands from 6 frames late to 10 early: 6 of 200 seeds
-  hung at the bird, 11 of 200 at the snake. About one play-through in nine would hit it.
+  hung at the bird, 11 of 200 at the snake. At the bird's rate, about 3% per pillar
+  event, that comes to about one play-through in nine across the four pillars.
 - Chris turned down shortening the line ("I don't like working around things"). The fix
   makes the dust count an open box as still busy, two instructions over two `nop`s in
   MAZE.BIN, no extra space.
@@ -580,7 +582,7 @@ found, and one the translation set off.
   worked before start on the same frame. Eight parties then ran chapter 1 from a cold boot
   and every pillar fight started first try.
 - The other stall the runs found ("You've met someone!" with no meeting) is unrelated: a
-  CD read that never finishes. Still open.
+  CD read that never finishes. Fixed the next day (0ef275c); the next entry explains it.
 
 **The "You've met someone!" lock (2026-10-13, bugs.md 1.12).** The second lock the harness
 found, and the deepest: a bug in Sony's CD library, linked into the game.

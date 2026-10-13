@@ -105,20 +105,22 @@ save, and the records. The findings are in `docs/re/` (index `docs/re/README.md`
 summarized in `docs/engine-notes.md`; the tools are in `scripts/re/` (`docs/code-map.md`).
 
 Decided 2026-10-11: the patch fixes the original game's clear bugs, and reopens content
-a bug cut off. Ten are fixed (`asm/bugfix_*.asm`, `docs/re/bugs.md` group 1): NPC lines
-that played in the wrong place or never (Guy's statue warning, Rosea's and Cephala's
-heals, Alstron's Madi, the pit scene, Fritillaria's "walkin' corpse", Cresson's speech
-after the Decipher table, the rerolled chat topics), the Temple scrambling the party
-table after a failed raise from ashes, and the BROKEN ITEM purge clearing the wrong
-slot. The harness runs found one more (bugs.md 1.11): a race at the Grounds pillars that
-the longer English text set off, locking the game about 3% of the time, now fixed. A
-second (1.12) is a rare race in the game's CD library that can stall any disc read for
-good; also fixed. Waiting on Chris (`docs/re/decisions.md`): content that looks deliberately cut
-(an NPC identify service, Zaril's healing), fixes that would change the balance (a wipe
-destroys only one character's items), and whether to correct the original's wrong
-numbers in spell and item descriptions (`docs/re/description-check.md`). Still to
-check: a natural-play test of the NPC rescue fees (`docs/re/rescue-test.md`), and
-bugs.md 2.7, 2.8, 3.3 and 3.4.
+a bug cut off. Thirteen are fixed (`asm/bugfix_*.asm`, `docs/re/bugs.md` group 1): NPC
+lines that played in the wrong place or never (Guy's statue warning, Rosea's and
+Cephala's heals, Alstron's Madi, the pit scene, Fritillaria's "walkin' corpse",
+Cresson's speech after the Decipher table, the rerolled chat topics), the Temple
+scrambling the party table after a failed raise from ashes, the BROKEN ITEM purge
+clearing the wrong slot, and the pit scene locking up for a party in which nobody has
+met Guy (2.8). The harness runs found two of them: a race at the Grounds pillars
+(bugs.md 1.11) that the longer English text set off, locking the game in about 3% of
+pillar events, and a rare race in the game's CD library that can stall any disc read for
+good (1.12). Decided since (`docs/re/decisions.md`, nothing there is waiting on Chris
+now): Zaril's healing, Guy's and Fontana's re-introductions, Cresson's greeting and
+Fontana's chat about Zaril's new party are reopened; the NPC identify service and
+Balbo's party's "heard that already" stay unused; the balance bugs are kept (see
+"hardcore mode" below); and the original's wrong numbers in spell and item descriptions
+are corrected (`docs/re/description-check.md`). Still to check: a natural-play test of
+the NPC rescue fees (`docs/re/rescue-test.md`).
 
 ### Quality passes (to reach 0.9)
 
@@ -137,7 +139,7 @@ bugs.md 2.7, 2.8, 3.3 and 3.4.
    flagged for another look are under "To revisit" in `docs/translation-notes.md`.
    The descriptions were also checked against what the game does
    (`docs/re/description-check.md`, 2026-10-11), which found three of our lines
-   mistranslating 力 and many wrong numbers in the original.
+   mistranslating 力 and many wrong numbers in the original, all since corrected.
 
 Total translation is about 44,700 words as of 2026-09-26.
 
