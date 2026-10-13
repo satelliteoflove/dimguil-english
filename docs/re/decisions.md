@@ -223,4 +223,6 @@ same pictures named differently from monster to monster. The options were leavin
 fixing only names that contradict the Japanese (A), naming by the picture (B), or one
 name per Japanese name (C).
 **Decided (Chris, 2026-10-13): B, name by the picture.** Vampire Bat, Wing Lizard and Were
-Bat are Flying Figure(s); Marchosias is Greater Demon(s).
+Bat are Flying Figure(s); Marchosias is Greater Demon(s). Death Hawk stays Very Big Bird (Chris,
+2026-10-13): it matches きょだいなとり, and picture 22 is the game's silhouette for any huge
+foe, not a demon's.
