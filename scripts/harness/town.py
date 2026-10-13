@@ -522,7 +522,9 @@ def inn_stay(g, slot, room='Stables', weeks=None, gather=False, limit=600):
                 continue
             if last == 57:
                 poor = True
-            if (g.u8(SLEEP_WAIT) == 0 or last == 57) and g.u8(TOWN_MSG):
+            if (g.u8(SLEEP_WAIT) == 0 or last == 57 or any(
+                    m['file'] == 'SISETU.OBJ' and m['idx'] == 42 for m in g.cap.messages[nm:])) \
+                    and g.u8(TOWN_MSG):
                 s0 = sig()
                 ui.confirm_until(g, lambda: sig() != s0, 300, 'inn message')
                 continue

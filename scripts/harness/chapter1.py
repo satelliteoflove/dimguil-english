@@ -279,7 +279,13 @@ def heal_in_camp(g, log, frac=0.6, max_casts=12, on_int=None):
         if not h or not p:
             break
         slot, idx, _ = max(p, key=lambda x: x[2])
-        camp.cast(g, slot, 1, 1, idx, h[0])
+        try:
+            camp.cast(g, slot, 1, 1, idx, h[0])
+        except Stuck as s:
+            if s.what != 'camp interrupted':
+                raise
+            (on_int or on_interrupt_factory(log))(g)
+            continue
         n += 1
     if camp.in_camp(g):
         camp.close_camp(g)
@@ -321,7 +327,13 @@ def heal_strong(g, log, frac=0.9, max_casts=12, on_int=None):
                 break
         if not pick:
             break
-        camp.cast(g, pick[0], 1, pick[1], pick[2], h[0])
+        try:
+            camp.cast(g, pick[0], 1, pick[1], pick[2], h[0])
+        except Stuck as s:
+            if s.what != 'camp interrupted':
+                raise
+            (on_int or on_interrupt_factory(log))(g)
+            continue
         log.append((g.frame, 'heal', pick[3], pick[0], h[0]))
         n += 1
     if camp.in_camp(g):
@@ -436,7 +448,39 @@ def tablet_back(g, log):
         log.append((g.frame, 'tablet back', holder, g.char(holder)['name']))
     except Stuck as s:
         log.append((g.frame, 'tablet back stuck', holder, s.what))
+        town.to_town_bar(g)
+        if 'mix' in str(s.what):
+            make_room_for(g, holder, log)
     town.to_town_bar(g)
+
+
+def make_room_for(g, holder, log):
+    """Take members out, lowest level first, until the game lets `holder` join; then
+    fill the party back up with whoever it will take."""
+    for _ in range(6):
+        slots = town.town_slots(g)
+        here = [p for p, ri in enumerate(slots) if ri is not None]
+        if not here:
+            break
+        pos = min(here, key=lambda p: g.char(slots[p])['level'])
+        try:
+            town.remove_member(g, pos)
+            log.append((g.frame, 'removed', slots[pos], g.char(slots[pos])['name']))
+        except Stuck as s:
+            log.append((g.frame, 'remove stuck', slots[pos], s.what))
+            break
+        town.to_town_bar(g)
+        try:
+            town.form_party(g, [holder])
+            log.append((g.frame, 'tablet back', holder, g.char(holder)['name']))
+            town.to_town_bar(g)
+            break
+        except Stuck as s:
+            town.to_town_bar(g)
+            if 'mix' not in str(s.what):
+                log.append((g.frame, 'tablet back stuck', holder, s.what))
+                break
+    fill_party(g, log)
 
 
 def fill_party(g, log, size=6):

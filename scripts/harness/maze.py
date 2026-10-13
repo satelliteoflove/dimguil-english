@@ -199,7 +199,9 @@ def bfs(wm, start, goal, blocked=(), closed=()):
 
 CD_PENDING = 0x80079bc2   # load_file_alt's async read: 1 queued, 2 issued, 3 done
 CD_COUNT = 0x800986f0     # the CD library's command queue count
-CD_WAIT = 4000            # frames: the pump's three tries of ~1,200 frames each
+CD_WAIT = 1500            # frames: one stall is 1,203 (t4v1); case states get the fix
+                          # words over MAIN (regress.overlay_main), so only old-MAIN play
+                          # outside the suite can meet one
 
 
 def cd_stalled(g):

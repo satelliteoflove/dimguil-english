@@ -207,10 +207,14 @@ class Run(chapter1.Run):
         (the jade mask's animation runs past after()'s quiet wait; c2v6 2026-10-13), so
         wait up to FIGHT_WAIT frames for the battle and run that too."""
         g = self.g
-        self.go(dest)
-        if not maze.face(g, facing):
-            self.after()
-            maze.face(g, facing)
+        for _ in range(3):
+            self.go(dest)
+            if not maze.face(g, facing):
+                self.after()
+            if (g.u8(maze.AREA),) + g.pos() == tuple(dest):
+                maze.face(g, facing)
+                if (g.u8(maze.AREA),) + g.pos() == tuple(dest):
+                    break
         self._fights0 = self.fights()
         for _ in range(3):
             # a roamer met on the square can take the Investigate's place: its fight runs
@@ -351,4 +355,4 @@ class Chapter1:
         return out
 
 
-from harness import chapter2, chapter3, chapter4, chapter5  # noqa: E402,F401  (register the chapters)
+from harness import chapter2, chapter3, chapter4, chapter5, chapter6, chapter7, chapter8  # noqa: E402,F401  (register the chapters)

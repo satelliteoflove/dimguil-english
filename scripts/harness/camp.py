@@ -31,7 +31,10 @@ def open_camp(g):
     if not in_camp(g):
         if not maze.calm(g):
             maze.settle(g)
-        ui.cancel_until(g, lambda: in_camp(g), 300, 'open camp')
+        ui.cancel_until(g, lambda: in_camp(g) or g.overlay() == 'BATTLE'
+                        or maze.interrupted(g), 300, 'open camp')
+        if not in_camp(g):
+            raise Stuck('camp interrupted', where=g.where())
         ui.wait_until(g, lambda: g.u8(CAMP_STATE) == 5, 300, 'camp menu')
         return
     # already in camp, maybe still on a member's screen after a cast ("Cast the spell."):

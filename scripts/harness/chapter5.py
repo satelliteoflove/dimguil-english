@@ -33,25 +33,32 @@ class Chapter5:
     def goals(self, run):
         g = run.g
 
+        # behind the moon door: B3 E19 N5 (19, 18) or the square past it, E19 N6
+        behind = lambda: (g.u8(maze.AREA),) + g.pos() in ((6, 19, 18), (6, 19, 17))
+
         def moon_door():
-            if g.u8(maze.AREA) in (5, 8, 18) or (g.u8(maze.AREA),) + g.pos() == (6, 19, 18):
+            if g.u8(maze.AREA) in (5, 8, 18) or behind():
                 return True
             run.fit()
             run.examine((6, 19, 19), 0)
             for _ in range(3):
+                if behind():
+                    break
                 s = maze.step(g, 0)
                 if s == 'interrupted':
                     run.after()
                     continue
                 break
-            return (g.u8(maze.AREA),) + g.pos() == (6, 19, 18)
+            return behind()
 
         def snake():
             if nav.flag(g, STORY, 2):
                 return True
-            run.fit()
+            run.ready()
             if chapter1.needs_town(g):
                 return 'not fit'
+            run.go((8, 16, 11))           # next to the snake's square, to heal first
+            run.heal()
             run.go((8, 15, 11))
             run.after()
             if not run.all_home():

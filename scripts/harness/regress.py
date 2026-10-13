@@ -24,6 +24,14 @@ Cases live in rips/harness/regress/cases.jsonl, one JSON object per line:
             expect 'stall' wants the stall and the game's own retry, main 'disc' lays the
             disc under test's DsPacket words over MAIN and expect 'read' wants a normal
             read), or 'boot' (made each round, not saved: see below)
+Every case that loads a state gets the disc under test's 14 DsPacket fix words
+(asm/bugfix_dspacket_race.asm) laid over its MAIN on each load (overlay_main): a state
+keeps the MAIN it was saved with, and the t3/t4 states predate the fix (0ef275c), so
+without it they could stall on the race and waste up to 1,500 frames a read. The words
+are checked against DSPACKET_WORDS first; a disc without them gets no overlay (and the
+cdrace disc_main case fails). The one case left without the overlay is cdrace main
+'state' (cdrace:t4v1_f3066:old_main), which exercises the stall itself. Boot cases load
+no state and run the disc's own MAIN.
   state     for 'stuck': the state to load (rips/harness/<state>.state); none for the
             party goal, which starts from power-on (creation can't resume midway)
   variant, seed   the chapter-1 run's party variant and seed
@@ -183,7 +191,46 @@ def run_pick(case):
 
 # DsPacket's two fill loops (asm/bugfix_dspacket_race.asm): (address, bytes)
 DSPACKET_FIX = [(0x80036a10, 4), (0x80036a58, 0x18), (0x80036b08, 4), (0x80036b50, 0x18)]
+# the 14 words of the fix (rips/harness/t3/metlock/idlast.py; docs/re/bugs.md 1.12)
+DSPACKET_WORDS = {
+    0x80036a10: 0x00000000, 0x80036a58: 0x3c10800a, 0x80036a5c: 0x8e0286f0,
+    0x80036a60: 0x26730001, 0x80036a64: 0xae350000, 0x80036a68: 0x24420001,
+    0x80036a6c: 0xae0286f0, 0x80036b08: 0x00000000, 0x80036b50: 0x3c10800a,
+    0x80036b54: 0x8e0286f0, 0x80036b58: 0x26730001, 0x80036b5c: 0xae350000,
+    0x80036b60: 0x24420001, 0x80036b64: 0xae0286f0}
 SLPS = os.path.join(OUTR, 'disc/dimguil/SLPS_026.91')
+
+
+def disc_fix_words():
+    """{address: word} for the 14 fix words as the disc under test's SLPS holds them, or
+    None if it doesn't hold exactly DSPACKET_WORDS (or isn't there)."""
+    import struct
+    try:
+        d = open(SLPS, 'rb').read()
+    except OSError:
+        return None
+    t_addr = struct.unpack_from('<I', d, 0x18)[0]
+    got = {a: struct.unpack_from('<I', d, a - t_addr + 0x800)[0] for a in DSPACKET_WORDS}
+    return got if got == DSPACKET_WORDS else None
+
+
+def overlay_main():
+    """From now on in this (case) process, every Game.load lays the disc's fix words over
+    MAIN. Returns True if the disc holds them."""
+    import struct
+    from harness import game
+    words = disc_fix_words()
+    if not words or getattr(game.Game, '_overlaid', False):
+        return bool(words)
+    load = game.Game.load
+
+    def load_fixed(self, name):
+        load(self, name)
+        for a, w in sorted(words.items()):
+            self.e.write(a, struct.pack('<I', w))
+    game.Game.load = load_fixed
+    game.Game._overlaid = True
+    return True
 
 
 def run_cdrace(case):
@@ -192,12 +239,7 @@ def run_cdrace(case):
     import struct
     from harness.game import Game
     g = Game(capture=False)
-    g.load(case['state'])
-    if case.get('main') == 'disc':
-        d = open(SLPS, 'rb').read()
-        t_addr = struct.unpack_from('<I', d, 0x18)[0]
-        for a, n in DSPACKET_FIX:
-            g.e.write(a, d[a - t_addr + 0x800:a - t_addr + 0x800 + n])
+    g.load(case['state'])           # main 'disc': run_case has set the overlay
     run = longest = 0
     issued = done = None
     for f in range(case.get('frames', 2000)):
@@ -284,6 +326,8 @@ def run_trial(case):
 def run_case(case):
     t0 = time.time()
     rec = dict(id=case['id'], kind=case['kind'])
+    if case['kind'] != 'boot' and case.get('main') != 'state':
+        rec['main_overlay'] = overlay_main()
     try:
         if case['kind'] == 'screen':
             from harness import t5bad

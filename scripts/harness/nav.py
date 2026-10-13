@@ -43,7 +43,19 @@ LINKS = [
     dict(at=(1, 11, 18), face=2, step=False, to=(0, 11, 19), what='Shrine exit'),
     # the jewel lift (event 0xc, square_examine): "Will you touch it?" Yes
     dict(at=(4, 11, 11), face=0, step=False, to=(6, 12, 11), what='jewel lift down'),
+    # the moon door on B3 between E19 N4 and N5 (square_examine 0x15): shut both ways,
+    # the Tablet opens it from the south each time (EVENTMES 80), and the party steps
+    # through (f1v3g chapter 5, 2026-10-13: "no path" at (19, 19) on the way back)
+    dict(at=(6, 19, 19), face=0, step=True, to=(6, 19, 18), need=0x143, what='moon door'),
 ]
+# Area A's ladders (square_examine 0x09): B3 (area 20) and B4 (19), the same square on
+# both, facing west; and B3's E12-E13 N20 pair facing north, down only (the walkthrough's
+# way to the LABORATORY mural)
+for _xy in ((10, 3), (10, 4), (10, 19), (10, 20)):
+    LINKS.append(dict(at=(20,) + _xy, face=3, step=False, to=(19,) + _xy, what='ladder down'))
+    LINKS.append(dict(at=(19,) + _xy, face=3, step=False, to=(20,) + _xy, what='ladder up'))
+for _xy in ((12, 3), (13, 3)):
+    LINKS.append(dict(at=(20,) + _xy, face=0, step=False, to=(19,) + _xy, what='ladder down'))
 # Transfers the site doesn't decode: area -> {(x, y): (area, x, y)}. The jewel lift's
 # B3 end (event 0xc with p3 = 4, square_arrive) takes the party up on arrival; its
 # params give the destination in game coordinates (x 12, y 11, area 4).
@@ -51,7 +63,7 @@ EXTRA_TRANSFERS = {6: {(12, 11): (4, 11, 11)}}
 # The lift rides (0x80079878 = 9 down, 10 up; countdown at 0x8008a000) pass through the
 # floors between, with the area byte changing on the way: up from B3 it reads 1, 2, 3,
 # then 4, and the party ends at 4F (11, 11) about 1,050 frames after stepping on.
-RIDES = (9, 10)
+RIDES = (9, 10, 15)         # 15: the lift to Area X (B3 E15 N12, ~500 frames)
 SCENE, SCENE_COUNT = 0x80079878, 0x8008a000
 # Sides the site doesn't decode as sealed: area -> {(x, y, side): [(addr, bit), ...]}.
 # The stream on B2 west of E7 N12 (record type 0x24 at (7, 11)) lets nobody across until
@@ -61,9 +73,16 @@ SCENE, SCENE_COUNT = 0x80079878, 0x8008a000
 # area -> {(x, y, side)}. The parted stream's bed on B3 (5, 11) is one square between two
 # stairs (B3 (4, 11) up to B2's far bank (3, 11), B3 (6, 11) up to B2 (7, 11)); its north
 # and south can't be walked (f1v0b chapter 4, 2026-10-13: "no path" to the rest of B3).
-EXTRA_SHUT = {6: {(5, 11, 0), (5, 11, 2), (5, 10, 2), (5, 12, 0)}}
+EXTRA_SHUT = {6: {(5, 11, 0), (5, 11, 2), (5, 10, 2), (5, 12, 0),
+                 (19, 19, 0), (19, 18, 2)}}     # the moon door: a LINK, not a side
 NPC_FLAGS = 0x80079754
 EXTRA_SEALED = {7: {(7, 11, 3): [(NPC_FLAGS, 28)], (6, 11, 1): [(NPC_FLAGS, 28)]}}
+# Sides that close once a flag is set: area -> {(x, y, side): (addr, bit)}. B2's passage
+# between E13 N12 and E14 N12 shuts when the winding machine runs (story_flags bit 2):
+# the wall it hauls up on B3 comes down here (walkthrough 05-moon-door; f1v3f 2026-10-13
+# went up and down B1-B2's stairs 40 times, the site's map calling it open).
+STORY_FLAGS = 0x80079b44
+EXTRA_SHUT_AFTER = {7: {(13, 11, 1): (STORY_FLAGS, 2), (14, 11, 3): (STORY_FLAGS, 2)}}
 
 _floor = {}
 
@@ -113,7 +132,8 @@ def floor(area):
     closed = {(x, 23 - r) for r, row in enumerate(d.get('no_entry', [])) for x, c in enumerate(row)
               if c == 'f'}
     _floor[area] = dict(walls=walls, transfers=transfers, arrive=arrive, voids=voids,
-                        secret=secret, sealed=sealed, closed=closed, fights=fights, shut=shut)
+                        secret=secret, sealed=sealed, closed=closed, fights=fights, shut=shut,
+                        shut_after=dict(EXTRA_SHUT_AFTER.get(area, {})))
     return _floor[area]
 
 
@@ -134,6 +154,9 @@ def side_state(g, F, x, y, d, wm=None):
     else:
         w = F['walls'][(x, y)][d]
     if w == 1 or (x, y, d) in F['shut']:
+        return 'shut'
+    after = F.get('shut_after', {}).get((x, y, d))
+    if after and flag(g, *after):
         return 'shut'
     p1 = F['secret'].get((x, y, d))
     if p1 is not None:
@@ -266,6 +289,9 @@ def hidden_blocked(g, area):
     for (x, y, d), fl in F['sealed'].items():
         if not all(flag(g, a, b) for a, b in fl):
             out.add((x, y, d))
+    for (x, y, d), fl in F.get('shut_after', {}).items():
+        if flag(g, *fl):
+            out.add((x, y, d))
     return out
 
 
@@ -329,6 +355,19 @@ def travel(g, dest, on_int, after=None, max_legs=40):
             return legs
         p = plan(g, tuple(dest))
         if not p:
+            for _ in range(15):
+                g.step(8)
+                if g.u8(SCENE) in RIDES:
+                    break
+            ride(g)
+            here = (g.u8(maze.AREA),) + g.pos()
+            if here == tuple(dest):
+                return legs
+            p = plan(g, tuple(dest))
+        if not p and step_off(g, on_int):
+            here = (g.u8(maze.AREA),) + g.pos()
+            p = plan(g, tuple(dest))
+        if not p:
             raise Stuck('no route', at=here, dest=dest)
         leg = p[0]
         legs += 1
@@ -341,6 +380,24 @@ def travel(g, dest, on_int, after=None, max_legs=40):
         _, area, x, y = leg
         walk_floor(g, x, y, on_int)
     raise Stuck('travel too long', dest=dest)
+
+
+def step_off(g, on_int):
+    """On a transfer square: walk to an open neighbor that isn't one. True if it did."""
+    area = g.u8(maze.AREA)
+    F = floor(area)
+    x, y = g.pos()
+    if not F or (x, y) not in F['transfers']:
+        return False
+    wm = maze.wallmap(g) if maze.in_maze(g) else None
+    for d in range(4):
+        nx, ny = x + maze.DIRV[d][0], y + maze.DIRV[d][1]
+        if side_state(g, F, x, y, d, wm) != 'open' or (nx, ny) in F['transfers'] \
+                or (nx, ny) in F['closed'] or (nx, ny) in F['voids']:
+            continue
+        walk_floor(g, nx, ny, on_int)
+        return g.pos() != (x, y)
+    return False
 
 
 def ride(g, limit=3000):

@@ -49,6 +49,7 @@ SPELL_DAMAGE = {
     22: (4.5, 'one'), 45: (7.5, 'group'), 48: (15, 'group'), 51: (22.5, 'group'),
     54: (36, 'group'), 57: (67.5, 'group'), 60: (105, 'one'), 62: (96, 'group'),
     63: (5.5, 'one'), 66: (6, 'group'), 72: (9, 'group'), 77: (50, 'one'), 80: (36, 'group'),
+    34: (40, 'one'), 40: (40, 'group'),      # Badi, Bakadi: death (not the undead)
     81: (30, 'all'), 82: (40, 'all'),
 }
 SPELL_NAME = {}
@@ -171,6 +172,7 @@ def castable(g, roster_i):
     return out
 
 
+MIN_SPELL_VALUE = 8   # expected damage under which a member who can Fight fights instead
 RUN_AFTER = 15     # rounds; a battle still going after this many tries to run away
                    # (T3 chapter 2 dev run, 2026-10-13: Fuzzballs on Shrine 3F call for
                    # help every round and the fight never ended in 60,000 frames)
@@ -261,6 +263,8 @@ def default_policy(g, m, opts):
                 best, val = sid, v
         if len(vals) > 1 and _vary():
             best = sorted(vals)[-2][1]
+        if best is not None and FIGHT in opts and val < MIN_SPELL_VALUE:
+            best = None                   # a blow does more than this spell would
         if best is not None:
             c = by_id[best]
             return ('spell', best, c[1], c[2], c[3], ('group', target))
