@@ -119,8 +119,11 @@ glance". By subsystem:
   never do. A party counts if every member is paralyzed or worse. On yes, one such party
   goes back to town, still dead, and the NPC party takes a fee from each member: Guy all
   the gold; Balbo every item (all ten slots, equipped and cursed ones too); Fontana half
-  the gold and the items in slots 1, 3, 5, 7 and 9. The gate (`progress_bits` & 0x1e)
-  is open from the first trip into the Grounds.
+  the gold and the items in the first, third, fifth, seventh and ninth slots (0, 2, 4, 6,
+  8 counting from 0). The gate (`progress_bits` & 0x1e) is open from the first trip
+  into the Grounds. All three fees were confirmed in natural play
+  (`re/rescue-test.md`), which also found that a rescued party stays on offer and pays
+  again.
 - **Bugs and cut content.** C found a dozen. The clear bugs are fixed (bugs.md group
   1). Of the cut-looking ones, Zaril's healing (9135ef5), Guy's and Fontana's
   re-introductions (7498b1c), Cresson's greeting (7166f5d) and Fontana's chat about

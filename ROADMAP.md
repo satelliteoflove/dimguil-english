@@ -124,8 +124,9 @@ now): Zaril's healing, Guy's and Fontana's re-introductions, Cresson's greeting 
 Fontana's chat about Zaril's new party are reopened; the NPC identify service and
 Balbo's party's "heard that already" stay unused; the balance bugs are kept (see
 "hardcore mode" below); and the original's wrong numbers in spell and item descriptions
-are corrected (`docs/re/description-check.md`). Still to check: a natural-play test of
-the NPC rescue fees (`docs/re/rescue-test.md`).
+are corrected (`docs/re/description-check.md`). The NPC rescue fees were tested in
+natural play on 2026-10-13 (`docs/re/rescue-test.md`): all three match the code, and the
+test found that a rescued party stays on offer and can be charged again.
 
 ### Quality passes (to reach 0.9)
 

@@ -298,16 +298,28 @@ scan and no offer. [code; Cresson's and Zaril's read in full for this]
   the maze, not only from tier 2. (Corrected in phase 4, from the code: this doc first
   said "from tier 2 on".)
 - **Yes**: one candidate party is picked at random (`rand_upto(count - 1)`). Each member
-  gets `area` = 0xff (back in town), status unchanged, and pays the fee. [code]
+  gets `area` = 0xff (back in town), status and x/y unchanged, and pays the fee. [code,
+  emu]
+- **The party record stays.** The Yes doesn't free the rescued party's record, and the
+  scan doesn't look at `area`, so the same party is offered again, in the same meeting
+  and at later ones, and pays again. It stays a candidate until a member is raised or
+  the town's cleanup runs (only after a wipe, a load, or "Go On with Another Party").
+  [code, emu; a bug, see rescue-test.md]
 
 | Party | Fee from each rescued member | |
 |---|---|---|
-| Guy | all gold | [code] |
-| Balbo | every item: all ten slots emptied (0xffff, item_state 0xff) | [code] |
-| Fontana | half the gold, and the items in slots 1, 3, 5, 7 and 9 | [code] |
+| Guy | all gold | [code, emu] |
+| Balbo | every item: all ten slots emptied (0xffff, item_state 0xff); gold kept | [code, emu] |
+| Fontana | half the gold, rounded down, and the items in the first, third, fifth, seventh and ninth slots (0, 2, 4, 6 and 8 counting from 0); then every roster record's pack is compacted | [code, emu] |
 
-These match `docs/engine-notes.md`. Rescued bodies don't get the "carried to the temple"
-line (SISETU 614); they just turn up in the Temple's list (E). [code, E]
+(Corrected 2026-10-13 from the emulator test, rescue-test.md: the Fontana row said
+"slots 1, 3, 5, 7 and 9". Her loop empties slot 0 first, and in the test Jupiter lost
+his slots 0 and 2, Mars his slots 0, 2 and 4. Slot 0 usually holds the equipped
+weapon.)
+
+Rescued bodies don't get the "carried to the temple" line (SISETU 614); they just turn
+up in the Temple's list (E). [code, E, emu] All three fees were played through in
+natural play in `rescue-test.md`.
 
 ### Fights
 

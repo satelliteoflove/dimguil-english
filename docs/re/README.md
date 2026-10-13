@@ -21,7 +21,7 @@ summarizes each chapter; `docs/code-map.md` is the map of the code and the tools
 | [description-check.md](description-check.md) | Item, spell, Compendium and help text checked against the records and the code |
 | [cursor-frame.md](cursor-frame.md) | The menu cursor frame crossing the bold labels: the original, the cause, options for Chris |
 | [decisions.md](decisions.md) | What's waiting on Chris, with recommendations |
-| rescue-test.md | The natural-play test of the NPC rescue fees (in progress when this index was written) |
+| [rescue-test.md](rescue-test.md) | The NPC rescue fees played through from power-on: Guy, Balbo and Fontana, Yes, No and Look for Companions, the repeat-offer bug, and the offer lines checked against the Japanese |
 
 ## How claims are marked
 
@@ -104,8 +104,10 @@ unless it says inclusive; `rand_upto(n)` is 0..n inclusive.
   bug, [bugs.md 3.1](bugs.md)).
 - Bodies stay on their square and nothing takes from them later. Look for Companions
   on that exact square brings them back free.
-- NPC rescue fees ([C-talk.md §5](C-talk.md#5-services)): Guy all the gold; Balbo every
-  item; Fontana half the gold and the items in slots 1, 3, 5, 7 and 9.
+- NPC rescue fees ([C-talk.md §5](C-talk.md#5-services), played through in
+  [rescue-test.md](rescue-test.md)): Guy all the gold; Balbo every item; Fontana half
+  the gold and the items in the first, third, fifth, seventh and ninth slots. A rescued
+  party stays a candidate, so it can be offered and charged again (a bug).
 
 ### Raising the dead
 
