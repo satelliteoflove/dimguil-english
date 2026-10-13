@@ -82,7 +82,8 @@ Inferred but not seen in play: the ITEM.DAT alignment and sex labels, and that I
 and ITEM_CA are never loaded.
 
 The patch is English only: the four language switches are locked on "Eng", since the
-Japanese names would draw as a jumble (the README has to say so).
+Japanese names would draw as a jumble. The README, the changelog and the release readme
+say so (2026-10-13).
 
 The game's own English names were reviewed on 2026-10-09 and 2026-10-10, checking
 earlier Wizardry games first (`docs/translation-notes.md`). Fixed: typos (Dragonaire,
@@ -95,6 +96,10 @@ GLOVES (Wizardry III's name for 鉄の小手) and TABLET OF THE SUN. Kept as the
 the developer had them: Halycon (Wizardry V), Maelific (Wizardry I), NUNCHAKA (Wizardry
 VI and VII), BENT STAFF (Wizardry I), Flap Figure (Gaiden IV), Astro Zombie and Chany
 Mask. Bartok's Trading Post shows the patch's names with the disc's beside them.
+On 2026-10-13 four unidentified names were changed to match what the player sees:
+Vampire Bat, Wing Lizard and Were Bat are Flying Figure(s) instead of Bird(s), and
+Marchosias is Greater Demon instead of Very Big Bird (`docs/unidentified-flyers.md`,
+decisions.md 26).
 
 ### The game's code and the original's bugs
 
@@ -113,8 +118,8 @@ scrambling the party table after a failed raise from ashes, the BROKEN ITEM purg
 clearing the wrong slot, and the pit scene locking up for a party in which nobody has
 met Guy (2.8). The harness runs found two of them: a race at the Grounds pillars
 (bugs.md 1.11) that the longer English text set off, locking the game in about 3% of
-pillar events, and a rare race in the game's CD library that can stall any disc read for
-good (1.12). Decided since (`docs/re/decisions.md`, nothing there is waiting on Chris
+pillar events, and a rare race in the game's CD library that can freeze any disc read for
+about 20 seconds before the game retries it (1.12). Decided since (`docs/re/decisions.md`, nothing there is waiting on Chris
 now): Zaril's healing, Guy's and Fontana's re-introductions, Cresson's greeting and
 Fontana's chat about Zaril's new party are reopened; the NPC identify service and
 Balbo's party's "heard that already" stay unused; the balance bugs are kept (see
@@ -183,6 +188,23 @@ anywhere on the disc. What placement changes is seek distance.
 Loading faster than the original, by reorganizing the data track around the real load
 order or by changing the loading code, isn't a goal for this patch. It could be a
 separate patch later.
+
+### The play harness (the release gate)
+
+Chris, 2026-10-12: the bot play-through's runs are what let the repo and the patch go
+public. They have to show that the patched game behaves and can be finished without
+major breakage; his own playthrough still happens, but the release doesn't wait on it.
+`docs/harness-plan.md` has the plan, the checks and the results. As of 2026-10-13:
+- The suite runs after every change to the harness or the game, about 330 cases
+  including four cold boots through chapter 1; a game change is published only after a
+  full pass on that exact disc (by md5).
+- Parties play from power-on through chapter 3 into chapter 4 of 19; the chapter 4
+  Guardians are the current wall. The bot now picks its target group.
+- It has found two freezes in the original code (bugs.md 1.11, 1.12, both fixed), the
+  voicing-mark centering bug, and many smaller screen problems.
+- Still to do: chapters 4-19 to the ending; the NPC rescue test and the lock and chest
+  test (in progress); rebuilding the suite from a fresh clone, since its states live in
+  the gitignored `rips/` (in progress).
 
 ### Build from a clean clone
 
