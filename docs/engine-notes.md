@@ -169,6 +169,47 @@ glance". By subsystem:
 - **After.** Experience is split among members below status 0x20; chest gold the same.
   Chests are trapped by the area's danger level, and traps are picked from the chest's
   mask.
+- **Choosing the target group** (`group_pick` 0x800cf0dc, from `party_commands`
+  0x800cbec8; checked in the emulator 2026-10-13, rips/re/work/grouppick/). One picker
+  serves every command aimed at monsters. The menu state `battle_menu_screen`
+  (0x800796e0) is 0x11 for Fight, 0x34 for a spell, 0x54 for an item, 0x41 Dispel,
+  0x71 Ambush and 0x91 Breath. On circle the pick goes to `pick_result` (0x800da802) and
+  then into the member's combatant record, +0xb at 0x8008e23b + member × 0xe, with +0xa
+  the action (-1 Fight, -4 Dispel, -9 Breath, or the spell id). Group numbers are
+  `battle_groups` indices, kept contiguous from 1. The picker has two forms:
+  - Random encounters use a list in the group window at the top. The cursor is
+    0x80079b95 (group - 1), set to 0 every time the pick opens. Up and down wrap over
+    0..max; left and right do nothing. For Fight, max is min(weapon reach,
+    groups standing) - 1 (0x800da7fc), so a short weapon only offers groups 1-2. For
+    spells and items it's groups standing (0x800798b8) - 1.
+  - Fixed battles (`battle_fixed` 0x80079bde = 1: the chapter guardians and other set
+    fights) use the 3x2 grid of name boxes, top row the front. The cursor is column
+    0x800da800 (0-2) and row 0x800da801. Grid cell p = column + 3 × row + 1 shows
+    layout entry 0x80079c28[p] (0xff is the grey "Empty" box), and group g is entry
+    0x80079c50[g]. Each command opens on the top row, on the middle box if it holds a
+    group, else the left, else the right. Left and right wrap within the row and skip
+    empty boxes. Up and down flip the row, then look for a group starting from the same
+    column, going left for up and right for down; if the row has none, the cursor stays
+    put. Fight only reaches the bottom row when the weapon reaches more groups than the
+    front row holds (`short_reach_groups` 0x8007989d < `cmd_reach` 0x800da7fb), and its
+    confirm is limited to the top row otherwise. Spells, items, Dispel, Ambush and
+    Breath can always pick either row.
+  - A group spell or item in a fixed battle (spell flag 0x40; also Breath from a
+    member above level 8, read in the code but not tried) picks a whole row: the frame spans the row, and +0xb gets 1 for the top row or 2
+    for the bottom one. `spell_group_range` then sweeps groups 1..front count or the
+    back row's groups. So Mahalito at the Guardians' Arch Mage hits the Arch Priest
+    too: in a fixed battle a group spell can't single out one group.
+  - With one group standing (and a last index of 0) the pick takes group 1 at once.
+    Fight never shows 0x11; a spell shows 0x34 for one frame before moving on.
+  - The cursor isn't remembered between members or rounds. The one exception is
+    cancelling a fixed-battle spell pick back to the spell list: the grid keeps its
+    place.
+  - A confused member's command list skips the reach check, so its Fight pick uses the
+    previous member's reach (left in 0x800da7fb), and can offer fewer groups than
+    the weapon would.
+  - In random encounters, `groups_reorder` can shuffle the groups at the start of every
+    round, so a target has to be found again each round by monster id (`battle_groups`
+    +2) and identified flag. Index numbers from an earlier round won't do.
 
 ### The town (E-town.md)
 
