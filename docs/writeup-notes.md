@@ -113,6 +113,35 @@ center line. Of fourteen forced attack lines, the Xicalli one among them, 11 cha
 each only by a space dropped before a break, and the 3 that break in plain text came
 out identical (`rips/re/work/wrapfix2/shots/`).
 
+**A digraph's space at the end of a battle line (2026-10-13).** The T5 screen checks
+found "Giant Ant calls for help! A / monster appears." with its first line 1.5 px left
+of center, in five of six chapter 1 runs. The font has twelve digraphs that end in a
+space ("A ", "s ", "t ", ", " and so on), each one glyph code with the space drawn in.
+The word wrap breaks after them, and the earlier fix for trailing spaces only took off
+a plain space, so the digraph's space stayed at the end of the line. Taking it off
+needs the digraph's letter, and there's no runtime table of those, so the fix carries
+one: 45 bytes covering codes 0x8b-0xb7, each digraph ending in a space mapped to its
+letter and everything else to itself. When the line breaks, the byte before the break
+goes through the table. One code becomes one code, so the glyph count the battle box
+fades in by and the sprites it draws stay in step, which is what hung the first
+voicing fix; and it's all in MAIN, where the buffer is written, so a save state can't
+pair it with an older copy of anything. Room was the problem again. The table went
+where the expander used to skip a voicing mark in a name (a test the voicing fix had
+already made always say no), and the extra 8 instructions came from two nops and a
+second `lui` in the check before a name. `fightfit.py --digraphs` counts 24 FIGHTMSG
+strings that can break after such a digraph (it had counted one more until it learned
+that strings without `"compress": true` get no digraphs); no event or NPC line can,
+since only battle text wraps. A small R3000 interpreter (`rips/re/work/digraphwrap/
+exptest.py`) ran the old and new expanders on every FIGHTMSG string and every name
+length: 127,118 expansions, 390 changed, every change a digraph turned into its letter
+just before a break, in exactly those 24 strings. In the game, from power-on on the
+built disc (a memory card save for chapter 4), three cases came up in play and moved
+2 px right, onto the same center as the lines around them: "Giant Ant calls for help!
+A", "Mercury obtains / LEATHER ARMOR!" and "Faerie Fly calls for help! But / no help
+comes." t5check went from 3 center findings to none on the chapter 1 run and from 2 to
+none on the chapter 4 one. Shots:
+`rips/re/work/digraphwrap/shots/` (`sheet_before_after.png`).
+
 **The voicing marks, second round: centering and "b  away" (2026-10-13).** The T5 screen
 checks found two things the first voicing fix (9a955ba) had left.
 - Seen: every event line with `"` or the digraph "w " sat right of center, about 2 px

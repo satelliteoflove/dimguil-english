@@ -49,6 +49,9 @@ see all of it.
   them into the glyph before ("Ocelotl tries to b  away" in battle). Fixed in
   `asm/voicing_marks.asm`; found by the T5 screen checks. Details in `writeup-notes.md`.
 
+- **Battle lines ending in a digraph's space (2026-10-13).** "Giant Ant calls for help! A /
+  monster appears." sat 2 px left; a break after "A ", "s " etc. now draws the letter alone (`asm/word_wrap.asm`).
+
 ### Machine-written habits (the Q1 sweep)
 
 The English was screened for habits that read as machine-written, and 37 hits were

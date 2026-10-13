@@ -51,8 +51,8 @@
     move    v0, zero            ; was sltiu v0, v0, 2 (next glyph - 0xb6 < 2)
 
 ; Measures: "is this glyph a mark" always says no, so every glyph is counted.
-.org 0x8001e2d0                 ; expander, name copy: wrap column
-    move    v0, zero            ; was sltiu v0, v0, 2 (glyph - 0xb6 < 2)
+; The expander's wrap column for a name (test at 0x8001e2d0) is word_wrap.asm's now: it
+; dropped the whole 12 px font and mark test for "count it" and keeps a table there.
 .org 0x8001fc98                 ; event box, first line
     move    v0, zero            ; was sltiu v0, v0, 2
 .org 0x800201f0                 ; event box, later lines

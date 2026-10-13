@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Check battle messages (translations/FIGHTMSG.OBJ.json) against the battle text box.
 
-    fightfit.py
+    fightfit.py [--digraphs]
 
 The box holds 3 lines of 24 glyph codes (a digraph is one code), centred. The printer
 moves an inserted name ({ff13} and friends) to a new line when it won't fit on the
@@ -14,8 +14,12 @@ straight after a break in plain text is dropped (word_wrap.asm), so neither end 
 gets one. Reports messages that can run past 3 lines, split a word (only possible for text
 stuck to a name with no space, like "{ff13}'s"), or start or end a line with a plain
 space (an explicit line break in a template can still end one). A digraph ending in a
-space ("s ") keeps it at the end of a line and isn't reported. String 297 (the Tree of
-Stillness mural) is shown in the event box and is skipped.
+space ("s ", "A ") at an automatic break is drawn as its letter alone (word_wrap.asm),
+so that isn't an issue either; one before an explicit line break, or at the end of a
+message, is. --digraphs lists the messages where an automatic break can land after such
+a digraph (the lines word_wrap.asm's digraph rule fixes). A string without "compress":
+true in the JSON is encoded letter by letter, as the encoder leaves it. String 297 (the
+Tree of Stillness mural) is shown in the event box and is skipped.
 """
 import itertools, os, re, sys
 sys.path.insert(0, os.path.dirname(__file__))
@@ -30,10 +34,12 @@ VERBS = range(1, 78)  # FIGHTMSG strings inserted as {ff15}
 SKIP = {297}
 # a plain space, and the digraphs that end in one (see asm/word_wrap.asm)
 SPACES = set(range(0x8b, 0x93)) | {0xad, 0xae, 0xb2, 0xb7, 0xba}
+DIGRAPHS = SPACES - {0xba}
 
 
-def tokens(text):
-    """[('var', name) | ('nl',) | ('code', c)]"""
+def tokens(text, compress=True):
+    """[('var', name) | ('nl',) | ('code', c)]; compress=False for a string the encoder
+    leaves without digraphs (no "compress": true in the JSON)."""
     text = re.sub(r'\{ancient_\w\}', 'X', text)
     out = []
     for tok in re.findall(r'\{ff[0-9a-f]{2}\}\d?|\n|\r|[^{\n\r]+', text):
@@ -43,24 +49,27 @@ def tokens(text):
         elif tok == '\n':
             out.append(('nl',))
         elif tok != '\r':
-            out += [('code', c) for c in descfit.encode(tok)]
+            codes = descfit.encode(tok) if compress else [descfit.CHARS[ch] for ch in tok]
+            out += [('code', c) for c in codes]
     return out
 
 
 def simulate(toks, lens):
-    """(lines, a word was split, a line starts with a space, a line ends with one)"""
-    lines, col, split, lead, trail = 1, 0, False, False, False
+    """(lines, a word was split, a line starts with a space, a line ends with one,
+    an automatic break lands after a digraph ending in a space)"""
+    lines, col, split, lead, trail, dig = 1, 0, False, False, False, False
     skip = None
     last = None  # the last code on the current line ('var' for a name)
     for k, t in enumerate(toks):
         if k == skip:
             continue
         if t[0] == 'nl':
-            trail |= last == 0xba
+            trail |= last in SPACES
             lines, col, last = lines + 1, 0, None
         elif t[0] == 'var':
             n = lens.get(t[1], 0)
             if n and col + n > CAP and col:
+                dig |= last in DIGRAPHS  # drawn as its letter
                 lines, col = lines + 1, 0  # a plain space before it is replaced
             col += n
             last = 'var' if n else last
@@ -85,27 +94,33 @@ def simulate(toks, lens):
                 nxt = toks[k + 1] if k + 1 < len(toks) else None
                 split |= bool(nxt and nxt[0] == 'code' and nxt[1] not in SPACES)
             if brk:  # after a plain space, the break replaces it
+                dig |= t[1] in DIGRAPHS  # drawn as its letter
                 lines, col, last = lines + 1, 0, None
                 nxt = toks[k + 1] if k + 1 < len(toks) else None
                 if nxt == ('code', 0xba):
                     skip = k + 1
-    return lines, split, lead, trail
+    trail |= last in SPACES  # the end of the message
+    return lines, split, lead, trail, dig
 
 
 def main():
     strings = load_json(os.path.join(ROOT, 'translations/FIGHTMSG.OBJ.json'))['sections'][0]['strings']
     ranges = dict(RANGES, ff15=sorted({len(descfit.encode(strings[i].get('translation') or ''))
                                        for i in VERBS} - {0}))
-    bad = 0
+    digraphs = '--digraphs' in sys.argv[1:]
+    bad = ndig = 0
     for i, s in enumerate(strings):
         text = s.get('translation') or ''
         if i in SKIP or not re.search('[a-z]', text):
             continue
-        toks = tokens(text)
+        toks = tokens(text, s.get('compress') is True)
         names = sorted({t[1] for t in toks if t[0] == 'var' and t[1] in ranges})
+        hit = None
         for combo in itertools.product(*(ranges[n] for n in names)):
             lens = dict(zip(names, combo))
-            lines, split, lead, trail = simulate(toks, lens)
+            lines, split, lead, trail, dig = simulate(toks, lens)
+            if dig and hit is None:
+                hit = lens
             if split or lead or trail or lines > 3:
                 bad += 1
                 print(f'!! {i:3d} {lines} lines{", splits a word" if split else ""}'
@@ -113,6 +128,13 @@ def main():
                       f'{", ends a line with a space" if trail else ""} '
                       f'with lengths {lens}: {text!r}')
                 break
+        if hit is not None:
+            ndig += 1
+            if digraphs:
+                print(f'.. {i:3d} a break after a digraph ending in a space with lengths {hit}: {text!r}')
+    if digraphs:
+        print(f'{ndig} battle messages can break after a digraph ending in a space '
+              '(drawn as its letter, word_wrap.asm)')
     print(f'{bad} battle messages can overflow, split a word or start or end a line with a space')
     return 1 if bad else 0
 

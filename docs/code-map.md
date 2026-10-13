@@ -243,7 +243,6 @@ at these spots.
 | Module | Function (patched addresses) | Patch |
 |---|---|---|
 | MAIN | FUN_80012a4c (0x80012c88) | english_defaults.asm |
-| MAIN | FUN_8001e1f0 (0x8001e2fc, 0x8001e370) | word_wrap.asm |
 | MAIN | FUN_8001f9d8 (0x8001f9d8) | vwf.asm |
 | MAIN | FUN_8001fb4c (0x8001fc18, 0x8001fc1c, 0x8001fc80, 0x8001fc98, 0x8001fca4, 0x8001fcac) | voicing_marks.asm, vwf.asm |
 | MAIN | FUN_8002027c (0x8002027c) | vwf.asm |
@@ -251,7 +250,7 @@ at these spots.
 | MAIN | FUN_80023e98 (0x80023f68) | english_defaults.asm |
 | MAIN | event_box_open (0x80021bfc) | event_window_pool.asm |
 | MAIN | event_box_print (0x8001ffe8, 0x80020170, 0x80020174, 0x800201d8, 0x800201f0, 0x800201fc, 0x80020204, 0x80020274) | voicing_marks.asm, vwf.asm |
-| MAIN | text_expand (0x8001e19c, 0x8001e2d0) | voicing_marks.asm, word_wrap.asm |
+| MAIN | text_expand (0x8001e164, 0x8001e2a4, 0x8001e2fc, 0x8001e370) | word_wrap.asm |
 | MAZE | FUN_800a1ecc (0x800a1f7c, 0x800a1f9c, 0x800a1fc0) | voicing_marks.asm, vwf.asm |
 | MAZE | text_draw (0x800a20e0) | voicing_marks.asm |
 | MAZE | FUN_800ba48c (0x800bab9c) | return_prompt_icon.asm |

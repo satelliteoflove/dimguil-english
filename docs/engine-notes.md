@@ -405,7 +405,8 @@ patches in `asm/`.
 - Every mark test in the eight code files (clean disc), and what's done with it:
   - MAIN: 0x8001e2c8 expander wrap column, 0x8001fc90 and 0x800201e8 event box
     measures, 0x8001ffe0 event box merge: patched. 0x800220c4 battle measure: left,
-    BATTLE passes font 0.
+    BATTLE passes font 0. (The expander's test, with its font check, was later removed
+    whole by word_wrap.asm, which keeps its digraph table there.)
   - BATTLE: 0x800d1a60 merge: patched. The helper (0x800d3510) returns 0.
   - MAZE: 0x800a1f74 text_at measure, 0x800a20d8 text_draw merge: patched.
   - MCARD: 0x800ad610 measure, 0x800b3ec0 typewriter: patched; 0x800ad7ac asks the
@@ -444,9 +445,27 @@ patches in `asm/`.
   routine, `write_break`, which puts the {ff21} over a plain space just before it (every
   caller has a nonzero column, so that byte is on the current line). The room came from
   sharing it: the three inline copies of the {ff21} sequence became one, returning
-  through t7, which the original function never uses (2026-10-13). A digraph that ends
-  in a space ("s ", "t ") still keeps its space at the end of a line: the break goes
-  after it, and taking the space off would need the digraph's letter.
+  through t7, which the original function never uses (2026-10-13).
+  A digraph that ends in a space ("s ", "A ", ", " and nine more: 0x8b-0x92, 0xad, 0xae,
+  0xb2, 0xb7) is one glyph code with the space drawn into it, so a break after it still
+  left that space at the end of the line ("Giant Ant calls for help! A / monster
+  appears.", 2 px left of center). The lookahead breaks after such a digraph, and the
+  name path breaks after one when a name follows a word like "plays ". `write_break`
+  now also rewrites the byte before the break through a 45-byte table at 0x8001e2b0,
+  indexed by code - 0x8b: each digraph ending in a space becomes its letter (0x8d "s "
+  -> 0x37 "s", 0xb2 "A " -> 0x0b "A"), every other code in 0x8b-0xb7 maps to itself.
+  It's one code for one code, so the expander's column, the battle box's per-line glyph
+  count and the sprites drawn don't change; the line's measured width loses the space,
+  and the measure (MAIN 0x80022024) and BATTLE's drawing read the same buffer. The fix is
+  all in MAIN, so no mix of MAIN and overlay builds can disagree about it. Room: the
+  name path's check (0x8001e164-0x8001e194) lost two nops and a second lui, so
+  `write_break` moved to 0x8001e198 and grew to 22 instructions; the table took the
+  name copy's 12 px font and voicing-mark test (0x8001e2b0-0x8001e2df), which
+  voicing_marks.asm had made always say no, leaving "count any one-byte glyph below
+  0xf8" in three instructions at 0x8001e2a4. 24 FIGHTMSG strings can break after such a
+  digraph (`fightfit.py --digraphs`); no event or NPC text can, since only the battle
+  call wraps and no explicit line break in them follows one. FIGHTMSG strings without
+  `"compress": true` (0, 103, 113, 214, 255, 264-285, 287) are encoded with no digraphs.
 
 ### Text buffer
 
