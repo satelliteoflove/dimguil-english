@@ -260,6 +260,16 @@ boot.
 and their states (16 MB each) live in `rips/`, which is gitignored, so the suite isn't
 reproducible from the repo yet.
 
+A save state keeps MAIN's code (SLPS_026.91) from the build it was made on, while the
+overlays (MAZE, BATTLE, JOUKA and the rest) load fresh from the disc under test. So the
+saved cases test overlay changes but not MAIN changes, and a fix split across MAIN and an
+overlay runs half old, half new. That's how the first voicing-mark fix (2212979) hung a
+battle in the suite but not from a cold boot (docs/engine-notes.md, "Text printer").
+Until then no round had exercised a MAIN change: the wrap fix (8c26893) and the CD
+library fix (0ef275c) were checked only by their own cold-boot runs. The fix being added
+(2026-10-13): each round also boots the disc under test from power-on and plays chapter 1
+with several seeds, so MAIN is always the build's own.
+
 ## T3 and T4 results (2026-10-12)
 
 Full notes in `rips/harness/t3/README.md`; code committed in 7026414 (`chapter1.py`,
