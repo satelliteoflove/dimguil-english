@@ -110,7 +110,8 @@ that played in the wrong place or never (Guy's statue warning, Rosea's and Cepha
 heals, Alstron's Madi, the pit scene, Fritillaria's "walkin' corpse", Cresson's speech
 after the Decipher table, the rerolled chat topics), the Temple scrambling the party
 table after a failed raise from ashes, and the BROKEN ITEM purge clearing the wrong
-slot. Waiting on Chris (`docs/re/decisions.md`): content that looks deliberately cut
+slot. The harness runs found one more (bugs.md 1.11): a race at the Grounds pillars that
+the longer English text set off, locking the game about 3% of the time, now fixed. Waiting on Chris (`docs/re/decisions.md`): content that looks deliberately cut
 (an NPC identify service, Zaril's healing), fixes that would change the balance (a wipe
 destroys only one character's items), and whether to correct the original's wrong
 numbers in spell and item descriptions (`docs/re/description-check.md`). Still to

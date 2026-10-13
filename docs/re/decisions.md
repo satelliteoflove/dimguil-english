@@ -186,3 +186,12 @@ against Madalqua** (its element is Tiltowait's, 0x4000).
 Checked 2026-10-12, both accurate, nothing to decide: EVENTMES 210/211 (the pillar water
 is a free, repeatable full spell-point refill) and Calnova on doors (95%, no penalty on a
 miss, fails on anti-magic squares). Details in `description-check.md`.
+
+## From the harness runs (2026-10-12)
+
+**23. The pillar guardian soft lock** (`bugs.md` 1.11). The box closing and the dust
+settling race; if the dust wins, the fight request is wiped and the game locks. Original
+code, set off by our longer line (about 3% of pillar events). The options were shortening
+the English line to finish first again, or fixing the race.
+**Decided (Chris, 2026-10-12): fix the code** ("I don't like working around things").
+`asm/bugfix_pillar_race.asm`: the dust waits for the box.

@@ -406,6 +406,11 @@ The full triage is `docs/re/bugs.md`; each fix is its own `asm/bugfix_*.asm`.
   falling into the Area C pit while Guy was the rescuer, sat on an empty talk window for
   good. It now gets the game's own rescuer for that case, Balbo's party if someone has
   met Balbo, otherwise the man in armor (5ff86d2).
+- **A pillar guardian's fight could be lost,** locking the game on "The pillar begins to
+  shake ... attacks." The box closing and the dust settling race, and the box closing
+  wipes the fight request. The Japanese line always finished first; ours is about three
+  times as long and lost about 3% of the time. The dust now waits for the box. Found by
+  the harness runs (asm/bugfix_pillar_race.asm, bugs.md 1.11).
 
 Reopened content (each one goes in the release notes too):
 

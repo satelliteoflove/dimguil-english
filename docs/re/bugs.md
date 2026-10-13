@@ -1,9 +1,10 @@
 # Bugs in the original game, and content no code reaches
 
-Every bug and every unreachable string the phase-2 analysts found (`docs/re/*.md`), and
-two from the fallen-party audit (`docs/re/fallen-parties.md`). Each was re-read in the
-code from the original disc (`rips/clean`, decompiled at 585c983) and confirmed or
-refuted. Addresses are RAM; MCARD, JOUKA and MAZE load at 0x800a1000.
+Every bug and every unreachable string the phase-2 analysts found (`docs/re/*.md`), two
+from the fallen-party audit (`docs/re/fallen-parties.md`), and one from the harness runs
+(1.11). Each was re-read in the code from the original disc (`rips/clean`, decompiled at
+585c983) and confirmed or refuted. Addresses are RAM; MCARD, JOUKA and MAZE load at
+0x800a1000.
 
 Chris's rule (2026-10-11): fix the clear bugs, and reopen content a bug cut off. Bring
 anything that looks deliberately cut, and any fix that changes how hard the game is, to
@@ -17,7 +18,7 @@ him first. So each entry is in one of three groups:
 
 | Group | Count |
 |---|---|
-| 1. Clear bugs | 11 (10 fixed; 2.8, the pit soft lock, confirmed and waiting on one choice) |
+| 1. Clear bugs | 12 (11 fixed; 2.8, the pit soft lock, confirmed and waiting on one choice) |
 | 2. Cut or unclear, ask | 6 |
 | 3. Balance, ask | 3 |
 | Not bugs, or harmless | 9 (2.7 and 3.4 moved here after the follow-ups) |
@@ -180,6 +181,38 @@ does. Dropping a redundant sign extension of the loop counter makes room.
 RAM-write setup (item 0 in slot 6, a 9-use item in slot 9): before, the purge zeroed
 +0x3d and the item was left with 0 uses; after (fix bytes over JOUKA, then again on the built
 disc), it cleared +0x3a and the item kept 9.
+
+### 1.11 A pillar guardian's fight can be lost, locking the game
+
+From the harness runs (T3/T4, 2026-10-12): four soft locks at the Grounds pillars, all
+on "The pillar begins to shake ... attacks." The summon (MAZE 0x800afb34) opens that
+event box, locks walking input (0x800796ab = 1) and starts the dust step (0x800cc9fc,
+walk sub-state 3). When the dust has settled, the step requests the fight
+(0x80079bf1 = 2, at 0x800cca4c). The box closes by itself once its text has typed out,
+and `maze_frame` clears 0x80079bf1 on every box close (0x800a3234, in a delay slot).
+Nothing ties the two together. If the dust settles first, the request is wiped, nothing
+clears the input lock, and only a reset gets out. [code, emu]
+
+Original code, but the Japanese disc never hits it: its line finishes typing 78-94
+frames before the dust settles. Our English line is about three times as long and
+finishes 84 frames later, which leaves -6 to +10 frames, and about 3% of pillar events
+locked up (200 seeds of the BIOS `rand()` the dust uses, at the bird: 6 hangs on our
+disc, none on the Japanese one; message speed makes no difference).
+`docs/engine-notes.md`, "Pillar guardians: the box and the dust race", has the trace.
+
+Fix: the dust step counts an open box (0x80079838) as dust still alive, so the request
+is only set once the box has closed. Two `nop`s at 0x800cca20 (`lbu a0, -0x67c8(s0)`)
+and 0x800cca28 (`or v0, v0, a0`), no extra space. `asm/bugfix_pillar_race.asm`.
+
+Checked: emulator, on the built disc. MAZE.BIN loads from the disc on entering the maze,
+after the START menu and after a battle, and RAM then reads 92049838 and 00441025 at the
+two addresses. The bird, 200 seeds from a fresh boot on the built disc: no hangs. The
+snake, the same 200 seeds from matched states on the old and new discs: 11 hangs before,
+none after. The 189 seeds that worked before start their fight on the same frame; the 11
+that hung now start it 4 frames after the box closes, the earliest the others do. The
+arrival-frame repro that hung every time (`t3/freeze/snake6_arrive.state`) starts its
+fight 2 frames after the box closes. (The RNG seed is set with a RAM write as a stand-in
+for different play histories.) Scripts: `rips/harness/t3/freeze/`.
 
 ## Group 2: looks cut, or the intent isn't clear
 

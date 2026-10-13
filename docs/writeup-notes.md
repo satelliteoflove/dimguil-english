@@ -539,3 +539,26 @@ called the confused status "Sane".
 - "Confused" is as long as the original's "Paralyze" and right-aligns to the same edge.
 - Checked with a RAM-write setup, so the shots stay in `rips/re/work/P3-label/`
   (before.png, after.png), not docs/shots.
+
+**The pillar soft lock (2026-10-12, bugs.md 1.11).** The first game bug the play harness
+found, and one the translation set off.
+- Seen in the harness's chapter 1 runs: four times, the game stopped on "The pillar begins
+  to shake ... attacks." with every button ignored. Timers and the picture kept going;
+  60,000 frames of waiting or pressing never started the fight. A bot presses on the first
+  frame the game accepts input, so it looked at first like a one-frame START window.
+- Cause: touching a pillar starts the event box and a dust animation together. The dust,
+  when it settles, requests the guardian's fight; every box close clears that request.
+  If the dust settles first, the request is wiped with walking input locked. The START
+  frame only shifted the random seed the dust uses.
+- Why only the English: the code is byte-identical to the Japanese disc, and the dust takes
+  the same time on both. The Japanese line finishes typing 78-94 frames ahead of it. Ours
+  is about three times as long and lands from 6 frames late to 10 early: 6 of 200 seeds
+  hung at the bird, 11 of 200 at the snake. About one play-through in nine would hit it.
+- Chris turned down shortening the line ("I don't like working around things"). The fix
+  makes the dust count an open box as still busy, two instructions over two `nop`s in
+  MAZE.BIN, no extra space.
+- Checked on the built disc: 0 of 200 at the bird, 0 of 200 at the snake; the fights that
+  worked before start on the same frame. Eight parties then ran chapter 1 from a cold boot
+  and every pillar fight started first try.
+- The other stall the runs found ("You've met someone!" with no meeting) is unrelated: a
+  CD read that never finishes. Still open.

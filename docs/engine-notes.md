@@ -321,14 +321,19 @@ patches in `asm/`.
   and finishes 84 frames later, which puts it at -6 to +10 frames: 6 of 200 seeds hang,
   about 3% per pillar event (`rips/harness/t3/freeze/race_dist_seeded.jsonl`). The
   message speed setting doesn't change the event box's speed.
-- **Fix (proposed, not applied):** make the dust step also wait for the box. Two `nop`s
-  in MAZE.BIN at 0x800cc9fc (s0 = 0x80080000 there):
+- **Fix (applied, `asm/bugfix_pillar_race.asm`; docs/re/bugs.md 1.11):** the dust step
+  also waits for the box. Two `nop`s in MAZE.BIN at 0x800cc9fc (s0 = 0x80080000 there):
   - 0x800cca20 `nop` → `lbu a0, -0x67c8(s0)` (the box flag, 0x80079838)
   - 0x800cca28 `nop` → `or v0, v0, a0` (busy = particles alive or box open)
 
   The count then holds at 1 until the box has closed, and the request is set after the
-  clear. No extra space needed. Tested in RAM only (re-applied after each overlay
-  reload): the deterministic hang and all six hanging seeds start their fights.
+  clear. No extra space needed. Checked on the built disc: 0 of 200 seeds hang at the
+  bird, and at the snake (matched states, old disc against new) 11 of 200 hung before
+  and none after. Seeds that worked before start their fight on the same frame; the
+  ones that hung now start it 4 frames after the box closes, the earliest the others do.
+- MAZE.BIN is read from the disc on entering the maze, after the START menu and after a
+  battle. A save state taken in the maze on an older build runs the older code until one
+  of those happens.
 
 ### Glyph sprite layers
 
