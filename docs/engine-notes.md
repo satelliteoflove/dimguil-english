@@ -291,6 +291,45 @@ patches in `asm/`.
   (424) and NPC_MES4 151 (378). `textbuf.py` holds every string to 544 bytes, leaving
   room for inserted names, and the build stops if one is over.
 
+### Pillar guardians: the box and the dust race
+
+- Answering Yes to "Will you touch it?" at one of the four Grounds pillars runs the
+  summon at MAZE 0x800afb34 (only caller: `maze_prompt_result`, 0x800bef20). It opens
+  the event box ("The pillar begins to shake ... attacks.", EVENTMES), locks walking
+  input (0x800796ab = 1; `maze_walk` zeroes the pad words while it's set, 0x800a9790),
+  sets walk sub-state 0x80079878 = 3 and a countdown 0x80079790 = 99.
+- Sub-state 3 runs 0x800cc9fc each logic frame (every other frame): count down, animate
+  the dust (0x800afc2c: up to 32 particles, spawned with the BIOS `rand()` while the
+  count is 2 or more; returns how many are alive), hold the count at 1 while any are
+  alive, then sub-state 0 and **0x80079bf1 = 2** (0x800cca4c), the request to start the
+  guardian's fight. `maze_frame` picks that up through 0x800c5ca8 / 0x800c5f78, which
+  clears the request and the input lock and starts the battle.
+- The box closes itself when its text has finished typing (printer 0x80079992 reaches
+  0x64; no press needed, and presses don't speed it up). `maze_frame` sees that at the
+  top of the frame (0x8001fb4c(6, N, 1) returns 1) and clears the box flag 0x80079838
+  **and 0x80079bf1** (0x800a3234, in the delay slot, so on every box close).
+- So the two finish independently. If the box closes first, or on the same logic
+  frame (the box check runs before `maze_walk`), the cleared byte doesn't matter and
+  the fight starts. If the dust ends first, its fight request is wiped one or more
+  logic frames later when the box closes. Nothing else ever clears 0x800796ab: the
+  game keeps running, the box text stays drawn, and no button does anything. Only a
+  reset gets out.
+- **Original code, exposed by the English.** MAZE.BIN and the box code in MAIN
+  (0x8001fb4c, 0x800224xx) are byte-identical to the Japanese Rev 1 disc. The dust takes
+  the same time on both discs; the Japanese text finishes 78-94 frames ahead of it
+  (200 RNG seeds at the bird, never negative). The English text is three times as long
+  and finishes 84 frames later, which puts it at -6 to +10 frames: 6 of 200 seeds hang,
+  about 3% per pillar event (`rips/harness/t3/freeze/race_dist_seeded.jsonl`). The
+  message speed setting doesn't change the event box's speed.
+- **Fix (proposed, not applied):** make the dust step also wait for the box. Two `nop`s
+  in MAZE.BIN at 0x800cc9fc (s0 = 0x80080000 there):
+  - 0x800cca20 `nop` → `lbu a0, -0x67c8(s0)` (the box flag, 0x80079838)
+  - 0x800cca28 `nop` → `or v0, v0, a0` (busy = particles alive or box open)
+
+  The count then holds at 1 until the box has closed, and the request is set after the
+  clear. No extra space needed. Tested in RAM only (re-applied after each overlay
+  reload): the deterministic hang and all six hanging seeds start their fights.
+
 ### Glyph sprite layers
 
 - Each glyph is drawn as a sprite from a pool ("layer"). A screen sets up four layers
