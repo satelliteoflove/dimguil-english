@@ -198,6 +198,13 @@ Once 1.0 is out and any early bug reports are dealt with, the repo mostly goes q
 - The disc token can be left to expire. The private disc repo only matters if another
   release is ever needed, and that would need a new token too.
 
+## Maybe later: corner-bracket cursor
+
+Chris, 2026-10-13: the menu cursor stays the original's orange box, but he liked the
+corner-bracket mockup and may add it later as a choice on the settings screen. Nothing is
+built. The spec, what it touches and what a setting would take are in
+`docs/re/cursor-frame.md` ("Corner brackets: the full spec"; decisions.md 25).
+
 ## Maybe later: a "hardcore mode"
 
 Chris, 2026-10-11: original bugs that make the game easier are kept in the main patch, to

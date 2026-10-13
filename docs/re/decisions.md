@@ -205,3 +205,11 @@ since the fix touches every disc read, or fixing it.
 **Decided (Chris, 2026-10-13): fix it, and document clearly that it was fixed and why.**
 Checked first: the same reads in the same frames with and without the fix over two
 chapter 1 runs, and the suite passing on a patched disc. `asm/bugfix_dspacket_race.asm`.
+
+**25. The menu cursor frame** (`cursor-frame.md`). The orange frame on the camp, status
+and shop menus crosses the tops of the bold capitals and the descenders. The original
+does the same at the top line; the descender hits are new. The options were leaving it,
+a 9 px frame (A), corner brackets (B), or rows 9 px apart (C).
+**Decided (Chris, 2026-10-13): leave it for now.** He liked the corner brackets and may
+add them later as a choice on the settings screen, so B is documented in full in
+`cursor-frame.md` ("Corner brackets: the full spec") and listed in ROADMAP.md.
