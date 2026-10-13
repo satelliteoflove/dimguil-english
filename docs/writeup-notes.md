@@ -113,6 +113,52 @@ center line. Of fourteen forced attack lines, the Xicalli one among them, 11 cha
 each only by a space dropped before a break, and the 3 that break in plain text came
 out identical (`rips/re/work/wrapfix2/shots/`).
 
+**The voicing marks, second round: centering and "b  away" (2026-10-13).** The T5 screen
+checks found two things the first voicing fix (9a955ba) had left.
+- Seen: every event line with `"` or the digraph "w " sat right of center, about 2 px
+  per `"` and 6 px per "w " (81 lines flagged; all 657 lines without either were within
+  1.5 px), and so did "Learned new spells." in the Inn's level-up box. In battle,
+  "Ocelotl tries to blow away" printed "b  away", on 54 screens.
+- Cause, centering: the game measures a line before printing it, to center it, and the
+  measure skips 0xb6 and 0xb7, since a voicing mark merges into the glyph before and
+  takes no room. Ours are `"` and "w ", so the line came out short by that glyph's
+  advance and moved right by half of it. The same three-instruction test sits in eight
+  measures: the event box's two, the battle box's, text_at in four overlays, and the
+  battle expander's wrap column for inserted names.
+- Cause, "blow away": two printers merge inline instead of asking the helper the first
+  fix turned off, BATTLE's and MAZE's. "lo" + "w " became a voiced form of "lo", which
+  doesn't exist, so a blank cell. Both merge after any glyph, like the event box did.
+- Both are ours, not the game's: in Japanese those codes are voicing marks and the code
+  is right for them. The fix makes each test say "not a mark" (`asm/voicing_marks.asm`).
+- Checked through the real boxes, before and after. All 91 event strings that use either
+  code: 98 lines, 1.5 to 12 px off before, within 0.5 px after, each moved left by
+  exactly 6 px per "w " and 2 px per `"`; the 205 lines without either didn't move, and
+  t5check went from 310 findings to none. The Inn: "Learned new spells." from +6 px to
+  centered.
+- The first version (2212979) hung a battle, and the harness caught it: "Ocelotl tries to
+  blow away / Mercury with a body slam" printed without its period and the box never
+  finished. The battle box fades its text in line by line, using the measure's glyph
+  count for each line, and is done when every sprite drawn has faded in. That version
+  patched the battle measure in MAIN and the merge in BATTLE.BIN. A save state keeps
+  MAIN's code from the build it was made on, but BATTLE.BIN loads fresh from the disc at
+  each fight, and the harness's states went back to older builds. Old MAIN skipped the
+  "w " (counts 20 + 21), new BATTLE drew it (42 sprites), and the period never faded in.
+  My own battle check had written the new MAIN code into RAM, so it never mixed the two.
+- So a count and the sprites it stands for now change in the same file. The measure in
+  MAIN is left alone and BATTLE asks it not to skip marks (it passes font 0, the only
+  thing the measure uses that argument for). Every mark test in all eight code files was
+  listed and accounted for (engine-notes, "Text printer"); the only count compared with
+  the sprites drawn is that fade-in.
+- Checked on the built disc with no code written into RAM: the harness's stuck state at
+  the tiger (t3g stuck_01_pillar_tiger_5) hangs on the 2212979 code, with the same
+  signature, and wins on the new build, body slam and all. Two chapter 1 runs from a cold
+  boot of the new disc finished every goal and printed the body slam line 14 times, period
+  included and centered; t5check found nothing on any "w " or `"` line. At a chest,
+  "You don't know Calfo." and the trap list with "Rainbow Flash" came out whole.
+- The same check showed the harness's other blind spot: its chapter runs start from
+  old states, so they had never run MAIN's word wrap fix either ("blow away " kept its
+  trailing space there, and not on a cold boot).
+
 ## Working without reading Japanese
 
 - Chris doesn't read Japanese. Each line was shown literally, sentence by sentence,

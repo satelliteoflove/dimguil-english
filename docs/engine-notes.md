@@ -324,6 +324,60 @@ patches in `asm/`.
   carries (MAZE, MCARD, JOUKA, CMENU, HAZURE, BATTLE), which did it after kana-like codes
   (`y "` printed as ブ). `asm/voicing_marks.asm` turns all of it off, so a `"` inside a
   line is safe now; `npcfit.py` still flags it, which does no harm.
+- Two more printers merge inline without the helper, and were missed at first: BATTLE's
+  (0x800d19a4, the battle box and menus; test at 0x800d1a68) and MAZE's text_draw
+  (0x800a201c; 0x800a20e0). FIGHTMSG 33 "tries to blow away" printed "b  away": "lo" +
+  "w " drew a blank voiced cell. Every inline test is the same three instructions,
+  `addiu v0, code, 0x4a / andi v0, v0, 0xff / sltiu v0, v0, 2` (code - 0xb6 < 2). The
+  printers only merge with the 12 px font on (0x8007977a bit 0).
+- The line measures skip the marks as well, since a merged mark takes no room. A line
+  with `"` or `w ` was measured short and printed right of center by half the glyph's
+  advance: 2 px per `"`, 6 px per `w `. The measures, all with the same test: the event
+  box's first line (0x8001fb4c, test at 0x8001fc98) and later lines (event_box_print,
+  0x800201f0), the battle box and BATTLE's single centered lines (both MAIN 0x80022024,
+  test at 0x800220cc), each of these only for the 12 px font; text_at in MAZE
+  (0x800a1f7c), MCARD (0x800ad618), JOUKA (0x800dbe2c) and HAZURE (0x800bca4c), always.
+  The battle expander's wrap column for an inserted name (text_expand, 0x8001e2d0)
+  skipped them too, while the name's length counted them, and MCARD's typewriter
+  (0x800b3de0, test at 0x800b3ec8) revealed a mark for free with the glyph before.
+- A count and the sprites it stands for must change together. The battle box fades its
+  text in line by line: FUN_800d202c stores the measure's glyph count for each line at
+  0x8008d340 + 8 x layer, and FUN_800d23f4 fades that many sprites, line by line, and
+  calls the box done when the faded count equals the layer's sprites in use (0x80079938).
+  If a line draws more sprites than its count, the extra ones never fade in and the box
+  never finishes. That hung the first version of the fix (2212979), which patched the
+  measure in MAIN: a save state keeps MAIN's code from the build it was made on, while
+  BATTLE.BIN reloads from the disc at every fight, so a state made on an older build ran
+  new BATTLE (no merge) with old MAIN (skip marks). "Ocelotl tries to blow away / Mercury
+  with a body slam." drew 42 sprites against counts of 20 + 21, the period never faded
+  in, and the box waited for good (phase 46). The measure in MAIN is left as it was;
+  BATTLE passes it font 0 at both calls (0x800d21a0, 0x800d3114), since its only use of
+  that argument is "skip marks in the 12 px font". Merge and count now sit in the same
+  file in every pair: event box (MAIN), text_at and text_draw (each overlay), battle
+  (BATTLE.BIN), and no mix of old and new files can disagree.
+- Every mark test in the eight code files (clean disc), and what's done with it:
+  - MAIN: 0x8001e2c8 expander wrap column, 0x8001fc90 and 0x800201e8 event box
+    measures, 0x8001ffe0 event box merge: patched. 0x800220c4 battle measure: left,
+    BATTLE passes font 0.
+  - BATTLE: 0x800d1a60 merge: patched. The helper (0x800d3510) returns 0.
+  - MAZE: 0x800a1f74 text_at measure, 0x800a20d8 text_draw merge: patched.
+  - MCARD: 0x800ad610 measure, 0x800b3ec0 typewriter: patched; 0x800ad7ac asks the
+    helper. JOUKA: 0x800dbe24 measure: patched; 0x800dbf8c asks the helper. HAZURE:
+    0x800bca44 measure: patched; 0x800bcbac asks the helper. CMENU: 0x800be15c asks the
+    helper. CMAIN: none.
+  - Name entry (JOUKA 0x800b86f0-0x800b8b98, HAZURE 0x800aeca0-0x800af164) and CMENU's
+    name store (0x800a8a4c) handle the ゛ ゜ keys of the kana grids, which really are
+    marks; the Latin grid (0x8005e120 + 132) has neither code. Left alone.
+  - The name expanders (MAIN 0x8001e5ac, 0x8001e814, 0x8001f0d8; JOUKA 0x800e2468,
+    0x800e903c; CMENU 0x800a59c0; CMAIN 0x800a4fd8) turn a stored voiced kana (0xf7 xx)
+    into base + mark, and glyph_prepare (0x8001f558) draws a voiced cell only when a
+    merge hands it a mark. Only names typed on the kana grids reach them, and those
+    don't show as kana anyway: single-byte codes draw English glyphs.
+  Found by scanning for the `addiu 0x4a` test and every compare against 0xb6-0xb8. Any
+  count the original keeps of sprites to come has to skip marks to be right in
+  Japanese, so the scan finds them all. Of the readers of the layer counts, only
+  FUN_800d23f4 compares them with a count taken from the text. No English text encodes
+  to 0xd8 or above, or to a two-byte code.
 - The NPC talk runs with MCARD.BIN at 0x800a1000, not MAZE.BIN.
 - The dungeon NPC box is 288 px by 3 lines, pages split by `\n\r`.
 - The battle box wraps at 24 glyph codes per line. Messages are expanded by 0x8001dfc0
