@@ -94,6 +94,25 @@ into the glyph before it. After certain letter pairs whose code doubles as a kan
 (`y ` is フ), a mid-line `"` prints as ブ. Only quotes that open a line are safe; quotes
 inside a line use `'`, and `npcfit.py` catches the rest.
 
+**A space left at the end of a battle line (2026-10-13).** When an inserted name won't
+fit, the printer breaks before it, but the space before the name was already written,
+so it stayed at the end of the line and pulled the centered line 2 px left ("Xicalli
+whips Venus with / vines."). The play harness saw it in 4 of 187 wrapped messages;
+`fightfit.py`, taught to look for it, finds 16 FIGHTMSG strings that can do it.
+The fix is one rule for every automatic break: if the byte before the break is a plain
+space, the {ff21} goes over it. The three areas in `asm/word_wrap.asm` were full, and
+the rule needed about 5 more instructions. The room came from the original function
+having three inline copies of the same 21-instruction "write {ff21}" sequence; they're
+now one 14-instruction routine that returns through t7, a register the original
+function never touches. That leaves 7 of 82 slots free, and the 3 spare words after
+the catalog code went unused. Checked by playing the same fight from a harness state
+with the old and the new code written into RAM: 55 of 57 wrapped messages came out
+byte-identical, and the other two (one line captured twice, "Ace slashes at / Giant
+Mosquito with / LONG SWORD.") lost both trailing spaces and moved 2 px right, onto the
+center line. Of fourteen forced attack lines, the Xicalli one among them, 11 changed,
+each only by a space dropped before a break, and the 3 that break in plain text came
+out identical (`rips/re/work/wrapfix2/shots/`).
+
 ## Working without reading Japanese
 
 - Chris doesn't read Japanese. Each line was shown literally, sentence by sentence,

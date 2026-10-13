@@ -9,11 +9,13 @@ current one, and with asm/word_wrap.asm it also looks ahead at each space and br
 there if the next word won't fit. The layout depends on the lengths of the names, so
 every combination is tried: monster 3-17 ("Skeleton Warriors"), character 1-8, item or
 attack noun 3-18, spell 3-9, number 1-5, and each length the verbs actually have.
-A plain space that comes straight after a break in plain text is dropped (word_wrap.asm),
-so it can't start the next line. Reports messages that can run past 3 lines, split a word
-(only possible for text stuck to a name with no space, like "{ff13}'s"), or start a line
-with a space. String 297 (the Tree of Stillness
-mural) is shown in the event box and is skipped.
+Every automatic break replaces a plain space just before it, and a plain space that comes
+straight after a break in plain text is dropped (word_wrap.asm), so neither end of a line
+gets one. Reports messages that can run past 3 lines, split a word (only possible for text
+stuck to a name with no space, like "{ff13}'s"), or start or end a line with a plain
+space (an explicit line break in a template can still end one). A digraph ending in a
+space ("s ") keeps it at the end of a line and isn't reported. String 297 (the Tree of
+Stillness mural) is shown in the event box and is skipped.
 """
 import itertools, os, re, sys
 sys.path.insert(0, os.path.dirname(__file__))
@@ -46,23 +48,27 @@ def tokens(text):
 
 
 def simulate(toks, lens):
-    """(lines, a word was split, a line starts with a space)"""
-    lines, col, split, lead = 1, 0, False, False
+    """(lines, a word was split, a line starts with a space, a line ends with one)"""
+    lines, col, split, lead, trail = 1, 0, False, False, False
     skip = None
+    last = None  # the last code on the current line ('var' for a name)
     for k, t in enumerate(toks):
         if k == skip:
             continue
         if t[0] == 'nl':
-            lines, col = lines + 1, 0
+            trail |= last == 0xba
+            lines, col, last = lines + 1, 0, None
         elif t[0] == 'var':
             n = lens.get(t[1], 0)
             if n and col + n > CAP and col:
-                lines, col = lines + 1, 0
+                lines, col = lines + 1, 0  # a plain space before it is replaced
             col += n
+            last = 'var' if n else last
         else:
             if col == 0 and lines > 1 and t[1] == 0xba:
                 lead = True
             col += 1
+            last = t[1]
             brk = False
             if t[1] in SPACES:
                 w = col
@@ -78,12 +84,12 @@ def simulate(toks, lens):
                 brk = True
                 nxt = toks[k + 1] if k + 1 < len(toks) else None
                 split |= bool(nxt and nxt[0] == 'code' and nxt[1] not in SPACES)
-            if brk:
-                lines, col = lines + 1, 0
+            if brk:  # after a plain space, the break replaces it
+                lines, col, last = lines + 1, 0, None
                 nxt = toks[k + 1] if k + 1 < len(toks) else None
                 if nxt == ('code', 0xba):
                     skip = k + 1
-    return lines, split, lead
+    return lines, split, lead, trail
 
 
 def main():
@@ -99,14 +105,15 @@ def main():
         names = sorted({t[1] for t in toks if t[0] == 'var' and t[1] in ranges})
         for combo in itertools.product(*(ranges[n] for n in names)):
             lens = dict(zip(names, combo))
-            lines, split, lead = simulate(toks, lens)
-            if split or lead or lines > 3:
+            lines, split, lead, trail = simulate(toks, lens)
+            if split or lead or trail or lines > 3:
                 bad += 1
                 print(f'!! {i:3d} {lines} lines{", splits a word" if split else ""}'
-                      f'{", starts a line with a space" if lead else ""} '
+                      f'{", starts a line with a space" if lead else ""}'
+                      f'{", ends a line with a space" if trail else ""} '
                       f'with lengths {lens}: {text!r}')
                 break
-    print(f'{bad} battle messages can overflow, split a word or start a line with a space')
+    print(f'{bad} battle messages can overflow, split a word or start or end a line with a space')
     return 1 if bad else 0
 
 

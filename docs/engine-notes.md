@@ -335,9 +335,15 @@ patches in `asm/`.
   ("Mercury peppers Xicalli with / BLOW GUN.", 2 px right of center; 19 strings could do
   it, found by the play harness, 2026-10-12). An automatic break now skips a plain space
   that follows it (advancing the source pointer); explicit {ff21} breaks are untouched.
-  Still open, no room left in the two areas: a break before a name leaves the space
-  before the name at the end of the line, half a space left of center ("Xicalli whips
-  Venus with / vines.", 4 of 187 wrapped messages in a run).
+  The break before a name went in after the space before the name, which stayed at the
+  end of the line, half a space left of center ("Xicalli whips Venus with / vines.";
+  16 FIGHTMSG strings could do it). All three automatic breaks now go through one
+  routine, `write_break`, which puts the {ff21} over a plain space just before it (every
+  caller has a nonzero column, so that byte is on the current line). The room came from
+  sharing it: the three inline copies of the {ff21} sequence became one, returning
+  through t7, which the original function never uses (2026-10-13). A digraph that ends
+  in a space ("s ", "t ") still keeps its space at the end of a line: the break goes
+  after it, and taking the space off would need the digraph's letter.
 
 ### Text buffer
 
