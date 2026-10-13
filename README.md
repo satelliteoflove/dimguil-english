@@ -60,6 +60,10 @@ Download the patch from the Releases page and apply it to the Track 1 .bin with 
 xdelta patcher: Delta Patcher, xdelta UI, xdelta3 or Rom Patcher JS. The audio tracks
 and the .cue stay as they are. The readme.txt in the download has the details.
 
+The patched game is English only. The original's settings can switch names and status
+text to Japanese, but the English font took the place of the kana, so those switches are
+locked on English and "Jpn" is dimmed. A save made with them on Japanese loads in English.
+
 It's been tested in DuckStation and Beetle PSX, but not on real hardware.
 
 ## Problems

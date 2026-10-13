@@ -7,3 +7,6 @@ English: the town, the castle and its menus, the dungeon dialogue, combat, item 
 monster descriptions and the card game. Much of it hasn't had a second look yet, and
 nobody has played it through to the ending, so expect some rough spots. If something
 looks wrong or breaks, please open an issue.
+
+The game is English only: the settings that switch names and status text to Japanese
+are locked on English.

@@ -4,6 +4,10 @@ https://github.com/satelliteoflove/dimguil-english
 This patch translates the Japanese PlayStation release of Wizardry: Dimguil
 (SLPS-02691) into English. It's for the Rev 1 disc only.
 
+The patched game is English only. The settings that switch names and status
+text to Japanese are locked on English, since the English font replaced the
+kana.
+
 
 What's in this version
 ----------------------
