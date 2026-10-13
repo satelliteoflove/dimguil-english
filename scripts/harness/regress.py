@@ -13,9 +13,10 @@ this suite runs -> only a change that passes every case is committed -> the next
 
 Cases live in rips/harness/regress/cases.jsonl, one JSON object per line:
   id        unique name
-  kind      'trial' (a T2 macro trial: macro, k), 'stuck' (a saved stuck state) or
+  kind      'trial' (a T2 macro trial: macro, k), 'stuck' (a saved stuck state),
             'screen' (a T5 known-bad screen, scripts/harness/t5bad.py: case; with expect
-            'proof' it passes when the checks catch the bug put back)
+            'proof' it passes when the checks catch the bug put back), or 'boot' (made
+            each round, not saved: see below)
   state     for 'stuck': the state to load (rips/harness/<state>.state); none for the
             party goal, which starts from power-on (creation can't resume midway)
   variant, seed   the chapter-1 run's party variant and seed
@@ -28,6 +29,13 @@ Cases live in rips/harness/regress/cases.jsonl, one JSON object per line:
             'frozen': a state where the game itself stops responding; pass only if the
             harness reports 'game not responding' (an open issue, not a harness fault)
   added     date added; source: the run that produced it
+Boot cases (--boots N, default 4): chapter 1 from power-on to the tablet door
+(chapter1.Run.run, T3 style: party, training, the four pillars, the door), seed and party
+variant from BOOTS. A save state keeps the MAIN executable's code (SLPS) of the build it
+was made on, while overlays load fresh from the disc; so stuck and trial cases never run
+a change to MAIN, and boot cases are the ones that do (2026-10-13: the voicing-mark build
+2212979 hung on a MAIN change no state-based case could reach). A boot case passes when
+the run gets through the tablet door, retries included.
 A case runs in its own process (one emulator per process; the core's debug hooks are
 global), at most 10 at once, with a frame budget. Each round appends to
 rips/harness/regress/rounds.jsonl: date, the harness code hash at the start and at the end
@@ -98,6 +106,38 @@ def collect():
         n += add_case(dict(id='stuck:' + rel, kind='stuck', state=rel, goal=goal, what=what,
                            source=run))
     return n
+
+
+BOOTS = [(81, 0), (82, 1), (83, 3), (84, 6)]     # (seed, party variant)
+BOOT_BUDGET = 600000      # frames per boot case (chapter 1 took 240,000-335,000)
+DISC_BUILD = os.path.join(OUTR, 'disc', 'BUILD.txt')
+
+
+def disc_build():
+    try:
+        return open(DISC_BUILD).read().strip()
+    except OSError:
+        return None
+
+
+def boot_cases(n):
+    return [dict(id='boot:s%d:v%d' % sv, kind='boot', seed=sv[0], variant=sv[1], expect='proof')
+            for sv in (BOOTS * (n // len(BOOTS) + 1))[:n]]
+
+
+def run_boot(case):
+    """Chapter 1 from power-on on the disc under test, to the tablet door."""
+    from harness.game import Game
+    from harness import chapter1
+    g = Game(capture=True)
+    run = chapter1.Run(g, seed=case['seed'], variant=case['variant'],
+                       out='regress/scratch/boot_%d' % os.getpid(), auto_cases=False)
+    g.budget_end = g.frame + BOOT_BUDGET
+    f0 = g.frame
+    run.run(boot=True)
+    done = [x['goal'] for x in run.goals]
+    return dict(result='tablet_door' in done or str(done[-1:]), frames=g.frame - f0,
+                goals=len(done), stuck=len(run.stuck))
 
 
 def trial_cases(n):
@@ -172,7 +212,8 @@ def run_case(case):
             from harness import t5bad
             r = t5bad.ratchet(case['case'])
         else:
-            r = run_stuck(case) if case['kind'] == 'stuck' else run_trial(case)
+            r = run_stuck(case) if case['kind'] == 'stuck' else \
+                run_boot(case) if case['kind'] == 'boot' else run_trial(case)
         rec.update(r)
         ok = r['result'] is True if case.get('expect') == 'proof' else True
         if case.get('expect') == 'frozen':
@@ -236,7 +277,7 @@ def record_aborted(reason):
     recs = ROUND.get('recs', [])
     failed = sorted(r['id'] for r in recs if not r['ok'])
     rnd = dict(date=ROUND.get('stamp'), code=ROUND.get('hash0'), code_end=code_hash(),
-               valid=False, aborted=reason, note=ROUND.get('note', ''),
+               valid=False, disc=ROUND.get('disc'), aborted=reason, note=ROUND.get('note', ''),
                cases_planned=ROUND.get('planned'), cases=len(recs),
                passed=len(recs) - len(failed), failed=failed,
                frames=sum(r.get('frames', 0) for r in recs),
@@ -273,7 +314,8 @@ def main():
 def _main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--trials', type=int, default=10, help='T2 trials per macro')
-    ap.add_argument('--only', choices=['stuck', 'trial', 'screen'])
+    ap.add_argument('--only', choices=['stuck', 'trial', 'screen', 'boot'])
+    ap.add_argument('--boots', type=int, default=len(BOOTS), help='cold-boot chapter 1 cases')
     ap.add_argument('--procs', type=int, default=MAX_PROCS)
     ap.add_argument('--collect', action='store_true')
     ap.add_argument('--note', default='')
@@ -284,6 +326,8 @@ def _main():
         return
     saved = load_cases()
     cases = []
+    if a.only in (None, 'boot'):
+        cases += boot_cases(a.boots)
     if a.only in (None, 'stuck'):
         cases += [c for c in saved if c['kind'] == 'stuck']
     if a.only in (None, 'screen'):
@@ -293,10 +337,10 @@ def _main():
         ids = {c['id'] for c in gen}
         cases += gen + [c for c in saved if c['kind'] == 'trial' and c['id'] not in ids]
     # long cases first, so the pool isn't left waiting on one at the end
-    cases.sort(key=lambda c: (c['kind'] != 'stuck', c['id']))
+    cases.sort(key=lambda c: ({'boot': 0, 'stuck': 1}.get(c['kind'], 2), c['id']))
     procs = min(a.procs, MAX_PROCS)
     hash0 = code_hash()
-    ROUND.update(hash0=hash0, note=a.note, planned=len(cases), t0=time.time())
+    ROUND.update(hash0=hash0, note=a.note, planned=len(cases), t0=time.time(), disc=disc_build())
     t0 = time.time()
     recs = []
     ROUND['recs'] = recs
@@ -318,11 +362,12 @@ def _main():
         print('!' * 78 + '\nWARNING: scripts/harness/*.py changed during this round (%s at the start, '
               '%s at the end).\nThe round ran on mixed code and is recorded as invalid: it '
               "can't count for a commit.\n" % (hash0, hash1) + '!' * 78, flush=True)
-    rnd = dict(date=stamp, code=hash0, code_end=hash1, valid=valid, note=a.note, cases=len(recs),
+    rnd = dict(date=stamp, code=hash0, code_end=hash1, valid=valid, disc=disc_build(),
+               note=a.note, cases=len(recs),
                passed=len(recs) - len(failed), failed=failed,
                by_kind={k: dict(n=sum(1 for r in recs if r['kind'] == k),
                                 ok=sum(1 for r in recs if r['kind'] == k and r['ok']))
-                        for k in ('stuck', 'trial')},
+                        for k in ('boot', 'stuck', 'trial', 'screen')},
                frames=sum(r.get('frames', 0) for r in recs), wall=round(time.time() - t0),
                stuck_causes=latest_stuck_causes())
     ROUND['written'] = True

@@ -21,7 +21,7 @@ from harness import chapters, chapter1, maze, nav
 from harness.game import Stuck
 
 STORY = 0x80079b44
-TRAIN_LEVEL = 13
+TRAIN_LEVEL = 12  # one lower 2026-10-13: r3v0 and r3v1 were still short of 11 after 24 trips of ~22k frames on B3 and B2
 TRAIN_AREAS = (5, 6)
 
 

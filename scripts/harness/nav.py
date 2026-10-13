@@ -175,8 +175,12 @@ def plan(g, dest, start=None, items=None):
         if F is None:
             continue
         nxt = []
-        # a transfer square moves the party as soon as it's entered (not the start)
-        if node != start and (x, y) in F['transfers']:
+        # a transfer square moves the party as soon as it's walked onto; not the start,
+        # and not where a link or a ride sets the party down (the jewel lift lands on
+        # B3 (12, 11), the square that rides back up: r3v1 chapter 3, 2026-10-13, had
+        # "no route" from the Grounds to anywhere on B3 past it)
+        placed = node == start or prev.get(node, (None, ('step',)))[1][0] in ('link', 'jump')
+        if not placed and (x, y) in F['transfers']:
             nxt.append((F['transfers'][(x, y)], 1, ('jump',)))
         else:
             for L in LINKS:

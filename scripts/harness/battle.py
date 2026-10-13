@@ -102,6 +102,27 @@ RUN_AFTER = 15     # rounds; a battle still going after this many tries to run a
                    # (T3 chapter 2 dev run, 2026-10-13: Fuzzballs on Shrine 3F call for
                    # help every round and the fight never ended in 60,000 frames)
 ROUND = 0          # the round being commanded (set by fight)
+# Run from a fight that's going badly: someone down or the party under LOSING_HP of its
+# hit points, with LOSING_MONSTERS or more standing. Only while training (chapters.train
+# sets it), never in the fixed fights a goal needs to win. (r3v3 chapter 3, 2026-10-13:
+# Wing Lizards on Underground B3 breathe on everyone and call for help; the party fought
+# on and was wiped on six retries running.)
+RUN_WHEN_LOSING = False
+LOSING_HP = 0.45
+LOSING_MONSTERS = 3
+
+
+def losing(g):
+    down = hp = mx = 0
+    for k, rk in enumerate(party_ids(g)):
+        if rk is None:
+            continue
+        h, st = member_state(g, k)
+        if st >= 0x20 or h <= 0:
+            down += 1
+        hp += max(h, 0)
+        mx += g.char(rk)['max_hp']
+    return (down or (mx and hp < mx * LOSING_HP)) and monsters_standing(g) >= LOSING_MONSTERS
 
 
 def default_policy(g, m, opts):
@@ -109,6 +130,8 @@ def default_policy(g, m, opts):
     ('run',), ('spell', sid, school, level, index, target) with target ('group', g) or
     ('member', slot), or ('first',) to take the first option."""
     if ROUND > RUN_AFTER and RUN in opts:
+        return ('run',)
+    if RUN_WHEN_LOSING and RUN in opts and losing(g):
         return ('run',)
     ids = party_ids(g)
     ri = ids[m]
@@ -255,6 +278,7 @@ def command_phase(g, policy, log):
 
 
 CHEST_PHASE = 0x42
+BLIND_WAIT = 120             # frames of chest phase with no new text before going by RAM
 # the chest menu: Inspect Calfo Calnova Disarm Open Leave (LIST 0-5); LEVEL 1 while it
 # has the input, 2 while a member is being picked
 CHEST_LEAVE, CHEST_OPEN, CHEST_INSPECT = 5, 4, 0
@@ -357,7 +381,8 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
     rounds = 0
     log = []
     chest_result = None
-    chest_mark = len(g.cap.messages)
+    chest_mark = len(g.cap.messages) if g.cap else 0
+    blind = None            # (frame, messages) when the chest phase began with no new text
     while True:
         if g.frame - f0 > limit:
             raise Stuck('battle too long', sig=sig(g))
@@ -390,9 +415,28 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
                                or len(g.cap.messages) > n, 300, 'loot message')
                 chest_mark = len(g.cap.messages)
             else:
+                n = len(g.cap.messages) if g.cap else 0
+                if blind is None or blind[1] != n:
+                    blind = (g.frame, n)
+                if g.frame - blind[0] > BLIND_WAIT:
+                    # nothing printed for BLIND_WAIT frames in the chest phase: the text
+                    # capture can't see this disc's text (the Japanese original; its fights
+                    # sat on "each survivor gains N gold" until "battle too long",
+                    # t3/metlock/jp_chapter_attempt). Go by RAM: LEVEL 1 is the chest
+                    # menu (leave the chest), anything else a message waiting for a press.
+                    if g.u8(LEVEL) == 1:
+                        chest_result = 'left (blind)'
+                        ui.move_cursor(g, LIST, CHEST_LEAVE, 'down', 'up', what='chest option')
+                        ui.confirm_until(g, lambda: not in_battle(g) or g.u8(PHASE) != CHEST_PHASE
+                                         or g.u8(LEVEL) != 1, 300, 'leave chest')
+                    else:
+                        g.tap('circle')
+                        g.step(16)
+                    continue
                 g.step()
             continue
-        chest_mark = len(g.cap.messages)
+        blind = None
+        chest_mark = len(g.cap.messages) if g.cap else 0
         # narration and everything else waits for a press; tap it along (4-frame floor)
         g.tap('circle')
         for _ in range(4):

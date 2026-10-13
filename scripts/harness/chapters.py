@@ -16,7 +16,7 @@ After the last goal of chapter N the run saves `<out>/c<N>_end.state`; the next 
 states only count for the disc they were made on (rips/harness/disc/BUILD.txt).
 """
 import time
-from harness import chapter1, maze, nav, play, town
+from harness import battle, chapter1, maze, nav, play, town
 from harness.game import Stuck
 
 CHAPTERS = {}
@@ -184,8 +184,21 @@ class Run(chapter1.Run):
             self.after()
             maze.face(g, facing)
         self._fights0 = self.fights()
-        chapter1.investigate(g)
-        r = self.after()
+        for _ in range(3):
+            # a roamer met on the square can take the Investigate's place: its fight runs
+            # and the event never does (r2v6b chapter 2, 2026-10-13: Xecotcovachs at 4F
+            # (14, 16), then "jade_mask False" six times). No event text: look again.
+            n = len(g.cap.messages) if g.cap else 0
+            f1 = self.fights()
+            chapter1.investigate(g)
+            r = self.after()
+            said = not g.cap or any(m['file'] == 'EVENTMES.BIN' for m in g.cap.messages[n:])
+            if said or self.fights() == f1 or (g.u8(maze.AREA),) + g.pos() != tuple(dest):
+                break
+            self._fights0 = self.fights()
+            if not maze.face(g, facing):
+                self.after()
+                maze.face(g, facing)
         if fight and r == 'calm' and self.fights() == self._fights0:
             for _ in range(FIGHT_WAIT):
                 if g.overlay() == 'BATTLE' or not maze.calm(g):
@@ -230,19 +243,23 @@ class Run(chapter1.Run):
             # the Grounds for gold until the temple can
             self.note('train on the Grounds', areas)
             areas = (0,)
-        for area in areas:
-            F = nav.floor(area)
-            sqs = list(F['fights'])
-            self.rng.shuffle(sqs)
-            for sq in sqs:
-                if self.fights() - n0 >= fights or chapter1.needs_town(g):
-                    break
-                if chapter1.hurt(g, 0.6) and chapter1.priests(g):
-                    chapter1.heal_in_camp(g, self.log, on_int=self.on_int)
-                if nav.plan(g, (area,) + sq) is None:
-                    continue
-                self.go((area,) + sq)
-        self.trip_home()
+        battle.RUN_WHEN_LOSING = True
+        try:
+            for area in areas:
+                F = nav.floor(area)
+                sqs = list(F['fights'])
+                self.rng.shuffle(sqs)
+                for sq in sqs:
+                    if self.fights() - n0 >= fights or chapter1.needs_town(g):
+                        break
+                    if chapter1.hurt(g, 0.6) and chapter1.priests(g):
+                        chapter1.heal_in_camp(g, self.log, on_int=self.on_int)
+                    if nav.plan(g, (area,) + sq) is None:
+                        continue
+                    self.go((area,) + sq)
+            self.trip_home()
+        finally:
+            battle.RUN_WHEN_LOSING = False
         if any(g.char(i)['status'] != 0 for i in town.town_party(g)) or len(town.town_party(g)) < 4:
             return 'casualties'
         return True

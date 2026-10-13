@@ -101,6 +101,76 @@ class Policy:
 
 SCENE = 0x80079878         # a maze scene in progress (5 a meeting's approach, 9 the jewel lift)
 SCENE_COUNT = 0x8008a000   # its countdown
+BOX_MAX = 20000            # frames one close_box may take in all
+SCENE_MAX = 3000           # the longest wait on one (the B3 lift ride up is ~1,050 frames)
+
+
+DROP_CURSOR = 0x80079c60     # "Drop which item?": the pack position under the cursor
+DROP_YES = 0x80079c65        # "Really throw it away?": 0 Yes, 1 No (the default)
+
+
+DROP_PROMPTS = (90, 36, 237)
+
+
+def _drop_prompt_msg(g):
+    """(position, idx) of the latest drop prompt among the SISETU lines since anything
+    else printed (the list's item names print after "Drop which item?"), unless it was
+    handled already."""
+    if not g.cap:
+        return None
+    ms = g.cap.messages
+    for j in range(len(ms) - 1, max(-1, len(ms) - 60), -1):
+        m = ms[j]
+        if m['file'] == 'SISETU.OBJ' and m['idx'] in DROP_PROMPTS:
+            done = g.__dict__.setdefault('_drop_done', set())
+            if j in done:
+                return None
+            done.add(j)
+            return j, m['idx']
+        if m['file'] not in ('SISETU.OBJ', 'STATUS.OBJ'):
+            return None
+    return None
+
+
+def drop_choice(g):
+    """The pack position to throw away: the last one that's spare loot (unequipped, an id
+    under 0x100, so not the Tablet, a stone or a story item) in every full pack, since
+    which member the game asks isn't known here."""
+    full = [g.char(i)['items'] for i in g.party() if len(g.char(i)['items']) >= 10]
+    ok = lambda k: all(k < len(p) and not p[k] & 0x2000 and (p[k] & 0x1ff) < 0x100 for p in full)
+    return next((k for k in range(9, -1, -1) if ok(k)), 9)
+
+
+def drop_prompt(g):
+    """A story item found with a full pack: "Your pack is full. Who will drop it?" (92,
+    303; the press picks the member under the cursor), "Drop which item?" (90), then
+    "Really throw it away?" (36, cursor on No). Throws away spare loot so the item fits (r2v6b
+    chapter 2, 2026-10-13: the jade mask with ten items in every pack; circle took the
+    equipped breast plate, "It's equipped, so it can't be dropped.", for ever). Returns
+    True if it acted."""
+    p = _drop_prompt_msg(g)
+    last = ('SISETU.OBJ', p[1]) if p else None
+    if last == ('SISETU.OBJ', 90):
+        ui.wait_until(g, lambda: g.u8(maze.PRINTER) != 4, 120, 'drop list')
+        ui.move_cursor(g, DROP_CURSOR, drop_choice(g), 'down', 'up', what='drop item')
+        n = len(g.cap.messages)
+        ui.press_until(g, 'circle', lambda: len(g.cap.messages) > n, 120, 'pick drop item')
+        g.step(20)
+        return True
+    if last == ('SISETU.OBJ', 36):
+        g.step(20)
+        ui.move_cursor(g, DROP_YES, 0, 'down', 'up', what='throw away yes')
+        n = len(g.cap.messages)
+        ui.press_until(g, 'circle', lambda: len(g.cap.messages) > n or g.u8(DROP_YES) != 0,
+                       120, 'throw away')
+        g.step(20)
+        return True
+    if last == ('SISETU.OBJ', 237):
+        # "It's equipped, so it can't be dropped.": back to the list
+        g.tap('cross', hold=6)
+        g.step(40)
+        return True
+    return False
 
 
 def close_box(g, limit=600, react=20):
@@ -112,22 +182,35 @@ def close_box(g, limit=600, react=20):
                       and not maze.box_up(g)) or not maze.in_maze(g)
     f0 = g.frame            # restarts whenever the box changes: `limit` is frames
     dead = 0                # without progress, so long multi-page sequences can run
+    scene_f = 0             # frames spent waiting on a scene's countdown
+    start = g.frame
     while not closed():
+        if g.frame - start > BOX_MAX:
+            # progress that never ends: a menu the presses walk round (r2v6b's "Drop
+            # which item?" at the jade mask with a full pack)
+            raise Stuck('event box too long', where=g.where(), msg=g.u8(maze.MSG))
         if g.frame - f0 > limit:
             raise Stuck('event box', where=g.where(), msg=g.u8(maze.MSG), ev=g.u8(maze.EVENT_BOX))
-        if g.u8(SCENE) not in (0, 0xff):
+        if g.u8(SCENE) not in (0, 0xff) and scene_f < SCENE_MAX:
             # a scene may run under the box: the jewel lift rides down floor by floor
             # (0x80079878 = 9, its countdown at 0x8008a000) with "the floor begins to
             # move!" left up; presses do nothing until it ends (r2v3, 2026-10-13: called
             # "game not responding"). Wait only while its countdown moves; other scenes
             # leave the byte set with no countdown and want presses (the T5 round at
             # 03:24 failed 74 cases when this waited on the byte alone).
+            # Capped at SCENE_MAX: some countdowns never stop moving (r2v6b's jade mask,
+            # 2026-10-13, waited here without end).
             c = g.u16(SCENE_COUNT)
             g.step(8)
+            scene_f += 8
             if g.u16(SCENE_COUNT) != c:
                 f0 = g.frame
                 dead = 0
                 continue
+        if drop_prompt(g):
+            f0 = g.frame
+            dead = 0
+            continue
         in_scene = g.u8(SCENE) not in (0, 0xff)
         sig = lambda: (g.u8(maze.MSG), g.u8(maze.EVENT_BOX), g.u16(maze.BOX_GLYPHS), g.u8(maze.PRINTER),
                        g.u8(maze.FADE_B), g.u8(0x8007967e), g.overlay())
