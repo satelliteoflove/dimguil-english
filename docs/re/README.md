@@ -116,7 +116,7 @@ unless it says inclusive; `rand_upto(n)` is 0..n inclusive.
 - **Picking a lock**: 70% if (level, + 5 for a Thief or Ninja, + 2 for a Ranger or
   Bard) × 5 + Luck, over 10, reaches the door's difficulty, else 15%; minus 10 for each
   failure (to 50), which wears off a step at a time. The level and Luck come from roster
-  entry 1-5 picked by the cursor's blink, not from the chosen member (a bug). No other
+  chosen member (until the fix, bugs.md 1.14, from roster entry 1-5 picked by the cursor's blink). No other
   cost. Calnova on a door: 95%, 0% on anti-magic squares.
 - **Chests**: Inspect is right Agility × 6% for a Thief (× 5 Ninja, × 4 Ranger and
   Bard, × 1 others, 95% at most); a miss names a random trap, or sets it off if

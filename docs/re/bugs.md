@@ -18,7 +18,7 @@ him first. So each entry is in one of three groups:
 
 | Group | Count |
 |---|---|
-| 1. Clear bugs | 14, all fixed (2.8, the pit soft lock, moved here; fixed in 5ff86d2 and kept) |
+| 1. Clear bugs | 15, all fixed (2.8, the pit soft lock, moved here; fixed in 5ff86d2 and kept) |
 | 2. Cut or unclear, ask | 6, all decided (2.2-2.5 reopened, 2.1 and 2.6 left unused) |
 | 3. Balance, ask | 3, all decided (kept as the original; decisions.md 8-10) |
 | Not bugs, or harmless | 9 (2.7 and 3.4 moved here after the follow-ups) |
@@ -340,6 +340,38 @@ first, third and fifth slots, then compacted the packs, as before the fix, and f
 record; 60 more Talks in the same meeting and 60 at each of three later ones brought no
 offer, where the old code's repeat took 62 → 31. Details in `rescue-test.md`, "The fix,
 tested".
+
+### 1.14 Picking a lock uses the wrong character's skill
+
+From the lock test (`lock-test.md`, 2026-10-13). Investigate on a locked door asks "Who
+will pick the lock?". MAZE's routine turns the party position picked (0x800ae324) into a
+roster number, stores it at 0x800798d1 (0x800ae39c) and checks that character's status
+from it (0x800ae3b4-0x800ae3e0). The roll then works out the skill, ((level, + 5 for a
+Thief or Ninja, + 2 for a Ranger or Bard) × 5 + Luck) / 10, against the door's
+difficulty, but both of its reads (level and class at 0x800aea44, Luck at 0x800aeaac)
+take the roster number from 0x80079791 instead: the member picker's blink counter
+(FUN_800ac6bc), which steps 1, 2, 3, 4, 5, 4, 3, 2, 1 every 4 frames. So the skill was
+that of roster entry 1 to 5, whichever the blink was on, in the party or not; an empty
+entry gave skill 0, so 15% even on the easiest door. In 91 logged tries the chosen Thief
+was never the record read; the records read ranged over roster 1-5 whoever was chosen,
+and every outcome matched that record's skill. On the difficulty-1 doors nearly anyone
+gets 70%, which hides it; on Area D's doors (difficulty 8) it decides whether a Thief's
+skill counts. [code, emu]
+
+Fix: both reads take 0x800798d1. One instruction each, and the base each needs
+(0x80080000) is already in the register, set by the instruction before:
+0x800aea44 `lbu v1, 1(s1)` → `lbu v1, -0x672f(a0)`, 0x800aeaac `lbu v1, -0x686f(v0)` →
+`lbu v1, -0x672f(v0)`. MAZE.BIN only. `asm/bugfix_lockpick_member.asm`.
+
+Checked: natural play on the built disc (`rips/re/work/locks/disc_fix/`, md5
+ca912fe814e0055527fdb67be3cb82a8, with the rescue fix), door states made fresh on that
+disc so MAZE's code was the new one (a state keeps the MAZE code it was saved with until
+the next fight reloads it), and the fixed words logged at every try. 103 tries on the
+Shrine 1F door (difficulty 1) and the B4 door (difficulty 13), alternating the Thief and
+others: the record read was the chosen member's on all 103, roster 6-8 included, which
+the blink could never reach, and each member's own skill was compared (B4: Thieves 10,
+others 6-7). 1F opened 20 of 29 (20.3 expected at 70%), B4 14 of 74 (11.1 at 15%).
+Details in `lock-test.md`, "After the fix".
 
 ## Group 2: looks cut, or the intent isn't clear
 

@@ -8,7 +8,7 @@ gives a source in brackets. "bugs.md" is `docs/re/bugs.md`, "decisions" is
 `docs/re/description-check.md`, "hp" is `docs/harness-plan.md`. Where the docs disagree,
 the item says so. The full list of disagreements is at the end.
 
-## 1. Bug fixes to the original game (14)
+## 1. Bug fixes to the original game (15)
 
 Each is original code, present on the Japanese disc. Commit hashes from `git log`.
 
@@ -78,7 +78,13 @@ Each is original code, present on the Japanese disc. Commit hashes from `git log
     the gold and about half the items again), until another party was wiped, a game was
     loaded or a member was raised. Now: the Yes frees the party's record, as Look for Companions
     does; no text changes. Found by the rescue test. [bugs.md 1.13; decisions 27;
-    re/rescue-test.md; asm/bugfix_rescue_repeat.asm; not committed yet]
+    re/rescue-test.md; asm/bugfix_rescue_repeat.asm; 2f5971b]
+15. **Picking a lock used the wrong character's skill.** Before: the roll took level,
+    class and Luck from whichever of roster entries 1-5 the member picker's blink was on,
+    not from the character chosen, so a Thief's skill could be ignored (only noticeable on
+    the harder doors). Now: the chosen character's own skill counts; no text changes.
+    Found by the lock test. [bugs.md 1.14; decisions 28; re/lock-test.md;
+    asm/bugfix_lockpick_member.asm]
 
 Exposed by the English: 12 directly (text length). 13 is timing-related to the patch's
 code, not text length, and unmeasured on the Japanese disc. The other twelve are
@@ -87,7 +93,8 @@ independent of the translation.
 How they were tested: emulator runs used RAM-write setups, not natural play (bugs.md "How
 the fixes are checked"). 1, 5, 6 and 7 were checked by disassembly only; 2 and 3 by script
 dump and patched bytes. 12 and 13 were also run in the harness on the built disc. 14 was
-played through on the built disc with button presses only, before and after.
+played through on the built disc with button presses only, before and after, and 15
+the same way (103 logged tries).
 
 ## 2. Reopened content
 
@@ -356,9 +363,9 @@ patch. Nothing is decided about whether that happens. [ROADMAP "Maybe later"]
 
 ## 7. Known issues still open
 
-1. **Digraph that ends in a space** ("s ", "t ") keeps its space at the end of a wrapped
-   battle line; removing it would need the digraph's letter. [en "Text printer", end;
-   asm/word_wrap.asm header]
+1. **Digraph that ends in a space** ("s ", "t ") kept its space at the end of a wrapped
+   battle line: fixed in 9cdab45 (the glyph becomes its letter at the break; 24 FIGHTMSG
+   strings). No longer open. [en "Word wrap"; asm/word_wrap.asm]
 2. **NPC encounters may load more slowly**: NPC_MES1-4 and I_NAME_E sit at the end of
    the data track. The fix (shift later files instead) was decided 2026-10-07, not done.
    [GitHub issue #3; ROADMAP "Disc layout"]
@@ -378,8 +385,8 @@ patch. Nothing is decided about whether that happens. [ROADMAP "Maybe later"]
    [tn "To revisit"; event-review.md "Still open", "To check in play"]
 8. **Event page 309** ends on a page break with no wait, so the box clears at once; the
    Japanese is built the same way. [event-review.md "Real event box sweep"]
-9. **English-only isn't stated yet** in README.md, docs/release-readme.txt or
-   CHANGELOG.md (grep found no mention); ROADMAP and tn say it must be.
+9. **English-only** is now stated in README.md, docs/release-readme.txt and CHANGELOG.md
+   (47dab33). No longer open.
 10. **Save carry-over between versions** not yet verified once, per ROADMAP; README says
     saves "have so far carried over". [ROADMAP "Playthrough"]
 11. **NPC rescue fees**: tested in natural play on 2026-10-13 (`docs/re/rescue-test.md`,

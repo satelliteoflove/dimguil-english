@@ -256,8 +256,8 @@ glance". By subsystem:
 
 ### Bugs, descriptions and open decisions
 
-- `docs/re/bugs.md`: every bug found, in three groups. Group 1 (fourteen clear bugs,
-  two of them found by the harness runs and one by the rescue test) is fixed in `asm/bugfix_*.asm`.
+- `docs/re/bugs.md`: every bug found, in three groups. Group 1 (fifteen clear bugs,
+  two of them found by the harness runs, one by the rescue test and one by the lock test) is fixed in `asm/bugfix_*.asm`.
 - `docs/re/description-check.md`: item, spell, Compendium and help text checked against
   the records and the code (18 spell ranges in the original are wrong).
 - `docs/re/decisions.md`: the open questions and Chris's decision on each (all decided).

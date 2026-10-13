@@ -739,3 +739,22 @@ the first fix whose before and after were both played through without RAM writes
   Talk disappears from the menu for the rest of the meeting, and with four members down
   every meeting ended in a heal. What worked was hopping between two floors one step
   apart, since each arrival places her token again, until it landed within a short walk.
+
+**The lock pick that read the blink (2026-10-13, bugs.md 1.14).** Found by the lock test.
+- Seen in 91 logged tries on three locked doors: the Thief chosen 22 times, and the game
+  used five different characters' stats, never the Thief's. Every outcome matched the
+  stats of the record actually read.
+- Cause: the pick's roll indexes the roster with 0x80079791, the byte beside the
+  picker's state, which is the member picker's blink counter (1-5 and back every 4
+  frames). The chosen member's roster number sits at 0x800798d1, stored a few
+  instructions earlier and used for the status check.
+- Why it hid: on the early doors (difficulty 1) nearly anyone in roster 1-5 gets the same
+  70%. It only matters on doors like Area D's (difficulty 8), and on any door when roster
+  1-5 has an empty slot (skill 0, 15%).
+- Fix: one instruction at each of the two reads; the base register each needs is already
+  loaded by the instruction before. MAZE only.
+- Checked: 103 tries on the built disc with fresh door states and the fixed words logged
+  every time; the record read was the chosen member's on all 103, and the open counts
+  match the odds (1F 20 of 29 at 70%, B4 14 of 74 at 15%).
+- A testing lesson: MAZE's code stays in a save state until the next fight reloads it,
+  so the old door states would have kept running the old pick on the new disc.

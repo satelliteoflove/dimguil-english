@@ -453,6 +453,12 @@ The full triage is `docs/re/bugs.md`; each fix is its own `asm/bugfix_*.asm`.
   Another Party". Found by the rescue test (`docs/re/rescue-test.md`). Chris: fix it. The
   Yes now frees the record as Look for Companions does; no text changes
   (asm/bugfix_rescue_repeat.asm, bugs.md 1.13, decisions.md 27).
+- **Picking a lock used the wrong character's skill** (2026-10-13). The roll took level,
+  class and Luck from whichever of roster entries 1-5 the member picker's blink was on,
+  not the character chosen, so a Thief's skill could be ignored on the harder doors.
+  Found by the lock test (`docs/re/lock-test.md`). Chris: fix it. Both reads now take
+  the chosen member; no text changes (asm/bugfix_lockpick_member.asm, bugs.md 1.14,
+  decisions.md 28).
 
 Reopened content (each one goes in the release notes too):
 

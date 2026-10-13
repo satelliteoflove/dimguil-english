@@ -1,7 +1,7 @@
 # Decisions from the code analysis
 
 These are the open questions that came out of the code analysis (2026-10-11), each with a
-recommendation. The evidence for each is in the doc named beside it. All fourteen clear
+recommendation. The evidence for each is in the doc named beside it. All fifteen clear
 bugs are fixed (`bugs.md`, group 1), and every item below has been decided.
 
 ## Content that looks cut
@@ -238,3 +238,10 @@ Temple. It lasts until a member is raised, another party is wiped, a game is loa
 leaves the party's record in the table, and the scan doesn't check where the members are.
 **Decided (Chris, 2026-10-13): fix it.** `asm/bugfix_rescue_repeat.asm`: the Yes frees
 the rescued party's record, as Look for Companions does for a party it empties.
+
+**28. Picking a lock uses the wrong character's skill** (`bugs.md` 1.14, `lock-test.md`).
+The pick's roll reads level, class and Luck from roster entry 1-5, picked by the member
+picker's blink counter, not from the character chosen. Original code; only noticeable on
+the harder doors. The fix is one instruction at each of the roll's two reads.
+**Decided (Chris, 2026-10-13): fix it** ("fix it and document it"), after he asked for
+the roster-index question to be confirmed from the code. `asm/bugfix_lockpick_member.asm`.

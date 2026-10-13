@@ -58,7 +58,8 @@ again; asleep, afraid and K.O. members can pick.
   in 0x800795fc (saved with the game, global to all parties); failure prints
   "* Failed! *" (521) and adds 10 to the penalty, to at most 50. The penalty drops by 1
   a step (`maze_step_hp`), and is cleared on entering a floor (0x800a4498) and in town.
-  **But the level, class and Luck are read from the wrong character** (bug below).
+  **But the level, class and Luck were read from the wrong character** (bug below, fixed
+  since; the retest is under "After the fix").
 - **Unlock with a spell.** The chosen member must know Calnova (`spells_known[2][3] & 2`,
   Alchemist level 7) or gets "You don't know the spell." (517); with no level 7 Alchemist
   point, "Not enough spell points." (519). Otherwise the point is spent, then it fails on
@@ -104,7 +105,7 @@ shut tight, and there isn't even a keyhole."
 
 None of these is on the harness's route, so they're from the code only.
 
-### The bug: the pick reads the wrong character
+### The bug: the pick reads the wrong character (fixed)
 
 The pick's roll (0x800aea44-0x800aeb44) reads the level, class and Luck from
 `roster[*(u8 *)0x80079791]`, not from the chosen member (0x800798d1, which the status
@@ -125,8 +126,10 @@ In practice: on the two difficulty-1 doors anyone in roster slots 1-5 with a lev
 so it's 70% whoever picks; on B4 (difficulty 13) a level 13 Thief with Luck 15 would get
 skill 10 and 15% anyway, and only a level 18+ Thief or Ninja would reach 70%, which this
 bug denies unless one sits in roster slots 1-5. On Area D's doors (difficulty 8), a level
-13 Thief would pass but a level 5 premade in slots 1-5 wouldn't. Not fixed; Chris decides
-(the fix is to load 0x800798d1 at 0x800aea44 and 0x800aeaac). [code, emu]
+13 Thief would pass but a level 5 premade in slots 1-5 wouldn't. Chris decided to fix it;
+`asm/bugfix_lockpick_member.asm` makes both reads take 0x800798d1 (0x800aea44:
+`lbu v1,-0x672f(a0)`, 0x800aeaac: `lbu v1,-0x672f(v0)`; the `lui 0x8008` each needs is the
+instruction before). [code, emu] Retested in play: "After the fix", below.
 
 ### Results
 
@@ -174,6 +177,57 @@ during the walking killed the member about to pick; those tries aren't counted.)
     no menu (`grounds_front_s_*`).
   - The moon door, B3 E19N4, with the Tablet: EVENTMES 80, and the party walks on
     (`moon_*`).
+
+### After the fix
+
+Retested on the combined fix build (`rips/re/work/P3-rescue2/fixbuild/dimguil-en.bin`, md5
+`ca912fe814e0055527fdb67be3cb82a8`: e3d5cd3 plus the rescue fix in MCARD and
+`bugfix_lockpick_member.asm` in MAZE, MAZE.BIN md5 `d6c2ce694785302189b06e10684f2992`),
+copied to `locks/disc_fix/`; `retest.sh` runs the whole thing.
+
+MAZE's code stays in RAM from the disc it was read from, so the old door states would
+still run the old pick on the new disc. The door states were made again on it
+(`refresh.py`): the 1F door from `f1v3/goal_27_train_09` (in town, so MAZE is read on
+entering) and the B4 door from a B4 chest menu (`runB_chest05`: BATTLE overwrites MAZE's
+code, which is read from the disc again after the fight). Both are saved only if the
+words at 0x800aea44 and 0x800aeaac are the fixed ones (0x908398d1, 0x904398d1), and
+every try logged them: fixed on all 103 (`fix_s1f_door.png`, `fix_b4_door.png`). Then
+the same logged trials as before (`doortest2.py`, 20 each, the Thief chosen on even
+tries and a standing non-thief on odd ones).
+
+**The record read is the chosen member's on every try: 103 of 103**, and **103 tries,
+no mismatch** with the formula using that member's level, class and Luck
+(`analyze2.py`, `fix_s1f_door2.jsonl`, `fix_b4_door2.jsonl`, `fix_analyze.txt`). Roster
+records 6, 7 and 8 (Jo, Kai, Lu), which the blink could never reach, were read when they
+were chosen.
+
+| Door | Chosen | Skill (code) | Chance | Tries | Opened | Expected |
+|---|---|---|---|---|---|---|
+| Shrine 1F (difficulty 1) | Mercury, Thief L9, Luck 13 | 8 | 70 | 22 | 15 | 15.4 |
+| | Jo, Thief L9, Luck 12 | 8 | 70 | 1 | 1 | 0.7 |
+| | Venus, Samurai L9, Luck 10 | 5 | 70 | 4 | 2 | 2.8 |
+| | Lu, Priest L9, Luck 10 | 5 | 70 | 2 | 2 | 1.4 |
+| | all | | | 29 | 20 | 20.3 |
+| Underground B4 (difficulty 13) | Mercury, Thief L13, Luck 14 | 10 | 15 | 42 | 10 | 6.3 |
+| | Jo, Thief L13, Luck 15 | 10 | 15 | 6 | 1 | 0.9 |
+| | Earth, Priest L13, Luck 12 | 7 | 15 | 7 | 1 | 1.1 |
+| | Lu, Priest L13, Luck 12 | 7 | 15 | 7 | 1 | 1.1 |
+| | Venus, Samurai L10, Luck 11 | 6 | 15 | 8 | 1 | 1.2 |
+| | Kai, Mage L10, Luck 12 | 6 | 15 | 4 | 0 | 0.6 |
+| | all | | | 74 | 14 | 11.1 |
+
+First tries opened: 15 of 20 on 1F, 6 of 20 on B4. The penalty behaved as before (10 a
+failure, worn off over ten steps). Mercury's 10 of 42 on B4 is on the lucky side (about
+a 1 in 10 chance), with every roll under the logged 15.
+
+**A Thief passing where a weak member gets 15% can't be shown on the doors this party
+reaches.** On 1F and B3 (difficulty 1) every member's skill is 4 or more, so anyone gets
+70%; on B4 (13) the best Thief here has 10 and would need about level 18, so everyone
+gets 15%. The doors where the fix changes who opens them are Area D B2's two (difficulty
+8: these Thieves' 10 passes, the Mage's, Samurai's and Priests' 6-7 don't), and no
+harness run has reached Area D yet. What the retest shows is the part that decides it
+there: the skill compared is now the chosen member's own (Thief 10 against Mage 6 on
+B4), not a roster entry 1-5 picked by the blink.
 
 ## Chests
 
