@@ -61,7 +61,8 @@ FIXED = 0x80079bde          # 1 in a fixed battle (up to 6 groups on a 3x2 grid)
 # monsters to kill first, by battle_groups +2 id: lower goes first. Walkthrough chapter 4
 # (04-lake-machine.json): at the Guardians "Kill the mage first" (Madalto over the whole
 # party for up to 64), and the priest's Badi kills a character outright.
-KILL_FIRST = {366: 0, 358: 1}       # Arch Mage, Arch Priest (Underground B2 E7 N22)
+KILL_FIRST = {366: 0, 358: 1,       # Arch Mage, Arch Priest (Underground B2 E7 N22)
+              454: 0, 438: 1}       # the same pair at Area A B1 E16 N11
 # against a kill-first monster: Montino (25, silence a group; in a fixed battle it takes
 # the row, so at the Guardians it reaches the Arch Priest and the Arch Mage both) up to
 # MONTINO_TRIES times a battle, then Badi (34, death to one). The B2 Arch Mage shrugs off
@@ -387,6 +388,13 @@ def command_phase(g, policy, log):
 
 
 CHEST_PHASE = 0x42
+# "A friendly monster appears. What will you do?" (FIGHTMSG 263): battle_phase 0x66,
+# its menu up while 0x800795fa is 0, LIST 0 Fight, 1 Leave. Fighting turns Good members
+# Evil (7% each), leaving turns Evil ones Good (5%), so the bot always leaves.
+FRIENDLY_PHASE = 0x66
+FRIENDLY_STEP = 0x800795fa
+FRIENDLY_LEAVE = 1
+FRIENDLY = 0x8007963c       # friendly_encounter: 1 from the setup to the menu
 BLIND_WAIT = 120             # frames of chest phase with no new text before going by RAM
 # the chest menu: Inspect Calfo Calnova Disarm Open Leave (LIST 0-5); LEVEL 1 while it
 # has the input, 2 while a member is being picked
@@ -567,6 +575,13 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
             continue
         blind = None
         chest_mark = len(g.cap.messages) if g.cap else 0
+        if ph == 1 and g.u8(FRIENDLY) == 1:
+            g.step()            # the menu is coming: a tap now would pick Fight
+            continue
+        if ph == FRIENDLY_PHASE and g.u8(FRIENDLY_STEP) == 0 and g.u8(LIST) != FRIENDLY_LEAVE:
+            ui.move_cursor(g, LIST, FRIENDLY_LEAVE, 'down', 'up', what='friendly leave')
+            log.append((None, 'friendly', 'leave'))
+            continue
         # narration and everything else waits for a press; tap it along (4-frame floor)
         g.tap('circle')
         for _ in range(4):

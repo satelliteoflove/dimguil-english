@@ -23,7 +23,9 @@ Cases live in rips/harness/regress/cases.jsonl, one JSON object per line:
             the old MAIN, docs/re/bugs.md 1.12; main 'state' keeps the state's MAIN and
             expect 'stall' wants the stall and the game's own retry, main 'disc' lays the
             disc under test's DsPacket words over MAIN and expect 'read' wants a normal
-            read), or 'boot' (made each round, not saved: see below)
+            read), 'friendly' (a battle state at or just before "A friendly monster
+            appears": battle.fight must choose Leave, with no fight rounds, and end
+            back in the maze), or 'boot' (made each round, not saved: see below)
 Every case that loads a state gets the disc under test's 14 DsPacket fix words
 (asm/bugfix_dspacket_race.asm) laid over its MAIN on each load (overlay_main): a state
 keeps the MAIN it was saved with, and the t3/t4 states predate the fix (0ef275c), so
@@ -189,6 +191,21 @@ def run_pick(case):
                 aims=[list(x) for x in aims])
 
 
+def run_friendly(case):
+    """battle.fight from a state at or before the friendly-monster menu: it must leave
+    (no fight rounds, ('friendly', 'leave') in its actions) and end in the maze."""
+    from harness.game import Game
+    from harness import battle
+    g = Game(capture=True)
+    g.load(case['state'])
+    f0 = g.frame
+    r = battle.fight(g)
+    left = any(x[1] == 'friendly' and x[2] == 'leave' for x in r['actions'])
+    ok = left and r['rounds'] == 0 and r['ovl'] == 'MAZE'
+    return dict(result=True if ok else 'rounds %d ovl %s actions %s' % (
+        r['rounds'], r['ovl'], r['actions'][:6]), frames=g.frame - f0)
+
+
 # DsPacket's two fill loops (asm/bugfix_dspacket_race.asm): (address, bytes)
 DSPACKET_FIX = [(0x80036a10, 4), (0x80036a58, 0x18), (0x80036b08, 4), (0x80036b50, 0x18)]
 # the 14 words of the fix (rips/harness/t3/metlock/idlast.py; docs/re/bugs.md 1.12)
@@ -336,7 +353,8 @@ def run_case(case):
             r = run_stuck(case) if case['kind'] == 'stuck' else \
                 run_boot(case) if case['kind'] == 'boot' else \
                 run_pick(case) if case['kind'] == 'pick' else \
-                run_cdrace(case) if case['kind'] == 'cdrace' else run_trial(case)
+                run_cdrace(case) if case['kind'] == 'cdrace' else \
+                run_friendly(case) if case['kind'] == 'friendly' else run_trial(case)
         rec.update(r)
         ok = r['result'] is True if case.get('expect') in ('proof', 'stall', 'read') else True
         if case.get('expect') == 'frozen':
@@ -437,7 +455,7 @@ def main():
 def _main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--trials', type=int, default=10, help='T2 trials per macro')
-    ap.add_argument('--only', choices=['stuck', 'trial', 'screen', 'boot', 'pick', 'cdrace'])
+    ap.add_argument('--only', choices=['stuck', 'trial', 'screen', 'boot', 'pick', 'cdrace', 'friendly'])
     ap.add_argument('--boots', type=int, default=len(BOOTS), help='cold-boot chapter 1 cases')
     ap.add_argument('--procs', type=int, default=MAX_PROCS)
     ap.add_argument('--collect', action='store_true')
@@ -459,6 +477,8 @@ def _main():
         cases += [c for c in saved if c['kind'] == 'pick']
     if a.only in (None, 'cdrace'):
         cases += [c for c in saved if c['kind'] == 'cdrace']
+    if a.only in (None, 'friendly'):
+        cases += [c for c in saved if c['kind'] == 'friendly']
     if a.only in (None, 'trial'):
         gen = trial_cases(a.trials)
         ids = {c['id'] for c in gen}

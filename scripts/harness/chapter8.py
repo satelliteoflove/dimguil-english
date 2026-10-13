@@ -31,7 +31,8 @@ from harness import chapters, chapter3, maze, nav
 
 STORY = 0x80079b44
 YELLOW = 0x40
-TRAIN_LEVEL = 14            # the Jail Ogre is level 17, the Guardians 12
+TRAIN_LEVEL = 16            # the Jail Ogre is level 17, the Guardians 12 but they
+                            # beat a party of 11-13 six times in six (pending_AE)
 TRAIN_AREAS = (20, 19)
 
 
