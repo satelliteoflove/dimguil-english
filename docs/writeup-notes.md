@@ -562,3 +562,23 @@ found, and one the translation set off.
   and every pillar fight started first try.
 - The other stall the runs found ("You've met someone!" with no meeting) is unrelated: a
   CD read that never finishes. Still open.
+
+**The "You've met someone!" lock (2026-10-13, bugs.md 1.12).** The second lock the harness
+found, and the deepest: a bug in Sony's CD library, linked into the game.
+- Seen twice in about 60 hours of bot play, both on the step toward the tiger pillar: the
+  meeting never starts, the music plays on, no button works. The main loop was waiting
+  on the meeting's data file, with the library reporting all 33 sectors still to come.
+- Cause: a read queues four drive commands. The library sends them from interrupts, as
+  the drive answers. Each queue slot was marked ready before its parameter was filled
+  in. If the frame interrupt landed in that 48-instruction gap and the drive answered
+  before the interrupt returned, Setmode went out with no parameter; the drive refused
+  it and nothing retried. Found by replaying the lock frame for frame, tracing the CD
+  registers, then counting instructions to the exact store.
+- Original code, byte-identical on the Japanese disc; our text only shifts which reads
+  land in the gap. Beetle answers the drive faster than hardware, so it's likelier in an
+  emulator. Of 10,337 timed reads in four chapter runs, none landed in the gap; at the
+  locking meeting, 1 of 100 timing shifts locks.
+- Chris weighed documenting it instead, since the fix touches every disc read. Two chapter
+  runs with the fix made the same reads in the same frames, and the suite passed, so he
+  chose to fix it and say clearly why. The fix marks each slot ready last: 14 words over
+  both copies of the fill loop, the same instruction count.

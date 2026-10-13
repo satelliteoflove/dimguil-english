@@ -18,7 +18,7 @@ him first. So each entry is in one of three groups:
 
 | Group | Count |
 |---|---|
-| 1. Clear bugs | 13 (11 fixed; 2.8, the pit soft lock, confirmed and waiting on one choice; 1.12 waiting on Chris) |
+| 1. Clear bugs | 13 (12 fixed; 2.8, the pit soft lock, confirmed and waiting on one choice) |
 | 2. Cut or unclear, ask | 6 |
 | 3. Balance, ask | 3 |
 | Not bugs, or harmless | 9 (2.7 and 3.4 moved here after the follow-ups) |
@@ -246,13 +246,19 @@ harness. In about 60 hours of harness play it locked twice, both at the same spo
 timed chapter 1 runs made 10,337 reads with none in the window, and at the t4v1 meeting
 1 of 100 timing shifts locks.
 
-Proposed fix (not applied, for Chris): DsPacket writes each slot's id after the rest of
-the slot, so the dispatcher can't take a half-written one. 14 words over both copies of
+**Fixed** (`asm/bugfix_dspacket_race.asm`). Why it's fixed rather than listed as a known
+issue: it's rare, but a lock costs everything since the last save, Beetle in RetroArch
+(what most players will use) hits it more often than hardware, and the fix only reorders
+stores the library already makes. Chris weighed documenting it instead, given the fix
+touches every disc read, and decided on 2026-10-13 to fix it once the checks below showed
+no change in timing or reads (decisions.md 24).
+
+The fix: DsPacket writes each slot's id after the rest of the slot, so the dispatcher
+can't take a half-written one. 14 words over both copies of
 the fill loop (0x80036a10, 0x80036a58-0x80036a6c, 0x80036b08, 0x80036b50-0x80036b64),
 same instruction count, no extra space: the old id store becomes a `nop`, and the
 queue-count update uses `s0` (free by then) as its base instead of `at`.
-Draft: `rips/harness/t3/metlock/bugfix_dspacket_race.asm.draft` (assembles to the tested
-words).
+The built SLPS_026.91 holds exactly the words tested below.
 
 Why the id is the right thing to hold back: the dispatcher issues the slot under its
 cursor (0x800986ec) whenever that slot's id is non-zero (0x800360dc, 0x80036efc; the
@@ -275,7 +281,8 @@ normally (892 reads). Two chapter 1 bot runs with the words in place make the sa
 and 2,580 reads as without them and finish in the same frames (one frame later in the
 second). The harness suite passes 187 of 187 on a test copy of the disc with the fix laid
 into SLPS_026.91 (and over MAIN in RAM after each state load, since states keep the code
-they were saved with). Scripts: `rips/harness/t3/metlock/`.
+they were saved with), and again on the built disc (round 13). Scripts:
+`rips/harness/t3/metlock/`.
 
 ## Group 2: looks cut, or the intent isn't clear
 

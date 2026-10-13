@@ -301,7 +301,7 @@ patches in `asm/`.
   stuck states, only those two are in this condition), both at the tiger approach. Timed
   over four chapter 1 runs: 10,337 reads, 21 starting within 2,000 instructions of a
   VSync, none in the window. At the t4v1 meeting, 1 of 100 input shifts locks.
-- Proposed fix (`metlock/bugfix_dspacket_race.asm.draft`, docs/re/bugs.md 1.12): DsPacket
+- Fix (applied, `asm/bugfix_dspacket_race.asm`; docs/re/bugs.md 1.12 says why): DsPacket
   writes each slot's id last, so the dispatcher can't take a slot that isn't finished.
   14 words in both copies of the fill loop, same instruction count. Tested in RAM: the
   t4v1 repro (same VSync point, lead 301) and all 100 shifts read normally; two chapter 1

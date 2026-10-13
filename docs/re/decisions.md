@@ -195,3 +195,13 @@ code, set off by our longer line (about 3% of pillar events). The options were s
 the English line to finish first again, or fixing the race.
 **Decided (Chris, 2026-10-12): fix the code** ("I don't like working around things").
 `asm/bugfix_pillar_race.asm`: the dust waits for the box.
+
+**24. The "You've met someone!" lock** (`bugs.md` 1.12). A race in the game's CD library
+(Sony's libds): a VSync landing while a read's Setmode command is half-written sends it
+with no parameter, the drive refuses it, and the read never finishes. Original code. Rare
+(two locks in about 60 hours of bot play, likelier in Beetle than on hardware), but it
+costs everything since the last save. The options were documenting it as a known issue,
+since the fix touches every disc read, or fixing it.
+**Decided (Chris, 2026-10-13): fix it, and document clearly that it was fixed and why.**
+Checked first: the same reads in the same frames with and without the fix over two
+chapter 1 runs, and the suite passing on a patched disc. `asm/bugfix_dspacket_race.asm`.

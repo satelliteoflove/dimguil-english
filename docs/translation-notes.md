@@ -411,6 +411,15 @@ The full triage is `docs/re/bugs.md`; each fix is its own `asm/bugfix_*.asm`.
   wipes the fight request. The Japanese line always finished first; ours is about three
   times as long and lost about 3% of the time. The dust now waits for the box. Found by
   the harness runs (asm/bugfix_pillar_race.asm, bugs.md 1.11).
+- **A disc read could stall forever,** most visibly as "You've met someone!" with the
+  meeting never starting, music playing on and no button working. It's a race in the
+  game's own CD library (Sony's libds, the same on the Japanese disc): if the frame
+  interrupt lands while a read's commands are being queued, one goes out half-written,
+  the drive refuses it and nothing retries. Rare (two locks in about 60 hours of bot
+  play), likelier in an emulator than on hardware, and any disc read can hit it. Fixed
+  because a lock loses everything since the last save and the fix only reorders stores
+  the library already makes: each queued command is marked ready last. Found by the
+  harness runs (asm/bugfix_dspacket_race.asm, bugs.md 1.12).
 
 Reopened content (each one goes in the release notes too):
 
