@@ -211,8 +211,11 @@ snake, the same 200 seeds from matched states on the old and new discs: 11 hangs
 none after. The 189 seeds that worked before start their fight on the same frame; the 11
 that hung now start it 4 frames after the box closes, the earliest the others do. The
 arrival-frame repro that hung every time (`t3/freeze/snake6_arrive.state`) starts its
-fight 2 frames after the box closes. (The RNG seed is set with a RAM write as a stand-in
-for different play histories.) Scripts: `rips/harness/t3/freeze/`.
+fight 2 frames after the box closes. Eight chapter 1 bot runs from a cold boot on the
+built disc reached the tablet door with all 32 pillar fights starting on the first try
+(on the old disc the same seeds lost one, the snake in run v3), and the harness suite
+passes 187 of 187. (The RNG seed is set with a RAM write as a stand-in for different
+play histories.) Scripts: `rips/harness/t3/freeze/`.
 
 ## Group 2: looks cut, or the intent isn't clear
 
