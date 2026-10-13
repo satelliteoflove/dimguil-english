@@ -22,6 +22,7 @@ summarizes each chapter; `docs/code-map.md` is the map of the code and the tools
 | [cursor-frame.md](cursor-frame.md) | The menu cursor frame crossing the bold labels: the original, the cause, options for Chris |
 | [decisions.md](decisions.md) | What's waiting on Chris, with recommendations |
 | [rescue-test.md](rescue-test.md) | The NPC rescue fees played through from power-on: Guy, Balbo and Fontana, Yes, No and Look for Companions, the repeat-offer bug, and the offer lines checked against the Japanese |
+| [lock-test.md](lock-test.md) | Locked doors and chests played through: the lock menu on the three reachable doors (91 tries counted against the code), the doors with no menu, every chest action, which traps hit whom, the pick's wrong-character bug, and the English on those screens |
 
 ## How claims are marked
 
@@ -108,6 +109,18 @@ unless it says inclusive; `rand_upto(n)` is 0..n inclusive.
   [rescue-test.md](rescue-test.md)): Guy all the gold; Balbo every item; Fontana half
   the gold and the items in the first, third, fifth, seventh and ninth slots. A rescued
   party stays a candidate, so it can be offered and charged again (a bug).
+
+### Locks and chests ([lock-test.md](lock-test.md), [D-battle.md](D-battle.md#chests-and-traps))
+
+- **Picking a lock**: 70% if (level, + 5 for a Thief or Ninja, + 2 for a Ranger or
+  Bard) × 5 + Luck, over 10, reaches the door's difficulty, else 15%; minus 10 for each
+  failure (to 50), which wears off a step at a time. The level and Luck come from roster
+  entry 1-5 picked by the cursor's blink, not from the chosen member (a bug). No other
+  cost. Calnova on a door: 95%, 0% on anti-magic squares.
+- **Chests**: Inspect is right Agility × 6% for a Thief (× 5 Ninja, × 4 Ranger and
+  Bard, × 1 others, 95% at most); a miss names a random trap, or sets it off if
+  rand(20) > Agility. Calfo 95%. Disarm needs the right trap named (a wrong one sets it
+  off): 80 + level - danger for a Thief or Ninja. Open always sets off a trap.
 
 ### Raising the dead
 

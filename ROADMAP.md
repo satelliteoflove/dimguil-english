@@ -203,9 +203,15 @@ major breakage; his own playthrough still happens, but the release doesn't wait 
   Guardians are the current wall. The bot now picks its target group.
 - It has found two freezes in the original code (bugs.md 1.11, 1.12, both fixed), the
   voicing-mark centering bug, and many smaller screen problems.
-- Still to do: chapters 4-19 to the ending; the NPC rescue test and the lock and chest
-  test (in progress); rebuilding the suite from a fresh clone, since its states live in
-  the gitignored `rips/` (in progress).
+- Still to do: chapters 8-19 to the ending (chapters 1-7 played through by 2026-10-13);
+  rebuilding the suite from a fresh clone, since its states live in the gitignored
+  `rips/` (in progress). The NPC rescue fees were tested on 2026-10-13
+  (`docs/re/rescue-test.md`).
+- Lock picking and chests were tested in play on 2026-10-13 (`docs/re/lock-test.md`):
+  the three reachable locked doors, the doors with no lock menu, and every chest action.
+  It found a bug in the pick (it reads a character chosen by the cursor's blink, not the
+  picker) and four screen problems (the ornate door's line is cut off, Ghost Swarm's
+  "strength", the picking dots, "can't act" off center), all waiting on Chris.
 
 ### Build from a clean clone
 

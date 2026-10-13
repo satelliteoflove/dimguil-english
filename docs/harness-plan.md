@@ -329,7 +329,9 @@ EVENTMES 15), 227 shots.
 
 **What blocks chapters 2-5:** goal lists beyond the door; battles on the Japanese disc
 don't end cleanly in the harness, which limits comparisons; lock picking still untested
-(chapter 1 has no ordinary locked door).
+(chapter 1 has no ordinary locked door). Update 2026-10-13: lock picking and chests have
+now been tested in play from the chapter 2 and 5 states, outside the suite
+(`docs/re/lock-test.md`); the harness itself still has no goal that picks a lock.
 
 ## T5 results (2026-10-13)
 
