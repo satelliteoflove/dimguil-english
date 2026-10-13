@@ -316,6 +316,17 @@ The preferred fix is a close-to-literal reading, fitted to the box.
     9ヘッド ("9 Head") and is fine.
   Sources: the Online Nahuatl Dictionary (nahuatl.wired-humanities.org, Xochitonal) and
   the day-sign list on Wikipedia's Tōnalpōhualli page.
+- **Unidentified flyers named by their picture (Chris, 2026-10-13).** The disc's English
+  called a Vampire Bat, Wing Lizard and Were Bat "Bird(s)" while showing the same
+  bat-winged figure as Fake Cupid and Halycon, which it calls Flying Figure(s); and
+  Marchosias "Very Big Bird" while showing the great demon that every other きょだいなあくま
+  shows as Greater Demon. Those four now match their pictures: Flying Figure(s) and
+  Greater Demon(s). "Bird" stays on the other picture (uk/07, a winged serpent), whose monsters really
+  are birds (Zopilote, Xecotcovach, and the Were Vulture), and Death Hawk stays Very Big Bird (きょだいなとり). The
+  picture is byte +2 after the six name slots (07, 08, 0x16...), the same numbers as
+  Bartok's Trading Post's uk/ images. 16 slots in DATA02 (`namefixes.py`, keyed by the
+  record's English name) and BATTLE.BIN's own Vampire Bat record (`asm/name_fixes.asm`).
+  Options and the series' names: `unidentified-flyers.md` (option B).
 - **Flap Insect and Flap Figure stay; the -y plurals are fixed (Chris, 2026-10-09).**
   Both are unidentified names for はばたくかげ ("flapping shadow"): Flap Insect(s) for
   the Giant Mosquito, Dragon Fly and Faerie Fly, Flap Figure(s) for the Camazotz. Flap

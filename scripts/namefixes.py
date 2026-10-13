@@ -56,6 +56,17 @@ SLOTS = {
     'Tepeyo{ff21}ryotl': 'Tepe{ff21}yollotl',
     'Tepeyo{ff21}ryotls': 'Tepe{ff21}yollotls',
 }
+# Unidentified names (slots 3 and 5) by the record's English name, so the same text can
+# change on one monster and not another. Named by the picture the player sees (Chris,
+# 2026-10-13, docs/unidentified-flyers.md option B): the bat-winged figure is a Flying
+# Figure, as on Fake Cupid and Halycon, and Marchosias shows the great demon of every
+# other Greater Demon.
+UNIDENTIFIED = {
+    'Vampire Bat': ('Flying Figure', 'Flying Figures'),
+    'Wing Lizard': ('Flying Figure', 'Flying Figures'),
+    'Were Bat': ('Flying Figure', 'Flying Figures'),
+    'Marchosias': ('Greater Demon', 'Greater Demons'),
+}
 # ITEM.DAT's English list, edited in place, so a fix can't grow ({ff21} is two bytes;
 # BREASTPLATE drops the space before the break to fit). The list is reached through a
 # pointer table, so a shorter name just ends early.
@@ -88,9 +99,12 @@ def main():
         d = open(p, 'rb').read()
         edits = {}
         for o in records(d):
+            unid = UNIDENTIFIED.get(dec(d, o + 2 * SLOT))
             for k in range(6):
                 s = o + k * SLOT
                 new = SLOTS.get(dec(d, s))
+                if unid and k in (3, 5):
+                    new = unid[k == 5]
                 if new:
                     edits[f'{s:x}'] = encode(new).hex(' ')
                     if listing:

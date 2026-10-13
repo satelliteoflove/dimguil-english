@@ -2,8 +2,11 @@
 
 Asked by Chris, 2026-10-13, after the harness saw an unidentified Wing Lizard group shown as
 "4 Birds". These names are the disc's own English (the monster records in DATA02, see
-`scripts/namefixes.py`); we have only fixed their typos and plurals. Nothing is changed
-yet.
+`scripts/namefixes.py`); we have only fixed their typos and plurals. **Decided (Chris,
+2026-10-13): option B**, applied in `scripts/namefixes.py` and `asm/name_fixes.asm`
+(decisions.md 26). The pictures were checked against the monster records: byte +2 after
+the six name slots holds the picture number, and it matches the site's mapping for every
+monster here, Death Hawk's demon included.
 
 Source: Bartok's Trading Post, `data/monsters/dim/ps.json` (the unidentified name in
 English and Japanese, and the unidentified picture each monster shows). The pictures are
@@ -51,7 +54,7 @@ The series uses "Bird" for actual birds, and not for bats, lizards or were-creat
 typos and garbled names (`namefixes.py`). "Bird" for a flapping shape is a fair first
 guess, and the oddness is mild.
 
-**A: fix only where the English contradicts the Japanese** (four monsters).
+**A: fix only where the English contradicts the Japanese** (three monsters).
 - Marchosias: Very Big Bird to Greater Demon, like every other きょだいなあくま and its own
   demon picture.
 - Were Vulture and Were Bat: Bird(s) to Flying Figure(s), like Halycon, the other
@@ -73,8 +76,8 @@ Marchosias becomes Greater Demon as in A.
 - "Bird" leaves the game except in Very Big Bird.
 This changes the most, and loses the bird hint on the real birds.
 
-I'd go with A. It's the smallest change, it only touches names that disagree with the
-developers' own Japanese, and it keeps Bird where it fits.
+I first suggested A. A leaves the Wing Lizard's "Birds" that started this, and makes Were
+Vulture a Flying Figure while it shares the real birds' picture, so B was chosen.
 
 ## Doing it
 

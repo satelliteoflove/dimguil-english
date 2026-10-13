@@ -213,3 +213,11 @@ a 9 px frame (A), corner brackets (B), or rows 9 px apart (C).
 **Decided (Chris, 2026-10-13): leave it for now.** He liked the corner brackets and may
 add them later as a choice on the settings screen, so B is documented in full in
 `cursor-frame.md` ("Corner brackets: the full spec") and listed in ROADMAP.md.
+
+**26. Unidentified flying monsters** (`unidentified-flyers.md`). The disc's English gave
+"Bird(s)" to bats, a lizard and were-creatures, and "Very Big Bird" to a demon, with the
+same pictures named differently from monster to monster. The options were leaving it,
+fixing only names that contradict the Japanese (A), naming by the picture (B), or one
+name per Japanese name (C).
+**Decided (Chris, 2026-10-13): B, name by the picture.** Vampire Bat, Wing Lizard and Were
+Bat are Flying Figure(s); Marchosias is Greater Demon(s).

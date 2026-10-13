@@ -1,6 +1,6 @@
 ; Misspelled built-in English names: BATTLE.BIN's copy.
 ;
-; BATTLE.BIN carries two monster records of its own (the 0xd0-byte layout of DATA02's
+; BATTLE.BIN carries monster records of its own (the 0xd0-byte layout of DATA02's
 ; M_DTnnn.BIN, six 18-byte name slots ending in {ff40}). Their names are fixed here, as
 ; scripts/namefixes.py fixes the DATA02 records; vwf.asm copies BATTLE.BIN into dirty/
 ; after the binary patches are applied, so the copy has to be patched in asm. Glyph
@@ -8,6 +8,19 @@
 .psx
 
 .open "dirty/dimguil/BATTLE.BIN", 0x800a1000
+.org 0x800d6e2e
+.area 0x12
+    ; Flying Figure (was Bird): Vampire Bat's unidentified name, named by its picture
+    ; (docs/unidentified-flyers.md, option B)
+    .db 0x10, 0x30, 0x3d, 0x2d, 0x32, 0x2b, 0xba, 0x10, 0x2d, 0x2b, 0x39, 0x36, 0x29, 0xff, 0x40
+    .fill 3, 0
+.endarea
+.org 0x800d6e52
+.area 0x12
+    ; Flying Figures (was Birds)
+    .db 0x10, 0x30, 0x3d, 0x2d, 0x32, 0x2b, 0xba, 0x10, 0x2d, 0x2b, 0x39, 0x36, 0x29, 0x37, 0xff, 0x40
+    .fill 2, 0
+.endarea
 .org 0x800d709e
 .area 0x12
     ; Small Shadow (was Small Silhoutte; "Small Silhouettes" won't fit a slot)
