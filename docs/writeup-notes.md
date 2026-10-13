@@ -628,18 +628,19 @@ found, and one the translation set off.
   worked before start on the same frame. Eight parties then ran chapter 1 from a cold boot
   and every pillar fight started first try.
 - The other stall the runs found ("You've met someone!" with no meeting) is unrelated: a
-  CD read that never finishes. Fixed the next day (0ef275c); the next entry explains it.
+  CD read that stalls for 20 seconds. Fixed the next day (0ef275c); the next entry explains it.
 
-**The "You've met someone!" lock (2026-10-13, bugs.md 1.12).** The second lock the harness
-found, and the deepest: a bug in Sony's CD library, linked into the game.
+**The "You've met someone!" stall (2026-10-13, bugs.md 1.12).** The second freeze the
+harness found, and the deepest: a bug in Sony's CD library, linked into the game. First
+written up as a permanent lock; it isn't (see the last bullet).
 - Seen twice in about 60 hours of bot play, both on the step toward the tiger pillar: the
   meeting never starts, the music plays on, no button works. The main loop was waiting
   on the meeting's data file, with the library reporting all 33 sectors still to come.
 - Cause: a read queues four drive commands. The library sends them from interrupts, as
   the drive answers. Each queue slot was marked ready before its parameter was filled
   in. If the frame interrupt landed in that 48-instruction gap and the drive answered
-  before the interrupt returned, Setmode went out with no parameter; the drive refused
-  it and nothing retried. Found by replaying the lock frame for frame, tracing the CD
+  before the interrupt returned, Setmode went out with no parameter and the drive refused
+  it. Found by replaying the lock frame for frame, tracing the CD
   registers, then counting instructions to the exact store.
 - Original code, byte-identical on the Japanese disc; our text only shifts which reads
   land in the gap. Beetle answers the drive faster than hardware, so it's likelier in an
@@ -649,3 +650,8 @@ found, and the deepest: a bug in Sony's CD library, linked into the game.
   runs with the fix made the same reads in the same frames, and the suite passed, so he
   chose to fix it and say clearly why. The fix marks each slot ready last: 14 words over
   both copies of the fill loop, the same instruction count.
+- Correction, later the same day: the harness had given up 350 frames into the stall.
+  Left alone, the library times the read out after about 1,200 frames and the game's load
+  pump retries it, so the meeting starts 20 seconds late (frame 1,263 from the stall
+  state with no input, frame 63 with the fix). The fix stays: a 20-second freeze with the
+  music playing looks like a crash.

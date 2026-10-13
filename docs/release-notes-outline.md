@@ -65,7 +65,7 @@ Each is original code, present on the Japanese disc. Commit hashes from `git log
     Now: the fight always starts. Found by the play harness. [bugs.md 1.11; en "Pillar
     guardians"; decisions 23; asm/bugfix_pillar_race.asm; c13dea2]
 13. **Disc read stall in Sony's CD library (libds).** Before: rarely, any disc read could
-    stall forever, seen as "You've met someone!" with no meeting, music playing, no
+    stall for about 20 seconds before the game retried it, seen as "You've met someone!" with no meeting, music playing, no
     input. Original library code, byte-identical on the Japanese disc. Our patch doesn't
     touch the library, but our text code changes frame timing and so moves which reads
     land in the window. The rate on the Japanese disc wasn't measured. Two locks in about

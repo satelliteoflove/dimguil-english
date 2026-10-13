@@ -324,7 +324,7 @@ EVENTMES 15), 227 shots.
   pillar, may have been this or something else; a state from his play would tell.)
 - **"You've met someone!" with no meeting, fixed (bugs.md 1.12, 0ef275c).** A different
   cause: a race in the game's CD library (Sony's libds) that can stall any disc read for
-  good. Original code, rare (two locks in about 60 hours of bot play), likelier in Beetle
+  about 20 seconds (first thought permanent: the harness gave up after 350 frames). Original code, rare (two locks in about 60 hours of bot play), likelier in Beetle
   than on hardware.
 
 **What blocks chapters 2-5:** goal lists beyond the door; battles on the Japanese disc

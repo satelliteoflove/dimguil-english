@@ -219,13 +219,18 @@ built disc reached the tablet door with all 32 pillar fights starting on the fir
 passes 187 of 187. (The RNG seed is set with a RAM write as a stand-in for different
 play histories.) Scripts: `rips/harness/t3/freeze/`.
 
-### 1.12 A disc read can stall forever ("You've met someone!" and no meeting)
+### 1.12 A disc read can stall for about 20 seconds ("You've met someone!" and no meeting)
 
 From the harness runs (T4 round 6, 2026-10-12): twice, a party stepped next to a roamer
 at the tiger approach, "You've met someone!" came up, and nothing more happened. The
 screen held, the music played on, no input was taken. The main loop was waiting in
 `load_file_alt` (0x80012f5c) for the meeting's data file (M_DT005, table 1 index 49) and
-the CD library kept reporting all 33 sectors still to come. [code, emu]
+the CD library kept reporting all 33 sectors still to come. The harness gave up after
+about 350 frames and called it a lock; it isn't one. Left alone, the read times out
+after about 1,200 frames (20 seconds), the game's load pump (0x800130a4, up to 3 tries,
+retry count at 0x800798c9) issues it again, and play goes on: from
+`rips/harness/t3/metlock/v1_r6b/f3066.state` with no input the fight starts at frame
+1,263, against frame 63 with the fix (checked 2026-10-13). [code, emu]
 
 The cause is in the CD library linked into the game (libds, byte-identical on the
 Japanese disc). DsRead (0x80038300) has DsPacket (0x80036888) put Pause, Setmode, Setloc
@@ -234,8 +239,9 @@ pointer last. The library sends queued commands from interrupts: its VSync callb
 for the drive status, and the drive's answer starts the packet's next slot. If the VSync
 lands in the 48 instructions between the Setmode slot's id and its parameter pointer,
 and the answer arrives before the interrupt returns, Setmode goes out with a null
-parameter. CD_cw refuses it ("no param", 0x80035118) and nothing retries, so that read
-and every read after it wait forever. Any file load can hit it.
+parameter. CD_cw refuses it ("no param", 0x80035118), the packet goes no further, and
+the read waits until the library gives it up as failed; then the game retries it. Any
+file load can hit it.
 `docs/engine-notes.md`, "CD reads: the DsPacket race", has the trace.
 
 Original code. Our patch doesn't touch the library or the files it was reading (same
@@ -249,11 +255,14 @@ timed chapter 1 runs made 10,337 reads with none in the window, and at the t4v1 
 1 of 100 timing shifts locks.
 
 **Fixed** (`asm/bugfix_dspacket_race.asm`, 0ef275c). Why it's fixed rather than listed as a known
-issue: it's rare, but a lock costs everything since the last save, Beetle in RetroArch
+issue: it's rare, but a 20-second freeze with the music playing looks like a crash, and
+a player may well reset and lose everything since the last save. Beetle in RetroArch
 (what most players will use) hits it more often than hardware, and the fix only reorders
 stores the library already makes. Chris weighed documenting it instead, given the fix
 touches every disc read, and decided on 2026-10-13 to fix it once the checks below showed
-no change in timing or reads (decisions.md 24).
+no change in timing or reads (decisions.md 24). When he decided, the stall was believed permanent; that
+was corrected the same day (the 20-second retry above), and the fix stands on the
+grounds given here.
 
 The fix: DsPacket writes each slot's id after the rest of the slot, so the dispatcher
 can't take a half-written one. 14 words over both copies of

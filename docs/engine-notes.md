@@ -318,10 +318,16 @@ patches in `asm/`.
   parameter pointer (instructions 270-318 after DsRead's entry, 48 instructions), and
   the VSync handler runs long enough for the Getstat answer to arrive inside it. The
   dispatcher sends Setmode with a null parameter, CD_cw refuses it ("no param", returns
-  -2 at 0x80035118), and nothing retries. No further CD command is ever sent, DsReadSync
-  keeps reporting the whole file (33 sectors for M_DT005), and the main loop spins in
-  the next `load_file_alt`. The screen holds, the music plays on (the sound driver runs
-  in the VSync handler), and no input is taken. Only a reset gets out.
+  -2 at 0x80035118), and the packet goes no further. DsReadSync keeps reporting the
+  whole file (33 sectors for M_DT005) and the main loop spins in `load_file_alt`; the
+  screen holds, the music plays on (the sound driver runs in the VSync handler), and no
+  input is taken. After about 1,200 frames the library times the read out, DsReadSync
+  returns -1, and MAIN's load pump (0x800130a4) issues DsRead again (retry count
+  0x800798c9; three tries, then a blocking `load_file`). So it's a 20-second freeze, not
+  a lock: from `rips/harness/t3/metlock/v1_r6b/f3066.state` with no input the read
+  finishes at frame 1,263, and at frame 63 with the fix laid over MAIN. (Corrected
+  2026-10-13: this note first said nothing retries. The harness had given up 350 frames
+  into the stall.)
 - Traced (`rips/harness/t3/metlock/`): the t4v1 lock replays exactly from its goal state
   (`replay.py`, `inrep.py`). The meeting read M_DT005 (table 1 index 49, LBA 2109) starts
   301 instructions before the VSync; one frame later (532 before) it's fine. In the

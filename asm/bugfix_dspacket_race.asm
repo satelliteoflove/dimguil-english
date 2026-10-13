@@ -1,4 +1,4 @@
-; Game bug fix: a disc read can't stall forever.
+; Game bug fix: a disc read can't stall for 20 seconds.
 ;
 ; Every file load goes through the CD library's DsRead (0x80038300), which has DsPacket
 ; (0x80036888) put four commands in the library's command queue: Pause, Setmode (with its
@@ -9,9 +9,10 @@
 ; lands while DsPacket is filling the Setmode slot (after the id, before the parameter
 ; pointer, about 48 instructions) and the drive answers before the interrupt returns, the
 ; dispatcher sends Setmode with a null parameter. CD_cw refuses it ("no param", -2), the
-; packet never moves on, DsReadSync reports the whole file still to come, and the game
-; waits for it forever. Seen as the "You've met someone!" lock (docs/engine-notes.md, "CD
-; reads: the DsPacket race").
+; packet never moves on, and DsReadSync reports the whole file still to come until the
+; library times the read out about 1,200 frames later and the game retries it. Seen as
+; "You've met someone!" frozen for 20 seconds (docs/engine-notes.md, "CD reads: the
+; DsPacket race").
 ;
 ; The fix writes each slot's id last, after the rest of the slot, so the dispatcher can't
 ; take a slot that isn't finished. Same instruction count: the old id store becomes a nop,
@@ -22,8 +23,8 @@
 ; slot being filled always reads as empty until this store.
 ;
 ; Original code (Sony's libds, byte-identical on the Japanese disc). It's rare, about one
-; lock per few dozen hours in Beetle and less on hardware, but it costs everything since
-; the last save. Chris decided on 2026-10-13 to fix it rather than list it as a known
+; stall per few dozen hours in Beetle and less on hardware, but a 20-second freeze looks
+; like a crash and invites a reset. Chris decided on 2026-10-13 to fix it rather than list it as a known
 ; issue (docs/re/bugs.md 1.12, docs/re/decisions.md 24).
 .psx
 .open "dirty/dimguil/SLPS_026.91", 0x8000f800

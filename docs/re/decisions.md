@@ -196,11 +196,13 @@ the English line to finish first again, or fixing the race.
 **Decided (Chris, 2026-10-12): fix the code** ("I don't like working around things").
 `asm/bugfix_pillar_race.asm`: the dust waits for the box.
 
-**24. The "You've met someone!" lock** (`bugs.md` 1.12). A race in the game's CD library
+**24. The "You've met someone!" stall** (`bugs.md` 1.12). A race in the game's CD library
 (Sony's libds): a VSync landing while a read's Setmode command is half-written sends it
-with no parameter, the drive refuses it, and the read never finishes. Original code. Rare
-(two locks in about 60 hours of bot play, likelier in Beetle than on hardware), but it
-costs everything since the last save. The options were documenting it as a known issue,
+with no parameter, the drive refuses it, and the read hangs. Original code. Rare (two in
+about 60 hours of bot play, likelier in Beetle than on hardware). It was presented as a
+permanent lock that costs everything since the last save; that was wrong (corrected
+2026-10-13, after the decision): the library times the read out after about 20 seconds
+and the game retries it, so it's a 20-second freeze that looks like a crash. The options were documenting it as a known issue,
 since the fix touches every disc read, or fixing it.
 **Decided (Chris, 2026-10-13): fix it, and document clearly that it was fixed and why.**
 Checked first: the same reads in the same frames with and without the fix over two
