@@ -110,7 +110,7 @@ save, and the records. The findings are in `docs/re/` (index `docs/re/README.md`
 summarized in `docs/engine-notes.md`; the tools are in `scripts/re/` (`docs/code-map.md`).
 
 Decided 2026-10-11: the patch fixes the original game's clear bugs, and reopens content
-a bug cut off. Thirteen are fixed (`asm/bugfix_*.asm`, `docs/re/bugs.md` group 1): NPC
+a bug cut off. Fourteen are fixed (`asm/bugfix_*.asm`, `docs/re/bugs.md` group 1): NPC
 lines that played in the wrong place or never (Guy's statue warning, Rosea's and
 Cephala's heals, Alstron's Madi, the pit scene, Fritillaria's "walkin' corpse",
 Cresson's speech after the Decipher table, the rerolled chat topics), the Temple
@@ -126,7 +126,8 @@ Balbo's party's "heard that already" stay unused; the balance bugs are kept (see
 "hardcore mode" below); and the original's wrong numbers in spell and item descriptions
 are corrected (`docs/re/description-check.md`). The NPC rescue fees were tested in
 natural play on 2026-10-13 (`docs/re/rescue-test.md`): all three match the code, and the
-test found that a rescued party stays on offer and can be charged again.
+test found that a rescued party stayed on offer and could be charged again (bugs.md 1.13),
+now fixed: the Yes frees the party's record.
 
 ### Quality passes (to reach 0.9)
 

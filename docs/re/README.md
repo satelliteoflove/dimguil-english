@@ -21,7 +21,7 @@ summarizes each chapter; `docs/code-map.md` is the map of the code and the tools
 | [description-check.md](description-check.md) | Item, spell, Compendium and help text checked against the records and the code |
 | [cursor-frame.md](cursor-frame.md) | The menu cursor frame crossing the bold labels: the original, the cause, options for Chris |
 | [decisions.md](decisions.md) | What's waiting on Chris, with recommendations |
-| [rescue-test.md](rescue-test.md) | The NPC rescue fees played through from power-on: Guy, Balbo and Fontana, Yes, No and Look for Companions, the repeat-offer bug, and the offer lines checked against the Japanese |
+| [rescue-test.md](rescue-test.md) | The NPC rescue fees played through from power-on: Guy, Balbo and Fontana, Yes, No and Look for Companions, the repeat-offer bug and its fix, and the offer lines checked against the Japanese |
 | [lock-test.md](lock-test.md) | Locked doors and chests played through: the lock menu on the three reachable doors (91 tries counted against the code), the doors with no menu, every chest action, which traps hit whom, the pick's wrong-character bug, and the English on those screens |
 
 ## How claims are marked
@@ -107,8 +107,9 @@ unless it says inclusive; `rand_upto(n)` is 0..n inclusive.
   on that exact square brings them back free.
 - NPC rescue fees ([C-talk.md §5](C-talk.md#5-services), played through in
   [rescue-test.md](rescue-test.md)): Guy all the gold; Balbo every item; Fontana half
-  the gold and the items in the first, third, fifth, seventh and ninth slots. A rescued
-  party stays a candidate, so it can be offered and charged again (a bug).
+  the gold and the items in the first, third, fifth, seventh and ninth slots. In the
+  original a rescued party stayed a candidate, so it could be offered and charged again;
+  fixed ([bugs.md 1.13](bugs.md)), the Yes frees its record.
 
 ### Locks and chests ([lock-test.md](lock-test.md), [D-battle.md](D-battle.md#chests-and-traps))
 

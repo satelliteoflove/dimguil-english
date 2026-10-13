@@ -23,7 +23,9 @@ fights and is superseded.
 - **Bug: a rescued party stays a rescue candidate.** Guy's party offered to rescue the
   same party again in the same meeting and at a later one, and Fontana's in the same
   meeting, taking the fee again: Fontana's repeat halves the gold again and takes more
-  items. Balbo's scan is the same code. See below.
+  items. Balbo's scan is the same code. See below. **Fixed** (bugs.md 1.13,
+  `asm/bugfix_rescue_repeat.asm`): the Yes now frees the party's record, tested on the
+  built disc in "The fix, tested".
 - After Yes nothing more is said; the bodies just turn up in the Temple's list, as the
   offers promised.
 - No and Look for Companions leave everything as it was.
@@ -174,11 +176,57 @@ again:
   next time a party is wiped or a game is loaded. A plain walk home doesn't clear it:
   the record was still there in town in Guy's steps 4 and 7. The offers also stop once
   any member is raised (status 0 isn't above 0x1f).
-- **A fix** would free the party record on Yes (id -1, count 0, members -1), as Look for
-  Companions does for a party it empties. Not made. It's for bugs.md.
+- **The fix** frees the party record on Yes (id -1, count 0, members -1, member_state
+  0xff), as Look for Companions does for a party it empties. Chris decided to fix it
+  (decisions.md 27); see "The fix, tested" below.
 
-fallen-parties.md's table says the town cleanup runs on entering town; it runs only on
-those three paths (after a wipe, a load, or "Go On with Another Party").
+fallen-parties.md's table said the town cleanup runs on entering town; it runs only on
+those three paths (after a wipe, a load, or "Go On with Another Party"). Corrected there.
+Any other return home only copies the current party back into its slot and frees other
+records with its id (JOUKA 0x800a2954).
+
+## The fix, tested
+
+`asm/bugfix_rescue_repeat.asm` (bugs.md 1.13, decisions.md 27): on Yes, all three
+handlers now free the picked party's record. Tested the same day, by the same standard
+(button presses and ordinary-play save states only, RAM read, never written).
+
+- **Build.** e3d5cd3 plus this fix and `asm/bugfix_lockpick_member.asm` (two words in
+  MAZE): `P3-rescue2/fixbuild/dimguil-en.bin`, md5 `ca912fe814e0055527fdb67be3cb82a8`
+  (MCARD.BIN `cd775b055b14f9a50db665229b8baf5a`). `build.log` 0 ERROR, `fightfit.py`
+  clean. Against e3d5cd3's files only MCARD.BIN and MAZE.BIN differ, and MAZE only in
+  the lock-pick fix's two words.
+- **States.** The runs start from states made on 06c9523's disc before any meeting,
+  `guy/g02_wiped` (town) and `bf/b03_c2end` (B3), so MCARD comes off the new disc when
+  the talk opens. At every meeting where they were read (the first of each case, and
+  Guy's later meeting) the three hook words in RAM were the fix's jumps
+  (`rt.mcard_code`). The states made mid-talk in the first test (`g03_offer`,
+  `B_offer`, `F_offer`) hold the old MCARD and weren't used.
+- **Scripts.** `fix_guy.py` (offer, yes, later, no), `fix_wipe2.py` (wipe, offer),
+  `fix_bf.py` (Balbo), `fix_f.py` (Fontana); outputs and `log.jsonl` in `fix/`. `rt.py`
+  takes the disc from `RT_DISC`. A first run on a build with only this fix
+  (`fixbuild1_mcard_only/`, the same MCARD.BIN) gave the same Guy results and Balbo's
+  freed record; it's in `fix_build1/`.
+- **Fontana** took several tries: the harness's routes have changed since the first test,
+  and walks to her token through areas 7 and 8, or onto area 4, cost the party most of
+  its members (failed runs kept as `fix/F_*_failed.out`). `fix_f.py` hops between B3's
+  start square and area 4 (one step apart) until her token lands where there's a walk
+  there and back on the same floor. A meeting with the half-dead party showed that a
+  heal clears Talk from the menu for the rest of the meeting (talk_menu 7 → 6, and only
+  Leave on screen: `fix/menu6_0.png`), so the driver now stops there.
+
+| Case | Seen |
+|---|---|
+| Guy, Yes | Offer on the 11th Talk. Yes: 357, 125 and 125 G taken, area 0xff, and slot 0 freed (id -1, count 0, members -1, member_state 0xff). Then 60 more Talks in the same meeting: chat only, no offer. Home: the Temple lists all three. |
+| Guy, later meeting | From home after the Yes, back out to Guy's party: 60 Talks (a sale offered and declined, chats), no offer. |
+| Guy, a second real wipe | Ace, Bea and Cy went out from town after the rescue and lost a fight on the Grounds, Parrying (dead at (7, 20); the wipe halved Cy's 203 G to 101). Party B went out and took over slot 0, the record the first rescue had freed; the new victims were in slot 1. Guy's party offered them on the 8th Talk. Yes took Cy's 101 G (all their gold) and freed slot 1; party B's slot 0 was untouched. 60 more Talks, no offer. |
+| Guy, No | Nothing changed; slot 0 kept the three. |
+| Guy, Look for Companions | After No, on the bodies' square: each pick took one body into party B; slot 0's count went 3, 2, 1, and the last pick freed it (id -1, count 0), as before the fix. |
+| Balbo, Yes | Offer on the 2nd Talk. Yes: every item taken, the gold (125 each) kept, area 0xff, slot 0 freed. 60 more Talks in the same meeting, no offer. |
+| Balbo, No | Nothing changed. |
+| Fontana, Yes | On B3 with the six at full health, offer on the 7th Talk. Yes: gold 125 → 62 each, the first, third and fifth slots emptied and the packs compacted (Jupiter kept BREAST PLATE and BUSKINS; Mars PADDED LEATHER, BLACK BOOTS and ANGEL FLUTE), area 0xff, slot 0 freed: the same fee as before the fix. 60 more Talks in the same meeting, no offer, gold and items unchanged (the old code's repeat took 62 → 31). |
+| Fontana, later meetings | Left, changed floors until her token came back, and met her three more times: 60 Talks each, no offer. |
+| Fontana, No | Nothing changed; slot 0 kept the three, with their gold and items. |
 
 ## The English, checked against the Japanese
 
@@ -219,7 +267,8 @@ Greetings, introductions, chats and the sale offers: NPC_MES1 16, 17, 47, 59, 16
 ## Screenshots
 
 In `rips/re/work/P3-rescue2/`. Each `*_NN_tsXX.png` is a page just before the press
-that turned it, XX the talk_state (41 the offer, 43 the reply).
+that turned it, XX the talk_state (41 the offer, 43 the reply). The repeat Talks after
+the fix's Yes showed no offer pages, so they have no shots.
 
 | Case | Files |
 |---|---|
@@ -232,14 +281,15 @@ that turned it, XX the talk_state (41 the offer, 43 the reply).
 | Balbo | `bf/B_offer_01_ts41.png` to `bf/B_offer_03_ts41.png`, `bf/B_offer_yesno.png`, `bf/B_yes_01_ts43.png`, `bf/B_no_01_ts43.png` |
 | Fontana | `bf/F_offer_01_ts41.png` to `bf/F_offer_03_ts41.png`, `bf/F_offer_yesno.png`, `bf/F_yes_01_ts43.png`, `bf/F_yes_02_ts43.png`, `bf/F_no_01_ts43.png`, `bf/F_no_02_ts43.png` |
 | Fontana, repeat offer (bug) | `bf/F_reoffer_01_ts41.png` to `bf/F_reoffer_03_ts41.png`, `bf/F_reoffer_yesno.png` |
+| Fix: Guy | `fix/offer_01_ts41.png`, `fix/offer_02_ts41.png`, `fix/offer_yesno.png`, `fix/yes_01_ts43.png`, `fix/yes_02_ts43.png`, `fix/yes_temple_list.png`, `fix/no_01_ts43.png`, `fix/lfc_01.png`, `fix/lfc_02.png` |
+| Fix: Guy, second wipe | `fix/x04_wiped2_town.png`, `fix/offer2_01_ts41.png`, `fix/offer2_02_ts41.png`, `fix/offer2_yesno.png`, `fix/yes2_01_ts43.png`, `fix/yes2_02_ts43.png` |
+| Fix: Balbo | `fix/B_offer_01_ts41.png` to `fix/B_offer_03_ts41.png`, `fix/B_offer_yesno.png`, `fix/B_yes_01_ts43.png`, `fix/B_no_01_ts43.png` |
+| Fix: Fontana | `fix/F_offer_m0_01_ts41.png` to `fix/F_offer_m0_03_ts41.png`, `fix/F_offer_yesno.png`, `fix/F_yes_01_ts43.png`, `fix/F_yes_02_ts43.png`; the menu after a heal, `fix/menu6_0.png` |
 
 `superseded/` holds first runs and a dry run, not cited here (its README says what).
 
 ## Open questions
 
-- **The repeat offer.** Fix it (free the record on Yes), and does it go in bugs.md
-  group 1? For Fontana it's a real loss, repeatable until a member is raised, another
-  party is wiped, or a game is loaded.
 - **Fontana's 153.** Does the English want the wink back ("You're a trusting bunch...
   Don't worry, we won't do you wrong")? That's a review-tool scene, not a fix here.
 - **Balbo's 142.** "doin'", "'em", "ya" against the leaders' maze-register rule; settled

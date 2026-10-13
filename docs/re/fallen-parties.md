@@ -54,10 +54,11 @@ away. No renumbering follows. **[code, disassembly]**
 So every party whose members sit above the lost character in the roster ends up pointing
 one record too high. That includes a fallen party in the maze. What follows is
 **[inf]**, read from the town's party cleanup in `town_main` (0x800a2198), which runs on
-entering town:
+entering town after a wipe, a load or "Go On with Another Party" (corrected 2026-10-13: a
+plain return home skips it; see the table below):
 - The fallen party now lists other characters. If one of them is in town (area 0xff),
   the cleanup breaks the party up (id -1, count 0).
-- On the next entry to town, whoever is still listed in that broken-up party is sent to
+- The next time the cleanup runs, whoever is still listed in that broken-up party is sent to
   town (area 0xff). If that's a member of another fallen party, they come home for free,
   still dead.
 - The real bodies keep their place in the maze, but no party lists them any more. Look
@@ -81,7 +82,7 @@ mirror at 0x8007e810), or one picked character, never a fallen one.
 | Module | Address | Name | When it runs | What it changes for the fallen | |
 |---|---|---|---|---|---|
 | BATTLE | 0x800c59a0 | `party_wiped` | the wipe | the wipe itself: gold halved, one member's items rolled six times (bug), Lost deleted, square saved | code (A, D), emu (A) |
-| JOUKA | 0x800a2198 | `town_main`, entry | entering town | party table cleanup: drops duplicate members; breaks up a party with a member in town; sends members of a broken-up party to town | code |
+| JOUKA | 0x800a2198 | `town_main`, entry | entering town after a wipe, a load or "Go On with Another Party" (0x80079567 = 1 or 0x800799a1 = 0xfd, the gate at 0x800a2348); any other return home only copies the current party back into its slot and frees other records with its id (0x800a2954) | party table cleanup: drops duplicate members; breaks up a party with a member in town; sends members of a broken-up party to town | code, emu (rescue-test.md: a rescued party's record survived plain walks home) |
 | JOUKA | 0x800db4c4 | `broken_items_purge` | entering town, every roster record | empties slots holding BROKEN ITEM (and zeroes item_state[9], sic) | code |
 | JOUKA | 0x800d5250 | `items_compact` | entering town, every roster record | moves items up over gaps | code |
 | JOUKA | 0x800dcb70 | `roster_compact` | entering town, deletions | moves records down over deleted ones (renumbered by the callers, except the Temple) | code |

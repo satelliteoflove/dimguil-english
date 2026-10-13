@@ -8,7 +8,7 @@ gives a source in brackets. "bugs.md" is `docs/re/bugs.md`, "decisions" is
 `docs/re/description-check.md`, "hp" is `docs/harness-plan.md`. Where the docs disagree,
 the item says so. The full list of disagreements is at the end.
 
-## 1. Bug fixes to the original game (13)
+## 1. Bug fixes to the original game (14)
 
 Each is original code, present on the Japanese disc. Commit hashes from `git log`.
 
@@ -72,14 +72,22 @@ Each is original code, present on the Japanese disc. Commit hashes from `git log
     60 hours of bot play; likelier in Beetle than on hardware. Now: queued commands are
     marked ready last. Found by the play harness. [bugs.md 1.12; en "CD reads";
     decisions 24; asm/bugfix_dspacket_race.asm; 0ef275c]
+14. **A rescued party stayed on offer and paid again.** Before: after a Yes, Guy's or
+    Fontana's party kept offering to rescue the same party, in the same meeting and at
+    later ones (Balbo's runs the same scan), and took the fee each time (Fontana's: half
+    the gold and about half the items again), until another party was wiped, a game was
+    loaded or a member was raised. Now: the Yes frees the party's record, as Look for Companions
+    does; no text changes. Found by the rescue test. [bugs.md 1.13; decisions 27;
+    re/rescue-test.md; asm/bugfix_rescue_repeat.asm; not committed yet]
 
 Exposed by the English: 12 directly (text length). 13 is timing-related to the patch's
-code, not text length, and unmeasured on the Japanese disc. The other eleven are
+code, not text length, and unmeasured on the Japanese disc. The other twelve are
 independent of the translation.
 
 How they were tested: emulator runs used RAM-write setups, not natural play (bugs.md "How
 the fixes are checked"). 1, 5, 6 and 7 were checked by disassembly only; 2 and 3 by script
-dump and patched bytes. 12 and 13 were also run in the harness on the built disc.
+dump and patched bytes. 12 and 13 were also run in the harness on the built disc. 14 was
+played through on the built disc with button presses only, before and after.
 
 ## 2. Reopened content
 
@@ -374,8 +382,9 @@ patch. Nothing is decided about whether that happens. [ROADMAP "Maybe later"]
    CHANGELOG.md (grep found no mention); ROADMAP and tn say it must be.
 10. **Save carry-over between versions** not yet verified once, per ROADMAP; README says
     saves "have so far carried over". [ROADMAP "Playthrough"]
-11. **NPC rescue fees** natural-play test listed as still to check; `docs/re/rescue-test.md`
-    isn't in the repo. [ROADMAP "The game's code"; docs/re/README.md]
+11. **NPC rescue fees**: tested in natural play on 2026-10-13 (`docs/re/rescue-test.md`,
+    c0b6192); all three fees match the code. The repeat charge it found is section 1
+    item 14. No longer open.
 12. **Harness coverage gaps:** chapter 1 only; lock picking untested; Japanese-disc
     battles don't end cleanly in the harness, so comparisons are limited; the card game
     and Compendium aren't covered by the town crawler. [hp "T3 and T4", "T2"; wn "The
@@ -490,10 +499,8 @@ Left for Chris, or for others:
 11. The notice's origin: ROADMAP says it comes from the original team's requests; a
     comment in `scripts/mkrelease.py` says "Remisse asked for this on the repo and on
     every release page."
-12. `docs/re/rescue-test.md` doesn't exist, in the working tree or anywhere in git
-    history. ROADMAP and docs/re/README.md still point to it. The test's working files are
-    in `rips/re/work/P3-rescue/` (gitignored): a `plan.md` and scripts whose last log ends
-    at the pillar fights, with no fee results.
+12. `docs/re/rescue-test.md` didn't exist when this was written; it does now (c0b6192),
+    from the rerun in `rips/re/work/P3-rescue2/`. Resolved.
 13. README.md, CHANGELOG.md and docs/release-readme.txt don't mention the English-only
     lock yet (public writing, Chris's).
 14. docs/harness-plan.md: the coordinator updated it in 63d5f64. Its "The suite" line

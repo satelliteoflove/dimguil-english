@@ -1,7 +1,7 @@
 # Decisions from the code analysis
 
 These are the open questions that came out of the code analysis (2026-10-11), each with a
-recommendation. The evidence for each is in the doc named beside it. All thirteen clear
+recommendation. The evidence for each is in the doc named beside it. All fourteen clear
 bugs are fixed (`bugs.md`, group 1), and every item below has been decided.
 
 ## Content that looks cut
@@ -226,3 +226,15 @@ name per Japanese name (C).
 Bat are Flying Figure(s); Marchosias is Greater Demon(s). Death Hawk stays Very Big Bird (Chris,
 2026-10-13): it matches きょだいなとり, and picture 22 is the game's silhouette for any huge
 foe, not a demon's.
+
+## From the play tests (2026-10-13)
+
+**27. A rescued party stays on offer** (`bugs.md` 1.13, `rescue-test.md`). After a Yes,
+Guy's and Fontana's parties kept offering to rescue the same party, in the same meeting
+and at later ones (Balbo's runs the same scan), and each Yes took the fee again: for
+Fontana's, half the gold and about half the items every time, for bodies already at the
+Temple. It lasts until a member is raised, another party is wiped, a game is loaded, or
+"Go On with Another Party" is used. Original code. The Yes
+leaves the party's record in the table, and the scan doesn't check where the members are.
+**Decided (Chris, 2026-10-13): fix it.** `asm/bugfix_rescue_repeat.asm`: the Yes frees
+the rescued party's record, as Look for Companions does for a party it empties.

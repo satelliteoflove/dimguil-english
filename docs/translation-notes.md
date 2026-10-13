@@ -445,6 +445,14 @@ The full triage is `docs/re/bugs.md`; each fix is its own `asm/bugfix_*.asm`.
   because a lock loses everything since the last save and the fix only reorders stores
   the library already makes: each queued command is marked ready last. Found by the
   harness runs (asm/bugfix_dspacket_race.asm, bugs.md 1.12).
+- **A rescued party stayed on offer** (2026-10-13). After a Yes, Guy's and Fontana's
+  parties offered to rescue the same party again, in the same meeting and at later
+  ones, and took the fee each time; for Fontana's that's half the gold and about half the
+  items again, for bodies already at the Temple. The Yes left the party's record in the
+  table, and the town only clears such records after a wipe, a load or "Go On with
+  Another Party". Found by the rescue test (`docs/re/rescue-test.md`). Chris: fix it. The
+  Yes now frees the record as Look for Companions does; no text changes
+  (asm/bugfix_rescue_repeat.asm, bugs.md 1.13, decisions.md 27).
 
 Reopened content (each one goes in the release notes too):
 

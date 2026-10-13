@@ -1,10 +1,10 @@
 # Bugs in the original game, and content no code reaches
 
 Every bug and every unreachable string the phase-2 analysts found (`docs/re/*.md`), two
-from the fallen-party audit (`docs/re/fallen-parties.md`), and two from the harness runs
-(1.11, 1.12). Each was re-read in the code from the original disc (`rips/clean`, decompiled at
-585c983) and confirmed or refuted. Addresses are RAM; MCARD, JOUKA and MAZE load at
-0x800a1000.
+from the fallen-party audit (`docs/re/fallen-parties.md`), two from the harness runs
+(1.11, 1.12), and one from the rescue test (1.13). Each was re-read in the code from the
+original disc (`rips/clean`, decompiled at 585c983) and confirmed or refuted. Addresses
+are RAM; MCARD, JOUKA and MAZE load at 0x800a1000.
 
 Chris's rule (2026-10-11): fix the clear bugs, and reopen content a bug cut off. Bring
 anything that looks deliberately cut, and any fix that changes how hard the game is, to
@@ -18,7 +18,7 @@ him first. So each entry is in one of three groups:
 
 | Group | Count |
 |---|---|
-| 1. Clear bugs | 13, all fixed (2.8, the pit soft lock, moved here; fixed in 5ff86d2 and kept) |
+| 1. Clear bugs | 14, all fixed (2.8, the pit soft lock, moved here; fixed in 5ff86d2 and kept) |
 | 2. Cut or unclear, ask | 6, all decided (2.2-2.5 reopened, 2.1 and 2.6 left unused) |
 | 3. Balance, ask | 3, all decided (kept as the original; decisions.md 8-10) |
 | Not bugs, or harmless | 9 (2.7 and 3.4 moved here after the follow-ups) |
@@ -294,6 +294,52 @@ second). The harness suite passes 187 of 187 on a test copy of the disc with the
 into SLPS_026.91 (and over MAIN in RAM after each state load, since states keep the code
 they were saved with), and again on the built disc (round 13). Scripts:
 `rips/harness/t3/metlock/`.
+
+### 1.13 A rescued party stays on offer, and pays the fee again
+
+From the rescue test (`rescue-test.md`, 2026-10-13). Guy's, Balbo's and Fontana's
+handlers (`talk_guy` 0x800b5694, `talk_balbo` 0x800c7264, `talk_fontana` 0x800cf8c0)
+offer a rescue for any party in the table, other than the current one, whose members all
+have status above 0x1f. The scan doesn't look at where the members are. On Yes each
+member gets area 0xff and pays the fee, but the party's record stays in the table, so
+the bodies, now at the Temple, are still a candidate. In the emulator Guy's party
+offered the same party again in the same meeting (five Talks later) and at a later one,
+and Fontana's in the same meeting, where a second Yes halved the gold again (62 → 31)
+and took three more items. Balbo's scan is the same code. The record only went when the
+town's full cleanup ran (JOUKA `town_main`, the gate at 0x800a2348), which happens after
+a wipe, a load or "Go On with Another Party", not on a plain walk home; or the offers
+stopped once a member was raised. [code, emu]
+
+Fix: each Yes ends by freeing the picked party's record the way Look for Companions does
+for a party it empties: id -1, count 0, members -1, member_state 0xff. The party is
+`rescue_candidates[rescue_candidate_count]` (0x8008d300, 0x80079895), where the handlers
+leave their `rand_upto` pick. No MCARD routine frees a party record (Look for Companions
+and the town do it inline; BATTLE's `party_record_clear` 0x800cb900 clears only the current
+party and isn't loaded during a talk), so the three hooks share one 24-instruction routine
+with a short stub each. Hooks, at each Yes branch's exit after the member loop: Guy
+0x800b7f44, Balbo 0x800cad6c, Fontana 0x800d24e4 (two words; the stub replays them).
+Space: two unreferenced routines in MCARD at 0x800ab1cc-0x800ab27b, each just calling
+0x800255b0 four times; no jal, j, branch or pointer from any module reaches them. Two
+caves Ghidra listed as uncalled (0x800b216c, 0x800b37b0) turned out to be branch-targeted
+tails of live functions and were left alone. Everything is in MCARD.BIN, which loads
+whole for each talk, so a state saved on an older build can't run new code against an
+old module (the voicing-mark hang in `docs/engine-notes.md`).
+`asm/bugfix_rescue_repeat.asm`.
+
+Checked: natural play on the built disc (`rips/re/work/P3-rescue2/fixbuild/`, md5
+ca912fe814e0055527fdb67be3cb82a8, with the lock-pick fix), button presses only, from
+states saved before each meeting; RAM held the fix's three jumps at every meeting where
+it was read.
+Guy: Yes took 357, 125 and 125 G and freed the record, then 60 more Talks in the same
+meeting and 60 at a later one brought no offer. A second party then lost a real fight;
+Guy's party offered it, the Yes took its gold (101 G) and freed its record (slot 1),
+leaving the current party's, which had reused the first freed slot, alone. Balbo: Yes
+took every item, kept the gold, freed the record; 60 more Talks, no offer. No and Look
+for Companions behave as before. Fontana: Yes halved the gold (125 → 62) and emptied the
+first, third and fifth slots, then compacted the packs, as before the fix, and freed the
+record; 60 more Talks in the same meeting and 60 at each of three later ones brought no
+offer, where the old code's repeat took 62 → 31. Details in `rescue-test.md`, "The fix,
+tested".
 
 ## Group 2: looks cut, or the intent isn't clear
 

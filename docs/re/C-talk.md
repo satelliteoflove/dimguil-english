@@ -159,7 +159,7 @@ Per-NPC flags found (all [code]):
 | 0x80079b40 | `talk_speaker` | Which member speaks a greeting or farewell (random). [code] |
 | 0x800795d6, 0x80079c6c, 0x800796d0 | `talk_str_a`, `talk_str_b`, `talk_topic_str` | String numbers filled into script slots at run time. [code] |
 | 0x8007969a, 0x800796ed, 0x800796e4 | | Portrait and expression put into a greeting's second speaker slot. [code] |
-| 0x80079b50 | `talk_menu` | Menu options: 7 means Talk/Fight/Leave and 5 means Talk/Leave. Bit 0 is cleared after a service (heal or three sales), which drops Fight. [code; what bit 0 means is inferred] |
+| 0x80079b50 | `talk_menu` | Menu options: 7 means Talk/Fight/Leave and 5 means Talk/Leave. Bit 0 is cleared after a service (heal or three sales), which drops Fight. [code; what bit 0 means is inferred] Seen 2026-10-13 at Fontana's (rescue-test.md): after a heal the byte went 7 → 6 and the menu showed only Leave, so Talk is gone for the rest of the meeting. [emu] |
 | 0x80079be8 | `talk_count` | Talk presses this meeting (Cresson and Zaril only). [code] |
 | 0x80079991 | `npc_sale_set` | Which sale set the next NPC sale uses. It persists between talks. [code] |
 | 0x800a1cf8 | `npc_sale_table` | 54 sets of three items and a price, 8 bytes each. [code] |
@@ -300,11 +300,14 @@ scan and no offer. [code; Cresson's and Zaril's read in full for this]
 - **Yes**: one candidate party is picked at random (`rand_upto(count - 1)`). Each member
   gets `area` = 0xff (back in town), status and x/y unchanged, and pays the fee. [code,
   emu]
-- **The party record stays.** The Yes doesn't free the rescued party's record, and the
-  scan doesn't look at `area`, so the same party is offered again, in the same meeting
-  and at later ones, and pays again. It stays a candidate until a member is raised or
-  the town's cleanup runs (only after a wipe, a load, or "Go On with Another Party").
-  [code, emu; a bug, see rescue-test.md]
+- **The party record stays** (original code; fixed). The Yes doesn't free the rescued
+  party's record, and the scan doesn't look at `area`, so the same party is offered
+  again, in the same meeting and at later ones, and pays again. It stays a candidate
+  until a member is raised or the town's cleanup runs (only after a wipe, a load, or
+  "Go On with Another Party"). [code, emu; rescue-test.md] Fixed by
+  `asm/bugfix_rescue_repeat.asm` (bugs.md 1.13): each Yes now frees the record (id -1,
+  count 0, members -1, member_state 0xff), as Look for Companions does for a party it
+  empties.
 
 | Party | Fee from each rescued member | |
 |---|---|---|

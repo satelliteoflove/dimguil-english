@@ -702,3 +702,40 @@ written up as a permanent lock; it isn't (see the last bullet).
   pump retries it, so the meeting starts 20 seconds late (frame 1,263 from the stall
   state with no input, frame 63 with the fix). The fix stays: a 20-second freeze with the
   music playing looks like a crash.
+
+**The rescue that charged twice (2026-10-13, bugs.md 1.13).** Found by the rescue test,
+the first fix whose before and after were both played through without RAM writes.
+- Seen in the test of the three NPC rescue fees (`docs/re/rescue-test.md`): after a Yes,
+  Guy's party offered to rescue the same party again five Talks later, and again at the
+  next meeting. Fontana's did too, and a second Yes halved the gold again (62 → 31) and
+  took three more items, for bodies already lying in the Temple.
+- Cause: the offer counts any party, other than yours, whose members are all down. It
+  never checks where they are. The Yes sends them to town and takes the fee, but leaves
+  their party in the party table. The town clears out such parties only after a wipe, a
+  load or "Go On with Another Party"; walking home doesn't. fallen-parties.md had said
+  the clear-out runs on every return to town, and was corrected.
+- The fix frees the party on Yes, the way Look for Companions does when it takes the last
+  body from a party. No routine in the talk overlay does that (the two places that do it
+  write it out inline), so the three handlers share one small routine: 38 words over two
+  unused routines in MCARD, with a jump at each handler's Yes. The first two spots tried
+  for the routine had been listed as uncalled by Ghidra but were the tails of live
+  functions, reached by branches; a branch scan caught it before anything was built.
+- Everything is in MCARD.BIN, which loads whole for each talk, so a save state made on an
+  older build can't mix new code with old. It also meant the test could start from states
+  made on the earlier disc, as long as they were saved before the meeting.
+- Checked on the built disc, button presses only: the code in RAM read back as the
+  fix's at each meeting checked. Guy: the offer, Yes, then 60 more Talks with no offer;
+  home, back out, another 60 Talks at a later meeting with no offer. A second party (Ace, Bea, Cy) then
+  lost a real fight: Guy offered them, the Yes took Cy's 101 G and freed their record,
+  not the one the first rescue had freed and the new party had taken over, and 60 more
+  Talks brought nothing. Balbo: Yes took every item, kept the gold, freed the record, and
+  60 Talks brought no repeat. Fontana: the same fee as before the fix (125 G halved to 62,
+  the first, third and fifth items, packs compacted), the record freed, and 60 Talks in
+  that meeting and at each of three later ones with no repeat; the old code's repeat had taken 62 down
+  to 31. No and Look for Companions behaved as before.
+- Getting to Fontana was the hard part. The harness's routes had changed since the first
+  test, and the walk to her token went through two other floors whose fights nearly wiped
+  the party. A half-dead party also showed something new: when her healers fix someone,
+  Talk disappears from the menu for the rest of the meeting, and with four members down
+  every meeting ended in a heal. What worked was hopping between two floors one step
+  apart, since each arrival places her token again, until it landed within a short walk.

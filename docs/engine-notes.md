@@ -122,8 +122,13 @@ glance". By subsystem:
   the gold and the items in the first, third, fifth, seventh and ninth slots (0, 2, 4, 6,
   8 counting from 0). The gate (`progress_bits` & 0x1e) is open from the first trip
   into the Grounds. All three fees were confirmed in natural play
-  (`re/rescue-test.md`), which also found that a rescued party stays on offer and pays
-  again.
+  (`re/rescue-test.md`), which also found that a rescued party stayed on offer and paid
+  again: the Yes left its record in the party table, and the scan only checks status.
+  Fixed (bugs.md 1.13, `asm/bugfix_rescue_repeat.asm`): the Yes frees the record the way
+  Look for Companions does, in a routine shared by the three handlers over two unused
+  MCARD routines (0x800ab1cc). The town only clears such records in its full cleanup,
+  after a wipe, a load or "Go On with Another Party" (JOUKA 0x800a2348); a plain return
+  home just copies the current party back into its slot.
 - **Bugs and cut content.** C found a dozen. The clear bugs are fixed (bugs.md group
   1). Of the cut-looking ones, Zaril's healing (9135ef5), Guy's and Fontana's
   re-introductions (7498b1c), Cresson's greeting (7166f5d) and Fontana's chat about
@@ -251,8 +256,8 @@ glance". By subsystem:
 
 ### Bugs, descriptions and open decisions
 
-- `docs/re/bugs.md`: every bug found, in three groups. Group 1 (thirteen clear bugs,
-  two of them found by the harness runs) is fixed in `asm/bugfix_*.asm`.
+- `docs/re/bugs.md`: every bug found, in three groups. Group 1 (fourteen clear bugs,
+  two of them found by the harness runs and one by the rescue test) is fixed in `asm/bugfix_*.asm`.
 - `docs/re/description-check.md`: item, spell, Compendium and help text checked against
   the records and the code (18 spell ranges in the original are wrong).
 - `docs/re/decisions.md`: the open questions and Chris's decision on each (all decided).
