@@ -43,12 +43,6 @@ see all of it.
   padding is gone. Found by printing all 317 event strings through the real box
   (`scripts/evsweep.py`): every page printed in full.
 
-- **Lines with `"` or "w " off center, and "b  away" (2026-10-13).** The game's line
-  measures skipped those two glyphs as Japanese voicing marks, so 81 event lines and the
-  Inn's "Learned new spells." sat 2-12 px right of center, and two printers still merged
-  them into the glyph before ("Ocelotl tries to b  away" in battle). Fixed in
-  `asm/voicing_marks.asm`; found by the T5 screen checks. Details in `writeup-notes.md`.
-
 ### Machine-written habits (the Q1 sweep)
 
 The English was screened for habits that read as machine-written, and 37 hits were

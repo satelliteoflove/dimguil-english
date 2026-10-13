@@ -113,32 +113,6 @@ center line. Of fourteen forced attack lines, the Xicalli one among them, 11 cha
 each only by a space dropped before a break, and the 3 that break in plain text came
 out identical (`rips/re/work/wrapfix2/shots/`).
 
-**The voicing marks, second round: centering and "b  away" (2026-10-13).** The T5 screen
-checks found two things the first voicing fix (9a955ba) had left.
-- Seen: every event line with `"` or the digraph "w " sat right of center, about 2 px
-  per `"` and 6 px per "w " (81 lines flagged; all 657 lines without either were within
-  1.5 px), and so did "Learned new spells." in the Inn's level-up box. In battle,
-  "Ocelotl tries to blow away" printed "b  away", on 54 screens.
-- Cause, centering: the game measures a line before printing it, to center it, and the
-  measure skips 0xb6 and 0xb7, since a voicing mark merges into the glyph before and
-  takes no room. Ours are `"` and "w ", so the line came out short by that glyph's
-  advance and moved right by half of it. The same three-instruction test sits in eight
-  measures: the event box's two, the battle box's, text_at in four overlays, and the
-  battle expander's wrap column for inserted names.
-- Cause, "blow away": two printers merge inline instead of asking the helper the first
-  fix turned off, BATTLE's and MAZE's. "lo" + "w " became a voiced form of "lo", which
-  doesn't exist, so a blank cell. Both merge after any glyph, like the event box did.
-- Both are ours, not the game's: in Japanese those codes are voicing marks and the code
-  is right for them. The fix is the same one-word change at all ten tests, so each says
-  "not a mark" (`asm/voicing_marks.asm`).
-- Checked through the real boxes, before and after, the rest of the code the same. All
-  91 event strings that use either code: 98 lines, 1.5 to 12 px off before, within 0.5
-  px after, each moved left by exactly 6 px per "w " and 2 px per `"`; the 205 lines
-  without either didn't move, and t5check went from 310 findings to none. A fight with
-  every attack verb set to "tries to blow away": "b  away" before, the whole line and
-  centered after, no findings on 92 screens. The Inn: "Learned new spells." from +6 px
-  to centered. Shots in `rips/re/work/centerfix/shots/`.
-
 ## Working without reading Japanese
 
 - Chris doesn't read Japanese. Each line was shown literally, sentence by sentence,

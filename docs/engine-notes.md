@@ -324,31 +324,6 @@ patches in `asm/`.
   carries (MAZE, MCARD, JOUKA, CMENU, HAZURE, BATTLE), which did it after kana-like codes
   (`y "` printed as ブ). `asm/voicing_marks.asm` turns all of it off, so a `"` inside a
   line is safe now; `npcfit.py` still flags it, which does no harm.
-- Two more printers merge inline without the helper, and were missed at first: BATTLE's
-  (0x800d19a4, the battle box and menus; test at 0x800d1a68) and MAZE's text_draw
-  (0x800a201c; 0x800a20e0). FIGHTMSG 33 "tries to blow away" printed "b  away": "lo" +
-  "w " drew a blank voiced cell. Every inline test is the same three instructions,
-  `addiu v0, code, 0x4a / andi v0, v0, 0xff / sltiu v0, v0, 2` (code - 0xb6 < 2). The
-  printers only merge with the 12 px font on (0x8007977a bit 0).
-- The line measures skip the marks as well, since a merged mark takes no room. A line
-  with `"` or `w ` was measured short and printed right of center by half the glyph's
-  advance: 2 px per `"`, 6 px per `w `. The measures, all with the same test: the event
-  box's first line (0x8001fb4c, test at 0x8001fc98) and later lines (event_box_print,
-  0x800201f0), the battle box (0x80022024, 0x800220cc), each of these only for a layer in
-  the 12 px font; text_at in MAZE (0x800a1f7c), MCARD (0x800ad618), JOUKA (0x800dbe2c) and
-  HAZURE (0x800bca4c), always. The battle expander's wrap column for an inserted name
-  (text_expand, 0x8001e2d0) skipped them too, while the name's length counted them. All
-  of them now count every glyph (`asm/voicing_marks.asm`, 2026-10-13). Measured through
-  the real event box: the 98 lines with a mark were 1.5 to 12 px right of center, and
-  are within 0.5 px now, the same as the 205 lines without one.
-- Glyph codes the text code treats specially, checked against everything the
-  translations encode to: only 0xb6 and 0xb7 among English glyphs. The rest are
-  two-byte prefixes (0xf7-0xfe) and controls (0xff), and no English text encodes to
-  0xd8 or above. Left alone, as they don't show: MCARD's typewriter (0x800b3de0) counts
-  a mark as free, so it reveals `"` and `w ` together with the glyph before; the name
-  entry screens (JOUKA 0x800b86f0, HAZURE 0x800aeca0) and CMENU's name store
-  (0x800a8a4c) handle marks typed on the kana grids. A name typed in kana doesn't show
-  as kana anyway: single-byte codes draw English glyphs.
 - The NPC talk runs with MCARD.BIN at 0x800a1000, not MAZE.BIN.
 - The dungeon NPC box is 288 px by 3 lines, pages split by `\n\r`.
 - The battle box wraps at 24 glyph codes per line. Messages are expanded by 0x8001dfc0

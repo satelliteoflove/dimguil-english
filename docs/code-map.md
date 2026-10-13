@@ -245,27 +245,25 @@ at these spots.
 | MAIN | FUN_80012a4c (0x80012c88) | english_defaults.asm |
 | MAIN | FUN_8001e1f0 (0x8001e2fc, 0x8001e370) | word_wrap.asm |
 | MAIN | FUN_8001f9d8 (0x8001f9d8) | vwf.asm |
-| MAIN | FUN_8001fb4c (0x8001fc18, 0x8001fc1c, 0x8001fc80, 0x8001fc98, 0x8001fca4, 0x8001fcac) | voicing_marks.asm, vwf.asm |
+| MAIN | FUN_8001fb4c (0x8001fc18, 0x8001fc1c, 0x8001fc80, 0x8001fca4, 0x8001fcac) | vwf.asm |
 | MAIN | FUN_8002027c (0x8002027c) | vwf.asm |
-| MAIN | FUN_80022024 (0x80022048, 0x8002204c, 0x800220b4, 0x800220cc, 0x800220d8) | voicing_marks.asm, vwf.asm |
+| MAIN | FUN_80022024 (0x80022048, 0x8002204c, 0x800220b4, 0x800220d8) | vwf.asm |
 | MAIN | FUN_80023e98 (0x80023f68) | english_defaults.asm |
 | MAIN | event_box_open (0x80021bfc) | event_window_pool.asm |
-| MAIN | event_box_print (0x8001ffe8, 0x80020170, 0x80020174, 0x800201d8, 0x800201f0, 0x800201fc, 0x80020204, 0x80020274) | voicing_marks.asm, vwf.asm |
-| MAIN | text_expand (0x8001e19c, 0x8001e2d0) | voicing_marks.asm, word_wrap.asm |
-| MAZE | FUN_800a1ecc (0x800a1f7c, 0x800a1f9c, 0x800a1fc0) | voicing_marks.asm, vwf.asm |
-| MAZE | text_draw (0x800a20e0) | voicing_marks.asm |
+| MAIN | event_box_print (0x8001ffe8, 0x80020170, 0x80020174, 0x800201d8, 0x800201fc, 0x80020204, 0x80020274) | voicing_marks.asm, vwf.asm |
+| MAIN | text_expand (0x8001e19c) | word_wrap.asm |
+| MAZE | FUN_800a1ecc (0x800a1f9c, 0x800a1fc0) | vwf.asm |
 | MAZE | FUN_800ba48c (0x800bab9c) | return_prompt_icon.asm |
 | MAZE | FUN_800bed7c (0x800bef6c) | training_sign_pool.asm |
 | MAZE | FUN_800d9304 (0x800d9cd8) | english_only.asm |
 | MAZE | voicing_merge (0x800a3134) | voicing_marks.asm |
-| BATTLE | FUN_800d19a4 (0x800d1a68) | voicing_marks.asm |
 | BATTLE | FUN_800d202c (0x800d2038, 0x800d2150, 0x800d21d0, 0x800d21ec) | vwf.asm |
 | BATTLE | FUN_800d3100 (0x800d3120) | vwf.asm |
 | BATTLE | voicing_merge (0x800d3510) | voicing_marks.asm |
 | MCARD | FUN_800aa9e0 (0x800aae88) | english_only.asm |
 | MCARD | FUN_800ac8d0 (0x800acbb4) | english_only.asm |
 | MCARD | FUN_800ad018 (0x800ad250) | english_only.asm |
-| MCARD | FUN_800ad524 (0x800ad618, 0x800ad638, 0x800ad65c) | voicing_marks.asm, vwf.asm |
+| MCARD | FUN_800ad524 (0x800ad638, 0x800ad65c) | vwf.asm |
 | MCARD | voicing_merge (0x800ae4e4) | voicing_marks.asm |
 | JOUKA | FUN_800a2198 (0x800a348c) | town_text_pool.asm |
 | JOUKA | FUN_800af5d8 (0x800af8b0) | name_entry_latin.asm |
@@ -276,14 +274,14 @@ at these spots.
 | JOUKA | FUN_800bf9ec (0x800c0d78) | shop_caption_layer.asm |
 | JOUKA | FUN_800c95f0 (0x800ca9b8, 0x800caa08, 0x800caa30, 0x800caa5c) | temple_layout.asm |
 | JOUKA | FUN_800cbddc (0x800cbec0) | status_text_pool.asm |
-| JOUKA | FUN_800dbd7c (0x800dbe2c, 0x800dbe4c, 0x800dbe70) | voicing_marks.asm, vwf.asm |
+| JOUKA | FUN_800dbd7c (0x800dbe4c, 0x800dbe70) | vwf.asm |
 | JOUKA | FUN_800dd5a8 (0x800deb1c) | catalog_tall_text.asm |
 | JOUKA | FUN_800e31b8 (0x800e33bc, 0x800e33c4, 0x800e340c) | catalog_vwf.asm |
 | JOUKA | voicing_merge (0x800dc76c) | voicing_marks.asm |
 | HAZURE | FUN_800abbd4 (0x800ac5c8) | english_only.asm |
 | HAZURE | FUN_800ac9f4 (0x800ace48) | name_entry_latin.asm |
 | HAZURE | FUN_800ae990 (0x800aeab8) | name_entry_latin.asm |
-| HAZURE | FUN_800bc99c (0x800bca4c, 0x800bca6c, 0x800bca90) | voicing_marks.asm, vwf.asm |
+| HAZURE | FUN_800bc99c (0x800bca6c, 0x800bca90) | vwf.asm |
 | HAZURE | voicing_merge (0x800bd2f8) | voicing_marks.asm |
 | CMAIN | FUN_800aa850 (0x800aa88c) | english_only.asm |
 | CMAIN | FUN_800b5330 (0x800b5508) | cb_strings.asm |
