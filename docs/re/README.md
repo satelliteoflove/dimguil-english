@@ -19,6 +19,7 @@ summarizes each chapter; `docs/code-map.md` is the map of the code and the tools
 | [fallen-parties.md](fallen-parties.md) | Every routine that touches a party left wiped in the maze, with an emulator check |
 | [bugs.md](bugs.md) | Every bug and unreachable string, triaged: fixed, cut-looking, balance-changing, harmless |
 | [description-check.md](description-check.md) | Item, spell, Compendium and help text checked against the records and the code |
+| [cursor-frame.md](cursor-frame.md) | The menu cursor frame crossing the bold labels: the original, the cause, options for Chris |
 | [decisions.md](decisions.md) | What's waiting on Chris, with recommendations |
 | rescue-test.md | The natural-play test of the NPC rescue fees (in progress when this index was written) |
 
