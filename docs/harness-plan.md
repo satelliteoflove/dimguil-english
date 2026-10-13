@@ -321,6 +321,49 @@ EVENTMES 15), 227 shots.
 don't end cleanly in the harness, which limits comparisons; lock picking still untested
 (chapter 1 has no ordinary locked door).
 
+## T5 results (2026-10-13)
+
+Full notes in `rips/harness/t5/README.md`; the report is `rips/harness/t5/report.html`.
+
+**Capture** (`harness/screens.py`). Every frame the glyph sprite pool is hashed. When a
+screen settles (the pool holds 3 frames before a press, 4 by itself, 10 while text types
+out, and the picture under the glyphs holds too), it's logged: every glyph sprite (layer,
+position, cell, so the code), the glyphs a full layer refused, the strings expanded
+lately with their bytes, and a shot (once per distinct text). The holds matter because
+the game draws at 30 fps and the picture lags the pool by a frame or two.
+
+**Checks** (`harness/t5check.py`). From RAM: refused glyphs not on screen (cut); each
+screen line against the lines of the recent strings, compared as letters so digraph
+choices don't matter (cut short mid-word, a glyph or two wrong, diverging partway); a
+page's earlier line gone while a later one shows; glyphs off screen or sharing ink;
+kana/kanji cells and 〓; runs of one glyph; strings that fill the 576-byte expand buffer;
+punctuation and wrap lint; and centering, against rows learned from the captures (a row
+is centered when 8+ texts of different widths share an ink center). From the shot: each
+glyph's ink must stand out from its cell, and nothing else may be drawn inside it; lines
+whose glyphs mostly don't show are taken as covered and left out.
+
+**Data.** Six chapter 1 runs (58,956 screens, 378 strings) and an event sweep that
+prints all 317 EVENTMES strings through the real box (2,073 screens). Checking it all
+takes 5 minutes on four processes.
+
+**Recall.** A known-bad set of 10 bugs we'd fixed, put back by RAM writes (pool sizes,
+the voicing merge, the Japanese padding, the buffer overrun, the return-prompt icon, two
+on the old disc): all 10 caught. They're now suite cases (`regress.py`, kind `screen`).
+The status help pool couldn't be used: today's labels fit its old size.
+
+**False alarms.** On the current disc: none unexplained in the chapter runs. The return
+prompt's deliberate spaces (109 screens) are allowlisted; 81 screens need a look (the
+menu cursor frame through the letters; one period missing from the picture at the end of
+the runs). One sweep artifact.
+
+**Found:** centered lines with `"` or the digraph `w ` sit right of center (about 6 px
+per `w `; 81 event lines and an Inn line), the FIGHTMSG 109 "blow away" glyph blank on
+screen, a line ending in the digraph "A " off center, and the trailing space before a
+name already fixed in 8c26893.
+
+**Not covered:** cursor and page-triangle positions unless they land on text; text past a
+box edge into empty space; the catalog, compendium and card game renderer.
+
 ## The pilot: what it takes to find out
 
 The pilot answers three questions: how reliable the harness is, how fast it runs, and how
