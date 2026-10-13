@@ -275,6 +275,8 @@ caught before it went in.
 | 4 | 124/124 | first full pass |
 | 8 | 175/175 | roamers no longer learned as walls |
 | 10 | 185/185 | committed (code 28d9dd7fed46) |
+| 12 | 187/187 | the disc with the pillar fix (c13dea2) |
+| 13 | 187/187 | the disc with the CD-library fix (0ef275c) |
 
 **T3.** From a cold boot, one run finished chapter 1 with no stuck points: party, 13
 training trips to level 7, the four pillars, the sealed door. 290,108 frames, 23 minutes
@@ -303,16 +305,17 @@ in the way.
 EVENTMES 15), 227 shots.
 
 **Game issues found:**
-- **Pillar soft lock.** Pressing START on the exact frame the party arrives in front of a
-  pillar leaves "The pillar begins to shake... attacks." on screen with input locked
-  (0x800796ab stays 1) and the event script dropped. The picture and timers keep going,
-  but no fight starts in 60,000 frames. One frame later and the fight starts normally.
-  Deterministic repro: `rips/harness/t3/freeze/snake6_arrive.state`. Not yet separated
-  between the game, our patch and the emulator; next is a code read from that state.
-  Chris has seen the picture stop at a pillar in his own play; that may be the same
-  thing or a different one.
-- **"You've met someone!" with no meeting,** twice at (2,12), then no button works. May
-  share a cause with the soft lock.
+- **Pillar soft lock, fixed (bugs.md 1.11, c13dea2).** The event box closing and the dust
+  settling race, and the box close wipes the guardian's fight request with walking input
+  locked. Original code; our longer line set it off, about 3% per pillar event. The START
+  press that first looked like the trigger only shifted the random seed the dust uses.
+  After the fix: 0 of 400 seeded pillar events hang, and 8 cold-boot chapter 1 runs
+  started all 32 pillar fights first try. (What Chris saw, the picture stopping at a
+  pillar, may have been this or something else; a state from his play would tell.)
+- **"You've met someone!" with no meeting, fixed (bugs.md 1.12, 0ef275c).** A different
+  cause: a race in the game's CD library (Sony's libds) that can stall any disc read for
+  good. Original code, rare (two locks in about 60 hours of bot play), likelier in Beetle
+  than on hardware.
 
 **What blocks chapters 2-5:** goal lists beyond the door; battles on the Japanese disc
 don't end cleanly in the harness, which limits comparisons; lock picking still untested
