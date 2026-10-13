@@ -482,8 +482,9 @@ patches in `asm/`.
   break ({ff20}) without {ff26} before it doesn't wait: the page clears at once.
   `scripts/evsweep.py` prints every event string through this box and saves each page.
 - The NPC talk box drew a 181-glyph test page whole; `npcfit.py` holds pages to that.
-- The town status screen (Training Grounds and tavern inspect, JOUKA 0x800cbec0) sizes
-  the layers 346, 70, 190, 114. With START's help on, layer 1 holds the five bold command
+- The town status screen (tavern and Boltac's Inspect, JOUKA 0x800cbec0; the Training
+  Grounds' Inspect is another screen and never runs 0x800cbddc) sizes the layers 346,
+  70, 190, 114. With START's help on, layer 1 holds the five bold command
   labels (50 glyphs: that font has no digraphs) and the help line, which got the other
   20: "Spells can only be read here, not ca" (2026-10-07, in the play-through).
   `asm/status_text_pool.asm` moves 20 from layer 0 (item list and spell grid: 164 with
@@ -616,3 +617,21 @@ EXP scale, Option bonuses, unit records) and `docs/cheats.md` for the card stock
 - The language switches are zeroed in system init, New Game (english_defaults.asm) and
   a reset in MCARD.BIN (0x800ad250). `asm/english_only.asm` keeps them on English
   everywhere above.
+- Byte 9 is a card game flag (CMAIN writes it at 0x800b33b8 and 0x800b33e8). Bytes 10
+  and 11 are unused: no code file reads or writes them except the save copies, which
+  pack all 12 bytes into the save image (at +0x1eb5) in MAZE 0x800e5f34, JOUKA
+  0x800dab10, HAZURE 0x800bc008 and MCARD 0x800aa518 and 0x800b26cc. MAIN's startup
+  (0x80032200) zeroes 0x800795b8-0x800a0baf, so they're 0 at power-on. A 1 written to
+  byte 10 survived Suspend Game and Load Data from a cold boot (emulator, 2026-10-13).
+- The Edge of Town and camp screens are the same code (HAZURE 0x800abbd4, MAZE
+  0x800d9304). The names come from a table of ten (x, y, string) halfwords (HAZURE
+  0x800a10a8, MAZE 0x800a1cbc: STATUS.OBJ 61-69 and 75), drawn once on layer 0 when the
+  screen opens. The options are drawn row by row in straight-line code on layer 1 at each
+  cursor move, the unchosen one dimmed by 7 in 0x80079760. The cursor byte (HAZURE
+  0x80079c5c, MAZE 0x80079c5a) runs 0-8, 8 being Done; screen row 6 (Sound Effects) is
+  byte 7 and row 7 (Effects) byte 6.
+- STATUS.OBJ 70-74 and 76-80 are Configuration labels the final game doesn't draw: Help
+  Messages, Message Speed, Autosave, View (視点) and Status Bar display, and option
+  strings including (常時表示／セレクトボタンで表示) and (1 2 3 4 5 止まる). No code that
+  draws them was found. `docs/re/cursor-frame.md` ("Corner brackets: the full spec") has
+  the details and a sketch that adds a row using byte 10.
