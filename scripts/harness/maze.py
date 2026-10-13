@@ -238,6 +238,7 @@ def face(g, d):
 
 
 MET_WAIT = 60
+MET_DOOR_WAIT = 900
 
 
 def step(g, d):
@@ -259,16 +260,28 @@ def step(g, d):
     try:
         ui.press_until(g, 'circle' if door else 'up', taken, 24, 'step')
     except Stuck:
-        if door:
-            return 'door'
         # a roaming party in the way shows "You've met someone!" and starts the battle or
         # talk ~40 frames later without moving us: watch for that before calling the
-        # side blocked
+        # side blocked. Through a door it can take several hundred frames (chapter 1
+        # run c1v0, 2026-10-13: a roamer behind the door at Grounds (11, 4) south; the
+        # side was learned shut six times and the dog pillar had "no path").
+        # A press on a door with a roamer behind it prints nothing: the battle's mode is
+        # queued about 60 frames after the press (door_probe.py), so a refused door waits
+        # as long as a refused step.
+        met = lambda: g.cap and any(m['file'] == 'SISETU.OBJ' and m['idx'] == 472
+                                    for m in g.cap.messages[n:])
         try:
-            ui.wait_until(g, lambda: interrupted(g), MET_WAIT, 'met someone')
+            ui.wait_until(g, lambda: interrupted(g), MET_WAIT + (30 if door else 0), 'met someone')
             return 'interrupted'
         except Stuck:
-            return 'blocked'
+            pass
+        if met():
+            try:
+                ui.wait_until(g, lambda: interrupted(g), MET_DOOR_WAIT, 'met someone')
+                return 'interrupted'
+            except Stuck:
+                pass
+        return 'door' if door else 'blocked'
     ui.wait_until(g, lambda: g.u8(MOVING) == 0 or interrupted(g), 120, 'step end')
     if door and locked():
         settle(g)
@@ -278,13 +291,28 @@ def step(g, d):
     return 'moved' if g.pos() != a else ('door' if door else 'blocked')
 
 
-def walk_to(g, tx, ty, on_interrupt=None, limit_moves=400, avoid=()):
+def walk_to(g, tx, ty, on_interrupt=None, limit_moves=400, avoid=(), closed=(), soft=(),
+            stop_area=False):
     """Walk to (tx, ty) on this floor by BFS over RAM's walls. on_interrupt(g) handles
     whatever stops the walk (a battle, a talk, an event); it returns True to carry on.
     Without it, an interruption raises Stuck. A locked door, or one that won't open, is
-    avoided from then on.
+    avoided from then on. `closed` squares are never entered (stairs and other squares
+    that move the party, nav.py); `soft` ones only when there's no other way.
+    stop_area: return as soon as the party is on another floor (a stair or chute was
+    the target, or the walk fell through one).
     Returns a dict: moves, frames, interruptions, blocked."""
     f0 = g.frame
+    area0 = g.u8(AREA)
+    closed = set(closed)
+    soft = set(soft)
+
+    def route(x, y, blocked):
+        base = site_closed(g.u8(AREA)) | closed
+        wm = wallmap(g)
+        p = bfs(wm, (x, y), (tx, ty), blocked, base | soft)
+        if p is None and soft:
+            p = bfs(wm, (x, y), (tx, ty), blocked, base)
+        return p
     blocked = set(avoid)
     refused = set()
     shuffles = 0
@@ -298,26 +326,27 @@ def walk_to(g, tx, ty, on_interrupt=None, limit_moves=400, avoid=()):
                     raise Stuck('walk interrupted', where=g.where(), at=g.pos())
                 continue
         x, y = g.pos()
-        if (x, y) == (tx, ty):
-            return dict(moves=moves, frames=g.frame - f0, interruptions=inter, blocked=sorted(blocked))
+        if (x, y) == (tx, ty) or (stop_area and g.u8(AREA) != area0):
+            return dict(moves=moves, frames=g.frame - f0, interruptions=inter, blocked=sorted(blocked),
+                        area=g.u8(AREA))
         if moves > limit_moves:
             raise Stuck('walk too long', at=(x, y), goal=(tx, ty))
-        p = bfs(wallmap(g), (x, y), (tx, ty), blocked, site_closed(g.u8(AREA)))
-        soft = {b for b in blocked if b not in set(avoid) and side(wallmap(g), *b) == 0}
-        if not p and soft and shuffles < 4:
+        p = route(x, y, blocked)
+        learned = {b for b in blocked if b not in set(avoid) and side(wallmap(g), *b) == 0}
+        if not p and learned and shuffles < 4:
             # Sides RAM calls open were learned shut, usually a roamer standing in the
             # way: "You've met someone!" and then nothing, for as long as it stays (T4,
             # round 7, t4v1/t4v4 at (1, 12)). Roamers only move when the party steps, so
             # forget those sides, step somewhere else, and plan again.
             shuffles += 1
-            blocked -= soft
+            blocked -= learned
             refused.clear()
             wm = wallmap(g)
-            closed = site_closed(g.u8(AREA))
+            shut = site_closed(g.u8(AREA)) | closed | soft
             for d2 in range(4):
                 nx, ny = x + DIRV[d2][0], y + DIRV[d2][1]
-                if (side(wm, x, y, d2) == 0 and (nx, ny) not in closed
-                        and (x, y, d2) not in soft):
+                if (side(wm, x, y, d2) == 0 and (nx, ny) not in shut
+                        and (x, y, d2) not in learned):
                     step(g, d2)
                     break
             continue
@@ -330,10 +359,19 @@ def walk_to(g, tx, ty, on_interrupt=None, limit_moves=400, avoid=()):
             continue
         if r == 'interrupted':
             continue
-        if r == 'blocked' and side(wallmap(g), x, y, d) == 0 and (x, y, d) not in refused:
+        if g.pos() != (x, y) or g.u8(AREA) != area0:
+            # the party was moved during the step (an event put it back a square: the
+            # Fontana scene at Shrine 4F E11 N10, r2v1/r2v3 2026-10-13, learned the STAR
+            # door shut for the square it had left); plan again from here
+            continue
+        if r in ('blocked', 'door') and side(wallmap(g), x, y, d) == (0 if r == 'blocked' else 2) \
+                and (x, y, d) not in refused:
             # RAM says open: give it one more try before learning it as shut. A step can
             # be refused once for timing (T4, round 6: west from (2, 12) was learned shut,
-            # leaving the tiger pillar with no path; it steps fine)
+            # leaving the tiger pillar with no path; it steps fine). A door too: the B3
+            # door east of (10, 11) swings open on the first press and the party walks
+            # through on the second (b3door_probe.py; r2v3c chapter 3, 2026-10-13, learned
+            # it and five other B3 doors shut and had "no path" to the lift)
             refused.add((x, y, d))
             g.step(20)
             continue

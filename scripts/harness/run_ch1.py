@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Run walkthrough chapter 1 from a cold boot (T3) in this process.
 
-    python3 scripts/harness/run_ch1.py RUN_NAME [--seed N] [--variant K] [--from STATE]
+    python3 scripts/harness/run_ch1.py RUN_NAME [--seed N] [--variant K] [--from STATE] [--screens DIR]
 
 Outputs go to rips/harness/t3/RUN_NAME/: result.json, log.jsonl, captured.jsonl, goal and
 stuck states; shots to rips/harness/t3/shots/ (shared, one per string id). --from starts
-from a saved goal state instead of power-on (skips the party goals).
+from a saved goal state instead of power-on (skips the party goals). --screens logs every
+screen before each press for the T5 checks (harness.screens) to rips/harness/DIR.
 """
 import argparse, json, os, sys, time, traceback
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
@@ -17,12 +18,17 @@ ap.add_argument('name')
 ap.add_argument('--seed', type=int, default=0)
 ap.add_argument('--variant', type=int, default=0)
 ap.add_argument('--from', dest='src')
+ap.add_argument('--screens')
 a = ap.parse_args()
 
 out = 't3/' + a.name
 d = os.path.join(OUT, out)
 os.makedirs(d, exist_ok=True)
 g = Game(capture=True, shots_dir=os.path.join(OUT, 't3/shots'))
+scr = None
+if a.screens:
+    from harness.screens import Screens
+    scr = Screens(g, a.screens)
 if a.src:
     g.load(a.src)
 r = chapter1.Run(g, seed=a.seed, variant=a.variant, out=out)
@@ -51,5 +57,7 @@ with open(os.path.join(d, 'log.jsonl'), 'w') as f:
     for x in r.log:
         f.write(json.dumps(x, default=str) + '\n')
 g.flush_shots()
+if scr:
+    scr.close()
 g.dump_messages(os.path.join(d, 'captured.jsonl'))
 print(json.dumps({k: v for k, v in res.items() if k != 'trace'}, default=str))

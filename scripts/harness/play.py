@@ -17,6 +17,7 @@ TALK = 0x35                   # game_state while an NPC talk runs (MCARD)
 
 
 YESNO_STATES = (0x3d, 0x42, 0x69)    # sale, rescue, fight-warning yes/no
+QUIET_TALK = 24                      # frames a quiet talk is left to settle before a press
 
 
 def talk(g, mode='leave', limit=20000):
@@ -44,7 +45,20 @@ def talk(g, mode='leave', limit=20000):
             presses += 1
             continue
         if g.u8(TALK_BOX) == 0:
-            # quiet: is it the menu?
+            # quiet: let whatever ends here settle first. A chat topic (0x28) hands back
+            # to the menu (0x14) some frames after its last line; a press in between
+            # lands on the menu and picks Talk again (chapter 2, c2v6 and c2v1: Balbo's
+            # party at Shrine 3F E11 N6 chatted for 20,000 frames).
+            t0 = ts()
+            for _ in range(QUIET_TALK):
+                if ts() != t0 or g.u8(TALK_BOX) != 0 or not talking():
+                    break
+                g.step()
+            if not talking():
+                break
+            if g.u8(TALK_BOX) != 0 or ts() != t0:
+                continue
+            # is it the menu?
             c0, m0 = g.u8(TALK_MENU_CURSOR), nmsg()
             g.tap('right')
             for _ in range(12):
@@ -85,6 +99,10 @@ class Policy:
     prompt = 'yes'            # event Yes/No prompts: 'yes' or 'no'
 
 
+SCENE = 0x80079878         # a maze scene in progress (5 a meeting's approach, 9 the jewel lift)
+SCENE_COUNT = 0x8008a000   # its countdown
+
+
 def close_box(g, limit=600, react=20):
     """Press a maze box away: one press, then wait up to `react` frames for it to react
     before pressing again. A retry press that lands just after the box closes counts as a
@@ -97,6 +115,20 @@ def close_box(g, limit=600, react=20):
     while not closed():
         if g.frame - f0 > limit:
             raise Stuck('event box', where=g.where(), msg=g.u8(maze.MSG), ev=g.u8(maze.EVENT_BOX))
+        if g.u8(SCENE) not in (0, 0xff):
+            # a scene may run under the box: the jewel lift rides down floor by floor
+            # (0x80079878 = 9, its countdown at 0x8008a000) with "the floor begins to
+            # move!" left up; presses do nothing until it ends (r2v3, 2026-10-13: called
+            # "game not responding"). Wait only while its countdown moves; other scenes
+            # leave the byte set with no countdown and want presses (the T5 round at
+            # 03:24 failed 74 cases when this waited on the byte alone).
+            c = g.u16(SCENE_COUNT)
+            g.step(8)
+            if g.u16(SCENE_COUNT) != c:
+                f0 = g.frame
+                dead = 0
+                continue
+        in_scene = g.u8(SCENE) not in (0, 0xff)
         sig = lambda: (g.u8(maze.MSG), g.u8(maze.EVENT_BOX), g.u16(maze.BOX_GLYPHS), g.u8(maze.PRINTER),
                        g.u8(maze.FADE_B), g.u8(0x8007967e), g.overlay())
         s0 = sig()
@@ -106,7 +138,10 @@ def close_box(g, limit=600, react=20):
                 break
             g.step()
         if sig() == s0:
-            dead += 1
+            # a scene with no countdown ignores presses too: the Shrine exit's fade
+            # (0x80079878 = 8, ~220 frames) under "the door swings open", then a few
+            # frames more (c1v0c train_05 cases, round 18: "game not responding")
+            dead += 0 if in_scene else 1
         else:
             dead = 0
             f0 = g.frame

@@ -97,7 +97,7 @@ def investigate(g):
 QUIET = 360     # after "Searching...", the side's event box can take ~190 frames to open
 
 
-def after_event(g, log, limit=30000, quiet=QUIET):
+def after_event(g, log, limit=30000, quiet=QUIET, policy=None):
     """Run whatever an Investigate started (boxes, a fight, a talk) back to calm, or a
     wipe. Calm only counts once nothing has opened for `quiet` frames. Returns 'calm',
     'wiped' or 'town'."""
@@ -114,7 +114,7 @@ def after_event(g, log, limit=30000, quiet=QUIET):
                     break
             else:
                 return 'calm'
-        if not play.handle_interrupt(g, Ch1Policy, log):
+        if not play.handle_interrupt(g, policy or Ch1Policy, log):
             if party_wiped(g):
                 return 'wiped'
             if g.overlay() == 'JOUKA':
@@ -128,8 +128,13 @@ class Ch1Policy(play.Policy):
 
 
 def party_wiped(g):
+    """Nobody standing; or back in town with no party at all, which is where a wipe
+    leaves the game (the bodies stay in the maze; c1v0c 2026-10-13 got 'walk
+    interrupted' there)."""
     p = g.party()
-    return bool(p) and all(g.char(i)['status'] != 0 for i in p)
+    if not p:
+        return g.overlay() == 'JOUKA' and g.roster_count() > 0
+    return all(g.char(i)['status'] != 0 for i in p)
 
 
 def on_interrupt_factory(log):
@@ -258,11 +263,17 @@ def hurt(g, frac=0.6):
     return [s for _, s in sorted(out)]
 
 
-def heal_in_camp(g, log, frac=0.6, max_casts=12):
+def heal_in_camp(g, log, frac=0.6, max_casts=12, on_int=None):
     """Cast Dios on the most hurt member until no one is under frac or the points run
-    out. Returns casts made."""
+    out. Returns casts made. A fight or talk that comes first (a roamer stepping in;
+    r2v1 2026-10-13 pressed cross for the camp into a battle) goes to on_int."""
     n = 0
-    while n < max_casts:
+    k = 0
+    while n < max_casts and k < 40:
+        k += 1
+        if not camp.in_camp(g) and not maze.calm(g) and not maze.settle(g):
+            (on_int or on_interrupt_factory(log))(g)
+            continue
         h = hurt(g, frac)
         p = priests(g)
         if not h or not p:
@@ -322,13 +333,19 @@ def town_upkeep(g, log):
             except Stuck as s:
                 log.append((g.frame, 'temple stuck', ri, s.what))
         town.to_town_bar(g)
-        if raised:
+        for ri in raised:
             try:
-                town.form_party(g, raised)
-                log.append((g.frame, 'rejoined', raised))
+                town.form_party(g, [ri])
+                log.append((g.frame, 'rejoined', ri))
             except Stuck as s:
-                log.append((g.frame, 'rejoin stuck', s.what))
+                log.append((g.frame, 'rejoin stuck', ri, s.what))
             town.to_town_bar(g)
+    # recruit only for a member who can't come back (refused, "Their alignments won't
+    # mix."): one who is merely dead stays out of the party so they can rejoin once the
+    # temple can raise them (r2v0: the Tablet's holder was replaced and the Shrine shut)
+    refused = [x for x in log if len(x) > 3 and x[1] == 'rejoin stuck' and 'mix' in str(x[3])]
+    if refused or len(town.town_party(g)) < 4:
+        fill_party(g, log, size=6 if refused else 4)
     for pos, ri in enumerate(town.town_slots(g)):
         if ri is None or g.char(ri)['status'] != 0:
             continue
@@ -336,6 +353,25 @@ def town_upkeep(g, log):
         log.append((g.frame, 'stables', pos, r['weeks']))
         town.to_town_bar(g)
     town.to_town_bar(g)
+
+
+def fill_party(g, log, size=6):
+    """Fill the party from the tavern, highest level first, when a member can't come back
+    (still dead, or "Their alignments won't mix."; c2v3 2026-10-13 kept failing every
+    goal with five members)."""
+    tried = set()
+    while len(town.town_party(g)) < size:
+        cand = [i for i in town.tavern_candidates(g) if i not in tried]
+        if not cand:
+            break
+        ri = max(cand, key=lambda i: (g.char(i)['level'], -i))
+        tried.add(ri)
+        try:
+            town.form_party(g, [ri])
+            log.append((g.frame, 'recruited', ri, g.char(ri)['name'], g.char(ri)['level']))
+        except Stuck as s:
+            log.append((g.frame, 'recruit stuck', ri, s.what))
+        town.to_town_bar(g)
 
 
 # --- the run ---
@@ -392,7 +428,8 @@ class Run:
                     regress.add_case(dict(id='stuck:' + tag, kind='stuck',
                                           state=None if name == 'party' else tag,
                                           goal=name, what=s.what, source=self.out,
-                                          variant=self.variant, seed=self.seed))
+                                          variant=self.variant, seed=self.seed,
+                                          chapter=getattr(self, 'chapter', 1)))
                 r = 'stuck'
             if r is True:
                 break

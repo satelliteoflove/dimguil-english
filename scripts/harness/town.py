@@ -331,10 +331,25 @@ def form_party(g, members, limit=900):
         ui.move_cursor(g, GRID_Y, k // 4, 'down', 'up', what='tavern row')
         ui.move_cursor(g, GRID_X, k % 4, 'right', 'left', what='tavern col')
         n = len(town_party(g))
-        ui.confirm_until(g, lambda: len(town_party(g)) != n or g.u8(FAC_SUB) != TAVERN_LIST,
-                         limit, 'add member')
+        m0 = len(g.cap.messages) if g.cap else 0
+        said = lambda i: g.cap and any(m['file'] == 'SISETU.OBJ' and m['idx'] == i
+                                       for m in g.cap.messages[m0:])
+        ui.confirm_until(g, lambda: len(town_party(g)) != n or said(9) or said(27), limit,
+                         'add member')
+        if said(9):
+            # "Their alignments won't mix." (a member whose alignment changed, c2v3
+            # 2026-10-13: Mercury came back from the temple Evil): back to the menu
+            ui.press_until(g, 'circle', lambda: g.u8(TOWN_MSG) == 0 and not said(9) or
+                           facility_ready(g) or g.u8(FAC_SUB) == TAVERN_LIST and g.u8(TOWN_MSG) == 0,
+                           limit, 'alignment message')
+            if not facility_ready(g):
+                ui.cancel_until(g, lambda: facility_ready(g), limit, 'back to the tavern menu')
+            raise Stuck('alignments won\'t mix', idx=idx, party=town_party(g))
+        if said(27) and idx not in town_party(g):
+            # "Which position?": a death left a hole; the cursor starts on it
+            ui.confirm_until(g, lambda: idx in town_party(g), limit, 'which position')
         p = town_party(g)
-        if not p or p[-1] != idx:
+        if idx not in p:
             raise Stuck('wrong member joined', want=idx, party=p)
         # "X joined the party." waits for a press
         ui.wait_until(g, lambda: g.u8(TOWN_MSG) != 0, 60, 'join message')

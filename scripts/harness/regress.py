@@ -13,7 +13,9 @@ this suite runs -> only a change that passes every case is committed -> the next
 
 Cases live in rips/harness/regress/cases.jsonl, one JSON object per line:
   id        unique name
-  kind      'trial' (a T2 macro trial: macro, k) or 'stuck' (a saved stuck state)
+  kind      'trial' (a T2 macro trial: macro, k), 'stuck' (a saved stuck state) or
+            'screen' (a T5 known-bad screen, scripts/harness/t5bad.py: case; with expect
+            'proof' it passes when the checks catch the bug put back)
   state     for 'stuck': the state to load (rips/harness/<state>.state); none for the
             party goal, which starts from power-on (creation can't resume midway)
   variant, seed   the chapter-1 run's party variant and seed
@@ -28,7 +30,9 @@ Cases live in rips/harness/regress/cases.jsonl, one JSON object per line:
   added     date added; source: the run that produced it
 A case runs in its own process (one emulator per process; the core's debug hooks are
 global), at most 10 at once, with a frame budget. Each round appends to
-rips/harness/regress/rounds.jsonl: date, the harness code hash, cases passed and failed
+rips/harness/regress/rounds.jsonl: date, the harness code hash at the start and at the end
+(`valid` false when they differ: the code changed mid-round, so the round can't count;
+rips/harness/regress/LOCK holds the running round's PID meanwhile), cases passed and failed
 (by case), stuck counts by cause from the latest chapter-1 runs, frames and wall time.
 """
 import argparse, glob, hashlib, json, os, random, sys, time, multiprocessing as mp
@@ -113,7 +117,21 @@ def run_stuck(case):
     run = chapter1.Run(g, seed=case.get('seed', 7), variant=case.get('variant', 0),
                        out='regress/scratch/%d' % os.getpid(), retries=1, auto_cases=False)
     goal = case['goal']
-    if goal.startswith('pillar_'):
+    if case.get('chapter', 1) > 1:
+        # chapter 2 on (chapters.py): the chapter's own goal list, by name
+        from harness import chapters
+        run = chapters.Run(g, seed=case.get('seed', 7), variant=case.get('variant', 0),
+                           out='regress/scratch/%d' % os.getpid(), retries=1, auto_cases=False)
+        run.chapter = case['chapter']
+        fns = run.goal_fns(case['chapter'])
+        if goal not in fns and goal.startswith('train_'):
+            fn = next(f for k, f in fns.items() if k.startswith('train_')) if any(
+                k.startswith('train_') for k in fns) else (lambda: True)
+        elif goal not in fns and goal.startswith('recover_'):
+            fn = run.guarded(run.recover)
+        else:
+            fn = fns[goal]
+    elif goal.startswith('pillar_'):
         name = goal[len('pillar_'):]
         xy = dict(chapter1.PILLARS)[name]
         fn = lambda: run.pillar(name, xy)
@@ -129,7 +147,10 @@ def run_stuck(case):
         raise ValueError('no runner for goal %r' % goal)
     g.budget_end = g.frame + BUDGET
     f0 = g.frame
-    r = fn()
+    try:
+        r = fn()
+    except chapter1.Wiped:
+        r = 'wiped'           # a defined outcome: the run reloads its goal state
     return dict(result=r if r in (True, False) else str(r), frames=g.frame - f0)
 
 
@@ -147,7 +168,11 @@ def run_case(case):
     t0 = time.time()
     rec = dict(id=case['id'], kind=case['kind'])
     try:
-        r = run_stuck(case) if case['kind'] == 'stuck' else run_trial(case)
+        if case['kind'] == 'screen':
+            from harness import t5bad
+            r = t5bad.ratchet(case['case'])
+        else:
+            r = run_stuck(case) if case['kind'] == 'stuck' else run_trial(case)
         rec.update(r)
         ok = r['result'] is True if case.get('expect') == 'proof' else True
         if case.get('expect') == 'frozen':
@@ -165,16 +190,90 @@ def run_case(case):
 def latest_stuck_causes():
     """Stuck counts by cause over the latest chapter-1 runs (their result.json files)."""
     out = {}
-    for res in glob.glob(os.path.join(OUTR, 't3/*/result.json')):
+    for res in glob.glob(os.path.join(OUTR, 't3/*/result.json')) + \
+            glob.glob(os.path.join(OUTR, 'chapters/*/result.json')):
         for s in json.load(open(res)).get('stuck', []):
             out[s.get('what')] = out.get(s.get('what'), 0) + 1
     return out
 
 
+LOCK = os.path.join(REG, 'LOCK')
+
+
+def take_lock():
+    """rips/harness/regress/LOCK holds the round's PID and start time while it runs:
+    nobody edits scripts/harness/*.py while it's there (the round tests the code as it
+    was at the start). A lock left by a dead process is taken over."""
+    os.makedirs(REG, exist_ok=True)
+    if os.path.exists(LOCK):
+        try:
+            pid = int(open(LOCK).read().split()[0])
+            os.kill(pid, 0)
+            sys.exit('regress: a round is already running (LOCK, pid %d)' % pid)
+        except (ValueError, IndexError, ProcessLookupError):
+            pass                       # stale
+    with open(LOCK, 'w') as f:
+        f.write('%d %s\n' % (os.getpid(), time.strftime('%Y-%m-%dT%H:%M:%S')))
+
+
+def drop_lock():
+    try:
+        if os.path.exists(LOCK) and open(LOCK).read().split()[0] == str(os.getpid()):
+            os.remove(LOCK)
+    except OSError:
+        pass
+
+
+ROUND = {}         # the round in progress (_main fills it), for an aborted round's line
+
+
+def record_aborted(reason):
+    """A round that stops before its end (killed, or an error in the runner) still gets
+    a line in rounds.jsonl: aborted, why, the code hash at its start and now, and the
+    cases done so far. It can't count for a commit."""
+    if not ROUND or ROUND.get('written'):
+        return
+    recs = ROUND.get('recs', [])
+    failed = sorted(r['id'] for r in recs if not r['ok'])
+    rnd = dict(date=ROUND.get('stamp'), code=ROUND.get('hash0'), code_end=code_hash(),
+               valid=False, aborted=reason, note=ROUND.get('note', ''),
+               cases_planned=ROUND.get('planned'), cases=len(recs),
+               passed=len(recs) - len(failed), failed=failed,
+               frames=sum(r.get('frames', 0) for r in recs),
+               wall=round(time.time() - ROUND.get('t0', time.time())))
+    with open(ROUNDS, 'a') as f:
+        f.write(json.dumps(rnd) + '\n')
+    ROUND['written'] = True
+    print('ABORTED ROUND recorded: %s (%d of %s cases done)' % (reason, len(recs),
+                                                              ROUND.get('planned')), flush=True)
+
+
 def main():
+    if '--collect' in sys.argv:
+        return _main()
+    take_lock()
+    import signal
+    signal.signal(signal.SIGTERM, lambda *a: sys.exit(143))   # so `finally` drops the lock
+    try:
+        return _main()
+    except SystemExit as e:
+        if e.code == 143:
+            record_aborted('killed (SIGTERM)')
+        raise
+    except KeyboardInterrupt:
+        record_aborted('interrupted (SIGINT)')
+        raise
+    except BaseException as e:
+        record_aborted('%s: %s' % (type(e).__name__, e))
+        raise
+    finally:
+        drop_lock()
+
+
+def _main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--trials', type=int, default=10, help='T2 trials per macro')
-    ap.add_argument('--only', choices=['stuck', 'trial'])
+    ap.add_argument('--only', choices=['stuck', 'trial', 'screen'])
     ap.add_argument('--procs', type=int, default=MAX_PROCS)
     ap.add_argument('--collect', action='store_true')
     ap.add_argument('--note', default='')
@@ -185,20 +284,26 @@ def main():
         return
     saved = load_cases()
     cases = []
-    if a.only != 'trial':
+    if a.only in (None, 'stuck'):
         cases += [c for c in saved if c['kind'] == 'stuck']
-    if a.only != 'stuck':
+    if a.only in (None, 'screen'):
+        cases += [c for c in saved if c['kind'] == 'screen']
+    if a.only in (None, 'trial'):
         gen = trial_cases(a.trials)
         ids = {c['id'] for c in gen}
         cases += gen + [c for c in saved if c['kind'] == 'trial' and c['id'] not in ids]
     # long cases first, so the pool isn't left waiting on one at the end
     cases.sort(key=lambda c: (c['kind'] != 'stuck', c['id']))
     procs = min(a.procs, MAX_PROCS)
+    hash0 = code_hash()
+    ROUND.update(hash0=hash0, note=a.note, planned=len(cases), t0=time.time())
     t0 = time.time()
     recs = []
+    ROUND['recs'] = recs
     ctx = mp.get_context('spawn')
     os.makedirs(REG, exist_ok=True)
     stamp = time.strftime('%Y-%m-%dT%H:%M:%S')
+    ROUND['stamp'] = stamp
     with ctx.Pool(procs, maxtasksperchild=1) as pool, \
             open(os.path.join(REG, 'results-%s.jsonl' % stamp.replace(':', '')), 'w') as f:
         for rec in pool.imap_unordered(run_case, cases):
@@ -207,18 +312,27 @@ def main():
             print('PASS' if rec['ok'] else 'FAIL', rec['id'], rec.get('result', ''),
                   rec.get('error', ''), rec['wall'], flush=True)
     failed = sorted(r['id'] for r in recs if not r['ok'])
-    rnd = dict(date=stamp, code=code_hash(), note=a.note, cases=len(recs),
+    hash1 = code_hash()
+    valid = hash0 == hash1
+    if not valid:
+        print('!' * 78 + '\nWARNING: scripts/harness/*.py changed during this round (%s at the start, '
+              '%s at the end).\nThe round ran on mixed code and is recorded as invalid: it '
+              "can't count for a commit.\n" % (hash0, hash1) + '!' * 78, flush=True)
+    rnd = dict(date=stamp, code=hash0, code_end=hash1, valid=valid, note=a.note, cases=len(recs),
                passed=len(recs) - len(failed), failed=failed,
                by_kind={k: dict(n=sum(1 for r in recs if r['kind'] == k),
                                 ok=sum(1 for r in recs if r['kind'] == k and r['ok']))
                         for k in ('stuck', 'trial')},
                frames=sum(r.get('frames', 0) for r in recs), wall=round(time.time() - t0),
                stuck_causes=latest_stuck_causes())
+    ROUND['written'] = True
     with open(ROUNDS, 'a') as f:
         f.write(json.dumps(rnd) + '\n')
     print(json.dumps({k: v for k, v in rnd.items() if k != 'failed'}, indent=1))
     print('FAILED:', failed)
-    sys.exit(0 if not failed else 1)
+    if not valid:
+        print('INVALID ROUND: code changed during the round (%s -> %s)' % (hash0, hash1))
+    sys.exit(0 if not failed and valid else 1)
 
 
 if __name__ == '__main__':

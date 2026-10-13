@@ -41,6 +41,16 @@ FIGHT, PARRY, SPELL, DISPEL, USE, RUN, AMBUSH, HIDE, BREATH = range(1, 10)
 GROUP_DAMAGE = [3, 7, 10, 13, 16, 20, 45, 48, 51, 54, 57, 62, 66, 72, 80, 81, 82]
 ONE_DAMAGE = [1, 9, 17, 22, 60, 63, 77]
 HEAL_ONE = [21, 30, 33, 36, 58, 64]     # weakest first
+# attack spells: id -> (mean damage per target, 'one' | 'group' | 'all'), from the site's
+# data/chara/spells/dim.json (clouds count their three rounds)
+SPELL_DAMAGE = {
+    1: (4.5, 'one'), 3: (4.5, 'group'), 7: (14, 'group'), 9: (41, 'one'), 10: (32, 'group'),
+    13: (36, 'group'), 16: (71, 'group'), 17: (72, 'one'), 20: (80, 'all'),
+    22: (4.5, 'one'), 45: (7.5, 'group'), 48: (15, 'group'), 51: (22.5, 'group'),
+    54: (36, 'group'), 57: (67.5, 'group'), 60: (105, 'one'), 62: (96, 'group'),
+    63: (5.5, 'one'), 66: (6, 'group'), 72: (9, 'group'), 77: (50, 'one'), 80: (36, 'group'),
+    81: (30, 'all'), 82: (40, 'all'),
+}
 SPELL_NAME = {}
 
 
@@ -88,10 +98,18 @@ def castable(g, roster_i):
     return out
 
 
+RUN_AFTER = 15     # rounds; a battle still going after this many tries to run away
+                   # (T3 chapter 2 dev run, 2026-10-13: Fuzzballs on Shrine 3F call for
+                   # help every round and the fight never ended in 60,000 frames)
+ROUND = 0          # the round being commanded (set by fight)
+
+
 def default_policy(g, m, opts):
     """What member m (party slot) does this round. Returns ('fight',), ('parry',),
-    ('spell', sid, school, level, index, target) with target ('group', g) or
+    ('run',), ('spell', sid, school, level, index, target) with target ('group', g) or
     ('member', slot), or ('first',) to take the first option."""
+    if ROUND > RUN_AFTER and RUN in opts:
+        return ('run',)
     ids = party_ids(g)
     ri = ids[m]
     cast = castable(g, ri) if SPELL in opts else []
@@ -111,16 +129,25 @@ def default_policy(g, m, opts):
                 c = by_id[sid]
                 return ('spell', sid, c[1], c[2], c[3], ('member', min(hurt)[1]))
     if cast:
-        many = monsters_standing(g) > 1
-        order = (GROUP_DAMAGE + ONE_DAMAGE) if many else (ONE_DAMAGE + GROUP_DAMAGE)
-        best = [sid for sid in order if sid in by_id]
-        if best:
-            # the strongest in the preferred kind: the lists run weakest to strongest
-            kind = GROUP_DAMAGE if best[0] in GROUP_DAMAGE else ONE_DAMAGE
-            pick = max((s for s in best if s in kind), key=lambda s: kind.index(s))
-            c = by_id[pick]
-            alive = groups_alive(g)
-            return ('spell', pick, c[1], c[2], c[3], ('group', alive[0] if alive else 1))
+        # the attack spell with the most expected damage: a group spell counts once per
+        # monster standing in the target group (the biggest), "all" spells once per
+        # monster standing. (Before, one monster meant single-target spells first, so a
+        # mage threw Halito at the Chany Mask while holding Mahalito; chapter 2.)
+        alive = groups_alive(g)
+        target = max(alive, key=lambda k: g.u8(GROUPS + k * 8 + 5)) if alive else 1
+        in_group = g.u8(GROUPS + target * 8 + 5) or 1
+        total = monsters_standing(g) or 1
+        best, val = None, 0
+        for sid in by_id:
+            if sid not in SPELL_DAMAGE:
+                continue
+            mean, kind = SPELL_DAMAGE[sid]
+            v = mean * (in_group if kind == 'group' else total if kind == 'all' else 1)
+            if v > val:
+                best, val = sid, v
+        if best is not None:
+            c = by_id[best]
+            return ('spell', best, c[1], c[2], c[3], ('group', target))
     if FIGHT in opts:
         return ('fight',)
     return ('parry',) if PARRY in opts else ('first',)
@@ -149,14 +176,31 @@ def command_member(g, policy, log):
     ui.wait_until(g, lambda: g.u8(SCREEN) == 9 and g.u8(OPTS) != 0, 120, 'command list')
     g.step(1)
     opts = _options(g)
+    if member_state(g, m)[1] & 0x02:
+        # confused: the list shows Fight alone and its cursor won't move, but the option
+        # bytes keep the full list (chapter 2 dev run, 2026-10-13: Ghosts' Lios)
+        opts = opts[:1]
     act = policy(g, m, opts)
     log.append((m, act[0], act[1] if len(act) > 1 else None))
     if act[0] == 'first':
         _press_change(g, 'circle')
         return
-    want = {'fight': FIGHT, 'parry': PARRY, 'spell': SPELL}[act[0]]
-    ui.move_cursor(g, LIST, opts.index(want), 'down', 'up', what='command')
-    _press_change(g, 'circle', what='choose command')
+    want = {'fight': FIGHT, 'parry': PARRY, 'spell': SPELL, 'run': RUN}[act[0]]
+    k = opts.index(want)
+    try:
+        # five or more commands sit in two columns of four (Fight Parry Spell Use | Run):
+        # the column is COL (right/left), the row LIST (c1v0c, 2026-10-13: Run was out
+        # of reach of up/down)
+        if len(opts) > 4:
+            ui.move_cursor(g, COL, k // 4, 'right', 'left', limit=120, what='command column')
+        ui.move_cursor(g, LIST, k % 4, 'down', 'up', limit=120, what='command')
+        _press_change(g, 'circle', what='choose command')
+    except Stuck:
+        # a list shorter than its option bytes (a status we haven't met): take what's
+        # under the cursor, then whatever target step follows
+        log.append((m, 'cursor stuck', act[0]))
+        _press_change(g, 'circle')
+        act = ('first',)
     if act[0] == 'spell':
         sid, school, level, idx, target = act[1:]
         ui.wait_until(g, lambda: g.u8(SCREEN) == 49, 120, 'spell grid')
@@ -186,6 +230,7 @@ def command_member(g, policy, log):
 
 def command_phase(g, policy, log):
     end = g.frame + 6000
+    still, last = 0, None
     while in_battle(g) and g.u8(PHASE) == CMD_PHASE:
         if g.frame > end:
             raise Stuck('command phase', sig=sig(g))
@@ -195,7 +240,17 @@ def command_phase(g, policy, log):
             # the members overview, or "Is this all right?" (cursor on Yes)
             _press_change(g, 'circle', 120, 'command flow')
         else:
-            # a screen in transition: a press now would carry into the next menu
+            # a screen in transition: a press now would carry into the next menu. One
+            # that stays put isn't a transition but a pick left waiting (a group pick,
+            # screen 17, after a cut-short command; c1v0c 2026-10-13): take what's
+            # selected.
+            s = sig(g)
+            still = still + 1 if s == last else 0
+            last = s
+            if still >= 60 and g.u8(SCREEN) not in TRANSIENT:
+                _press_change(g, 'circle', 120, 'waiting pick')
+                still = 0
+                continue
             g.step(1)
 
 
@@ -282,6 +337,19 @@ def chest(g, mode='leave', who=0, since=None):
     return 'left trap %s' % trap
 
 
+THIEVES = (3, 12)            # Thief, Ninja (G-records class ids)
+
+
+def thief_slot(g):
+    """Party slot of a standing Thief or Ninja, or None."""
+    for slot, ri in enumerate(g.party_slots()):
+        if ri is not None:
+            c = g.char(ri)
+            if c['cls'] in THIEVES and c['status'] == 0:
+                return slot
+    return None
+
+
 def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
     """Fight the battle on screen to its end. Returns a dict: rounds, frames, outcome
     ('won' back in the maze, 'town' after a wipe or escape to town, 'other'), actions."""
@@ -297,14 +365,23 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
             break
         ph = g.u8(PHASE)
         if ph == CMD_PHASE:
+            global ROUND
             rounds += 1
+            ROUND = rounds
             command_phase(g, policy, log)
             continue
         if ph == CHEST_PHASE:
             # the chest menu, or a loot message ("Each survivor gains N gold!") when there's
             # no chest. Tap only for a message: a press would pick from the chest menu.
             if _since(g, chest_mark, 'FIGHTMSG.OBJ', (245,)):
-                chest_result = chest(g, chest_mode, since=chest_mark)
+                mode, who = chest_mode, 0
+                if mode == 'auto':
+                    # the Grounds' chests are never trapped; elsewhere a Thief or Ninja
+                    # inspects and opens only an untrapped one; else leave it
+                    who = thief_slot(g)
+                    mode = 'open' if g.u8(0x80079668) == 0 else 'inspect' if who is not None else 'leave'
+                    who = who or 0
+                chest_result = chest(g, mode, who=who, since=chest_mark)
                 continue
             last = [m for m in g.cap.messages[chest_mark:] if m['file'] == 'FIGHTMSG.OBJ']
             if last and last[-1]['idx'] in LOOT_MSGS:

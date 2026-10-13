@@ -118,7 +118,7 @@ class StringIndex:
 class Capture:
     """Install on an Emu; call poll() after running frames. New messages land in .messages
     as dicts: frame, last, idx, base, wrap, ra, src (unexpanded text), text (expanded),
-    where (list of (file, index) matches)."""
+    exp (the expanded bytes, hex), where (list of (file, index) matches)."""
 
     GAP = 12   # a repeat within this many frames is the same message being redrawn
 
@@ -170,7 +170,7 @@ class Capture:
             else:
                 fn, inferred = self.base_file.get(r['base']), True
             m = dict(frame=f, last=f, idx=r['idx'], base=r['base'], wrap=r['wrap'], ra=r['ra'],
-                     file=fn, inferred=inferred, src=src, text=text)
+                     file=fn, inferred=inferred, src=src, text=text, exp=exp.hex())
             self._recent[key] = m
             self.messages.append(m)
         self._last_poll = f
