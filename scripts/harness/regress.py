@@ -19,7 +19,11 @@ Cases live in rips/harness/regress/cases.jsonl, one JSON object per line:
             state at its command phase: one round of commands, every enemy group pick
             aimed and confirmed in RAM; want_id, a monster id some member must aim at;
             min_aims, default 1: a lone group's Fight shows no pick),
-            or 'boot' (made each round, not saved: see below)
+            'cdrace' (a state just before a disc read that the DsPacket race stalls on
+            the old MAIN, docs/re/bugs.md 1.12; main 'state' keeps the state's MAIN and
+            expect 'stall' wants the stall and the game's own retry, main 'disc' lays the
+            disc under test's DsPacket words over MAIN and expect 'read' wants a normal
+            read), or 'boot' (made each round, not saved: see below)
   state     for 'stuck': the state to load (rips/harness/<state>.state); none for the
             party goal, which starts from power-on (creation can't resume midway)
   variant, seed   the chapter-1 run's party variant and seed
@@ -177,6 +181,42 @@ def run_pick(case):
                 aims=[list(x) for x in aims])
 
 
+# DsPacket's two fill loops (asm/bugfix_dspacket_race.asm): (address, bytes)
+DSPACKET_FIX = [(0x80036a10, 4), (0x80036a58, 0x18), (0x80036b08, 4), (0x80036b50, 0x18)]
+SLPS = os.path.join(OUTR, 'disc/dimguil/SLPS_026.91')
+
+
+def run_cdrace(case):
+    """No input from the state for case['frames'] (default 2,000); the longest run of
+    frames with a read issued and commands stuck in the CD queue, and when it finished."""
+    import struct
+    from harness.game import Game
+    g = Game(capture=False)
+    g.load(case['state'])
+    if case.get('main') == 'disc':
+        d = open(SLPS, 'rb').read()
+        t_addr = struct.unpack_from('<I', d, 0x18)[0]
+        for a, n in DSPACKET_FIX:
+            g.e.write(a, d[a - t_addr + 0x800:a - t_addr + 0x800 + n])
+    run = longest = 0
+    issued = done = None
+    for f in range(case.get('frames', 2000)):
+        bc2, cnt = g.u8(0x80079bc2), g.e.u32(0x800986f0)
+        if bc2 == 2 and issued is None:
+            issued = f
+        run = run + 1 if bc2 == 2 and cnt else 0
+        longest = max(longest, run)
+        if bc2 == 3 and issued is not None and done is None:
+            done = f
+        g.e.run(1)
+    if case['expect'] == 'stall':
+        ok = longest >= 1000 and done is not None
+    else:
+        ok = done is not None and done - issued < 200 and longest < 60
+    return dict(result=True if ok else 'issued %s done %s longest stall %d' % (issued, done, longest),
+                frames=case.get('frames', 2000), issued=issued, done=done, longest=longest)
+
+
 def trial_cases(n):
     from harness import trials
     return [dict(id='trial:%s:%d' % (m, k), kind='trial', macro=m, k=k)
@@ -251,9 +291,10 @@ def run_case(case):
         else:
             r = run_stuck(case) if case['kind'] == 'stuck' else \
                 run_boot(case) if case['kind'] == 'boot' else \
-                run_pick(case) if case['kind'] == 'pick' else run_trial(case)
+                run_pick(case) if case['kind'] == 'pick' else \
+                run_cdrace(case) if case['kind'] == 'cdrace' else run_trial(case)
         rec.update(r)
-        ok = r['result'] is True if case.get('expect') == 'proof' else True
+        ok = r['result'] is True if case.get('expect') in ('proof', 'stall', 'read') else True
         if case.get('expect') == 'frozen':
             ok = False                    # it should have been reported as frozen
         rec['ok'] = ok
@@ -352,7 +393,7 @@ def main():
 def _main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--trials', type=int, default=10, help='T2 trials per macro')
-    ap.add_argument('--only', choices=['stuck', 'trial', 'screen', 'boot', 'pick'])
+    ap.add_argument('--only', choices=['stuck', 'trial', 'screen', 'boot', 'pick', 'cdrace'])
     ap.add_argument('--boots', type=int, default=len(BOOTS), help='cold-boot chapter 1 cases')
     ap.add_argument('--procs', type=int, default=MAX_PROCS)
     ap.add_argument('--collect', action='store_true')
@@ -372,6 +413,8 @@ def _main():
         cases += [c for c in saved if c['kind'] == 'screen']
     if a.only in (None, 'pick'):
         cases += [c for c in saved if c['kind'] == 'pick']
+    if a.only in (None, 'cdrace'):
+        cases += [c for c in saved if c['kind'] == 'cdrace']
     if a.only in (None, 'trial'):
         gen = trial_cases(a.trials)
         ids = {c['id'] for c in gen}
@@ -414,7 +457,7 @@ def _main():
                passed=len(recs) - len(failed), failed=failed,
                by_kind={k: dict(n=sum(1 for r in recs if r['kind'] == k),
                                 ok=sum(1 for r in recs if r['kind'] == k and r['ok']))
-                        for k in ('boot', 'stuck', 'trial', 'screen', 'pick')},
+                        for k in ('boot', 'stuck', 'trial', 'screen', 'pick', 'cdrace')},
                frames=sum(r.get('frames', 0) for r in recs), wall=round(time.time() - t0),
                stuck_causes=latest_stuck_causes())
     ROUND['written'] = True

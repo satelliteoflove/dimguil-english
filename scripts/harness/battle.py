@@ -18,7 +18,7 @@ RAM (BATTLE resident; docs/re/D-battle.md, and probe.py on the harness disc 2026
   0x8008c480 battle_groups: 8 bytes per group, +4 count, +5 standing
   0x8007e812 the party's roster indices
 """
-import struct
+import random, struct
 from harness import ui, pick
 from harness.game import Stuck
 
@@ -61,6 +61,26 @@ FIXED = 0x80079bde          # 1 in a fixed battle (up to 6 groups on a 3x2 grid)
 # (04-lake-machine.json): at the Guardians "Kill the mage first" (Madalto over the whole
 # party for up to 64), and the priest's Badi kills a character outright.
 KILL_FIRST = {366: 0, 358: 1}       # Arch Mage, Arch Priest (Underground B2 E7 N22)
+# against a kill-first monster: Montino (25, silence a group; in a fixed battle it takes
+# the row, so at the Guardians it reaches the Arch Priest and the Arch Mage both) up to
+# MONTINO_TRIES times a battle, then Badi (34, death to one). The B2 Arch Mage shrugs off
+# mage spells 60% of the time but priest spells only 20% (data/monsters/dim/ps.json,
+# P34-2).
+MONTINO, BADI, BAKADI, CORTU = 25, 34, 40, 8
+MONTINO_TRIES = 2
+CORTU_TRIES = 2     # Cortu (8): a barrier against enemy spells and breath; it stacks
+CAST = {}          # this battle's casts by spell id (fight() clears it)
+# VARY > 0: a goal's retry (chapter1.Run.goal sets it to the try number - 1). The game's
+# rolls don't move with time, only with what's done, so a retry has to choose
+# differently or it replays the same fight: then a fighter may take another group on
+# offer and a caster the next-best spell, at random from a seed of VARY.
+VARY = 0
+VARY_P = 0.3
+_vrng = random.Random(0)
+
+
+def _vary():
+    return VARY > 0 and _vrng.random() < VARY_P
 
 
 def in_battle(g):
@@ -105,6 +125,8 @@ def choose_group(g, offered, prefer=None, spread=False):
     alive = [k for k in offered if g.u8(GROUPS + k * 8 + 5)] or list(offered)
     if not alive:
         return None
+    if len(alive) > 1 and _vary():
+        return _vrng.choice(alive)
     return min(alive, key=lambda k: (KILL_FIRST.get(group_id(g, k), 9), k != prefer,
                                      -g.u8(GROUPS + k * 8 + 5) if spread else 0, k))
 
@@ -202,6 +224,22 @@ def default_policy(g, m, opts):
             if sid in by_id:
                 c = by_id[sid]
                 return ('spell', sid, c[1], c[2], c[3], ('member', min(hurt)[1]))
+    boss = [k for k in groups_alive(g) if group_id(g, k) in KILL_FIRST]
+    if cast and boss and not (VARY and _vary()):
+        k = min(boss, key=lambda k: KILL_FIRST[group_id(g, k)])
+        if CORTU in by_id and CAST.get(CORTU, 0) < CORTU_TRIES:
+            # a barrier against the Arch Mage's Madalto (it stacks)
+            CAST[CORTU] = CAST.get(CORTU, 0) + 1
+            c = by_id[CORTU]
+            return ('spell', CORTU, c[1], c[2], c[3], ('group', k))
+        if MONTINO in by_id and CAST.get(MONTINO, 0) < MONTINO_TRIES:
+            CAST[MONTINO] = CAST.get(MONTINO, 0) + 1
+            c = by_id[MONTINO]
+            return ('spell', MONTINO, c[1], c[2], c[3], ('group', k))
+        for sid in (BADI,):
+            if sid in by_id:
+                c = by_id[sid]
+                return ('spell', sid, c[1], c[2], c[3], ('group', k))
     if cast:
         # the attack spell with the most expected damage: a group spell counts once per
         # monster standing in the target group (the biggest), "all" spells once per
@@ -212,13 +250,17 @@ def default_policy(g, m, opts):
         in_group = g.u8(GROUPS + target * 8 + 5) or 1
         total = monsters_standing(g) or 1
         best, val = None, 0
+        vals = []
         for sid in by_id:
             if sid not in SPELL_DAMAGE:
                 continue
             mean, kind = SPELL_DAMAGE[sid]
             v = mean * (in_group if kind == 'group' else total if kind == 'all' else 1)
+            vals.append((v, sid))
             if v > val:
                 best, val = sid, v
+        if len(vals) > 1 and _vary():
+            best = sorted(vals)[-2][1]
         if best is not None:
             c = by_id[best]
             return ('spell', best, c[1], c[2], c[3], ('group', target))
@@ -448,6 +490,8 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
     f0 = g.frame
     rounds = 0
     log = []
+    CAST.clear()
+    _vrng.seed(VARY * 7919 + 1)
     chest_result = None
     chest_mark = len(g.cap.messages) if g.cap else 0
     blind = None            # (frame, messages) when the chest phase began with no new text

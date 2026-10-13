@@ -42,9 +42,13 @@ class Chapter4:
         def guardians():
             if nav.flag(g, STORY, 14):
                 return True
-            run.fit()
+            run.ready()
             if chapter1.needs_town(g):
                 return 'not fit'
+            # a square short (E6 N22, on the way round from Balbo's side of the stream),
+            # heal again there: the walk meets roamers
+            run.go((7, 6, 1))
+            run.heal()
             run.go((7, 7, 1))
             run.after()
             if not nav.flag(g, STORY, 14):
@@ -54,7 +58,7 @@ class Chapter4:
         def machine():
             if nav.flag(g, STORY, 3):
                 return True
-            run.fit()
+            run.ready()
             if chapter1.needs_town(g):
                 return 'not fit'
             run.examine((7, 11, 1), 2, fight=True)

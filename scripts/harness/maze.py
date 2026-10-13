@@ -197,6 +197,32 @@ def bfs(wm, start, goal, blocked=(), closed=()):
     return path[::-1]
 
 
+CD_PENDING = 0x80079bc2   # load_file_alt's async read: 1 queued, 2 issued, 3 done
+CD_COUNT = 0x800986f0     # the CD library's command queue count
+CD_WAIT = 4000            # frames: the pump's three tries of ~1,200 frames each
+
+
+def cd_stalled(g):
+    """A disc read issued with commands stuck in the CD queue: the DsPacket race on a
+    MAIN without the fix (bugs.md 1.12). It clears by itself after about 1,200 frames."""
+    return g.u8(CD_PENDING) == 2 and g.e.u32(CD_COUNT) > 0
+
+
+def wait_cd(g):
+    """While a read is stalled, wait for it: until it's done (CD_PENDING 3), or the queue
+    has stayed empty 90 frames, or CD_WAIT. True if it waited at all. (T4 round 6, t4v1
+    and t4v4 at the tiger approach: "You've met someone!", then the harness called it a
+    freeze after ~350 frames of a stall that would have cleared at ~1,200.)"""
+    if not cd_stalled(g):
+        return False
+    f0 = g.frame
+    empty = 0
+    while g.frame - f0 < CD_WAIT and g.u8(CD_PENDING) in (1, 2) and empty < 90:
+        empty = empty + 1 if g.e.u32(CD_COUNT) == 0 else 0
+        g.step(1)
+    return True
+
+
 def settle(g, limit=600, on_box=None):
     """Run until calm. A box that needs a press gets one (or on_box(g) decides)."""
     f0 = g.frame
@@ -227,6 +253,8 @@ def face(g, d):
         try:
             ui.press_until(g, btn, lambda: g.u8(FACE) != cur or interrupted(g), 120, 'turn')
         except Stuck:
+            if wait_cd(g):
+                continue
             if calm(g) and not nudged:
                 # after the stream parts on B2 (7, 11) the screen stays black and turns do
                 # nothing until the party steps forward (f1v0 chapter 4, 2026-10-13); wait,

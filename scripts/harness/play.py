@@ -190,6 +190,12 @@ def close_box(g, limit=600, react=20):
             # progress that never ends: a menu the presses walk round (r2v6b's "Drop
             # which item?" at the jade mask with a full pack)
             raise Stuck('event box too long', where=g.where(), msg=g.u8(maze.MSG))
+        if maze.wait_cd(g):
+            # a stalled disc read (bugs.md 1.12 on an old MAIN): waited out, not progress
+            # lost; the box timers start again
+            f0 = g.frame
+            dead = 0
+            continue
         if g.frame - f0 > limit:
             raise Stuck('event box', where=g.where(), msg=g.u8(maze.MSG), ev=g.u8(maze.EVENT_BOX))
         if g.u8(SCENE) not in (0, 0xff) and scene_f < SCENE_MAX:

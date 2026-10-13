@@ -288,6 +288,47 @@ def heal_in_camp(g, log, frac=0.6, max_casts=12, on_int=None):
     return n
 
 
+# camp heals, strongest first: (spell id, Priest level). Each is the first spell of its
+# level, so its place in the level's list is 0 whatever else is known.
+HEALS = [(36, 6), (33, 5), (30, 4), (21, 1)]     # Madi, Dialma, Dial, Dios
+
+
+def heal_strong(g, log, frac=0.9, max_casts=12, on_int=None):
+    """Heal everyone to frac of max HP from camp with the strongest heal a priest still
+    has points for (Madi, Dialma, Dial, Dios). Returns casts made."""
+    n = k = 0
+    while n < max_casts and k < 40:
+        k += 1
+        if not camp.in_camp(g) and not maze.calm(g) and not maze.settle(g):
+            (on_int or on_interrupt_factory(log))(g)
+            continue
+        h = hurt(g, frac)
+        if not h:
+            break
+        pick = None
+        for sid, lv in HEALS:
+            for slot, ri in enumerate(g.party_slots()):
+                if ri is None:
+                    continue
+                c = g.char(ri)
+                if c['status'] != 0 or not c['raw'][0x5c + 7 + lv - 1]:
+                    continue
+                ks = battle.known_spells(c['raw'], 1, lv)
+                if sid in ks:
+                    pick = (slot, lv, ks.index(sid), sid)
+                    break
+            if pick:
+                break
+        if not pick:
+            break
+        camp.cast(g, pick[0], 1, pick[1], pick[2], h[0])
+        log.append((g.frame, 'heal', pick[3], pick[0], h[0]))
+        n += 1
+    if camp.in_camp(g):
+        camp.close_camp(g)
+    return n
+
+
 def anyone_dead(g):
     return any(g.char(i)['status'] != 0 for i in g.party())
 
@@ -449,6 +490,7 @@ class Run:
         tries = 0
         while True:
             tries += 1
+            battle.VARY = tries - 1
             try:
                 r = fn()
             except Wiped:
@@ -482,6 +524,7 @@ class Run:
             if self.ckpt:
                 g.load(self.ckpt)
             g.step(self.rng.randrange(1, 40))     # different timing, different rolls
+        battle.VARY = 0
         self.goals.append(dict(goal=name, frames=g.frame - f0, secs=round(time.time() - t0, 1),
                                tries=tries))
         self.checkpoint(name)

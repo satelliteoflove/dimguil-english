@@ -173,6 +173,34 @@ class Run(chapter1.Run):
         else:
             chapter1.heal_in_camp(g, self.log, on_int=self.on_int)
 
+    def ready(self, home_below=None):
+        """Before a boss: home if anyone is dead or under home_below of max HP once the
+        priests have healed what they can (the Cots heal everyone to full there), else
+        heal to READY_HP from camp."""
+        g = self.g
+        home_below = home_below or READY_HOME
+        self.fit()
+        if g.overlay() in ('JOUKA', 'HAZURE'):
+            return
+        self.heal()
+        if chapter1.anyone_dead(g) or chapter1.hurt(g, home_below):
+            keep = chapter1.COT_BELOW
+            chapter1.COT_BELOW = READY_HP
+            try:
+                self.trip_home()
+            finally:
+                chapter1.COT_BELOW = keep
+
+    def heal(self, frac=None):
+        """Heal to frac (READY_HP) from camp, where the party stands."""
+        if self.g.overlay() not in ('JOUKA', 'HAZURE'):
+            try:
+                chapter1.heal_strong(self.g, self.log, frac or READY_HP, on_int=self.on_int)
+            except Stuck as s:
+                # the camp won't open everywhere: just after the stream parts the screen
+                # stays black until the party steps on (f1v3e, 2026-10-13)
+                self.note('heal stuck', s.what)
+
     def examine(self, dest, facing, fight=False):
         """Walk to dest, face, Investigate, run what it starts. Returns after's result.
         fight: the event ends in a fixed fight that can start long after its last box
@@ -290,6 +318,8 @@ class Run(chapter1.Run):
 
 
 FIGHT_WAIT = 2400
+READY_HP = 0.9              # a boss fight starts with everyone at this share of max HP
+READY_HOME = 0.7            # ... or the party goes home first if healing can't reach this
 TOWN_GOLD = 100             # party gold under which a trip home can't buy anything
 
 
