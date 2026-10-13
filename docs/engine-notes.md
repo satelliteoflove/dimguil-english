@@ -252,6 +252,65 @@ patches in `asm/`.
     emulator save state carried across a patch update in play: continue from the
     memory card instead.
 
+### CD reads: the DsPacket race ("You've met someone!" lock)
+
+- Every disc read goes through the CD library's DsRead (0x80038300; libds, identical
+  bytes on the Japanese disc). `load_file` (0x80012d18) calls it and spins on DsReadSync
+  (0x800386b0); `load_file_alt` (0x80012f5c, the encounter path 0x80020e10) queues an
+  async read instead: 0x80079bc2 = 1, and the pump 0x800130a4 calls DsSync (0x80036bf8)
+  then DsRead and sets 2, then 3 once DsReadSync reports 0. Its pending read is in
+  0x80079748 (MSF), 0x800795ec (index), 0x8007986b (table), 0x80079824 (destination).
+  The next load first loops on the pump until 3.
+- DsRead has DsPacket (0x80036888) put four commands in the library's 8-slot queue (ring
+  at 0x80098628, 0x18 bytes a slot, count 0x800986f0). Each slot is written in order: id
+  (0x80036b08), command, parameter bytes (memcpy 0x800380cc), parameter pointer
+  (0x80036b38), then the count. The second of the four is Setmode, whose parameter is
+  the mode byte.
+- The commands are sent from interrupts. libds's VSync callback sends Getstat, and when
+  the drive answers (INT3, handled in the same exception if it comes before the VSync
+  handler returns) the dispatcher sends the packet's next slot (0x80037358 → CD_cw
+  0x800350cc). It issues the slot under its cursor (0x800986ec) if the slot's id is
+  non-zero (0x800360dc, 0x80036efc); the count only has to be above 0.
+- The stall: the VSync lands while DsPacket is between the Setmode slot's id and its
+  parameter pointer (instructions 270-318 after DsRead's entry, 48 instructions), and
+  the VSync handler runs long enough for the Getstat answer to arrive inside it. The
+  dispatcher sends Setmode with a null parameter, CD_cw refuses it ("no param", returns
+  -2 at 0x80035118), and nothing retries. No further CD command is ever sent, DsReadSync
+  keeps reporting the whole file (33 sectors for M_DT005), and the main loop spins in
+  the next `load_file_alt`. The screen holds, the music plays on (the sound driver runs
+  in the VSync handler), and no input is taken. Only a reset gets out.
+- Traced (`rips/harness/t3/metlock/`): the t4v1 lock replays exactly from its goal state
+  (`replay.py`, `inrep.py`). The meeting read M_DT005 (table 1 index 49, LBA 2109) starts
+  301 instructions before the VSync; one frame later (532 before) it's fine. In the
+  stall a single exception runs from instruction 248,395 to 280,083: Getstat sent at
+  257,625, Setmode with a null parameter at 279,839, the parameter pointer stored by the
+  main thread at 280,170. If the handler returns first (a lead of 277 in the shift
+  sweep, a 14,000-instruction exception) the read goes through.
+- Not our patch: the library is byte-identical, the files read (M_DT003-006) sit at the
+  same LBAs with the same sizes on both discs (our relocations only touch table 2), and
+  the read is one the original makes. Our text code does change how many instructions a
+  frame takes, so it moves which reads land in the window; the harness can't finish
+  Japanese battles, so the rate on the Japanese disc wasn't measured.
+- Not the emulator either, though its timing matters. Beetle answers a command after
+  12,315-15,315 cycles (`cdc.c`, `PendingCommandCounter`); psx-spx gives 19,000-201,000
+  (average 50,401) on hardware, so the answer comes inside a long VSync handler less often
+  there. None of Beetle's CD options touch that delay (`cd_fastload` only scales the
+  sector rate, `cd_access_method` is host I/O), and RetroArch's Beetle HW defaults
+  (interpreter, sync, 2x) run the same timing as the harness.
+- How often: two locks in about 60 hours of harness play (41 chapter 1 runs; of 121
+  stuck states, only those two are in this condition), both at the tiger approach. Timed
+  over four chapter 1 runs: 10,337 reads, 21 starting within 2,000 instructions of a
+  VSync, none in the window. At the t4v1 meeting, 1 of 100 input shifts locks.
+- Proposed fix (`metlock/bugfix_dspacket_race.asm.draft`, docs/re/bugs.md 1.12): DsPacket
+  writes each slot's id last, so the dispatcher can't take a slot that isn't finished.
+  14 words in both copies of the fill loop, same instruction count. Tested in RAM: the
+  t4v1 repro (same VSync point, lead 301) and all 100 shifts read normally; two chapter 1
+  runs make the same reads in the same frames (one frame off in one); the suite passes
+  187 of 187 on a patched test copy of the disc. Freed slots always read id 0 (the packet
+  pop clears them, 0x80035d10; so do the queue resets), and the dispatcher issues a slot
+  only when its id is non-zero (0x800360dc, 0x80036efc), so a slot whose id is written
+  last can't go out half-written.
+
 ### Text printer
 
 - One printer (reader at 0x8001e0c0) draws dialogue, battle and event text. Codes below

@@ -1,8 +1,8 @@
 # Bugs in the original game, and content no code reaches
 
 Every bug and every unreachable string the phase-2 analysts found (`docs/re/*.md`), two
-from the fallen-party audit (`docs/re/fallen-parties.md`), and one from the harness runs
-(1.11). Each was re-read in the code from the original disc (`rips/clean`, decompiled at
+from the fallen-party audit (`docs/re/fallen-parties.md`), and two from the harness runs
+(1.11, 1.12). Each was re-read in the code from the original disc (`rips/clean`, decompiled at
 585c983) and confirmed or refuted. Addresses are RAM; MCARD, JOUKA and MAZE load at
 0x800a1000.
 
@@ -18,7 +18,7 @@ him first. So each entry is in one of three groups:
 
 | Group | Count |
 |---|---|
-| 1. Clear bugs | 12 (11 fixed; 2.8, the pit soft lock, confirmed and waiting on one choice) |
+| 1. Clear bugs | 13 (11 fixed; 2.8, the pit soft lock, confirmed and waiting on one choice; 1.12 waiting on Chris) |
 | 2. Cut or unclear, ask | 6 |
 | 3. Balance, ask | 3 |
 | Not bugs, or harmless | 9 (2.7 and 3.4 moved here after the follow-ups) |
@@ -216,6 +216,66 @@ built disc reached the tablet door with all 32 pillar fights starting on the fir
 (on the old disc the same seeds lost one, the snake in run v3), and the harness suite
 passes 187 of 187. (The RNG seed is set with a RAM write as a stand-in for different
 play histories.) Scripts: `rips/harness/t3/freeze/`.
+
+### 1.12 A disc read can stall forever ("You've met someone!" and no meeting)
+
+From the harness runs (T4 round 6, 2026-10-12): twice, a party stepped next to a roamer
+at the tiger approach, "You've met someone!" came up, and nothing more happened. The
+screen held, the music played on, no input was taken. The main loop was waiting in
+`load_file_alt` (0x80012f5c) for the meeting's data file (M_DT005, table 1 index 49) and
+the CD library kept reporting all 33 sectors still to come. [code, emu]
+
+The cause is in the CD library linked into the game (libds, byte-identical on the
+Japanese disc). DsRead (0x80038300) has DsPacket (0x80036888) put Pause, Setmode, Setloc
+and ReadN in the library's command queue, writing each slot's id first and its parameter
+pointer last. The library sends queued commands from interrupts: its VSync callback asks
+for the drive status, and the drive's answer starts the packet's next slot. If the VSync
+lands in the 48 instructions between the Setmode slot's id and its parameter pointer,
+and the answer arrives before the interrupt returns, Setmode goes out with a null
+parameter. CD_cw refuses it ("no param", 0x80035118) and nothing retries, so that read
+and every read after it wait forever. Any file load can hit it.
+`docs/engine-notes.md`, "CD reads: the DsPacket race", has the trace.
+
+Original code. Our patch doesn't touch the library or the files it was reading (same
+LBAs and sizes), but our text code changes how long frames take, so it moves which reads
+land in the window. The rate on the Japanese disc wasn't measured: the harness can't
+finish battles there. Beetle answers commands faster than the hardware does (12,315-15,315
+cycles against 19,000-201,000 in psx-spx), which makes the second condition likelier in
+the emulator; no Beetle option changes that, and RetroArch's defaults behave like the
+harness. In about 60 hours of harness play it locked twice, both at the same spot; four
+timed chapter 1 runs made 10,337 reads with none in the window, and at the t4v1 meeting
+1 of 100 timing shifts locks.
+
+Proposed fix (not applied, for Chris): DsPacket writes each slot's id after the rest of
+the slot, so the dispatcher can't take a half-written one. 14 words over both copies of
+the fill loop (0x80036a10, 0x80036a58-0x80036a6c, 0x80036b08, 0x80036b50-0x80036b64),
+same instruction count, no extra space: the old id store becomes a `nop`, and the
+queue-count update uses `s0` (free by then) as its base instead of `at`.
+Draft: `rips/harness/t3/metlock/bugfix_dspacket_race.asm.draft` (assembles to the tested
+words).
+
+Why the id is the right thing to hold back: the dispatcher issues the slot under its
+cursor (0x800986ec) whenever that slot's id is non-zero (0x800360dc, 0x80036efc; the
+second also wants the count above 0, which an earlier slot of the same packet already
+gives). Every way a slot is freed writes its id back to 0: the packet pop at 0x80035d10
+clears each slot it releases (id at 0x80035d70) and stops at the first slot with another
+id, and the queue resets clear all eight (0x80035fe0, init 0x80035e00, and the 0x80035ce0
+loops at 0x80036450 and 0x8003658c). Packet ids come from 0x80060c48 and skip 0. So a
+slot DsPacket gets from the allocator (0x80035e5c, the one after the live ones) reads
+id 0 until the patched code stores its id, after everything the dispatcher reads from it.
+The patch drops the `lui at` before the count store; nothing in the loop, the allocator,
+memcpy or the code after the loop reads `at` (every other use is a `lui at` immediately
+followed by its store), and `s0` is rewritten at the top of each pass (0x80036a2c,
+0x80036b24) and not read after the loop before the epilogue restores it.
+
+Checked: emulator, as RAM words over MAIN after loading the state. The t4v1 lock, replayed
+frame for frame, reaches the same VSync point (301 instructions after DsRead's entry),
+reads the file in the usual 59 frames and starts the meeting; all 100 input shifts read
+normally (892 reads). Two chapter 1 bot runs with the words in place make the same 2,578
+and 2,580 reads as without them and finish in the same frames (one frame later in the
+second). The harness suite passes 187 of 187 on a test copy of the disc with the fix laid
+into SLPS_026.91 (and over MAIN in RAM after each state load, since states keep the code
+they were saved with). Scripts: `rips/harness/t3/metlock/`.
 
 ## Group 2: looks cut, or the intent isn't clear
 
