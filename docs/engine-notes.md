@@ -429,6 +429,24 @@ patches in `asm/`.
   Japanese, so the scan finds them all. Of the readers of the layer counts, only
   FUN_800d23f4 compares them with a count taken from the text. No English text encodes
   to 0xd8 or above, or to a two-byte code.
+- Town text (JOUKA) goes through text_at (0x800dbd7c: x, y, a2, SISETU string, a 5th
+  argument on the stack). With the flag at 0x80079772 set, it ignores x and centers the
+  line: start = 168 - (W + 12) / 2 for a line W px wide, and clears the flag. The 12 is
+  apparently the terminator: the measure skips its 0xff but prices the 0x40 as "th"
+  (12 px). It's the same for every line, so centered lines agree with each other, about
+  6 px left of 168 (checked: "Not enough gold." 83 px starts at 121, "Which room?" 66 px
+  at 129). 0x800dba48 (y, a1, string, a4) sets the flag and
+  calls it; that's how the message row (y 0xa6) prints. Many lines are placed at fixed
+  x instead, sized for the Japanese, and most of those are columns meant to be left
+  aligned. Two weren't: the Inn's "Not enough gold." (SISETU 57), printed at x 0x70
+  (お金がたりません, 96 px, 112 to 208) from 0x800c6cd8 and 0x800c7054, so the 83 px
+  English line sat 9 px left of the row's center; both now call 0x800dba48
+  (`asm/inn_gold_message.asm`). And the Temple's chant, four words drawn one at a time
+  at fixed x (`asm/temple_layout.asm`, ours since 4b09b08), which sat 10 px left; its
+  positions now center the finished line with a 4 px space between words, and have to be
+  redone if a word changes. The Inn's "To the next level, you need N more exp." under
+  100 exp is one line at fixed x 28 and 124 (0x800c7c30), left aligned like the
+  original; at 100 or more it's two centered lines (2026-10-13).
 - The NPC talk runs with MCARD.BIN at 0x800a1000, not MAZE.BIN.
 - The dungeon NPC box is 288 px by 3 lines, pages split by `\n\r`.
 - The battle box wraps at 24 glyph codes per line. Messages are expanded by 0x8001dfc0

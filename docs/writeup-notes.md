@@ -142,6 +142,24 @@ comes." t5check went from 3 center findings to none on the chapter 1 run and fro
 none on the chapter 4 one. Shots:
 `rips/re/work/digraphwrap/shots/` (`sheet_before_after.png`).
 
+**Lines placed for the Japanese (2026-10-13).** The chapter 4 test run for the digraph
+fix showed "Not enough gold." at the Inn 9 px left of center, on the old disc and the
+new one. The town prints its message row through a centering call, but this one line
+was printed at a fixed x of 112, where お金がたりません (eight 12 px glyphs) came out
+centered; the English line is 83 px. Both places the Inn prints it now go through the
+centering call the Inn's other messages use (`asm/inn_gold_message.asm`). A scan of every
+line T5 captured in that row turned up one more, the Temple's chant: our own earlier
+patch spread its four words at fixed positions so "Murmur-" stopped running into
+"Chant-", but the finished line sat 10 px left, with 10-14 px gaps. The positions now
+come from the English widths, one space apart, centered (`asm/temple_layout.asm`). Nothing
+else in the town's centered rows was off in any capture, and "To the next level, you
+need N more exp." (under 100 exp) is one left-aligned line in the original too.
+Checked on the built disc: the Inn from power-on with a memory card save, 112 to 121 px,
+the ink midpoint from 152.5 to 161.5 (the row's other lines sit at 161-161.5); the
+chant through the harness's own trip home to the temple, from a state in the maze
+(JOUKA isn't in RAM there, so it came from the new disc), 64 to 84 px, midpoint 150.5
+to 160.5. Shots: `rips/re/work/notenoughgold/shots/`.
+
 **The voicing marks, second round: centering and "b  away" (2026-10-13).** The T5 screen
 checks found two things the first voicing fix (9a955ba) had left.
 - Seen: every event line with `"` or the digraph "w " sat right of center, about 2 px

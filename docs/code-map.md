@@ -274,6 +274,7 @@ at these spots.
 | JOUKA | FUN_800bae4c (0x800bb0a0) | shop_caption_layer.asm |
 | JOUKA | FUN_800bb914 (0x800bbca4) | shop_caption_layer.asm |
 | JOUKA | FUN_800bf9ec (0x800c0d78) | shop_caption_layer.asm |
+| JOUKA | inn_stay (0x800c6cd8, 0x800c7054) | inn_gold_message.asm |
 | JOUKA | FUN_800c95f0 (0x800ca9b8, 0x800caa08, 0x800caa30, 0x800caa5c) | temple_layout.asm |
 | JOUKA | FUN_800cbddc (0x800cbec0) | status_text_pool.asm |
 | JOUKA | FUN_800dbd7c (0x800dbe2c, 0x800dbe4c, 0x800dbe70) | voicing_marks.asm, vwf.asm |

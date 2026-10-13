@@ -52,6 +52,9 @@ see all of it.
 - **Battle lines ending in a digraph's space (2026-10-13).** "Giant Ant calls for help! A /
   monster appears." sat 2 px left; a break after "A ", "s " etc. now draws the letter alone (`asm/word_wrap.asm`).
 
+- **Inn and Temple lines off center (2026-10-13).** "Not enough gold." sat 9 px left (x fixed for the
+  Japanese, `asm/inn_gold_message.asm`); the Temple's chant 10 px (`asm/temple_layout.asm`).
+
 ### Machine-written habits (the Q1 sweep)
 
 The English was screened for habits that read as machine-written, and 37 hits were
