@@ -25,9 +25,14 @@ pictures is at `rips/re/work/birdnames/silhouettes.png`.
 | はばたくひとかげ "flapping human shadow" | Bird(s) | Were Vulture | uk/07 |
 | | Bird(s) | Were Bat | uk/08 |
 | | Flying Figure(s) | Halycon | uk/08 |
-| きょだいなとり "giant bird" | Very Big Bird | Death Hawk | uk/22, a great winged demon |
+| きょだいなとり "giant bird" | Very Big Bird | Death Hawk | uk/22, a huge winged figure* |
 | きょだいなあくま "giant demon" | Very Big Bird | Marchosias | uk/22 |
 | | Greater Demon(s) | Greater Demon, Agares, Bael, Ahalmez, Ixpuztec | uk/22 and uk/20 |
+
+\* Picture 22 is the game's one silhouette for any huge foe: besides the Greater Demons
+it's shown for Death Hawk, Quetzalcoatl, Ugo (Violent Beast) and Hims (Devil), read from
+the records' picture bytes. There's no big-bird picture; the bird picture, 07, is used
+for Cuauhtli, the eagle, too.
 
 So one Japanese name has four English names, and one English name, "Bird", covers both
 Japanese names. The same bat-winged picture is called Birds, Flying Figures and Flap

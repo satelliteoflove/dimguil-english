@@ -319,10 +319,12 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 - **Unidentified flyers named by their picture (Chris, 2026-10-13).** The disc's English
   called a Vampire Bat, Wing Lizard and Were Bat "Bird(s)" while showing the same
   bat-winged figure as Fake Cupid and Halycon, which it calls Flying Figure(s); and
-  Marchosias "Very Big Bird" while showing the great demon that every other きょだいなあくま
-  shows as Greater Demon. Those four now match their pictures: Flying Figure(s) and
-  Greater Demon(s). "Bird" stays on the other picture (uk/07, a winged serpent), whose monsters really
-  are birds (Zopilote, Xecotcovach, and the Were Vulture), and Death Hawk stays Very Big Bird (きょだいなとり). The
+  Marchosias "Very Big Bird", though its Japanese is きょだいなあくま ("giant demon"), like
+  every Greater Demon. Those four are now Flying Figure(s) and Greater Demon(s). "Bird"
+  stays on the other picture (uk/07, a winged serpent), whose monsters really are birds
+  (Zopilote, Xecotcovach, and the Were Vulture). Death Hawk stays Very Big Bird
+  (きょだいなとり), though it shows picture 22: that's the game's one silhouette for any
+  huge foe, also shown for Quetzalcoatl, Ugo, Hims and the Greater Demons. The
   picture is byte +2 after the six name slots (07, 08, 0x16...), the same numbers as
   Bartok's Trading Post's uk/ images. 16 slots in DATA02 (`namefixes.py`, keyed by the
   record's English name) and BATTLE.BIN's own Vampire Bat record (`asm/name_fixes.asm`).
