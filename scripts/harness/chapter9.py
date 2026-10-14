@@ -24,6 +24,7 @@ Training: B4 (area 24), which has the HEAL room at E5 N18 (5, 5) (event type 0x3
 Not done: the book on B4 E15 N12.
 """
 from harness import chapters, chapter3, chapter6, maze, nav
+from harness.game import Stuck
 
 STORY = 0x80079b44
 BLACK = 0x01
@@ -77,7 +78,14 @@ class Chapter9:
                 return True
             run.fit()
             run.examine((25, 5, 15), 0)
-            run.go((25, 5, 18))
+            try:
+                run.go((25, 5, 18))
+            except Stuck:
+                # the lit circle sends the party up as it steps on, and travel then looks
+                # for a way back down to the circle (q9r2, 2026-10-14: "no route" from
+                # B2 (5, 18) six times)
+                if g.u8(maze.AREA) != 26:
+                    raise
             run.after()
             return g.u8(maze.AREA) == 26
 
