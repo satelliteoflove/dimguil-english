@@ -282,8 +282,19 @@ def avoid_squares(g, area, target):
     if not F:
         return set(), set()
     hard = (set(F['transfers']) | F['voids']) - {target}
-    soft = F['arrive'] - set(F['transfers']) - {target}
+    for sq, fl in EXTRA_AVOID_AFTER.get(area, {}).items():
+        if flag(g, *fl) and sq != target:
+            hard.add(sq)
+    soft = F['arrive'] - hard - {target}
     return hard, soft
+
+
+# squares that become transfers once a flag is set, kept off hard from then on: Area A
+# B1's chute at E17 N11 (17, 12) drops to the Ogre's pen on B4 while story bit 25 (the
+# switch) is set (square_arrive 0x3b). The site draws it as an ordinary arrive event, so
+# it was only a soft avoid, and b1v3c's trip home before the Ogre (points low) walked
+# over it into the pen, which has no way out: 6 "no path" (2026-10-14)
+EXTRA_AVOID_AFTER = {22: {(17, 12): (0x80079b44, 25)}}
 
 
 def hidden_blocked(g, area):

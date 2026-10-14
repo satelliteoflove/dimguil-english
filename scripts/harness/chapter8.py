@@ -84,12 +84,15 @@ class Chapter8:
                 run.ready()
                 # walking to the chute square itself drops the party to B4 mid-walk, and
                 # travel then plans a way back up to it (q8w4, 2026-10-14: "no path" to
-                # the B4 ladder): stand on the switch square east of it and step west
-                run.go((22, 18, 12))
+                # the B4 ladder): stand north of it at (17, 11) and step south. (The
+                # switch square (18, 12) has a wall on its west side: stepping west from
+                # it was refused, and the drop only came when the walk to the den crossed
+                # the chute, which nav now keeps off once bit 25 is set.)
+                run.go((22, 17, 11))
                 for _ in range(3):
                     if g.u8(maze.AREA) != 22:
                         break
-                    if maze.step(g, 3) == 'interrupted':
+                    if maze.step(g, 2) == 'interrupted':
                         run.after()
                 run.after()
             # into the den: the iron bars on the east side of (17, 11), Investigate facing
