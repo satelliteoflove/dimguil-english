@@ -263,6 +263,7 @@ def flee_chance(g):
     return max(0, min(100, c - 1))
 
 
+LONG_FIGHT = True           # agent 7 / main, 2026-10-14: long_fight() makes a fight matter
 LOSS_RUN = True             # Chris, 2026-10-14: run from a likely loss, round 1 only, anywhere
 LOSS_FLEE_ABOVE = 25        # Chris, 2026-10-14: a likely loss runs at a flee chance above this
 
@@ -270,6 +271,59 @@ LOSS_FLEE_ABOVE = 25        # Chris, 2026-10-14: a likely loss runs at a flee ch
 def _kill(x, hp):
     # tactics.value's kill rule: a sure kill at the monster's HP, half a kill at 70% of it
     return 1.0 if x >= hp else 0.5 if x >= hp * 0.7 else 0.0
+
+
+FOCUS_ROUNDS = 3            # the weakest member must outlast this many rounds of focused blows
+LONG_SHARE = 0.25           # a fight whose cheap win costs this share of party HP matters
+
+
+def cheap_round(g, M):
+    """The party's damage in a round with cheap means only: each standing member's best
+    damage spell of level CHEAP_LEVEL or less it has points for (DAMAGE mean x the chance it
+    lands, capped at each target's HP), or for the front row its weapon (half landing)."""
+    from harness import gear
+    D = 0.0
+    for slot, ri in enumerate(party_ids(g)):
+        if ri is None:
+            continue
+        hp, st = member_state(g, slot)
+        if hp <= 0 or st >= 0x20:
+            continue
+        best = 0.0
+        for sid, school, level, i in castable(g, ri):
+            if sid not in tactics.DAMAGE or level > tactics.CHEAP_LEVEL:
+                continue
+            mean, kind, el = tactics.DAMAGE[sid]
+            for k in M:
+                d = 0.0
+                for t in tactics.targets(g, k, kind, M):
+                    m = M[t]
+                    f = 0.5 if m['resist'] & el and el else 2.0 if m['weak'] & el and el else 1.0
+                    mons = m['mons'][:1] if kind == 'one' else m['mons']
+                    d += tactics.lands(m, sid) * sum(min(mean * f, h) for _, h, _ in mons)
+                best = max(best, d)
+        if slot < 3:
+            w = gear.equipped(g, ri).get(0)
+            best = max(best, gear.wscore(w) * 0.5 if w else 2.0)
+        D += best
+    return D
+
+
+def long_fight(g, M, party_hp):
+    """A fight that costs too much won the cheap way (main, 2026-10-14: ten level-7 priests,
+    rated 22 a round, fought with cheap spells for 10 rounds and Kai went down; fought hard
+    it was won in 2 with nobody down): the rated damage a round times the rounds the cheap
+    means need to clear the monsters' HP reaches LONG_SHARE of the party's HP. The numbers,
+    or None. Once a round (FIGHT_INFO)."""
+    key = ('long', ROUND)
+    if key not in FIGHT_INFO:
+        T = sum(M[k]['threat'] * len(M[k]['mons']) for k in M)
+        H = sum(hp for k in M for _, hp, _ in M[k]['mons'])
+        D = cheap_round(g, M)
+        rounds = H / max(D, 1.0)
+        FIGHT_INFO[key] = (dict(threat=round(T, 1), mon_hp=H, cheap_round=round(D), rounds=round(rounds, 1))
+                           if T * rounds >= party_hp * LONG_SHARE else None)
+    return FIGHT_INFO[key]
 
 
 def likely_loss(g, M, party_hp):
@@ -370,6 +424,18 @@ def default_policy(g, m, opts):
     lv = sorted(g.char(rk)['level'] for rk in ids if rk is not None)
     bad = losing(g)
     why = tactics.matters(g, M, party_hp, lv[len(lv) // 2] if lv else None, party)
+    if not why and LONG_FIGHT and M and tactics.SPELLS_ON and party:
+        # the weakest member under the monsters' 'fight the weakest' blows (AI column 1):
+        # ten level-7 priests put Kai (36 HP, back row) down in two rounds while the fight
+        # was rated 22 a round in all (main, 2026-10-14)
+        for slot, hp, mx in sorted(party, key=lambda x: x[1])[:1]:
+            fo = sum(M[k]['focus'][0 if slot < 3 else 1] * len(M[k]['mons']) for k in M)
+            if hp > 0 and hp < FOCUS_ROUNDS * fo:
+                why = 'focus'
+                FIGHT_INFO['focus'] = (slot, hp, round(fo, 1))
+    if not why and LONG_FIGHT and M and long_fight(g, M, party_hp):
+        why = 'long fight'
+        FIGHT_INFO['long'] = FIGHT_INFO[('long', ROUND)]
     big = bool(why) or bad
     FIGHT_INFO['matters'] = FIGHT_INFO['matters'] or bool(big)
     if LOSS_RUN and not FIGHT_INFO.get('loss_checked') and M:
@@ -1005,6 +1071,8 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
     FIGHT_INFO.pop('runs', None)
     FIGHT_INFO.pop('loss_checked', None)
     FIGHT_INFO.pop('likely_loss', None)
+    for k_ in [k_ for k_ in FIGHT_INFO if isinstance(k_, tuple) and k_[0] == 'long'] + ['long', 'focus']:
+        FIGHT_INFO.pop(k_, None)
     msg0 = len(g.cap.messages) if g.cap else 0
     tactics.STORY[0] = None
     where = (g.u8(MAZE_AREA),) + tuple(g.pos())
@@ -1095,7 +1163,7 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
                 where=where, story=tactics.STORY[0],
                 matters=FIGHT_INFO['matters'], casts=list(FIGHT_INFO['casts']),
                 ran=sum(1 for a in log if a[1] == 'run'),
-                runs=FIGHT_INFO.get('runs', []), likely_loss=FIGHT_INFO.get('likely_loss'),
+                runs=FIGHT_INFO.get('runs', []), likely_loss=FIGHT_INFO.get('likely_loss'), long=FIGHT_INFO.get('long'), focus=FIGHT_INFO.get('focus'),
                 fled=_flee_msgs(g, msg0),
                 first=FIGHT_INFO.get('first'), hp_end=_party_hp(g),
                 down_end=[g.char(ri)['name'] for ri in g.party() if g.char(ri)['status'] >= 0x20],

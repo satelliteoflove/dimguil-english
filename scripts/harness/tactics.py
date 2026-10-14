@@ -171,13 +171,24 @@ def info(g, k):
                 blow_f, blow_b = max(blow_f, mean), max(blow_b, mean)
         death = any(sid in DEATH for _, sid in sts)
         threat = p_fight * melee_round + p_dmg * spell_round + p_breath * breath_one * ROW
+        # monster_ai 0x800cffb0: columns 3-4 damage (spell entry 0), 5 status (1), 6 buff
+        # (2), 7 heal (3), 8 cure (4); a column it has no spells for falls back to fighting
+        has = [any(r[0x8f + sc * 5 + e] != 0xff for sc in range(4)) for e in range(5)]
+        cast_share = sum(p[c] for c, e in ((3, 0), (4, 0), (5, 1), (6, 2), (7, 3), (8, 4)) if has[e])
+        # column 1 fights the reachable member with the least HP: that part lands on one
+        # member, the weakest (front row: any attack; back row: reach attacks only)
+        reach_round = sum(reach) / len(reach) * 0.5 if reach else 0
+        focus = (p[1] * melee_round, p[1] * reach_round)
     else:
         threat = max(melee_round, 8 * lv if caster else 0)
         if r[0xc9]:
             threat += hp / 2 * 3 / 2
     if breath_one:
         blow_f, blow_b = max(blow_f, breath_one), max(blow_b, breath_one)
-    return dict(id=struct.unpack_from('<H', r, 0x6c)[0], level=lv, mr=list(r[0xa3:0xa7]),
+    if not SPELLS_ON:
+        cast_share = 1.0 if caster else 0.0
+        focus = (0.0, 0.0)
+    return dict(id=struct.unpack_from('<H', r, 0x6c)[0], level=lv, mr=list(r[0xa3:0xa7]), cast_share=cast_share, focus=focus,
                 flags=struct.unpack_from('<I', r, 0xa8)[0],
                 resist=struct.unpack_from('<H', r, 0xcc)[0],
                 weak=struct.unpack_from('<H', r, 0xce)[0], caster=caster, threat=threat,
@@ -285,7 +296,10 @@ def value(g, sid, k, M, clevel, cast_counts, commit=False):
                     continue
                 base = 16 if m['weak'] & 0x800 else 50
                 mons = m['mons']
-                worth = 8 * m['level'] * 2
+                # silence takes away every spell action, heals and buffs too (a healer
+                # drags a fight out): 8 x level x 2 scaled by the share of its AI row's
+                # actions it has spells for (cast_share; SPELLS_ON)
+                worth = 8 * m['level'] * 2 * (m.get('cast_share', 1.0) if SPELLS_ON else 1.0)
             p = lands(m, sid) * (1 - save_adj(base, m['level'], clevel))
             p_new = p * (1 - PLAN['dis'].get(t, 0))
             v += sum(p_new * worth for _ in mons)
@@ -401,7 +415,7 @@ def matters(g, M, party_hp, party_level=None, party=None):
     return None
 
 
-HEAVY = ('story', 'threat')     # matters() reasons that free levels 6-7 and support spells
+HEAVY = ('story', 'threat', 'long fight', 'focus')     # matters() reasons that free levels 6-7 and support spells
 
 
 def matters_detail(g, M, party_hp, party_level=None, party=None):
