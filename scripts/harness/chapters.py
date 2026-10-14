@@ -87,6 +87,7 @@ class Run(chapter1.Run):
                 self.goal(name, fn)
         g.save('%s/c%d_end' % (self.out, n))
         self.ckpt = '%s/c%d_end' % (self.out, n)
+        save_points(g, self.ckpt, self.full_points)
         res = dict(chapter=n, title=cls.title, frames=g.frame - f0,
                    secs=round(time.time() - t0, 1), goals=self.goals[k0:],
                    stuck=self.stuck[s0:], spells=self.spell_summary(l0),
@@ -438,6 +439,12 @@ class Run(chapter1.Run):
         for i in g.party():
             full = self.full_points.get(i)
             if not full:
+                # a caster whose points after the Stables aren't known (a run resumed from
+                # a state without its points file): count as low, one Stables trip learns
+                # them (n1v3i chapter 7, agent 8: the first trip after a resume left with
+                # Earth at Priest points 0/2/4 and two died in a 16-round fight)
+                if any(g.char(i)['raw'][0x4c:0x5c]) and g.char(i)['status'] < 0x20:
+                    low.append((g.char(i)['name'], None, None))
                 continue
             now = g.char(i)['raw'][0x5c:0x78]
             f = sum(full[s * 7 + l] for s in range(4) for l in range(2, 7))
@@ -634,6 +641,13 @@ class Run(chapter1.Run):
         g = self.g
         n0 = self.fights()
         self.fit()
+        if POINTS_TRAIN and not getattr(self, '_gold', False) and g.overlay() not in ('JOUKA', 'HAZURE'):
+            low = self.points_low()
+            if low:
+                # a training trip sets out with its casters' points, as a boss does (the
+                # chapter's story goals can leave them spent in the maze)
+                self.note('points low before training', low)
+                self.trip_home('points before training')
         if not getattr(self, '_gold', False) and self.temple_short():
             # the trip home just now left a member the temple can't raise: this trip goes
             # for gold on easier floors instead, and counts (its checkpoint keeps the gold)
@@ -967,6 +981,7 @@ class Run(chapter1.Run):
 MAPORFIC_TRIP = False        # Maporfic from camp as a training trip sets out
 TOPUP = False                # heal to what the trip's worst monster can't take in two hits
 HP_HEAL = True               # Chris's HP lines after every training fight (Run.hp_heal)
+POINTS_TRAIN = True         # agent 8: a training trip from the maze goes home first when points are low
 DEATH_RETRY = False         # agent 8, 2026-10-14 (Chris): a training trip with a death isn't reloaded
 POISON_HOME = True          # agent 7, 2026-10-14: cure poison first after a fight; home if it stays
 LOOT_EACH_FIGHT = True      # agent 7, 2026-10-14: camp_loot after a training fight that left work
@@ -1021,3 +1036,22 @@ class Chapter1:
 
 
 from harness import chapter2, chapter3, chapter4, chapter5, chapter6, chapter7, chapter8, chapter9, chapter10, chapter11  # noqa: E402,F401  (register the chapters)
+
+
+def points_path(g, name):
+    return os.path.splitext(g.path(name))[0] + '.points.json'
+
+
+def save_points(g, name, full):
+    """The casters' points after the last Stables beside a state (agent 8): a run resumed
+    from it knows them (load_points)."""
+    with open(points_path(g, name), 'w') as f:
+        json.dump({str(k): v for k, v in full.items()}, f)
+
+
+def load_points(g, name):
+    try:
+        with open(points_path(g, name)) as f:
+            return {int(k): v for k, v in json.load(f).items()}
+    except (OSError, ValueError):
+        return {}

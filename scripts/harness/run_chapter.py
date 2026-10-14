@@ -87,6 +87,9 @@ if a.src:
 r = chapters.Run(g, seed=a.seed, variant=a.variant, out=out, auto_cases=not a.no_cases)
 if a.src:
     r.ckpt = a.src
+    # the casters' points after the last Stables, saved beside cN_end (agent 8)
+    r.full_points = chapters.load_points(g, a.src)
+    print('points known for', sorted(r.full_points))
 t0 = time.time()
 ok = True
 try:
