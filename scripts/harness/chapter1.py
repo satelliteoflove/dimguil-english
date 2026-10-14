@@ -484,7 +484,7 @@ def town_upkeep(g, log):
     patients = sorted(town.temple_patients(g), key=lambda ri: (
         not carries_fee(ri), g.char(ri)['cls'] not in (3, 12), g.char(ri)['cls'] != 11,
         -g.char(ri)['level']))
-    gear.TRIED.clear()
+    gear.TRIED_VISIT.clear()
     if patients:
         try:
             town.pool_gold(g, first_pos(), 'tavern')

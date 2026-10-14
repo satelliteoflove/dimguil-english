@@ -329,9 +329,12 @@ ID_STATE, GIVE_STATE, CAMP_TARGET, CAMP_MSG, ITEM_CUR, LIST_COUNT = (
     0x800799e7, 0x80079569, 0x80079948, 0x80079565, 0x80079c60, 0x8007990c)
 ITEMS_IDENTIFY, ITEMS_GIVE = 0, 2
 BISHOP = 11
-ID_RISKY_MIN = 55          # below twice the item's level, try only at this chance or more
+ID_RISKY_MIN = 55          # past ID_MIN_TRIES, a risky try needs this chance or more
 ID_TRIES = 6               # tries per item per camp
-TRIED = {}                 # (roster index, item word) -> risky tries made (reset in town)
+ID_MIN_TRIES = 5           # the Bishop's tries at an item before the shop may (Chris, 2026-10-14)
+TRIED = {}                 # item word -> the Bishop's tries at it, kept across town visits
+TRIED_VISIT = {}           # item word -> risky tries past ID_MIN_TRIES since the last town visit
+BLOCKED = set()            # unknowns left outside the Bishop's pack after camp (logs only)
 
 
 def id_level(g, i):
@@ -367,17 +370,17 @@ def spare_gold(g, members):
 
 
 def bishop_can(g, bpos, w):
-    """Whether the Bishop at bpos should try unidentified word w in camp. A try below
-    twice the item's level risks a touch ((95 - chance) / 4 percent a miss: afraid, and a
-    cursed kind goes on cursed, camp_identify 0x800d5f24), so it's left to Boltac's when
-    the party's gold over the reserve pays his fee (price / 2, which the sale gives back)."""
+    """Whether the Bishop at bpos should try unidentified word w in camp. The Bishop tries
+    every unknown first, ID_MIN_TRIES times at least, risks included (Chris, 2026-10-14):
+    below twice the item's level a miss touches it at (95 - chance) / 4 percent (afraid,
+    and a cursed kind goes on cursed; camp_identify 0x800d5f24). Past those tries a safe
+    item is tried on, a risky one only at ID_RISKY_MIN or better, three times a visit; the
+    rest wait for the shop (shop()) or for the Bishop's next levels."""
     c = g.char(g.party_slots()[bpos])
     chance, safe = id_odds(c['level'], id_level(g, w & 0x1ff))
-    if safe:
+    if safe or TRIED.get(w, 0) < ID_MIN_TRIES:
         return True
-    if spare_gold(g, g.party()) >= item(g, w & 0x1ff)['price'] // 2:
-        return False
-    return chance >= ID_RISKY_MIN and TRIED.get((c['i'], w), 0) < 3
+    return chance >= ID_RISKY_MIN and TRIED_VISIT.get(w, 0) < 3
 
 
 def unknowns(g, ri):
@@ -407,6 +410,12 @@ def identify_in_camp(g, bpos, log=None):
     todo = [(k, w) for k, w in unknowns(g, ri) if bishop_can(g, bpos, w)]
     if not todo:
         return []
+    # best odds first: a miss turns the Bishop afraid at (95 - chance) / 4 percent, which
+    # ends their tries until town clears it, so a 5% item first can use up a camp
+    # (idbf6_v6b: Uma afraid on the Shihou Shuriken's first or second try each visit)
+    lv = g.char(ri)['level']
+    todo.sort(key=lambda kw: (-id_odds(lv, id_level(g, kw[1] & 0x1ff))[1],
+                              -id_odds(lv, id_level(g, kw[1] & 0x1ff))[0]))
     items_menu(g, bpos)
     ui.move_cursor(g, ITEMS_CURSOR, ITEMS_IDENTIFY, 'down', 'up', what='Identify')
     ui.confirm_until(g, lambda: g.u8(camp.SPELL_STATE) == 10 and g.u8(ID_STATE) == 15, 300,
@@ -429,8 +438,9 @@ def identify_in_camp(g, bpos, log=None):
             afraid = bool(g.char(ri)['status'] & 1)
             res = ('identified' if nw & IDENT else 'cursed on' if nw & CURSED else
                    'afraid' if afraid else 'failed')
-            if not safe:
-                TRIED[(ri, w)] = TRIED.get((ri, w), 0) + 1
+            if TRIED.get(w, 0) >= ID_MIN_TRIES and not safe:
+                TRIED_VISIT[w] = TRIED_VISIT.get(w, 0) + 1
+            TRIED[w] = TRIED.get(w, 0) + 1
             out.append((name(w & 0x1ff), res, chance, safe))
             if log is not None:
                 log.append((g.frame, 'identify camp', c['name'], name(w & 0x1ff), chance, safe, res))
@@ -442,9 +452,15 @@ def identify_in_camp(g, bpos, log=None):
     return out
 
 
-def give(g, from_pos, k, to_pos, log=None):
+SWAP_CUR = 0x80079c65       # the receiver's list cursor when a full pack offers a swap
+
+
+def give(g, from_pos, k, to_pos, log=None, swap=None):
     """Camp > Items > Give: pack index k of the member at party slot from_pos to the one
-    at to_pos. Returns 'given', 'refused' (equipped, cursed) or 'full'."""
+    at to_pos. Returns 'given', 'swapped', 'refused' (equipped, cursed) or 'full'. A full
+    receiver offers a swap (camp_give 0x800de578: state 0x19, the receiver's list, cursor
+    0x80079c65; circle on an item that isn't equipped or cursed trades the two, state
+    0x1e): swap = the receiver's pack index to trade back, else it's left."""
     ri, rj = g.party_slots()[from_pos], g.party_slots()[to_pos]
     w = dict(pack(g, ri))[k]
     n0 = len(pack(g, rj))
@@ -461,6 +477,12 @@ def give(g, from_pos, k, to_pos, log=None):
             and g.u8(GIVE_STATE) != 0x19:
         g.step()
     out = 'given' if len(pack(g, rj)) > n0 else 'full' if g.u8(GIVE_STATE) == 0x19 else 'refused'
+    if out == 'full' and swap is not None:
+        g.step(8)
+        ui.move_cursor(g, SWAP_CUR, swap, 'down', 'up', wrap=10, what='swap item')
+        ui.press_until(g, 'circle', lambda: g.u8(GIVE_STATE) != 0x19 or g.u8(CAMP_MSG), 60, 'swap')
+        g.step(30)
+        out = 'swapped' if dict(pack(g, rj)).get(swap) == w else 'refused'
     if log is not None:
         log.append((g.frame, 'give', g.char(ri)['name'], name(w & 0x1ff), g.char(rj)['name'], out))
     camp.close_camp(g)
@@ -518,29 +540,44 @@ def gather_for_bishop(g, bpos, log=None, room_keep=0):
     """Give unknown items from the others to the Bishop while their pack has room."""
     bri = g.party_slots()[bpos]
     n = 0
+    # the best odds first (identify_in_camp), from whoever carries them
+    blv = g.char(bri)['level']
+    cands = []
     for pos, ri in enumerate(g.party_slots()):
         if ri is None or pos == bpos or g.char(ri)['status'] >= 0x20:
             continue
-        for k, w in list(unknowns(g, ri)):
-            if not bishop_can(g, bpos, w):
+        for k, w in unknowns(g, ri):
+            if bishop_can(g, bpos, w):
+                ch, safe = id_odds(blv, id_level(g, w & 0x1ff))
+                cands.append((-safe, -ch, pos, ri, w))
+    cands.sort(key=lambda c: c[:3])
+    for _, _, pos, ri, w in cands:
+        if not bishop_can(g, bpos, w):
+            continue
+        if len(pack(g, bri)) >= 10 - room_keep:
+            # the Bishop's pack is full: hand the giver something the Bishop can't
+            # work on (an unknown beyond them, else a known piece not worn) first,
+            # or trade it for the unknown when the giver's pack is full too
+            # (an unknown with worse odds than this one goes too, the worst first)
+            odds = lambda x: id_odds(blv, id_level(g, x & 0x1ff))[::-1]
+            spare = [(j, x) for j, x in pack(g, bri) if not x & (EQUIPPED | CURSED)
+                     and (x & IDENT or not bishop_can(g, bpos, x) or odds(x) < odds(w))]
+            if not spare:
+                break
+            spare.sort(key=lambda jx: (2 if jx[1] & IDENT else 0 if not bishop_can(g, bpos, jx[1]) else 1,
+                                       odds(jx[1]), jx[0]))
+            if len(pack(g, ri)) >= 10:
+                k = next((j for j, x in pack(g, ri) if x == w), None)
+                if k is not None and give(g, pos, k, bpos, log, swap=spare[0][0]) == 'swapped':
+                    n += 1
                 continue
-            if len(pack(g, bri)) >= 10 - room_keep:
-                # the Bishop's pack is full: hand the giver something the Bishop can't
-                # work on (an unknown beyond them, else a known piece not worn) first
-                if len(pack(g, ri)) >= 10:
-                    continue
-                spare = [(j, x) for j, x in pack(g, bri) if not x & (EQUIPPED | CURSED)
-                         and (x & IDENT or not bishop_can(g, bpos, x))]
-                if not spare:
-                    break
-                spare.sort(key=lambda jx: (bool(jx[1] & IDENT), jx[0]))
-                if give(g, bpos, spare[0][0], pos, log) != 'given':
-                    break
-            k = next((j for j, x in pack(g, ri) if x == w), None)
-            if k is None:
+            if give(g, bpos, spare[0][0], pos, log) != 'given':
                 continue
-            if give(g, pos, k, bpos, log) == 'given':
-                n += 1
+        k = next((j for j, x in pack(g, ri) if x == w), None)
+        if k is None:
+            continue
+        if give(g, pos, k, bpos, log) == 'given':
+            n += 1
     return n
 
 
@@ -561,6 +598,12 @@ def camp_loot(g, log=None, on_int=None):
             gather_for_bishop(g, bpos, log)
             got = identify_in_camp(g, bpos, log)
             done += len(got)
+            # what's still out of the Bishop's reach after gathering (b1v3d chapter 9,
+            # 2026-10-14: six packs at 10/10, nine unknowns), for the logs: these wait for
+            # the Bishop's tries too, the shop doesn't take them early (Chris, 5 tries first)
+            BLOCKED.clear()
+            BLOCKED.update(w for ri in g.party() if ri != bri for k, w in unknowns(g, ri)
+                           if bishop_can(g, bpos, w))
             # the Bishop's own pack full of known things: pass them on before the next
             # round of gathering
             if not got:
@@ -740,10 +783,12 @@ def shop_list(g, sub):
 
 
 def bishop_will(g, members, w):
-    """A Bishop in the party who identifies w safely (at least twice its level)."""
+    """A Bishop in the party who still has camp work on w: it's safe for them (at least
+    twice its level), or they haven't had their ID_MIN_TRIES at it yet."""
     for _, ri in members:
         c = g.char(ri)
-        if c['cls'] == BISHOP and c['status'] < 0x20 and id_odds(c['level'], id_level(g, w & 0x1ff))[1]:
+        if c['cls'] == BISHOP and c['status'] < 0x20 and (
+                id_odds(c['level'], id_level(g, w & 0x1ff))[1] or TRIED.get(w, 0) < ID_MIN_TRIES):
             return True
     return False
 
@@ -767,6 +812,7 @@ def gold(g):
 
 
 CHEAP_ID = 50              # a shop identify this cheap is paid to make room when packs are full
+SURPLUS = 20               # gold over the reserve this many times a fee is truly surplus
 
 
 def shop(g, log, reserve):
@@ -789,15 +835,15 @@ def shop(g, log, reserve):
         if town._at_trade_menu(g):
             town.boltac_leave(g)
 
-    # identify and uncurse. Boltac's identify fee is price / 2, the same as the sale price
-    # (E-town.md: boltac_identify 0x800c1de8, boltac_sell 0x800bf9ec), so with gold over the
-    # reserve a shop identify costs nothing in the end: what helps is worn, the rest is sold
-    # back below for the fee. The Bishop keeps what they can do safely in camp; the shop
-    # takes the rest (b1v3d chapter 8: 54,000 gold and nine unknowns at idl 9-23 waiting on
-    # a level-13 Bishop). A player sees the unidentified name (SWORD, ROBE: the subtype),
-    # so the kinds a member's class could use go first, then the cheapest, while the fees
-    # fit in the gold over the reserve. Packs full to the last slot stop the Bishop
-    # gathering and drop chest loot, so a cheap unknown (<= CHEAP_ID) is done even then.
+    # identify and uncurse. The Bishop goes first (Chris, 2026-10-14: at least
+    # ID_MIN_TRIES tries an item, risks included; bishop_can). The shop identifies only
+    # what the Bishop has had those tries at, and only an item that matters (its kind is
+    # one a member's class could use: a player sees the unidentified name, SWORD, ROBE)
+    # while the fee fits in the gold over the reserve, or anything when the gold is truly
+    # surplus (SURPLUS times the fee). Boltac's fee is price / 2, the same as the sale
+    # price (boltac_identify 0x800c1de8, boltac_sell 0x800bf9ec), so the sell step below
+    # gets back the fee of what nobody wears. Packs full to the last slot stop the Bishop
+    # gathering and drop chest loot, so a cheap unknown (<= CHEAP_ID) is done then too.
     alive = [ri for _, ri in members if g.char(ri)['status'] < 0x20]
     bishop_full = any(g.char(ri)['cls'] == BISHOP and len(pack(g, ri)) >= 10 for ri in alive)
     budget = gold(g) - reserve
@@ -809,14 +855,15 @@ def shop(g, log, reserve):
                 cands.append((0, it['price'] // 2, pos, ri, k, 'uncurse', w, False))
             elif not w & IDENT and it['price']:
                 if bishop_will(g, members, w):
-                    continue            # the Bishop does it in camp, at no risk
+                    continue            # the Bishop's to do in camp first
                 cheap = it['price'] // 2 <= CHEAP_ID and (len(pack(g, ri)) >= 10 or bishop_full)
                 hope = any(kind_usable(g, rj, it['sub']) for rj in alive)
                 cands.append((1 if hope else 2, it['price'] // 2, pos, ri, k, 'identify', w, cheap))
     cands.sort(key=lambda c: c[:2])
     todo = {}
     for rank, cost, pos, ri, k, which, w, cheap in cands:
-        if which == 'identify' and not cheap and cost > budget:
+        if which == 'identify' and not cheap and (
+                cost > budget or rank == 2 and budget < SURPLUS * cost):
             continue
         budget -= cost
         todo.setdefault((pos, ri), []).append((cost, k, which, w))
