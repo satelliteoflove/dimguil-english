@@ -337,6 +337,7 @@ ITEMS_IDENTIFY, ITEMS_GIVE = 0, 2
 BISHOP = 11
 ID_RISKY_MIN = 55          # past ID_MIN_TRIES, a risky try needs this chance or more
 ID_TRIES = 6               # tries per item per camp
+ID_SAFE_TRIES = 40         # a safe item (no touch on a miss): tried until it's identified
 ID_MIN_TRIES = 5           # the Bishop's tries at an item before the shop may (Chris, 2026-10-14)
 TRIED = {}                 # item word -> the Bishop's tries at it, kept across town visits
 TRIED_VISIT = {}           # item word -> risky tries past ID_MIN_TRIES since the last town visit
@@ -452,7 +453,10 @@ def identify_in_camp(g, bpos, log=None):
     g.step(8)
     out = []
     for _, w in todo:
-        for t in range(ID_TRIES):
+        # a safe try has no touch (camp_identify 0x800d5f24: only a miss below twice the
+        # item's level touches it), so a safe item is tried until it's identified
+        safe0 = id_odds(lv, id_level(g, w & 0x1ff))[1]
+        for t in range(ID_SAFE_TRIES if safe0 else ID_TRIES):
             words = dict(pack(g, ri))
             k = next((j for j, x in words.items() if x == w), None)
             if k is None or g.u8(camp.SPELL_STATE) != 10 or not bishop_can(g, bpos, w):

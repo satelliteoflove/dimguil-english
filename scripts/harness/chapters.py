@@ -292,6 +292,11 @@ class Run(chapter1.Run):
             # Chris's HP lines after every training fight, the walk home included
             self._topping = True
             try:
+                if chapter1.GEAR and LOOT_EACH_FIGHT and gear.loot_work(g):
+                    # the chest's loot straight away (main, 2026-10-14): the Bishop's safe
+                    # tries, gives and equipping, so the party fights the rest of the trip
+                    # in it (risky tries stay for the setting-out camp)
+                    gear.camp_loot(g, self.log, on_int=self.on_int)
                 critical = self.hp_heal()
             finally:
                 self._topping = False
@@ -954,6 +959,7 @@ MAPORFIC_TRIP = False        # Maporfic from camp as a training trip sets out
 TOPUP = False                # heal to what the trip's worst monster can't take in two hits
 HP_HEAL = True               # Chris's HP lines after every training fight (Run.hp_heal)
 POISON_HOME = True          # agent 7, 2026-10-14: cure poison first after a fight; home if it stays
+LOOT_EACH_FIGHT = True      # agent 7, 2026-10-14: camp_loot after a training fight that left work
 # camp heals, cheapest first: (spell id, school, level, mean HP; 999 = full). B-camp.md:
 # Dios 2d4, Diomas 3d2, Dial 2d8, Dialma 3d8, Madi and Kadios full
 HEAL_OPTS = [(21, 1, 1, 5), (64, 3, 1, 4.5), (30, 1, 4, 9), (33, 1, 5, 13.5),
