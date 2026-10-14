@@ -753,8 +753,10 @@ class Run(chapter1.Run):
         # (b1v6c chapter 7, 2026-10-14: Jupiter, out for Tia, counted twice and reloaded)
         left = [i for i in setting_out if i not in town.town_party(g) and g.char(i)['status'] != 0]
         hurt = any(g.char(i)['status'] != 0 for i in town.town_party(g)) or len(town.town_party(g)) < 4
-        self.note('train trip', dict(died=bool(left) or any(
-            x[1] == 'temple' and x[2] in setting_out for x in self.log[l0:] if len(x) > 2)))
+        # a death, not a cure: the temple raised or ashed them, or they wait there dead
+        self.note('train trip', dict(died=any(g.char(i)['status'] & 0x380 for i in left) or any(
+            x[1] == 'temple' and x[2] in setting_out and isinstance(x[3], dict)
+            and x[3].get('outcome') in ('alive', 'ashes', 'lost') for x in self.log[l0:] if len(x) > 3)))
         if DEATH_RETRY and (hurt or areas != (0,) and left):
             if left:
                 self.note('left at the temple', [g.char(i)['name'] for i in left])
