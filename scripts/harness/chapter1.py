@@ -476,8 +476,14 @@ def town_upkeep(g, log):
     raised = []
     # the Thief first, then the Bishop, then by level (Chris, 2026-10-14: the chests and
     # the identifying need them)
+    # A patient carrying their own fee comes first: the raise gives the gold back (b1v0f
+    # chapter 6, 2026-10-14: 8,577 gold on a dead member, the temple "poor" for the rest)
+    def carries_fee(ri):
+        c = g.char(ri)
+        return c['gold'] >= c['level'] * temple_rate(c['status'])
     patients = sorted(town.temple_patients(g), key=lambda ri: (
-        g.char(ri)['cls'] not in (3, 12), g.char(ri)['cls'] != 11, -g.char(ri)['level']))
+        not carries_fee(ri), g.char(ri)['cls'] not in (3, 12), g.char(ri)['cls'] != 11,
+        -g.char(ri)['level']))
     gear.TRIED.clear()
     if patients:
         try:
@@ -491,8 +497,17 @@ def town_upkeep(g, log):
                 log.append((g.frame, 'temple', ri, r))
                 if r.get('outcome') in ('healed', 'alive') if isinstance(r, dict) else r in ('healed', 'alive'):
                     raised.append(ri)
+                    if g.char(ri)['gold'] and len(town.town_party(g)) < 6:
+                        # back in the party now, and their gold pooled for the next patient
+                        town.to_town_bar(g)
+                        town.form_party(g, [ri])
+                        log.append((g.frame, 'rejoined', ri))
+                        raised.remove(ri)
+                        town.to_town_bar(g)
+                        town.pool_gold(g, first_pos(), 'tavern')
             except Stuck as s:
                 log.append((g.frame, 'temple stuck', ri, s.what))
+            town.to_town_bar(g)
         town.to_town_bar(g)
         for ri in raised:
             try:
@@ -541,7 +556,12 @@ def town_upkeep(g, log):
         # Boltac's: identify, uncurse, sell, buy (gear.shop), keeping a dead member's
         # raise in reserve; the party equips in camp once it sets out (Chris, 2026-10-14)
         try:
-            gear.shop(g, log, GEAR_RESERVE * max(g.char(i)['level'] for i in town.town_party(g)))
+            # the reserve also holds the fees of members still at the temple (b1v0f
+            # chapter 6, 2026-10-14: a hammer for a recruit with the Bishop in ashes)
+            top = max(g.char(i)['level'] for i in town.town_party(g))
+            waiting = sum(g.char(ri)['level'] * temple_rate(g.char(ri)['status'])
+                          for ri in town.temple_patients(g) if g.char(ri)['level'] >= top - 3)
+            gear.shop(g, log, GEAR_RESERVE * top + waiting)
         except Stuck as s:
             log.append((g.frame, 'shop stuck', s.what))
             town.to_town_bar(g)
@@ -551,6 +571,11 @@ def town_upkeep(g, log):
     except Stuck as s:
         log.append((g.frame, 'divide stuck', s.what))
     town.to_town_bar(g)
+
+
+def temple_rate(st):
+    """The temple's fee per level for a status (E-town.md, temple_heal 0x800c95f0)."""
+    return 500 if st & 0x100 else 250 if st & 0x80 else 200 if st & 0x40 else 100 if st & 0x20 else 0
 
 
 def party_heals(g):
