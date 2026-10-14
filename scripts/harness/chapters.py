@@ -551,9 +551,11 @@ class Run(chapter1.Run):
             battle.RUN_WHEN_LOSING = False
         if any(g.char(i)['status'] != 0 for i in town.town_party(g)) or len(town.town_party(g)) < 4:
             return 'casualties'
-        if areas != (0,) and any(i not in town.town_party(g) for i in setting_out):
-            self.note('left at the temple', [g.char(i)['name'] for i in setting_out
-                                             if i not in town.town_party(g)])
+        # a member swapped out alive for a raised one (raised_back) isn't a casualty
+        # (b1v6c chapter 7, 2026-10-14: Jupiter, out for Tia, counted twice and reloaded)
+        left = [i for i in setting_out if i not in town.town_party(g) and g.char(i)['status'] != 0]
+        if areas != (0,) and left:
+            self.note('left at the temple', [g.char(i)['name'] for i in left])
             return 'casualties'
         return True
 
