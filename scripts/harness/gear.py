@@ -955,9 +955,11 @@ def shop(g, log, reserve):
                     gain = worth(g, ri, it, s) - worth(g, ri, cur, s)
                     offers.append((gain / it['price'], gain, pos, ri, s, i))
     offers.sort(reverse=True)
-    # buying keeps back a raise from death for every member (temple_heal: level x 250),
-    # more than the two raises identify keeps: a bought item's gold doesn't come back
-    buy_reserve = max(reserve, sum(250 * g.char(ri)['level'] for _, ri in members))
+    # buying keeps back the same two raises at the top level as identify (`reserve`).
+    # A raise for every member (6599867) kept 12,000 gold back at level 8: the n1 chains
+    # ended chapter 1 with 7,000-8,000 gold, nothing bought, mages at AC 7-9 and a 10 gold
+    # Anointed Mace on the shelf (agent 7, 2026-10-14)
+    buy_reserve = reserve
     taken = set()
     for _, gain, pos, ri, s, i in offers:
         if (ri, s) in taken:

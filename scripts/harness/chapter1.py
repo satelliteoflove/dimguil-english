@@ -967,7 +967,13 @@ class Run:
         if g.overlay() == 'JOUKA':
             town.begin_adventure(g)
             if GEAR:
-                gear.camp_loot(g, self.log)
+                if hasattr(self, 'set_out_loot'):
+                    # chapters.Run: the setting-out camp with the Bishop's risky tries
+                    # (n1 chains, 2026-10-14: chapter 1 never had one, so 1-5 risky unknowns
+                    # stayed in the packs all chapter)
+                    self.set_out_loot()
+                else:
+                    gear.camp_loot(g, self.log)
             heal_in_camp(g, self.log, frac=0.95)
         fights = []
         log = self.log
