@@ -263,6 +263,72 @@ def flee_chance(g):
     return max(0, min(100, c - 1))
 
 
+LOSS_RUN = True             # Chris, 2026-10-14: run from a likely loss, round 1 only, anywhere
+
+
+def _kill(x, hp):
+    # tactics.value's kill rule: a sure kill at the monster's HP, half a kill at 70% of it
+    return 1.0 if x >= hp else 0.5 if x >= hp * 0.7 else 0.0
+
+
+def likely_loss(g, M, party_hp):
+    """A fight the party expects to lose, judged at round 1 before anyone acts: the rated
+    monster damage a round (tactics.info threat, as matters() sums it) is at least the
+    party's HP, and is still at least the party's HP after the party's best round. That
+    round: each standing member in turn takes what removes the most threat, given what the
+    members before it already did: its best damage spell it has points for (tactics.DAMAGE
+    mean x the chance it lands, against each target's HP), or, front row (slots 0-2), its
+    weapon (gear.wscore, half landing) at group 1; kills by tactics.value's rule (a kill at
+    the monster's HP, half a kill at 70% of it). Returns the numbers when it's a likely
+    loss, else None."""
+    from harness import gear
+    T = sum(M[k]['threat'] * len(M[k]['mons']) for k in M)
+    if T < party_hp:
+        return None
+    done = {}                          # (group, monster) -> expected damage so far
+
+    def gain(hits):
+        v = 0.0
+        for t, j, hp, d in hits:
+            x = done.get((t, j), 0.0)
+            v += (_kill(x + d, hp) - _kill(x, hp)) * M[t]['threat']
+        return v
+    for slot, ri in enumerate(party_ids(g)):
+        if ri is None:
+            continue
+        hp, st = member_state(g, slot)
+        if hp <= 0 or st >= 0x20:
+            continue
+        options = []
+        for sid, school, level, i in castable(g, ri):
+            if sid not in tactics.DAMAGE:
+                continue
+            mean, kind, el = tactics.DAMAGE[sid]
+            for k in M:
+                hits = []
+                for t in tactics.targets(g, k, kind, M):
+                    m = M[t]
+                    f = 0.5 if m['resist'] & el and el else 2.0 if m['weak'] & el and el else 1.0
+                    mons = m['mons'][:1] if kind == 'one' else m['mons']
+                    hits += [(t, j, h, mean * f * tactics.lands(m, sid)) for j, h, _ in mons]
+                options.append(hits)
+        if slot < 3 and M:
+            w = gear.equipped(g, ri).get(0)
+            k = min(M)
+            j, h, _ = M[k]['mons'][0]
+            options.append([(k, j, h, gear.wscore(w) * 0.5 if w else 2.0)])
+        if options:
+            best = max(options, key=gain)
+            for t, j, h, d in best:
+                done[(t, j)] = done.get((t, j), 0.0) + d
+    killed = sum(_kill(x, h) * M[t]['threat'] for t in M for j, h, _ in M[t]['mons']
+                 for x in [done.get((t, j), 0.0)])
+    left = T - killed
+    if left < party_hp:
+        return None
+    return dict(threat=round(T), party_hp=party_hp, threat_left=round(left))
+
+
 def default_policy(g, m, opts):
     """What member m (party slot) does this round. Returns ('fight',), ('parry',),
     ('run',), ('spell', sid, school, level, index, target) with target ('group', g) or
@@ -302,6 +368,20 @@ def default_policy(g, m, opts):
     why = tactics.matters(g, M, party_hp, lv[len(lv) // 2] if lv else None, party)
     big = bool(why) or bad
     FIGHT_INFO['matters'] = FIGHT_INFO['matters'] or bool(big)
+    if LOSS_RUN and not FIGHT_INFO.get('loss_checked') and M:
+        # anywhere, grinding included: a fight the party expects to lose may be run from,
+        # only at the fight's first command (round 1, before the party acts; ROUND can
+        # read 2 there when the first command phase is entered twice) and only at
+        # FLEE_MIN or better (Chris, 2026-10-14); never mid-fight
+        FIGHT_INFO['loss_checked'] = True
+        if RUN in opts:
+            ll = likely_loss(g, M, party_hp)
+            if ll:
+                ch = flee_chance(g)
+                FIGHT_INFO['likely_loss'] = dict(ll, chance=ch)
+                if ch >= FLEE_MIN:
+                    FIGHT_INFO.setdefault('runs', []).append((1, ch, 'likely loss'))
+                    return ('run',)
     if FLEE_RULE and RUN_OK and RUN in opts:
         # run only where it saves something (on the way to the grinding spot, or home with
         # the casters spent), from a costly fight, at FLEE_MIN or better; the losing state
@@ -918,6 +998,8 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
     FIGHT_INFO['matters'], FIGHT_INFO['casts'] = False, []
     FIGHT_INFO.pop('first', None)
     FIGHT_INFO.pop('runs', None)
+    FIGHT_INFO.pop('loss_checked', None)
+    FIGHT_INFO.pop('likely_loss', None)
     msg0 = len(g.cap.messages) if g.cap else 0
     tactics.STORY[0] = None
     where = (g.u8(MAZE_AREA),) + tuple(g.pos())
@@ -1008,7 +1090,7 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
                 where=where, story=tactics.STORY[0],
                 matters=FIGHT_INFO['matters'], casts=list(FIGHT_INFO['casts']),
                 ran=sum(1 for a in log if a[1] == 'run'),
-                runs=FIGHT_INFO.get('runs', []),
+                runs=FIGHT_INFO.get('runs', []), likely_loss=FIGHT_INFO.get('likely_loss'),
                 fled=_flee_msgs(g, msg0),
                 first=FIGHT_INFO.get('first'), hp_end=_party_hp(g),
                 down_end=[g.char(ri)['name'] for ri in g.party() if g.char(ri)['status'] >= 0x20],
