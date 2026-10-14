@@ -15,8 +15,8 @@ After the last goal of chapter N the run saves `<out>/c<N>_end.state`; the next 
 (or a later run, --from) starts there. States keep the code they were saved with, so end
 states only count for the disc they were made on (rips/harness/disc/BUILD.txt).
 """
-import json, os, struct, time
-from harness import battle, camp, chapter1, gear, maze, nav, play, town
+import collections, json, os, struct, time
+from harness import battle, camp, chapter1, gear, maze, nav, play, tactics, town
 from harness.game import Stuck
 
 CHAPTERS = {}
@@ -35,6 +35,7 @@ class Run(chapter1.Run):
         self.chapter = 1
         self.chapter_results = []
         self.full_points = {}       # roster index -> spell points after the last Stables
+        self._floors = {}           # training floor ladder index by the chapter's TRAIN_AREAS
         chapter1.CURE_LOG = self.log
 
     def guarded(self, fn):
@@ -91,6 +92,7 @@ class Run(chapter1.Run):
                    stuck=self.stuck[s0:], spells=self.spell_summary(l0),
                    party=self.party_gear(), chests=self.chest_summary(l0),
                    loot=self.loot_summary(l0), gold=self.gold_summary(l0, gold0))
+        res['trend'] = self.trend_summary(l0, res)
         self.chapter_results.append(res)
         # a line per chapter as it ends, and the log so far (result.json and log.jsonl
         # are only written when the run ends)
@@ -101,6 +103,40 @@ class Run(chapter1.Run):
             for x in self.log[l0:]:
                 f.write(json.dumps(x, default=str) + '\n')
         return res
+
+    def trend_summary(self, l0, res):
+        """The numbers Chris tabulates per chapter (2026-10-14): frames, training trips,
+        fights, deaths and members down per 100 fights, raises and ashes, gold at the end,
+        the party's levels and average AC, stuck count."""
+        fights = dead = down = 0
+        prev_dead, prev_down = set(), set()
+        temple = collections.Counter()
+        trips = 0
+        for x in self.log[l0:]:
+            if len(x) < 2:
+                continue
+            if x[1] in ('temple', 'rejoined', 'trip home', 'stables'):
+                prev_dead, prev_down = set(), set()
+            if x[1] == 'temple' and len(x) > 3 and isinstance(x[3], dict):
+                temple[x[3].get('outcome')] += 1
+            if x[1] == 'trip end':
+                trips += 1
+            if x[1] == 'fought' and len(x) > 2 and isinstance(x[2], dict):
+                fights += 1
+                d, w = set(x[2].get('dead_end', [])), set(x[2].get('down_end', []))
+                dead += len(d - prev_dead)
+                down += len(w - prev_down)
+                prev_dead, prev_down = d, w
+        party = res['party']
+        return dict(frames=res['frames'], trips=trips,
+                    train_goals=sum(1 for gl in res['goals'] if 'train' in str(gl)),
+                    fights=fights, deaths=dead, downs=down,
+                    deaths_per_100=round(100 * dead / fights, 1) if fights else None,
+                    downs_per_100=round(100 * down / fights, 1) if fights else None,
+                    raises=temple.get('alive', 0), ashes=temple.get('ashes', 0), lost=temple.get('lost', 0),
+                    gold_end=sum(q['gold'] for q in party), levels=[q['level'] for q in party],
+                    avg_ac=round(sum(q['ac'] for q in party) / len(party), 1) if party else None,
+                    stuck=len(res['stuck']))
 
     def party_gear(self):
         """Each member's level, AC (+0x86), HP, gold and what's worn, by slot (Chris,
@@ -211,9 +247,21 @@ class Run(chapter1.Run):
     def on_int(self, g):
         if chapter1.party_wiped(g):
             raise chapter1.Wiped()
+        n = self.fights()
         r = play.handle_interrupt(g, self.policy or LaterPolicy, self.log)
         if chapter1.party_wiped(g):
             raise chapter1.Wiped()
+        if TOPUP and tactics.TRAINING and self.fights() > n and not getattr(self, '_topping', False) \
+                and g.overlay() not in ('JOUKA', 'HAZURE', 'BATTLE'):
+            # heal up after each training fight, not only at the next fight square: the
+            # roamers met between squares came one after another (smoke2: Mercury at 14
+            # of 68 HP into Area B's human party)
+            self._topping = True
+            try:
+                if self.top_up():
+                    self._heals_out = True
+            finally:
+                self._topping = False
         return r
 
     def after(self, g=None, quiet=chapter1.QUIET):
@@ -335,7 +383,11 @@ class Run(chapter1.Run):
                     camp.cast(g, slot, 1, 4, ks.index(32))
                     self.note('maporfic', c['name'], g.u8(0x8007e82a))
                 except Stuck as s:
-                    self.note('maporfic stuck', s.what)
+                    # a spell with no target goes back to the level's list (state 10),
+                    # not to 0 or 50, so camp.cast's last wait runs out though the
+                    # spell is on (mapo_probe, 2026-10-14)
+                    if not g.u8(0x8007e82a):
+                        self.note('maporfic stuck', s.what)
                 if camp.in_camp(g):
                     camp.close_camp(g)
                 return
@@ -525,7 +577,15 @@ class Run(chapter1.Run):
         # passed with two level-14s dead and level-5 recruits in their places, the gold
         # gone to the temple with the dead, and the party wore down trip by trip)
         setting_out = [i for i in g.party() if g.char(i)['status'] == 0]
+        base, areas = areas, self.ladder_areas(areas)
+        if MAPORFIC_TRIP:
+            # the party's AC for the trip (Chris, 2026-10-14; B-camp.md: -2 for 1250 steps)
+            self.maporfic()
+        battle.TRIP_BLOW[:] = [0.0, 0.0]
+        l0 = len(self.log)
+        self._heals_out = False
         battle.RUN_WHEN_LOSING = True
+        tactics.TRAINING = True
         why = 'squares done'
         try:
             for area in areas:
@@ -539,16 +599,24 @@ class Run(chapter1.Run):
                     if chapter1.needs_town(g) and self.town_helps():
                         why = None
                         break
-                    if chapter1.hurt(g, 0.6) and chapter1.priests(g):
+                    if TOPUP:
+                        if getattr(self, '_heals_out', False) or self.top_up():
+                            why = 'heals out'
+                            break
+                    elif chapter1.hurt(g, 0.6) and chapter1.priests(g):
                         chapter1.heal_in_camp(g, self.log, on_int=self.on_int)
                     if nav.plan(g, (area,) + sq) is None:
                         continue
                     self.go((area,) + sq)
                 else:
                     why = 'squares done'
+                    continue
+                break
             self.trip_home(why)
         finally:
             battle.RUN_WHEN_LOSING = False
+            tactics.TRAINING = False
+        self.ladder_step(base, areas, l0)
         if any(g.char(i)['status'] != 0 for i in town.town_party(g)) or len(town.town_party(g)) < 4:
             return 'casualties'
         # a member swapped out alive for a raised one (raised_back) isn't a casualty
@@ -558,6 +626,61 @@ class Run(chapter1.Run):
             self.note('left at the temple', [g.char(i)['name'] for i in left])
             return 'casualties'
         return True
+
+    def top_up(self):
+        """Between a training trip's fights: heal each member to what the worst monster
+        seen this trip couldn't take in two hits (tactics blow, by row), at least 60% of
+        max HP, with the cheapest heals (chapter1.heal_to). True when the heals ran out
+        with someone still short: the trip goes home."""
+        g = self.g
+        blow = battle.TRIP_BLOW
+
+        def need(slot, c):
+            return max(c['max_hp'] * 0.6, 2 * blow[0 if slot < 3 else 1] + 1)
+        short = chapter1.heal_to(g, self.log, need, on_int=self.on_int)
+        if short:
+            # short by a third or more of what they need: home (a little short goes on)
+            for slot in short:
+                ri = g.party_slots()[slot]
+                if ri is not None:
+                    c = g.char(ri)
+                    if c['hp'] < min(c['max_hp'], need(slot, c)) * 0.67:
+                        self.note('heals out', c['name'], c['hp'], round(need(slot, c)))
+                        return True
+        return False
+
+    def ladder_areas(self, areas):
+        """(Chris, 2026-10-14) The training floor by deaths per trip: one floor shallower
+        after a trip that lost someone, one deeper after a clean one, between two floors
+        above the chapter's first training floor and its deepest (LADDERS, shallow to deep
+        by the site's floor labels). At the chapter's first floor the trip keeps all of its
+        floors, as before."""
+        lad = next((L for L in LADDERS if areas[0] in L), None)
+        if not LADDER or not lad:
+            return areas
+        start = lad.index(areas[0])
+        top = max(lad.index(a) for a in areas if a in lad)
+        i = self._floors.setdefault(tuple(areas), start)
+        while i < top and not any(nav.plan(self.g, (lad[i],) + sq) is not None
+                                  for sq in sorted(nav.floor(lad[i])['fights'])[:6]):
+            i += 1              # out of reach: the next floor down
+        if i == start:
+            return tuple(areas)
+        self.note('training floor', lad[i], areas)
+        return (lad[i],)
+
+    def ladder_step(self, base, areas, l0):
+        lad = next((L for L in LADDERS if base[0] in L), None)
+        if not LADDER or not lad:
+            return
+        start = lad.index(base[0])
+        top = max(lad.index(a) for a in base if a in lad)
+        lost = sorted({n for x in self.log[l0:] if len(x) > 2 and x[1] == 'fought'
+                       and isinstance(x[2], dict) for n in x[2].get('down_end', [])})
+        i = self._floors.get(tuple(base), start)
+        i = max(start - 2, i - 1) if lost else min(top, i + 1)
+        self._floors[tuple(base)] = i
+        self.note('next floor', lad[i], lost)
 
     def train_goals(self, areas, level, prefix='train', most=40):
         """(name, fn) training trips, yielded lazily while min level < level (a
@@ -631,6 +754,12 @@ class Run(chapter1.Run):
         return lv[len(lv) // 2]
 
 
+MAPORFIC_TRIP = False        # Maporfic from camp as a training trip sets out
+TOPUP = False                # heal to what the trip's worst monster can't take in two hits
+LADDER = False               # training floor by deaths per trip (ladder_areas)
+# each dungeon's floors, shallow to deep (the site's floor labels: Underground B1-B4,
+# Area A B1-B4, Area B B1-B5)
+LADDERS = [(8, 7, 6, 5), (22, 21, 20, 19), (27, 26, 25, 24, 23)]
 GOLD_MOST = 15              # gold trips a chapter's training may insert
 RECOVER_MOST = 30           # Grounds trips for the Tablet's holder inside one goal
 BOSS_WIPES = 2              # failed tries at a goal before each further try trains a level

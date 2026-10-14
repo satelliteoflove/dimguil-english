@@ -40,7 +40,16 @@ FIGHT, PARRY, SPELL, DISPEL, USE, RUN, AMBUSH, HIDE, BREATH = range(1, 10)
 
 GROUP_DAMAGE = [3, 7, 10, 13, 16, 20, 45, 48, 51, 54, 57, 62, 66, 72, 80, 81, 82]
 ONE_DAMAGE = [1, 9, 17, 22, 60, 63, 77]
-HEAL_ONE = [21, 30, 33, 36, 58, 64]     # weakest first
+HEAL_ONE = [64, 21, 30, 33, 36, 58]     # weakest first (Diomas, Dios, Dial, Dialma, Madi, Kadios)
+# mean HP healed in battle (D-battle.md "Healing and buffs": Dios 2d4, Dial 2d8, Dialma
+# 3d8, Diomas 3d2; Madi and Kadios to full)
+HEAL_MEAN = {64: 4.5, 21: 5, 30: 9, 33: 13.5, 36: 999, 58: 999}
+HEAL_RISK = False       # (d) heal a member who couldn't survive another hit
+TRIP_BLOW = [0.0, 0.0]  # the worst one-action damage seen this trip, front and back row (chapters.train)
+KEEP_LEVEL = 6         # (c) spell levels kept for story/boss fights and fights going badly
+CHEAPEST = False        # (c) in a fight that matters, the cheapest spell that does most of the job
+CHEAP_SHARE = 0.6      # ... "most": this share of the best candidate's value
+PLANNING = False        # a later caster in a round sees what the earlier ones' spells will likely do
 # attack spells: id -> (mean damage per target, 'one' | 'group' | 'all'), from the site's
 # data/chara/spells/dim.json (clouds count their three rounds)
 SPELL_DAMAGE = {
@@ -221,12 +230,15 @@ def default_policy(g, m, opts):
         if M0:
             lv0 = sorted(g.char(rk)['level'] for rk in ids0 if rk is not None)
             hp0 = sum(max(member_state(g, k)[0], 0) for k, rk in enumerate(ids0) if rk is not None)
-            FIGHT_INFO['first'] = tactics.matters_detail(g, M0, hp0, lv0[len(lv0) // 2] if lv0 else None)
+            P0 = [(k, member_state(g, k)[0], g.char(rk)['max_hp']) for k, rk in enumerate(ids0)
+                  if rk is not None and member_state(g, k)[1] < 0x20]
+            FIGHT_INFO['first'] = tactics.matters_detail(g, M0, hp0, lv0[len(lv0) // 2] if lv0 else None, P0)
             FIGHT_INFO['first']['party_max'] = sum(g.char(rk)['max_hp'] for rk in ids0 if rk is not None)
     if ROUND > RUN_AFTER and RUN in opts:
         return ('run',)
     if RUN_WHEN_LOSING and RUN in opts and losing(g):
         return ('run',)
+    tactics.plan_reset(ROUND)
     ids = party_ids(g)
     ri = ids[m]
     me = g.char(ri)
@@ -235,30 +247,52 @@ def default_policy(g, m, opts):
     M = {k: tactics.info(g, k) for k in tactics.groups(g)}
     M = {k: v for k, v in M.items() if v['mons']}
     party_hp = sum(max(member_state(g, k)[0], 0) for k, rk in enumerate(ids) if rk is not None)
+    party = [(k, member_state(g, k)[0], g.char(rk)['max_hp']) for k, rk in enumerate(ids)
+             if rk is not None and member_state(g, k)[1] < 0x20]
+    for k in M:
+        for row in (0, 1):
+            TRIP_BLOW[row] = max(TRIP_BLOW[row], M[k]['blow'][row])
     lv = sorted(g.char(rk)['level'] for rk in ids if rk is not None)
-    big = tactics.matters(g, M, party_hp, lv[len(lv) // 2] if lv else None) or losing(g)
+    bad = losing(g)
+    why = tactics.matters(g, M, party_hp, lv[len(lv) // 2] if lv else None, party)
+    big = bool(why) or bad
     FIGHT_INFO['matters'] = FIGHT_INFO['matters'] or bool(big)
     if 'first' not in FIGHT_INFO and M:
         # the rating's inputs at the first command phase (brief item 6)
-        FIGHT_INFO['first'] = tactics.matters_detail(g, M, party_hp, lv[len(lv) // 2] if lv else None)
+        FIGHT_INFO['first'] = tactics.matters_detail(g, M, party_hp, lv[len(lv) // 2] if lv else None, party)
         FIGHT_INFO['first']['party_max'] = sum(g.char(rk)['max_hp'] for rk in ids if rk is not None)
-    # support spells (the party's AC and magic screen, the monsters' AC) only in a fixed
-    # fight or one that's going badly (Chris, 2026-10-14: not in trash fights)
-    boss = bool(g.u8(FIXED)) or losing(g)
-    # heal the most hurt member below 40%
+    # support spells (the party's AC and magic screen, the monsters' AC) and spell levels
+    # 6-7 only in a story or boss fight or one that's going badly (Chris, 2026-10-14):
+    # someone down or the party under 45% (losing), or monsters that could take half the
+    # party's HP in two rounds (smoke2, 2026-10-14: Area B's five-member human party, rated
+    # cheap, wiped a level-14 party in 8 rounds that Tiltowait had beaten with one loss)
+    boss = why in (tactics.HEAVY if CHEAPEST else ('story',)) or bad
+    # heal: (d) a member who couldn't survive another hit of the worst monster that
+    # reaches them, or anyone below 40%; the cheapest heal that lifts them clear of it,
+    # else the strongest there is
     hurt = []
-    for k, rk in enumerate(ids):
-        if rk is None:
-            continue
-        hp, st = member_state(g, k)
-        mx = g.char(rk)['max_hp']
-        if st < 0x20 and mx and hp * 10 < mx * 4:
-            hurt.append((hp / mx, k))
+    risk = {s_: b for s_, h, b in tactics.danger(g, M, party)} if HEAL_RISK else {}
+    if not HEAL_RISK:
+        # the old rule: the most hurt member below 40%, the strongest heal there is
+        old = [(hp / mx, k) for k, hp, mx in party if mx and hp * 10 < mx * 4]
+        if old:
+            for sid in (64, 58, 36, 33, 30, 21):    # as it was (Diomas first: see HEAL_RISK)
+                if sid in by_id:
+                    c = by_id[sid]
+                    return ('spell', sid, c[1], c[2], c[3], ('member', min(old)[1]))
+    for k, hp, mx in (party if HEAL_RISK else []):
+        need = max(mx * 0.4, risk.get(k, 0) + 1)
+        if mx and hp < need and CAST.get(('healed', k), -1) != ROUND:
+            hurt.append((hp - need, k, need - hp, mx - hp))
     if hurt:
-        for sid in reversed(HEAL_ONE):
-            if sid in by_id:
-                c = by_id[sid]
-                return ('spell', sid, c[1], c[2], c[3], ('member', min(hurt)[1]))
+        _, k, short, room = min(hurt)
+        heals = [sid for sid in HEAL_ONE if sid in by_id]
+        enough = [sid for sid in heals if HEAL_MEAN.get(sid, 999) >= min(short, room)]
+        sid = enough[0] if enough else (heals[-1] if heals else None)
+        if sid is not None and (enough or HEAL_MEAN.get(sid, 999) * 2 >= short or hp_frac(party, k) < 0.4):
+            c = by_id[sid]
+            CAST[('healed', k)] = ROUND
+            return ('spell', sid, c[1], c[2], c[3], ('member', k))
     # a member out of the fight in one that matters: Dialko for paralysis or sleep, Madi
     # for stone too (dim.json: Dialko cures paralysis and sleep in battle; Madi all but
     # death and ash)
@@ -284,44 +318,59 @@ def default_policy(g, m, opts):
         if not big:
             if lv > tactics.CHEAP_LEVEL:
                 continue
-            if rec[0x5c + sch * 7 + lv - 1] <= 1 and any(
-                    h in tactics.HEALS for h in known_spells(rec, sch, lv)):
-                continue
+        elif CHEAPEST and lv >= KEEP_LEVEL and not boss:
+            continue                    # (c) levels 6-7 wait for bosses and bad fights
+        if rec[0x5c + sch * 7 + lv - 1] <= 1 and (not boss if CHEAPEST else not big) and any(
+                h in tactics.HEALS for h in known_spells(rec, sch, lv)):
+            continue
         if sid in tactics.DAMAGE or sid in tactics.DEATH or sid in tactics.DISABLE:
             for k in M:
                 v = tactics.value(g, sid, k, M, me['level'], CAST)
                 if v > 0:
-                    cands.append((v, ('spell', sid, sch, lv, c[3], ('group', k)), (sid, k)))
+                    cands.append((v, ('spell', sid, sch, lv, c[3], ('group', k)), (sid, k), lv))
         elif boss and sid in (tactics.BAMATU, tactics.MAPORFIC, tactics.CORTU):
             v = tactics.support_value(g, sid, M, CAST, party_hp)
             if v > 0 and M:
                 k = min(M)
-                cands.append((v, ('spell', sid, sch, lv, c[3], ('group', k)), (sid, None)))
+                cands.append((v, ('spell', sid, sch, lv, c[3], ('group', k)), (sid, None), lv))
         elif boss and sid in (tactics.DILTO, tactics.MORLIS, tactics.BADUMAS):
             for k in M:
                 v = tactics.armor_value(g, sid, k, M, CAST)
                 if v > 0:
-                    cands.append((v, ('spell', sid, sch, lv, c[3], ('group', k)), (sid, k)))
+                    cands.append((v, ('spell', sid, sch, lv, c[3], ('group', k)), (sid, k), lv))
     if DISPEL in opts:
         for k in M:
             v = tactics.dispel_value(g, k, M, me['cls'], me['level'])
             if v > 0:
-                cands.append((v, ('dispel', ('group', k)), ('dispel', k)))
+                cands.append((v, ('dispel', ('group', k)), ('dispel', k), 0))
     fight_v = 3 * me['level'] if FIGHT in opts else 0
     if cands:
         cands.sort(key=lambda x: -x[0])
         pick_ = cands[0]
+        if CHEAPEST and big and not boss:
+            # (c) the cheapest spell that does most of what the best one would
+            ok = [c_ for c_ in cands if c_[0] >= CHEAP_SHARE * cands[0][0]]
+            pick_ = min(ok, key=lambda c_: (c_[3], -c_[0]))
         if len(cands) > 1 and _vary():
             pick_ = cands[1]
-        v, act, key = pick_
+        v, act, key, _ = pick_
         if v > fight_v and v >= MIN_SPELL_VALUE:
             CAST[key[0]] = CAST.get(key[0], 0) + 1
             if key[1] is not None:
                 CAST[key] = CAST.get(key, 0) + 1
+            if PLANNING and (key[0] in tactics.DAMAGE or key[0] in tactics.DEATH or key[0] in tactics.DISABLE):
+                tactics.value(g, key[0], key[1], M, me['level'], CAST, commit=True)
             return act
     if FIGHT in opts:
         return ('fight',)
     return ('parry',) if PARRY in opts else ('first',)
+
+
+def hp_frac(party, k):
+    for s_, hp, mx in party:
+        if s_ == k:
+            return hp / mx if mx else 1
+    return 1
 
 
 def sig(g):
@@ -805,6 +854,8 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
     CAST.clear()
     FIGHT_INFO['matters'], FIGHT_INFO['casts'] = False, []
     FIGHT_INFO.pop('first', None)
+    tactics.STORY[0] = None
+    where = (g.u8(MAZE_AREA),) + tuple(g.pos())
     _vrng.seed(VARY * 7919 + 1)
     chest_result = None
     chest_mark = len(g.cap.messages) if g.cap else 0
@@ -889,7 +940,9 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
                 break
             g.step()
     return dict(rounds=rounds, frames=g.frame - f0, actions=log, ovl=g.overlay(), chest=chest_result,
+                where=where, story=tactics.STORY[0],
                 matters=FIGHT_INFO['matters'], casts=list(FIGHT_INFO['casts']),
                 ran=sum(1 for a in log if a[1] == 'run'),
                 first=FIGHT_INFO.get('first'), hp_end=_party_hp(g),
-                down_end=[g.char(ri)['name'] for ri in g.party() if g.char(ri)['status'] >= 0x20])
+                down_end=[g.char(ri)['name'] for ri in g.party() if g.char(ri)['status'] >= 0x20],
+                dead_end=[g.char(ri)['name'] for ri in g.party() if g.char(ri)['status'] & 0x380])

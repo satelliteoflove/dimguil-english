@@ -302,6 +302,64 @@ def heal_in_camp(g, log, frac=0.6, max_casts=12, on_int=None):
 HEALS = [(36, 6), (33, 5), (30, 4), (21, 1)]     # Madi, Dialma, Dial, Dios
 
 
+CAMP_HEAL_MEAN = {21: 5, 30: 9, 33: 13.5, 36: 999}   # Dios 2d4, Dial 2d8, Dialma 3d8, Madi full
+
+
+def heal_to(g, log, need, max_casts=16, on_int=None):
+    """Heal from camp each member below need(slot, char) HP, most short first, with the
+    cheapest heal that covers what's short (Dios, Dial, Dialma; Madi only for half a
+    member's HP or more), else the strongest under Madi. Returns the slots still short
+    when the points ran out (empty when everyone's there)."""
+    n = k = 0
+    short = []
+    while n < max_casts and k < 40:
+        k += 1
+        if not camp.in_camp(g) and not maze.calm(g) and not maze.settle(g):
+            (on_int or on_interrupt_factory(log))(g)
+            continue
+        short = []
+        for slot, ri in enumerate(g.party_slots()):
+            if ri is None:
+                continue
+            c = g.char(ri)
+            want = min(c['max_hp'], need(slot, c))
+            if c['status'] < 0x20 and c['hp'] < want:
+                short.append((c['hp'] - want, slot, want - c['hp'], c['max_hp']))
+        if not short:
+            break
+        _, tslot, gap, mx = min(short)
+        have = []
+        for sid, lv in HEALS:
+            for slot, ri in enumerate(g.party_slots()):
+                if ri is None:
+                    continue
+                c = g.char(ri)
+                if c['status'] != 0 or not c['raw'][0x5c + 7 + lv - 1]:
+                    continue
+                ks = battle.known_spells(c['raw'], 1, lv)
+                if sid in ks:
+                    have.append((lv, slot, ks.index(sid), sid))
+                    break
+        have.sort()
+        if gap < mx / 2:
+            have = [h for h in have if h[3] != 36] or []
+        if not have:
+            break
+        pick = next((h for h in have if CAMP_HEAL_MEAN[h[3]] >= gap), have[-1])
+        try:
+            camp.cast(g, pick[1], 1, pick[0], pick[2], tslot)
+        except Stuck as s:
+            if s.what != 'camp interrupted':
+                raise
+            (on_int or on_interrupt_factory(log))(g)
+            continue
+        log.append((g.frame, 'heal to', pick[3], pick[1], tslot, gap))
+        n += 1
+    if camp.in_camp(g):
+        camp.close_camp(g)
+    return [x[1] for x in short]
+
+
 def heal_strong(g, log, frac=0.9, max_casts=12, on_int=None):
     """Heal everyone to frac of max HP from camp with the strongest heal a priest still
     has points for (Madi, Dialma, Dial, Dios). Returns casts made."""
