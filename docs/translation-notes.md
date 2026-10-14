@@ -617,9 +617,10 @@ about them, as the developers wrote them; the item details screen already shows 
 use an item. "Has died of old age" (SISETU 65/66) stays too, though the character is
 Lost and deleted: it reads as final and matches the Japanese (decisions.md item 19).
 The Training Maze sign (492) stays as well; it never says a wipe there is free, its box
-is full, and the site documents the cost (decisions.md item 20). The Smoke Demon and Venus Man
-Trap Compendium entries stay too (in-world lore; the site gives the real resistances;
-decisions.md item 21). Madalqua's "freezing cold" battle lines stay
+is full, and the site documents the cost (decisions.md item 20). The Venus Man Trap
+Compendium entry stays too (in-world lore; the site gives the real resistances;
+decisions.md item 21). The Smoke Demon's was corrected on 2026-10-14: swords do full
+damage, and it resists Alchemist spells 80%. Madalqua's "freezing cold" battle lines stay
 too, though its element is Tiltowait's; the site notes it (decisions.md item 22).
 
 ### Our mistranslation corrections (2026-10-11)

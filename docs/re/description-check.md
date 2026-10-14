@@ -367,7 +367,8 @@ true)
 
 **Compendium, the two unsupported claims**
 - Smoke Demon (10.0, "swords barely harm it"): no field or code found that cuts weapon
-  damage. **[inf]** Left as written, decided 2026-10-12 (decisions.md item 21).
+  damage. **[inf]** Left as written 2026-10-12; corrected 2026-10-14 to "shrugs off
+  alchemy but not a sword" (decisions.md item 21).
 - Venus Man Trap (12.3, "burns well with fire spells"): no fire weakness, and it resists
   Mage spells 40%, so Mahalito and Lahalito do worse than usual; the Alchemist's fire
   clouds aren't resisted (Alchemist 0%). **[record]** Left as written, decided 2026-10-12 (decisions.md item 21).

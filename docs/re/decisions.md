@@ -177,6 +177,10 @@ resistances.** The Compendium reads as in-world lore, not a rules reference. The
 data (Emonoya's): Smoke Demon AC 4, resists Mage 30% and Alchemist 80%; Venus Man Trap
 resists Mage 40%, Priest 50%, Psionic 85%, Alchemist 0%. The man-eating plant (12.1,
 Xicalli) makes the same fire claim, but it is weak to fire, so its advice holds.
+**Revised (Chris, 2026-10-14): the Smoke Demon's text is corrected** ("I'm willing to
+correct wording, not game logic"). Now: "...made of smoke, which shrugs off alchemy but not
+a sword. Best to finish it off before it calls for help." (it calls for help 20% of the
+time). The Venus Man Trap stays as written.
 
 **22. FIGHTMSG 179/185, Madalqua's "in freezing cold".** Its element is Tiltowait's, not
 cold. Battle narration, so left alone.
