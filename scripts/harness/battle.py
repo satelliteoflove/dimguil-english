@@ -264,6 +264,7 @@ def flee_chance(g):
 
 
 LOSS_RUN = True             # Chris, 2026-10-14: run from a likely loss, round 1 only, anywhere
+LOSS_FLEE_ABOVE = 25        # Chris, 2026-10-14: a likely loss runs at a flee chance above this
 
 
 def _kill(x, hp):
@@ -372,14 +373,15 @@ def default_policy(g, m, opts):
         # anywhere, grinding included: a fight the party expects to lose may be run from,
         # only at the fight's first command (round 1, before the party acts; ROUND can
         # read 2 there when the first command phase is entered twice) and only at
-        # FLEE_MIN or better (Chris, 2026-10-14); never mid-fight
+        # a flee chance above LOSS_FLEE_ABOVE (Chris, 2026-10-14; FLEE_MIN stays for the
+        # walk out and the walk home); never mid-fight
         FIGHT_INFO['loss_checked'] = True
         if RUN in opts:
             ll = likely_loss(g, M, party_hp)
             if ll:
                 ch = flee_chance(g)
                 FIGHT_INFO['likely_loss'] = dict(ll, chance=ch)
-                if ch >= FLEE_MIN:
+                if ch > LOSS_FLEE_ABOVE:
                     FIGHT_INFO.setdefault('runs', []).append((1, ch, 'likely loss'))
                     return ('run',)
     if FLEE_RULE and RUN_OK and RUN in opts:
