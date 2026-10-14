@@ -231,6 +231,38 @@ def fleeable(g):
     return (g.u16(ENCOUNTER_ID) + 2) & 0xffff < 2 and not g.u8(ALARM_FIGHT)
 
 
+FLEE_PENALTY = 0x800da6c8   # BATTLE byte table by map type (party_flee_roll)
+MAP_TYPE = 0x8005a824       # map_type_of_area, a byte per area
+PARTY_AREA = 0x8007e844
+FLEE_RULE = True            # Chris, 2026-10-14: running rare, by the computed chance
+RUN_OK = False              # chapters: the walk to the first square, or home with casters spent
+FLEE_MIN = 70               # the chance a run needs
+MANY = 6                    # standing monsters that make a fight costly without matters()
+
+
+def flee_chance(g):
+    """party_flee_roll's chance (BATTLE 0x800d1380) as a percentage for this round: M = 1 +
+    the levels of the monsters that can act (status < 8), P = 1 + the party's; 80, or
+    80 + 5 x (P / M) if P >= M (at most 255), minus 2 x flee_penalty[map type of the
+    area], and success on rand(100) + 1 < chance, so (chance - 1)%. 0 when it can't be
+    fled (fleeable)."""
+    if not fleeable(g):
+        return 0
+    M = 1
+    for k in range(1, 5):
+        lv = g.u16(tactics.MREC + k * 0xd0 + 0x74)
+        for j in range(g.u8(tactics.GROUPS + k * 8 + 5) if g.u8(tactics.GROUPS + k * 8 + 5) < 0x80 else 0):
+            if g.u16(0x8008e23c + k * 0x7e + j * 0xe) < 8:
+                M += lv
+    P = 1
+    for i in range(6):
+        if g.u8(0x8007e812 + i) != 0xff and g.u16(tactics.COMBAT + i * 14 + 12) < 8:
+            P += g.u16(tactics.COMBAT + i * 14)
+    c = 80 if P < M else min(255, 80 + 5 * (P // M))
+    c = max(0, c - 2 * g.u8(FLEE_PENALTY + g.u8(MAP_TYPE + g.u8(PARTY_AREA))))
+    return max(0, min(100, c - 1))
+
+
 def default_policy(g, m, opts):
     """What member m (party slot) does this round. Returns ('fight',), ('parry',),
     ('run',), ('spell', sid, school, level, index, target) with target ('group', g) or
@@ -249,7 +281,7 @@ def default_policy(g, m, opts):
             FIGHT_INFO['first']['party_max'] = sum(g.char(rk)['max_hp'] for rk in ids0 if rk is not None)
     if ROUND > RUN_AFTER and RUN in opts and fleeable(g):
         return ('run',)
-    if RUN_WHEN_LOSING and RUN in opts and fleeable(g) and losing(g):
+    if not FLEE_RULE and RUN_WHEN_LOSING and RUN in opts and fleeable(g) and losing(g):
         return ('run',)
     tactics.plan_reset(ROUND)
     ids = party_ids(g)
@@ -270,6 +302,16 @@ def default_policy(g, m, opts):
     why = tactics.matters(g, M, party_hp, lv[len(lv) // 2] if lv else None, party)
     big = bool(why) or bad
     FIGHT_INFO['matters'] = FIGHT_INFO['matters'] or bool(big)
+    if FLEE_RULE and RUN_OK and RUN in opts:
+        # run only where it saves something (on the way to the grinding spot, or home with
+        # the casters spent), from a costly fight, at FLEE_MIN or better; the losing state
+        # heals and fights (Chris, 2026-10-14)
+        many = sum(len(v['mons']) for v in M.values()) >= MANY
+        if why or many:
+            ch = flee_chance(g)
+            if ch >= FLEE_MIN:
+                FIGHT_INFO.setdefault('runs', []).append((ROUND, ch, why or 'many'))
+                return ('run',)
     if 'first' not in FIGHT_INFO and M:
         # the rating's inputs at the first command phase (brief item 6)
         FIGHT_INFO['first'] = tactics.matters_detail(g, M, party_hp, lv[len(lv) // 2] if lv else None, party)
@@ -377,6 +419,14 @@ def default_policy(g, m, opts):
     if FIGHT in opts:
         return ('fight',)
     return ('parry',) if PARRY in opts else ('first',)
+
+
+def _flee_msgs(g, n0):
+    """(escaped, failed) runs this fight: FIGHTMSG 205 and 206 (battle_main 0x800a2cd8)."""
+    if not g.cap:
+        return None
+    M = [m for m in g.cap.messages[n0:] if m['file'] == 'FIGHTMSG.OBJ']
+    return (sum(1 for m in M if m['idx'] == 205), sum(1 for m in M if m['idx'] == 206))
 
 
 def hp_frac(party, k):
@@ -867,6 +917,8 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
     CAST.clear()
     FIGHT_INFO['matters'], FIGHT_INFO['casts'] = False, []
     FIGHT_INFO.pop('first', None)
+    FIGHT_INFO.pop('runs', None)
+    msg0 = len(g.cap.messages) if g.cap else 0
     tactics.STORY[0] = None
     where = (g.u8(MAZE_AREA),) + tuple(g.pos())
     _vrng.seed(VARY * 7919 + 1)
@@ -956,6 +1008,8 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
                 where=where, story=tactics.STORY[0],
                 matters=FIGHT_INFO['matters'], casts=list(FIGHT_INFO['casts']),
                 ran=sum(1 for a in log if a[1] == 'run'),
+                runs=FIGHT_INFO.get('runs', []),
+                fled=_flee_msgs(g, msg0),
                 first=FIGHT_INFO.get('first'), hp_end=_party_hp(g),
                 down_end=[g.char(ri)['name'] for ri in g.party() if g.char(ri)['status'] >= 0x20],
                 dead_end=[g.char(ri)['name'] for ri in g.party() if g.char(ri)['status'] & 0x380])

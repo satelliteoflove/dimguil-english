@@ -285,6 +285,8 @@ class Run(chapter1.Run):
         r = play.handle_interrupt(g, self.policy or LaterPolicy, self.log)
         if chapter1.party_wiped(g):
             raise chapter1.Wiped()
+        if getattr(self, '_homeward', False) and self.fights() > n:
+            battle.RUN_OK = self.casters_spent()
         if HP_HEAL and tactics.TRAINING and self.fights() > n and not getattr(self, '_topping', False) \
                 and g.overlay() not in ('JOUKA', 'HAZURE', 'BATTLE'):
             # Chris's HP lines after every training fight, the walk home included
@@ -409,7 +411,13 @@ class Run(chapter1.Run):
             self.trip_end(reason)
             if chapter1.GEAR and not chapter1.party_wiped(g):
                 gear.camp_loot(g, self.log, on_int=self.on_int)
-            nav.to_town(g, self.on_int, lambda g: self.after())
+            self._homeward = tactics.TRAINING
+            battle.RUN_OK = self._homeward and self.casters_spent()
+            try:
+                nav.to_town(g, self.on_int, lambda g: self.after())
+            finally:
+                self._homeward = False
+                battle.RUN_OK = False
         chapter1.town_upkeep(g, self.log)
         for i in town.town_party(g):
             self.full_points[i] = list(g.char(i)['raw'][0x5c:0x78])
@@ -652,6 +660,7 @@ class Run(chapter1.Run):
         self._heals_out = False
         battle.RUN_WHEN_LOSING = True
         tactics.TRAINING = True
+        battle.RUN_OK = True            # the walk to the first square may run (FLEE_RULE)
         why = 'squares done'
         try:
             for area in areas:
@@ -680,6 +689,7 @@ class Run(chapter1.Run):
                     self._walking_out = True
                     try:
                         self.go((area,) + sq)
+                        battle.RUN_OK = False   # at the grinding spot: fight it out
                     except TurnHome as t:
                         self.note('turn home', t.args[0])
                         why = 'critical'
@@ -693,6 +703,7 @@ class Run(chapter1.Run):
             self.trip_home(why)
         finally:
             battle.RUN_WHEN_LOSING = False
+            battle.RUN_OK = False
             tactics.TRAINING = False
         self.ladder_step(base, areas, l0)
         if any(g.char(i)['status'] != 0 for i in town.town_party(g)) or len(town.town_party(g)) < 4:
@@ -704,6 +715,22 @@ class Run(chapter1.Run):
             self.note('left at the temple', [g.char(i)['name'] for i in left])
             return 'casualties'
         return True
+
+    def casters_spent(self, frac=1 / 3):
+        """The party's spell points (every school and level, the standing members') at
+        frac or less of what they had after the last Stables: the walk home may run."""
+        g = self.g
+        now = full = 0
+        for ri in g.party():
+            c = g.char(ri)
+            if c['status'] >= 0x20:
+                continue
+            f = self.full_points.get(ri)
+            if not f:
+                continue
+            full += sum(f)
+            now += sum(c['raw'][0x5c:0x78])
+        return bool(full) and now <= full * frac
 
     def hp_heal(self, most=16):
         """Chris's HP lines (2026-10-14), per standing member: over 2/3 of max HP no heal;
