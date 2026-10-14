@@ -36,6 +36,9 @@ class Run(chapter1.Run):
         self.chapter_results = []
         self.full_points = {}       # roster index -> spell points after the last Stables
         self._floors = {}           # training floor ladder index by the chapter's TRAIN_AREAS
+        self._pull = {}             # pulled-back training areas: area -> easier area, level, log index
+        self._since = {}            # area -> log index of the last return to it (its window starts there)
+        self._ch_l0 = 0             # log index where the chapter began
         chapter1.CURE_LOG = self.log
 
     def guarded(self, fn):
@@ -78,6 +81,7 @@ class Run(chapter1.Run):
         self.chapter = n
         cls = CHAPTERS[n]
         t0, f0, k0, s0, l0 = time.time(), g.frame, len(self.goals), len(self.stuck), len(self.log)
+        self._ch_l0, self._pull, self._since = l0, {}, {}
         gold0 = chapter1.party_gold(g)
         if n == 1:
             # chapter 1 keeps its own loop (training trips until level 7, then the pillars)
@@ -115,9 +119,12 @@ class Run(chapter1.Run):
         trips = 0
         uncurse = [0, 0]            # Boltac's uncurse fees after the Bishop's risky tries
         items = collections.Counter()   # battle items: used up, broke, kept (battle.item_choice)
+        pulls = collections.Counter()   # agent 11: pull-backs and returns (pull_areas)
         for x in self.log[l0:]:
             if len(x) < 2:
                 continue
+            if x[1] in ('pull back', 'pull return'):
+                pulls[x[1]] += 1
             if x[1] == 'uncurse' and len(x) > 5 and x[5] == 'done':
                 uncurse[0] += 1
                 uncurse[1] += x[4]
@@ -146,6 +153,7 @@ class Run(chapter1.Run):
                     avg_ac=round(sum(q['ac'] for q in party) / len(party), 1) if party else None,
                     uncursed=uncurse[0], uncurse_gold=uncurse[1],
                     items_used=items['used'] + items['gone'], items_broke=items['broke'], items_kept=items['kept'],
+                    pull_backs=pulls['pull back'], pull_returns=pulls['pull return'],
                     stuck=len(res['stuck']), foundation=self.foundation())
 
     def foundation(self):
@@ -685,7 +693,8 @@ class Run(chapter1.Run):
         # passed with two level-14s dead and level-5 recruits in their places, the gold
         # gone to the temple with the dead, and the party wore down trip by trip)
         setting_out = [i for i in g.party() if g.char(i)['status'] == 0]
-        base, areas = areas, self.ladder_areas(areas)
+        base, areas = areas, self.ladder_areas(self.pull_areas(areas))
+        self.note('train area', tuple(areas), tuple(base))
         if MAPORFIC_TRIP:
             # the party's AC for the trip (Chris, 2026-10-14; B-camp.md: -2 for 1250 steps)
             self.maporfic()
@@ -744,6 +753,8 @@ class Run(chapter1.Run):
         # (b1v6c chapter 7, 2026-10-14: Jupiter, out for Tia, counted twice and reloaded)
         left = [i for i in setting_out if i not in town.town_party(g) and g.char(i)['status'] != 0]
         hurt = any(g.char(i)['status'] != 0 for i in town.town_party(g)) or len(town.town_party(g)) < 4
+        self.note('train trip', dict(died=bool(left) or any(
+            x[1] == 'temple' and x[2] in setting_out for x in self.log[l0:] if len(x) > 2)))
         if DEATH_RETRY and (hurt or areas != (0,) and left):
             if left:
                 self.note('left at the temple', [g.char(i)['name'] for i in left])
@@ -914,6 +925,116 @@ class Run(chapter1.Run):
         self.note('training floor', lad[i], areas)
         return (lad[i],)
 
+    def train_trips(self):
+        """This chapter's training trips from the log: dict(key=area tuple, i=log index,
+        died, downs, fights). A wipe (a 'retry' after 'train area') is a trip with a death."""
+        out, cur, pd, pw = [], None, set(), set()
+        for i in range(self._ch_l0, len(self.log)):
+            x = self.log[i]
+            if len(x) < 2:
+                continue
+            k = x[1]
+            if k == 'train area':
+                cur, pd, pw = dict(key=tuple(x[2]), i=i, died=False, downs=0, fights=0), set(), set()
+            elif cur is None:
+                continue
+            elif k == 'fought' and len(x) > 2 and isinstance(x[2], dict):
+                d, w = set(x[2].get('dead_end', [])), set(x[2].get('down_end', []))
+                cur['fights'] += 1
+                cur['died'] |= bool(d - pd)
+                cur['downs'] += len(w - pw)
+                pd, pw = d, w
+            elif k in ('temple', 'rejoined', 'trip home', 'stables'):
+                pd, pw = set(), set()
+            elif k == 'train trip':
+                cur['died'] |= bool(x[2].get('died'))
+                out.append(cur)
+                cur = None
+            elif k == 'retry':
+                cur['died'] |= len(x) > 3 and x[3] == 'wiped'
+                if cur['died']:
+                    out.append(cur)
+                cur = None
+        return out
+
+    def pull_why(self, key):
+        """Why `key` is too hard now, or None: a death on PULL_DEATHS of its last PULL_TRIPS
+        trips, or its downs per 100 fights over them at PULL_DOWNS times the chapter's
+        norm (its training trips before them, at least DOWN_NORM) with 3+ downs."""
+        T = self.train_trips()
+        own = [t for t in T if t['key'] == key and t['i'] >= self._since.get(key, 0)][-PULL_TRIPS:]
+        if not own:
+            return None
+        died = sum(t['died'] for t in own)
+        if died >= PULL_DEATHS:
+            return 'deaths %d/%d' % (died, len(own))
+        if len(own) < PULL_TRIPS:
+            return None
+        f, w = sum(t['fights'] for t in own), sum(t['downs'] for t in own)
+        before = [t for t in T if t['i'] < own[0]['i']]
+        bf, bw = sum(t['fights'] for t in before), sum(t['downs'] for t in before)
+        norm = max(DOWN_NORM, 100 * bw / bf if bf else 0)
+        if f and w >= 3 and 100 * w / f >= PULL_DOWNS * norm:
+            return 'downs %.0f/100 vs %.0f' % (100 * w / f, norm)
+        return None
+
+    def pull_done(self, p):
+        """Why a pull-back can end, or None: the party gained a level since it began, or
+        the easier area's last PULL_TRIPS trips since then had no death and downs per 100
+        at or under DOWN_NORM."""
+        if self.party_level() > p['lv']:
+            return 'level %d' % self.party_level()
+        own = [t for t in self.train_trips() if t['key'] == p['to'] and t['i'] >= p['at']][-PULL_TRIPS:]
+        f, w = sum(t['fights'] for t in own), sum(t['downs'] for t in own)
+        if len(own) == PULL_TRIPS and not any(t['died'] for t in own) and 100 * w <= DOWN_NORM * max(f, 1):
+            return 'rate %d downs/%d fights' % (w, f)
+        return None
+
+    def easier_area(self, key):
+        """The training areas an earlier chapter used before `key` (the most recent
+        distinct TRAIN_AREAS going back), or None."""
+        import sys
+        seq = []
+        for n in range(self.chapter, 1, -1):
+            a = getattr(sys.modules.get('harness.chapter%d' % n), 'TRAIN_AREAS', None)
+            if a and tuple(a) not in seq:
+                seq.append(tuple(a))
+        return seq[seq.index(key) + 1] if key in seq and seq.index(key) + 1 < len(seq) else None
+
+    def pull_areas(self, areas):
+        """(Chris, 2026-10-14: if an area is too hard, pull back and train) The areas this
+        trip trains in: `areas`, or the easier area it was pulled back to (pull_why), until
+        pull_done says go back; a pulled-back area that is too hard pulls back again.
+        Logged as 'pull back' and 'pull return' (the trend counts them)."""
+        key = tuple(areas)
+        if not PULL_BACK:
+            return key
+        seen = set()
+        while key not in seen:
+            seen.add(key)
+            p = self._pull.get(key)
+            if p is None:
+                why = self.pull_why(key)
+                to = why and self.easier_area(key)
+                if not to:
+                    return key
+                self._pull[key] = dict(to=to, lv=self.party_level(), at=len(self.log))
+                self.note('pull back', key, to, why, self.party_level())
+                print('c%d pull back %s -> %s: %s' % (self.chapter, key, to, why), flush=True)
+                key = to
+                continue
+            back = self.pull_done(p)
+            if back:
+                k = key
+                while k in self._pull:          # the pulls below it end too
+                    k = self._pull.pop(k)['to']
+                self._since[key] = len(self.log)
+                self.note('pull return', key, back, self.party_level())
+                print('c%d pull return %s: %s' % (self.chapter, key, back), flush=True)
+                return key
+            key = p['to']
+        return key
+
     def ladder_step(self, base, areas, l0):
         lad = next((L for L in LADDERS if base[0] in L), None)
         if not LADDER or not lad:
@@ -1017,6 +1138,11 @@ HEAL_OPTS = [(21, 1, 1, 5), (64, 3, 1, 4.5), (30, 1, 4, 9), (33, 1, 5, 13.5),
 class TurnHome(Exception):
     """A member stays under 1/3 of max HP with the heals gone: the walk out ends."""
 LADDER = False               # training floor by deaths per trip (ladder_areas)
+PULL_BACK = True             # agent 11 (Chris): too hard an area -> train in the easier one (pull_areas)
+PULL_TRIPS = 3               # ... judged on its last few trips
+PULL_DEATHS = 2              # ... a death on this many of them
+PULL_DOWNS = 2               # ... or downs/100 this many times the chapter's norm
+DOWN_NORM = 10               # downs per 100 training fights taken as normal (old chains c4-c9: 6-13)
 # each dungeon's floors, shallow to deep (the site's floor labels: Underground B1-B4,
 # Area A B1-B4, Area B B1-B5)
 LADDERS = [(8, 7, 6, 5), (22, 21, 20, 19), (27, 26, 25, 24, 23)]
