@@ -565,6 +565,29 @@ def pool_gold(g, slot, place='tavern', limit=600):
     return g.char(idx)['gold']
 
 
+DIVIDE_ICON = 3             # the tavern's icons: Form Party, Remove Member, Inspect, Divide Gold,
+                            # Pool Gold, Visit the Tables (SISETU; JOUKA tavern_main camp_state 0x19)
+
+
+def divide_gold(g, limit=600):
+    """Tavern, Divide Gold: the party's gold split evenly (JOUKA FUN_800aa848 calls
+    FUN_800ad8a0, total / members; no member pick, back to the menu after 16 frames).
+    Gold pooled on one member who then dies waits at the temple with them (b1v6c chapter
+    5, 2026-10-14: 824 gold in the party, 18,500 on the dead). Returns the members' gold."""
+    party = town_party(g)
+    if len(party) < 2:
+        return [g.char(i)['gold'] for i in party]
+    if g.u8(TOWN_STATE) != 10 or g.overlay() != 'JOUKA':
+        enter(g, 'tavern')
+    ui.wait_until(g, lambda: facility_ready(g), limit, 'tavern menu')
+    total = sum(g.char(i)['gold'] for i in party)
+    even = lambda: max(g.char(i)['gold'] for i in party) - min(g.char(i)['gold'] for i in party) <= total % len(party) + 1
+    ui.move_cursor(g, FAC_CURSOR, DIVIDE_ICON, 'right', 'left', wrap=7, what='Divide Gold')
+    ui.confirm_until(g, even, limit, 'Divide Gold')
+    ui.wait_until(g, lambda: facility_ready(g), limit, 'after dividing')
+    return [g.char(i)['gold'] for i in party]
+
+
 # --- the temple ---
 #   Heal Character -> "Help whom?" (SISETU 147; grid cursor x 0x80079c59, y 0x80079c5c, 3
 #   per row, the patients in roster order) -> "Who will pay?" (148; the party grid MX/MY)

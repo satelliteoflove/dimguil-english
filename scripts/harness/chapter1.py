@@ -546,6 +546,11 @@ def town_upkeep(g, log):
             log.append((g.frame, 'shop stuck', s.what))
             town.to_town_bar(g)
         gold_note(g, log, 'shop', g2)
+    try:
+        town.divide_gold(g)
+    except Stuck as s:
+        log.append((g.frame, 'divide stuck', s.what))
+    town.to_town_bar(g)
 
 
 def party_heals(g):
