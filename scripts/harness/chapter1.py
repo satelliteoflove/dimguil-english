@@ -441,7 +441,10 @@ def cure_in_camp(g, log=None, on_int=None, most=12):
         for slot, ri in enumerate(slots):
             if ri is None:
                 continue
-            st = g.char(ri)['status']
+            # fear alone isn't worth a point: an afraid member loses a turn 1 in 8 and
+            # recovers in battle at min(3 x level, 35)% a round (D-battle.md), and town
+            # clears it; a Madi went on it (b1v3d goal_10, 2026-10-14)
+            st = g.char(ri)['status'] & ~0x01
             if st and not st & 0x300:
                 pats.append((st & 0x80 != 0, -(st & SERIOUS), slot, ri, st))
         pick = None

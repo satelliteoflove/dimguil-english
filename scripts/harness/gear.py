@@ -378,9 +378,32 @@ def bishop_can(g, bpos, w):
     rest wait for the shop (shop()) or for the Bishop's next levels."""
     c = g.char(g.party_slots()[bpos])
     chance, safe = id_odds(c['level'], id_level(g, w & 0x1ff))
-    if safe or TRIED.get(w, 0) < ID_MIN_TRIES:
+    if safe:
+        return True
+    if not RISKY:
+        return False            # risky tries only in the setting-out camp (RISKY)
+    if TRIED.get(w, 0) < ID_MIN_TRIES:
         return True
     return chance >= ID_RISKY_MIN and TRIED_VISIT.get(w, 0) < 3
+
+
+# Risky tries happen only in the camp on the Grounds as a trip sets out
+# (chapters.Run.ensure_maze), where a touch costs nothing: the party steps back into town,
+# which clears fear (town_main, E-town.md), and Boltac's uncurses. In the maze a touch
+# cost the trip: b1v3d goal_10, 2026-10-14, the Epee of Dismay went on Lu cursed and
+# afraid, cure_in_camp spent a Madi on the fear, the points ran low after three fights
+# and two members died on the walk home.
+RISKY = False
+
+
+def fallout(g):
+    """Party members left afraid or wearing a cursed item, by name."""
+    out = []
+    for ri in g.party():
+        c = g.char(ri)
+        if c['status'] & 1 or any(w & CURSED and w & EQUIPPED for _, w in pack(g, ri)):
+            out.append(c['name'])
+    return out
 
 
 def unknowns(g, ri):

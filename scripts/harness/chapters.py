@@ -280,10 +280,32 @@ class Run(chapter1.Run):
             town.to_town_bar(g) if g.overlay() == 'JOUKA' else None
             town.begin_adventure(g)
             if chapter1.GEAR:
-                gear.camp_loot(g, self.log, on_int=self.on_int)
+                self.set_out_loot()
             chapter1.heal_in_camp(g, self.log, frac=0.95, on_int=self.on_int)
         elif not maze.calm(g):
             self.after(quiet=30)
+
+    def set_out_loot(self, most=2):
+        """The setting-out camp on the Grounds: the Bishop's risky tries too (gear.RISKY).
+        Anyone left afraid or wearing a cursed item: back into town (fear clears there,
+        Boltac's uncurses) and out again, at most `most` times, then a safe-only camp."""
+        g = self.g
+        for _ in range(most):
+            gear.RISKY = True
+            try:
+                gear.camp_loot(g, self.log, on_int=self.on_int)
+            finally:
+                gear.RISKY = False
+            hit = gear.fallout(g)
+            if not hit or g.overlay() in ('JOUKA', 'HAZURE', 'BATTLE'):
+                return
+            self.note('identify fallout', hit)
+            nav.to_town(g, self.on_int, lambda g: self.after())
+            chapter1.town_upkeep(g, self.log)
+            for i in town.town_party(g):
+                self.full_points[i] = list(g.char(i)['raw'][0x5c:0x78])
+            town.begin_adventure(g)
+        gear.camp_loot(g, self.log, on_int=self.on_int)
 
     def go(self, dest):
         """To dest = (area, x, y) from wherever the party is, town included. Without the
