@@ -219,15 +219,16 @@ def losing(g):
 
 
 ENCOUNTER_ID = 0x800797f4   # u16: 0xffff / 0xfffe for a random encounter
+ALARM_FIGHT = 0x80079784    # set by the alarm chest trap's fight (chest_trap_effect 0x800c7010 case 10)
 
 
 def fleeable(g):
-    """Whether Run can work in this fight. party_flee_roll (BATTLE 0x800d1380) rolls only
-    when encounter_id is 0xffff or 0xfffe; any other encounter fails with "The enemy cuts
-    off your escape!" (FIGHTMSG 206) and the monsters get a free round. The harness ran
-    from those 505 times in the 2026-10-14 benches (deaths_fix.md); FIXED (0x80079bde) is
-    a different flag."""
-    return (g.u16(ENCOUNTER_ID) + 2) & 0xffff < 2
+    """Whether Run can work in this fight. party_commands (BATTLE 0x800cbec8, case 0x60)
+    rolls party_flee_roll (0x800d1380) only when ALARM_FIGHT is 0, and the roll fails
+    outright unless encounter_id is 0xffff or 0xfffe. A failed run, there or on the roll,
+    gives every member nothing for the round (FIGHTMSG 206). FIXED (0x80079bde) is a
+    different flag."""
+    return (g.u16(ENCOUNTER_ID) + 2) & 0xffff < 2 and not g.u8(ALARM_FIGHT)
 
 
 def default_policy(g, m, opts):
