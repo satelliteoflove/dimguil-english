@@ -758,3 +758,31 @@ the first fix whose before and after were both played through without RAM writes
   match the odds (1F 20 of 29 at 70%, B4 14 of 74 at 15%).
 - A testing lesson: MAZE's code stays in a save state until the next fight reloads it,
   so the old door states would have kept running the old pick on the new disc.
+
+**The spell that froze on the last one's sound (2026-10-13, bugs.md 1.15).** The third
+freeze the harness found, in the chapter 8 training runs: "Kai casts Tiltowait." and
+then nothing, for good.
+- Cause: a spell's animation file carries its sound, and battle loads the next spell's
+  file into the same buffer the last spell's sound is still playing from. The sound
+  driver goes on reading the new file as music, and when it reads a tempo of 0 it
+  divides by it. Nothing handles the exception, so the console sits in the BIOS's
+  error loop. The game does stop the old sound, but only after the new file is in.
+- It takes pressing on fast: Bakadi's sound runs about 4.5 seconds, and tapping or
+  holding circle through the messages starts Tiltowait's load before it ends. Someone
+  reading each message never sees it. The bot hit it about once in 140 to 340 casts,
+  always Bakadi followed by Tiltowait or Ladalto.
+- The fix stops the old sound before each of the three loads into those buffers (spell
+  animations, encounter music, item and trap tunes). It needed a few words of space, and
+  got them from a routine nothing calls; each load site was rewritten in the same number
+  of instructions. 36 words in BATTLE.BIN.
+- Checked on the built disc, with no RAM written. The hunts saved a state before each
+  fight's BATTLE.BIN load plus the buttons that followed, so a replay loads the battle
+  code fresh from whichever disc is in. Five caught freezes, replayed at 152 different
+  press timings on each disc: the published disc froze in 130, the fixed one in none,
+  with the same casts up to the point where the old one froze. The same hunts rerun on
+  the fixed disc went 1,189 casts without a freeze.
+- A testing lesson: the first hunt saved its pre-fight state when a battle was queued
+  with the maze overlay loaded, and missed the fight that froze, which started from a
+  meeting with the talk overlay loaded. A rolling state every 30 frames, with the
+  buttons recorded since, worked, but only once the replay stopped adding the one idle
+  frame that loading a state normally runs.

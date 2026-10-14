@@ -1,8 +1,8 @@
 # Bugs in the original game, and content no code reaches
 
 Every bug and every unreachable string the phase-2 analysts found (`docs/re/*.md`), two
-from the fallen-party audit (`docs/re/fallen-parties.md`), two from the harness runs
-(1.11, 1.12), and one from the rescue test (1.13). Each was re-read in the code from the
+from the fallen-party audit (`docs/re/fallen-parties.md`), three from the harness runs
+(1.11, 1.12, 1.15), one from the rescue test (1.13) and one from the lock test (1.14). Each was re-read in the code from the
 original disc (`rips/clean`, decompiled at 585c983) and confirmed or refuted. Addresses
 are RAM; MCARD, JOUKA and MAZE load at 0x800a1000.
 
@@ -18,7 +18,7 @@ him first. So each entry is in one of three groups:
 
 | Group | Count |
 |---|---|
-| 1. Clear bugs | 15, all fixed (2.8, the pit soft lock, moved here; fixed in 5ff86d2 and kept) |
+| 1. Clear bugs | 16, all fixed (2.8, the pit soft lock, moved here; fixed in 5ff86d2 and kept) |
 | 2. Cut or unclear, ask | 6, all decided (2.2-2.5 reopened, 2.1 and 2.6 left unused) |
 | 3. Balance, ask | 3, all decided (kept as the original; decisions.md 8-10) |
 | Not bugs, or harmless | 9 (2.7 and 3.4 moved here after the follow-ups) |
@@ -372,6 +372,98 @@ others: the record read was the chosen member's on all 103, roster 6-8 included,
 the blink could never reach, and each member's own skill was compared (B4: Thieves 10,
 others 6-7). 1F opened 20 of 29 (20.3 expected at 70%), B4 14 of 74 (11.1 at 15%).
 Details in `lock-test.md`, "After the fix".
+
+### 1.15 A spell cast while the last spell's sound still plays can freeze the game
+
+From the harness runs (chapter 8 training, q8v6, 2026-10-13): twice, on "Kai casts
+Tiltowait.", the battle stopped for good. The screen held and no input was taken. The
+battle was waiting on the spell animation's read (phase 0x30, 0x80079bc2 = 2), but the
+VSync counter (0x80060788) had stopped, so DsReadSync's 1,200-frame timeout never came.
+The CPU was in the BIOS A(40h) loop (SystemErrorUnresolvedException). The kernel's saved
+context (TCB at 0xa000e29c) has EPC 0x80029c14 and Cause 0x24, a BREAK: the `break 7`
+that follows `div 60,000,000 / tempo` in libsnd's tempo event (MAIN 0x80029c08), with a
+tempo of 0, on sequence slot 2 (0x80093078), the spell sound. [emu]
+
+The cause is in BATTLE. A spell's animation file (DATA03/MAGICnn.BIN, table 1, index
+0x1bb + animation) carries the spell's sound sequence and its VAB header, and battle
+loads it into 0x801a0400 with `load_file_alt` (0x800a421c). The previous spell's
+sequence is still open on slot gp+0x2c0 and plays out of that same buffer. The game
+stops and closes it only after the new file is in (the read is polled in phase 0x30,
+0x800a42c0; when it's done, 0x800a42fc calls FUN_800ca890 -> MAIN 0x8001c494: SsSeqStop,
+SsSeqClose, SsVabClose, then SsSeqOpen on the new one). If the old sound is still
+playing when the new file comes in, the sequencer reads the new file's bytes as its
+events. A long sound followed quickly by the next cast is enough. The two other loads
+into that slot's buffers work the same way: the encounter music (FUN_800a53fc, index
+0x1f6+, into 0x801a0400 at 0x800a54d8) and the item tunes and chest-trap sounds (index
+0x20e+, into 0x801b4400 with the blocking `load_file` at 0x800a5534, up to 0x4000 bytes,
+which reaches the longer spell sequences at 0x801b68e0-0x801b7cc0). [code, emu]
+
+Original code: BATTLE differs from the Japanese disc in 32 words, all in the text
+routines, and the three load sites, FUN_800ca890 and MAIN's sound wrappers are
+byte-identical. DATA03 is the same on both discs. What it takes is pressing on fast.
+From the first caught pair (h29, "Lu casts Bakadi." state), circle every 2 or 4 frames
+or held froze it; one press 10 to 90 frames after each box settled, or a press every 30
+or 60 frames, played on. Bakadi's sound runs 271 frames, Tiltowait's 276, Badi's 52-54.
+A player holding circle or tapping it through the messages, or using fast-forward, can
+reach it. Someone reading each message won't.
+
+Rate: in the hunts (the harness's chapter 8 training trips from q8v6's states, the bot
+tapping circle through the messages), 9 freezes in about 1,280 casts in the first set,
+and 5 in about 1,720 in the second (`scripts/re/spellsound/hunt.py`, seeds 103-112).
+Every caught freeze followed a Bakadi whose sound was still playing: 11 times Tiltowait
+came next, and 3 times Ladalto (Kai's, in the second set). The party was always the same
+(Lu and Earth cast Bakadi, Kai Tiltowait or Ladalto), so the rate says more about those
+spells than about play in general. Other pairs read different bytes; none was seen to
+freeze, but nothing stops them reading junk.
+
+Fix: stop the open sequence (SsSeqStop, MAIN 0x8002b6c0) just before each of the three
+loads, through a 7-word routine placed in BATTLE's FUN_800c3188, which is dead: no jal,
+j, branch, pointer word or lui/addiu pair in BATTLE or MAIN reaches it (the other
+overlays load at the same address and never share RAM with BATTLE), and it never ran in
+the coverage runs. The routine skips the stop when no sequence is open (gp+0x2c0 = -1)
+and otherwise jumps into SsSeqStop with the caller's return address. 0x8001c494 still
+stops and closes the sequence after the load, as before. A second SsSeqStop is harmless,
+on a stopped or a closed slot too: it clears the slot's play flags, keys off its voices
+and rewinds its read pointer (MAIN 0x8002b540). It only stops, since closing here too
+would close the sequence and its VAB twice. Site 1's stop comes a read's length earlier
+than the original stop did, so the old spell's sound is cut when the next cast's file
+starts loading rather than when it's in; that sound was about to be cut anyway.
+
+36 words, no new space, nothing that's a branch target:
+- the routine, 0x800c3188-0x800c31a0 (7 words, over FUN_800c3188's prologue);
+- site 1, 0x800a4204-0x800a4218 and 0x800a4220 (7): `lb` does the 8-bit sign extension
+  that `lbu` plus `sll`/`sra` 24 did, and the 16-bit one is a no-op for 0x1bb +
+  [-128, 127]; a0 is set again after the call;
+- site 2, 0x800a54c8-0x800a54e8 and 0x800a5510 (10): the second `lui v1, 0x800e` goes
+  (v1 still holds it), and `li s1, 0xa0` moves into the load delay that lui filled;
+- site 3, 0x800a5524-0x800a5548, 0x800a5578 and 0x800a557c (12): a1 takes v1 (both were
+  0x801b4400) instead of its own lui/ori, and the second `lui v0, 0x800e` goes (v0 still
+  holds it); the last word becomes a `nop` before the branch target at 0x800a5580.
+Branch targets 0x800a4200, 0x800a4224-0x800a4234, 0x800a54c0, 0x800a5520, 0x800a5580 and
+0x800a5588 are untouched, and the instructions in the delay slots keep their meaning.
+BATTLE.BIN only. `asm/bugfix_spell_sound_reload.asm`.
+
+Checked first as RAM words over BATTLE (`rips/harness/chapters/dev/ramfix/`): the nine
+caught pairs of the first set froze without them and didn't with them, and sites 2 and
+3, forced with a sound playing, gave 0x8001c494 the same arguments at the same frames.
+
+Then on the built disc (md5 ba2a42a6353f4bd630bd6b1e9c341a85, against the published
+ca912fe814e0055527fdb67be3cb82a8), with no RAM written. BATTLE.BIN differs from the
+published one in exactly the 36 words. The hunts kept a state from before each fight's
+BATTLE.BIN load, and the buttons from it to the fight, so the fight loads BATTLE fresh
+from whichever disc is in; every replay read the 36 words back from RAM, the new ones
+on the new disc and the old on the published one. Five freezes from the second set's
+hunts were replayed on both discs with the harness's command policy and circle every
+5, 6, 7, 8 or 10 frames, shifted 0-7 frames after each round's commands (all 40 timings for
+three of them, 16 for the other two: every 5, 6, 8 or 10 frames, shifted 0-3; 152 runs
+on each disc). On the published disc 130 of
+152 froze, all with EPC 0x80029c14 and the CPU in the kernel's loop
+(0x800000a0-0x800005dc) with the VSync counter still for 3,300 frames; one was run
+20,000 frames further, presses included, with no change. On the new disc none froze: in
+each of the 130 the same inputs gave the same spell loads and casts up to the freeze, the
+stop routine ran at every load, and the battle played to its end. The same five hunts,
+rerun on the new disc with their seeds, went past the frames where the published disc
+froze and on for 1,189 casts without a freeze. Tools in `scripts/re/spellsound/`.
 
 ## Group 2: looks cut, or the intent isn't clear
 

@@ -218,6 +218,16 @@ glance". By subsystem:
   - In random encounters, `groups_reorder` can shuffle the groups at the start of every
     round, so a target has to be found again each round by monster id (`battle_groups`
     +2) and identified flag. Index numbers from an earlier round won't do.
+- Battle sound (bugs.md 1.15). Spell sounds, the encounter music and the item and
+  chest-trap tunes all play on one libsnd sequence slot, gp+0x2c0, out of the file they
+  came in with: a spell's animation file (MAGICnn.BIN, table 1, 0x1bb + animation) and
+  the music into 0x801a0400, the tunes into 0x801b4400. MAIN 0x8001c494 stops and closes
+  the old sequence and opens the new one, but only after the new file has loaded, so
+  until 2026-10-13 a sound still playing read the next file's bytes as its events; a
+  tempo of 0 there is a divide by zero (MAIN 0x80029c08, `break 7`), which the kernel
+  doesn't handle, and the game froze. `asm/bugfix_spell_sound_reload.asm` stops it
+  before each of the three loads (0x800a421c, 0x800a54d8, 0x800a5534), from a routine
+  in the dead FUN_800c3188. A second SsSeqStop on a stopped or closed slot is harmless.
 
 ### The town (E-town.md)
 
@@ -256,8 +266,8 @@ glance". By subsystem:
 
 ### Bugs, descriptions and open decisions
 
-- `docs/re/bugs.md`: every bug found, in three groups. Group 1 (fifteen clear bugs,
-  two of them found by the harness runs, one by the rescue test and one by the lock test) is fixed in `asm/bugfix_*.asm`.
+- `docs/re/bugs.md`: every bug found, in three groups. Group 1 (sixteen clear bugs,
+  three of them found by the harness runs, one by the rescue test and one by the lock test) is fixed in `asm/bugfix_*.asm`.
 - `docs/re/description-check.md`: item, spell, Compendium and help text checked against
   the records and the code (18 spell ranges in the original are wrong).
 - `docs/re/decisions.md`: the open questions and Chris's decision on each (all decided).
