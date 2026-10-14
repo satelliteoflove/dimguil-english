@@ -91,7 +91,13 @@ EXTRA_SEALED = {7: {(7, 11, 3): [(NPC_FLAGS, 28)], (6, 11, 1): [(NPC_FLAGS, 28)]
                 # Area B B5's vault door, west of E7 N11 (7, 12): locked (square_flags bit
                 # 25, put back at every floor load, MAZE 0x800a8f1c) until the three-ring
                 # dial opens it, story_flags bit 26 (chapter 10)
-                23: {(7, 12, 3): [(0x80079b44, 26)], (6, 12, 1): [(0x80079b44, 26)]}}
+                23: {(7, 12, 3): [(0x80079b44, 26)], (6, 12, 1): [(0x80079b44, 26)]},
+                # Area A B1's crested doors, locked at each floor load the same way: the
+                # red one west of E11 N11 (11, 12) until story bit 9 (the altar lit red),
+                # the green one east of E15 N11 (15, 12) until bit 8 (lit green; red
+                # clears it). The site's map shows neither lock (chapter 11)
+                22: {(11, 12, 3): [(0x80079b44, 9)], (10, 12, 1): [(0x80079b44, 9)],
+                     (15, 12, 1): [(0x80079b44, 8)], (16, 12, 3): [(0x80079b44, 8)]}}
 # Sides that close once a flag is set: area -> {(x, y, side): (addr, bit)}. B2's passage
 # between E13 N12 and E14 N12 shuts when the winding machine runs (story_flags bit 2):
 # the wall it hauls up on B3 comes down here (walkthrough 05-moon-door; f1v3f 2026-10-13

@@ -188,7 +188,9 @@ ROUND = 0          # the round being commanded (set by fight)
 # hit points, with LOSING_MONSTERS or more standing. Only while training (chapters.train
 # sets it), never in the fixed fights a goal needs to win. (r3v3 chapter 3, 2026-10-13:
 # Wing Lizards on Underground B3 breathe on everyone and call for help; the party fought
-# on and was wiped on six retries running.)
+# on and was wiped on six retries running.) Benched 2026-10-14 against judging only the
+# fight in progress (5 of 6 trips wiped vs 1 of 6) and against at most 2 runs per fight
+# (no better); rips/agents/chapters/bench_run/table.txt.
 RUN_WHEN_LOSING = False
 LOSING_HP = 0.45
 LOSING_MONSTERS = 3
@@ -211,6 +213,16 @@ def default_policy(g, m, opts):
     """What member m (party slot) does this round. Returns ('fight',), ('parry',),
     ('run',), ('spell', sid, school, level, index, target) with target ('group', g) or
     ('member', slot), or ('first',) to take the first option."""
+    if 'first' not in FIGHT_INFO:
+        # the rating's inputs at the first command phase (brief item 6), run or not
+        ids0 = party_ids(g)
+        M0 = {k: tactics.info(g, k) for k in tactics.groups(g)}
+        M0 = {k: v for k, v in M0.items() if v['mons']}
+        if M0:
+            lv0 = sorted(g.char(rk)['level'] for rk in ids0 if rk is not None)
+            hp0 = sum(max(member_state(g, k)[0], 0) for k, rk in enumerate(ids0) if rk is not None)
+            FIGHT_INFO['first'] = tactics.matters_detail(g, M0, hp0, lv0[len(lv0) // 2] if lv0 else None)
+            FIGHT_INFO['first']['party_max'] = sum(g.char(rk)['max_hp'] for rk in ids0 if rk is not None)
     if ROUND > RUN_AFTER and RUN in opts:
         return ('run',)
     if RUN_WHEN_LOSING and RUN in opts and losing(g):
@@ -878,5 +890,6 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
             g.step()
     return dict(rounds=rounds, frames=g.frame - f0, actions=log, ovl=g.overlay(), chest=chest_result,
                 matters=FIGHT_INFO['matters'], casts=list(FIGHT_INFO['casts']),
+                ran=sum(1 for a in log if a[1] == 'run'),
                 first=FIGHT_INFO.get('first'), hp_end=_party_hp(g),
                 down_end=[g.char(ri)['name'] for ri in g.party() if g.char(ri)['status'] >= 0x20])
