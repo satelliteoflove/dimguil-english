@@ -376,22 +376,33 @@ def spare_gold(g, members):
     return sum(g.char(ri)['gold'] for ri in members) - RESERVE_PER_LEVEL * top
 
 
+ID_RISKY_FLOOR = 20        # risky tries each visit only from this chance up, or a risen one
+LAST_CHANCE = {}           # item word -> the Bishop's chance at its last try
+FAILED5 = set()            # item words whose ID_MIN_TRIES tries in a visit all failed
+
+
+def risky_ok(chance, w):
+    """A risky item worth the Bishop's tries this visit (main, 2026-10-14): a chance of
+    ID_RISKY_FLOOR or better, or one that has risen since its last tries (the Bishop
+    levelled). An item at the 5% floor waits: five tries there identify about 23% of the
+    time and touch (fear, or a cursed kind put on) about 70% (idmeasure, chapters 1-2)."""
+    return chance >= ID_RISKY_FLOOR or (w in LAST_CHANCE and chance > LAST_CHANCE[w])
+
+
 def bishop_can(g, bpos, w):
-    """Whether the Bishop at bpos should try unidentified word w in camp. The Bishop tries
-    every unknown first, ID_MIN_TRIES times at least, risks included (Chris, 2026-10-14):
-    below twice the item's level a miss touches it at (95 - chance) / 4 percent (afraid,
-    and a cursed kind goes on cursed; camp_identify 0x800d5f24). Past those tries a safe
-    item is tried on, a risky one only at ID_RISKY_MIN or better, three times a visit; the
-    rest wait for the shop (shop()) or for the Bishop's next levels."""
+    """Whether the Bishop at bpos should try unidentified word w in camp. A safe item (the
+    Bishop at least twice its level: a miss does nothing) any time; a risky one only in the
+    setting-out camp (RISKY), ID_MIN_TRIES tries a visit, when risky_ok (below twice the
+    item's level a miss touches it at (95 - chance) / 4 percent: afraid, and a cursed kind
+    goes on cursed; camp_identify 0x800d5f24). The rest wait for the Bishop's levels, or
+    for the shop (shop(): a likely upgrade, gold allowing)."""
     c = g.char(g.party_slots()[bpos])
     chance, safe = id_odds(c['level'], id_level(g, w & 0x1ff))
     if safe:
         return True
     if not RISKY:
         return False            # risky tries only in the setting-out camp (RISKY)
-    if TRIED.get(w, 0) < ID_MIN_TRIES:
-        return True
-    return chance >= ID_RISKY_MIN and TRIED_VISIT.get(w, 0) < 3
+    return TRIED_VISIT.get(w, 0) < ID_MIN_TRIES and risky_ok(chance, w)
 
 
 # Risky tries happen only in the camp on the Grounds as a trip sets out
@@ -444,7 +455,9 @@ def identify_in_camp(g, bpos, log=None):
     # ends their tries until town clears it, so a 5% item first can use up a camp
     # (idbf6_v6b: Uma afraid on the Shihou Shuriken's first or second try each visit)
     lv = g.char(ri)['level']
-    todo.sort(key=lambda kw: (-id_odds(lv, id_level(g, kw[1] & 0x1ff))[1],
+    # an item not tried yet before one that has been (main, 2026-10-14: three Round
+    # Shield-1s and a Leather of Loss rode two chapters with no try)
+    todo.sort(key=lambda kw: (-id_odds(lv, id_level(g, kw[1] & 0x1ff))[1], TRIED.get(kw[1], 0) > 0,
                               -id_odds(lv, id_level(g, kw[1] & 0x1ff))[0]))
     items_menu(g, bpos)
     ui.move_cursor(g, ITEMS_CURSOR, ITEMS_IDENTIFY, 'down', 'up', what='Identify')
@@ -471,8 +484,12 @@ def identify_in_camp(g, bpos, log=None):
             afraid = bool(g.char(ri)['status'] & 1)
             res = ('identified' if nw & IDENT else 'cursed on' if nw & CURSED else
                    'afraid' if afraid else 'failed')
-            if TRIED.get(w, 0) >= ID_MIN_TRIES and not safe:
+            if not safe:
                 TRIED_VISIT[w] = TRIED_VISIT.get(w, 0) + 1
+                LAST_CHANCE[w] = chance
+                FAILED5.discard(w)
+                if res == 'failed' and TRIED_VISIT[w] >= ID_MIN_TRIES:
+                    FAILED5.add(w)
             TRIED[w] = TRIED.get(w, 0) + 1
             out.append((name(w & 0x1ff), res, chance, safe))
             if log is not None:
@@ -582,9 +599,9 @@ def gather_for_bishop(g, bpos, log=None, room_keep=0):
         for k, w in unknowns(g, ri):
             if bishop_can(g, bpos, w):
                 ch, safe = id_odds(blv, id_level(g, w & 0x1ff))
-                cands.append((-safe, -ch, pos, ri, w))
-    cands.sort(key=lambda c: c[:3])
-    for _, _, pos, ri, w in cands:
+                cands.append((-safe, TRIED.get(w, 0) > 0, -ch, pos, ri, w))
+    cands.sort(key=lambda c: c[:4])
+    for _, _, _, pos, ri, w in cands:
         if not bishop_can(g, bpos, w):
             continue
         if len(pack(g, bri)) >= 10 - room_keep:
@@ -820,8 +837,9 @@ def bishop_will(g, members, w):
     twice its level), or they haven't had their ID_MIN_TRIES at it yet."""
     for _, ri in members:
         c = g.char(ri)
+        ch, safe = id_odds(c['level'], id_level(g, w & 0x1ff))
         if c['cls'] == BISHOP and c['status'] < 0x20 and (
-                id_odds(c['level'], id_level(g, w & 0x1ff))[1] or TRIED.get(w, 0) < ID_MIN_TRIES):
+                safe or risky_ok(ch, w) and w not in FAILED5):
             return True
     return False
 
