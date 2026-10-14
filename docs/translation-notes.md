@@ -695,3 +695,9 @@ only).
   These are the developer's uppercase names, so the original likely does the same.
   Left as they are (Chris, 2026-10-09): fixing it is a bigger job than it's worth, and
   the names still read.
+- **Monster names run together in battle text?** (found 2026-10-14, harness chapter 8,
+  not checked). The bot's text capture showed "OldDrummer" and "ArchFighter" in battle
+  messages, and "Strange  Figure" with two spaces in the group list. The translations
+  have the spaces right (MESSAGE.DAT "Arch Fighter"), so it's either the game's display
+  or the capture reading it. Check on screen before calling it a problem. Parked (Chris,
+  2026-10-14: "don't worry about it for now").
