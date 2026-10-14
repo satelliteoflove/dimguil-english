@@ -247,6 +247,13 @@ Bard, Ranger, Ninja (0x800d89c0); members paralyzed or worse can't be chosen.
 - **Calfo** (Priest level 2): 95% the real trap, otherwise a random name; never sets it
   off. Not known: "You don't know Calfo." (234); no points (235); spells sealed (236);
   afraid (237); nobody in the party with it and a point: "No one can cast Calfo." (243).
+  Checked again 2026-10-14 in `FUN_800c697c` (BATTLE 0x800c697c, shared with Inspect):
+  the chance is the constant 0x5f; a miss takes `rand_below(13)`, which is right 1 time
+  in 13, and never reaches the set-off branch. Each member's Calfo answer is kept for
+  the chest in its own slot (0x800da7c6 + member, Inspect's is 0x800da7c0 + member), and
+  the point is spent before that slot is read, so a second Calfo by the same priest
+  costs a point and repeats the first answer. A reloaded state repeats a miss too: the
+  roll is the same.
 - **Calnova** (Alchemist level 7): 85% disarms; otherwise 90% nothing (239) and 10% the
   trap goes off. "No one can cast Calnova." (244).
 - **Disarm**: pick a member, then the trap (the 12 names, "Choose the trap.", 251). A
