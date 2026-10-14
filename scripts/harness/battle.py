@@ -900,8 +900,7 @@ def chest_full(g, since=None):
         since = max(0, len(g.cap.messages) - 40)
     ui.wait_until(g, lambda: chest_menu_ready(g, since), 600, 'chest menu')
     danger = area_danger(g)
-    members = [(slot, g.char(ri)) for slot, ri in enumerate(g.party_slots()) if ri is not None]
-    members = [(s, c) for s, c in members if _can_act(c)]
+    members = _standing(g)
     # the chest's real trap (0x80079a59), for the log only: the choices go by what the
     # party is told
     rec = dict(area=g.u8(MAZE_AREA), pos=g.pos(), danger=danger, acts=[], trap=None,
@@ -914,8 +913,9 @@ def chest_full(g, since=None):
 
     def act(opt, slot, trap=None, why=''):
         msgs, gone = _chest_act(g, opt, slot, trap)
+        ri = g.party_slots()[slot]
         rec['acts'].append(dict(act=['inspect', 'calfo', 'calnova', 'disarm', 'open'][opt],
-                                who=g.char(g.party_slots()[slot])['name'], trap=trap, why=why,
+                                who=g.char(ri)['name'] if ri is not None else None, trap=trap, why=why,
                                 msgs=[i for i, t in msgs]))
         for i, t in msgs:
             if i == 242:
@@ -994,6 +994,16 @@ def chest_full(g, since=None):
         risk = spring_risk(p, q)
         rec['odds'] = dict(who=disarmers[0][1]['name'], p=p, q=q, risk=round(risk, 3))
         for k in range(DISARM_TRIES):
+            # who can act now: a try can leave the disarmer's slot empty (n1v0h chapter 9,
+            # agent 8, 2026-10-14: the next try used the stale slot and the run crashed)
+            members = _standing(g)
+            if not members:
+                _chest_act_leave(g)
+                rec['result'] = 'left (nobody can act)'
+                return rec
+            disarmers = sorted(members, key=lambda m: -disarm_odds(m[1], danger)[0])
+            p, q = disarm_odds(disarmers[0][1], danger)
+            risk = spring_risk(p, q)
             nova = _caster(g, members, CALNOVA, 2, 7)
             if nova is not None:
                 msgs, gone = act(2, nova[0], why='calnova')
@@ -1012,6 +1022,11 @@ def chest_full(g, since=None):
             return rec
     # open it: an untrapped chest, or a mild trap that couldn't be disarmed (the opener
     # takes it: the one with the most hit points)
+    members = _standing(g)
+    if not members:
+        _chest_act_leave(g)
+        rec['result'] = 'left (nobody can act)'
+        return rec
     opener = max(members, key=lambda m: m[1]['hp'])
     msgs, gone = act(4, opener[0], why='open' if not trap else 'open mild trap %d' % trap)
     rec['result'] = 'opened' if not rec['went_off'] else 'opened, sprung'
@@ -1019,6 +1034,12 @@ def chest_full(g, since=None):
         _chest_act_leave(g)
         rec['result'] += ' (then left?)'
     return rec
+
+
+def _standing(g):
+    """[(party slot, char)] of the members who can act at a chest."""
+    members = [(slot, g.char(ri)) for slot, ri in enumerate(g.party_slots()) if ri is not None]
+    return [(s_, c) for s_, c in members if _can_act(c)]
 
 
 def _chest_act_leave(g):
