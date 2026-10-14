@@ -137,7 +137,10 @@ def party_wiped(g):
     p = g.party()
     if not p:
         return g.overlay() == 'JOUKA' and g.roster_count() > 0
-    return all(g.char(i)['status'] != 0 for i in p)
+    # the game's own test (MAZE wipe_check 0x800cc718): every member paralyzed, stoned,
+    # dead or ash (0x1e0). Poison, sleep, fear, confusion and K.O. still stand: n1v0d
+    # chapter 3 fled 14 Wing Lizards with all six poisoned and was counted wiped, 6 times
+    return all(g.char(i)['status'] & 0x1e0 for i in p)
 
 
 def on_interrupt_factory(log):
