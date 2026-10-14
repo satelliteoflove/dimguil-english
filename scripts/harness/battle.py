@@ -309,18 +309,32 @@ def cheap_round(g, M):
     return D
 
 
-def long_fight(g, M, party_hp):
+def members(g):
+    """[(slot, roster raw, level)] for the members standing (tactics.disable)."""
+    out = []
+    for slot, ri in enumerate(party_ids(g)):
+        if ri is None:
+            continue
+        hp, st = member_state(g, slot)
+        if hp > 0 and st < 0x20:
+            c = g.char(ri)
+            out.append((slot, c['raw'], c['level']))
+    return out
+
+
+def long_fight(g, M, party_hp, lost=None):
     """A fight that costs too much won the cheap way (main, 2026-10-14: ten level-7 priests,
     rated 22 a round, fought with cheap spells for 10 rounds and Kai went down; fought hard
     it was won in 2 with nobody down): the rated damage a round times the rounds the cheap
-    means need to clear the monsters' HP reaches LONG_SHARE of the party's HP. The numbers,
+    means need to clear the monsters' HP reaches LONG_SHARE of the party's HP, the rounds
+    stretched by the actions the monsters take away (lost, tactics.disable). The numbers,
     or None. Once a round (FIGHT_INFO)."""
     key = ('long', ROUND)
     if key not in FIGHT_INFO:
         T = sum(M[k]['threat'] * len(M[k]['mons']) for k in M)
         H = sum(hp for k in M for _, hp, _ in M[k]['mons'])
         D = cheap_round(g, M)
-        rounds = H / max(D, 1.0)
+        rounds = H / max(D, 1.0) * (lost['L'] if lost else 1.0)
         FIGHT_INFO[key] = (dict(threat=round(T, 1), mon_hp=H, cheap_round=round(D), rounds=round(rounds, 1))
                            if T * rounds >= party_hp * LONG_SHARE else None)
     return FIGHT_INFO[key]
@@ -335,13 +349,18 @@ def likely_loss(g, M, party_hp):
     mean x the chance it lands, against each target's HP), or, front row (slots 0-2), its
     weapon (gear.wscore, half landing) at group 1; kills by tactics.value's rule (a kill at
     the monster's HP, half a kill at 70% of it). Returns the numbers when it's a likely
-    loss, else None."""
+    loss, else None. Actions the monsters take away (tactics.disable, fix 1) stretch both
+    sides: the threat counts L times over, before the party's round and again after it with
+    the monsters it expects to kill gone; a member already asleep or worse doesn't act."""
     from harness import gear
     # with the records' real odds (tactics.SPELLS_ON) threat is a round's mean, so the bar
     # is two rounds of it; the old rating (every breather breathing every round) one
     rounds = 2 if tactics.SPELLS_ON else 1
     T = sum(M[k]['threat'] * len(M[k]['mons']) for k in M)
-    if T * rounds < party_hp:
+    mem = members(g)
+    M = {k: dict(v) for k, v in M.items()}          # tactics.disable writes dis_hp
+    lost = tactics.disable(g, M, mem)
+    if T * rounds * lost['L'] < party_hp:
         return None
     done = {}                          # (group, monster) -> expected damage so far
 
@@ -355,7 +374,7 @@ def likely_loss(g, M, party_hp):
         if ri is None:
             continue
         hp, st = member_state(g, slot)
-        if hp <= 0 or st >= 0x20:
+        if hp <= 0 or st >= (8 if tactics.LOST_ACTIONS else 0x20):
             continue
         options = []
         for sid, school, level, i in castable(g, ri):
@@ -382,9 +401,13 @@ def likely_loss(g, M, party_hp):
     killed = sum(_kill(x, h) * M[t]['threat'] for t in M for j, h, _ in M[t]['mons']
                  for x in [done.get((t, j), 0.0)])
     left = T - killed
-    if left * rounds < party_hp:
+    scale = {t: 1 - sum(_kill(done.get((t, j), 0.0), h) for j, h, _ in M[t]['mons']) / len(M[t]['mons'])
+             for t in M if M[t]['mons']}
+    lost2 = tactics.disable(g, M, mem, scale)
+    if left * rounds * lost2['L'] < party_hp:
         return None
-    return dict(threat=round(T), party_hp=party_hp, threat_left=round(left))
+    return dict(threat=round(T), party_hp=party_hp, threat_left=round(left), lost=lost['share'],
+                lost_after=lost2['share'])
 
 
 def default_policy(g, m, opts):
@@ -401,7 +424,8 @@ def default_policy(g, m, opts):
             hp0 = sum(max(member_state(g, k)[0], 0) for k, rk in enumerate(ids0) if rk is not None)
             P0 = [(k, member_state(g, k)[0], g.char(rk)['max_hp']) for k, rk in enumerate(ids0)
                   if rk is not None and member_state(g, k)[1] < 0x20]
-            FIGHT_INFO['first'] = tactics.matters_detail(g, M0, hp0, lv0[len(lv0) // 2] if lv0 else None, P0)
+            lost0 = tactics.disable(g, M0, members(g))
+            FIGHT_INFO['first'] = tactics.matters_detail(g, M0, hp0, lv0[len(lv0) // 2] if lv0 else None, P0, lost0)
             FIGHT_INFO['first']['party_max'] = sum(g.char(rk)['max_hp'] for rk in ids0 if rk is not None)
     if ROUND > RUN_AFTER and RUN in opts and fleeable(g):
         return ('run',)
@@ -423,7 +447,8 @@ def default_policy(g, m, opts):
             TRIP_BLOW[row] = max(TRIP_BLOW[row], M[k]['blow'][row])
     lv = sorted(g.char(rk)['level'] for rk in ids if rk is not None)
     bad = losing(g)
-    why = tactics.matters(g, M, party_hp, lv[len(lv) // 2] if lv else None, party)
+    lost = tactics.disable(g, M, members(g))
+    why = tactics.matters(g, M, party_hp, lv[len(lv) // 2] if lv else None, party, lost)
     if not why and LONG_FIGHT and M and tactics.SPELLS_ON and party:
         # the weakest member under the monsters' 'fight the weakest' blows (AI column 1):
         # ten level-7 priests put Kai (36 HP, back row) down in two rounds while the fight
@@ -433,7 +458,7 @@ def default_policy(g, m, opts):
             if hp > 0 and hp < FOCUS_ROUNDS * fo:
                 why = 'focus'
                 FIGHT_INFO['focus'] = (slot, hp, round(fo, 1))
-    if not why and LONG_FIGHT and M and long_fight(g, M, party_hp):
+    if not why and LONG_FIGHT and M and long_fight(g, M, party_hp, lost):
         why = 'long fight'
         FIGHT_INFO['long'] = FIGHT_INFO[('long', ROUND)]
     big = bool(why) or bad
@@ -465,7 +490,7 @@ def default_policy(g, m, opts):
                 return ('run',)
     if 'first' not in FIGHT_INFO and M:
         # the rating's inputs at the first command phase (brief item 6)
-        FIGHT_INFO['first'] = tactics.matters_detail(g, M, party_hp, lv[len(lv) // 2] if lv else None, party)
+        FIGHT_INFO['first'] = tactics.matters_detail(g, M, party_hp, lv[len(lv) // 2] if lv else None, party, lost)
         FIGHT_INFO['first']['party_max'] = sum(g.char(rk)['max_hp'] for rk in ids if rk is not None)
     # support spells (the party's AC and magic screen, the monsters' AC) and spell levels
     # 6-7 only in a story or boss fight or one that's going badly (Chris, 2026-10-14):

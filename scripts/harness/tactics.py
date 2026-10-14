@@ -179,7 +179,9 @@ def info(g, k):
         # member, the weakest (front row: any attack; back row: reach attacks only)
         reach_round = sum(reach) / len(reach) * 0.5 if reach else 0
         focus = (p[1] * melee_round, p[1] * reach_round)
+        dsrc = disable_sources(g, k, r, p_fight, p[5] if sts else 0.0, sts)
     else:
+        dsrc = []
         threat = max(melee_round, 8 * lv if caster else 0)
         if r[0xc9]:
             threat += hp / 2 * 3 / 2
@@ -192,8 +194,156 @@ def info(g, k):
                 flags=struct.unpack_from('<I', r, 0xa8)[0],
                 resist=struct.unpack_from('<H', r, 0xcc)[0],
                 weak=struct.unpack_from('<H', r, 0xce)[0], caster=caster, threat=threat,
-                blow=(blow_f, blow_b), death=death,
+                blow=(blow_f, blow_b), death=death, dsrc=dsrc, dis_hp=0.0, dis_hp_spell=0.0,
+                silenced=silenced(g, k),
                 screen=g.u8(GROUPS + k * 8 + 7), mons=standing(g, k))
+
+
+# Disabling (agent 9, 2026-10-14, from the n1v1 chapter 8 near-wipe: 18 Nightmares and 6
+# Merry Puppets cast or danced Katino 92 times and the party slept through 19 rounds, rated
+# 5 hit points a Nightmare). A member asleep, paralyzed, stoned or silenced loses actions,
+# which the damage threat doesn't see. The party's side of the code:
+#   status_spell_targets 0x800b1524: a monster's group spell hits one row (the caster's
+#     row byte, combatant +0xb; chosen at random when both rows stand), Katiqurea both;
+#     save = the spell's base, 85 if the member's resist bits (+0xae) have the spell's bit,
+#     + the member's effect resistance (+0xb0 + table 0x800d8524[kind]) for kinds 0-2,
+#     + 4 a level the member is above the caster (save_adjust 0x800c990c), clamped 5-100
+#   status_spell 0x800b173c: first the member's magic resistance (+0x87 + school) + the
+#     party's magic screen (battle_groups +7) + 1 nullifies
+#   monster_attack_roll 0x800aaed0: an attack whose noun is 0x100 or more is an ability: it
+#     casts spell +6 as an item would, so silence doesn't stop it (the Nightmare's and the
+#     Merry Puppet's "strange dance" is Katino: attack 2 = [19, 1, 46, ...]); monster_melee
+#     0x800aaa04 uses attack 1 on rand(100) > 68 when it's usable, else attack 0, plus
+#     attack 2 when it has swings
+#   apply_status_effects 0x800aa190: an attack's effect bits (+7) land at chance (+8) x
+#     (99 - the member's resistance to that effect)
+#   party_upkeep 0x800a73f4: sleep and knock-out wear off at min(4 x level, 35)% a round,
+#     paralysis and stone not at all; silence lasts 3 rounds or more (spell_montino)
+DIS_SPELL = {0: ('sleep', 0, 50, 0x200, 'row'), 49: ('sleep', 0, 50, 0x200, 'all'),
+             25: ('silence', 1, 50, 0x800, 'row'), 69: ('para', 4, 35, 0x10, 'row')}
+DIS_HIT = {0x01: ('sleep', 0), 0x20: ('sleep', 5), 0x10: ('para', 4), 0x04: ('para', 2)}
+EFFECT_RES = 0x800d8524     # status kind -> index into a member's +0xb0 effect resistances
+LOST_CAP = 0.9              # the lost share of the party's actions counted at most
+LOST_ACTIONS = True         # (fix 1) count actions taken away as threat
+
+
+def disable_sources(g, k, r, p_fight, p_status, sts):
+    """What group k's monster does a round that can take a member's actions away:
+    [(chance a round, ('spell', sid, silenceable) | ('hit', kind, effect index), reach)]."""
+    out = []
+    for pr, sid in sts:
+        if sid in DIS_SPELL and p_status:
+            out.append((p_status * pr, ('spell', sid, True), False))
+    atk = [r[o:o + 10] for o in (0xac, 0xb6, 0xc0)]
+    nouns = [struct.unpack_from('<H', a, 0)[0] for a in atk]
+    ability = [0x100 <= n < 1621 for n in nouns]
+    reach_any = bool((atk[0][7] | atk[1][7]) & BACK_REACH)
+    if k > 2 and not g.u8(FIXED) and not reach_any:
+        return out              # groups 3-4 of a random fight can't reach: their fight turns defend
+    use1 = ability[1] or (nouns[1] < 0xff or nouns[1] >= 0x8000) and atk[1][3] > 0
+    uses = [(0, 0.69 if use1 else 1.0), (1, 0.31 if use1 else 0.0), (2, 1.0 if atk[2][3] else 0.0)]
+    for i, u in uses:
+        if not u:
+            continue
+        a = atk[i]
+        if ability[i]:
+            if a[6] in DIS_SPELL:
+                out.append((p_fight * u, ('spell', a[6], False), False))
+            continue
+        sw, chance = a[3], a[8] / 100
+        if not sw or not chance:
+            continue
+        for bit, (kind, idx) in DIS_HIT.items():
+            if a[7] & bit:
+                out.append((p_fight * u * (1 - 0.5 ** sw) * chance, ('hit', kind, idx), bool(a[7] & BACK_REACH)))
+    return out
+
+
+def silenced(g, k):
+    """Group k's monsters with a silence counter (combatant +2), by member."""
+    return {j for j in range(9) if g.u8(COMBAT + k * 0x7e + j * 0xe + 2)}
+
+
+def disable(g, M, members, scale=None):
+    """The share of the party's actions monsters present take away a round (fix 1), over
+    the next two rounds from now, and each monster's part of it in hit points. members:
+    [(slot, roster raw, level)] standing. scale: group -> share of its monsters still up
+    (likely_loss's after-the-party's-round view). Sets M[k]['dis_hp'] (a monster's
+    disabling worth, hit points a round it lives) and 'dis_hp_spell' (the part silence
+    would stop). Returns dict(share, L, lost) with L = 1 / (1 - share): how much longer the
+    fight runs, so how much more of the monsters' damage the party takes."""
+    if not LOST_ACTIONS or not members or not M:
+        return dict(share=0.0, L=1.0, lost=[])
+    scale = scale or {}
+    tbl = g.e.read(EFFECT_RES, 8)
+    screen = g.u8(GROUPS + 7)
+    front = [m for m in members if m[0] < 3]
+    back = [m for m in members if m[0] >= 3]
+    T = sum(M[k]['threat'] * len(M[k]['mons']) * scale.get(k, 1.0) for k in M)
+    worth = T / len(members)             # a member-round lost: the fight runs that much longer
+    for k in M:
+        M[k]['dis_hp'] = M[k]['dis_hp_spell'] = 0.0
+    lost = []
+    for slot, raw, mlv in members:
+        has_spells = any(raw[0x5c:0x5c + 28])
+        keep = {}                        # kind -> chance of staying clear this round
+        for k in M:
+            m = M[k]
+            act = [j for j, hp, st in m['mons'] if st < 8]
+            n_all = len(act) * scale.get(k, 1.0)
+            n_spell = len([j for j in act if j not in m['silenced']]) * scale.get(k, 1.0)
+            for rate, src, reach in m['dsrc']:
+                if src[0] == 'spell':
+                    _, sid, silenceable = src
+                    kind, ki, base, rbit, rows = DIS_SPELL[sid]
+                    mr = raw[0x87 + school(sid)] + screen
+                    land = max(0.0, 1 - min(255, mr + 1) / 100)
+                    save = 85 if struct.unpack_from('<H', raw, 0xae)[0] & rbit else base
+                    if ki < 3:
+                        save += raw[0xb0 + tbl[ki]]
+                    save += 4 * max(0, mlv - m['level'])
+                    p = land * (1 - min(100, max(5, save)) / 100)
+                    share = 1.0 if rows == 'all' or not (front and back) else 0.5
+                    n = n_spell if silenceable else n_all
+                else:
+                    _, kind, idx = src
+                    p = max(0, 99 - raw[0xb0 + idx]) / 100
+                    reachable = members if reach else front
+                    share = 1.0 / len(reachable) if any(x[0] == slot for x in reachable) else 0.0
+                    n = n_all
+                if kind == 'silence':
+                    if not has_spells:
+                        continue
+                    weight = 0.5         # a silenced caster still fights
+                else:
+                    weight = 1.0
+                d = rate * p * share
+                if d <= 0 or n <= 0:
+                    continue
+                keep[kind] = keep.get(kind, 1.0) * (1 - d) ** n
+                w = wake(kind, mlv)
+                hp_ = d * weight / w * worth             # member-rounds it takes, in hit points
+                m['dis_hp'] += hp_
+                if src[0] == 'spell' and silenceable:
+                    m['dis_hp_spell'] += hp_
+        out = 1.0
+        for kind, q in keep.items():
+            h, w = 1 - q, wake(kind, mlv)
+            x1 = h
+            x2 = x1 * (1 - w) + (1 - x1) * h
+            out *= 1 - (0.5 if kind == 'silence' else 1.0) * (x1 + x2) / 2
+        lost.append((slot, round(1 - out, 2)))
+    share = min(LOST_CAP, sum(x for _, x in lost) / len(members))
+    return dict(share=round(share, 3), L=1 / (1 - share), lost=lost)
+
+
+def wake(kind, mlv):
+    """A member's chance a round of shaking a disabling status off in battle."""
+    if kind == 'sleep':
+        return max(0.2, min(4 * mlv, 35) / 100)
+    if kind == 'silence':
+        return 0.33
+    return 0.2                  # paralysis, stone: only a cure (Dialko, Madi) ends them
 
 
 def lands(m, sid):
@@ -395,12 +545,13 @@ def at_risk(g, M, party):
     return [(slot, hp, b) for slot, hp, b in danger(g, M, party) if hp > 0 and b * 2 >= hp]
 
 
-def matters(g, M, party_hp, party_level=None, party=None):
+def matters(g, M, party_hp, party_level=None, party=None, lost=None):
     """Why a fight is worth spending points on, or None: 'story' (a story or boss fight),
     'above median level' (a monster above the party's median level), 'threat' (monsters
     that could take half the party's hit points in two rounds: a heavy fight, which gets
-    levels 6-7 like a boss), or (d) 'kill hits' (a monster that could kill a member in one
-    or two hits)."""
+    levels 6-7 like a boss), 'disable' (the same once the actions they take away are
+    counted: lost (disable()) L stretches the rounds), or (d) 'kill hits' (a monster that
+    could kill a member in one or two hits)."""
     if is_story(g):
         return 'story'
     # a monster above the party's median level (the Jail Ogre, 17, against a party of 14
@@ -410,15 +561,17 @@ def matters(g, M, party_hp, party_level=None, party=None):
     threat = sum(M[k]['threat'] * len(M[k]['mons']) for k in M)
     if threat * 2 >= party_hp / 2:
         return 'threat'
+    if lost and threat * lost['L'] * 2 >= party_hp / 2:
+        return 'disable'
     if KILL_HITS and party and at_risk(g, M, party):
         return 'kill hits'
     return None
 
 
-HEAVY = ('story', 'threat', 'long fight', 'focus')     # matters() reasons that free levels 6-7 and support spells
+HEAVY = ('story', 'threat', 'disable', 'long fight', 'focus')     # matters() reasons that free levels 6-7 and support spells
 
 
-def matters_detail(g, M, party_hp, party_level=None, party=None):
+def matters_detail(g, M, party_hp, party_level=None, party=None, lost=None):
     """What matters() weighed, for the trip logs (it doesn't change the rating): per group
     the monster id, level, count, and its threat split into melee, caster (8 x level) and
     breath parts; the total against half the party's HP; and which rule said yes."""
@@ -436,12 +589,15 @@ def matters_detail(g, M, party_hp, party_level=None, party=None):
         br = struct.unpack_from('<h', r, 0x72)[0] / 2 * 3 / 2 if r[0xc9] else 0
         out.append(dict(id=M[k]['id'], level=lv, n=len(M[k]['mons']), melee=round(m, 1),
                         caster=c, breath=round(br, 1), threat=round(M[k]['threat'], 1),
-                        blow=[round(x, 1) for x in M[k]['blow']], death=M[k]['death']))
+                        blow=[round(x, 1) for x in M[k]['blow']], death=M[k]['death'],
+                        dis_hp=round(M[k].get('dis_hp', 0), 1)))
     threat = sum(x['threat'] * x['n'] for x in out)
     why = ('story' if is_story(g) else
            'above median level' if party_level is not None and any(M[k]['level'] > party_level for k in M) else
            'threat' if threat * 2 >= party_hp / 2 else
+           'disable' if lost and threat * lost['L'] * 2 >= party_hp / 2 else
            'kill hits' if KILL_HITS and party and at_risk(g, M, party) else None)
     return dict(groups=out, threat=round(threat, 1), party_hp=party_hp, half_hp=party_hp / 2,
                 two_rounds=round(threat * 2, 1), median_level=party_level, why=why,
-                fixed=g.u8(FIXED), at_risk=[(s_, h, round(b, 1)) for s_, h, b in at_risk(g, M, party or [])])
+                fixed=g.u8(FIXED), lost=lost and dict(share=lost['share'], L=round(lost['L'], 2), members=lost['lost']),
+                at_risk=[(s_, h, round(b, 1)) for s_, h, b in at_risk(g, M, party or [])])
