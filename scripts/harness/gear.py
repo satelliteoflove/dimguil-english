@@ -273,6 +273,12 @@ def equip(g, slot_pos, log=None):
         if g.u8(EQ_STATE) == 0x78:
             ui.press_until(g, 'cross', lambda: g.u8(EQ_STATE) != 0x78, 120, 'no special power')
             continue
+        if g.u8(CAMP_MSG) and g.u8(EQ_PROMPT) == 0:
+            # "Cursed!": a slot held by a cursed item (a Bishop's touch put the Axe of Woe on
+            # Lu cursed; n1v3c chapter 2, 2026-10-14, stuck here). The message waits for a
+            # press, then the flow goes on to the next slot
+            ui.press_until(g, 'circle', lambda: g.u8(CAMP_MSG) == 0, 120, 'equip message')
+            continue
         g.step()
     if log is not None:
         log.append((g.frame, 'equip', g.char(ri)['name'],
