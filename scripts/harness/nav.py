@@ -87,7 +87,11 @@ EXTRA_SEALED = {7: {(7, 11, 3): [(NPC_FLAGS, 28)], (6, 11, 1): [(NPC_FLAGS, 28)]
                 # open; training planned through them into the freezer's pocket and got
                 # "no path" at (20, 4) (b1v1b, b1v6 chapter 3, 2026-10-14)
                 6: {(x, y, d): [(NPC_FLAGS, 29)] for y in (2, 3, 4)
-                    for x, d in ((19, 1), (20, 3))}}
+                    for x, d in ((19, 1), (20, 3))},
+                # Area B B5's vault door, west of E7 N11 (7, 12): locked (square_flags bit
+                # 25, put back at every floor load, MAZE 0x800a8f1c) until the three-ring
+                # dial opens it, story_flags bit 26 (chapter 10)
+                23: {(7, 12, 3): [(0x80079b44, 26)], (6, 12, 1): [(0x80079b44, 26)]}}
 # Sides that close once a flag is set: area -> {(x, y, side): (addr, bit)}. B2's passage
 # between E13 N12 and E14 N12 shuts when the winding machine runs (story_flags bit 2):
 # the wall it hauls up on B3 comes down here (walkthrough 05-moon-door; f1v3f 2026-10-13
@@ -115,6 +119,7 @@ def floor(area):
         for x in range(24):
             walls[(x, 23 - N)] = [int(W[s][N][x]) for s in 'nesw']
     transfers, arrive, voids, secret, sealed, fights = {}, set(), set(), {}, {}, set()
+    circles, switches = {}, {}
     for e in d['events']:
         t = e['raw']['type']
         sq = [(x, 23 - N) for x, N in e.get('squares', [])]
@@ -132,6 +137,13 @@ def floor(area):
             p1, p3 = e['raw']['params'][0], e['raw']['params'][2]
             for s in sq:
                 secret[(s[0], s[1], p3)] = p1
+        if t == 0x41 and e.get('to') and e['to'].get('floor', -1) >= 0:
+            to = (e['to']['floor'], e['to']['x'], 23 - e['to']['y'])
+            for s in sq:
+                circles[s] = (e['raw']['params'][0], to)
+        if t == 0x42:
+            for s in sq:
+                switches[e['raw']['params'][1]] = (s[0], s[1], e['raw']['params'][0])
         if t in SEALED and e.get('until_flag'):
             fl = [(int(f['at'], 16), f['bit']) for f in e['until_flag']]
             for s in sq:
@@ -144,6 +156,8 @@ def floor(area):
               if c == 'f'}
     _floor[area] = dict(walls=walls, transfers=transfers, arrive=arrive, voids=voids,
                         secret=secret, sealed=sealed, closed=closed, fights=fights, shut=shut,
+                        circles={xy: c for xy, c in circles.items() if c[0] in switches},
+                        switches=switches,
                         shut_after=dict(EXTRA_SHUT_AFTER.get(area, {})))
     return _floor[area]
 
@@ -226,6 +240,9 @@ def plan(g, dest, start=None, items=None):
             for L in LINKS:
                 if L['at'] == node and (L.get('need') is None or L['need'] in items):
                     nxt.append((L['to'], 3, ('link', L)))
+            for L in circle_links(area):
+                if L['switch'] == node:
+                    nxt.append((L['to'], 8, ('link', L)))
             for d in range(4):
                 st = side_state(g, F, x, y, d, wm_here if area == here_area else None)
                 if st == 'shut':
@@ -285,6 +302,9 @@ def avoid_squares(g, area, target):
     for sq, fl in EXTRA_AVOID_AFTER.get(area, {}).items():
         if flag(g, *fl) and sq != target:
             hard.add(sq)
+    for sq, (bit, _) in F.get('circles', {}).items():
+        if flag(g, MAZE_EVENTS, bit) and sq != target:
+            hard.add(sq)
     soft = F['arrive'] - hard - {target}
     return hard, soft
 
@@ -317,9 +337,55 @@ def hidden_blocked(g, area):
     return out
 
 
+# Magic circles (square_arrive 0x41, params bit, 0 up / 1 down) move the party while
+# maze_event_flags (0x80079b48) bit p1 is set; the switch with p2 = that bit (square_examine
+# 0x42, facing p1, EVENTMES 167 yes/no) toggles it, and every bit is cleared on each maze
+# entry from town (main 0x800114d8). Area B's circles (walkthrough 10-red-stone; chapter 10
+# research 2026-10-14). A press while the bit is on turns the circle off, so the bit is
+# read first.
+MAZE_EVENTS = 0x80079b48
+_circle_links = {}
+
+
+def circle_links(area):
+    if area not in _circle_links:
+        F = floor(area)
+        out = []
+        for (cx, cy), (bit, to) in (F or {}).get('circles', {}).items():
+            sx, sy, face = F['switches'][bit]
+            out.append(dict(kind='circle', switch=(area, sx, sy), face=face, bit=bit,
+                            at=(area, cx, cy), to=to, what='circle %d' % bit))
+        _circle_links[area] = out
+    return _circle_links[area]
+
+
+def do_circle(g, L, on_int, after):
+    from harness import chapter1
+    a, sx, sy = L['switch']
+    walk_floor(g, sx, sy, on_int)
+    if (g.u8(maze.AREA),) + g.pos() != L['switch']:
+        return
+    if not flag(g, MAZE_EVENTS, L['bit']):
+        if not maze.face(g, L['face']):
+            after(g)
+            maze.face(g, L['face'])
+        chapter1.investigate(g)
+        after(g)
+        if not flag(g, MAZE_EVENTS, L['bit']):
+            raise Stuck('switch left the circle dark', at=L['switch'], bit=L['bit'])
+    try:
+        walk_floor(g, L['at'][1], L['at'][2], on_int)
+    except Stuck:
+        if g.u8(maze.AREA) == a:
+            raise
+    after(g)
+
+
 def do_link(g, L, on_int, after):
     """Walk to a link's square, face, Investigate, let the event run, step if it says."""
     from harness import chapter1
+    if L.get('kind') == 'circle':
+        return do_circle(g, L, on_int, after)
     a, x, y = L['at']
     walk_floor(g, x, y, on_int)
     if not maze.face(g, L['face']):

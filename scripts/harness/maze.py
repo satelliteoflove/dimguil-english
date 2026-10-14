@@ -257,6 +257,17 @@ def face(g, d):
         except Stuck:
             if wait_cd(g):
                 continue
+            if not calm(g):
+                # a scene or fade started under the press: the stairs' change of floor
+                # (scene 6, ~200 frames) right after the step onto them looked calm for a
+                # frame (b1v1e chapter 7, 2026-10-14: "turn" at B3 (9, 11) going up to
+                # B2); a floor's fade-in (c10b, Area B B2 (17, 13)). Wait it out; if it
+                # moved the party, the caller plans again
+                a = (g.u8(AREA),) + g.pos()
+                ui.wait_until(g, lambda: calm(g) or interrupted(g), 1500, 'scene under a turn')
+                if (g.u8(AREA),) + g.pos() != a or interrupted(g):
+                    return False
+                continue
             if calm(g) and not nudged:
                 # after the stream parts on B2 (7, 11) the screen stays black and turns do
                 # nothing until the party steps forward (f1v0 chapter 4, 2026-10-13); wait,
