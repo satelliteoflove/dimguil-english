@@ -24,14 +24,19 @@ Goals, each proved by RAM:
                (17, 12), the Ogre's fight on E17 N12 (17, 11).
   yellow_stone the Tablet's stone bit 6 (0x34, MAZE 0x800b7310(6)): B4 E19 N13 (19, 10),
                Investigate facing north.
-  out          outside the pen, B4 E18 N8 (18, 15), by the teleporter at E20 N10 (20, 13).
-Not done: Guy's Ruby Slippers; the mural with LABORATORY (the word is in MAZE's table).
+  out          outside the pen, B4 E18 N8 (18, 15): the den's south bars at (19, 12),
+               Investigate facing south, step south, then east onto the teleporter at
+               E20 N10 (20, 13).
+  mural        LABORATORY: the mural at B4 E17 N20 (17, 3), Investigate facing east
+               (EVENTMES 107), through the hidden door east of (15, 2).
+Not done: Guy's Ruby Slippers.
 """
 from harness import chapters, chapter3, maze, nav
 
 STORY = 0x80079b44
 YELLOW = 0x40
-TRAIN_LEVEL = 14            # the Guardians (12) beat a party of 11-13 six times in six
+TRAIN_LEVEL = 13   # lowered 2026-10-14 for the geared Bishop parties; boss_training adds levels after 2 failed tries
+#           before: the Guardians (12) beat a party of 11-13 six times in six
                             # with the old spell choice (pending_AE); with tactics.py a
                             # party of 13-14 won 12 of 12 (bench g14b, 2026-10-14). The
                             # Jail Ogre is level 17
@@ -108,9 +113,35 @@ class Chapter8:
             return bool(chapter3.tablet_stones(g) & YELLOW)
 
         def out():
+            # the den's south side, B4 (19, 12) facing south, is the second set of bars
+            # (event type 0x32, facing 2; site event 53 at E19 N11): with maze_event_flags
+            # 0x20 set by the way in, Investigate gives EVENTMES 102 ("closed, but not
+            # locked") and sets 0x40, and the step south goes through; then east onto the
+            # teleporter at (20, 13), which puts the party at (18, 15) outside (site event
+            # 16). Found with den_probe.py from og2_yellow_stone, 2026-10-14.
+            if (g.u8(maze.AREA),) + g.pos() == (19, 18, 15):
+                return True
             run.fit()
-            run.go((19, 18, 15))
+            if (g.u8(maze.AREA),) + g.pos() not in ((19, 19, 13), (19, 20, 13)):
+                run.examine((19, 19, 12), 2)
+                if maze.step(g, 2) == 'interrupted':
+                    run.after()
+            if (g.u8(maze.AREA),) + g.pos() == (19, 19, 13):
+                if maze.step(g, 1) == 'interrupted':
+                    run.after()
+            run.after(quiet=60)
             return (g.u8(maze.AREA),) + g.pos() == (19, 18, 15)
+
+        def mural():
+            # the word for Area B (walkthrough chapter 8's last section): B4's mural at
+            # E17 N20 (17, 3), Investigate facing east, EVENTMES 107. The way in is the
+            # hidden door between (15, 2) and (16, 2) (site events 12 and 13, bit 8 of
+            # 0x80079628), which nav finds with an Investigate facing east
+            n = len(g.cap.messages) if g.cap else 0
+            run.fit()
+            run.examine((19, 17, 3), 1)
+            return not g.cap or any(m['file'] == 'EVENTMES.BIN' and m['idx'] == 107
+                                    for m in g.cap.messages[n:])
 
         yield from run.train_goals(TRAIN_AREAS, TRAIN_LEVEL)
         yield from run.recover_goals()
@@ -121,3 +152,4 @@ class Chapter8:
         yield 'ogre', ogre
         yield 'yellow_stone', yellow_stone
         yield 'out', out
+        yield 'mural', mural
