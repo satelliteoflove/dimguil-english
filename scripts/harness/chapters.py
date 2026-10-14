@@ -141,7 +141,36 @@ class Run(chapter1.Run):
                     gold_end=sum(q['gold'] for q in party), levels=[q['level'] for q in party],
                     avg_ac=round(sum(q['ac'] for q in party) / len(party), 1) if party else None,
                     uncursed=uncurse[0], uncurse_gold=uncurse[1],
-                    stuck=len(res['stuck']))
+                    stuck=len(res['stuck']), foundation=self.foundation())
+
+    def foundation(self):
+        """Chris's chapter-end check (2026-10-14): AC by row (party slots 0-2 front, 3-5
+        back), unknowns still carried, identified upgrades left in a pack (gear.wants_equip),
+        and in-stock shop items that beat what a member wears and the party could afford
+        (gear.better), best gain first."""
+        g = self.g
+        slots = g.party_slots() if g.party() else [ri for ri in town.town_party(g)]
+        ac = lambda ri: struct.unpack('b', g.char(ri)['raw'][0x86:0x87])[0]
+        rows = [[ac(ri) for ri in slots[a:b] if ri is not None] for a, b in ((0, 3), (3, 6))]
+        party = [ri for ri in slots if ri is not None]
+        gold = sum(g.char(ri)['gold'] for ri in party)
+        offers = []
+        for ri in party:
+            on = gear.equipped(g, ri)
+            for sl in range(7):
+                for i in range(1, gear.SHOP_LAST + 1):
+                    if not g.u8(gear.STOCK + i):
+                        continue
+                    it = gear.item(g, i)
+                    if it['price'] and it['price'] <= gold and gear.better(g, ri, it, sl, on.get(sl)):
+                        gain = gear.score(it, sl) - (gear.score(on[sl], sl) if on.get(sl) else 0)
+                        if gain > 0:
+                            offers.append((round(gain, 1), it['price'], g.char(ri)['name'], gear.name(i)))
+        offers.sort(reverse=True)
+        return dict(ac_front=rows[0], ac_back=rows[1],
+                    unknowns=sum(len(gear.unknowns(g, ri)) for ri in party),
+                    upgrades_in_packs=[g.char(ri)['name'] for ri in party if gear.wants_equip(g, ri)],
+                    shop_upgrades=len(offers), best_offers=offers[:5])
 
     def party_gear(self):
         """Each member's level, AC (+0x86), HP, gold and what's worn, by slot (Chris,
