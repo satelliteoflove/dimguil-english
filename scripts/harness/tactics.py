@@ -57,6 +57,13 @@ CORTU, BAMATU, MAPORFIC, PORFIC, DILTO, MORLIS, BADUMAS = 8, 29, 32, 23, 5, 6, 7
 HEALS = {21, 30, 33, 36, 41, 58, 64, 79}
 DIALKO, MADI = 28, 36
 CHEAP_LEVEL = 3          # in a fight that doesn't matter, spells above this level wait
+# (c) kill first (main, 2026-10-14, from the n1v0 chapter 9 wipe: Dalosto killed one
+# member, then four Lorks paralyzed the rest): a group that can paralyze or stone a whole
+# row (Lorks 69 hits one row, status_spell_targets 0x800b1524; Galtomas 81 all) counts
+# PARA_FIRST times over for group and all-enemy damage, so Lahalito, Tiltowait and the like
+# go there first. A paralyzed member stays down until a cure (party_upkeep 0x800a73f4).
+PARA_SPELLS = (69, 81)
+PARA_FIRST = 3.0
 DEBUFF_MIN = 0.3         # (fix 3) sleep, silence, paralysis only where a monster's chance of being caught is this
 
 
@@ -198,6 +205,7 @@ def info(g, k):
                 resist=struct.unpack_from('<H', r, 0xcc)[0],
                 weak=struct.unpack_from('<H', r, 0xce)[0], caster=caster, threat=threat, threat_spell=threat_spell,
                 blow=(blow_f, blow_b), death=death, dsrc=dsrc, dis_hp=0.0, dis_hp_spell=0.0,
+                para=para_caster(dsrc, dmg + sts if SPELLS_ON else []),
                 silenced=silenced(g, k),
                 screen=g.u8(GROUPS + k * 8 + 7), mons=standing(g, k))
 
@@ -221,13 +229,36 @@ def info(g, k):
 #   apply_status_effects 0x800aa190: an attack's effect bits (+7) land at chance (+8) x
 #     (99 - the member's resistance to that effect)
 #   party_upkeep 0x800a73f4: sleep and knock-out wear off at min(4 x level, 35)% a round,
-#     paralysis and stone not at all; silence lasts 3 rounds or more (spell_montino)
+#     paralysis and stone not at all; silence lasts rand(L) + L/8 rounds, L = max(3, caster
+#     level - target level), counted down at each round's start (silence_rounds)
 DIS_SPELL = {0: ('sleep', 0, 50, 0x200, 'row'), 49: ('sleep', 0, 50, 0x200, 'all'),
              25: ('silence', 1, 50, 0x800, 'row'), 69: ('para', 4, 35, 0x10, 'row')}
 DIS_HIT = {0x01: ('sleep', 0), 0x20: ('sleep', 5), 0x10: ('para', 4), 0x04: ('para', 2)}
 EFFECT_RES = 0x800d8524     # status kind -> index into a member's +0xb0 effect resistances
 LOST_CAP = 0.9              # the lost share of the party's actions counted at most
 LOST_ACTIONS = True         # (fix 1) count actions taken away as threat
+
+
+def para_caster(dsrc, dmg):
+    """Whether a group can paralyze or stone a row or the whole party (PARA_SPELLS), by spell
+    or by an ability that casts one."""
+    return (any(src[0] == 'spell' and src[1] in PARA_SPELLS for _, src, _ in dsrc)
+            or any(sid in PARA_SPELLS for _, sid in dmg))
+
+
+def silence_rounds(clevel, mlevel):
+    """Expected rounds a landed Montino keeps a monster from casting. status_spell 0x800b173c
+    kind 1: counter = rand(L) + L / 8, L = caster level - target level clamped 3-255;
+    counters_tick 0x800a77e0 takes 1 off at the start of every round, and cast_spell
+    0x800abcc0 refuses while it's not 0. So the rest of this round when the counter is 1 or
+    more (half a round on average: the monster may already have acted), then counter - 1
+    whole rounds. At equal levels (L = 3): 2/3 x 0.5 + 1/3 = about 0.67 of a round."""
+    L = min(255, max(3, clevel - mlevel))
+    n = 0.0
+    for r in range(L):
+        c = r + L // 8
+        n += (0.5 if c >= 1 else 0.0) + max(0, c - 1)
+    return n / L
 
 
 def disable_sources(g, k, r, p_fight, p_status, sts):
@@ -401,12 +432,13 @@ def value(g, sid, k, M, clevel, cast_counts, commit=False):
             p = lands(m, sid) * (1 - PLAN['dis'].get(t, 0) * 0.5)
             f = 0.5 if m['resist'] & el and el else 2.0 if m['weak'] & el and el else 1.0
             d = mean * f
+            w = PARA_FIRST if kind != 'one' and m.get('para') else 1.0
             mons = [x for x in m['mons'] if _left(t, x[0], x[1]) > 0]
             mons = mons if kind != 'one' else mons[:1]
             for j, hp0, st in mons:
                 hp = _left(t, j, hp0)
                 kill = 1.0 if d >= hp else 0.5 if d >= hp * 0.7 else 0.0
-                v += p * (min(d, hp) + kill * danger_of(m))
+                v += p * (min(d, hp) + kill * danger_of(m)) * w
                 if commit:
                     PLAN['dmg'].setdefault(t, {})[j] = PLAN['dmg'].get(t, {}).get(j, 0) + p * d
         return v
@@ -457,11 +489,13 @@ def value(g, sid, k, M, clevel, cast_counts, commit=False):
                 mons = m['mons']
                 # silence takes away every spell action, heals and buffs too (a healer
                 # drags a fight out): 8 x level x 2 scaled by the share of its AI row's
-                # actions it has spells for (cast_share; SPELLS_ON)
-                worth = 8 * m['level'] * 2 * (m.get('cast_share', 1.0) if SPELLS_ON else 1.0)
-                # (fix 2) or what its spells do, damage and members put to sleep, for the
-                # rounds the silence lasts (3 or more); abilities aren't silenced
-                worth = max(worth, (m.get('threat_spell', 0) + m.get('dis_hp_spell', 0)) * 2)
+                # actions it has spells for (cast_share; SPELLS_ON), for the rounds the
+                # silence lasts (silence_rounds: under one at equal levels)
+                n = silence_rounds(clevel, m['level'])
+                worth = 8 * m['level'] * n * (m.get('cast_share', 1.0) if SPELLS_ON else 1.0)
+                # (fix 2) or what its spells do, damage and members put to sleep, for those
+                # rounds; abilities aren't silenced
+                worth = max(worth, (m.get('threat_spell', 0) + m.get('dis_hp_spell', 0)) * n)
                 mons = [x for x in mons if x[0] not in m.get('silenced', ())]
             p = lands(m, sid) * (1 - save_adj(base, m['level'], clevel))
             if p < DEBUFF_MIN:
@@ -608,7 +642,7 @@ def matters_detail(g, M, party_hp, party_level=None, party=None, lost=None):
         out.append(dict(id=M[k]['id'], level=lv, n=len(M[k]['mons']), melee=round(m, 1),
                         caster=c, breath=round(br, 1), threat=round(M[k]['threat'], 1),
                         blow=[round(x, 1) for x in M[k]['blow']], death=M[k]['death'],
-                        dis_hp=round(M[k].get('dis_hp', 0), 1)))
+                        dis_hp=round(M[k].get('dis_hp', 0), 1), para=M[k].get('para', False)))
     threat = sum(x['threat'] * x['n'] for x in out)
     why = ('story' if is_story(g) else
            'above median level' if party_level is not None and any(M[k]['level'] > party_level for k in M) else
