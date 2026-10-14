@@ -10,11 +10,29 @@ rips/harness/chapters/NAME/: result.json (per chapter: goals, frames, wall time,
 log.jsonl, captured.jsonl, goal and stuck states, c<N>_end.state after each chapter;
 shots to rips/harness/chapters/shots/ (shared, one per string id). --screens logs every
 screen before each press for the T5 checks (harness.screens) to rips/harness/DIR.
+
+Stuck states become regression cases in rips/harness/regress/pending/chapters.jsonl (added
+to the live list between suite rounds), not in the live cases.jsonl; --no-cases makes
+none. Each battle's BATTLE code is checked once in RAM against the disc under test's
+BATTLE.BIN at the spell-sound fix's 36 words (bugs.md 1.15), so a run from a state made on
+an older disc shows which code its fights ran: result.json 'battle_code'.
 """
 import argparse, json, os, sys, time, traceback
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
-from harness.game import Game, OUT
-from harness import chapters
+from harness.game import Game, OUT, DISC
+from harness import chapters, regress
+
+# the live case list is the suite runner's alone (docs/agent-workflow.md)
+regress.CASES = os.path.join(regress.REG, 'pending', 'chapters.jsonl')
+os.makedirs(os.path.dirname(regress.CASES), exist_ok=True)
+
+# the spell-sound fix's words (asm/bugfix_spell_sound_reload.asm: three load sites and the
+# stop routine in FUN_800c3188); BATTLE loads at 0x800a1000
+FIX_WORDS = ([0x800a4204 + 4 * i for i in range(6)] + [0x800a4220]
+             + [0x800a54c8 + 4 * i for i in range(9)] + [0x800a5510]
+             + [0x800a5524 + 4 * i for i in range(10)] + [0x800a5578, 0x800a557c]
+             + [0x800c3188 + 4 * i for i in range(7)])
+assert len(FIX_WORDS) == 36
 
 ap = argparse.ArgumentParser()
 ap.add_argument('name')
@@ -39,6 +57,31 @@ scr = None
 if a.screens:
     from harness.screens import Screens
     scr = Screens(g, a.screens)
+battle_code = dict(match=0, differ=0, first_differ=None)
+_bin = open(os.path.join(os.path.dirname(DISC), 'dimguil', 'BATTLE.BIN'), 'rb').read()
+_want = [int.from_bytes(_bin[w - 0x800a1000:w - 0x800a1000 + 4], 'little') for w in FIX_WORDS]
+_in_battle = [0]
+
+
+def check_battle_code():
+    if g.overlay() != 'BATTLE':
+        _in_battle[0] = 0
+        return
+    _in_battle[0] += 1
+    if _in_battle[0] != 30:         # once per battle, after the overlay is in
+        return
+    if [g.u32(w) for w in FIX_WORDS] == _want:
+        battle_code['match'] += 1
+        if battle_code['match'] == 1:
+            print('BATTLE code in RAM matches the disc (first battle, frame %d)' % g.frame, flush=True)
+    else:
+        battle_code['differ'] += 1
+        if battle_code['first_differ'] is None:
+            battle_code['first_differ'] = g.frame
+            print('BATTLE code in RAM differs from the disc at frame %d' % g.frame, flush=True)
+
+
+g.t.ticks.append(check_battle_code)
 if a.src:
     g.load(a.src)
 r = chapters.Run(g, seed=a.seed, variant=a.variant, out=out, auto_cases=not a.no_cases)
@@ -65,6 +108,7 @@ res['from'] = a.src
 res['chapters_asked'] = [first, last]
 res['wall'] = round(time.time() - t0, 1)
 res['total_frames'] = g.frame
+res['battle_code'] = battle_code
 json.dump(res, open(os.path.join(d, 'result.json'), 'w'), indent=1, default=str)
 with open(os.path.join(d, 'log.jsonl'), 'w') as f:
     for x in r.log:

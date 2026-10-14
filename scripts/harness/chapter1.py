@@ -18,7 +18,7 @@ again. A wipe, or a Stuck, reloads the last goal's state and tries again with di
 input timing (the RNG follows input timing).
 """
 import json, os, random, time
-from harness import ui, maze, town, battle, play, camp
+from harness import ui, maze, town, battle, play, camp, gear
 from harness.game import Stuck, OUT
 
 EV_FLAGS = 0x80079b48
@@ -345,10 +345,98 @@ def anyone_dead(g):
     return any(g.char(i)['status'] != 0 for i in g.party())
 
 
+# statuses (docs/re/B-camp.md, status_has 0x800d5504): afraid 0x01, confused 0x02,
+# poison 0x04, asleep 0x08, KO 0x10, paralysis 0x20, stone 0x40, dead 0x80, ash 0x100,
+# lost 0x200. SERIOUS ones keep a member out of the fighting; the rest wait for a cure.
+SERIOUS = 0x10 | 0x20 | 0x40 | 0x80 | 0x100 | 0x200
+# camp cures, cheapest first (B-camp.md "The 26 camp spells", camp_spell_effect):
+# (spell id, school, level, status bits it clears, whole party)
+CURES = [(28, 1, 3, 0x20, False),      # Dialko: paralysis
+         (31, 1, 4, 0x04, False),      # Latumofis: poison
+         (56, 2, 5, 0x3f, True),       # Morfis: bits 0-5 for the party, stone stays
+         (36, 1, 6, 0x7f, False),      # Madi: all but death and ash
+         (39, 1, 7, 0x80, False)]      # Kadorto: the dead (a miss turns them to ash)
+CURE_LOG = []           # chapters.Run points this at its log
+
+
+def cure_in_camp(g, log=None, on_int=None, most=12):
+    """Cure from camp what the party's spells can: for each member with a status (the
+    out-of-action ones first, the dead last), the cheapest cure a standing caster has
+    points for. Ash and the lost wait for the temple. Returns the casts made. The camp
+    list's place for a spell is taken as its place among the caster's known spells of
+    that level; a cast that changes nothing is tried once at the spell's slot instead."""
+    log = CURE_LOG if log is None else log
+    n = k = 0
+    tried = set()
+    while n < most and k < 30:
+        k += 1
+        if g.overlay() in ('JOUKA', 'HAZURE', 'BATTLE'):
+            break
+        if not camp.in_camp(g) and not maze.calm(g) and not maze.settle(g):
+            (on_int or on_interrupt_factory(log))(g)
+            continue
+        slots = g.party_slots()
+        pats = []
+        for slot, ri in enumerate(slots):
+            if ri is None:
+                continue
+            st = g.char(ri)['status']
+            if st and not st & 0x300:
+                pats.append((st & 0x80 != 0, -(st & SERIOUS), slot, ri, st))
+        pick = None
+        for _, _, tslot, tri, st in sorted(pats):
+            for sid, sch, lv, bits, party in CURES:
+                if not st & bits or (sid, tri) in tried:
+                    continue
+                for cslot, cri in enumerate(slots):
+                    if cri is None or cri == tri and st >= 0x20:
+                        continue
+                    c = g.char(cri)
+                    if c['status'] >= 0x20 or not c['raw'][0x5c + sch * 7 + lv - 1]:
+                        continue
+                    ks = battle.known_spells(c['raw'], sch, lv)
+                    if sid in ks:
+                        pick = (cslot, sch, lv, ks.index(sid), sid % 3, None if party else tslot,
+                                tri, st, sid)
+                        break
+                if pick:
+                    break
+            if pick:
+                break
+        if not pick:
+            break
+        cslot, sch, lv, idx, slot_idx, tslot, tri, st, sid = pick
+        tried.add((sid, tri))
+        for i in ([idx] if idx == slot_idx else [idx, slot_idx]):
+            try:
+                camp.cast(g, cslot, sch, lv, i, tslot)
+            except Stuck as s:
+                if s.what != 'camp interrupted':
+                    raise
+                (on_int or on_interrupt_factory(log))(g)
+                break
+            n += 1
+            if g.char(tri)['status'] != st:
+                break
+        log.append((g.frame, 'cure', sid, g.char(tri)['name'], st, g.char(tri)['status']))
+    if camp.in_camp(g):
+        camp.close_camp(g)
+    return n
+
+
+def out_of_action(g):
+    return [i for i in g.party() if g.char(i)['status'] & SERIOUS]
+
+
 def needs_town(g):
-    """Go home when someone is down, or someone is badly hurt and no priest has points."""
+    """Go home when someone is out of action and the party's own spells can't bring them
+    back (cure_in_camp is tried first), or someone is badly hurt and no priest has
+    points. A poisoned, afraid, confused or sleeping member carries on (2026-10-14:
+    before, any status ended the trip)."""
     if anyone_dead(g):
-        return True
+        cure_in_camp(g)
+        if out_of_action(g):
+            return True
     return bool(hurt(g, 0.5)) and not priests(g)
 
 
@@ -359,6 +447,8 @@ def town_trip(g, log):
     maze.to_town(g, on_int)
     town_upkeep(g, log)
     town.begin_adventure(g)
+    if GEAR:
+        gear.equip_party(g, log)
     heal_in_camp(g, log, frac=0.95)
 
 
@@ -421,6 +511,18 @@ def town_upkeep(g, log):
         log.append((g.frame, 'stables', pos, r['weeks']))
         town.to_town_bar(g)
     town.to_town_bar(g)
+    if GEAR:
+        # Boltac's: identify, uncurse, sell, buy (gear.shop), keeping a dead member's
+        # raise in reserve; the party equips in camp once it sets out (Chris, 2026-10-14)
+        try:
+            gear.shop(g, log, GEAR_RESERVE * max(g.char(i)['level'] for i in town.town_party(g)))
+        except Stuck as s:
+            log.append((g.frame, 'shop stuck', s.what))
+            town.to_town_bar(g)
+
+
+GEAR = True
+GEAR_RESERVE = 300          # gold kept back per level of the highest member (a raise is 250)
 
 
 COT_BELOW = 0.6               # a member under this share of max HP rests in a Cot
@@ -631,6 +733,8 @@ class Run:
         g = self.g
         if g.overlay() == 'JOUKA':
             town.begin_adventure(g)
+            if GEAR:
+                gear.equip_party(g, self.log)
             heal_in_camp(g, self.log, frac=0.95)
         fights = []
         log = self.log

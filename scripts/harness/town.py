@@ -651,6 +651,15 @@ def temple_heal(g, patient, payer_slot=0, limit=600):
 
 BUY_CAT, BUY_TYPE, BUY_ITEM, BUY_YN = 0x80079c60, 0x80079c65, 0x80079c64, 0x800795d5
 SELL_ITEM, SELL_YN = 0x80079c60, 0x80079c65
+# A list's prompt isn't always captured again on a second visit (2026-10-14), so the
+# screens are also read from RAM: BOLTAC_SCREEN 0x80079738 is 15 at "What will you do?",
+# 20 Buy, 25 Sell, 30 Uncurse, 35 Identify; SHOP_STATE 0x800797a4 within Buy is 5 the
+# categories, 15 the types, 25 the items, and 5 the item list in Sell
+BOLTAC_SCREEN, SHOP_STATE = 0x80079738, 0x800797a4
+
+
+def _screen(g, scr, st):
+    return g.u8(BOLTAC_SCREEN) == scr and g.u8(SHOP_STATE) == st and _settled(g)
 
 
 def _said(g, since, *ids):
@@ -661,7 +670,8 @@ def _settled(g):
     return g.u8(TOWN_MSG) == 0
 
 
-PROMPTS = {5, 57, 79, 80, 81, 82, 83, 84, 85, 86, 87, 91, 96, 97, 98, 110, 111, 123, 126}
+PROMPTS = {5, 57, 79, 80, 81, 82, 83, 84, 85, 86, 87, 91, 96, 97, 98, 99, 100, 101, 108, 109, 110, 111,
+           123, 126}
 
 
 def _sig(g):
@@ -694,8 +704,8 @@ def boltac_trade(g, slot, limit=600):
 def _at_trade_menu(g):
     """"What will you do?" is up (the last facility line printed) and settled. (0x800797d6
     isn't a screen id here: it holds the trader's pack count.)"""
-    return g.u8(TOWN_STATE) == 20 and _last_sisetu(g, max(0, len(g.cap.messages) - 60)) in (5, 129) \
-        and _settled(g) and g.u8(FAC_SUB) == 10
+    return g.u8(TOWN_STATE) == 20 and _settled(g) and g.u8(FAC_SUB) == 10 and (
+        g.u8(0x80079738) == 15 or _last_sisetu(g, max(0, len(g.cap.messages) - 60)) in (5, 129))
 
 
 def _to_trade_menu(g, limit=600):
@@ -704,9 +714,9 @@ def _to_trade_menu(g, limit=600):
         return
     for _ in range(6):
         n = len(g.cap.messages)
-        ui.press_then_wait(g, 'cross', lambda: _sig(g), lambda: _said(g, n, 5, 80, 81, 82, 87),
+        ui.press_then_wait(g, 'cross', lambda: _sig(g), lambda: _said(g, n, 5, 80, 81, 82, 87, 99, 101) or g.u8(BOLTAC_SCREEN) == 15,
                            limit, 'back a screen')
-        if _said(g, n, 5):
+        if _said(g, n, 5) or g.u8(BOLTAC_SCREEN) == 15:
             ui.wait_until(g, lambda: _settled(g), limit, 'What will you do?')
             return
     raise Stuck('back to What will you do?')
@@ -726,13 +736,13 @@ def boltac_buy(g, slot, cat, typ, item, limit=600):
     gold0, items0 = g.char(idx)['gold'], len(g.char(idx)['items'])
     ui.move_cursor(g, LIST, 0, 'down', 'up', what='Buy')
     n = len(g.cap.messages)
-    _ok(g, lambda: _said(g, n, 80) and _settled(g), limit, 'Buy')
+    _ok(g, lambda: _said(g, n, 80) and _settled(g) or _screen(g, 20, 5), limit, 'Buy')
     ui.move_cursor(g, BUY_CAT, cat, 'down', 'up', what='category')
     n = len(g.cap.messages)
-    _ok(g, lambda: _said(g, n, 81) and _settled(g), limit, 'category')
+    _ok(g, lambda: _said(g, n, 81) and _settled(g) or _screen(g, 20, 15), limit, 'category')
     ui.move_cursor(g, BUY_TYPE, typ, 'down', 'up', what='type')
     n = len(g.cap.messages)
-    _ok(g, lambda: _said(g, n, 82), limit, 'type')
+    _ok(g, lambda: _said(g, n, 82) or _screen(g, 20, 25), limit, 'type')
     ui.move_cursor(g, BUY_ITEM, item, 'down', 'up', what='item')
     n = len(g.cap.messages)
     ENDS = (123, 85, 86, 91, 126, 84, 57)
@@ -776,7 +786,7 @@ def boltac_sell(g, slot, item, limit=600):
     pack0 = g.char(idx)['items']
     ui.move_cursor(g, LIST, 1, 'down', 'up', what='Sell')
     n = len(g.cap.messages)
-    _ok(g, lambda: _said(g, n, 87) and _settled(g), limit, 'Sell')
+    _ok(g, lambda: _said(g, n, 87) and _settled(g) or _screen(g, 25, 5), limit, 'Sell')
     ui.move_cursor(g, SELL_ITEM, item, 'down', 'up', what='item to sell')
     n = len(g.cap.messages)
     _ok(g, lambda: _said(g, n, 111, 98, 96, 97, 110), limit, 'pick item')

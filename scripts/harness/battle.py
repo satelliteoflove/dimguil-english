@@ -19,7 +19,7 @@ RAM (BATTLE resident; docs/re/D-battle.md, and probe.py on the harness disc 2026
   0x8007e812 the party's roster indices
 """
 import random, struct
-from harness import ui, pick
+from harness import ui, pick, tactics
 from harness.game import Stuck
 
 PHASE = 0x800796fa
@@ -72,6 +72,10 @@ MONTINO, BADI, BAKADI, CORTU = 25, 34, 40, 8
 MONTINO_TRIES = 2
 CORTU_TRIES = 2     # Cortu (8): a barrier against enemy spells and breath; it stacks
 CAST = {}          # this battle's casts by spell id (fight() clears it)
+# this battle's record for the trip logs (Chris, 2026-10-14): did it count as a fight that
+# matters (tactics.matters, or losing) at any command phase, and each cast as
+# (member name, spell id, school, level)
+FIGHT_INFO = dict(matters=False, casts=[])
 # VARY > 0: a goal's retry (chapter1.Run.goal sets it to the try number - 1). The game's
 # rolls don't move with time, only with what's done, so a retry has to choose
 # differently or it replays the same fight: then a fighter may take another group on
@@ -129,6 +133,8 @@ def choose_group(g, offered, prefer=None, spread=False):
         return None
     if len(alive) > 1 and _vary():
         return _vrng.choice(alive)
+    if prefer in alive:
+        return prefer               # a spell's or Dispel's chosen group (tactics.py)
     return min(alive, key=lambda k: (KILL_FIRST.get(group_id(g, k), 9), k != prefer,
                                      -g.u8(GROUPS + k * 8 + 5) if spread else 0, k))
 
@@ -211,8 +217,17 @@ def default_policy(g, m, opts):
         return ('run',)
     ids = party_ids(g)
     ri = ids[m]
+    me = g.char(ri)
     cast = castable(g, ri) if SPELL in opts else []
     by_id = {c[0]: c for c in cast}
+    M = {k: tactics.info(g, k) for k in tactics.groups(g)}
+    M = {k: v for k, v in M.items() if v['mons']}
+    party_hp = sum(max(member_state(g, k)[0], 0) for k, rk in enumerate(ids) if rk is not None)
+    big = tactics.matters(g, M, party_hp) or losing(g)
+    FIGHT_INFO['matters'] = FIGHT_INFO['matters'] or bool(big)
+    # support spells (the party's AC and magic screen, the monsters' AC) only in a fixed
+    # fight or one that's going badly (Chris, 2026-10-14: not in trash fights)
+    boss = bool(g.u8(FIXED)) or losing(g)
     # heal the most hurt member below 40%
     hurt = []
     for k, rk in enumerate(ids):
@@ -227,48 +242,66 @@ def default_policy(g, m, opts):
             if sid in by_id:
                 c = by_id[sid]
                 return ('spell', sid, c[1], c[2], c[3], ('member', min(hurt)[1]))
-    boss = [k for k in groups_alive(g) if group_id(g, k) in KILL_FIRST]
-    if cast and boss and not (VARY and _vary()):
-        k = min(boss, key=lambda k: KILL_FIRST[group_id(g, k)])
-        if CORTU in by_id and CAST.get(CORTU, 0) < CORTU_TRIES:
-            # a barrier against the Arch Mage's Madalto (it stacks)
-            CAST[CORTU] = CAST.get(CORTU, 0) + 1
-            c = by_id[CORTU]
-            return ('spell', CORTU, c[1], c[2], c[3], ('group', k))
-        if MONTINO in by_id and CAST.get(MONTINO, 0) < MONTINO_TRIES:
-            CAST[MONTINO] = CAST.get(MONTINO, 0) + 1
-            c = by_id[MONTINO]
-            return ('spell', MONTINO, c[1], c[2], c[3], ('group', k))
-        for sid in (BADI,):
-            if sid in by_id:
-                c = by_id[sid]
-                return ('spell', sid, c[1], c[2], c[3], ('group', k))
-    if cast:
-        # the attack spell with the most expected damage: a group spell counts once per
-        # monster standing in the target group (the biggest), "all" spells once per
-        # monster standing. (Before, one monster meant single-target spells first, so a
-        # mage threw Halito at the Chany Mask while holding Mahalito; chapter 2.)
-        alive = groups_alive(g)
-        target = max(alive, key=lambda k: g.u8(GROUPS + k * 8 + 5)) if alive else 1
-        in_group = g.u8(GROUPS + target * 8 + 5) or 1
-        total = monsters_standing(g) or 1
-        best, val = None, 0
-        vals = []
-        for sid in by_id:
-            if sid not in SPELL_DAMAGE:
+    # a member out of the fight in one that matters: Dialko for paralysis or sleep, Madi
+    # for stone too (dim.json: Dialko cures paralysis and sleep in battle; Madi all but
+    # death and ash)
+    if big and len(M):
+        for k, rk in enumerate(ids):
+            if rk is None or k == m:
                 continue
-            mean, kind = SPELL_DAMAGE[sid]
-            v = mean * (in_group if kind == 'group' else total if kind == 'all' else 1)
-            vals.append((v, sid))
-            if v > val:
-                best, val = sid, v
-        if len(vals) > 1 and _vary():
-            best = sorted(vals)[-2][1]
-        if best is not None and FIGHT in opts and val < MIN_SPELL_VALUE:
-            best = None                   # a blow does more than this spell would
-        if best is not None:
-            c = by_id[best]
-            return ('spell', best, c[1], c[2], c[3], ('group', target))
+            st = member_state(g, k)[1]
+            if st >= 0x80:
+                continue
+            for sid, bits in ((tactics.DIALKO, 0x28), (tactics.MADI, 0x68)):
+                if st & bits and sid in by_id and CAST.get(('cure', k), 0) < ROUND:
+                    CAST[('cure', k)] = ROUND
+                    c = by_id[sid]
+                    return ('spell', sid, c[1], c[2], c[3], ('member', k))
+    # every spell and target, valued in hit points (tactics.py): in a fight that doesn't
+    # matter, nothing above CHEAP_LEVEL and no support spells, and a healer keeps the last
+    # point of a level holding a heal they know
+    rec = me['raw']
+    cands = []
+    for sid, c in by_id.items():
+        sch, lv = c[1], c[2]
+        if not big:
+            if lv > tactics.CHEAP_LEVEL:
+                continue
+            if rec[0x5c + sch * 7 + lv - 1] <= 1 and any(
+                    h in tactics.HEALS for h in known_spells(rec, sch, lv)):
+                continue
+        if sid in tactics.DAMAGE or sid in tactics.DEATH or sid in tactics.DISABLE:
+            for k in M:
+                v = tactics.value(g, sid, k, M, me['level'], CAST)
+                if v > 0:
+                    cands.append((v, ('spell', sid, sch, lv, c[3], ('group', k)), (sid, k)))
+        elif boss and sid in (tactics.BAMATU, tactics.MAPORFIC, tactics.CORTU):
+            v = tactics.support_value(g, sid, M, CAST, party_hp)
+            if v > 0 and M:
+                k = min(M)
+                cands.append((v, ('spell', sid, sch, lv, c[3], ('group', k)), (sid, None)))
+        elif boss and sid in (tactics.DILTO, tactics.MORLIS, tactics.BADUMAS):
+            for k in M:
+                v = tactics.armor_value(g, sid, k, M, CAST)
+                if v > 0:
+                    cands.append((v, ('spell', sid, sch, lv, c[3], ('group', k)), (sid, k)))
+    if DISPEL in opts:
+        for k in M:
+            v = tactics.dispel_value(g, k, M, me['cls'], me['level'])
+            if v > 0:
+                cands.append((v, ('dispel', ('group', k)), ('dispel', k)))
+    fight_v = 3 * me['level'] if FIGHT in opts else 0
+    if cands:
+        cands.sort(key=lambda x: -x[0])
+        pick_ = cands[0]
+        if len(cands) > 1 and _vary():
+            pick_ = cands[1]
+        v, act, key = pick_
+        if v > fight_v and v >= MIN_SPELL_VALUE:
+            CAST[key[0]] = CAST.get(key[0], 0) + 1
+            if key[1] is not None:
+                CAST[key] = CAST.get(key, 0) + 1
+            return act
     if FIGHT in opts:
         return ('fight',)
     return ('parry',) if PARRY in opts else ('first',)
@@ -303,10 +336,14 @@ def command_member(g, policy, log):
         opts = opts[:1]
     act = policy(g, m, opts)
     log.append((m, act[0], act[1] if len(act) > 1 else None))
+    if act[0] == 'spell':
+        ri = party_ids(g)[m]
+        FIGHT_INFO['casts'].append((g.char(ri)['name'] if ri is not None else m,
+                                    act[1], act[2], act[3]))
     if act[0] == 'first':
         _press_change(g, 'circle')
         return
-    want = {'fight': FIGHT, 'parry': PARRY, 'spell': SPELL, 'run': RUN}[act[0]]
+    want = {'fight': FIGHT, 'parry': PARRY, 'spell': SPELL, 'run': RUN, 'dispel': DISPEL}[act[0]]
     k = opts.index(want)
     try:
         # five or more commands sit in two columns of four (Fight Parry Spell Use | Run):
@@ -338,7 +375,7 @@ def command_member(g, policy, log):
             ui.move_cursor(g, PGRID_X, slot % 3, 'right', 'left', what='target col')
     # a target step: an enemy group pick is aimed (aim); anything else (a member) takes
     # what's selected. Stop at the next member or the overview.
-    prefer = act[-1][1] if act[0] == 'spell' and act[-1][0] == 'group' else None
+    prefer = act[-1][1] if act[0] in ('spell', 'dispel') and act[-1][0] == 'group' else None
     end = g.frame + 600
     while in_battle(g) and g.u8(PHASE) == CMD_PHASE and g.u8(MEMBER) == m \
             and g.u8(SCREEN) not in WAITING:
@@ -465,7 +502,7 @@ def chest(g, mode='leave', who=0, since=None):
     if gone():
         return 'oops' if oops else 'gone'
     trap = res[0]['idx'] if res else None
-    if trap == 221 and not oops:
+    if (trap == 221 or trap in MILD_TRAPS and OPEN_MILD) and not oops:
         n3 = len(g.cap.messages)
         ui.move_cursor(g, LIST, CHEST_OPEN, 'down', 'up', what='chest option')
         ui.confirm_until(g, lambda: _since(g, n3, 'FIGHTMSG.OBJ', (250,)) or gone(), 120, 'open')
@@ -478,6 +515,14 @@ def chest(g, mode='leave', who=0, since=None):
     return 'left trap %s' % trap
 
 
+# Inspect's answers, FIGHTMSG 221-233 in the order of data/traps/dim.json: no trap,
+# Stone Shot, Poison Needle, Magic Drain, Poison Gas, Bomb, Ghost Swarm, Demon Eye,
+# Rainbow Ray, Goddess's Kiss, Spell Blaster, Alarm, Teleporter. The loot is worth a
+# trap that hurts one member or poisons (the party cures poison from camp now): open
+# those too (Chris, 2026-10-14: weigh the loot). Not the ones that hit everyone hard,
+# stone, kill casters, lose the chest or move the party.
+MILD_TRAPS = {222, 223, 225, 230}
+OPEN_MILD = True
 THIEVES = (3, 12)            # Thief, Ninja (G-records class ids)
 
 
@@ -503,6 +548,7 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
     rounds = 0
     log = []
     CAST.clear()
+    FIGHT_INFO['matters'], FIGHT_INFO['casts'] = False, []
     _vrng.seed(VARY * 7919 + 1)
     chest_result = None
     chest_mark = len(g.cap.messages) if g.cap else 0
@@ -588,4 +634,5 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
             if not in_battle(g) or g.u8(PHASE) == CMD_PHASE:
                 break
             g.step()
-    return dict(rounds=rounds, frames=g.frame - f0, actions=log, ovl=g.overlay(), chest=chest_result)
+    return dict(rounds=rounds, frames=g.frame - f0, actions=log, ovl=g.overlay(), chest=chest_result,
+                matters=FIGHT_INFO['matters'], casts=list(FIGHT_INFO['casts']))

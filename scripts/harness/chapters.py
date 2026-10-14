@@ -16,7 +16,7 @@ After the last goal of chapter N the run saves `<out>/c<N>_end.state`; the next 
 states only count for the disc they were made on (rips/harness/disc/BUILD.txt).
 """
 import time
-from harness import battle, chapter1, maze, nav, play, town
+from harness import battle, camp, chapter1, gear, maze, nav, play, town
 from harness.game import Stuck
 
 CHAPTERS = {}
@@ -34,6 +34,8 @@ class Run(chapter1.Run):
         super().__init__(g, **kw)
         self.chapter = 1
         self.chapter_results = []
+        self.full_points = {}       # roster index -> spell points after the last Stables
+        chapter1.CURE_LOG = self.log
 
     def guarded(self, fn):
         """fn, with NoTablet turned into the outcome 'no tablet' (the goal isn't reached;
@@ -66,7 +68,7 @@ class Run(chapter1.Run):
         g = self.g
         self.chapter = n
         cls = CHAPTERS[n]
-        t0, f0, k0, s0 = time.time(), g.frame, len(self.goals), len(self.stuck)
+        t0, f0, k0, s0, l0 = time.time(), g.frame, len(self.goals), len(self.stuck), len(self.log)
         if n == 1:
             # chapter 1 keeps its own loop (training trips until level 7, then the pillars)
             chapter1.Run.run(self, boot=boot)
@@ -77,9 +79,36 @@ class Run(chapter1.Run):
         self.ckpt = '%s/c%d_end' % (self.out, n)
         res = dict(chapter=n, title=cls.title, frames=g.frame - f0,
                    secs=round(time.time() - t0, 1), goals=self.goals[k0:],
-                   stuck=self.stuck[s0:])
+                   stuck=self.stuck[s0:], spells=self.spell_summary(l0))
         self.chapter_results.append(res)
         return res
+
+    def spell_summary(self, l0=0):
+        """The chapter's fights and casts (by spell level, and in fights that matter or
+        not) and its trips (why each ended, and the lowest share of points at levels 3-7
+        a caster came home with), from the log since entry l0."""
+        fights = [x[2] for x in self.log[l0:] if len(x) > 2 and x[1] == 'fought' and isinstance(x[2], dict)]
+        by_level = {}
+        for f in fights:
+            for name, sid, sch, lv in f.get('casts', []):
+                k = '%s L%d %s' % ('MPAS'[sch], lv, 'matters' if f.get('matters') else 'trash')
+                by_level[k] = by_level.get(k, 0) + 1
+        trips = [x[2] for x in self.log[l0:] if len(x) > 2 and x[1] == 'trip end']
+        reasons, low = {}, []
+        for t in trips:
+            reasons[t['reason']] = reasons.get(t['reason'], 0) + 1
+            for name, per in t['points'].items():
+                n = f = 0
+                for a, b in per.values():
+                    if b:
+                        n += sum(a[2:]); f += sum(b[2:])
+                if f >= 4:
+                    low.append(round(n / f, 2))
+        return dict(fights=len(fights), matters=sum(1 for f in fights if f.get('matters')),
+                    casts=sum(len(f.get('casts', [])) for f in fights), casts_by=by_level,
+                    trips=len(trips), trip_reasons=reasons,
+                    points_home_min=min(low) if low else None,
+                    points_home_median=sorted(low)[len(low) // 2] if low else None)
 
     def run_chapters(self, first, last, boot=None):
         if boot is None:
@@ -121,6 +150,8 @@ class Run(chapter1.Run):
         if g.overlay() in ('JOUKA', 'HAZURE'):
             town.to_town_bar(g) if g.overlay() == 'JOUKA' else None
             town.begin_adventure(g)
+            if chapter1.GEAR:
+                gear.equip_party(g, self.log, on_int=self.on_int)
             chapter1.heal_in_camp(g, self.log, frac=0.95, on_int=self.on_int)
         elif not maze.calm(g):
             self.after(quiet=30)
@@ -154,13 +185,77 @@ class Run(chapter1.Run):
             self._recover_k = getattr(self, '_recover_k', 0) + 1
             yield 'recover_%02d' % self._recover_k, self.recover
 
-    def trip_home(self):
+    def trip_end(self, reason=None):
+        """Log the end of a trip (Chris, 2026-10-14): why it ended and each caster's points
+        by school and level against what they had after the last Stables."""
+        g = self.g
+        if reason is None:
+            reason = ('down' if chapter1.out_of_action(g) else
+                      'HP' if chapter1.hurt(g, 0.5) and not chapter1.priests(g) else 'other')
+        pts = {}
+        for i in g.party():
+            c = g.char(i)
+            now, full = list(c['raw'][0x5c:0x78]), self.full_points.get(i)
+            per = {}
+            for sch in range(4):
+                a = now[sch * 7:sch * 7 + 7]
+                b = full[sch * 7:sch * 7 + 7] if full else None
+                if any(a) or b and any(b):
+                    per['MPAS'[sch]] = [a, b]
+            if per:
+                pts[c['name']] = per
+        self.note('trip end', dict(reason=reason, fights=self.fights() - getattr(self, '_trip_f0', 0),
+                                   points=pts))
+
+    def trip_home(self, reason=None):
         """Back to town from anywhere: temple for the dead, the Stables for points."""
         g = self.g
         if g.overlay() not in ('JOUKA', 'HAZURE'):
+            self.trip_end(reason)
             nav.to_town(g, self.on_int, lambda g: self.after())
         chapter1.town_upkeep(g, self.log)
+        for i in town.town_party(g):
+            self.full_points[i] = list(g.char(i)['raw'][0x5c:0x78])
+        self._trip_f0 = self.fights()
         self.note('trip home', [(g.char(i)['name'], g.char(i)['level']) for i in town.town_party(g)])
+
+    def points_low(self, share=None):
+        """Casters whose spell points at levels 3-7 are under `share` of what they had
+        after the last Stables (none known yet: not low)."""
+        g = self.g
+        share = share or POINTS_READY
+        low = []
+        for i in g.party():
+            full = self.full_points.get(i)
+            if not full:
+                continue
+            now = g.char(i)['raw'][0x5c:0x78]
+            f = sum(full[s * 7 + l] for s in range(4) for l in range(2, 7))
+            n = sum(now[s * 7 + l] for s in range(4) for l in range(2, 7))
+            if f >= 4 and n < f * share:
+                low.append((g.char(i)['name'], n, f))
+        return low
+
+    def maporfic(self):
+        """Maporfic from camp before a boss (B-camp.md: party AC -2 for 1250 steps,
+        0x8007e82a), if a priest knows it and it isn't running."""
+        g = self.g
+        if g.u8(0x8007e82a):
+            return
+        for slot, ri in enumerate(g.party_slots()):
+            if ri is None:
+                continue
+            c = g.char(ri)
+            ks = battle.known_spells(c['raw'], 1, 4)
+            if c['status'] < 0x20 and 32 in ks and c['raw'][0x5c + 7 + 3]:
+                try:
+                    camp.cast(g, slot, 1, 4, ks.index(32))
+                    self.note('maporfic', c['name'], g.u8(0x8007e82a))
+                except Stuck as s:
+                    self.note('maporfic stuck', s.what)
+                if camp.in_camp(g):
+                    camp.close_camp(g)
+                return
 
     def fit(self):
         """Before a step of the route: go home if someone is down or badly hurt with no
@@ -171,6 +266,9 @@ class Run(chapter1.Run):
         if chapter1.needs_town(g):
             self.trip_home()
         else:
+            if chapter1.GEAR and any(gear.wants_equip(g, i) for i in g.party()):
+                # something found and identified that beats what's on
+                gear.equip_party(g, self.log, on_int=self.on_int)
             chapter1.heal_in_camp(g, self.log, on_int=self.on_int)
 
     def ready(self, home_below=None):
@@ -182,12 +280,21 @@ class Run(chapter1.Run):
         self.fit()
         if g.overlay() in ('JOUKA', 'HAZURE'):
             return
+        if chapter1.anyone_dead(g):
+            chapter1.cure_in_camp(g, self.log, on_int=self.on_int)
         self.heal()
-        if chapter1.anyone_dead(g) or chapter1.hurt(g, home_below):
+        low = self.points_low()
+        if low:
+            # the casters spent their points on the way: a Stables trip first, as for HP
+            # (Chris, 2026-10-14)
+            self.note('points low before a boss', low)
+        if chapter1.out_of_action(g) or chapter1.hurt(g, home_below) or low:
             keep = chapter1.COT_BELOW
             chapter1.COT_BELOW = READY_HP
             try:
-                self.trip_home()
+                self.trip_home('points before a boss' if low and not chapter1.out_of_action(g)
+                               and not chapter1.hurt(g, home_below) else
+                               'down before a boss' if chapter1.out_of_action(g) else 'HP before a boss')
             finally:
                 chapter1.COT_BELOW = keep
 
@@ -196,6 +303,8 @@ class Run(chapter1.Run):
         if self.g.overlay() not in ('JOUKA', 'HAZURE'):
             try:
                 chapter1.heal_strong(self.g, self.log, frac or READY_HP, on_int=self.on_int)
+                # heal() comes just before a boss: the party's AC too (Chris, 2026-10-14)
+                self.maporfic()
             except Stuck as s:
                 # the camp won't open everywhere: just after the stream parts the screen
                 # stays black until the party steps on (f1v3e, 2026-10-13)
@@ -275,25 +384,40 @@ class Run(chapter1.Run):
             # the Grounds for gold until the temple can
             self.note('train on the Grounds', areas)
             areas = (0,)
+        # the members setting out: a trip that leaves one of them at the temple doesn't
+        # count, and the goal's retry reloads (q8v7-q8v9 chapter 8, 2026-10-13: trips that
+        # passed with two level-14s dead and level-5 recruits in their places, the gold
+        # gone to the temple with the dead, and the party wore down trip by trip)
+        setting_out = [i for i in g.party() if g.char(i)['status'] == 0]
         battle.RUN_WHEN_LOSING = True
+        why = 'squares done'
         try:
             for area in areas:
                 F = nav.floor(area)
                 sqs = list(F['fights'])
                 self.rng.shuffle(sqs)
                 for sq in sqs:
-                    if self.fights() - n0 >= fights or (chapter1.needs_town(g)
-                                                        and self.town_helps()):
+                    if self.fights() - n0 >= fights:
+                        why = 'fight count'
+                        break
+                    if chapter1.needs_town(g) and self.town_helps():
+                        why = None
                         break
                     if chapter1.hurt(g, 0.6) and chapter1.priests(g):
                         chapter1.heal_in_camp(g, self.log, on_int=self.on_int)
                     if nav.plan(g, (area,) + sq) is None:
                         continue
                     self.go((area,) + sq)
-            self.trip_home()
+                else:
+                    why = 'squares done'
+            self.trip_home(why)
         finally:
             battle.RUN_WHEN_LOSING = False
         if any(g.char(i)['status'] != 0 for i in town.town_party(g)) or len(town.town_party(g)) < 4:
+            return 'casualties'
+        if areas != (0,) and any(i not in town.town_party(g) for i in setting_out):
+            self.note('left at the temple', [g.char(i)['name'] for i in setting_out
+                                             if i not in town.town_party(g)])
             return 'casualties'
         return True
 
@@ -324,6 +448,7 @@ class Run(chapter1.Run):
 FIGHT_WAIT = 2400
 READY_HP = 0.9              # a boss fight starts with everyone at this share of max HP
 READY_HOME = 0.7            # ... or the party goes home first if healing can't reach this
+POINTS_READY = 0.6          # ... or the casters' points at levels 3-7 are under this share
 TOWN_GOLD = 100             # party gold under which a trip home can't buy anything
 
 
