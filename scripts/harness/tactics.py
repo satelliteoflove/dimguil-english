@@ -95,7 +95,7 @@ BACK_REACH = 0x80           # attack +7: the attack reaches the back row
 ROW = 3                     # a monster's group spell or breath hits one row of the party
 # AI columns (monster_ai 0x800cffb0): 0 fight, 1 fight the weakest, 2 defend, 3-4 damage
 # spell (entry 0, flag 0x100), 5 status spell (entry 1, flag 0x400), 10-11 breath
-SPELLS_ON = False            # (b) caster threat from the record's spells, not 8 x level
+SPELLS_ON = True             # (b) caster threat from the record's spells, not 8 x level (on: main, 2026-10-14)
 GROUP_REACH = False          # groups 3-4 of a random fight threaten only with back-row reach
 
 

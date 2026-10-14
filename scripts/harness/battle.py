@@ -283,8 +283,11 @@ def likely_loss(g, M, party_hp):
     the monster's HP, half a kill at 70% of it). Returns the numbers when it's a likely
     loss, else None."""
     from harness import gear
+    # with the records' real odds (tactics.SPELLS_ON) threat is a round's mean, so the bar
+    # is two rounds of it; the old rating (every breather breathing every round) one
+    rounds = 2 if tactics.SPELLS_ON else 1
     T = sum(M[k]['threat'] * len(M[k]['mons']) for k in M)
-    if T < party_hp:
+    if T * rounds < party_hp:
         return None
     done = {}                          # (group, monster) -> expected damage so far
 
@@ -325,7 +328,7 @@ def likely_loss(g, M, party_hp):
     killed = sum(_kill(x, h) * M[t]['threat'] for t in M for j, h, _ in M[t]['mons']
                  for x in [done.get((t, j), 0.0)])
     left = T - killed
-    if left < party_hp:
+    if left * rounds < party_hp:
         return None
     return dict(threat=round(T), party_hp=party_hp, threat_left=round(left))
 
