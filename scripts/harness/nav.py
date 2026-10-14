@@ -49,13 +49,17 @@ LINKS = [
     dict(at=(6, 19, 19), face=0, step=True, to=(6, 19, 18), need=0x143, what='moon door'),
 ]
 # Area A's ladders (square_examine 0x09): B3 (area 20) and B4 (19), the same square on
-# both, facing west; and B3's E12-E13 N20 pair facing north, down only (the walkthrough's
-# way to the LABORATORY mural)
+# both, facing west; and B3's E12-E13 N20 pair facing north (the walkthrough's way to the
+# LABORATORY mural), with B4's ladder up beneath it
 for _xy in ((10, 3), (10, 4), (10, 19), (10, 20)):
     LINKS.append(dict(at=(20,) + _xy, face=3, step=False, to=(19,) + _xy, what='ladder down'))
     LINKS.append(dict(at=(19,) + _xy, face=3, step=False, to=(20,) + _xy, what='ladder up'))
 for _xy in ((12, 3), (13, 3)):
     LINKS.append(dict(at=(20,) + _xy, face=0, step=False, to=(19,) + _xy, what='ladder down'))
+    # and B4's end, facing north too (site event 57, type 9 with p1 0: EVENTMES 220, the
+    # ladder up): the only way back from the mural room (q9r1 chapter 9, 2026-10-14: "no
+    # route" from (17, 3))
+    LINKS.append(dict(at=(19,) + _xy, face=0, step=False, to=(20,) + _xy, what='ladder up'))
 # Transfers the site doesn't decode: area -> {(x, y): (area, x, y)}. The jewel lift's
 # B3 end (event 0xc with p3 = 4, square_arrive) takes the party up on arrival; its
 # params give the destination in game coordinates (x 12, y 11, area 4).
