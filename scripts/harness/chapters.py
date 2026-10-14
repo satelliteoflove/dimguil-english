@@ -287,7 +287,7 @@ class Run(chapter1.Run):
         if chapter1.party_wiped(g):
             raise chapter1.Wiped()
         if getattr(self, '_homeward', False) and self.fights() > n:
-            battle.RUN_OK = self.casters_spent()
+            battle.RUN_OK = self.homeward_run()
         if HP_HEAL and tactics.TRAINING and self.fights() > n and not getattr(self, '_topping', False) \
                 and g.overlay() not in ('JOUKA', 'HAZURE', 'BATTLE'):
             # Chris's HP lines after every training fight, the walk home included
@@ -418,7 +418,7 @@ class Run(chapter1.Run):
             if chapter1.GEAR and not chapter1.party_wiped(g):
                 gear.camp_loot(g, self.log, on_int=self.on_int)
             self._homeward = tactics.TRAINING
-            battle.RUN_OK = self._homeward and self.casters_spent()
+            battle.RUN_OK = self._homeward and self.homeward_run()
             try:
                 nav.to_town(g, self.on_int, lambda g: self.after())
             finally:
@@ -744,6 +744,12 @@ class Run(chapter1.Run):
                                          party=len(town.town_party(g))))
         return True
 
+    def homeward_run(self):
+        """The walk home may run (FLEE_RULE): the casters are spent, or a member is dead,
+        ash or lost (main, 2026-10-14: n1v3j c9 train_02 walked home with two dead, met a
+        fixed caster party with the casters' points still up, couldn't run and was wiped)."""
+        return self.casters_spent() or any(self.g.char(i)['status'] & HOME_DEAD for i in self.g.party())
+
     def casters_spent(self, frac=1 / 3):
         """The party's spell points (every school and level, the standing members') at
         frac or less of what they had after the last Stables: the walk home may run."""
@@ -981,6 +987,7 @@ class Run(chapter1.Run):
 MAPORFIC_TRIP = False        # Maporfic from camp as a training trip sets out
 TOPUP = False                # heal to what the trip's worst monster can't take in two hits
 HP_HEAL = True               # Chris's HP lines after every training fight (Run.hp_heal)
+HOME_DEAD = 0x80 | 0x100 | 0x200  # dead, ash, lost: the walk home may run (Run.homeward_run)
 POINTS_TRAIN = True         # agent 8: a training trip from the maze goes home first when points are low
 DEATH_RETRY = False         # agent 8, 2026-10-14 (Chris): a training trip with a death isn't reloaded
 POISON_HOME = True          # agent 7, 2026-10-14: cure poison first after a fight; home if it stays
