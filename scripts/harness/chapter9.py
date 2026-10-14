@@ -78,6 +78,7 @@ class Chapter9:
                 return True
             run.fit()
             run.examine((25, 5, 15), 0)
+            l0 = len(run.log)
             try:
                 run.go((25, 5, 18))
             except Stuck:
@@ -87,7 +88,11 @@ class Chapter9:
                 if g.u8(maze.AREA) != 26:
                     raise
             run.after()
-            return g.u8(maze.AREA) == 26
+            # the lift counts even when travel then walks back down onto the circle (n1v0j
+            # c9, 2026-10-14: up to area 26 (5, 17), a fight there, then back on B3 (5, 18)
+            # and the goal failed three times)
+            return g.u8(maze.AREA) == 26 or any(
+                isinstance(x[-1], dict) and x[-1].get('area') == 26 for x in run.log[l0:])
 
         yield from run.recover_goals()
         yield 'laboratory', laboratory
