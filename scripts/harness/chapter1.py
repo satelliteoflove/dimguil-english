@@ -552,14 +552,20 @@ def town_upkeep(g, log):
     # the identifying need them)
     # A patient carrying their own fee comes first: the raise gives the gold back (b1v0f
     # chapter 6, 2026-10-14: 8,577 gold on a dead member, the temple "poor" for the rest)
-    def carries_fee(ri):
+    def fee(ri):
         c = g.char(ri)
-        return c['gold'] >= c['level'] * temple_rate(c['status'])
+        return c['level'] * temple_rate(c['status'])
+
+    def refunds(ri):
+        return g.char(ri)['gold'] * 2 >= fee(ri)
     def temple_pass():
         raised = []
+        # a patient whose own gold returns at least half the fee goes first, the most
+        # returned first (n1v1i chapter 8, agent 8: Eve carried 2,653 of her 2,750 and
+        # waited behind the Thief through four gold trips); a 'poor' answer costs nothing
         patients = sorted(town.temple_patients(g), key=lambda ri: (
-            not carries_fee(ri), g.char(ri)['cls'] not in (3, 12), g.char(ri)['cls'] != 11,
-            -g.char(ri)['level']))
+            not refunds(ri), g.char(ri)['cls'] not in (3, 12), g.char(ri)['cls'] != 11,
+            fee(ri) - g.char(ri)['gold'], -g.char(ri)['level']))
         if patients:
             try:
                 town.pool_gold(g, first_pos(), 'tavern')
