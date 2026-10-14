@@ -38,13 +38,20 @@ class Run(chapter1.Run):
         chapter1.CURE_LOG = self.log
 
     def guarded(self, fn):
-        """fn, with NoTablet turned into the outcome 'no tablet' (the goal isn't reached;
-        the recover goals deal with it)."""
+        """fn, with NoTablet handled where it happens: Grounds trips for gold until the
+        temple raises the Tablet's holder (recover), then fn again; 'no tablet' after
+        RECOVER_MOST of them. (b1v1 chapter 2, 2026-10-14: Venus died in the jade mask
+        goal, the temple was too poor, and the jewel goal's retries reloaded a checkpoint
+        with her dead six times; the recover goals only come before some goals.)"""
         def run():
-            try:
-                return fn()
-            except NoTablet:
-                return 'no tablet'
+            for k in range(RECOVER_MOST + 1):
+                try:
+                    return fn()
+                except NoTablet:
+                    if k == RECOVER_MOST:
+                        return 'no tablet'
+                    self.note('recover in goal', getattr(self, '_goal_name', None), k + 1)
+                    self.recover()
         return run
 
     def goal(self, name, fn):
@@ -530,6 +537,7 @@ class Run(chapter1.Run):
         return lv[len(lv) // 2]
 
 
+RECOVER_MOST = 30           # Grounds trips for the Tablet's holder inside one goal
 BOSS_WIPES = 2              # failed tries at a goal before each further try trains a level
 FIGHT_WAIT = 2400
 READY_HP = 0.9              # a boss fight starts with everyone at this share of max HP
