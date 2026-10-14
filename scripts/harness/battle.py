@@ -878,4 +878,5 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
             g.step()
     return dict(rounds=rounds, frames=g.frame - f0, actions=log, ovl=g.overlay(), chest=chest_result,
                 matters=FIGHT_INFO['matters'], casts=list(FIGHT_INFO['casts']),
-                first=FIGHT_INFO.get('first'), hp_end=_party_hp(g))
+                first=FIGHT_INFO.get('first'), hp_end=_party_hp(g),
+                down_end=[g.char(ri)['name'] for ri in g.party() if g.char(ri)['status'] >= 0x20])
