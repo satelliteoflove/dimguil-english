@@ -537,6 +537,9 @@ def town_upkeep(g, log):
         return next(k for k, x in enumerate(town.town_slots(g)) if x is not None)
     gold_note(g, log, 'arrive')
     g0 = party_gold(g)
+    roster0 = roster_gold(g)
+    if _DEPART[0] is not None:
+        INCOME.append(roster0 - _DEPART[0])
     raised = []
     # the Thief first, then the Bishop, then by level (Chris, 2026-10-14: the chests and
     # the identifying need them)
@@ -561,6 +564,9 @@ def town_upkeep(g, log):
                 log.append((g.frame, 'temple', ri, r))
                 if r.get('outcome') in ('healed', 'alive') if isinstance(r, dict) else r in ('healed', 'alive'):
                     raised.append(ri)
+                    if ri in WAIT_FROM:
+                        log.append((g.frame, 'raised after standby', g.char(ri)['name'],
+                                    len(INCOME) - WAIT_FROM.pop(ri)))
                     if g.char(ri)['gold'] and len(town.town_party(g)) < 6:
                         # back in the party now, and their gold pooled for the next patient
                         town.to_town_bar(g)
@@ -587,8 +593,17 @@ def town_upkeep(g, log):
     # mix."): one who is merely dead stays out of the party so they can rejoin once the
     # temple can raise them (r2v0: the Tablet's holder was replaced and the Shrine shut)
     refused = [x for x in log if len(x) > 3 and x[1] == 'rejoin stuck' and 'mix' in str(x[3])]
-    if refused or len(town.town_party(g)) < 4:
-        fill_party(g, log, size=6 if refused else 4)
+    # a member the temple can't raise yet waits there and a standby fills the place
+    # (Chris, 2026-10-14: early on a player grinds the raise's gold with a stand-in)
+    waiting_dead = [ri for ri in town.temple_patients(g) if g.char(ri)['status'] & 0x180]
+    if refused or waiting_dead or len(town.town_party(g)) < 4:
+        n0 = len(town.town_party(g))
+        fill_party(g, log, size=6 if refused or waiting_dead else 4)
+        if waiting_dead and len(town.town_party(g)) > n0:
+            for ri in waiting_dead:
+                WAIT_FROM.setdefault(ri, len(INCOME))
+            log.append((g.frame, 'standby', [g.char(ri)['name'] for ri in waiting_dead],
+                        len(town.town_party(g)) - n0))
     g1 = party_gold(g)
     healer = party_heals(g)
     for pos, ri in enumerate(town.town_slots(g)):
@@ -626,16 +641,25 @@ def town_upkeep(g, log):
             top = max(g.char(i)['level'] for i in town.town_party(g))
             waiting = sum(g.char(ri)['level'] * temple_rate(g.char(ri)['status'])
                           for ri in town.temple_patients(g) if g.char(ri)['level'] >= top - 3)
-            gear.shop(g, log, GEAR_RESERVE * top + waiting)
+            res = raise_reserve(top)
+            log.append((g.frame, 'reserve', res, waiting, round(sum(INCOME[-4:]) / max(1, len(INCOME[-4:])))))
+            gear.shop(g, log, res + waiting)
         except Stuck as s:
             log.append((g.frame, 'shop stuck', s.what))
             town.to_town_bar(g)
         gold_note(g, log, 'shop', g2)
+    # the gold rides with the member least likely to die (back row, the Bishop first),
+    # not split six ways: a mass death no longer locks the raise money in the dead (n1v0
+    # chapter 3, 2026-10-14: five dead with 1,300 each, the temple 'poor'). The shop
+    # pools it on whoever buys
     try:
-        town.divide_gold(g)
+        k = gold_keeper(g)
+        if k is not None:
+            town.pool_gold(g, k, 'tavern')
     except Stuck as s:
-        log.append((g.frame, 'divide stuck', s.what))
+        log.append((g.frame, 'pool stuck', s.what))
     town.to_town_bar(g)
+    _DEPART[0] = roster_gold(g)
 
 
 # Rows (main, 2026-10-14): the three best front-liners in front, by class first, then by
@@ -722,6 +746,43 @@ def heal_at_gate(g, log, on_int=None):
             town.to_town_bar(g)
         if not n:
             return
+
+
+INCOME = []         # roster gold each trip brought home (arrival less the last departure)
+_DEPART = [None]    # roster gold as the party last left town
+WAIT_FROM = {}      # roster index -> len(INCOME) when a standby took their place
+RAISE_TRIPS = 2     # a raise costing under this many trips' income keeps no reserve
+
+
+def roster_gold(g):
+    return sum(g.char(i)['gold'] for i in range(g.roster_count()))
+
+
+def raise_reserve(top):
+    """The gold Boltac's keeps back (Chris, 2026-10-14): none while a raise from death
+    (temple: level x 250) costs less than RAISE_TRIPS trips' income (the last four trips'
+    mean): a standby fills in and the party grinds the raise; above that line two raises
+    at the top level (GEAR_RESERVE). With no trips measured yet, the two raises."""
+    inc = INCOME[-4:]
+    if inc and 250 * top < RAISE_TRIPS * sum(inc) / len(inc):
+        return 0
+    return GEAR_RESERVE * top
+
+
+def gold_keeper(g):
+    """Party position to hold the gold: the Bishop in the back row, else the back-row
+    member with the most HP, else the first member."""
+    slots = town.town_slots(g)
+    here = [(p, ri) for p, ri in enumerate(slots) if ri is not None and g.char(ri)['status'] == 0]
+    if not here:
+        return None
+    back = [(p, ri) for p, ri in here if p >= 3]
+    for p, ri in back:
+        if g.char(ri)['cls'] == gear.BISHOP:
+            return p
+    if back:
+        return max(back, key=lambda x: g.char(x[1])['max_hp'])[0]
+    return here[0][0]
 
 
 def party_gold(g):
