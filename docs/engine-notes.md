@@ -690,6 +690,15 @@ patches in `asm/`.
   sets a flag. The result indexes I_NAME_E.OBJ, whose strings 427-938 were never
   localised in the English-mode file: 428-557 mirror the item list, 558+ are natural
   attacks (claws, fangs, stinger). The verb indexes FIGHTMSG.OBJ.
+- An attack whose noun is 0x100 or more is an ability, not a blow: `monster_attack_roll`
+  (0x800aaed0) casts the spell in its +6 byte the way an item is used, with the verb byte
+  as the message ("tries to lull a strange dance", FIGHTMSG 214 through
+  `battle_message_build`'s mode 5). Because it goes through the item path, silence
+  doesn't stop it. The Nightmare's and the Merry Puppet's attack 2 is [19, 1, 46, ...]:
+  the dance is Katino. `monster_melee` (0x800aaa04) picks attack 1 on rand(100) > 68 when
+  it's usable, else attack 0, so a fighting Nightmare dances about a third of the time
+  on top of its 45% Katino column. (Agent 9, 2026-10-14, from the n1v1 chapter 8 fight:
+  92 Katino casts and dances in 19 rounds.)
 - In a battle, the current group's monster record is at 0x801b0680 (in
   rips/states/battle_wriggle.state).
 - `battleshow.py` renders any template/verb/noun combination in the real battle box, with
