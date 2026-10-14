@@ -419,7 +419,8 @@ ITEM_FLUSH_PRICES = 5       # flush: gold over the reserve at least the reserve 
 
 def item_options(g, ri):
     """The battle Use list of roster index ri: pack items with a battle spell (item +0x1b
-    != 0xff), in pack order (f07 probe, 2026-10-14: Uranus's list was his Latumofis potion,
+    != 0xff), potions and scrolls (+3 = 20, 21) or worn gear, in pack order (f07 probe,
+    2026-10-14: Uranus's list was his Latumofis potion,
     Cape of Hide and Demonic Chimes, pack slots 2, 7, 8; screen 81, cursor LIST). Each is a
     dict: idx (list row), k (pack slot), w (word), id, sid, cons (potion or scroll, or a sure
     break into nothing: used up), br (break chance), eq (equipped), stock (Boltac's), price,
@@ -433,6 +434,11 @@ def item_options(g, ri):
         if not i or bs == 0xff:
             continue
         sub, br = g.u8(a + 3), g.u8(a + 0x0e)
+        if sub not in (20, 21) and not w & gear.EQUIPPED:
+            # the list skips gear that isn't worn (agent 11, n1v3k c9 state: Mercury's two
+            # unworn Rings of Jewels weren't on it, his worn Shadow Cloak, potions and
+            # scroll were; the scroll's row was 3, not 5, and the cursor stuck)
+            continue
         out.append(dict(idx=len(out), k=k, w=w, id=i, sid=bs & 0x7f, br=br, eq=bool(w & gear.EQUIPPED),
                         cons=sub in (20, 21) or (br >= 100 and g.u16(a + 0x10) == 0),
                         stock=g.u8(gear.STOCK + i), price=g.u32(a + 0x12), ident=bool(w & gear.IDENT)))
