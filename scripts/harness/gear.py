@@ -115,7 +115,17 @@ def equipped(g, ri):
     return out
 
 
+CLOAK = 22                 # subtype of the cloaks (Shadow, Night, Darkness, Cape of Hide): AC
+                           # pieces any class wears in the accessory slot (G-records.md subtypes)
+
+
+def cloak(it):
+    return it['cat'] == 7 and it['sub'] == CLOAK
+
+
 def fits_slot(it, slot, main=None):
+    if slot == 6:
+        return cloak(it)
     if slot == 0:
         return it['cat'] == 0
     if slot == 1:
@@ -131,6 +141,8 @@ def better(g, ri, it, slot, cur):
         return False
     if slot == 0 and cur is not None and ranged(cur) != ranged(it):
         return False
+    if slot == 6 and cur is not None and not cloak(cur):
+        return False                # a ring or amulet that's on stays on (choose)
     if slot == 1:
         main = equipped(g, ri).get(0)
         if main is not None and main['f04'] & 0x20:
@@ -151,7 +163,20 @@ def choose(g, ri, slot, cands, before):
     the member can wear uncursed; the accessory that was on before stays on."""
     words = dict(pack(g, ri))
     if slot == 6:
-        return next((k for k in cands if before.get(k, 0) & EQUIPPED), None)
+        # the accessory slot: a cloak by AC (b1v3b chapter 4, 2026-10-14: two spare Shadow
+        # Cloaks filled the Bishop's pack); anything else that was on stays on
+        on = next((k for k in cands if before.get(k, 0) & EQUIPPED), None)
+        if on is not None and not cloak(item(g, words.get(on, before[on]) & 0x1ff)):
+            return on
+        best, bs = on, score(item(g, before[on] & 0x1ff), 6) if on is not None else 0
+        for k in cands:
+            w = words.get(k)
+            if w is None or not w & IDENT:
+                continue
+            it = item(g, w & 0x1ff)
+            if cloak(it) and usable(g, ri, it) and score(it, 6) > bs:
+                best, bs = k, score(it, 6)
+        return best
     best, bs = None, None
     for k in cands:
         w = words.get(k)
@@ -227,7 +252,7 @@ def wants_equip(g, ri):
         if w & EQUIPPED or not w & IDENT:
             continue
         it = item(g, w & 0x1ff)
-        for slot in (0, 1, 2, 3, 4, 5):
+        for slot in (0, 1, 2, 3, 4, 5, 6):
             if better(g, ri, it, slot, on.get(slot)):
                 return True
     return False
@@ -394,7 +419,7 @@ def gear_value(g, rj, it, taken=None):
     already been planned for them in `taken`), or (0, None)."""
     on = equipped(g, rj)
     best = (0, None)
-    for s in range(6):
+    for s in range(7):
         cur = (taken or {}).get((rj, s), on.get(s))
         if better(g, rj, it, s, cur):
             gain = score(it, s) - (score(cur, s) if cur else 0)
@@ -413,7 +438,7 @@ def plan_gives(g, members):
             if w & (EQUIPPED | CURSED) or not w & IDENT:
                 continue
             it = item(g, w & 0x1ff)
-            if it['cat'] > 5:
+            if it['cat'] > 5 and not cloak(it):
                 continue
             for rj in members:
                 if g.char(rj)['status'] >= 0x20:
@@ -674,6 +699,9 @@ def gold(g):
     return sum(g.char(i)['gold'] for i in town.town_party(g))
 
 
+CHEAP_ID = 50              # a shop identify this cheap is paid to make room when packs are full
+
+
 def shop(g, log, reserve):
     """One visit to Boltac's after a trip: for each member, identify unknown items and
     uncurse cursed ones (cheapest first, each while it costs at most a quarter of the
@@ -694,24 +722,32 @@ def shop(g, log, reserve):
         if town._at_trade_menu(g):
             town.boltac_leave(g)
 
-    # identify and uncurse
+    # identify and uncurse. The fee is half the price, the same as the sale, so paying it
+    # only makes sense for something a member could wear (b1v3b, 2026-10-14). Packs full
+    # to the last slot stop the Bishop gathering and drop chest loot, so cheap unknowns
+    # are identified (and then sold) to make room.
+    alive = [ri for _, ri in members if g.char(ri)['status'] < 0x20]
+    bishop_full = any(g.char(ri)['cls'] == BISHOP and len(pack(g, ri)) >= 10 for ri in alive)
     for pos, ri in members:
         todo = []
         for k, w in pack(g, ri):
             it = item(g, w & 0x1ff)
             if w & CURSED:
-                todo.append((it['price'] // 2, k, 'uncurse', w))
+                todo.append((it['price'] // 2, k, 'uncurse', w, False))
             elif not w & IDENT and it['price']:
-                if bishop_will(g, members, w):
+                cheap = it['price'] // 2 <= CHEAP_ID and (len(pack(g, ri)) >= 10 or bishop_full)
+                if not cheap and bishop_will(g, members, w):
                     continue            # the Bishop does it in camp, at no risk
-                todo.append((it['price'] // 2, k, 'identify', w))
+                if not cheap and not any(usable(g, rj, it) for rj in alive):
+                    continue            # nobody could wear it: the Bishop's, in time
+                todo.append((it['price'] // 2, k, 'identify', w, cheap))
         todo.sort()
         if not todo:
             continue
         trade_done()
         pool(pos)
-        for cost, k, which, w in todo:
-            if cost > max(0, gold(g) - reserve) / 4 and which == 'identify':
+        for cost, k, which, w, cheap in todo:
+            if cost > max(0, gold(g) - reserve) / 4 and which == 'identify' and not cheap:
                 continue
             if cost > g.char(ri)['gold']:
                 continue
@@ -729,12 +765,12 @@ def shop(g, log, reserve):
                 if w & (EQUIPPED | CURSED) or not w & IDENT:
                     continue
                 it = item(g, w & 0x1ff)
-                if it['cat'] > 5 or not it['price']:
+                if it['cat'] > 5 and not cloak(it) or not it['price']:
                     continue
                 # sold only if no member in the party can use it, or everyone who can
                 # has better (Chris, 2026-10-14); camp Give passes it on otherwise
                 if any(better(g, rj, it, s, equipped(g, rj).get(s))
-                       for _, rj in members if g.char(rj)['status'] < 0x20 for s in range(6)):
+                       for _, rj in members if g.char(rj)['status'] < 0x20 for s in range(7)):
                     continue
                 sell = (k, w)
                 break

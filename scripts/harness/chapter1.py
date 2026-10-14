@@ -471,6 +471,8 @@ def town_upkeep(g, log):
     death leaves a hole."""
     def first_pos():
         return next(k for k, x in enumerate(town.town_slots(g)) if x is not None)
+    gold_note(g, log, 'arrive')
+    g0 = party_gold(g)
     raised = []
     # the Thief first, then the Bishop, then by level (Chris, 2026-10-14: the chests and
     # the identifying need them)
@@ -499,18 +501,22 @@ def town_upkeep(g, log):
             except Stuck as s:
                 log.append((g.frame, 'rejoin stuck', ri, s.what))
             town.to_town_bar(g)
+    gold_note(g, log, 'temple', g0)
     tablet_back(g, log)
+    raised_back(g, log)
     # recruit only for a member who can't come back (refused, "Their alignments won't
     # mix."): one who is merely dead stays out of the party so they can rejoin once the
     # temple can raise them (r2v0: the Tablet's holder was replaced and the Shrine shut)
     refused = [x for x in log if len(x) > 3 and x[1] == 'rejoin stuck' and 'mix' in str(x[3])]
     if refused or len(town.town_party(g)) < 4:
         fill_party(g, log, size=6 if refused else 4)
+    g1 = party_gold(g)
+    healer = party_heals(g)
     for pos, ri in enumerate(town.town_slots(g)):
         if ri is None or g.char(ri)['status'] != 0:
             continue
         c = g.char(ri)
-        if c['max_hp'] and c['hp'] < c['max_hp'] * COT_BELOW:
+        if c['max_hp'] and c['hp'] < c['max_hp'] * COT_BELOW and not healer:
             # the Stables restore spell points but no HP: a member left at 1 HP with no
             # healer's points sent every trip straight home (f1v1c chapter 2, 2026-10-13:
             # 30 recover trips of 2,800 frames). A Cot heals, week by week, while the
@@ -527,6 +533,10 @@ def town_upkeep(g, log):
         log.append((g.frame, 'stables', pos, r['weeks']))
         town.to_town_bar(g)
     town.to_town_bar(g)
+    if healer:
+        heal_at_gate(g, log)
+    gold_note(g, log, 'inn', g1)
+    g2 = party_gold(g)
     if GEAR:
         # Boltac's: identify, uncurse, sell, buy (gear.shop), keeping a dead member's
         # raise in reserve; the party equips in camp once it sets out (Chris, 2026-10-14)
@@ -535,6 +545,122 @@ def town_upkeep(g, log):
         except Stuck as s:
             log.append((g.frame, 'shop stuck', s.what))
             town.to_town_bar(g)
+        gold_note(g, log, 'shop', g2)
+
+
+def party_heals(g):
+    """Someone in the party who stands and knows Dios: after the Stables they heal the
+    rest from camp."""
+    return any(g.char(ri)['status'] == 0 and 21 in battle.known_spells(g.char(ri)['raw'], 1, 1)
+               for ri in town.town_party(g))
+
+
+GATE_HEALS = 3              # rounds of heal-at-the-gate, Stables between
+
+
+def heal_at_gate(g, log, on_int=None):
+    """In town, someone under COT_BELOW of max HP: step out onto the Grounds, heal from
+    camp with the strongest heals the priests have (heal_strong), step back in and take
+    the Stables for the points; again while it helps. A Cot heals 1 HP a week, for 10
+    gold and a week of age each (E-town.md; b1v3b chapter 4, 2026-10-14: about 19 Cot
+    stays, some 5,000 gold, while the party couldn't pay for raises)."""
+    for _ in range(GATE_HEALS):
+        party = town.town_party(g)
+        if not any(g.char(i)['status'] == 0 and g.char(i)['max_hp']
+                   and g.char(i)['hp'] < g.char(i)['max_hp'] * COT_BELOW for i in party):
+            return
+        town.begin_adventure(g)
+        n = heal_strong(g, log, frac=0.95, max_casts=20, on_int=on_int)
+        maze.to_town(g, on_int)
+        town.to_town_bar(g)
+        log.append((g.frame, 'gate heal', n, [(g.char(i)['name'], g.char(i)['hp'], g.char(i)['max_hp'])
+                                              for i in town.town_party(g)]))
+        for pos, ri in enumerate(town.town_slots(g)):
+            if ri is None or g.char(ri)['status'] != 0:
+                continue
+            town.inn_stay(g, pos, 'Stables', weeks=1)
+            town.to_town_bar(g)
+        if not n:
+            return
+
+
+def party_gold(g):
+    return sum(g.char(i)['gold'] for i in (g.party() or town.town_party(g)))
+
+
+def gold_note(g, log, what, before=None):
+    """('gold', what, change, party gold, roster gold): where the gold goes (b1v3b chapter
+    4, 2026-10-14, ended with none; the logs had no gold in them)."""
+    now = party_gold(g)
+    roster = sum(g.char(i)['gold'] for i in range(g.roster_count()))
+    log.append((g.frame, 'gold', what, None if before is None else now - before, now, roster))
+
+
+def leave_party(g, log, pos):
+    """Take party position pos out, after pooling the gold on another member (b1v3b
+    chapter 4, 2026-10-14: Uranus left with the party's 706 gold)."""
+    slots = town.town_slots(g)
+    ri = slots[pos]
+    other = next((p for p, x in enumerate(slots) if x is not None and p != pos), None)
+    if other is not None and g.char(ri)['gold']:
+        try:
+            town.pool_gold(g, other, 'tavern')
+        except Stuck as s:
+            log.append((g.frame, 'pool stuck', s.what))
+        town.to_town_bar(g)
+    town.remove_member(g, pos)
+    log.append((g.frame, 'removed', ri, g.char(ri)['name']))
+    return ri
+
+
+RAISED_BACK = 2             # a member in the tavern this many levels above the party's lowest swaps in
+
+
+def raised_back(g, log):
+    """A member the temple raised who couldn't rejoin a full party (recruits filled the
+    places of the dead) takes the place of its lowest-level member (b1v3b chapter 4,
+    2026-10-14: Earth, a level-11 Priest, was raised for 2,750 gold and sat in the tavern
+    while a level-8 recruit played on). The Tablet's holder stays."""
+    tried = set()
+    for _ in range(6):
+        slots = town.town_slots(g)
+        here = [p for p, ri in enumerate(slots) if ri is not None]
+        if len(here) < 6:
+            return
+        cands = [i for i in town.tavern_candidates(g)
+                 if i not in tried and g.char(i)['status'] == 0]
+        if not cands:
+            return
+        ri = max(cands, key=lambda i: (g.char(i)['level'], -i))
+        def only_one(p):
+            # the party's only Thief (or Ninja) or only Bishop stays (Chris, 2026-10-14)
+            for kind in ((3, 12), (11,)):
+                if g.char(slots[p])['cls'] in kind and sum(
+                        1 for q in here if g.char(slots[q])['cls'] in kind) == 1:
+                    return True
+            return False
+        out = [p for p in here if not only_one(p)
+               and not any((it & 0xfff) == TABLET for it in g.char(slots[p])['items'])]
+        if not out:
+            return
+        pos = min(out, key=lambda p: (g.char(slots[p])['level'], -p))
+        if g.char(ri)['level'] < g.char(slots[pos])['level'] + RAISED_BACK:
+            return
+        tried.add(ri)
+        try:
+            gone = leave_party(g, log, pos)
+            town.to_town_bar(g)
+            town.form_party(g, [ri])
+            log.append((g.frame, 'raised back', ri, g.char(ri)['name'], g.char(gone)['name']))
+        except Stuck as s:
+            log.append((g.frame, 'raised back stuck', ri, s.what))
+            town.to_town_bar(g)
+            if len(town.town_party(g)) < 6:
+                try:
+                    town.form_party(g, [gone])
+                except Stuck:
+                    pass
+        town.to_town_bar(g)
 
 
 GEAR = True
@@ -561,8 +687,8 @@ def tablet_back(g, log):
         if len(town.town_party(g)) >= 6:
             pos = min((p for p, ri in enumerate(slots) if ri is not None),
                       key=lambda p: g.char(slots[p])['level'])
-            town.remove_member(g, pos)
-            log.append((g.frame, 'removed', slots[pos], g.char(slots[pos])['name']))
+            leave_party(g, log, pos)
+            town.to_town_bar(g)
         town.form_party(g, [holder])
         log.append((g.frame, 'tablet back', holder, g.char(holder)['name']))
     except Stuck as s:
@@ -583,8 +709,7 @@ def make_room_for(g, holder, log):
             break
         pos = min(here, key=lambda p: g.char(slots[p])['level'])
         try:
-            town.remove_member(g, pos)
-            log.append((g.frame, 'removed', slots[pos], g.char(slots[pos])['name']))
+            leave_party(g, log, pos)
         except Stuck as s:
             log.append((g.frame, 'remove stuck', slots[pos], s.what))
             break

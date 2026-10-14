@@ -77,6 +77,7 @@ class Run(chapter1.Run):
         self.chapter = n
         cls = CHAPTERS[n]
         t0, f0, k0, s0, l0 = time.time(), g.frame, len(self.goals), len(self.stuck), len(self.log)
+        gold0 = chapter1.party_gold(g)
         if n == 1:
             # chapter 1 keeps its own loop (training trips until level 7, then the pillars)
             chapter1.Run.run(self, boot=boot)
@@ -89,7 +90,7 @@ class Run(chapter1.Run):
                    secs=round(time.time() - t0, 1), goals=self.goals[k0:],
                    stuck=self.stuck[s0:], spells=self.spell_summary(l0),
                    party=self.party_gear(), chests=self.chest_summary(l0),
-                   loot=self.loot_summary(l0))
+                   loot=self.loot_summary(l0), gold=self.gold_summary(l0, gold0))
         self.chapter_results.append(res)
         # a line per chapter as it ends, and the log so far (result.json and log.jsonl
         # are only written when the run ends)
@@ -134,6 +135,26 @@ class Run(chapter1.Run):
             else:
                 res[str(c)] = res.get(str(c), 0) + 1
         return dict(chests=len(chests), results=res, traps=traps, items=loot)
+
+    def gold_summary(self, l0=0, start=None):
+        """The chapter's gold: at the start and end, what the temple, the inn and the shop
+        took (shop: sales less buys and fees), and what came home from the maze (each
+        arrival in town against the gold the party left with). Sums over goals that
+        counted and retries that were reloaded alike, so a reload shows as a gap."""
+        g = self.g
+        spent, income, last = {}, 0, start
+        for x in self.log[l0:]:
+            if len(x) > 5 and x[1] == 'gold':
+                what, ch, now = x[2], x[3], x[4]
+                if what == 'arrive':
+                    if last is not None and now > last:
+                        income += now - last
+                elif ch is not None:
+                    spent[what] = spent.get(what, 0) + ch
+                last = now
+        return dict(start=start, end=chapter1.party_gold(g),
+                    roster_end=sum(g.char(i)['gold'] for i in range(g.roster_count())),
+                    town=spent, maze_income=income)
 
     def loot_summary(self, l0=0):
         """Identifying (camp and shop), gives, sales and buys in the chapter."""
