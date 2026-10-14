@@ -80,7 +80,14 @@ SCENE, SCENE_COUNT = 0x80079878, 0x8008a000
 EXTRA_SHUT = {6: {(5, 11, 0), (5, 11, 2), (5, 10, 2), (5, 12, 0),
                  (19, 19, 0), (19, 18, 2)}}     # the moon door: a LINK, not a side
 NPC_FLAGS = 0x80079754
-EXTRA_SEALED = {7: {(7, 11, 3): [(NPC_FLAGS, 28)], (6, 11, 1): [(NPC_FLAGS, 28)]}}
+EXTRA_SEALED = {7: {(7, 11, 3): [(NPC_FLAGS, 28)], (6, 11, 1): [(NPC_FLAGS, 28)]},
+                # B3's ice pillars between x 19 and 20, rows 2-4 (site events 53/54/58,
+                # "A pillar of ice towers before you."): shut until the freezer melts
+                # (npc_flags bit 29, chapter 3). The site and RAM's wall map call them
+                # open; training planned through them into the freezer's pocket and got
+                # "no path" at (20, 4) (b1v1b, b1v6 chapter 3, 2026-10-14)
+                6: {(x, y, d): [(NPC_FLAGS, 29)] for y in (2, 3, 4)
+                    for x, d in ((19, 1), (20, 3))}}
 # Sides that close once a flag is set: area -> {(x, y, side): (addr, bit)}. B2's passage
 # between E13 N12 and E14 N12 shuts when the winding machine runs (story_flags bit 2):
 # the wall it hauls up on B3 comes down here (walkthrough 05-moon-door; f1v3f 2026-10-13
