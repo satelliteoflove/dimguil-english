@@ -36,20 +36,23 @@ DIOS = (1, 1)                # Priest, level 1, list index of spell id 21
 # party variants for T4: the three new characters (all Good, to sit with the premade Good
 # three); the class falls back to Fighter if the rolls never offer it
 VARIANTS = [
+    # every party: Mercury (premade Thief) and a Bishop among the three made (Chris,
+    # 2026-10-14). A Bishop needs IQ 15 and Piety 15 (G-records.md class minimums): an
+    # Elf or a Gnome starts nearest (10 bonus points), creation rerolls until it's offered
     [('Ace', 'Human', 'M', 'Good', 'Fighter'), ('Bea', 'Elf', 'F', 'Good', 'Mage'),
-     ('Cy', 'Dwarf', 'M', 'Good', 'Priest')],
-    [('Dax', 'Dwarf', 'M', 'Good', 'Fighter'), ('Eve', 'Gnome', 'F', 'Good', 'Priest'),
+     ('Cy', 'Gnome', 'M', 'Good', 'Bishop')],
+    [('Dax', 'Dwarf', 'M', 'Good', 'Fighter'), ('Eve', 'Gnome', 'F', 'Good', 'Bishop'),
      ('Fen', 'Elf', 'M', 'Good', 'Mage')],
     [('Gus', 'Human', 'M', 'Good', 'Fighter'), ('Hal', 'Human', 'M', 'Good', 'Fighter'),
-     ('Ivy', 'Elf', 'F', 'Good', 'Priest')],
+     ('Ivy', 'Elf', 'F', 'Good', 'Bishop')],
     [('Jo', 'Hobbit', 'F', 'Neutral', 'Thief'), ('Kai', 'Elf', 'M', 'Good', 'Mage'),
-     ('Lu', 'Dwarf', 'F', 'Good', 'Priest')],
+     ('Lu', 'Gnome', 'F', 'Good', 'Bishop')],
     [('Max', 'Dracon', 'M', 'Good', 'Fighter'), ('Nia', 'Elf', 'F', 'Good', 'Mage'),
-     ('Oz', 'Elf', 'M', 'Good', 'Mage')],
+     ('Oz', 'Elf', 'M', 'Good', 'Bishop')],
     [('Pip', 'Human', 'F', 'Good', 'Fighter'), ('Quo', 'Gnome', 'M', 'Good', 'Priest'),
-     ('Rex', 'Dwarf', 'M', 'Good', 'Priest')],
+     ('Rex', 'Gnome', 'M', 'Good', 'Bishop')],
     [('Sam', 'Human', 'M', 'Good', 'Samurai'), ('Tia', 'Elf', 'F', 'Good', 'Mage'),
-     ('Uma', 'Dwarf', 'F', 'Good', 'Priest')],
+     ('Uma', 'Elf', 'F', 'Good', 'Bishop')],
     # a Lord needs about 30 bonus points on any race; a player would reroll for an hour
     [('Vic', 'Elf', 'M', 'Good', 'Bishop'), ('Wes', 'Human', 'M', 'Good', 'Fighter'),
      ('Xia', 'Gnome', 'F', 'Good', 'Priest')],
@@ -451,11 +454,13 @@ def town_trip(g, log):
     """Walk out, raise the dead at the temple if the gold allows, Stables for everyone
     (spell points), back to the maze, then heal with Dios."""
     on_int = on_interrupt_factory(log)
+    if GEAR:
+        gear.camp_loot(g, log, on_int)
     maze.to_town(g, on_int)
     town_upkeep(g, log)
     town.begin_adventure(g)
     if GEAR:
-        gear.equip_party(g, log)
+        gear.camp_loot(g, log)
     heal_in_camp(g, log, frac=0.95)
 
 
@@ -467,7 +472,11 @@ def town_upkeep(g, log):
     def first_pos():
         return next(k for k, x in enumerate(town.town_slots(g)) if x is not None)
     raised = []
-    patients = [ri for ri in town.temple_patients(g)]
+    # the Thief first, then the Bishop, then by level (Chris, 2026-10-14: the chests and
+    # the identifying need them)
+    patients = sorted(town.temple_patients(g), key=lambda ri: (
+        g.char(ri)['cls'] not in (3, 12), g.char(ri)['cls'] != 11, -g.char(ri)['level']))
+    gear.TRIED.clear()
     if patients:
         try:
             town.pool_gold(g, first_pos(), 'tavern')
@@ -741,7 +750,7 @@ class Run:
         if g.overlay() == 'JOUKA':
             town.begin_adventure(g)
             if GEAR:
-                gear.equip_party(g, self.log)
+                gear.camp_loot(g, self.log)
             heal_in_camp(g, self.log, frac=0.95)
         fights = []
         log = self.log
@@ -783,6 +792,8 @@ class Run:
                     if e.what != 'no path':
                         raise
             walks += 1
+        if GEAR:
+            gear.camp_loot(g, log, on_int)
         maze.to_town(g, on_int)
         town_upkeep(g, log)
         if anyone_dead(g) or any(g.char(i)['status'] != 0 for i in town.town_party(g)):

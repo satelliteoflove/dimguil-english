@@ -226,6 +226,10 @@ def default_policy(g, m, opts):
     lv = sorted(g.char(rk)['level'] for rk in ids if rk is not None)
     big = tactics.matters(g, M, party_hp, lv[len(lv) // 2] if lv else None) or losing(g)
     FIGHT_INFO['matters'] = FIGHT_INFO['matters'] or bool(big)
+    if 'first' not in FIGHT_INFO and M:
+        # the rating's inputs at the first command phase (brief item 6)
+        FIGHT_INFO['first'] = tactics.matters_detail(g, M, party_hp, lv[len(lv) // 2] if lv else None)
+        FIGHT_INFO['first']['party_max'] = sum(g.char(rk)['max_hp'] for rk in ids if rk is not None)
     # support spells (the party's AC and magic screen, the monsters' AC) only in a fixed
     # fight or one that's going badly (Chris, 2026-10-14: not in trash fights)
     boss = bool(g.u8(FIXED)) or losing(g)
@@ -445,6 +449,7 @@ def _since(g, n, file, idxs):
 
 
 def _chest_pick_member(g, slot):
+    ui.move_cursor(g, PGRID_Y, slot // 3, 'down', 'up', what='chest member row')
     ui.move_cursor(g, PGRID_X, slot % 3, 'right', 'left', what='chest member')
 
 
@@ -516,6 +521,239 @@ def chest(g, mode='leave', who=0, since=None):
     return 'left trap %s' % trap
 
 
+# --- every chest: inspect (or Calfo), disarm, open (Chris, 2026-10-14) ---
+# The rules, all from BATTLE (docs/re/lock-test.md "Chests", D-battle.md "Chests and traps"):
+#   Inspect (FUN_800c697c): right with chance Agility x 6 Thief, 5 Ninja, 4 Ranger or Bard,
+#     1 anyone else, held to 1-95; a miss names a random trap when rand_below(20) <= Agility,
+#     else the trap goes off on the inspector.
+#   Calfo (Priest 2, id 24): 95% right, never sets it off.
+#   Calnova (Alchemist 7, id 61): 85% disarms, else 90% nothing, 10% it goes off.
+#   Disarm: a wrong name sets it off; the right one disarms with chance 80 (Thief, Ninja),
+#     60 (Ranger, Bard), 0 (anyone else) + level - the area's danger; a miss sets it off
+#     when rand_below(20) + (5 for the others) > Agility, else "Couldn't disarm the trap."
+#     and the menu again. A disarmed or sprung chest gives its loot (chest_open 0x1e/0x28
+#     -> 0x50 chest_loot).
+#   Items go to a random member with room (FUN_800c8388), not to the opener.
+#   danger = area_danger[map_type_of_area[area]] (chest_trap_pick 0x800c6768).
+CLS_INSPECT = {3: 6, 12: 5, 7: 4, 8: 4}
+CLS_DISARM = {3: 80, 12: 80, 7: 60, 8: 60}
+AREA_DANGER, MAP_TYPE_OF_AREA, MAZE_AREA = 0x800d7cec, 0x8005a824, 0x80079668
+CALFO, CALNOVA = 24, 61
+# traps by number (FIGHTMSG 221 + n): those that hit only the opener or poison are
+# opened if they can't be disarmed; the rest are left unless the odds of springing them
+# while disarming are low (SPRING_RISK)
+MILD = {1, 2, 4, 9}
+SPRING_RISK = 0.25
+DISARM_TRIES = 8
+CHESTS = []             # one record per chest met (fight() returns the last)
+
+
+def area_danger(g):
+    t = struct.unpack('b', bytes([g.u8(MAP_TYPE_OF_AREA + g.u8(MAZE_AREA))]))[0]
+    return g.u8(AREA_DANGER + t)
+
+
+def _can_act(c):
+    # paralysis and worse can't be chosen; asleep or out cold can't act either
+    return c['status'] & ~0x05 == 0
+
+
+def inspect_chance(c):
+    return min(95, max(1, c['stats'][4] * CLS_INSPECT.get(c['cls'], 1)))
+
+
+def disarm_odds(c, danger):
+    """(chance it's disarmed, chance a miss springs it) for one try with the right name."""
+    p = max(0, min(100, CLS_DISARM.get(c['cls'], 0) + c['level'] - danger)) / 100
+    b = 0 if c['cls'] in CLS_DISARM else 5
+    q = sum(1 for r in range(20) if r + b > c['stats'][4]) / 20
+    return p, q
+
+
+def spring_risk(p, q):
+    """Chance the trap goes off before it's disarmed, trying until one or the other."""
+    return 1.0 if p + (1 - p) * q == 0 else (1 - p) * q / (p + (1 - p) * q)
+
+
+def _caster(g, members, sid, school, level):
+    for slot, c in members:
+        if sid in known_spells(c['raw'], school, level) and c['raw'][0x5c + school * 7 + level - 1] \
+                and c['status'] & ~0x04 == 0:
+            return slot, c
+    return None
+
+
+CHEST_PROMPTS = {0: 246, 1: 247, 2: 248, 3: 249, 4: 250}
+CHEST_REFUSED = (234, 235, 236, 237, 238, 243, 244)
+
+
+def _chest_act(g, opt, slot, trap=None):
+    """One chest menu action by party slot `slot` (trap: the name to disarm, 1-12).
+    Returns (new FIGHTMSG (idx, text) list, gone)."""
+    gone = lambda: not in_battle(g) or g.u8(PHASE) != CHEST_PHASE
+    n = len(g.cap.messages)
+    ui.move_cursor(g, LIST, opt, 'down', 'up', what='chest option')
+    ui.confirm_until(g, lambda: _since(g, n, 'FIGHTMSG.OBJ', (CHEST_PROMPTS[opt],) + CHEST_REFUSED)
+                     or gone(), 120, 'chest option %d' % opt)
+    if not gone() and not _since(g, n, 'FIGHTMSG.OBJ', CHEST_REFUSED):
+        ui.wait_until(g, lambda: g.u8(LEVEL) == 2 or gone(), 120, 'chest member pick')
+        _chest_pick_member(g, slot)
+        if opt == 3:
+            ui.confirm_until(g, lambda: _since(g, n, 'FIGHTMSG.OBJ', (251,)) or gone(), 120,
+                             'disarm member')
+            g.step(8)
+            ui.move_cursor(g, LIST, trap - 1, 'down', 'up', what='trap name')
+        lv = g.u8(LEVEL)
+        n2 = len(g.cap.messages)
+        ui.confirm_until(g, lambda: gone() or g.u8(LEVEL) != lv
+                         or len([m for m in g.cap.messages[n2:] if m['file'] == 'FIGHTMSG.OBJ']),
+                         120, 'chest action %d' % opt)
+    n3 = len(g.cap.messages)
+    _chest_tap_until(g, lambda: gone() or chest_menu_ready(g, n3), limit=1500, what='chest result')
+    out = [(m['idx'], m['text'].replace('\n', ' ')) for m in g.cap.messages[n:]
+           if m['file'] == 'FIGHTMSG.OBJ']
+    return out, gone()
+
+
+def chest_full(g, since=None):
+    """Every chest: find out the trap (the best inspector at 95%, else Calfo, else the
+    best inspector), disarm a trap with the best disarmer (Calnova first if anyone has
+    it), then open it. A trap that only hurts the opener or poisons is opened if it can't
+    be disarmed; a worse one is left only when nobody can disarm it at decent odds.
+    Returns the chest's record (also appended to CHESTS)."""
+    if since is None:
+        since = max(0, len(g.cap.messages) - 40)
+    ui.wait_until(g, lambda: chest_menu_ready(g, since), 600, 'chest menu')
+    danger = area_danger(g)
+    members = [(slot, g.char(ri)) for slot, ri in enumerate(g.party_slots()) if ri is not None]
+    members = [(s, c) for s, c in members if _can_act(c)]
+    # the chest's real trap (0x80079a59), for the log only: the choices go by what the
+    # party is told
+    rec = dict(area=g.u8(MAZE_AREA), pos=g.pos(), danger=danger, acts=[], trap=None,
+               went_off=None, loot=[], result=None, real_trap=g.u8(0x80079a59))
+    CHESTS.append(rec)
+    if not members:
+        _chest_act_leave(g)
+        rec['result'] = 'left (nobody can act)'
+        return rec
+
+    def act(opt, slot, trap=None, why=''):
+        msgs, gone = _chest_act(g, opt, slot, trap)
+        rec['acts'].append(dict(act=['inspect', 'calfo', 'calnova', 'disarm', 'open'][opt],
+                                who=g.char(g.party_slots()[slot])['name'], trap=trap, why=why,
+                                msgs=[i for i, t in msgs]))
+        for i, t in msgs:
+            if i == 242:
+                rec['went_off'] = t
+            elif i in (261, 262) or 252 <= i <= 260:
+                rec['loot'].append(t)
+        return msgs, gone
+
+    def named(msgs):
+        k = [i for i, t in msgs if 221 <= i <= 233]
+        return k[-1] - 221 if k else None
+
+    # what's the trap?
+    best_i = max(members, key=lambda m: (inspect_chance(m[1]), m[1]['stats'][4]))
+    calfo = _caster(g, members, CALFO, 1, 2)
+    if inspect_chance(best_i[1]) >= 95 or calfo is None:
+        msgs, gone = act(0, best_i[0], why='inspect %d%%' % inspect_chance(best_i[1]))
+    else:
+        msgs, gone = act(1, calfo[0], why='calfo 95%')
+        if named(msgs) is None and not gone:
+            msgs, gone = act(0, best_i[0], why='inspect %d%% (calfo failed)' % inspect_chance(best_i[1]))
+    if gone:
+        rec['result'] = 'sprung inspecting'
+        return rec
+    trap = named(msgs)
+    rec['trap'] = trap
+    if trap is None:
+        _chest_act_leave(g)
+        rec['result'] = 'left (no answer)'
+        return rec
+    if trap and trap not in MILD:
+        # a wrong name sets the trap off at once, and these hit everyone (q8 loot test
+        # l1b, 2026-10-14: an inspect read Spell Blaster and four casters died disarming
+        # it): ask others until two answers agree (each member answers once a chest;
+        # Calfo casters, then members who inspect at 50% or more), else leave it. In l3b
+        # Calfo misread 2 of 4 where the Thief was right, so one answer each isn't enough
+        votes = {trap: 1}
+        used = {a['who'] for a in rec['acts']}
+        while max(votes.values()) < 2:
+            m = None
+            for slot, c in members:
+                if c['name'] in used:
+                    continue
+                if CALFO in known_spells(c['raw'], 1, 2) and g.char(c['i'])['raw'][0x5c + 7 + 1] \
+                        and c['status'] & ~0x04 == 0:
+                    m = (1, slot, c, 'calfo')
+                    break
+            if m is None:
+                others = [(s_, c) for s_, c in members if c['name'] not in used
+                          and inspect_chance(c) >= 50]
+                if others:
+                    s_, c = max(others, key=lambda sc: inspect_chance(sc[1]))
+                    m = (0, s_, c, 'inspect %d%%' % inspect_chance(c))
+            if m is None:
+                break
+            used.add(m[2]['name'])
+            msgs2, gone = act(m[0], m[1], why='another opinion, ' + m[3])
+            if gone:
+                rec['result'] = 'sprung inspecting'
+                return rec
+            t2 = named(msgs2)
+            if t2 is not None:
+                votes[t2] = votes.get(t2, 0) + 1
+        rec['votes'] = votes
+        best = max(votes, key=votes.get)
+        if votes[best] < 2:
+            _chest_act_leave(g)
+            rec['result'] = 'left (answers differ: %s)' % votes
+            return rec
+        trap = best
+        rec['trap'] = trap
+    if trap:
+        nova = _caster(g, members, CALNOVA, 2, 7)
+        disarmers = sorted(members, key=lambda m: -disarm_odds(m[1], danger)[0])
+        p, q = disarm_odds(disarmers[0][1], danger)
+        risk = spring_risk(p, q)
+        rec['odds'] = dict(who=disarmers[0][1]['name'], p=p, q=q, risk=round(risk, 3))
+        for k in range(DISARM_TRIES):
+            nova = _caster(g, members, CALNOVA, 2, 7)
+            if nova is not None:
+                msgs, gone = act(2, nova[0], why='calnova')
+            elif p > 0 and (trap in MILD or risk <= SPRING_RISK):
+                msgs, gone = act(3, disarmers[0][0], trap, why='disarm %d%%, springs %d%% of misses'
+                                 % (p * 100, q * 100))
+            else:
+                break
+            if gone:
+                rec['result'] = ('disarmed' if any(i in (240, 241) for i, t in msgs) else
+                                 'sprung disarming' if rec['went_off'] else 'gone disarming')
+                return rec
+        if trap not in MILD:
+            _chest_act_leave(g)
+            rec['result'] = 'left trap %d (risk %.2f)' % (trap, risk)
+            return rec
+    # open it: an untrapped chest, or a mild trap that couldn't be disarmed (the opener
+    # takes it: the one with the most hit points)
+    opener = max(members, key=lambda m: m[1]['hp'])
+    msgs, gone = act(4, opener[0], why='open' if not trap else 'open mild trap %d' % trap)
+    rec['result'] = 'opened' if not rec['went_off'] else 'opened, sprung'
+    if not gone:
+        _chest_act_leave(g)
+        rec['result'] += ' (then left?)'
+    return rec
+
+
+def _chest_act_leave(g):
+    gone = lambda: not in_battle(g) or g.u8(PHASE) != CHEST_PHASE
+    if gone():
+        return
+    ui.move_cursor(g, LIST, CHEST_LEAVE, 'down', 'up', what='chest option')
+    ui.confirm_until(g, gone, 300, 'leave chest')
+
+
 # Inspect's answers, FIGHTMSG 221-233 in the order of data/traps/dim.json: no trap,
 # Stone Shot, Poison Needle, Magic Drain, Poison Gas, Bomb, Ghost Swarm, Demon Eye,
 # Rainbow Ray, Goddess's Kiss, Spell Blaster, Alarm, Teleporter. The loot is worth a
@@ -542,6 +780,10 @@ def thief_slot(g):
     return None
 
 
+def _party_hp(g):
+    return sum(max(g.char(ri)['hp'], 0) for ri in g.party())
+
+
 def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
     """Fight the battle on screen to its end. Returns a dict: rounds, frames, outcome
     ('won' back in the maze, 'town' after a wipe or escape to town, 'other'), actions."""
@@ -550,6 +792,7 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
     log = []
     CAST.clear()
     FIGHT_INFO['matters'], FIGHT_INFO['casts'] = False, []
+    FIGHT_INFO.pop('first', None)
     _vrng.seed(VARY * 7919 + 1)
     chest_result = None
     chest_mark = len(g.cap.messages) if g.cap else 0
@@ -572,21 +815,19 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
             if _since(g, chest_mark, 'FIGHTMSG.OBJ', (245,)):
                 mode, who = chest_mode, 0
                 if mode == 'auto':
-                    # the Grounds' chests are never trapped; elsewhere a Thief or Ninja
-                    # inspects and opens only an untrapped one; else leave it
-                    who = thief_slot(g)
-                    mode = 'open' if g.u8(0x80079668) == 0 else 'inspect' if who is not None else 'leave'
-                    if mode == 'open':
-                        who = 0
-                    if mode != 'leave' and (who is None or pack_full(g, who)
-                                            or g.char(g.party_slots()[who])['status'] != 0):
-                        # nowhere to put what's inside, or nobody standing where the
-                        # opener's cursor starts (slot 0; moving it isn't reliable): leave
-                        # it (f1v6c chapter 4, 2026-10-13: "Who will open the chest?" on
-                        # an empty slot 0, then "opening" six times)
-                        mode = 'leave'
-                    who = who or 0
-                chest_result = chest(g, mode, who=who, since=chest_mark)
+                    # every chest (Chris, 2026-10-14): the Grounds' are never trapped and
+                    # are opened by the first member who can act; elsewhere chest_full
+                    if g.u8(MAZE_AREA) == 0:
+                        who = next((s for s, ri in enumerate(g.party_slots()) if ri is not None
+                                    and _can_act(g.char(ri))), None)
+                        mode = 'open' if who is not None else 'leave'
+                        who = who or 0
+                    else:
+                        mode = 'full'
+                if mode == 'full':
+                    chest_result = chest_full(g, since=chest_mark)
+                else:
+                    chest_result = chest(g, mode, who=who, since=chest_mark)
                 continue
             last = [m for m in g.cap.messages[chest_mark:] if m['file'] == 'FIGHTMSG.OBJ']
             if last and last[-1]['idx'] in LOOT_MSGS:
@@ -636,4 +877,5 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
                 break
             g.step()
     return dict(rounds=rounds, frames=g.frame - f0, actions=log, ovl=g.overlay(), chest=chest_result,
-                matters=FIGHT_INFO['matters'], casts=list(FIGHT_INFO['casts']))
+                matters=FIGHT_INFO['matters'], casts=list(FIGHT_INFO['casts']),
+                first=FIGHT_INFO.get('first'), hp_end=_party_hp(g))

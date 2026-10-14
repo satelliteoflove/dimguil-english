@@ -26,7 +26,7 @@ from harness.game import Stuck
 
 STORY = 0x80079b44
 JADE_MASK = 0x13c
-TRAIN_LEVEL = 9
+TRAIN_LEVEL = 8  # lowered 2026-10-14 for the geared Bishop parties; boss_training adds levels after 2 failed tries
 TRAIN_AREAS = (3,)          # 3F's corridor and rooms: eight 95% fight squares
 
 

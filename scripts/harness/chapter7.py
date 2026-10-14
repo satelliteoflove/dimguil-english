@@ -13,7 +13,7 @@ Goals, each proved by RAM:
 from harness import chapters, chapter3
 
 GREEN = 0x20
-TRAIN_LEVEL = 13
+TRAIN_LEVEL = 12  # lowered 2026-10-14 for the geared Bishop parties; boss_training adds levels after 2 failed tries
 TRAIN_AREAS = (20, 19)      # Area A B3, B4
 
 

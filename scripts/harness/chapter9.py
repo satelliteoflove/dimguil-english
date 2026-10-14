@@ -27,7 +27,8 @@ from harness import chapters, chapter3, chapter6, maze, nav
 
 STORY = 0x80079b44
 BLACK = 0x01
-TRAIN_LEVEL = 18            # the Chimera Warrior is level 20; Were Centipedes from B3
+TRAIN_LEVEL = 16   # lowered 2026-10-14 for the geared Bishop parties; boss_training adds levels after 2 failed tries
+#           before: the Chimera Warrior is level 20; Were Centipedes from B3
 TRAIN_AREAS = (24, 23)      # Area B B4, B5
 
 

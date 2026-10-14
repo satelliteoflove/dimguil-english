@@ -171,11 +171,9 @@ def choose(g, ri, slot, cands, before):
     return best
 
 
-def equip(g, slot_pos, log=None):
-    """Camp > Inspect > member at party slot slot_pos > Items > Equip, answering every slot
-    prompt with choose(). Returns {slot: chosen item id or None}."""
-    ri = g.party_slots()[slot_pos]
-    before = dict(pack(g, ri))
+def items_menu(g, slot_pos):
+    """Camp > Inspect > the member at party slot slot_pos > Items (Identify, Use, Give,
+    Equip, Drop; camp_spell_state 5)."""
     camp.open_camp(g)
     ui.move_cursor(g, camp.ICON, 0, 'right', 'left', what='camp icon')
     ui.confirm_until(g, lambda: g.u8(camp.CAMP_STATE) == 10 and g.u8(camp.SUB) == 5, 300, 'Inspect')
@@ -183,6 +181,14 @@ def equip(g, slot_pos, log=None):
     ui.confirm_until(g, lambda: g.u8(camp.SUB) == 15, 300, 'inspect member')
     ui.move_cursor(g, camp.MENU, 1, 'down', 'up', what='Items')
     ui.confirm_until(g, lambda: g.u8(camp.SPELL_STATE) == 5 and g.u8(camp.SUB) != 15, 300, 'Items')
+
+
+def equip(g, slot_pos, log=None):
+    """Camp > Inspect > member at party slot slot_pos > Items > Equip, answering every slot
+    prompt with choose(). Returns {slot: chosen item id or None}."""
+    ri = g.party_slots()[slot_pos]
+    before = dict(pack(g, ri))
+    items_menu(g, slot_pos)
     ui.move_cursor(g, ITEMS_CURSOR, ITEMS_EQUIP, 'down', 'up', what='Equip')
     ui.confirm_until(g, lambda: g.u8(camp.SPELL_STATE) == 0x19, 300, 'Equip')
     chosen = {}
@@ -243,6 +249,275 @@ def equip_party(g, log=None, on_int=None):
     if camp.in_camp(g):
         camp.close_camp(g)
     return n
+
+
+# --- the Bishop's Identify and Give, in camp (Chris, 2026-10-14) ---
+# MAZE camp_items_menu 0x800d579c: camp_spell_state 0x800799e6 = 10 Identify, 20 Give.
+# camp_identify 0x800d5f24 (state 0x800799e7): 15 the list (cursor 0x80079c60, count
+# 0x8007990c); a press rolls (0x14), then 0x2d identified, 0x19 failed, 0x1e/0x23/0x28
+# touched (afraid; a cursed kind is put on cursed), each a message (0x80079565 = 1) that
+# a press clears, then the list again; an afraid Bishop is put back on the Items menu.
+# Chance (level - item +0x20 + 1) x 20, held to 5-75; on a miss a Bishop of at least
+# twice the item's level just fails (exactly twice: the roll repeats until it passes),
+# below that (95 - chance)/4 % of misses touch it. Traced 2026-10-14 (camp_probe.py).
+# camp_give 0x800de578 (state 0x80079569): 5 "Give an item to whom?" (receiver
+# camp_target 0x80079948 = party slot, right/left), circle -> 15 the giver's list
+# (cursor 0x80079c60), circle gives into the receiver's first free slot; an equipped or
+# cursed item gets a message (0x80079565); a full receiver asks for a swap (0x19).
+ID_STATE, GIVE_STATE, CAMP_TARGET, CAMP_MSG, ITEM_CUR, LIST_COUNT = (
+    0x800799e7, 0x80079569, 0x80079948, 0x80079565, 0x80079c60, 0x8007990c)
+ITEMS_IDENTIFY, ITEMS_GIVE = 0, 2
+BISHOP = 11
+ID_RISKY_MIN = 55          # below twice the item's level, try only at this chance or more
+ID_TRIES = 6               # tries per item per camp
+TRIED = {}                 # (roster index, item word) -> risky tries made (reset in town)
+
+
+def id_level(g, i):
+    return g.u8(ITEMS + i * 0x4c + 0x20)
+
+
+def id_odds(level, idl):
+    """(chance, safe): the Bishop's chance and whether a miss is harmless."""
+    return min(75, max(5, (level - idl + 1) * 20)), level >= 2 * idl
+
+
+def bishops(g):
+    """Party slots of Bishops who can identify now (not afraid, nothing worse)."""
+    out = []
+    for pos, ri in enumerate(g.party_slots()):
+        if ri is not None:
+            c = g.char(ri)
+            if c['cls'] == BISHOP and c['status'] & ~0x04 == 0:
+                out.append(pos)
+    return out
+
+
+def bishop_can(g, bpos, w):
+    """Whether the Bishop at bpos should try unidentified word w in camp."""
+    c = g.char(g.party_slots()[bpos])
+    chance, safe = id_odds(c['level'], id_level(g, w & 0x1ff))
+    if safe:
+        return True
+    return chance >= ID_RISKY_MIN and TRIED.get((c['i'], w), 0) < 3
+
+
+def unknowns(g, ri):
+    return [(k, w) for k, w in pack(g, ri) if not w & (IDENT | EQUIPPED | CURSED)]
+
+
+def _back_to_list(g, state_addr, list_state, limit=300):
+    """Clear a message (one press) and wait for the list again, or for the screen to go."""
+    end = g.frame + limit
+    while g.frame < end:
+        if g.u8(state_addr) == list_state and g.u8(CAMP_MSG) == 0:
+            g.step(4)
+            if g.u8(state_addr) == list_state:
+                return True
+        if g.u8(camp.SPELL_STATE) not in (10, 20):
+            return False
+        if g.u8(CAMP_MSG):
+            ui.press_until(g, 'circle', lambda: g.u8(CAMP_MSG) == 0, 60, 'camp message')
+        g.step()
+    raise Stuck('camp list', st=g.u8(state_addr), sp=g.u8(camp.SPELL_STATE))
+
+
+def identify_in_camp(g, bpos, log=None):
+    """The Bishop at bpos identifies what's unknown in their own pack (bishop_can).
+    Returns [(item name, outcome)]."""
+    ri = g.party_slots()[bpos]
+    todo = [(k, w) for k, w in unknowns(g, ri) if bishop_can(g, bpos, w)]
+    if not todo:
+        return []
+    items_menu(g, bpos)
+    ui.move_cursor(g, ITEMS_CURSOR, ITEMS_IDENTIFY, 'down', 'up', what='Identify')
+    ui.confirm_until(g, lambda: g.u8(camp.SPELL_STATE) == 10 and g.u8(ID_STATE) == 15, 300,
+                     'Identify')
+    g.step(8)
+    out = []
+    for _, w in todo:
+        for t in range(ID_TRIES):
+            words = dict(pack(g, ri))
+            k = next((j for j, x in words.items() if x == w), None)
+            if k is None or g.u8(camp.SPELL_STATE) != 10 or not bishop_can(g, bpos, w):
+                break
+            c = g.char(ri)
+            chance, safe = id_odds(c['level'], id_level(g, w & 0x1ff))
+            ui.move_cursor(g, ITEM_CUR, k, 'down', 'up', wrap=max(1, g.u8(LIST_COUNT)),
+                           what='identify item')
+            ui.press_until(g, 'circle', lambda: g.u8(ID_STATE) != 15, 60, 'identify')
+            _back_to_list(g, ID_STATE, 15)
+            nw = dict(pack(g, ri)).get(k, 0)
+            afraid = bool(g.char(ri)['status'] & 1)
+            res = ('identified' if nw & IDENT else 'cursed on' if nw & CURSED else
+                   'afraid' if afraid else 'failed')
+            if not safe:
+                TRIED[(ri, w)] = TRIED.get((ri, w), 0) + 1
+            out.append((name(w & 0x1ff), res, chance, safe))
+            if log is not None:
+                log.append((g.frame, 'identify camp', c['name'], name(w & 0x1ff), chance, safe, res))
+            if res != 'failed':
+                break
+        if g.u8(camp.SPELL_STATE) != 10 or g.char(ri)['status'] & 1:
+            break
+    camp.close_camp(g)
+    return out
+
+
+def give(g, from_pos, k, to_pos, log=None):
+    """Camp > Items > Give: pack index k of the member at party slot from_pos to the one
+    at to_pos. Returns 'given', 'refused' (equipped, cursed) or 'full'."""
+    ri, rj = g.party_slots()[from_pos], g.party_slots()[to_pos]
+    w = dict(pack(g, ri))[k]
+    n0 = len(pack(g, rj))
+    items_menu(g, from_pos)
+    ui.move_cursor(g, ITEMS_CURSOR, ITEMS_GIVE, 'down', 'up', what='Give')
+    ui.confirm_until(g, lambda: g.u8(camp.SPELL_STATE) == 20 and g.u8(GIVE_STATE) == 5, 300, 'Give')
+    ui.move_cursor(g, CAMP_TARGET, to_pos, 'right', 'left', wrap=6, what='give to')
+    ui.press_until(g, 'circle', lambda: g.u8(GIVE_STATE) == 15, 120, 'give list')
+    g.step(8)
+    ui.move_cursor(g, ITEM_CUR, k, 'down', 'up', wrap=max(1, g.u8(LIST_COUNT)), what='give item')
+    ui.press_until(g, 'circle', lambda: g.u8(GIVE_STATE) != 15 or g.u8(CAMP_MSG), 60, 'give')
+    end = g.frame + 300
+    while g.frame < end and len(pack(g, rj)) == n0 and not g.u8(CAMP_MSG) \
+            and g.u8(GIVE_STATE) != 0x19:
+        g.step()
+    out = 'given' if len(pack(g, rj)) > n0 else 'full' if g.u8(GIVE_STATE) == 0x19 else 'refused'
+    if log is not None:
+        log.append((g.frame, 'give', g.char(ri)['name'], name(w & 0x1ff), g.char(rj)['name'], out))
+    camp.close_camp(g)
+    return out
+
+
+def gear_value(g, rj, it, taken=None):
+    """(gain, slot) of item `it` for roster index rj over what they wear (or what's
+    already been planned for them in `taken`), or (0, None)."""
+    on = equipped(g, rj)
+    best = (0, None)
+    for s in range(6):
+        cur = (taken or {}).get((rj, s), on.get(s))
+        if better(g, rj, it, s, cur):
+            gain = score(it, s) - (score(cur, s) if cur else 0)
+            if gain > best[0]:
+                best = (gain, s)
+    return best
+
+
+def plan_gives(g, members):
+    """[(holder ri, item word, receiver ri, slot, gain)]: each identified weapon or armor
+    not worn goes to the member it helps most (the holder keeps it if that's them), best
+    gains first, one piece per member and slot."""
+    cands = []
+    for ri in members:
+        for k, w in pack(g, ri):
+            if w & (EQUIPPED | CURSED) or not w & IDENT:
+                continue
+            it = item(g, w & 0x1ff)
+            if it['cat'] > 5:
+                continue
+            for rj in members:
+                if g.char(rj)['status'] >= 0x20:
+                    continue
+                gain, s = gear_value(g, rj, it)
+                if s is not None:
+                    cands.append((gain, ri, w, rj, s))
+    cands.sort(key=lambda x: -x[0])
+    taken, used, out = {}, set(), []
+    for gain, ri, w, rj, s in cands:
+        if (ri, w) in used or (rj, s) in taken:
+            continue
+        it = item(g, w & 0x1ff)
+        cur = taken.get((rj, s))
+        if cur is not None and score(it, s) <= score(cur, s):
+            continue
+        taken[(rj, s)] = it
+        used.add((ri, w))
+        out.append((ri, w, rj, s, gain))
+    return out
+
+
+def gather_for_bishop(g, bpos, log=None, room_keep=0):
+    """Give unknown items from the others to the Bishop while their pack has room."""
+    bri = g.party_slots()[bpos]
+    n = 0
+    for pos, ri in enumerate(g.party_slots()):
+        if ri is None or pos == bpos or g.char(ri)['status'] >= 0x20:
+            continue
+        for k, w in list(unknowns(g, ri)):
+            if not bishop_can(g, bpos, w):
+                continue
+            if len(pack(g, bri)) >= 10 - room_keep:
+                # the Bishop's pack is full: hand the giver something the Bishop can't
+                # work on (an unknown beyond them, else a known piece not worn) first
+                if len(pack(g, ri)) >= 10:
+                    continue
+                spare = [(j, x) for j, x in pack(g, bri) if not x & (EQUIPPED | CURSED)
+                         and (x & IDENT or not bishop_can(g, bpos, x))]
+                if not spare:
+                    break
+                spare.sort(key=lambda jx: (bool(jx[1] & IDENT), jx[0]))
+                if give(g, bpos, spare[0][0], pos, log) != 'given':
+                    break
+            k = next((j for j, x in pack(g, ri) if x == w), None)
+            if k is None:
+                continue
+            if give(g, pos, k, bpos, log) == 'given':
+                n += 1
+    return n
+
+
+def camp_loot(g, log=None, on_int=None):
+    """In camp in the maze: the Bishop identifies (gathering the others' unknown items
+    first), identified gear goes to whoever gains most (Give), then everyone equips
+    upgrades. Cheap when there's nothing to do."""
+    done = 0
+    try:
+        for _ in range(4):
+            b = bishops(g)
+            if not b:
+                break
+            bpos = b[0]
+            bri = g.party_slots()[bpos]
+            if not any(bishop_can(g, bpos, w) for ri in g.party() for k, w in unknowns(g, ri)):
+                break
+            gather_for_bishop(g, bpos, log)
+            got = identify_in_camp(g, bpos, log)
+            done += len(got)
+            # the Bishop's own pack full of known things: pass them on before the next
+            # round of gathering
+            if not got:
+                break
+        members = [ri for ri in g.party()]
+        for _ in range(12):
+            plan = [p for p in plan_gives(g, members) if p[0] != p[2]]
+            if not plan:
+                break
+            ri, w, rj, s, gain = plan[0]
+            if len(pack(g, rj)) >= 10:
+                members = [m for m in members if m != rj]
+                continue
+            k = next((j for j, x in pack(g, ri) if x == w), None)
+            if give(g, g.party_slots().index(ri), k, g.party_slots().index(rj), log) != 'given':
+                break
+            done += 1
+        done += equip_party(g, log, on_int=on_int)
+    except Stuck as s:
+        if s.what != 'camp interrupted' or on_int is None:
+            raise
+        on_int(g)
+    if camp.in_camp(g):
+        camp.close_camp(g)
+    return done
+
+
+def loot_work(g):
+    """Whether camp_loot has anything to do (RAM only)."""
+    b = bishops(g)
+    if b and any(bishop_can(g, b[0], w) for ri in g.party() for k, w in unknowns(g, ri)):
+        return True
+    if any(p[0] != p[2] and len(pack(g, p[2])) < 10 for p in plan_gives(g, g.party())):
+        return True
+    return any(wants_equip(g, i) for i in g.party())
 
 
 # --- Boltac's ---
@@ -386,6 +661,15 @@ def shop_list(g, sub):
             if g.u8(STOCK + i) and g.u8(ITEMS + i * 0x4c + 3) == sub]
 
 
+def bishop_will(g, members, w):
+    """A Bishop in the party who identifies w safely (at least twice its level)."""
+    for _, ri in members:
+        c = g.char(ri)
+        if c['cls'] == BISHOP and c['status'] < 0x20 and id_odds(c['level'], id_level(g, w & 0x1ff))[1]:
+            return True
+    return False
+
+
 def gold(g):
     return sum(g.char(i)['gold'] for i in town.town_party(g))
 
@@ -418,6 +702,8 @@ def shop(g, log, reserve):
             if w & CURSED:
                 todo.append((it['price'] // 2, k, 'uncurse', w))
             elif not w & IDENT and it['price']:
+                if bishop_will(g, members, w):
+                    continue            # the Bishop does it in camp, at no risk
                 todo.append((it['price'] // 2, k, 'identify', w))
         todo.sort()
         if not todo:
@@ -445,10 +731,10 @@ def shop(g, log, reserve):
                 it = item(g, w & 0x1ff)
                 if it['cat'] > 5 or not it['price']:
                     continue
-                # kept only if its owner would wear it: there's no Give between members
-                # yet, and a piece kept for someone else sat in the pack while they bought
-                # their own (2026-10-14: Kai's BUCKLER, Lu bought one)
-                if any(better(g, ri, it, s, equipped(g, ri).get(s)) for s in range(6)):
+                # sold only if no member in the party can use it, or everyone who can
+                # has better (Chris, 2026-10-14); camp Give passes it on otherwise
+                if any(better(g, rj, it, s, equipped(g, rj).get(s))
+                       for _, rj in members if g.char(rj)['status'] < 0x20 for s in range(6)):
                     continue
                 sell = (k, w)
                 break
@@ -462,8 +748,11 @@ def shop(g, log, reserve):
         trade_done()
     # buy
     offers = []
+    # what's already in a pack goes to its member in camp: count it as worn
+    planned = {(rj, s): item(g, w & 0x1ff) for _, w, rj, s, _ in plan_gives(g, [ri for _, ri in members])}
     for pos, ri in members:
-        on = equipped(g, ri)
+        on = dict(equipped(g, ri))
+        on.update({s: it for (rj, s), it in planned.items() if rj == ri})
         for s in range(6):
             cur = on.get(s)
             for sub in range(0, 19):

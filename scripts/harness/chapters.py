@@ -15,7 +15,7 @@ After the last goal of chapter N the run saves `<out>/c<N>_end.state`; the next 
 (or a later run, --from) starts there. States keep the code they were saved with, so end
 states only count for the disc they were made on (rips/harness/disc/BUILD.txt).
 """
-import time
+import json, os, struct, time
 from harness import battle, camp, chapter1, gear, maze, nav, play, town
 from harness.game import Stuck
 
@@ -50,6 +50,7 @@ class Run(chapter1.Run):
     def goal(self, name, fn):
         """chapter1.Run.goal, with a progress line on stdout (runs are long)."""
         k = len(self.stuck)
+        self._goal_name = name
         try:
             super().goal(name, self.guarded(fn))
         finally:
@@ -79,9 +80,61 @@ class Run(chapter1.Run):
         self.ckpt = '%s/c%d_end' % (self.out, n)
         res = dict(chapter=n, title=cls.title, frames=g.frame - f0,
                    secs=round(time.time() - t0, 1), goals=self.goals[k0:],
-                   stuck=self.stuck[s0:], spells=self.spell_summary(l0))
+                   stuck=self.stuck[s0:], spells=self.spell_summary(l0),
+                   party=self.party_gear(), chests=self.chest_summary(l0),
+                   loot=self.loot_summary(l0))
         self.chapter_results.append(res)
+        # a line per chapter as it ends, and the log so far (result.json and log.jsonl
+        # are only written when the run ends)
+        d = os.path.join(chapter1.OUT, self.out)
+        with open(os.path.join(d, 'chapters.jsonl'), 'a') as f:
+            f.write(json.dumps({k: v for k, v in res.items() if k != 'goals'}, default=str) + '\n')
+        with open(os.path.join(d, 'log_c%d.jsonl' % n), 'w') as f:
+            for x in self.log[l0:]:
+                f.write(json.dumps(x, default=str) + '\n')
         return res
+
+    def party_gear(self):
+        """Each member's level, AC (+0x86), HP, gold and what's worn, by slot (Chris,
+        2026-10-14: does the gear keep up with what a player would have)."""
+        g = self.g
+        out = []
+        names = ['main', 'off', 'armor', 'helm', 'gloves', 'boots', 'other']
+        for ri in (g.party() or town.town_party(g)):
+            c = g.char(ri)
+            on = gear.equipped(g, ri)
+            out.append(dict(name=c['name'], cls=c['cls'], level=c['level'],
+                            ac=struct.unpack('b', c['raw'][0x86:0x87])[0], hp=c['max_hp'],
+                            gold=c['gold'], status=c['status'],
+                            gear={names[s]: gear.name(it['id']) for s, it in sorted(on.items())},
+                            pack=[gear.name(w & 0x1ff) + ('' if w & gear.IDENT else '?')
+                                  for k, w in gear.pack(g, ri) if not w & gear.EQUIPPED]))
+        return out
+
+    def chest_summary(self, l0=0):
+        """The chapter's chests: how each ended, traps met, and what came out."""
+        chests = [x[2].get('chest') for x in self.log[l0:] if len(x) > 2 and x[1] == 'fought'
+                  and isinstance(x[2], dict) and x[2].get('chest')]
+        res, traps, loot = {}, {}, []
+        for c in chests:
+            if isinstance(c, dict):
+                r = c.get('result') or '?'
+                k = r.split(' (')[0].split(' trap')[0]
+                res[k] = res.get(k, 0) + 1
+                if c.get('trap'):
+                    traps[c['trap']] = traps.get(c['trap'], 0) + 1
+                loot += [t for t in c.get('loot', []) if 'obtains' in t]
+            else:
+                res[str(c)] = res.get(str(c), 0) + 1
+        return dict(chests=len(chests), results=res, traps=traps, items=loot)
+
+    def loot_summary(self, l0=0):
+        """Identifying (camp and shop), gives, sales and buys in the chapter."""
+        out = {}
+        for x in self.log[l0:]:
+            if len(x) > 1 and x[1] in ('identify camp', 'identify', 'give', 'sell', 'buy', 'uncurse', 'equip'):
+                out.setdefault(x[1], []).append(x[2:])
+        return out
 
     def spell_summary(self, l0=0):
         """The chapter's fights and casts (by spell level, and in fights that matter or
@@ -151,7 +204,7 @@ class Run(chapter1.Run):
             town.to_town_bar(g) if g.overlay() == 'JOUKA' else None
             town.begin_adventure(g)
             if chapter1.GEAR:
-                gear.equip_party(g, self.log, on_int=self.on_int)
+                gear.camp_loot(g, self.log, on_int=self.on_int)
             chapter1.heal_in_camp(g, self.log, frac=0.95, on_int=self.on_int)
         elif not maze.calm(g):
             self.after(quiet=30)
@@ -212,6 +265,8 @@ class Run(chapter1.Run):
         g = self.g
         if g.overlay() not in ('JOUKA', 'HAZURE'):
             self.trip_end(reason)
+            if chapter1.GEAR and not chapter1.party_wiped(g):
+                gear.camp_loot(g, self.log, on_int=self.on_int)
             nav.to_town(g, self.on_int, lambda g: self.after())
         chapter1.town_upkeep(g, self.log)
         for i in town.town_party(g):
@@ -266,9 +321,9 @@ class Run(chapter1.Run):
         if chapter1.needs_town(g):
             self.trip_home()
         else:
-            if chapter1.GEAR and any(gear.wants_equip(g, i) for i in g.party()):
-                # something found and identified that beats what's on
-                gear.equip_party(g, self.log, on_int=self.on_int)
+            if chapter1.GEAR and gear.loot_work(g):
+                # something to identify, pass on or put on
+                gear.camp_loot(g, self.log, on_int=self.on_int)
             chapter1.heal_in_camp(g, self.log, on_int=self.on_int)
 
     def ready(self, home_below=None):
@@ -277,6 +332,7 @@ class Run(chapter1.Run):
         heal to READY_HP from camp."""
         g = self.g
         home_below = home_below or READY_HOME
+        self.boss_training()
         self.fit()
         if g.overlay() in ('JOUKA', 'HAZURE'):
             return
@@ -297,6 +353,35 @@ class Run(chapter1.Run):
                                'down before a boss' if chapter1.out_of_action(g) else 'HP before a boss')
             finally:
                 chapter1.COT_BELOW = keep
+
+    def boss_wipes(self):
+        """Tries of the goal under way that ended in a wipe or casualties."""
+        name = getattr(self, '_goal_name', None)
+        return sum(1 for x in self.log if len(x) > 3 and x[1] == 'retry' and x[2] == name
+                   and x[3] in ('wiped', 'casualties'))
+
+    def boss_training(self):
+        """The training targets are set low and measured (Chris, 2026-10-14: a geared party
+        needn't grind like the starting-gear one did): after BOSS_WIPES failed tries at a
+        goal, each further try trains one level more first, on the chapter's training
+        floors, and the run's log says so."""
+        w = self.boss_wipes()
+        if w < BOSS_WIPES:
+            return
+        import sys
+        mod = sys.modules.get('harness.chapter%d' % self.chapter)
+        areas = getattr(mod, 'TRAIN_AREAS', None)
+        if not areas:
+            return
+        want = self.party_level() + w - BOSS_WIPES + 1
+        self.note('boss training', getattr(self, '_goal_name', None), self.party_level(), want)
+        print('c%d %s: %d failed tries, training to %d' % (self.chapter, self._goal_name, w, want),
+              flush=True)
+        for _ in range(12):
+            if self.party_level() >= want:
+                break
+            self.train(areas)
+        self.ensure_maze()
 
     def heal(self, frac=None):
         """Heal to frac (READY_HP) from camp, where the party stands."""
@@ -445,6 +530,7 @@ class Run(chapter1.Run):
         return lv[len(lv) // 2]
 
 
+BOSS_WIPES = 2              # failed tries at a goal before each further try trains a level
 FIGHT_WAIT = 2400
 READY_HP = 0.9              # a boss fight starts with everyone at this share of max HP
 READY_HOME = 0.7            # ... or the party goes home first if healing can't reach this

@@ -242,3 +242,29 @@ def matters(g, M, party_hp, party_level=None):
         return True
     threat = sum(M[k]['threat'] * len(M[k]['mons']) for k in M)
     return threat * 2 >= party_hp / 2
+
+
+def matters_detail(g, M, party_hp, party_level=None):
+    """What matters() weighed, for the trip logs (it doesn't change the rating): per group
+    the monster id, level, count, and its threat split into melee, caster (8 x level) and
+    breath parts; the total against half the party's HP; and which rule said yes."""
+    out = []
+    for k in M:
+        r = rec(g, k)
+        lv = M[k]['level']
+        melee = []
+        for o in (0xac, 0xb6, 0xc0):
+            sw, n, s_, b = r[o + 3], r[o + 4], r[o + 5], r[o + 6]
+            if sw and n:
+                melee.append(sw * (n * (s_ + 1) / 2 + b))
+        m = sum(melee) / len(melee) * 0.5 if melee else 0
+        c = 8 * lv if M[k]['caster'] else 0
+        br = struct.unpack_from('<h', r, 0x72)[0] / 2 * 3 / 2 if r[0xc9] else 0
+        out.append(dict(id=M[k]['id'], level=lv, n=len(M[k]['mons']), melee=round(m, 1),
+                        caster=c, breath=round(br, 1), threat=round(M[k]['threat'], 1)))
+    threat = sum(x['threat'] * x['n'] for x in out)
+    why = ('fixed' if g.u8(FIXED) else
+           'above median level' if party_level is not None and any(M[k]['level'] > party_level for k in M) else
+           'threat' if threat * 2 >= party_hp / 2 else None)
+    return dict(groups=out, threat=round(threat, 1), party_hp=party_hp, half_hp=party_hp / 2,
+                two_rounds=round(threat * 2, 1), median_level=party_level, why=why)

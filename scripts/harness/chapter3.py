@@ -20,7 +20,8 @@ from harness.game import Stuck
 
 NPC_FLAGS = 0x80079754
 TABLET = 0x143
-TRAIN_LEVEL = 10  # one lower 2026-10-13: r3v0 and r3v1 were still short of 11 after 24 trips of ~22k frames on B3 and B2
+TRAIN_LEVEL = 9   # lowered 2026-10-14 for the geared Bishop parties; boss_training adds levels after 2 failed tries
+# before: one lower 2026-10-13: r3v0 and r3v1 were still short of 11 after 24 trips of ~22k frames on B3 and B2
 TRAIN_AREAS = (6, 7)
 
 
