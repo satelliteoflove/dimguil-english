@@ -17,7 +17,7 @@ or someone is dead, go back to town (temple, Stables for the spell points) and s
 again. A wipe, or a Stuck, reloads the last goal's state and tries again with different
 input timing (the RNG follows input timing).
 """
-import json, os, random, time
+import json, os, random, struct, time
 from harness import ui, maze, town, battle, play, camp, gear
 from harness.game import Stuck, OUT
 
@@ -612,6 +612,7 @@ def town_upkeep(g, log):
     if healer:
         heal_at_gate(g, log)
     gold_note(g, log, 'inn', g1)
+    reorder_party(g, log)
     g2 = party_gold(g)
     if GEAR:
         # Boltac's: identify, uncurse, sell, buy (gear.shop), keeping a dead member's
@@ -631,6 +632,51 @@ def town_upkeep(g, log):
         town.divide_gold(g)
     except Stuck as s:
         log.append((g.frame, 'divide stuck', s.what))
+    town.to_town_bar(g)
+
+
+# Rows (main, 2026-10-14): the three best front-liners in front, by class first, then by
+# how much they can take. Class ids: town.CLASSES.
+MELEE = {0, 4, 5, 6, 7, 12, 13}     # Fighter, Samurai, Lord, Valkyrie, Ranger, Ninja, Monk
+FRONT_NEXT = {2}                    # then the Priest; Thief, Mage, Bishop and the rest behind
+
+
+def front_rank(g, ri):
+    """Sort key for the front row: class tier, then max HP weighed by AC (lower AC first)."""
+    c = g.char(ri)
+    tier = 0 if c['cls'] in MELEE else 1 if c['cls'] in FRONT_NEXT else 2
+    ac = struct.unpack('b', c['raw'][0x86:0x87])[0]
+    return (tier, -c['max_hp'] * (1 + (10 - ac) / 10))
+
+
+def reorder_party(g, log):
+    """In town before setting out (town_upkeep, ahead of Boltac's so the gear follows the
+    rows): put the three best front-liners (front_rank) in positions 0-2 and the rest
+    behind, each row keeping its current order. The party is re-formed at the tavern from
+    the first position that changes (members after it leave, then rejoin in order). Skipped
+    while a death leaves a hole in the party."""
+    slots = town.town_slots(g)
+    party = [ri for ri in slots if ri is not None]
+    if len(party) < 4 or None in slots[:len(party)]:
+        return
+    front = set(sorted(party, key=lambda ri: front_rank(g, ri))[:3])
+    if set(party[:3]) == front:
+        return
+    want = [ri for ri in party if ri in front] + [ri for ri in party if ri not in front]
+    k = next(i for i in range(len(party)) if party[i] != want[i])
+    try:
+        for pos in range(len(party) - 1, k - 1, -1):
+            town.remove_member(g, pos)
+        town.to_town_bar(g)
+        town.form_party(g, want[k:])
+        log.append((g.frame, 'reorder', [g.char(ri)['name'] for ri in party],
+                    [g.char(ri)['name'] for ri in town.town_party(g)]))
+    except Stuck as s:
+        log.append((g.frame, 'reorder stuck', s.what))
+        town.to_town_bar(g)
+        missing = [ri for ri in want if ri not in town.town_party(g)]
+        if missing:
+            town.form_party(g, missing)
     town.to_town_bar(g)
 
 
