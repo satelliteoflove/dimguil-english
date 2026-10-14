@@ -516,10 +516,54 @@ class Run(chapter1.Run):
     def train_goals(self, areas, level, prefix='train', most=40):
         """(name, fn) training trips, yielded lazily while min level < level (a
         chapter's goals() can `yield from` this)."""
-        k = 0
+        k = gk = 0
         while k < most and self.party_level() < level:
+            if self.temple_short() and gk < GOLD_MOST:
+                # a member waits at the temple and the gold won't raise them: trips on
+                # the last chapter's floors for gold first, each its own goal so the gold
+                # is kept (b1v0 chapter 3, 2026-10-14: Earth dead since chapter 2, the
+                # party too poor, and six training trips on B3 lost more members)
+                gk += 1
+                yield '%s_gold_%02d' % (prefix, gk), self.gold_trip
+                continue
             k += 1
             yield '%s_%02d' % (prefix, k), (lambda: self.train(areas))
+
+    def temple_short(self):
+        """Names of this party's members at the temple whose fee (E-town.md: level x 100
+        paralyzed, 200 stoned, 250 dead, 500 ashes) is more than the party's gold. Only
+        members near the party's level count (not the tavern's level-5 premades)."""
+        g = self.g
+        if g.overlay() not in ('JOUKA', 'HAZURE'):
+            return []
+        gold = sum(g.char(i)['gold'] for i in town.town_party(g))
+        out = []
+        for ri in town.temple_patients(g):
+            c = g.char(ri)
+            if c['level'] < self.party_level() - 3:
+                continue
+            st = c['status']
+            fee = c['level'] * (500 if st & 0x100 else 250 if st & 0x80 else 200 if st & 0x40
+                                else 100 if st & 0x20 else 0)
+            if fee > gold:
+                out.append(c['name'])
+        return out
+
+    def gold_areas(self):
+        """The floors an earlier chapter trained on (the Grounds before chapter 2's)."""
+        import sys
+        for n in range(self.chapter - 1, 1, -1):
+            a = getattr(sys.modules.get('harness.chapter%d' % n), 'TRAIN_AREAS', None)
+            if a:
+                return a
+        return (0,)
+
+    def gold_trip(self):
+        """One trip for gold on easier floors; it counts whatever the temple did."""
+        areas = self.gold_areas()
+        self.note('gold trip', areas, self.temple_short())
+        self.train(areas)
+        return True
 
     def town_helps(self):
         """Whether a trip home can do anything: with under TOWN_GOLD in the party the
@@ -537,6 +581,7 @@ class Run(chapter1.Run):
         return lv[len(lv) // 2]
 
 
+GOLD_MOST = 15              # gold trips a chapter's training may insert
 RECOVER_MOST = 30           # Grounds trips for the Tablet's holder inside one goal
 BOSS_WIPES = 2              # failed tries at a goal before each further try trains a level
 FIGHT_WAIT = 2400
