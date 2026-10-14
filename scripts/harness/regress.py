@@ -460,7 +460,13 @@ def _main():
     ap.add_argument('--procs', type=int, default=MAX_PROCS)
     ap.add_argument('--collect', action='store_true')
     ap.add_argument('--note', default='')
+    ap.add_argument('--quick', action='store_true',
+                    help='fast feedback, about a quarter of the time: every boot, pick, cdrace, '
+                         'friendly and screen case, 2 trials per macro, and every 8th stuck case. '
+                         "Recorded as partial; it can't count for a publish or a commit")
     a = ap.parse_args()
+    if a.quick:
+        a.trials = min(a.trials, 2)
     added = collect()
     if a.collect:
         print('added', added)
@@ -470,7 +476,8 @@ def _main():
     if a.only in (None, 'boot'):
         cases += boot_cases(a.boots)
     if a.only in (None, 'stuck'):
-        cases += [c for c in saved if c['kind'] == 'stuck']
+        stuck = sorted((c for c in saved if c['kind'] == 'stuck'), key=lambda c: c['id'])
+        cases += stuck[::8] if a.quick else stuck
     if a.only in (None, 'screen'):
         cases += [c for c in saved if c['kind'] == 'screen']
     if a.only in (None, 'pick'):
@@ -518,10 +525,12 @@ def _main():
     rnd = dict(date=stamp, code=hash0, code_end=hash1, valid=valid, disc=ROUND.get('disc'),
                disc_md5=ROUND.get('disc_md5'), disc_md5_end=md5_end,
                note=a.note, cases=len(recs),
+               partial=bool(a.only or a.quick or a.boots < len(BOOTS) or a.trials < 10),
                passed=len(recs) - len(failed), failed=failed,
                by_kind={k: dict(n=sum(1 for r in recs if r['kind'] == k),
                                 ok=sum(1 for r in recs if r['kind'] == k and r['ok']))
-                        for k in ('boot', 'stuck', 'trial', 'screen', 'pick', 'cdrace')},
+                        for k in ('boot', 'stuck', 'trial', 'screen', 'pick', 'cdrace',
+                                  'friendly')},
                frames=sum(r.get('frames', 0) for r in recs), wall=round(time.time() - t0),
                stuck_causes=latest_stuck_causes())
     ROUND['written'] = True
