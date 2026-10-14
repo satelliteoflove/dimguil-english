@@ -7,14 +7,7 @@ other work unless it says **blocks**.
 
 ## Game code
 
-1. **The spell-sound crash** (to be bugs.md 1.15). **Blocks** the chapter runs: the bot's
-   chapter 8 training keeps hitting it. A spell's animation file loads over the previous
-   spell's sound while it's still playing; the sound driver reads the new bytes, divides
-   by zero, and the game hangs for good. Original code. Holding circle through battle
-   messages triggers it (Bakadi, then Tiltowait); pressing once per finished message
-   missed it by a quarter-second. The fix stops the previous sound before each load
-   (three sites in BATTLE.BIN only); tested in RAM, 9 of 9 caught hangs gone.
-   Recommendation: fix. Draft: `rips/harness/chapters/dev/bugs_spell_sound_draft.md`.
+Nothing open.
 
 ## Text
 

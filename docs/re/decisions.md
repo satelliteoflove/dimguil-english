@@ -245,3 +245,13 @@ picker's blink counter, not from the character chosen. Original code; only notic
 the harder doors. The fix is one instruction at each of the roll's two reads.
 **Decided (Chris, 2026-10-13): fix it** ("fix it and document it"), after he asked for
 the roster-index question to be confirmed from the code. `asm/bugfix_lockpick_member.asm`.
+
+**29. A spell cast while the last spell's sound still plays can freeze the game**
+(`bugs.md` 1.15). Battle loads each spell's animation file, with its sound sequence, over
+the previous spell's sequence while that may still be playing; the sound driver reads a
+tempo of 0, divides by it and the game hangs for good. Original code; holding circle
+through battle messages is enough (the bot hit it 9 times in about 1,280 casts). The fix
+stops the previous sound before each of battle's three loads into those buffers, in
+BATTLE.BIN only.
+**Decided (Chris, 2026-10-13): fix it** ("go ahead and implement the spell-sound fix").
+`asm/bugfix_spell_sound_reload.asm`.
