@@ -493,6 +493,14 @@ def cure_in_camp(g, log=None, on_int=None, most=12):
             if g.char(tri)['status'] != st:
                 break
         log.append((g.frame, 'cure', sid, g.char(tri)['name'], st, g.char(tri)['status']))
+    # poison the spells couldn't cure: a Potion of Latumofis (Chris, 2026-10-14)
+    if g.overlay() not in ('JOUKA', 'HAZURE', 'BATTLE') and (camp.in_camp(g) or maze.calm(g)):
+        try:
+            n += gear.potion_cure(g, log)
+        except Stuck as s:
+            if s.what != 'camp interrupted':
+                raise
+            (on_int or on_interrupt_factory(log))(g)
     if camp.in_camp(g):
         camp.close_camp(g)
     return n

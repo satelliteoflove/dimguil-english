@@ -672,6 +672,7 @@ def camp_loot(g, log=None, on_int=None):
                 break
             done += 1
         done += equip_party(g, log, on_int=on_int)
+        done += place_potions(g, log)
     except Stuck as s:
         if s.what != 'camp interrupted' or on_int is None:
             raise
@@ -688,7 +689,141 @@ def loot_work(g):
         return True
     if any(p[0] != p[2] and len(pack(g, p[2])) < 10 for p in plan_gives(g, g.party())):
         return True
-    return any(wants_equip(g, i) for i in g.party())
+    return any(wants_equip(g, i) for i in g.party()) or bool(potion_moves(g))
+
+
+# --- potions (Chris, 2026-10-14) ---
+# Two Potions of Latumofis ride on two members who aren't healers, restocked at Boltac's
+# above the reserve, and used in camp on poison the party's spells can't cure. The shop
+# sells a potion with 5 doses in its item_state byte (Roster +0x34 + slot; G-records.md);
+# camp_use_item 0x800d7150 takes one per use and empties the slot at 0, and uses the dose
+# even if the target wasn't poisoned (B-camp.md).
+LATUMOFIS = 243
+POTIONS_KEEP = 2
+HEALERS = {2, 5, 6, 11}       # Priest, Lord, Valkyrie, Bishop: the classes with priest spells
+USE_STATE = 0x800799e7        # camp_use_item: 5 the list (cursor USE_CUR), 0xe/0xf the target
+USE_CUR = 0x80079c6b          # grid (column USE_COL 0-2, row USE_ROW 0-1: party slot row*3+col),
+USE_COL, USE_ROW = 0x800796cc, 0x800796cd   # 0x14 the effect, 0x19/0x1e the message, 0 redraw
+ITEMS_USE = 1
+SPELL_USE = 15                # camp_spell_state while Use runs (camp_items_menu 0x800d579c)
+POTION_LOG = []               # (what, member, doses left) for result.json; the run log has them too
+
+
+def doses(g, ri, k):
+    return g.char(ri)['raw'][0x34 + k]
+
+
+def potions(g, ri):
+    """[(pack index, doses)] of Latumofis potions in roster index ri's pack."""
+    return [(k, doses(g, ri, k)) for k, w in pack(g, ri) if w & 0x1ff == LATUMOFIS]
+
+
+def potion_holders(g, members):
+    """The POTIONS_KEEP members meant to carry a potion: standing non-healers, those
+    already carrying one first, then the most pack room; healers only if there aren't
+    enough others."""
+    ok = [ri for ri in members if ri is not None and g.char(ri)['status'] < 0x20]
+    key = lambda ri: (g.char(ri)['cls'] in HEALERS, not potions(g, ri), len(pack(g, ri)))
+    return sorted(ok, key=key)[:POTIONS_KEEP]
+
+
+def potion_moves(g):
+    """[(from roster index, pack index, to roster index)]: a potion carried by someone who
+    isn't a holder (or a holder's second one) to a holder without one (camp Give)."""
+    members = g.party()
+    hold = potion_holders(g, members)
+    need = [ri for ri in hold if not potions(g, ri) and len(pack(g, ri)) < 10]
+    spare = []
+    for ri in members:
+        if g.char(ri)['status'] >= 0x20:
+            continue
+        p = potions(g, ri)
+        spare += [(ri, k) for k, _ in (p if ri not in hold else p[1:])]
+    return [(ri, k, rj) for (ri, k), rj in zip(spare, need)]
+
+
+def place_potions(g, log=None):
+    n = 0
+    for _ in range(POTIONS_KEEP):
+        mv = potion_moves(g)
+        if not mv:
+            break
+        ri, k, rj = mv[0]
+        slots = g.party_slots()
+        if give(g, slots.index(ri), k, slots.index(rj), log) != 'given':
+            break
+        n += 1
+    return n
+
+
+def use_item(g, from_pos, k, to_pos, log=None):
+    """Camp > Items > Use: pack index k of the member at party slot from_pos, on the one
+    at to_pos (camp_use_item 0x800d7150; the effect is hard-coded by item id). Returns
+    the target's status after."""
+    ri, rj = g.party_slots()[from_pos], g.party_slots()[to_pos]
+    w = dict(pack(g, ri))[k]
+    d0, st0 = doses(g, ri, k), g.char(rj)['status']
+    items_menu(g, from_pos)
+    ui.move_cursor(g, ITEMS_CURSOR, ITEMS_USE, 'down', 'up', what='Use')
+    ui.confirm_until(g, lambda: g.u8(camp.SPELL_STATE) == SPELL_USE and g.u8(USE_STATE) == 5,
+                     300, 'Use')
+    g.step(8)
+    ui.move_cursor(g, USE_CUR, k, 'down', 'up', wrap=len(pack(g, ri)), what='use item')
+    ui.press_until(g, 'circle', lambda: g.u8(USE_STATE) == 0xf, 120, 'use target')
+    g.step(8)
+    ui.move_cursor(g, USE_COL, to_pos % 3, 'right', 'left', wrap=3, what='use column')
+    ui.move_cursor(g, USE_ROW, to_pos // 3, 'down', 'up', wrap=2, what='use row')
+    ui.press_until(g, 'circle', lambda: g.u8(USE_STATE) != 0xf, 120, 'use on')
+    end = g.frame + 600
+    while g.frame < end:
+        if g.u8(camp.SPELL_STATE) != SPELL_USE:
+            break                       # the pack's last item went: back to the menu
+        if g.u8(USE_STATE) == 5 and not g.u8(CAMP_MSG):
+            break
+        if g.u8(CAMP_MSG):
+            ui.press_until(g, 'circle', lambda: g.u8(CAMP_MSG) == 0, 60, 'use message')
+        g.step()
+    else:
+        raise Stuck('use item', st=g.u8(USE_STATE), sp=g.u8(camp.SPELL_STATE))
+    left = sum(d for _, d in potions(g, ri)) if w & 0x1ff == LATUMOFIS else None
+    st = g.char(rj)['status']
+    if log is not None:
+        log.append((g.frame, 'use item', g.char(ri)['name'], name(w & 0x1ff), g.char(rj)['name'],
+                    st0, st, d0, left))
+    camp.close_camp(g)
+    return st
+
+
+def potion_cure(g, log=None):
+    """Latumofis potions on every poisoned member who isn't dead (after the spells: the
+    caller's cure_in_camp has tried them). Returns the doses used."""
+    n = 0
+    for _ in range(8):
+        slots = g.party_slots()
+        sick = [t for t, ri in enumerate(slots) if ri is not None and
+                g.char(ri)['status'] & 0x04 and not g.char(ri)['status'] & 0x380]
+        have = [(d, t, k) for t, ri in enumerate(slots) if ri is not None and
+                g.char(ri)['status'] < 0x20 for k, d in potions(g, ri)]
+        if not sick or not have:
+            break
+        _, t, k = min(have)             # the emptiest potion first: it frees the slot
+        tgt = slots[sick[0]]
+        st = use_item(g, t, k, sick[0], log)
+        n += 1
+        POTION_LOG.append(('used', g.char(tgt)['name'], st))
+        if st & 0x04:
+            break                       # it didn't take: don't spend more
+    return n
+
+
+def potions_to_buy(g, members):
+    """(roster index, count) of Latumofis potions to buy so POTIONS_KEEP holders carry one,
+    counting spares that camp Give will pass on."""
+    hold = potion_holders(g, members)
+    need = [ri for ri in hold if not potions(g, ri)]
+    spare = sum(len(potions(g, ri)) - (1 if ri in hold else 0)
+                for ri in members if g.char(ri)['status'] < 0x20 and potions(g, ri))
+    return need[spare:] if spare < len(need) else []
 
 
 # --- Boltac's ---
@@ -966,6 +1101,20 @@ def shop(g, log, reserve):
             if r['outcome'] != 'sold':
                 break
         trade_done()
+    # potions first (Chris, 2026-10-14): POTIONS_KEEP Latumofis on non-healers, above the
+    # reserve like any purchase
+    price = item(g, LATUMOFIS)['price']
+    for ri in potions_to_buy(g, [ri for _, ri in members]):
+        pos = slots.index(ri)
+        if gold(g) - price < reserve or len(pack(g, ri)) >= 10 or not g.u8(STOCK + LATUMOFIS):
+            continue
+        trade_done()
+        pool(pos)
+        r = buy(g, pos, LATUMOFIS)
+        done.append(('potion buy', g.char(ri)['name'], name(LATUMOFIS), price, r))
+        log.append((g.frame, 'potion buy', g.char(ri)['name'], name(LATUMOFIS), price, r))
+        POTION_LOG.append(('bought', g.char(ri)['name'], r))
+    trade_done()
     # buy
     offers = []
     # what's already in a pack goes to its member in camp: count it as worn
