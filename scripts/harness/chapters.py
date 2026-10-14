@@ -741,6 +741,13 @@ class Run(chapter1.Run):
         best lower heals wouldn't. Returns the names still under 1/3 when the heals are
         out (the trip turns home), else []."""
         g = self.g
+        poisoned = lambda: [g.char(ri)['name'] for ri in g.party()
+                            if g.char(ri)['status'] & 0x04 and g.char(ri)['status'] < 0x20]
+        if POISON_HOME and poisoned():
+            # poison first: it takes HP every few steps, so heals spent on a poisoned
+            # party drain away (n1v0 chapter 3, 2026-10-14: 14 Wing Lizards poisoned all
+            # six, the bot healed HP for three more fights and five died walking home)
+            chapter1.cure_in_camp(self.g, self.log, on_int=self.on_int)
         tried, n, k = set(), 0, 0
         while n < most and k < 40:
             k += 1
@@ -807,8 +814,14 @@ class Run(chapter1.Run):
             n += 1
         if camp.in_camp(g):
             camp.close_camp(g)
-        return [g.char(ri)['name'] for ri in g.party()
-                if g.char(ri)['status'] < 0x20 and 0 < g.char(ri)['hp'] < g.char(ri)['max_hp'] / 3]
+        low = [g.char(ri)['name'] for ri in g.party()
+               if g.char(ri)['status'] < 0x20 and 0 < g.char(ri)['hp'] < g.char(ri)['max_hp'] / 3]
+        # poison the party's cures couldn't clear: the trip goes home now (the walk home
+        # keeps healing by the HP lines)
+        left = poisoned() if POISON_HOME else []
+        if left:
+            self.note('poison home', left)
+        return low + [x for x in left if x not in low]
 
     def top_up(self):
         """Between a training trip's fights: heal each member to what the worst monster
@@ -940,6 +953,7 @@ class Run(chapter1.Run):
 MAPORFIC_TRIP = False        # Maporfic from camp as a training trip sets out
 TOPUP = False                # heal to what the trip's worst monster can't take in two hits
 HP_HEAL = True               # Chris's HP lines after every training fight (Run.hp_heal)
+POISON_HOME = True          # agent 7, 2026-10-14: cure poison first after a fight; home if it stays
 # camp heals, cheapest first: (spell id, school, level, mean HP; 999 = full). B-camp.md:
 # Dios 2d4, Diomas 3d2, Dial 2d8, Dialma 3d8, Madi and Kadios full
 HEAL_OPTS = [(21, 1, 1, 5), (64, 3, 1, 4.5), (30, 1, 4, 9), (33, 1, 5, 13.5),
