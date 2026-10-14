@@ -975,7 +975,7 @@ def shop(g, log, reserve):
         on.update({s: it for (rj, s), it in planned.items() if rj == ri})
         for s in range(7):              # 6: cloaks (b1v3d chapter 8: 54,000 gold, three bare)
             cur = on.get(s)
-            for sub in range(0, 19):
+            for sub in list(range(0, 19)) + [CLOAK]:   # 22: cloaks (slot 6) were never offered
                 for i in shop_list(g, sub):
                     it = item(g, i)
                     if not it['price'] or not better(g, ri, it, s, cur):
