@@ -631,12 +631,57 @@ def gather_for_bishop(g, bpos, log=None, room_keep=0):
     return n
 
 
+ROOM_KEEP = 7       # make_room gives only to a pack with at most this many items
+
+
+def room_move(g):
+    """(from roster index, pack index, to roster index) to take an item out of a full
+    pack, or None. n1v1/n1v6/n1v0 chapter 4 (agent 8, 2026-10-14): Earth's pack sat at
+    10 (starting potions, a spare Sword of Slashing, an unknown), so Boltac's skipped
+    him and camp Give couldn't reach him: five Shadow Cloaks bought, Earth without one.
+    The item: unequipped, identified, not cursed, not a Latumofis (the potion holders),
+    the ones the holder can't use first; to the emptiest pack."""
+    members = [ri for ri in g.party() if g.char(ri)['status'] < 0x20]
+    full = [ri for ri in members if len(pack(g, ri)) >= 10]
+    if not full:
+        return None
+    to = min(members, key=lambda ri: len(pack(g, ri)))
+    if len(pack(g, to)) > ROOM_KEEP:
+        return None
+    cands = []
+    for ri in full:
+        for k, w in pack(g, ri):
+            if w & (EQUIPPED | CURSED) or not w & IDENT or w & 0x1ff == LATUMOFIS:
+                continue
+            it = item(g, w & 0x1ff)
+            cands.append((usable(g, ri, it) and it['cat'] <= 6, not usable(g, to, it), ri, k))
+    if not cands:
+        return None
+    _, _, ri, k = min(cands)
+    return ri, k, to
+
+
+def make_room(g, log=None, most=4):
+    n = 0
+    for _ in range(most):
+        mv = room_move(g)
+        if not mv:
+            break
+        ri, k, rj = mv
+        slots = g.party_slots()
+        if give(g, slots.index(ri), k, slots.index(rj), log) != 'given':
+            break
+        n += 1
+    return n
+
+
 def camp_loot(g, log=None, on_int=None):
     """In camp in the maze: the Bishop identifies (gathering the others' unknown items
     first), identified gear goes to whoever gains most (Give), then everyone equips
     upgrades. Cheap when there's nothing to do."""
     done = 0
     try:
+        done += make_room(g, log)
         for _ in range(4):
             b = bishops(g)
             if not b:
@@ -689,7 +734,7 @@ def loot_work(g):
         return True
     if any(p[0] != p[2] and len(pack(g, p[2])) < 10 for p in plan_gives(g, g.party())):
         return True
-    return any(wants_equip(g, i) for i in g.party()) or bool(potion_moves(g))
+    return any(wants_equip(g, i) for i in g.party()) or bool(potion_moves(g)) or bool(room_move(g))
 
 
 # --- potions (Chris, 2026-10-14) ---
