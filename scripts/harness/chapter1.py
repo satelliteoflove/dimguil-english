@@ -664,8 +664,15 @@ def town_upkeep(g, log):
         k = gold_keeper(g)
         if k is not None:
             town.pool_gold(g, k, 'tavern')
+            if SECOND_PURSE:
+                second_purse(g, log, k)
     except Stuck as s:
         log.append((g.frame, 'pool stuck', s.what))
+        town.to_town_bar(g)
+        missing = [ri for ri in _PURSE_ORDER if ri not in town.town_party(g)]
+        if missing:
+            town.form_party(g, missing)
+        _PURSE_ORDER.clear()
     town.to_town_bar(g)
     _DEPART[0] = roster_gold(g)
 
@@ -791,6 +798,65 @@ def gold_keeper(g):
     if back:
         return max(back, key=lambda x: g.char(x[1])['max_hp'])[0]
     return here[0][0]
+
+
+SECOND_PURSE = True
+_PURSE_ORDER = []
+
+
+def purse_holder(g, k):
+    """Party position for the second purse: the standing back-row member other than the
+    keeper with the most HP, else any other standing member."""
+    slots = town.town_slots(g)
+    here = [(p, ri) for p, ri in enumerate(slots) if ri is not None and p != k
+            and g.char(ri)['status'] == 0]
+    back = [x for x in here if x[0] >= 3] or here
+    return max(back, key=lambda x: g.char(x[1])['max_hp'])[0] if back else None
+
+
+def second_purse(g, log, k):
+    """With the gold pooled on the keeper (position k): a second member holds at least one
+    raise (temple: 250 x the top level) where the gold allows (main, 2026-10-14: Cy, the
+    Bishop and keeper, died on a walk home with all 17,036 gold; the temple's payer must
+    be in the party, temple_heal 0x800c95f0, so the dead keep theirs until raised). The
+    tavern only pools or divides evenly, so the divide runs m ways (m = gold // raise,
+    2-6) with the others out of the party, the purse member steps out while the rest is
+    pooled back on the keeper, and the tail is re-formed in its old order."""
+    slots = town.town_slots(g)
+    order = [ri for ri in slots if ri is not None]
+    if len(order) < 2 or None in slots[:len(order)]:
+        return
+    top = max(g.char(ri)['level'] for ri in order)
+    fee = 250 * top
+    total = sum(g.char(ri)['gold'] for ri in order)
+    p = purse_holder(g, k)
+    if p is None or total < fee:
+        return
+    m = min(len(order), max(2, total // fee))
+    leave = [pos for pos in range(len(order) - 1, -1, -1) if pos not in (k, p)][:len(order) - m]
+    j = min(leave + [p])
+    _PURSE_ORDER[:] = order
+    for pos in leave:                       # highest first: removing leaves a hole
+        town.remove_member(g, pos)
+    town.to_town_bar(g)
+    town.divide_gold(g)
+    town.to_town_bar(g)
+    town.remove_member(g, p)
+    town.to_town_bar(g)
+    town.pool_gold(g, k, 'tavern')
+    town.to_town_bar(g)
+    for pos in range(len(order) - 1, j - 1, -1):
+        if town.town_slots(g)[pos] is not None:
+            town.remove_member(g, pos)
+    town.to_town_bar(g)
+    town.form_party(g, order[j:])
+    town.to_town_bar(g)
+    if [ri for ri in town.town_slots(g) if ri is not None] != order:
+        log.append((g.frame, 'purse order', [g.char(ri)['name'] for ri in town.town_party(g)]))
+    pr, kr = order[p], order[k]
+    log.append((g.frame, 'purse', g.char(pr)['name'], g.char(pr)['gold'], g.char(kr)['name'],
+                g.char(kr)['gold'], fee, m))
+    _PURSE_ORDER.clear()
 
 
 def party_gold(g):
