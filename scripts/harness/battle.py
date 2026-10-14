@@ -911,12 +911,18 @@ def chest_full(g, since=None):
         rec['result'] = 'left (nobody can act)'
         return rec
 
+    rec['answers'] = []     # (who, 'inspect' or 'calfo', trap named) per answer
+
     def act(opt, slot, trap=None, why=''):
         msgs, gone = _chest_act(g, opt, slot, trap)
         ri = g.party_slots()[slot]
+        who = g.char(ri)['name'] if ri is not None else None
         rec['acts'].append(dict(act=['inspect', 'calfo', 'calnova', 'disarm', 'open'][opt],
-                                who=g.char(ri)['name'] if ri is not None else None, trap=trap, why=why,
+                                who=who, trap=trap, why=why,
                                 msgs=[i for i, t in msgs]))
+        if opt in (0, 1):
+            k = [i for i, t in msgs if 221 <= i <= 233]
+            rec['answers'].append((who, ['inspect', 'calfo'][opt], k[-1] - 221 if k else None))
         for i, t in msgs:
             if i == 242:
                 rec['went_off'] = t
@@ -946,32 +952,47 @@ def chest_full(g, since=None):
         _chest_act_leave(g)
         rec['result'] = 'left (no answer)'
         return rec
-    if trap and trap not in MILD:
+    used = {(w, m) for w, m, _ in rec['answers']}
+
+    def calfo_left():
+        # a Calfo answer not had yet: each member's answer is kept per chest and method
+        # (BATTLE 0x800c697c, table 0x800da7c0 + member + 6 x method), and a repeat cast
+        # by the same member spends the point and gives the same answer
+        return any((c['name'], 'calfo') not in used and CALFO in known_spells(c['raw'], 1, 2)
+                   and g.char(c['i'])['raw'][0x5c + 7 + 1] and c['status'] & ~0x04 == 0
+                   for _, c in members)
+
+    # any name is confirmed before a Disarm while a Calfo answer is to be had (main, agent
+    # 8, 2026-10-14: n1v0h chapter 9, a Thief's Inspect named Goddess's Kiss, a mild trap
+    # that went straight to Disarm; it was a Demon's Eye, a wrong name springs it at once,
+    # and it stoned the party). Inspect misses about 5% and then names a random trap;
+    # Calfo is right 95% and never springs. Without Calfo a mild name goes ahead as before,
+    # and a worse one still needs two answers that agree or the chest is left
+    if trap and (trap not in MILD or calfo_left()):
         # a wrong name sets the trap off at once, and these hit everyone (q8 loot test
         # l1b, 2026-10-14: an inspect read Spell Blaster and four casters died disarming
         # it): ask others until two answers agree (each member answers once a chest;
         # Calfo casters, then members who inspect at 50% or more), else leave it. In l3b
         # Calfo misread 2 of 4 where the Thief was right, so one answer each isn't enough
         votes = {trap: 1}
-        used = {a['who'] for a in rec['acts']}
         while max(votes.values()) < 2:
             m = None
             for slot, c in members:
-                if c['name'] in used:
+                if (c['name'], 'calfo') in used:
                     continue
                 if CALFO in known_spells(c['raw'], 1, 2) and g.char(c['i'])['raw'][0x5c + 7 + 1] \
                         and c['status'] & ~0x04 == 0:
                     m = (1, slot, c, 'calfo')
                     break
             if m is None:
-                others = [(s_, c) for s_, c in members if c['name'] not in used
+                others = [(s_, c) for s_, c in members if (c['name'], 'inspect') not in used
                           and inspect_chance(c) >= 50]
                 if others:
                     s_, c = max(others, key=lambda sc: inspect_chance(sc[1]))
                     m = (0, s_, c, 'inspect %d%%' % inspect_chance(c))
             if m is None:
                 break
-            used.add(m[2]['name'])
+            used.add((m[2]['name'], 'calfo' if m[0] == 1 else 'inspect'))
             msgs2, gone = act(m[0], m[1], why='another opinion, ' + m[3])
             if gone:
                 rec['result'] = 'sprung inspecting'
