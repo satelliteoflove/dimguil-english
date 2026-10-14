@@ -35,7 +35,7 @@ from harness import chapters, chapter3, maze, nav
 
 STORY = 0x80079b44
 YELLOW = 0x40
-TRAIN_LEVEL = 13   # lowered 2026-10-14 for the geared Bishop parties; boss_training adds levels after 2 failed tries
+TRAIN_LEVEL = 14   # 13 (2026-10-14) left the Guardians failing twice in v3 (b1v3b, b1v3c), v0 (b1v0h) and v1 (b1v1f); v6 passed at 12-13
 #           before: the Guardians (12) beat a party of 11-13 six times in six
                             # with the old spell choice (pending_AE); with tactics.py a
                             # party of 13-14 won 12 of 12 (bench g14b, 2026-10-14). The
