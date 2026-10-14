@@ -910,6 +910,19 @@ class Run:
     def note(self, *a):
         self.log.append((self.g.frame,) + a)
 
+    def fail_sig(self, r):
+        """What a failed try ended on: its result and its last fight (place, monster groups,
+        rounds, runs, HP and who was down at the end), or None without a fight."""
+        for x in reversed(self.log):
+            if len(x) > 1 and x[1] == 'retry':
+                return None
+            if len(x) > 2 and x[1] == 'fought' and isinstance(x[2], dict):
+                f = x[2]
+                mons = tuple((q.get('id'), q.get('n')) for q in (f.get('first') or {}).get('groups', []))
+                return (r, mons, f.get('rounds'), str(f.get('runs')), f.get('hp_end'),
+                        tuple(f.get('down_end') or ()))
+        return None
+
     def goal(self, name, fn):
         """Run goal fn until it returns True; a Stuck, a wipe or a False reloads the last
         checkpoint and tries again (up to retries)."""
@@ -948,6 +961,13 @@ class Run:
                 break
             if tries >= self.retries:
                 raise Stuck('goal failed', goal=name, last=r)
+            # the game's rolls don't move with time (battle.VARY), so a try that ended on
+            # the same fight the same way as the last one is a replay: n1v0d chapter 3 ran
+            # from the same 14 Wing Lizards at 178 HP six times. Stop instead of replaying
+            sig_ = self.fail_sig(r)
+            if sig_ is not None and sig_ == getattr(self, '_last_fail', None) and self._last_fail_goal == name:
+                raise Stuck('goal replays', goal=name, last=r, sig=str(sig_))
+            self._last_fail, self._last_fail_goal = sig_, name
             self.note('retry', name, r)
             if self.ckpt:
                 g.load(self.ckpt)
