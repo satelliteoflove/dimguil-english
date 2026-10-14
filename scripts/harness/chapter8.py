@@ -31,8 +31,10 @@ from harness import chapters, chapter3, maze, nav
 
 STORY = 0x80079b44
 YELLOW = 0x40
-TRAIN_LEVEL = 16            # the Jail Ogre is level 17, the Guardians 12 but they
-                            # beat a party of 11-13 six times in six (pending_AE)
+TRAIN_LEVEL = 14            # the Guardians (12) beat a party of 11-13 six times in six
+                            # with the old spell choice (pending_AE); with tactics.py a
+                            # party of 13-14 won 12 of 12 (bench g14b, 2026-10-14). The
+                            # Jail Ogre is level 17
 TRAIN_AREAS = (20, 19)
 
 
@@ -73,17 +75,36 @@ class Chapter8:
         def ogre():
             if (g.u8(maze.AREA),) + g.pos() == (19, 19, 11) or chapter3.tablet_stones(g) & YELLOW:
                 return True
-            run.ready()
-            run.go((22, 17, 12))
-            run.after()
-            run.go((19, 19, 11))
+            if g.u8(maze.AREA) != 19:
+                run.ready()
+                # walking to the chute square itself drops the party to B4 mid-walk, and
+                # travel then plans a way back up to it (q8w4, 2026-10-14: "no path" to
+                # the B4 ladder): stand on the switch square east of it and step west
+                run.go((22, 18, 12))
+                for _ in range(3):
+                    if g.u8(maze.AREA) != 22:
+                        break
+                    if maze.step(g, 3) == 'interrupted':
+                        run.after()
+                run.after()
+            # into the den: the iron bars on the east side of (17, 11), Investigate facing
+            # east (MAZE square_examine case 0x32: while story bit 10 and event flag 0x20
+            # are clear it shows message 99 and moves the party two squares east, to
+            # (19, 11)). A plain walk finds no way in (q8w4, 2026-10-14: "no path").
+            run.examine((19, 17, 11), 1, fight=True)
+            run.note('ogre', (g.u8(maze.AREA),) + g.pos(), run.fights())
             return (g.u8(maze.AREA),) + g.pos() == (19, 19, 11)
 
         def yellow_stone():
             if chapter3.tablet_stones(g) & YELLOW:
                 return True
             run.fit()
-            run.examine((19, 19, 10), 0)
+            for _ in range(2):
+                # Guy's meeting on arriving at (19, 10) can take the first Investigate's
+                # place (2026-10-14)
+                run.examine((19, 19, 10), 0)
+                if chapter3.tablet_stones(g) & YELLOW:
+                    break
             return bool(chapter3.tablet_stones(g) & YELLOW)
 
         def out():

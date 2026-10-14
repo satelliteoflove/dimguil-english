@@ -230,11 +230,15 @@ def dispel_value(g, k, M, cls, clevel):
     return sum(min(1, p) * (hp + m['threat']) for _, hp, _ in m['mons'])
 
 
-def matters(g, M, party_hp):
+def matters(g, M, party_hp, party_level=None):
     """A fight worth spending points on: a fixed fight, or monsters that could take half
     the party's hit points in two rounds. (A third made most of Area A's roamers count,
     and a training trip cast 53 spells in 12 fights; 2026-10-14.)"""
     if g.u8(FIXED):
+        return True
+    # a monster above the party's median level (the Jail Ogre, 17, against a party of 14
+    # counted as trash and got Mahalito five times; 2026-10-14)
+    if party_level is not None and any(M[k]['level'] > party_level for k in M):
         return True
     threat = sum(M[k]['threat'] * len(M[k]['mons']) for k in M)
     return threat * 2 >= party_hp / 2

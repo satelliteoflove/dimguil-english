@@ -223,7 +223,8 @@ def default_policy(g, m, opts):
     M = {k: tactics.info(g, k) for k in tactics.groups(g)}
     M = {k: v for k, v in M.items() if v['mons']}
     party_hp = sum(max(member_state(g, k)[0], 0) for k, rk in enumerate(ids) if rk is not None)
-    big = tactics.matters(g, M, party_hp) or losing(g)
+    lv = sorted(g.char(rk)['level'] for rk in ids if rk is not None)
+    big = tactics.matters(g, M, party_hp, lv[len(lv) // 2] if lv else None) or losing(g)
     FIGHT_INFO['matters'] = FIGHT_INFO['matters'] or bool(big)
     # support spells (the party's AC and magic screen, the monsters' AC) only in a fixed
     # fight or one that's going badly (Chris, 2026-10-14: not in trash fights)

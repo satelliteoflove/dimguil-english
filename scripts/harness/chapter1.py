@@ -388,6 +388,13 @@ def cure_in_camp(g, log=None, on_int=None, most=12):
             for sid, sch, lv, bits, party in CURES:
                 if not st & bits or (sid, tri) in tried:
                     continue
+                if sid == 39 and sum(g.char(i)['gold'] for i in g.party()) >= \
+                        250 * g.char(tri)['level']:
+                    # Kadorto raises the dead on rand_upto(80) < Vit x 4 and turns a miss
+                    # to ash (B-camp.md); the temple raises on rand_upto(99) < 60 + 2 x Vit
+                    # (E-town.md). Mercury went to ash in camp after the Jail Ogre
+                    # (2026-10-14). Kadorto only when the temple's fee is out of reach.
+                    continue
                 for cslot, cri in enumerate(slots):
                     if cri is None or cri == tri and st >= 0x20:
                         continue

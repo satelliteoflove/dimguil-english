@@ -40,7 +40,9 @@ def talk(g, mode='leave', limit=20000):
             raise Stuck('talk too long', ts=hex(ts()))
         t = ts()
         if t in YESNO_STATES:
-            ui.move_cursor(g, YESNO, 1, 'down', 'up', what='talk yes/no')
+            # mode 'fight' answers Yes to the fight warning (0x69) and No to the rest
+            ui.move_cursor(g, YESNO, 0 if mode == 'fight' and t == 0x69 else 1, 'down', 'up',
+                           what='talk yes/no')
             ui.confirm_until(g, lambda: ts() != t or not talking(), 300, 'answer no')
             presses += 1
             continue
@@ -68,6 +70,10 @@ def talk(g, mode='leave', limit=20000):
             if talking() and g.u8(TALK_MENU_CURSOR) != c0:
                 opts = [k for k in range(3) if g.u8(TALK_MENU) & (1 << k)]
                 want = opts.index(2) if 2 in opts else len(opts) - 1
+                if mode == 'fight' and 1 in opts:
+                    # a meeting that has to be fought (chapter 8: the Jail Ogre comes as
+                    # "You've met someone!" and Leave walks the party back a square)
+                    want = opts.index(1)
                 ui.move_cursor(g, TALK_MENU_CURSOR, want, 'right', 'left', wrap=len(opts),
                                what='talk menu')
                 t1 = ts()
