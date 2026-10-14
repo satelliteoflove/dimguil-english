@@ -218,6 +218,18 @@ def losing(g):
     return (down or (mx and hp < mx * LOSING_HP)) and monsters_standing(g) >= LOSING_MONSTERS
 
 
+ENCOUNTER_ID = 0x800797f4   # u16: 0xffff / 0xfffe for a random encounter
+
+
+def fleeable(g):
+    """Whether Run can work in this fight. party_flee_roll (BATTLE 0x800d1380) rolls only
+    when encounter_id is 0xffff or 0xfffe; any other encounter fails with "The enemy cuts
+    off your escape!" (FIGHTMSG 206) and the monsters get a free round. The harness ran
+    from those 505 times in the 2026-10-14 benches (deaths_fix.md); FIXED (0x80079bde) is
+    a different flag."""
+    return (g.u16(ENCOUNTER_ID) + 2) & 0xffff < 2
+
+
 def default_policy(g, m, opts):
     """What member m (party slot) does this round. Returns ('fight',), ('parry',),
     ('run',), ('spell', sid, school, level, index, target) with target ('group', g) or
@@ -234,9 +246,9 @@ def default_policy(g, m, opts):
                   if rk is not None and member_state(g, k)[1] < 0x20]
             FIGHT_INFO['first'] = tactics.matters_detail(g, M0, hp0, lv0[len(lv0) // 2] if lv0 else None, P0)
             FIGHT_INFO['first']['party_max'] = sum(g.char(rk)['max_hp'] for rk in ids0 if rk is not None)
-    if ROUND > RUN_AFTER and RUN in opts:
+    if ROUND > RUN_AFTER and RUN in opts and fleeable(g):
         return ('run',)
-    if RUN_WHEN_LOSING and RUN in opts and losing(g):
+    if RUN_WHEN_LOSING and RUN in opts and fleeable(g) and losing(g):
         return ('run',)
     tactics.plan_reset(ROUND)
     ids = party_ids(g)
