@@ -548,7 +548,6 @@ def town_upkeep(g, log):
     roster0 = roster_gold(g)
     if _DEPART[0] is not None:
         INCOME.append(roster0 - _DEPART[0])
-    raised = []
     # the Thief first, then the Bishop, then by level (Chris, 2026-10-14: the chests and
     # the identifying need them)
     # A patient carrying their own fee comes first: the raise gives the gold back (b1v0f
@@ -556,44 +555,48 @@ def town_upkeep(g, log):
     def carries_fee(ri):
         c = g.char(ri)
         return c['gold'] >= c['level'] * temple_rate(c['status'])
-    patients = sorted(town.temple_patients(g), key=lambda ri: (
-        not carries_fee(ri), g.char(ri)['cls'] not in (3, 12), g.char(ri)['cls'] != 11,
-        -g.char(ri)['level']))
+    def temple_pass():
+        raised = []
+        patients = sorted(town.temple_patients(g), key=lambda ri: (
+            not carries_fee(ri), g.char(ri)['cls'] not in (3, 12), g.char(ri)['cls'] != 11,
+            -g.char(ri)['level']))
+        if patients:
+            try:
+                town.pool_gold(g, first_pos(), 'tavern')
+            except Stuck as s:
+                log.append((g.frame, 'pool stuck', s.what))
+                town.to_town_bar(g)
+            for ri in patients:
+                try:
+                    r = town.temple_heal(g, ri, first_pos())
+                    log.append((g.frame, 'temple', ri, r))
+                    if r.get('outcome') in ('healed', 'alive') if isinstance(r, dict) else r in ('healed', 'alive'):
+                        raised.append(ri)
+                        if ri in WAIT_FROM:
+                            log.append((g.frame, 'raised after standby', g.char(ri)['name'],
+                                        len(INCOME) - WAIT_FROM.pop(ri)))
+                        if g.char(ri)['gold'] and len(town.town_party(g)) < 6:
+                            # back in the party now, and their gold pooled for the next patient
+                            town.to_town_bar(g)
+                            town.form_party(g, [ri])
+                            log.append((g.frame, 'rejoined', ri))
+                            raised.remove(ri)
+                            town.to_town_bar(g)
+                            town.pool_gold(g, first_pos(), 'tavern')
+                except Stuck as s:
+                    log.append((g.frame, 'temple stuck', ri, s.what))
+                town.to_town_bar(g)
+            town.to_town_bar(g)
+            for ri in raised:
+                try:
+                    town.form_party(g, [ri])
+                    log.append((g.frame, 'rejoined', ri))
+                except Stuck as s:
+                    log.append((g.frame, 'rejoin stuck', ri, s.what))
+                town.to_town_bar(g)
+
     gear.TRIED_VISIT.clear()
-    if patients:
-        try:
-            town.pool_gold(g, first_pos(), 'tavern')
-        except Stuck as s:
-            log.append((g.frame, 'pool stuck', s.what))
-            town.to_town_bar(g)
-        for ri in patients:
-            try:
-                r = town.temple_heal(g, ri, first_pos())
-                log.append((g.frame, 'temple', ri, r))
-                if r.get('outcome') in ('healed', 'alive') if isinstance(r, dict) else r in ('healed', 'alive'):
-                    raised.append(ri)
-                    if ri in WAIT_FROM:
-                        log.append((g.frame, 'raised after standby', g.char(ri)['name'],
-                                    len(INCOME) - WAIT_FROM.pop(ri)))
-                    if g.char(ri)['gold'] and len(town.town_party(g)) < 6:
-                        # back in the party now, and their gold pooled for the next patient
-                        town.to_town_bar(g)
-                        town.form_party(g, [ri])
-                        log.append((g.frame, 'rejoined', ri))
-                        raised.remove(ri)
-                        town.to_town_bar(g)
-                        town.pool_gold(g, first_pos(), 'tavern')
-            except Stuck as s:
-                log.append((g.frame, 'temple stuck', ri, s.what))
-            town.to_town_bar(g)
-        town.to_town_bar(g)
-        for ri in raised:
-            try:
-                town.form_party(g, [ri])
-                log.append((g.frame, 'rejoined', ri))
-            except Stuck as s:
-                log.append((g.frame, 'rejoin stuck', ri, s.what))
-            town.to_town_bar(g)
+    temple_pass()
     gold_note(g, log, 'temple', g0)
     tablet_back(g, log)
     raised_back(g, log)
@@ -656,6 +659,23 @@ def town_upkeep(g, log):
             log.append((g.frame, 'shop stuck', s.what))
             town.to_town_bar(g)
         gold_note(g, log, 'shop', g2)
+    # Boltac's sales can pay a raise the temple turned down: back to the temple (n1v1
+    # chapter 7, agent 8, 2026-10-14: Eve's raise failed to ashes, Venus and Earth were
+    # "poor" at 1,970, the sales made it 5,270 for their 5,250, and they waited a trip)
+    gold_now = party_gold(g)
+    if SECOND_TEMPLE and any(g.char(ri)['level'] * temple_rate(g.char(ri)['status']) <= gold_now
+                             for ri in town.temple_patients(g)):
+        before = set(town.town_party(g))
+        log.append((g.frame, 'temple again', gold_now))
+        temple_pass()
+        raised_back(g, log)
+        for pos, ri in enumerate(town.town_slots(g)):
+            if ri is not None and ri not in before and g.char(ri)['status'] == 0:
+                r = town.inn_stay(g, pos, 'Stables', weeks=1)
+                log.append((g.frame, 'stables', pos, r['weeks']))
+                town.to_town_bar(g)
+        reorder_party(g, log)
+        town.to_town_bar(g)
     # the gold rides with the member least likely to die (back row, the Bishop first),
     # not split six ways: a mass death no longer locks the raise money in the dead (n1v0
     # chapter 3, 2026-10-14: five dead with 1,300 each, the temple 'poor'). The shop
@@ -801,6 +821,7 @@ def gold_keeper(g):
 
 
 SECOND_PURSE = True
+SECOND_TEMPLE = True       # agent 8: the temple again after Boltac's when a fee is affordable
 _PURSE_ORDER = []
 
 
