@@ -171,6 +171,7 @@ def info(g, k):
                 blow_f, blow_b = max(blow_f, mean), max(blow_b, mean)
         death = any(sid in DEATH for _, sid in sts)
         threat = p_fight * melee_round + p_dmg * spell_round + p_breath * breath_one * ROW
+        threat_spell = p_dmg * spell_round
         # monster_ai 0x800cffb0: columns 3-4 damage (spell entry 0), 5 status (1), 6 buff
         # (2), 7 heal (3), 8 cure (4); a column it has no spells for falls back to fighting
         has = [any(r[0x8f + sc * 5 + e] != 0xff for sc in range(4)) for e in range(5)]
@@ -182,6 +183,7 @@ def info(g, k):
         dsrc = disable_sources(g, k, r, p_fight, p[5] if sts else 0.0, sts)
     else:
         dsrc = []
+        threat_spell = 8 * lv if caster else 0
         threat = max(melee_round, 8 * lv if caster else 0)
         if r[0xc9]:
             threat += hp / 2 * 3 / 2
@@ -193,7 +195,7 @@ def info(g, k):
     return dict(id=struct.unpack_from('<H', r, 0x6c)[0], level=lv, mr=list(r[0xa3:0xa7]), cast_share=cast_share, focus=focus,
                 flags=struct.unpack_from('<I', r, 0xa8)[0],
                 resist=struct.unpack_from('<H', r, 0xcc)[0],
-                weak=struct.unpack_from('<H', r, 0xce)[0], caster=caster, threat=threat,
+                weak=struct.unpack_from('<H', r, 0xce)[0], caster=caster, threat=threat, threat_spell=threat_spell,
                 blow=(blow_f, blow_b), death=death, dsrc=dsrc, dis_hp=0.0, dis_hp_spell=0.0,
                 silenced=silenced(g, k),
                 screen=g.u8(GROUPS + k * 8 + 7), mons=standing(g, k))
@@ -346,6 +348,12 @@ def wake(kind, mlv):
     return 0.2                  # paralysis, stone: only a cure (Dialko, Madi) ends them
 
 
+def danger_of(m):
+    """What one of group m's monsters costs the party a round it stands: its damage threat
+    and the actions it takes away (disable(): dis_hp, 0 until it has run)."""
+    return m['threat'] + m.get('dis_hp', 0.0)
+
+
 def lands(m, sid):
     """Chance a hostile spell from sid's school gets past group m's resistance."""
     return max(0.0, 1 - min(255, m['mr'][school(sid)] + m['screen'] + 1) / 100)
@@ -397,7 +405,7 @@ def value(g, sid, k, M, clevel, cast_counts, commit=False):
             for j, hp0, st in mons:
                 hp = _left(t, j, hp0)
                 kill = 1.0 if d >= hp else 0.5 if d >= hp * 0.7 else 0.0
-                v += p * (min(d, hp) + kill * m['threat'])
+                v += p * (min(d, hp) + kill * danger_of(m))
                 if commit:
                     PLAN['dmg'].setdefault(t, {})[j] = PLAN['dmg'].get(t, {}).get(j, 0) + p * d
         return v
@@ -424,7 +432,7 @@ def value(g, sid, k, M, clevel, cast_counts, commit=False):
                     continue
                 p = lands(m, sid) * (1 - save_adj(base, m['level'], clevel))
             for j, hp, st in mons:
-                v += p * (_left(t, j, hp) + m['threat'] * 2)
+                v += p * (_left(t, j, hp) + danger_of(m) * 2)
                 if commit:
                     PLAN['dmg'].setdefault(t, {})[j] = PLAN['dmg'].get(t, {}).get(j, 0) + p * hp
         return v
@@ -436,11 +444,11 @@ def value(g, sid, k, M, clevel, cast_counts, commit=False):
                     continue
                 base = 15 if m['weak'] & 0x200 else 50
                 mons = [x for x in m['mons'] if x[2] < 8]
-                worth = m['threat'] * 1.5
+                worth = danger_of(m) * 1.5
             elif sid == PARALYZE:
                 base = 70 if m['resist'] & 0x10 else 17 if m['weak'] & 0x10 else 35
                 mons = [x for x in m['mons'] if x[2] < 0x20]
-                worth = m['threat'] * 2
+                worth = danger_of(m) * 2
             else:                               # Montino: only casters, twice a group
                 if not m['caster'] or cast_counts.get((SILENCE, t), 0) >= 2:
                     continue
@@ -450,6 +458,10 @@ def value(g, sid, k, M, clevel, cast_counts, commit=False):
                 # drags a fight out): 8 x level x 2 scaled by the share of its AI row's
                 # actions it has spells for (cast_share; SPELLS_ON)
                 worth = 8 * m['level'] * 2 * (m.get('cast_share', 1.0) if SPELLS_ON else 1.0)
+                # (fix 2) or what its spells do, damage and members put to sleep, for the
+                # rounds the silence lasts (3 or more); abilities aren't silenced
+                worth = max(worth, (m.get('threat_spell', 0) + m.get('dis_hp_spell', 0)) * 2)
+                mons = [x for x in mons if x[0] not in m.get('silenced', ())]
             p = lands(m, sid) * (1 - save_adj(base, m['level'], clevel))
             p_new = p * (1 - PLAN['dis'].get(t, 0))
             v += sum(p_new * worth for _ in mons)

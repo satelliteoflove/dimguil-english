@@ -575,6 +575,13 @@ def default_policy(g, m, opts):
             if v > 0:
                 cands.append((v, ('dispel', ('group', k)), ('dispel', k), 0))
     fight_v = 3 * me['level'] if FIGHT in opts else 0
+    if big and m >= 3 and FIGHT in opts:
+        # (fix 2) a back-row member's Fight is its weapon's reach and damage, not its
+        # level: in the n1v1 chapter 8 near-wipe the Mage and the Bishop, rated 33 for
+        # a Fight, never cast at the 18 Nightmares
+        from harness import gear
+        w = gear.equipped(g, ri).get(0)
+        fight_v = gear.wscore(w) * 0.5 if w and gear.back_reach(w) else 0
     if cands:
         cands.sort(key=lambda x: -x[0])
         pick_ = cands[0]
@@ -585,7 +592,7 @@ def default_policy(g, m, opts):
         if len(cands) > 1 and _vary():
             pick_ = cands[1]
         v, act, key, _ = pick_
-        if v > fight_v and v >= MIN_SPELL_VALUE:
+        if v > fight_v and (v >= MIN_SPELL_VALUE or big):
             CAST[key[0]] = CAST.get(key[0], 0) + 1
             if key[1] is not None:
                 CAST[key] = CAST.get(key, 0) + 1
