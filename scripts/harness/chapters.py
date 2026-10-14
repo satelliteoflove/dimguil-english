@@ -283,9 +283,16 @@ class Run(chapter1.Run):
         if chapter1.party_wiped(g):
             raise chapter1.Wiped()
         n = self.fights()
+        dead0 = {i for i in g.party() if g.char(i)['status'] & HOME_DEAD}
         r = play.handle_interrupt(g, self.policy or LaterPolicy, self.log)
         if chapter1.party_wiped(g):
             raise chapter1.Wiped()
+        if AVOID_FATAL and tactics.TRAINING and self.fights() > n:
+            # a fixed fight that killed a member: the walk home keeps off its square
+            f = next((x[2] for x in reversed(self.log) if len(x) > 2 and x[1] == 'fought'), None)
+            if f and f.get('story') and f.get('where') and \
+                    {i for i in g.party() if g.char(i)['status'] & HOME_DEAD} - dead0:
+                self._fatal = getattr(self, '_fatal', set()) | {tuple(f['where'])}
         if getattr(self, '_homeward', False) and self.fights() > n:
             battle.RUN_OK = self.homeward_run()
         if HP_HEAL and tactics.TRAINING and self.fights() > n and not getattr(self, '_topping', False) \
@@ -419,11 +426,15 @@ class Run(chapter1.Run):
                 gear.camp_loot(g, self.log, on_int=self.on_int)
             self._homeward = tactics.TRAINING
             battle.RUN_OK = self._homeward and self.homeward_run()
+            for a, x, y in getattr(self, '_fatal', ()):
+                nav.TRIP_SOFT.setdefault(a, set()).add((x, y))
             try:
                 nav.to_town(g, self.on_int, lambda g: self.after())
             finally:
                 self._homeward = False
                 battle.RUN_OK = False
+                nav.TRIP_SOFT.clear()
+                self._fatal = set()
         chapter1.town_upkeep(g, self.log)
         for i in town.town_party(g):
             self.full_points[i] = list(g.char(i)['raw'][0x5c:0x78])
@@ -988,6 +999,7 @@ MAPORFIC_TRIP = False        # Maporfic from camp as a training trip sets out
 TOPUP = False                # heal to what the trip's worst monster can't take in two hits
 HP_HEAL = True               # Chris's HP lines after every training fight (Run.hp_heal)
 HOME_DEAD = 0x80 | 0x100 | 0x200  # dead, ash, lost: the walk home may run (Run.homeward_run)
+AVOID_FATAL = True           # the walk home keeps off the square of the trip's fatal fixed fight (nav.TRIP_SOFT)
 POINTS_TRAIN = True         # agent 8: a training trip from the maze goes home first when points are low
 DEATH_RETRY = False         # agent 8, 2026-10-14 (Chris): a training trip with a death isn't reloaded
 POISON_HOME = True          # agent 7, 2026-10-14: cure poison first after a fight; home if it stays

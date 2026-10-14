@@ -311,8 +311,14 @@ def avoid_squares(g, area, target):
     for sq, (bit, _) in F.get('circles', {}).items():
         if flag(g, MAZE_EVENTS, bit) and sq != target:
             hard.add(sq)
-    soft = F['arrive'] - hard - {target}
+    soft = (F['arrive'] | TRIP_SOFT.get(area, set())) - hard - {target}
     return hard, soft
+
+
+# squares the walk home keeps off when another path exists, by area: a training trip's fixed
+# fight that killed a member (chapters.Run.trip_home; n1v3j c9 train_02, 2026-10-14: the
+# walk home crossed Area B's (15, 16) again, met the same kind of party and was wiped)
+TRIP_SOFT = {}
 
 
 # squares that become transfers once a flag is set, kept off hard from then on: Area A
