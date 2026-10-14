@@ -342,6 +342,8 @@ class Run(chapter1.Run):
         self.boss_training()
         self.fit()
         if g.overlay() in ('JOUKA', 'HAZURE'):
+            self.raise_all()
+        if g.overlay() in ('JOUKA', 'HAZURE'):
             return
         if chapter1.anyone_dead(g):
             chapter1.cure_in_camp(g, self.log, on_int=self.on_int)
@@ -448,10 +450,22 @@ class Run(chapter1.Run):
         g = self.g
         if chapter1.anyone_dead(g):
             self.trip_home()
+            self.raise_all()
             if any(g.char(i)['status'] != 0 for i in town.town_party(g)) \
                     or len(town.town_party(g)) < 4:
                 return False
         return True
+
+    def raise_all(self):
+        """In town with members the temple can't afford: gold trips on easier floors until
+        it can (each ends at the temple). b1v1b chapter 3, 2026-10-14: the Ice Rocks
+        killed two, the temple was too poor, and the party went on as three and a
+        level-5 recruit."""
+        for _ in range(GOLD_MOST):
+            if not self.temple_short():
+                return True
+            self.gold_trip()
+        return not self.temple_short()
 
     def levels(self):
         g = self.g
