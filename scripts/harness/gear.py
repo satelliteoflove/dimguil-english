@@ -798,6 +798,7 @@ def loot_work(g):
 # camp_use_item 0x800d7150 takes one per use and empties the slot at 0, and uses the dose
 # even if the target wasn't poisoned (B-camp.md).
 LATUMOFIS = 243
+RESTOCK = []                  # (roster index, item id) of battle items used up (battle._items_after)
 POTIONS_KEEP = 2
 HEALERS = {2, 5, 6, 11}       # Priest, Lord, Valkyrie, Bishop: the classes with priest spells
 USE_STATE = 0x800799e7        # camp_use_item: 5 the list (cursor USE_CUR), 0xe/0xf the target
@@ -1213,6 +1214,22 @@ def shop(g, log, reserve):
         done.append(('potion buy', g.char(ri)['name'], name(LATUMOFIS), price, r))
         log.append((g.frame, 'potion buy', g.char(ri)['name'], name(LATUMOFIS), price, r))
         POTION_LOG.append(('bought', g.char(ri)['name'], r))
+    trade_done()
+    # battle items used up since the last visit, bought back for their user when the shop
+    # sells them, above the reserve like any purchase (Chris, 2026-10-14; battle.item_choice)
+    for ri, i in list(RESTOCK):
+        RESTOCK.remove((ri, i))
+        if ri not in slots:
+            continue
+        pos = slots.index(ri)
+        price = item(g, i)['price']
+        if gold(g) - price < reserve or len(pack(g, ri)) >= 10 or not g.u8(STOCK + i):
+            continue
+        trade_done()
+        pool(pos)
+        r = buy(g, pos, i)
+        done.append(('restock', g.char(ri)['name'], name(i), price, r))
+        log.append((g.frame, 'restock', g.char(ri)['name'], name(i), price, r))
     trade_done()
     # buy
     offers = []

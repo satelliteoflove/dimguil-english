@@ -114,6 +114,7 @@ class Run(chapter1.Run):
         temple = collections.Counter()
         trips = 0
         uncurse = [0, 0]            # Boltac's uncurse fees after the Bishop's risky tries
+        items = collections.Counter()   # battle items: used up, broke, kept (battle.item_choice)
         for x in self.log[l0:]:
             if len(x) < 2:
                 continue
@@ -128,6 +129,8 @@ class Run(chapter1.Run):
                 trips += 1
             if x[1] == 'fought' and len(x) > 2 and isinstance(x[2], dict):
                 fights += 1
+                for u in x[2].get('items') or []:
+                    items[u.get('result')] += 1
                 d, w = set(x[2].get('dead_end', [])), set(x[2].get('down_end', []))
                 dead += len(d - prev_dead)
                 down += len(w - prev_down)
@@ -142,6 +145,7 @@ class Run(chapter1.Run):
                     gold_end=sum(q['gold'] for q in party), levels=[q['level'] for q in party],
                     avg_ac=round(sum(q['ac'] for q in party) / len(party), 1) if party else None,
                     uncursed=uncurse[0], uncurse_gold=uncurse[1],
+                    items_used=items['used'] + items['gone'], items_broke=items['broke'], items_kept=items['kept'],
                     stuck=len(res['stuck']), foundation=self.foundation())
 
     def foundation(self):

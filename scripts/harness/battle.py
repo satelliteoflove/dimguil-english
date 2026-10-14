@@ -34,6 +34,7 @@ COMBAT = 0x8008e230
 GROUPS = 0x8008c480
 PARTY_IDS = 0x8007e812
 CMD_PHASE = 0x1c
+USE_LIST = 81                # SCREEN: the Use item list (cursor LIST; agent 10 probe, 2026-10-14)
 WAITING = (5, 6, 32)   # SCREEN values that wait for a press: overview, "Is this all right?", its Yes/No
 TRANSIENT = (4, 8, 16)
 FIGHT, PARRY, SPELL, DISPEL, USE, RUN, AMBUSH, HIDE, BREATH = range(1, 10)
@@ -410,6 +411,84 @@ def likely_loss(g, M, party_hp):
                 lost_after=lost2['share'])
 
 
+ITEMS_IN_BATTLE = True      # Chris, 2026-10-14: attack items (scrolls, rods, orbs) in battle, by rule
+ITEM_FREE_MARGIN = 1.5      # a flush party's rebuyable consumable in a fight that doesn't matter:
+                            # this many times the member's own best action
+ITEM_FLUSH_PRICES = 5       # flush: gold over the reserve at least the reserve and this many prices
+
+
+def item_options(g, ri):
+    """The battle Use list of roster index ri: pack items with a battle spell (item +0x1b
+    != 0xff), in pack order (f07 probe, 2026-10-14: Uranus's list was his Latumofis potion,
+    Cape of Hide and Demonic Chimes, pack slots 2, 7, 8; screen 81, cursor LIST). Each is a
+    dict: idx (list row), k (pack slot), w (word), id, sid, cons (potion or scroll, or a sure
+    break into nothing: used up), br (break chance), eq (equipped), stock (Boltac's), price,
+    ident."""
+    from harness import gear
+    out = []
+    for k, w in gear.pack(g, ri):
+        i = w & 0x1ff
+        a = gear.ITEMS + i * 0x4c
+        bs = g.u8(a + 0x1b)
+        if not i or bs == 0xff:
+            continue
+        sub, br = g.u8(a + 3), g.u8(a + 0x0e)
+        out.append(dict(idx=len(out), k=k, w=w, id=i, sid=bs & 0x7f, br=br, eq=bool(w & gear.EQUIPPED),
+                        cons=sub in (20, 21) or (br >= 100 and g.u16(a + 0x10) == 0),
+                        stock=g.u8(gear.STOCK + i), price=g.u32(a + 0x12), ident=bool(w & gear.IDENT)))
+    return out
+
+
+def item_choice(g, ri, me, M, big, best_own):
+    """A Use action for an attack item, or None (Chris, 2026-10-14). The item's spell is
+    valued as tactics values the spell (resistances, saves, group size; the user's level
+    as the caster level). Identified items only. A consumable (potion, scroll, or a sure
+    break) in a fight that matters or a likely loss, when it beats the member's own best
+    action; a flush party (gold over the reserve by the reserve and ITEM_FLUSH_PRICES of
+    its price) uses one the shop sells in any fight at ITEM_FREE_MARGIN times that. Gear
+    that can break: only in a likely loss, when no consumable or own action does as well,
+    and never a piece someone wears."""
+    from harness import gear
+    ll = bool(FIGHT_INFO.get('likely_loss'))
+    party = [x for x in party_ids(g) if x is not None]
+    spare = gear.spare_gold(g, party)
+    reserve = gear.RESERVE_PER_LEVEL * max(g.char(x)['level'] for x in party)
+    best = None
+    for it in item_options(g, ri):
+        sid = it['sid']
+        if not it['ident'] or not (sid in tactics.DAMAGE or sid in tactics.DEATH or sid in tactics.DISABLE):
+            continue
+        if it['cons']:
+            if big or ll:
+                bar = best_own
+            elif it['stock'] and spare >= reserve and spare >= ITEM_FLUSH_PRICES * it['price']:
+                bar = best_own * ITEM_FREE_MARGIN
+            else:
+                continue
+        elif ll and not it['eq']:
+            bar = best_own
+        else:
+            continue
+        for k in M:
+            v = tactics.value(g, sid, k, M, me['level'], CAST)
+            if v > bar and v >= MIN_SPELL_VALUE:
+                key = (it['cons'], v)
+                if best is None or key > best[0]:
+                    best = (key, it, k, v)
+    if not best:
+        return None
+    _, it, k, v = best
+    sid = it['sid']
+    CAST[sid] = CAST.get(sid, 0) + 1
+    CAST[(sid, k)] = CAST.get((sid, k), 0) + 1
+    if PLANNING:
+        tactics.value(g, sid, k, M, me['level'], CAST, commit=True)
+    FIGHT_INFO.setdefault('items', []).append(dict(who=me['name'], ri=ri, item=gear.name(it['id']), id=it['id'],
+                                                   k=it['k'], w=it['w'], sid=sid, cons=it['cons'], v=round(v, 1),
+                                                   round=ROUND))
+    return ('use', it['idx'], sid, it['id'], ('group', k))
+
+
 def default_policy(g, m, opts):
     """What member m (party slot) does this round. Returns ('fight',), ('parry',),
     ('run',), ('spell', sid, school, level, index, target) with target ('group', g) or
@@ -582,6 +661,11 @@ def default_policy(g, m, opts):
         from harness import gear
         w = gear.equipped(g, ri).get(0)
         fight_v = gear.wscore(w) * 0.5 if w and gear.back_reach(w) else 0
+    if ITEMS_IN_BATTLE and USE in opts and M:
+        best_own = max([c_[0] for c_ in cands] + [fight_v])
+        it_act = item_choice(g, ri, me, M, big, best_own)
+        if it_act:
+            return it_act
     if cands:
         cands.sort(key=lambda x: -x[0])
         pick_ = cands[0]
@@ -655,7 +739,7 @@ def command_member(g, policy, log):
     if act[0] == 'first':
         _press_change(g, 'circle')
         return
-    want = {'fight': FIGHT, 'parry': PARRY, 'spell': SPELL, 'run': RUN, 'dispel': DISPEL}[act[0]]
+    want = {'fight': FIGHT, 'parry': PARRY, 'spell': SPELL, 'run': RUN, 'dispel': DISPEL, 'use': USE}[act[0]]
     k = opts.index(want)
     try:
         # five or more commands sit in two columns of four (Fight Parry Spell Use | Run):
@@ -685,9 +769,13 @@ def command_member(g, policy, log):
             slot = target[1]
             ui.move_cursor(g, PGRID_Y, slot // 3, 'down', 'up', what='target row')
             ui.move_cursor(g, PGRID_X, slot % 3, 'right', 'left', what='target col')
+    if act[0] == 'use':
+        ui.wait_until(g, lambda: g.u8(SCREEN) == USE_LIST, 120, 'use list')
+        ui.move_cursor(g, LIST, act[1], 'down', 'up', what='use item')
+        _press_change(g, 'circle', what='use item')
     # a target step: an enemy group pick is aimed (aim); anything else (a member) takes
     # what's selected. Stop at the next member or the overview.
-    prefer = act[-1][1] if act[0] in ('spell', 'dispel') and act[-1][0] == 'group' else None
+    prefer = act[-1][1] if act[0] in ('spell', 'dispel', 'use') and act[-1][0] == 'group' else None
     end = g.frame + 600
     while in_battle(g) and g.u8(PHASE) == CMD_PHASE and g.u8(MEMBER) == m \
             and g.u8(SCREEN) not in WAITING:
@@ -1133,6 +1221,25 @@ def _party_hp(g):
     return sum(max(g.char(ri)['hp'], 0) for ri in g.party())
 
 
+def _items_after(g):
+    """The fight's item uses, each marked 'used' (a consumable with uses left: potions and
+    scrolls carry a count, item_use_after 0x800ac7c4), 'gone' (its last use; queued for
+    gear.RESTOCK), 'broke' (gear no longer in its pack slot) or 'kept'."""
+    from harness import gear
+    out = []
+    for u in FIGHT_INFO.get('items', []):
+        held = any(w & 0x1ff == u['id'] for _, w in gear.pack(g, u['ri']))
+        words = dict(gear.pack(g, u['ri']))
+        if u['cons']:
+            res = 'used' if held else 'gone'
+            if not held:
+                gear.RESTOCK.append((u['ri'], u['id']))
+        else:
+            res = 'kept' if (words.get(u['k'], 0xffff) & 0x1ff) == u['id'] else 'broke'
+        out.append(dict(who=u['who'], item=u['item'], sid=u['sid'], round=u['round'], v=u['v'], result=res))
+    return out
+
+
 def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
     """Fight the battle on screen to its end. Returns a dict: rounds, frames, outcome
     ('won' back in the maze, 'town' after a wipe or escape to town, 'other'), actions."""
@@ -1145,6 +1252,7 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
     FIGHT_INFO.pop('runs', None)
     FIGHT_INFO.pop('loss_checked', None)
     FIGHT_INFO.pop('likely_loss', None)
+    FIGHT_INFO.pop('items', None)
     for k_ in [k_ for k_ in FIGHT_INFO if isinstance(k_, tuple) and k_[0] == 'long'] + ['long', 'focus']:
         FIGHT_INFO.pop(k_, None)
     msg0 = len(g.cap.messages) if g.cap else 0
@@ -1239,6 +1347,6 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
                 ran=sum(1 for a in log if a[1] == 'run'),
                 runs=FIGHT_INFO.get('runs', []), likely_loss=FIGHT_INFO.get('likely_loss'), long=FIGHT_INFO.get('long'), focus=FIGHT_INFO.get('focus'),
                 fled=_flee_msgs(g, msg0),
-                first=FIGHT_INFO.get('first'), hp_end=_party_hp(g),
+                first=FIGHT_INFO.get('first'), hp_end=_party_hp(g), items=_items_after(g),
                 down_end=[g.char(ri)['name'] for ri in g.party() if g.char(ri)['status'] >= 0x20],
                 dead_end=[g.char(ri)['name'] for ri in g.party() if g.char(ri)['status'] & 0x380])
