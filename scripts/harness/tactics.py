@@ -57,6 +57,7 @@ CORTU, BAMATU, MAPORFIC, PORFIC, DILTO, MORLIS, BADUMAS = 8, 29, 32, 23, 5, 6, 7
 HEALS = {21, 30, 33, 36, 41, 58, 64, 79}
 DIALKO, MADI = 28, 36
 CHEAP_LEVEL = 3          # in a fight that doesn't matter, spells above this level wait
+DEBUFF_MIN = 0.3         # (fix 3) sleep, silence, paralysis only where a monster's chance of being caught is this
 
 
 def school(sid):
@@ -463,6 +464,11 @@ def value(g, sid, k, M, clevel, cast_counts, commit=False):
                 worth = max(worth, (m.get('threat_spell', 0) + m.get('dis_hp_spell', 0)) * 2)
                 mons = [x for x in mons if x[0] not in m.get('silenced', ())]
             p = lands(m, sid) * (1 - save_adj(base, m['level'], clevel))
+            if p < DEBUFF_MIN:
+                # (fix 3) not into a group that nullifies or saves against it most of the
+                # time (n1v1 chapter 8: Montino twice at Nightmares that nullify Priest
+                # spells 65% of the time and save half the rest: 17% a monster)
+                continue
             p_new = p * (1 - PLAN['dis'].get(t, 0))
             v += sum(p_new * worth for _ in mons)
             if commit and mons:
