@@ -34,10 +34,13 @@ SHOP_LAST = 0x132                       # the shop lists ids 1-0x132
 EQUIPPED, IDENT, CURSED, MAIN_H, SUB_H = 0x2000, 0x4000, 0x8000, 0x1000, 0x0800
 
 _names = {}
+_back = {}          # id -> whether the weapon reaches from the back row (site range 'front,back')
 try:
     for r in json.load(open(os.path.expanduser(
             '~/Documents/bartoks-trading-post/data/items/dim/ps.json')))['records']:
         _names[r['no']] = r['name']['en']
+        if ',' in (r.get('range_ja') or ''):
+            _back[r['no']] = r['range_ja'].split(',')[1].strip() != '-'
 except Exception:
     pass
 
@@ -97,6 +100,39 @@ def score(it, slot):
     return -it['ac']
 
 
+def back_reach(it):
+    """A weapon that reaches from the back row: weapon_reach 0x800c94a8 (D-battle.md
+    "Reach") gives short weapons nothing from the back, long ones groups 1-2, bows all;
+    each item's class is the site's range column ('2,-' short, '4,2', '4,4')."""
+    return _back.get(it['id'], ranged(it))
+
+
+def back_row(g, ri):
+    """Whether roster index ri stands in the back row (positions 3-5), in the maze or in
+    town."""
+    for slots in (g.party_slots(), town.town_slots(g)):
+        if ri in slots:
+            return slots.index(ri) >= 3
+    return False
+
+
+def worth(g, ri, it, slot):
+    """score() for roster index ri where they stand: a weapon that can't reach from the
+    back row is worth nothing to a back-row member (b1v3d chapter 9: a level-14 Mage in
+    the back row with two daggers)."""
+    if it is None:
+        return 0
+    if slot in (0, 1) and it['cat'] == 0 and back_row(g, ri) and not back_reach(it):
+        return 0
+    if slot == 0 and it['f04'] & 0x20:
+        # a two-handed weapon gives up what's in the off hand now (b1v3d chapter 9: a
+        # 10-gold Rod for a back-row Thief cost him his Shield of Defense)
+        off = equipped(g, ri).get(1)
+        lost = worth(g, ri, off, 1) if off is not None and off['id'] != it['id'] else 0
+        return wscore(it) - max(TWO_HAND_COST, lost)
+    return score(it, slot)
+
+
 def equipped(g, ri):
     """{slot: item} of what's on now (slot 6, accessories, isn't scored)."""
     out = {}
@@ -147,7 +183,7 @@ def better(g, ri, it, slot, cur):
         main = equipped(g, ri).get(0)
         if main is not None and main['f04'] & 0x20:
             return False
-    return score(it, slot) > (score(cur, slot) if cur else 0)
+    return worth(g, ri, it, slot) > worth(g, ri, cur, slot)
 
 
 # --- equip from camp ---
@@ -190,7 +226,7 @@ def choose(g, ri, slot, cands, before):
                         if before[j] & EQUIPPED and before[j] & MAIN_H), None)
             if cur is not None and ranged(cur) != ranged(it):
                 continue
-        sc = score(it, slot)
+        sc = worth(g, ri, it, slot)
         if bs is None or sc > bs:
             best, bs = k, sc
     return best
@@ -318,12 +354,29 @@ def bishops(g):
     return out
 
 
+RESERVE_PER_LEVEL = 500    # gold kept back per level of the highest member: two raises from
+                           # death (temple_heal 0x800c95f0: dead = level x 250, ashes x 500)
+
+
+def spare_gold(g, members):
+    """The gold of roster indexes `members` over the raise reserve."""
+    if not members:
+        return 0
+    top = max(g.char(ri)['level'] for ri in members)
+    return sum(g.char(ri)['gold'] for ri in members) - RESERVE_PER_LEVEL * top
+
+
 def bishop_can(g, bpos, w):
-    """Whether the Bishop at bpos should try unidentified word w in camp."""
+    """Whether the Bishop at bpos should try unidentified word w in camp. A try below
+    twice the item's level risks a touch ((95 - chance) / 4 percent a miss: afraid, and a
+    cursed kind goes on cursed, camp_identify 0x800d5f24), so it's left to Boltac's when
+    the party's gold over the reserve pays his fee (price / 2, which the sale gives back)."""
     c = g.char(g.party_slots()[bpos])
     chance, safe = id_odds(c['level'], id_level(g, w & 0x1ff))
     if safe:
         return True
+    if spare_gold(g, g.party()) >= item(g, w & 0x1ff)['price'] // 2:
+        return False
     return chance >= ID_RISKY_MIN and TRIED.get((c['i'], w), 0) < 3
 
 
@@ -422,7 +475,7 @@ def gear_value(g, rj, it, taken=None):
     for s in range(7):
         cur = (taken or {}).get((rj, s), on.get(s))
         if better(g, rj, it, s, cur):
-            gain = score(it, s) - (score(cur, s) if cur else 0)
+            gain = worth(g, rj, it, s) - worth(g, rj, cur, s)
             if gain > best[0]:
                 best = (gain, s)
     return best
@@ -453,7 +506,7 @@ def plan_gives(g, members):
             continue
         it = item(g, w & 0x1ff)
         cur = taken.get((rj, s))
-        if cur is not None and score(it, s) <= score(cur, s):
+        if cur is not None and worth(g, rj, it, s) <= worth(g, rj, cur, s):
             continue
         taken[(rj, s)] = it
         used.add((ri, w))
@@ -695,6 +748,20 @@ def bishop_will(g, members, w):
     return False
 
 
+def kind_usable(g, ri, sub):
+    """Whether any item of subtype `sub` (what an unidentified item's name shows) is one
+    roster index ri's class may equip (Item +0x1c class mask)."""
+    cls = g.char(ri)['raw'][0x0b] & 0x7f
+    key = (cls, sub)
+    if key not in _KIND:
+        _KIND[key] = any(g.u8(ITEMS + i * 0x4c + 3) == sub and
+                         g.u16(ITEMS + i * 0x4c + 0x1c) & (1 << cls) for i in range(1, 0x133))
+    return _KIND[key]
+
+
+_KIND = {}
+
+
 def gold(g):
     return sum(g.char(i)['gold'] for i in town.town_party(g))
 
@@ -722,40 +789,50 @@ def shop(g, log, reserve):
         if town._at_trade_menu(g):
             town.boltac_leave(g)
 
-    # identify and uncurse. The fee is half the price, the same as the sale, so paying it
-    # only makes sense for something a member could wear (b1v3b, 2026-10-14). Packs full
-    # to the last slot stop the Bishop gathering and drop chest loot, so cheap unknowns
-    # are identified (and then sold) to make room.
+    # identify and uncurse. Boltac's identify fee is price / 2, the same as the sale price
+    # (E-town.md: boltac_identify 0x800c1de8, boltac_sell 0x800bf9ec), so with gold over the
+    # reserve a shop identify costs nothing in the end: what helps is worn, the rest is sold
+    # back below for the fee. The Bishop keeps what they can do safely in camp; the shop
+    # takes the rest (b1v3d chapter 8: 54,000 gold and nine unknowns at idl 9-23 waiting on
+    # a level-13 Bishop). A player sees the unidentified name (SWORD, ROBE: the subtype),
+    # so the kinds a member's class could use go first, then the cheapest, while the fees
+    # fit in the gold over the reserve. Packs full to the last slot stop the Bishop
+    # gathering and drop chest loot, so a cheap unknown (<= CHEAP_ID) is done even then.
     alive = [ri for _, ri in members if g.char(ri)['status'] < 0x20]
     bishop_full = any(g.char(ri)['cls'] == BISHOP and len(pack(g, ri)) >= 10 for ri in alive)
+    budget = gold(g) - reserve
+    cands = []
     for pos, ri in members:
-        todo = []
         for k, w in pack(g, ri):
             it = item(g, w & 0x1ff)
             if w & CURSED:
-                todo.append((it['price'] // 2, k, 'uncurse', w, False))
+                cands.append((0, it['price'] // 2, pos, ri, k, 'uncurse', w, False))
             elif not w & IDENT and it['price']:
-                cheap = it['price'] // 2 <= CHEAP_ID and (len(pack(g, ri)) >= 10 or bishop_full)
-                if not cheap and bishop_will(g, members, w):
+                if bishop_will(g, members, w):
                     continue            # the Bishop does it in camp, at no risk
-                if not cheap and not any(usable(g, rj, it) for rj in alive):
-                    continue            # nobody could wear it: the Bishop's, in time
-                todo.append((it['price'] // 2, k, 'identify', w, cheap))
-        todo.sort()
-        if not todo:
+                cheap = it['price'] // 2 <= CHEAP_ID and (len(pack(g, ri)) >= 10 or bishop_full)
+                hope = any(kind_usable(g, rj, it['sub']) for rj in alive)
+                cands.append((1 if hope else 2, it['price'] // 2, pos, ri, k, 'identify', w, cheap))
+    cands.sort(key=lambda c: c[:2])
+    todo = {}
+    for rank, cost, pos, ri, k, which, w, cheap in cands:
+        if which == 'identify' and not cheap and cost > budget:
             continue
+        budget -= cost
+        todo.setdefault((pos, ri), []).append((cost, k, which, w))
+    for (pos, ri), jobs in todo.items():
         trade_done()
         pool(pos)
-        for cost, k, which, w, cheap in todo:
-            if cost > max(0, gold(g) - reserve) / 4 and which == 'identify' and not cheap:
-                continue
+        jobs.sort(key=lambda j: j[2] == 'uncurse')     # uncurse last: it shifts the pack
+        for cost, k, which, w in jobs:
             if cost > g.char(ri)['gold']:
+                continue
+            k = next((j for j, x in pack(g, ri) if x == w), None)
+            if k is None:
                 continue
             r = service(g, pos, k, which)
             done.append((which, g.char(ri)['name'], name(w & 0x1ff), cost, r))
             log.append((g.frame, which, g.char(ri)['name'], name(w & 0x1ff), cost, r))
-            if which == 'uncurse' and r == 'done':
-                break                   # the pack has shifted: the rest next trip
         trade_done()
     # sell what nobody would wear
     for pos, ri in members:
@@ -765,7 +842,16 @@ def shop(g, log, reserve):
                 if w & (EQUIPPED | CURSED) or not w & IDENT:
                     continue
                 it = item(g, w & 0x1ff)
-                if it['cat'] > 5 and not cloak(it) or not it['price']:
+                if not it['price']:
+                    continue
+                if it['cat'] == 6:
+                    # an instrument nobody here can equip (b1v3d: a Harp of Silence, 5,000
+                    # gold to identify, carried for good)
+                    if any(usable(g, rj, it) for _, rj in members if g.char(rj)['status'] < 0x20):
+                        continue
+                    sell = (k, w)
+                    break
+                if it['cat'] > 5 and not cloak(it):
                     continue
                 # sold only if no member in the party can use it, or everyone who can
                 # has better (Chris, 2026-10-14); camp Give passes it on otherwise
@@ -796,15 +882,18 @@ def shop(g, log, reserve):
                     it = item(g, i)
                     if not it['price'] or not better(g, ri, it, s, cur):
                         continue
-                    gain = score(it, s) - (score(cur, s) if cur else 0)
+                    gain = worth(g, ri, it, s) - worth(g, ri, cur, s)
                     offers.append((gain / it['price'], gain, pos, ri, s, i))
     offers.sort(reverse=True)
+    # buying keeps back a raise from death for every member (temple_heal: level x 250),
+    # more than the two raises identify keeps: a bought item's gold doesn't come back
+    buy_reserve = max(reserve, sum(250 * g.char(ri)['level'] for _, ri in members))
     taken = set()
     for _, gain, pos, ri, s, i in offers:
         if (ri, s) in taken:
             continue
         it = item(g, i)
-        if gold(g) - it['price'] < reserve or len(pack(g, ri)) >= 10 or not g.u8(STOCK + i):
+        if gold(g) - it['price'] < buy_reserve or len(pack(g, ri)) >= 10 or not g.u8(STOCK + i):
             continue
         trade_done()
         pool(pos)

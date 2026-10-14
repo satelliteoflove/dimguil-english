@@ -694,7 +694,7 @@ def raised_back(g, log):
 
 
 GEAR = True
-GEAR_RESERVE = 500          # gold kept back per level of the highest member: two raises (250 a level).
+GEAR_RESERVE = gear.RESERVE_PER_LEVEL   # gold kept back per level of the highest member: two raises (250 a level).
                             # At 300 (one raise) the chains were too poor for the temple in chapter 3
 
 
