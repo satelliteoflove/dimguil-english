@@ -538,7 +538,8 @@ def town_upkeep(g, log):
 
 
 GEAR = True
-GEAR_RESERVE = 300          # gold kept back per level of the highest member (a raise is 250)
+GEAR_RESERVE = 500          # gold kept back per level of the highest member: two raises (250 a level).
+                            # At 300 (one raise) the chains were too poor for the temple in chapter 3
 
 
 COT_BELOW = 0.6               # a member under this share of max HP rests in a Cot
