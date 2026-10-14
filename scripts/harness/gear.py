@@ -129,8 +129,38 @@ def worth(g, ri, it, slot):
         # 10-gold Rod for a back-row Thief cost him his Shield of Defense)
         off = equipped(g, ri).get(1)
         lost = worth(g, ri, off, 1) if off is not None and off['id'] != it['id'] else 0
-        return wscore(it) - max(TWO_HAND_COST, lost)
+        # and the best shield they could carry instead (agent 8, 2026-10-14: Earth in the
+        # back row with a Rod, worth 7 against the flat 4, while a Bullwhip and a Target
+        # Shield, 6.5 + 12, were in stock; with the Rod on, a shield was never offered)
+        return wscore(it) - max(TWO_HAND_COST, lost, best_shield(g, ri))
     return score(it, slot)
+
+
+_SHIELDS = []
+_BEST_SHIELD = {}
+
+
+def best_shield(g, ri):
+    """score() of the best shield roster index ri can use that's in a party pack
+    (identified, not cursed) or in Boltac's stock; 0 if none."""
+    key = (ri, g.frame)
+    if key in _BEST_SHIELD:
+        return _BEST_SHIELD[key]
+    if not _SHIELDS:
+        _SHIELDS.extend(i for i in range(1, SHOP_LAST + 1) if g.u8(ITEMS + i * 0x4c + 2) == 2)
+    ids = {i for i in _SHIELDS if g.u8(STOCK + i)}
+    for rj in (g.party() or town.town_party(g)):
+        ids |= {w & 0x1ff for k, w in pack(g, rj) if w & IDENT and not w & CURSED
+                and (rj == ri or not w & EQUIPPED)}
+    best = 0
+    for i in ids:
+        sh = item(g, i)
+        if sh['cat'] == 2 and usable(g, ri, sh):
+            best = max(best, score(sh, 1))
+    if len(_BEST_SHIELD) > 500:
+        _BEST_SHIELD.clear()
+    _BEST_SHIELD[key] = best
+    return best
 
 
 def equipped(g, ri):
@@ -570,18 +600,20 @@ def plan_gives(g, members):
                     continue
                 gain, s = gear_value(g, rj, it)
                 if s is not None:
-                    cands.append((gain, ri, w, rj, s))
+                    cands.append((gain, ri, w, rj, s, k))
     cands.sort(key=lambda x: -x[0])
     taken, used, out = {}, set(), []
-    for gain, ri, w, rj, s in cands:
-        if (ri, w) in used or (rj, s) in taken:
+    # by pack index: two of the same item in one pack have the same word (n1v1, agent 8:
+    # Eve's second Bullwhip, bought for Earth, counted as hers)
+    for gain, ri, w, rj, s, k in cands:
+        if (ri, k) in used or (rj, s) in taken:
             continue
         it = item(g, w & 0x1ff)
         cur = taken.get((rj, s))
         if cur is not None and worth(g, rj, it, s) <= worth(g, rj, cur, s):
             continue
         taken[(rj, s)] = it
-        used.add((ri, w))
+        used.add((ri, k))
         out.append((ri, w, rj, s, gain))
     return out
 
@@ -629,6 +661,20 @@ def gather_for_bishop(g, bpos, log=None, room_keep=0):
         if give(g, pos, k, bpos, log) == 'given':
             n += 1
     return n
+
+
+def swap_back(g, rj, w_in):
+    """Pack index of what full receiver rj hands back in a Give trade: identified, not
+    worn, not cursed, not a Latumofis, nothing rj gains from; what rj can't use first."""
+    cands = []
+    for j, x in pack(g, rj):
+        if x & (EQUIPPED | CURSED) or not x & IDENT or x == w_in or x & 0x1ff == LATUMOFIS:
+            continue
+        it = item(g, x & 0x1ff)
+        if (it['cat'] <= 5 or cloak(it)) and gear_value(g, rj, it)[1] is not None:
+            continue
+        cands.append((usable(g, rj, it), it['price'], j))
+    return min(cands)[2] if cands else None
 
 
 ROOM_KEEP = 7       # make_room gives only to a pack with at most this many items
@@ -709,11 +755,18 @@ def camp_loot(g, log=None, on_int=None):
             if not plan:
                 break
             ri, w, rj, s, gain = plan[0]
+            sw = None
             if len(pack(g, rj)) >= 10:
-                members = [m for m in members if m != rj]
-                continue
+                # a full receiver trades back something they gain nothing from (agent 8,
+                # 2026-10-14: n1v6 chapter 6, all six packs at 10, a Kabuto for Venus and
+                # a Sword of Slashing for Uranus (+20) stuck in others' packs)
+                sw = swap_back(g, rj, w)
+                if sw is None:
+                    members = [m for m in members if m != rj]
+                    continue
             k = next((j for j, x in pack(g, ri) if x == w), None)
-            if give(g, g.party_slots().index(ri), k, g.party_slots().index(rj), log) != 'given':
+            if give(g, g.party_slots().index(ri), k, g.party_slots().index(rj), log,
+                    swap=sw) not in ('given', 'swapped'):
                 break
             done += 1
         done += equip_party(g, log, on_int=on_int)
@@ -732,7 +785,8 @@ def loot_work(g):
     b = bishops(g)
     if b and any(bishop_can(g, b[0], w) for ri in g.party() for k, w in unknowns(g, ri)):
         return True
-    if any(p[0] != p[2] and len(pack(g, p[2])) < 10 for p in plan_gives(g, g.party())):
+    if any(p[0] != p[2] and (len(pack(g, p[2])) < 10 or swap_back(g, p[2], p[1]) is not None)
+           for p in plan_gives(g, g.party())):
         return True
     return any(wants_equip(g, i) for i in g.party()) or bool(potion_moves(g)) or bool(room_move(g))
 
@@ -1176,7 +1230,18 @@ def shop(g, log, reserve):
                         continue
                     gain = worth(g, ri, it, s) - worth(g, ri, cur, s)
                     offers.append((gain / it['price'], gain, pos, ri, s, i))
-    offers.sort(reverse=True)
+    # one offer per member and slot, the biggest gain (the cheaper on a tie): by gain per
+    # gold alone a 10 gold Anointed Mace (+1, no reach from the back row) beat a 100 gold
+    # Bullwhip (+7.5) for Earth (agent 8, 2026-10-14, n1v3 chapter 6)
+    top = {}
+    spend = gold(g) - reserve
+    for o in offers:
+        if item(g, o[5])['price'] > spend:
+            continue                    # (the Staff of Curing, 75,000 gold, won every slot)
+        key = (o[3], o[4])
+        if key not in top or (o[1], -item(g, o[5])['price']) > (top[key][1], -item(g, top[key][5])['price']):
+            top[key] = o
+    offers = sorted(top.values(), reverse=True)
     # buying keeps back the same two raises at the top level as identify (`reserve`).
     # A raise for every member (6599867) kept 12,000 gold back at level 8: the n1 chains
     # ended chapter 1 with 7,000-8,000 gold, nothing bought, mages at AC 7-9 and a 10 gold
@@ -1187,13 +1252,23 @@ def shop(g, log, reserve):
         if (ri, s) in taken:
             continue
         it = item(g, i)
-        if gold(g) - it['price'] < buy_reserve or len(pack(g, ri)) >= 10 or not g.u8(STOCK + i):
+        if gold(g) - it['price'] < buy_reserve or not g.u8(STOCK + i):
             continue
+        bpos, bri = pos, ri
+        if len(pack(g, ri)) >= 10:
+            # a full pack (Earth's, n1v1 chapter 6: starting potions): someone with room
+            # who could wear it carries it, and camp Give passes it on
+            room = [(len(pack(g, rj)), p, rj) for p, rj in members if rj != ri
+                    and len(pack(g, rj)) < 10 and usable(g, rj, it) and g.char(rj)['status'] < 0x20]
+            if not room:
+                continue
+            _, bpos, bri = min(room)
         trade_done()
-        pool(pos)
-        r = buy(g, pos, i)
+        pool(bpos)
+        r = buy(g, bpos, i)
         done.append(('buy', g.char(ri)['name'], name(i), it['price'], r))
-        log.append((g.frame, 'buy', g.char(ri)['name'], name(i), it['price'], r))
+        log.append((g.frame, 'buy', g.char(ri)['name'], name(i), it['price'], r)
+                   + ((g.char(bri)['name'],) if bri != ri else ()))
         if r == 'bought':
             taken.add((ri, s))
     trade_done()
