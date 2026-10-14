@@ -789,7 +789,7 @@ def shop(g, log, reserve):
     for pos, ri in members:
         on = dict(equipped(g, ri))
         on.update({s: it for (rj, s), it in planned.items() if rj == ri})
-        for s in range(6):
+        for s in range(7):              # 6: cloaks (b1v3d chapter 8: 54,000 gold, three bare)
             cur = on.get(s)
             for sub in range(0, 19):
                 for i in shop_list(g, sub):
