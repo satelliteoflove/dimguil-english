@@ -112,9 +112,13 @@ class Run(chapter1.Run):
         prev_dead, prev_down = set(), set()
         temple = collections.Counter()
         trips = 0
+        uncurse = [0, 0]            # Boltac's uncurse fees after the Bishop's risky tries
         for x in self.log[l0:]:
             if len(x) < 2:
                 continue
+            if x[1] == 'uncurse' and len(x) > 5 and x[5] == 'done':
+                uncurse[0] += 1
+                uncurse[1] += x[4]
             if x[1] in ('temple', 'rejoined', 'trip home', 'stables'):
                 prev_dead, prev_down = set(), set()
             if x[1] == 'temple' and len(x) > 3 and isinstance(x[3], dict):
@@ -136,6 +140,7 @@ class Run(chapter1.Run):
                     raises=temple.get('alive', 0), ashes=temple.get('ashes', 0), lost=temple.get('lost', 0),
                     gold_end=sum(q['gold'] for q in party), levels=[q['level'] for q in party],
                     avg_ac=round(sum(q['ac'] for q in party) / len(party), 1) if party else None,
+                    uncursed=uncurse[0], uncurse_gold=uncurse[1],
                     stuck=len(res['stuck']))
 
     def party_gear(self):
