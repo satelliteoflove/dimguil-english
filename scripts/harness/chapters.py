@@ -711,14 +711,23 @@ class Run(chapter1.Run):
             battle.RUN_OK = False
             tactics.TRAINING = False
         self.ladder_step(base, areas, l0)
-        if any(g.char(i)['status'] != 0 for i in town.town_party(g)) or len(town.town_party(g)) < 4:
-            return 'casualties'
         # a member swapped out alive for a raised one (raised_back) isn't a casualty
         # (b1v6c chapter 7, 2026-10-14: Jupiter, out for Tia, counted twice and reloaded)
         left = [i for i in setting_out if i not in town.town_party(g) and g.char(i)['status'] != 0]
-        if areas != (0,) and left:
-            self.note('left at the temple', [g.char(i)['name'] for i in left])
+        hurt = any(g.char(i)['status'] != 0 for i in town.town_party(g)) or len(town.town_party(g)) < 4
+        if DEATH_RETRY and (hurt or areas != (0,) and left):
+            if left:
+                self.note('left at the temple', [g.char(i)['name'] for i in left])
             return 'casualties'
+        # the party lives with a death (Chris, 2026-10-14: realistic play): the temple
+        # raised them if the gold allowed, else they wait there and a standby fills in
+        # (town_upkeep), and the next trip goes for the fee (temple_short -> gold_trip).
+        # Only a wipe reloads.
+        died = [g.char(i)['name'] for i in setting_out
+                if any(x[1] == 'temple' and x[2] == i for x in self.log[l0:] if len(x) > 2)]
+        if died or left or hurt:
+            self.note('lived with', dict(temple=died, waiting=[g.char(i)['name'] for i in left],
+                                         party=len(town.town_party(g))))
         return True
 
     def casters_spent(self, frac=1 / 3):
@@ -958,6 +967,7 @@ class Run(chapter1.Run):
 MAPORFIC_TRIP = False        # Maporfic from camp as a training trip sets out
 TOPUP = False                # heal to what the trip's worst monster can't take in two hits
 HP_HEAL = True               # Chris's HP lines after every training fight (Run.hp_heal)
+DEATH_RETRY = False         # agent 8, 2026-10-14 (Chris): a training trip with a death isn't reloaded
 POISON_HOME = True          # agent 7, 2026-10-14: cure poison first after a fight; home if it stays
 LOOT_EACH_FIGHT = True      # agent 7, 2026-10-14: camp_loot after a training fight that left work
 # camp heals, cheapest first: (spell id, school, level, mean HP; 999 = full). B-camp.md:
