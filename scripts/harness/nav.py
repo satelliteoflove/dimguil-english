@@ -377,14 +377,20 @@ def do_circle(g, L, on_int, after):
     walk_floor(g, sx, sy, on_int)
     if (g.u8(maze.AREA),) + g.pos() != L['switch']:
         return
-    if not flag(g, MAZE_EVENTS, L['bit']):
+    # up to 3 presses: right after a fight on the switch square the START press can be
+    # eaten (MAZE game_state 1 while the screen comes back; investigate returns False and
+    # no prompt opens: n1v6k c9 train_01, 2026-10-14), so the bit is read again and the
+    # press repeated
+    for _ in range(3):
+        if flag(g, MAZE_EVENTS, L['bit']):
+            break
         if not maze.face(g, L['face']):
             after(g)
             maze.face(g, L['face'])
         chapter1.investigate(g)
         after(g)
-        if not flag(g, MAZE_EVENTS, L['bit']):
-            raise Stuck('switch left the circle dark', at=L['switch'], bit=L['bit'])
+    if not flag(g, MAZE_EVENTS, L['bit']):
+        raise Stuck('switch left the circle dark', at=L['switch'], bit=L['bit'])
     try:
         walk_floor(g, L['at'][1], L['at'][2], on_int)
     except Stuck:
