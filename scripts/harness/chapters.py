@@ -468,6 +468,15 @@ class Run(chapter1.Run):
         g = self.g
         n0 = self.fights()
         self.fit()
+        if not getattr(self, '_gold', False) and self.temple_short():
+            # the trip home just now left a member the temple can't raise: this trip goes
+            # for gold on easier floors instead, and counts (its checkpoint keeps the gold)
+            self._gold = True
+            try:
+                self.gold_trip()
+            finally:
+                self._gold = False
+            return True
         self.ensure_maze()
         if not any(nav.plan(g, (a,) + sq) is not None
                    for a in areas for sq in sorted(nav.floor(a)['fights'])[:6]):
@@ -562,7 +571,11 @@ class Run(chapter1.Run):
         """One trip for gold on easier floors; it counts whatever the temple did."""
         areas = self.gold_areas()
         self.note('gold trip', areas, self.temple_short())
-        self.train(areas)
+        keep, self._gold = getattr(self, '_gold', False), True
+        try:
+            self.train(areas)
+        finally:
+            self._gold = keep
         return True
 
     def town_helps(self):
