@@ -256,6 +256,16 @@ class Run(chapter1.Run):
         r = play.handle_interrupt(g, self.policy or LaterPolicy, self.log)
         if chapter1.party_wiped(g):
             raise chapter1.Wiped()
+        if HP_HEAL and tactics.TRAINING and self.fights() > n and not getattr(self, '_topping', False) \
+                and g.overlay() not in ('JOUKA', 'HAZURE', 'BATTLE'):
+            # Chris's HP lines after every training fight, the walk home included
+            self._topping = True
+            try:
+                critical = self.hp_heal()
+            finally:
+                self._topping = False
+            if critical and getattr(self, '_walking_out', False):
+                raise TurnHome(critical)
         if TOPUP and tactics.TRAINING and self.fights() > n and not getattr(self, '_topping', False) \
                 and g.overlay() not in ('JOUKA', 'HAZURE', 'BATTLE'):
             # heal up after each training fight, not only at the next fight square: the
@@ -626,7 +636,11 @@ class Run(chapter1.Run):
                     if chapter1.needs_town(g) and self.town_helps():
                         why = None
                         break
-                    if TOPUP:
+                    if HP_HEAL:
+                        if self.hp_heal():
+                            why = 'critical'
+                            break
+                    elif TOPUP:
                         if getattr(self, '_heals_out', False) or self.top_up():
                             why = 'heals out'
                             break
@@ -634,7 +648,15 @@ class Run(chapter1.Run):
                         chapter1.heal_in_camp(g, self.log, on_int=self.on_int)
                     if nav.plan(g, (area,) + sq) is None:
                         continue
-                    self.go((area,) + sq)
+                    self._walking_out = True
+                    try:
+                        self.go((area,) + sq)
+                    except TurnHome as t:
+                        self.note('turn home', t.args[0])
+                        why = 'critical'
+                        break
+                    finally:
+                        self._walking_out = False
                 else:
                     why = 'squares done'
                     continue
@@ -653,6 +675,84 @@ class Run(chapter1.Run):
             self.note('left at the temple', [g.char(i)['name'] for i in left])
             return 'casualties'
         return True
+
+    def hp_heal(self, most=16):
+        """Chris's HP lines (2026-10-14), per standing member: over 2/3 of max HP no heal;
+        under 2/3 back over 2/3 only from points to spare (the caster keeps half that
+        level's points from the last Stables, levels 1-5 only); under 1/2 back over 1/2
+        before the next fight; under 1/3 critical. Each cast is the cheapest heal whose
+        mean clears the gap (HEAL_OPTS), Madi or Kadios only under 1/2 when two of the
+        best lower heals wouldn't. Returns the names still under 1/3 when the heals are
+        out (the trip turns home), else []."""
+        g = self.g
+        tried, n, k = set(), 0, 0
+        while n < most and k < 40:
+            k += 1
+            if not camp.in_camp(g) and not maze.calm(g) and not maze.settle(g):
+                break
+            slots = g.party_slots()
+            want = []
+            for t, ri in enumerate(slots):
+                if ri is None:
+                    continue
+                c = g.char(ri)
+                if c['status'] >= 0x20 or c['hp'] <= 0 or not c['max_hp']:
+                    continue
+                f = c['hp'] / c['max_hp']
+                if f < 0.5:
+                    want.append((f, t, ri, c['max_hp'] * 0.5 - c['hp'], True))
+                elif f < 2 / 3:
+                    want.append((f, t, ri, c['max_hp'] * 2 / 3 - c['hp'], False))
+            want.sort()
+            pick = None
+            for f, t, ri, gap, must in want:
+                opts = []
+                for sid, sch, lv, mean in HEAL_OPTS:
+                    for cs, cri in enumerate(slots):
+                        if cri is None or (sid, cs, t) in tried:
+                            continue
+                        c = g.char(cri)
+                        if c['status'] & ~0x05 or not c['raw'][0x5c + sch * 7 + lv - 1]:
+                            continue            # afraid and poisoned members cast in camp
+                        left = c['raw'][0x5c + sch * 7 + lv - 1]
+                        full = (self.full_points.get(cri) or c['raw'][0x5c:0x78])[sch * 7 + lv - 1]
+                        if not must and (lv >= 6 or left - 1 < full / 2):
+                            continue            # only points to spare above 1/2 HP
+                        ks = battle.known_spells(c['raw'], sch, lv)
+                        if sid in ks:
+                            opts.append((lv, mean, sid, sch, cs, ks.index(sid)))
+                            break
+                if not opts:
+                    continue
+                small = sorted(o for o in opts if o[1] < 999)
+                clear = [o for o in small if o[1] >= gap]
+                best_small = max((o[1] for o in small), default=0)
+                full_ok = [o for o in opts if o[1] >= 999 and must and 2 * best_small < gap]
+                o = clear[0] if clear else full_ok[0] if full_ok else (small[-1] if small else None)
+                if o:
+                    pick = (o, t, gap)
+                    break
+            if not pick:
+                break
+            (lv, mean, sid, sch, cs, idx), t, gap = pick
+            ri = slots[t]
+            hp0 = g.char(ri)['hp']
+            try:
+                camp.cast(g, cs, sch, lv, idx, t)
+            except Stuck as s:
+                if s.what != 'camp interrupted':
+                    raise
+                self.on_int(g)
+                continue
+            if g.char(ri)['hp'] <= hp0:
+                tried.add((sid, cs, t))         # nothing healed (the list place?): not again
+            self.log.append((g.frame, 'hp heal', sid, lv, g.char(slots[cs])['name'],
+                             g.char(ri)['name'], round(gap), g.char(ri)['hp'] - hp0))
+            n += 1
+        if camp.in_camp(g):
+            camp.close_camp(g)
+        return [g.char(ri)['name'] for ri in g.party()
+                if g.char(ri)['status'] < 0x20 and 0 < g.char(ri)['hp'] < g.char(ri)['max_hp'] / 3]
 
     def top_up(self):
         """Between a training trip's fights: heal each member to what the worst monster
@@ -783,6 +883,15 @@ class Run(chapter1.Run):
 
 MAPORFIC_TRIP = False        # Maporfic from camp as a training trip sets out
 TOPUP = False                # heal to what the trip's worst monster can't take in two hits
+HP_HEAL = True               # Chris's HP lines after every training fight (Run.hp_heal)
+# camp heals, cheapest first: (spell id, school, level, mean HP; 999 = full). B-camp.md:
+# Dios 2d4, Diomas 3d2, Dial 2d8, Dialma 3d8, Madi and Kadios full
+HEAL_OPTS = [(21, 1, 1, 5), (64, 3, 1, 4.5), (30, 1, 4, 9), (33, 1, 5, 13.5),
+             (36, 1, 6, 999), (58, 2, 6, 999)]
+
+
+class TurnHome(Exception):
+    """A member stays under 1/3 of max HP with the heals gone: the walk out ends."""
 LADDER = False               # training floor by deaths per trip (ladder_areas)
 # each dungeon's floors, shallow to deep (the site's floor labels: Underground B1-B4,
 # Area A B1-B4, Area B B1-B5)
