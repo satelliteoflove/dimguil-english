@@ -120,11 +120,14 @@ class Run(chapter1.Run):
         uncurse = [0, 0]            # Boltac's uncurse fees after the Bishop's risky tries
         items = collections.Counter()   # battle items: used up, broke, kept (battle.item_choice)
         pulls = collections.Counter()   # agent 11: pull-backs and returns (pull_areas)
+        dcat = collections.Counter()    # agent 11: deaths by category (tag_deaths)
         for x in self.log[l0:]:
             if len(x) < 2:
                 continue
             if x[1] in ('pull back', 'pull return'):
                 pulls[x[1]] += 1
+            if x[1] == 'death' and len(x) > 2 and isinstance(x[2], dict):
+                dcat[x[2].get('cat')] += 1
             if x[1] == 'uncurse' and len(x) > 5 and x[5] == 'done':
                 uncurse[0] += 1
                 uncurse[1] += x[4]
@@ -154,6 +157,7 @@ class Run(chapter1.Run):
                     uncursed=uncurse[0], uncurse_gold=uncurse[1],
                     items_used=items['used'] + items['gone'], items_broke=items['broke'], items_kept=items['kept'],
                     pull_backs=pulls['pull back'], pull_returns=pulls['pull return'],
+                    death_cats=dict(dcat),
                     stuck=len(res['stuck']), foundation=self.foundation())
 
     def foundation(self):
@@ -296,7 +300,9 @@ class Run(chapter1.Run):
             raise chapter1.Wiped()
         n = self.fights()
         dead0 = {i for i in g.party() if g.char(i)['status'] & HOME_DEAD}
+        l1 = len(self.log)
         r = play.handle_interrupt(g, self.policy or LaterPolicy, self.log)
+        self.tag_deaths(l1)
         if chapter1.party_wiped(g):
             raise chapter1.Wiped()
         if AVOID_FATAL and tactics.TRAINING and self.fights() > n:
@@ -771,6 +777,34 @@ class Run(chapter1.Run):
             self.note('lived with', dict(temple=died, waiting=[g.char(i)['name'] for i in left],
                                          party=len(town.town_party(g))))
         return True
+
+    def tag_deaths(self, l1):
+        """(main, 2026-10-14) A 'death' note per member who fell in the fights logged since
+        l1 (battle.death_tags), with a category: trap, confused ally, walking home hurt,
+        sleep/paralysis (helpless before the blow), else the blow (melee, spell, breath,
+        other); and the
+        fight's monster groups. The second time a chapter has the same category and
+        monster, a 'death pattern' note and a stdout line (for the agent to take to main)."""
+        for x in self.log[l1:]:
+            if not (len(x) > 2 and x[1] == 'fought' and isinstance(x[2], dict)):
+                continue
+            for d in x[2].get('deaths') or []:
+                cat = ('trap' if d['how'] == 'trap' else 'confused ally' if d['how'] == 'ally'
+                       else 'walking home hurt'
+                       if getattr(self, '_homeward', False) else 'sleep/paralysis'
+                       if d['helpless'] else d['how'])
+                key = '%s: %s' % (cat, d['by'] or '?')
+                groups = [(q.get('id'), q.get('level'), q.get('n'))
+                          for q in (x[2].get('first') or {}).get('groups', [])]
+                self.note('death', dict(d, cat=cat, key=key, where=x[2].get('where'),
+                                        goal=getattr(self, '_goal_name', None), groups=groups))
+                n = sum(1 for y in self.log[self._ch_l0:] if len(y) > 2 and y[1] == 'death'
+                        and y[2].get('key') == key)
+                if n == 2:
+                    self.note('death pattern', key)
+                    print('death pattern c%d %s x2: %s %s %s by %s at %s, groups %s' % (
+                        self.chapter, key, d['who'], d['fell'], d['what'], d['how'],
+                        x[2].get('where'), groups), flush=True)
 
     def homeward_run(self):
         """The walk home may run (FLEE_RULE): the casters are spent, or a member is dead,

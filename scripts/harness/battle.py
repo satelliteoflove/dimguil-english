@@ -1246,6 +1246,79 @@ def _items_after(g):
     return out
 
 
+# death-cause tags (agent 11, 2026-10-14), by FIGHTMSG.OBJ row: a member's fall, what left
+# them helpless earlier, and the actor rows that can be the cause
+M_DOWN = (132, 136, 138, 139, 140, 141)        # stone, decapitated, lost, dies, ashes, dust
+M_DOWN_AS_MON = (154, 158, 159, 160, 161)       # the same on the monster rows: a member hit by a
+                                                # confused member is named on those (n1v3k c9 test)
+M_HELPLESS = (130, 134, 135)                    # asleep, paralyzed, knocked out
+M_BREATH = tuple(range(78, 98))                 # breathes fire, spits venom, deadly scream...
+M_HIT = (108, 109)                              # {mon} {verb} {member} with {weapon}.
+M_CAST = 112                                    # {mon} casts {spell}.
+M_TRAP = 242                                    # Oops! {trap}!!
+M_PARTY = (98, 99, 100, 102)                    # a member's own action: the cause isn't before it
+VERBS = sorted({'attacks', 'slashes at', 'stabs', 'cuts', 'rips into', 'runs through', 'slams',
+                'swings at', 'bashes', 'clubs', 'hits', 'strikes', 'thrusts at', 'sweeps', 'shoots',
+                'takes aim at', 'peppers', 'looses at', 'claws', 'bites', 'scratches',
+                'tries to pin down', 'fans', 'whips', 'touches', 'headbutts', 'tries to crush',
+                'tries to deal with', 'burns', 'kicks', 'tries to blow away', 'stings', 'kicks at',
+                'squeezes', 'pecks at', 'gnaws on', 'pinches', 'smacks', 'slaps', 'thrashes',
+                'tries to bowl over', 'glares at', 'tries to lull', 'startles', 'tries to melt',
+                'tries to engulf', 'bops', 'batters', 'tries to chomp', 'grabs', 'tries to choke out',
+                'sprays', 'pelts', 'slams into', 'stares at', 'wallops'}, key=len, reverse=True)
+
+
+def _flat(t):
+    return ' '.join((t or '').split())
+
+
+def death_tags(g, msg0):
+    """Each member who fell in this fight (dead, ashes, lost, or stoned), from the battle
+    text since msg0: dict(who, fell (the row's words), how ('melee', 'spell', 'breath',
+    'trap', 'ally' (a confused member's blow) or 'other'), by (the monster's name as
+    shown, the member, or the trap), what (the spell,
+    breath or weapon), helpless (asleep, paralyzed or knocked out earlier in the fight))."""
+    if not g.cap:
+        return []
+    ms = [m for m in g.cap.messages[msg0:] if m['file'] == 'FIGHTMSG.OBJ']
+    names = {g.char(ri)['name'] for ri in g.party()}
+    out = []
+    for j, m in enumerate(ms):
+        t = _flat(m['text'])
+        if not (m['idx'] in M_DOWN or m['idx'] in M_DOWN_AS_MON and t.split(' ')[0] in names):
+            continue
+        tail = _flat(m.get('src')).replace('{ff18}', '').replace('{ff13}', '').strip()
+        who = t[:-len(tail)].strip() if tail and t.endswith(tail) else t.split(' ')[0]
+        d = dict(who=who, fell=tail.rstrip('.!'), how='other', by=None, what=None,
+                 helpless=next((_flat(x.get('src')).replace('{ff18}', '').strip().rstrip('.')
+                                for x in ms[:j] if x['idx'] in M_HELPLESS
+                                and _flat(x['text']).startswith(who + ' ')), None))
+        for x in reversed(ms[:j]):
+            i, xt = x['idx'], _flat(x['text'])
+            if i in M_HIT:
+                k = xt.find(' %s ' % who)
+                left = xt[:k] if k > 0 else xt
+                v = next((v for v in VERBS if left.endswith(' ' + v)), None)
+                d.update(how='melee', by=left[:-len(v) - 1] if v else left,
+                         what=xt.split(' with ', 1)[1].rstrip('.') if ' with ' in xt else None)
+            elif i == M_CAST:
+                by, _, sp = xt.partition(' casts ')
+                d.update(how='spell', by=by, what=sp.rstrip('.'))
+            elif i in M_BREATH:
+                bt = _flat(x.get('src')).replace('{ff13}', '').strip()
+                d.update(how='breath', by=xt[:-len(bt)].strip() if xt.endswith(bt) else xt, what=bt.rstrip('.'))
+            elif i == M_TRAP:
+                d.update(how='trap', by=xt.replace('Oops!', '').strip(' !'), what=None)
+            elif i in (98, 99) and (' %s ' % who in xt or xt.endswith(' ' + who + '.')):
+                d.update(how='ally', by=xt.split(' ')[0],
+                         what=xt.split(' with ', 1)[1].rstrip('.') if ' with ' in xt else None)
+            elif i not in M_PARTY:
+                continue
+            break
+        out.append(d)
+    return out
+
+
 def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
     """Fight the battle on screen to its end. Returns a dict: rounds, frames, outcome
     ('won' back in the maze, 'town' after a wipe or escape to town, 'other'), actions."""
@@ -1355,4 +1428,5 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
                 fled=_flee_msgs(g, msg0),
                 first=FIGHT_INFO.get('first'), hp_end=_party_hp(g), items=_items_after(g),
                 down_end=[g.char(ri)['name'] for ri in g.party() if g.char(ri)['status'] >= 0x20],
-                dead_end=[g.char(ri)['name'] for ri in g.party() if g.char(ri)['status'] & 0x380])
+                dead_end=[g.char(ri)['name'] for ri in g.party() if g.char(ri)['status'] & 0x380],
+                deaths=death_tags(g, msg0))
