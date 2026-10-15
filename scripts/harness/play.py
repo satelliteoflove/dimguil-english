@@ -169,7 +169,21 @@ def _drop_prompt_msg(g):
     return None
 
 
-def drop_choice(g):
+def asked_member(g, at):
+    """Roster index of the member whose list "Drop which item?" (message `at`) shows, or
+    None: the last name before it (the party bar's names print after it)."""
+    ms = g.cap.messages if g.cap else []
+    for j in range(at - 1, max(-1, at - 120), -1):
+        m = ms[j]
+        if m['file'] == 'STATUS.OBJ' and m['idx'] == 390:
+            for ri in g.party():
+                if g.char(ri)['name'] == m['text'].strip():
+                    return ri
+            return None
+    return None
+
+
+def drop_choice(g, at=None):
     """The pack position to throw away: the last one that's spare loot (unequipped, an id
     under 0x100, so not the Tablet, a stone or a story item) in the most full packs, since
     which member the game asks isn't known here; positions already tried at this prompt
@@ -181,6 +195,13 @@ def drop_choice(g):
     tried = g.__dict__.setdefault('_drop_tried', set())
     if len(tried) >= 10:
         tried.clear()
+    # the member the game asks: the list shows their sheet, name first (STATUS 390)
+    who = asked_member(g, at) if at is not None else None
+    if who is not None:
+        from harness import gear
+        ok = [k for k, w in gear.pack(g, who) if k not in tried and gear.throwable(g, w)]
+        if ok:
+            return ok[-1]
     spare = lambda k: sum(k < len(p) and not p[k] & 0x2000 and (p[k] & 0x1ff) < 0x100
                           for p in full)
     return max((k for k in range(9, -1, -1) if k not in tried), key=spare)
@@ -197,7 +218,7 @@ def drop_prompt(g):
     last = ('SISETU.OBJ', p[1]) if p else None
     if last == ('SISETU.OBJ', 90):
         ui.wait_until(g, lambda: g.u8(maze.PRINTER) != 4, 120, 'drop list')
-        k = drop_choice(g)
+        k = drop_choice(g, p[0])
         g._drop_tried.add(k)
         ui.move_cursor(g, DROP_CURSOR, k, 'down', 'up', what='drop item')
         n = len(g.cap.messages)

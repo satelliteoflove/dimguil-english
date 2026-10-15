@@ -904,6 +904,44 @@ def make_room(g, log=None, most=4):
     return n
 
 
+def throwable(g, w):
+    """An item the full-pack drop picker can throw away without a question: unequipped,
+    priced, and under the important ids (camp_drop's "This is an important item")."""
+    i = w & 0x1ff
+    return not w & (EQUIPPED | CURSED) and i < IMPORTANT_ID and item(g, i)['price'] > 0
+
+
+def room_for_find(g, log=None):
+    """Before a story item that may come with every pack full: a member whose full pack
+    holds nothing throwable hands an unequipped item to the emptiest pack, or trades it
+    for a throwable one. The game picks who drops, not the player (n1v0t chapter 11,
+    2026-10-15: Uranus, three gold pieces and seven worn items, asked to drop for the
+    boots; "This is an important item" for ever). Returns the gives made."""
+    n = 0
+    members = [ri for ri in g.party() if g.char(ri)['status'] < 0x20]
+    for ri in members:
+        p = pack(g, ri)
+        if len(p) < 10 or any(throwable(g, w) for _, w in p):
+            continue
+        k = next((k for k, w in p if not w & (EQUIPPED | CURSED)), None)
+        if k is None:
+            continue
+        others = [rj for rj in members if rj != ri]
+        to = min(others, key=lambda rj: len(pack(g, rj)), default=None)
+        swap = None
+        if to is None:
+            continue
+        if len(pack(g, to)) >= 10:
+            trade = [(rj, k2) for rj in others for k2, w2 in pack(g, rj) if throwable(g, w2)]
+            if not trade:
+                continue
+            to, swap = trade[-1]
+        slots = g.party_slots()
+        if give(g, slots.index(ri), k, slots.index(to), log, swap=swap) in ('given', 'swapped'):
+            n += 1
+    return n
+
+
 # --- confusion cures (main, 2026-10-14) ---
 # Only Madi (spell_madi 0x800ae6e8) and Morfis (spell_morfis 0x800af20c) cure confusion in
 # battle, and Boltac stocks no item that casts them but the 75,000 gold Staff of Curing

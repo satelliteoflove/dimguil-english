@@ -108,6 +108,7 @@ class Chapter11:
                 if has_piece(g, i):
                     return True
                 run.ready()
+                gear.room_for_find(g, run.log)
                 run.examine(at, facing, fight=True)
                 run.after()
                 if not has_piece(g, i):
