@@ -132,14 +132,16 @@ def run_one(g, st, seed):
         return dict(state=st, seed=seed, skip='no command phase')
     ids = battle.party_ids(g)
     p0, h0, pl0 = points(g), hp(g), points_lv(g)
-    casters0 = {k for k in tactics.groups(g) if caster_group(tactics.info(g, k))}
-    gone = {}
+    # caster groups by monster id (groups renumber as they fall), the same rule for every
+    # harness version: paralysis, group damage, death or a disabling spell
+    casters0 = {tactics.info(g, k)['id'] for k in tactics.groups(g) if caster_group(tactics.info(g, k))}
+    gone = []
     orig = battle.command_phase
 
     def cp(g_, policy, log):
-        for k in casters0:
-            if k not in gone and not tactics.standing(g_, k):
-                gone[k] = battle.ROUND - 1 if battle.ROUND else 0
+        if not gone and casters0 and not any(tactics.standing(g_, k) for k in tactics.groups(g_)
+                                             if battle.group_id(g_, k) in casters0):
+            gone.append(battle.ROUND - 1 if battle.ROUND else 0)
         return orig(g_, policy, log)
     battle.command_phase = cp
     try:
@@ -148,8 +150,8 @@ def run_one(g, st, seed):
         return dict(state=st, seed=seed, error='%s: %s' % (type(e).__name__, e))
     finally:
         battle.command_phase = orig
-    for k in casters0:
-        gone.setdefault(k, res['rounds'] if res['ovl'] == 'MAZE' and not res['ran'] else None)
+    if casters0 and not gone and res['ovl'] == 'MAZE' and not res['ran']:
+        gone.append(res['rounds'])
     st_all = [battle.member_state(g, s) for s, ri in enumerate(ids) if ri is not None]
     wiped = all(h <= 0 or s >= 0x20 for h, s in st_all)
     won = res['ovl'] == 'MAZE' and not wiped and not (res['fled'] or (0, 0))[0]
@@ -158,16 +160,13 @@ def run_one(g, st, seed):
                 hp_lost=h0 - hp(g), down=len(res['down_end']), dead=len(res['dead_end']),
                 ran=res['ran'], fled=res['fled'], runs=res['runs'], runs_skipped=res.get('runs_skipped'),
                 casts=[(c[0], sp(c[1])) for c in res['casts']], casters=sorted(casters0),
-                caster_down=max(gone.values(), default=0) if all(v is not None for v in gone.values()) else None,
+                caster_down=gone[0] if gone else None,
                 ll=bool(res['likely_loss']), matters=res['matters'], story=res['story'],
                 why=(res.get('first') or {}).get('why'),
                 acts=[a for a in res['actions'] if a[1] in ('spell', 'fight', 'aim', 'run', 'parry', 'use', 'dispel')])
 
 
 def caster_group(m):
-    f = getattr(tactics, 'caster_danger', None)
-    if f:
-        return f(m) > 0
     return bool(m['para'] or m['gdmg'] or m['death'] or any(s[1][0] == 'spell' for s in m['dsrc']))
 
 
