@@ -356,6 +356,18 @@ class Run(chapter1.Run):
             down = self.healers_down()
             if down and self.town_helps():
                 raise TurnHome('healer down: ' + ', '.join(down))
+        if ROAMER_DOOR and getattr(self, '_goal_walk', False) and self.fights() > n \
+                and g.overlay() not in ('JOUKA', 'HAZURE', 'BATTLE'):
+            areas = (g_area(g), getattr(self, '_dest', (None,))[0])
+            if self.roamer_short(areas) and not getattr(self, '_topping', False):
+                self._topping = True
+                try:
+                    self.hp_heal()
+                finally:
+                    self._topping = False
+                short = self.roamer_short(areas)
+                if short and self.town_helps():
+                    raise TurnHome('short for roamers: %s' % (short,))
         if TOPUP and tactics.TRAINING and self.fights() > n and not getattr(self, '_topping', False) \
                 and g.overlay() not in ('JOUKA', 'HAZURE', 'BATTLE'):
             # heal up after each training fight, not only at the next fight square: the
@@ -427,6 +439,15 @@ class Run(chapter1.Run):
             return nav.travel(self.g, tuple(dest), self.on_int, lambda g: self.after())
         for k in range(HEALER_TRIPS + 1):
             self._goal_walk = k < HEALER_TRIPS
+            self._dest = tuple(dest)
+            short = self._goal_walk and self.roamer_short((g_area(self.g), dest[0]))
+            if short and self.town_helps():
+                # (agent 16) the roamers' door: short for the type-2 parties on the way
+                self._goal_walk = False
+                self.note('roamer door', short)
+                self.trip_home('short for roamers')
+                self.ensure_maze()
+                continue
             try:
                 return nav.travel(self.g, tuple(dest), self.on_int, lambda g: self.after())
             except TurnHome as t:
@@ -436,6 +457,23 @@ class Run(chapter1.Run):
                 self.ensure_maze()
             finally:
                 self._goal_walk = False
+
+    def roamer_short(self, areas, hp_only=False):
+        """What the party lacks for the type-2 parties (roamer tokens, A-maze.md "Tokens")
+        on the floors `areas`, or []: they are met anywhere on the floor, so a square can't
+        be avoided (main, 2026-10-14). Against the worst one's rated threat a round
+        (TYPE2_THREAT): the standing members' HP under TYPE2_ROUNDS rounds of it, and,
+        unless hp_only, a member down or the heals short (boss_short's 'down' and 'heals')."""
+        g = self.g
+        T = max([TYPE2_THREAT.get(a, 0) for a in areas if a is not None and 0 <= a < 0x40
+                 and g.u8(TYPE2_TOKENS + a * 2 + 1)] or [0])
+        if not ROAMER_DOOR or not T or not maze.in_maze(g):
+            return []
+        hp = sum(max(0, g.char(i)['hp']) for i in g.party() if g.char(i)['status'] < 0x20)
+        short = [('hp', hp, TYPE2_ROUNDS * T)] if hp < TYPE2_ROUNDS * T else []
+        if not hp_only:
+            short += [x for x in self.boss_short() if x == 'down' or x[0] == 'heals']
+        return short
 
     def healers_down(self):
         """Names of the members who know a Priest heal (tactics.HEALS) and are out of
@@ -459,6 +497,10 @@ class Run(chapter1.Run):
         dead = [g.char(i) for i in g.party()]
         dead = [c for c in dead if c['status'] & 0x180 and not c['status'] & 0x200]
         if not dead or not self.has_tablet() or not maze.in_maze(g):
+            return None
+        if self.roamer_short((g_area(g),), hp_only=True):
+            # (agent 16) not deeper among the type-2 parties with the HP short (n1v1r chapter
+            # 10: the detour took Earth alone, 134 HP, to a GremlinMother party at (25,4,17))
             return None
         home = (0,) + maze.ENTRANCE[0]
         a, b, c = nav.cost(g, home), nav.cost(g, CLEO), nav.cost(g, home, start=CLEO)
@@ -1448,6 +1490,13 @@ HP_HEAL = True               # Chris's HP lines after every training fight (Run.
 HOME_DEAD = 0x80 | 0x100 | 0x200  # dead, ash, lost: the walk home may run (Run.homeward_run)
 HEALER_HOME = True           # (agent 16) a healer down on the walk out or a goal walk turns the party home
 HEALER_TRIPS = 2             # ... a goal walk goes home and back at most this many times
+ROAMER_DOOR = True           # (agent 16) a goal walk short for the floor's type-2 parties goes home first (Run.roamer_short)
+TYPE2_ROUNDS = 2             # ... the standing HP must cover this many rounds of the worst one's threat
+TYPE2_TOKENS = 0x8005e654    # npc_tokens_per_area: 2 bytes an area, the second the type-2 tokens placed
+# the worst type-2 party's rated threat a round by area (tactics.info at the first command, every
+# chain's logs to 2026-10-14; the parties are the area group's type2_groups, 0x8005a3dc)
+TYPE2_THREAT = dict([(a, 15) for a in (3, 4)] + [(a, 80) for a in (5, 6, 7, 8)] +
+                    [(a, 95) for a in (19, 20, 21, 22)] + [(a, 153) for a in (23, 24, 25, 26, 27)])
 AVOID_FATAL = True           # the walk home keeps off the square of the trip's fatal fixed fight (nav.TRIP_SOFT)
 POINTS_HOME = 0.5           # agent 13 (strategy revision 3): a training trip goes home when points or heals are this low (Run.points_spent)
 POINTS_TRAIN = True         # agent 8: a training trip from the maze goes home first when points are low
@@ -1458,6 +1507,10 @@ LOOT_EACH_FIGHT = True      # agent 7, 2026-10-14: camp_loot after a training fi
 # Dios 2d4, Diomas 3d2, Dial 2d8, Dialma 3d8, Madi and Kadios full
 HEAL_OPTS = [(21, 1, 1, 5), (64, 3, 1, 4.5), (30, 1, 4, 9), (33, 1, 5, 13.5),
              (36, 1, 6, 999), (58, 2, 6, 999)]
+
+
+def g_area(g):
+    return g.u8(maze.AREA)
 
 
 class TurnHome(Exception):
