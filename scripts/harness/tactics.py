@@ -64,6 +64,13 @@ CHEAP_LEVEL = 3          # in a fight that doesn't matter, spells above this lev
 # go there first. A paralyzed member stays down until a cure (party_upkeep 0x800a73f4).
 PARA_SPELLS = (69, 81)
 PARA_FIRST = 3.0
+# (agent 13, main's call) the same for a group that casts group or all-enemy damage
+# (Madalto, Lahalito, Tiltowait: DAMAGE kind 'group' or 'all'), GDMG_FIRST times over; a
+# lone caster (one monster standing) counts that much for single-target spells too, since
+# one kill removes the caster (n1v1m, n1v3k chapter 9: an Orc Adept party's Madalto killed
+# Venus twice on the walk home and wiped n1v3 once). battle.choose_group puts fighters'
+# blows on such a lone caster first.
+GDMG_FIRST = 2.0
 DEBUFF_MIN = 0.3         # (fix 3) sleep, silence, paralysis only where a monster's chance of being caught is this
 
 
@@ -206,6 +213,7 @@ def info(g, k):
                 weak=struct.unpack_from('<H', r, 0xce)[0], caster=caster, threat=threat, threat_spell=threat_spell,
                 blow=(blow_f, blow_b), death=death, dsrc=dsrc, dis_hp=0.0, dis_hp_spell=0.0,
                 para=para_caster(dsrc, dmg + sts if SPELLS_ON else []),
+                gdmg=any(sid in DAMAGE and DAMAGE[sid][1] != 'one' for _, sid in (dmg if SPELLS_ON else [])),
                 silenced=silenced(g, k),
                 screen=g.u8(GROUPS + k * 8 + 7), mons=standing(g, k))
 
@@ -237,6 +245,17 @@ DIS_HIT = {0x01: ('sleep', 0), 0x20: ('sleep', 5), 0x10: ('para', 4), 0x04: ('pa
 EFFECT_RES = 0x800d8524     # status kind -> index into a member's +0xb0 effect resistances
 LOST_CAP = 0.9              # the lost share of the party's actions counted at most
 LOST_ACTIONS = True         # (fix 1) count actions taken away as threat
+
+
+def first_weight(m, kind):
+    """How many times over a damage spell's worth counts at group m (PARA_FIRST,
+    GDMG_FIRST): group and all-enemy spells at a group that can paralyze a row or cast
+    group damage, any spell when that group is down to one monster."""
+    if not (m.get('para') or m.get('gdmg')):
+        return 1.0
+    if kind == 'one' and len(m['mons']) > 1:
+        return 1.0
+    return PARA_FIRST if m.get('para') else GDMG_FIRST
 
 
 def para_caster(dsrc, dmg):
@@ -432,7 +451,7 @@ def value(g, sid, k, M, clevel, cast_counts, commit=False):
             p = lands(m, sid) * (1 - PLAN['dis'].get(t, 0) * 0.5)
             f = 0.5 if m['resist'] & el and el else 2.0 if m['weak'] & el and el else 1.0
             d = mean * f
-            w = PARA_FIRST if kind != 'one' and m.get('para') else 1.0
+            w = first_weight(m, kind)
             mons = [x for x in m['mons'] if _left(t, x[0], x[1]) > 0]
             mons = mons if kind != 'one' else mons[:1]
             for j, hp0, st in mons:
@@ -642,7 +661,7 @@ def matters_detail(g, M, party_hp, party_level=None, party=None, lost=None):
         out.append(dict(id=M[k]['id'], level=lv, n=len(M[k]['mons']), melee=round(m, 1),
                         caster=c, breath=round(br, 1), threat=round(M[k]['threat'], 1),
                         blow=[round(x, 1) for x in M[k]['blow']], death=M[k]['death'],
-                        dis_hp=round(M[k].get('dis_hp', 0), 1), para=M[k].get('para', False)))
+                        dis_hp=round(M[k].get('dis_hp', 0), 1), para=M[k].get('para', False), gdmg=M[k].get('gdmg', False)))
     threat = sum(x['threat'] * x['n'] for x in out)
     why = ('story' if is_story(g) else
            'above median level' if party_level is not None and any(M[k]['level'] > party_level for k in M) else

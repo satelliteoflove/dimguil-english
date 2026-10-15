@@ -71,6 +71,7 @@ FIXED = 0x80079bde          # 1 in a fixed battle (up to 6 groups on a 3x2 grid)
 # monsters to kill first, by battle_groups +2 id: lower goes first. Walkthrough chapter 4
 # (04-lake-machine.json): at the Guardians "Kill the mage first" (Madalto over the whole
 # party for up to 64), and the priest's Badi kills a character outright.
+CASTER_FIRST = True         # fighters' blows on a lone para/group-damage caster first (choose_group)
 KILL_FIRST = {366: 0, 358: 1,       # Arch Mage, Arch Priest (Underground B2 E7 N22)
               454: 0, 438: 1}       # the same pair at Area A B1 E16 N11
 # against a kill-first monster: Montino (25, silence a group; in a fixed battle it takes
@@ -145,7 +146,18 @@ def choose_group(g, offered, prefer=None, spread=False):
         return _vrng.choice(alive)
     if prefer in alive:
         return prefer               # a spell's or Dispel's chosen group (tactics.py)
-    return min(alive, key=lambda k: (KILL_FIRST.get(group_id(g, k), 9), k != prefer,
+    lone = set()
+    if CASTER_FIRST and not spread:
+        # a lone monster that paralyzes a row or casts group damage: one kill removes it
+        # (tactics.first_weight; agent 13, main's call)
+        for k in alive:
+            try:
+                m = tactics.info(g, k)
+            except Exception:
+                continue
+            if (m.get('para') or m.get('gdmg')) and len(m['mons']) == 1:
+                lone.add(k)
+    return min(alive, key=lambda k: (KILL_FIRST.get(group_id(g, k), 9), k not in lone, k != prefer,
                                      -g.u8(GROUPS + k * 8 + 5) if spread else 0, k))
 
 
