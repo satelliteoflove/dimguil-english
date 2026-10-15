@@ -436,7 +436,11 @@ class Run(chapter1.Run):
         if dest[0] != 0 and not self.has_tablet() and nav.plan(self.g, tuple(dest)) is None:
             raise NoTablet()
         if tactics.TRAINING or getattr(self, '_goal_walk', False):
-            return nav.travel(self.g, tuple(dest), self.on_int, lambda g: self.after())
+            # a training walk to its own floors stays on them once there (train's _keep)
+            keep = getattr(self, '_keep', None) if tactics.TRAINING else None
+            if keep and (dest[0] not in keep or nav.plan(self.g, tuple(dest), keep=keep) is None):
+                keep = None
+            return nav.travel(self.g, tuple(dest), self.on_int, lambda g: self.after(), keep=keep)
         for k in range(HEALER_TRIPS + 1):
             self._goal_walk = k < HEALER_TRIPS
             self._dest = tuple(dest)
@@ -969,6 +973,7 @@ class Run(chapter1.Run):
         setting_out = [i for i in g.party() if g.char(i)['status'] == 0]
         base, areas = areas, self.ladder_areas(self.pull_areas(areas))
         self.note('train area', tuple(areas), tuple(base))
+        self._keep = tuple(areas)
         if MAPORFIC_TRIP:
             # the party's AC for the trip (Chris, 2026-10-14; B-camp.md: -2 for 1250 steps)
             self.maporfic()
@@ -982,7 +987,11 @@ class Run(chapter1.Run):
         try:
             for area in areas:
                 F = nav.floor(area)
-                sqs = list(F['fights'])
+                # only squares reached without leaving the trip's floors: B4's west rooms
+                # and two of B5's are reached through B3, B2 and B1, and the trip that
+                # walked there met the Were Centipedes on B3 (n1v0j chapter 9, 2026-10-15)
+                sqs = [sq for sq in F['fights'] if nav.plan(g, (area,) + sq, keep=areas)
+                       is not None] or list(F['fights'])
                 self.rng.shuffle(sqs)
                 for sq in sqs:
                     if self.fights() - n0 >= fights:
