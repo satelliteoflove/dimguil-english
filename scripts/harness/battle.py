@@ -281,6 +281,8 @@ def flee_chance(g):
 LONG_FIGHT = True           # agent 7 / main, 2026-10-14: long_fight() makes a fight matter
 LOSS_RUN = True             # Chris, 2026-10-14: run from a likely loss, round 1 only, anywhere
 LOSS_FLEE_ABOVE = 25        # Chris, 2026-10-14: a likely loss runs at a flee chance above this
+LOSS_EVERY_ROUND = True     # Chris, 2026-10-14: re-rate a likely loss every round, from the HP of
+                            # the members who can still act ("try it out and see if it helps")
 
 
 def _kill(x, hp):
@@ -562,20 +564,26 @@ def default_policy(g, m, opts):
         FIGHT_INFO['long'] = FIGHT_INFO[('long', ROUND)]
     big = bool(why) or bad
     FIGHT_INFO['matters'] = FIGHT_INFO['matters'] or bool(big)
-    if LOSS_RUN and not FIGHT_INFO.get('loss_checked') and M:
-        # anywhere, grinding included: a fight the party expects to lose may be run from,
-        # only at the fight's first command (round 1, before the party acts; ROUND can
-        # read 2 there when the first command phase is entered twice) and only at
-        # a flee chance above LOSS_FLEE_ABOVE (Chris, 2026-10-14; FLEE_MIN stays for the
-        # walk out and the walk home); never mid-fight
-        FIGHT_INFO['loss_checked'] = True
+    if (LOSS_RUN and M and FIGHT_INFO.get('loss_checked') != ROUND
+            and (LOSS_EVERY_ROUND or not FIGHT_INFO.get('loss_checked'))):
+        # anywhere, grinding included: a fight the party expects to lose may be run from, at
+        # a flee chance above LOSS_FLEE_ABOVE (Chris, 2026-10-14; FLEE_MIN stays for the walk
+        # out and the walk home). Rated at each round's first command (ROUND can read 2 at
+        # the fight's first one when that phase is entered twice), from the HP of the members
+        # who can still act: asleep, paralyzed, stoned and dead don't count (Chris,
+        # 2026-10-14: re-rated every round, not reflex running, only fights rated as lost).
+        # flee_chance is 0 where a run can't work (fixed fights, alarms).
+        FIGHT_INFO['loss_checked'] = ROUND
         if RUN in opts:
-            ll = likely_loss(g, M, party_hp)
+            act_hp = sum(max(h, 0) for h, st in (member_state(g, k) for k, rk in enumerate(ids)
+                                                 if rk is not None) if st < 8)
+            ll = likely_loss(g, M, act_hp)
             if ll:
                 ch = flee_chance(g)
-                FIGHT_INFO['likely_loss'] = dict(ll, chance=ch)
+                FIGHT_INFO.setdefault('likely_loss', dict(ll, chance=ch, round=ROUND))
+                FIGHT_INFO.setdefault('loss_rounds', []).append((ROUND, ch, ll['threat_left'], act_hp))
                 if ch > LOSS_FLEE_ABOVE:
-                    FIGHT_INFO.setdefault('runs', []).append((1, ch, 'likely loss'))
+                    FIGHT_INFO.setdefault('runs', []).append((ROUND, ch, 'likely loss'))
                     return ('run',)
     if FLEE_RULE and RUN_OK and RUN in opts:
         # run only where it saves something (on the way to the grinding spot, or home with
@@ -1367,6 +1375,7 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
     FIGHT_INFO.pop('runs', None)
     FIGHT_INFO.pop('loss_checked', None)
     FIGHT_INFO.pop('likely_loss', None)
+    FIGHT_INFO.pop('loss_rounds', None)
     FIGHT_INFO.pop('items', None)
     for k_ in [k_ for k_ in FIGHT_INFO if isinstance(k_, tuple) and k_[0] == 'long'] + ['long', 'focus']:
         FIGHT_INFO.pop(k_, None)
@@ -1460,7 +1469,7 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
                 where=where, story=tactics.STORY[0],
                 matters=FIGHT_INFO['matters'], casts=list(FIGHT_INFO['casts']),
                 ran=sum(1 for a in log if a[1] == 'run'),
-                runs=FIGHT_INFO.get('runs', []), likely_loss=FIGHT_INFO.get('likely_loss'), long=FIGHT_INFO.get('long'), focus=FIGHT_INFO.get('focus'),
+                runs=FIGHT_INFO.get('runs', []), likely_loss=FIGHT_INFO.get('likely_loss'), loss_rounds=FIGHT_INFO.get('loss_rounds', []), long=FIGHT_INFO.get('long'), focus=FIGHT_INFO.get('focus'),
                 fled=_flee_msgs(g, msg0),
                 first=FIGHT_INFO.get('first'), hp_end=_party_hp(g), items=_items_after(g),
                 down_end=[g.char(ri)['name'] for ri in g.party() if g.char(ri)['status'] >= 0x20],
