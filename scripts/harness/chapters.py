@@ -521,6 +521,8 @@ class Run(chapter1.Run):
             for a, x, y in getattr(self, '_fatal', ()):
                 nav.TRIP_SOFT.setdefault(a, set()).add((x, y))
             try:
+                if HOME_HEAL:
+                    self.home_heal()
                 if CLEO_RAISE:
                     self.cleo_raise()
                 nav.to_town(g, self.on_int, lambda g: self.after())
@@ -954,7 +956,51 @@ class Run(chapter1.Run):
             now += sum(c['raw'][0x5c:0x78])
         return bool(full) and now <= full * frac
 
-    def hp_heal(self, most=16):
+    def heal_reserve(self, ri, sch, lv):
+        """Points a healer keeps at (school, level) on the walk home (main, 2026-10-14):
+        one for their strongest heal (HEAL_OPTS) and one for a cure, Dialko if they know
+        it, else Latumofis (chapter1.CURES)."""
+        raw = self.g.char(ri)['raw']
+        known = lambda sid, s_, l_: sid in battle.known_spells(raw, s_, l_)
+        heals = [(mean, s_, l_) for sid, s_, l_, mean in HEAL_OPTS if known(sid, s_, l_)]
+        cures = [(s_, l_) for sid, s_, l_, bits, party in chapter1.CURES
+                 if bits in (0x20, 0x04) and known(sid, s_, l_)]
+        r = 0
+        if heals and max(heals)[1:] == (sch, lv):
+            r += 1
+        if cures and cures[0] == (sch, lv):
+            r += 1
+        return r
+
+    def home_heal(self):
+        """(main, 2026-10-14: 5 of n1v6's 8 chapter 10 deaths came walking home hurt) A
+        trip that turns home has no other use for its points: before the homeward leg,
+        heal everyone to 2/3 of max HP, or to full when the points over each healer's
+        reserve (heal_reserve) cover the whole gap. Logged as 'home heal'."""
+        g = self.g
+        if g.overlay() in ('JOUKA', 'HAZURE', 'BATTLE') or not maze.in_maze(g):
+            return
+        ups = [g.char(ri) for ri in g.party()]
+        ups = [c for c in ups if c['status'] < 0x20 and c['hp'] > 0 and c['max_hp']]
+        gap = sum(c['max_hp'] - c['hp'] for c in ups)
+        if not gap:
+            return
+        spare = 0
+        for ri in g.party():
+            c = g.char(ri)
+            if c['status'] & ~0x05:
+                continue
+            for sid, sch, lv, mean in HEAL_OPTS:
+                if sid in battle.known_spells(c['raw'], sch, lv):
+                    left = c['raw'][0x5c + sch * 7 + lv - 1] - self.heal_reserve(ri, sch, lv)
+                    spare += max(0, left) * (min(mean, 100) if mean >= 999 else mean)
+        line = 1.0 if spare >= gap else 2 / 3
+        hp0 = sum(c['hp'] for c in ups)
+        self.hp_heal(most=24, home_line=line)
+        hp1 = sum(g.char(ri)['hp'] for ri in g.party() if g.char(ri)['status'] < 0x20)
+        self.note('home heal', dict(line=round(line, 2), gap=gap, spare=round(spare), hp=[hp0, hp1]))
+
+    def hp_heal(self, most=16, home_line=None):
         """Chris's HP lines (2026-10-14), per standing member: over 2/3 of max HP no heal;
         under 2/3 back over 2/3 only from points to spare (the caster keeps half that
         level's points from the last Stables, levels 1-5 only); under 1/2 back over 1/2
@@ -984,7 +1030,11 @@ class Run(chapter1.Run):
                 if c['status'] >= 0x20 or c['hp'] <= 0 or not c['max_hp']:
                     continue
                 f = c['hp'] / c['max_hp']
-                if f < 0.5:
+                if home_line and f < home_line:
+                    want.append((f, t, ri, c['max_hp'] * home_line - c['hp'], True))
+                elif home_line:
+                    pass
+                elif f < 0.5:
                     want.append((f, t, ri, c['max_hp'] * 0.5 - c['hp'], True))
                 elif f < 2 / 3:
                     want.append((f, t, ri, c['max_hp'] * 2 / 3 - c['hp'], False))
@@ -1001,7 +1051,10 @@ class Run(chapter1.Run):
                             continue            # afraid and poisoned members cast in camp
                         left = c['raw'][0x5c + sch * 7 + lv - 1]
                         full = (self.full_points.get(cri) or c['raw'][0x5c:0x78])[sch * 7 + lv - 1]
-                        if not must and (lv >= 6 or left - 1 < full / 2):
+                        if home_line:
+                            if left - 1 < self.heal_reserve(cri, sch, lv):
+                                continue        # the walk home keeps a heal and a cure
+                        elif not must and (lv >= 6 or left - 1 < full / 2):
                             continue            # only points to spare above 1/2 HP
                         ks = battle.known_spells(c['raw'], sch, lv)
                         if sid in ks:
@@ -1285,6 +1338,7 @@ class Run(chapter1.Run):
 MAPORFIC_TRIP = True         # Maporfic from camp as a training trip sets out, and again when it lapses (agent 13, revision 5)
 MAPORFIC_KEEP = 2            # ... the recast keeps this many Priest level 4 points (Dial)
 TOPUP = False                # heal to what the trip's worst monster can't take in two hits
+HOME_HEAL = True             # (main) before the homeward leg, heal to 2/3 or full (Run.home_heal)
 HP_HEAL = True               # Chris's HP lines after every training fight (Run.hp_heal)
 HOME_DEAD = 0x80 | 0x100 | 0x200  # dead, ash, lost: the walk home may run (Run.homeward_run)
 AVOID_FATAL = True           # the walk home keeps off the square of the trip's fatal fixed fight (nav.TRIP_SOFT)
