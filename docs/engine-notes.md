@@ -113,6 +113,14 @@ glance". By subsystem:
 - **Healing** is free, from two healers per party chosen 50/50, and what they can cure
   grows with their party's story stage; most roll a 20% "out of magic" first. An NPC's
   Kadorto never fails: no roll, no fee, no VIT loss, no aging, and it works on ashes.
+  Checked in the emulator on 2026-10-14 (rips/agents/chapters/cleo/): Cleo raised a dead
+  Dax to full HP, age and stats unchanged. The offer came on the 18th Talk of one meeting
+  and the 11th of another; picked a frame earlier, the first one was her 20% "no healing
+  magic", which is rolled after the pick. The
+  pick's cursor is 0x800796cc (column) and 0x800796cd (row), party slot = row × 3 +
+  column. Cresson's party's Underground B3 meeting is at RAM (8, 17) (fixed_meet_table
+  0x8005e6ac, id 0x16); its token is spent once met, until the party next arrives on B3,
+  and the talk starts some frames after the step onto the square.
 - **Sales** are sets of three items at one price (5 to 20,000 G), chosen by
   `progress_bits`; some of the items are cursed.
 - **The rescue.** Guy's, Balbo's and Fontana's parties offer it; Cresson's and Zaril's

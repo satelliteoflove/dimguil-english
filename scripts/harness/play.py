@@ -18,6 +18,18 @@ TALK = 0x35                   # game_state while an NPC talk runs (MCARD)
 
 YESNO_STATES = (0x3d, 0x42, 0x69)    # sale, rescue, fight-warning yes/no
 QUIET_TALK = 24                      # frames a quiet talk is left to settle before a press
+HEAL_PICK = 0x32                     # the heal offer's "Whom shall I heal?" (C-talk.md §4)
+PICK_COL, PICK_ROW = 0x800796cc, 0x800796cd   # its cursor: party slot = row x 3 + col (talk_cresson 0x800d65c8)
+RAISE_TALKS = 40                     # mode 'raise': Talk presses before giving up (~560 frames each)
+TALKS = [0]
+
+
+def raise_target(g):
+    """The party slot of a dead or ashed member (not lost), or None."""
+    for k, ri in enumerate(g.party_slots()):
+        if ri is not None and g.char(ri)['status'] & 0x180 and not g.char(ri)['status'] & 0x200:
+            return k
+    return None
 
 
 def talk(g, mode='leave', limit=20000):
@@ -29,9 +41,15 @@ def talk(g, mode='leave', limit=20000):
     runs its whole scripted talk in 0xf), so the menu is found by what it does: when
     nothing is printing, tap right; if the menu cursor moves, the icon row (Talk, Fight,
     Leave) is up. A circle there would pick Talk and start another chat (T3: a random
-    meeting with Guy's party chatted for ever)."""
+    meeting with Guy's party chatted for ever).
+
+    mode 'raise' (revision 9, agent 14): Talk instead of Leave while a member is dead or
+    ashed, up to RAISE_TALKS times, and at a heal offer pick that member: an NPC's Kadorto
+    is free and certain (C-talk.md §5; Cleo raised a dead Dax to full HP in the emulator,
+    age and stats unchanged, 2026-10-14). TALKS[0] counts the Talk presses."""
     f0 = g.frame
     presses = 0
+    TALKS[0] = 0
     ts = lambda: g.s16(TALK_STATE) & 0xffff
     talking = lambda: g.u8(maze.GAME_STATE) == TALK
     nmsg = lambda: len(g.cap.messages) if g.cap else 0
@@ -39,6 +57,13 @@ def talk(g, mode='leave', limit=20000):
         if g.frame - f0 > limit:
             raise Stuck('talk too long', ts=hex(ts()))
         t = ts()
+        if t == HEAL_PICK and mode == 'raise' and raise_target(g) is not None:
+            k = raise_target(g)
+            ui.move_cursor(g, PICK_ROW, k // 3, 'down', 'up', wrap=2, what='heal pick row')
+            ui.move_cursor(g, PICK_COL, k % 3, 'right', 'left', wrap=3, what='heal pick column')
+            ui.confirm_until(g, lambda: ts() != t or not talking(), 300, 'heal pick')
+            presses += 1
+            continue
         if t in YESNO_STATES:
             # mode 'fight' answers Yes to the fight warning (0x69) and No to the rest
             ui.move_cursor(g, YESNO, 0 if mode == 'fight' and t == 0x69 else 1, 'down', 'up',
@@ -70,6 +95,9 @@ def talk(g, mode='leave', limit=20000):
             if talking() and g.u8(TALK_MENU_CURSOR) != c0:
                 opts = [k for k in range(3) if g.u8(TALK_MENU) & (1 << k)]
                 want = opts.index(2) if 2 in opts else len(opts) - 1
+                if mode == 'raise' and 0 in opts and TALKS[0] < RAISE_TALKS and raise_target(g) is not None:
+                    want = opts.index(0)
+                    TALKS[0] += 1
                 if mode == 'fight' and 1 in opts:
                     # a meeting that has to be fought (chapter 8: the Jail Ogre comes as
                     # "You've met someone!" and Leave walks the party back a square)

@@ -210,7 +210,15 @@ def side_open(g, F, x, y, d, wm=None):
 FIND_COST = 12
 
 
-def plan(g, dest, start=None, items=None):
+def cost(g, dest, start=None):
+    """plan's cost from start (default: here) to dest, about one a step; None if no way."""
+    out = []
+    if plan(g, tuple(dest), start, out=out) is None:
+        return None
+    return out[0] if out else 0
+
+
+def plan(g, dest, start=None, items=None, out=None):
     """Cheapest way from start (default: here) to dest = (area, x, y). Returns a list of
     legs: ('walk', area, x, y) to reach a square on the same floor (a transfer square
     included), ('link', link) for an Investigate join. None if no way is known."""
@@ -273,6 +281,8 @@ def plan(g, dest, start=None, items=None):
                 heapq.heappush(q, (c2, n2))
     if dest not in prev and dest != start:
         return None
+    if out is not None:
+        out.append(dist.get(dest, 0))
     # walk back and cut into legs
     path = []
     n = dest

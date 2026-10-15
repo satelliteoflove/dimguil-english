@@ -413,6 +413,59 @@ class Run(chapter1.Run):
             raise NoTablet()
         return nav.travel(self.g, tuple(dest), self.on_int, lambda g: self.after())
 
+    def cleo_why(self):
+        """(revision 9, Chris) Why the walk home should go by Cresson's party for a free
+        raise, or None: a member is dead or ashed, the detour is at most CLEO_DETOUR steps
+        over the walk home (nav.cost), and the temple's expected fee (E-town.md: level x 250
+        dead, 500 ashes; a failed raise turns the dead to ashes, 60 + 2 x VIT of 100 works)
+        is more than the party's gold, or CLEO_GOLD_SHARE of it or more."""
+        g = self.g
+        dead = [g.char(i) for i in g.party()]
+        dead = [c for c in dead if c['status'] & 0x180 and not c['status'] & 0x200]
+        if not dead or not self.has_tablet() or not maze.in_maze(g):
+            return None
+        home = (0,) + maze.ENTRANCE[0]
+        a, b, c = nav.cost(g, home), nav.cost(g, CLEO), nav.cost(g, home, start=CLEO)
+        if None in (a, b, c) or b + c - a > CLEO_DETOUR:
+            return None
+        fee = 0.0
+        for ch in dead:
+            L, vit = ch['level'], ch['stats'][3]
+            fee += L * 500 if ch['status'] & 0x100 else L * 250 + (1 - min(1, (60 + 2 * vit) / 100)) * L * 500
+        gold = sum(g.char(i)['gold'] for i in g.party())
+        why = ('fee %d over gold %d' % (fee, gold) if fee > gold else
+               'fee %d of gold %d' % (fee, gold) if fee >= CLEO_GOLD_SHARE * gold else None)
+        return why and '%s, detour %d steps' % (why, b + c - a)
+
+    def cleo_raise(self):
+        """Walk to Cresson's party (CLEO) and Talk until Cleo or Bergamot raises the dead
+        (play.talk mode 'raise'), when cleo_why says so. The meeting square's token is
+        spent once met, until the party next arrives on the floor."""
+        g = self.g
+        why = self.cleo_why()
+        if not why:
+            return
+        names = [g.char(i)['name'] for i in g.party() if g.char(i)['status'] & 0x180]
+        f0, policy = g.frame, self.policy
+        self.note('cleo', why, names)
+        print('c%d cleo: %s %s' % (self.chapter, names, why), flush=True)
+        self.policy = type('RaisePolicy', (policy or LaterPolicy,), dict(talk='raise'))
+        try:
+            nav.travel(g, CLEO, self.on_int, lambda g: self.after())
+            for _ in range(600):            # the meeting starts some frames after the step
+                if g.u8(maze.GAME_STATE) == play.TALK:
+                    break
+                g.step()
+            if g.u8(maze.GAME_STATE) == play.TALK:
+                self.on_int(g)
+        finally:
+            self.policy = policy
+        left = [g.char(i)['name'] for i in g.party() if g.char(i)['status'] & 0x180]
+        self.note('cleo done', dict(raised=[n for n in names if n not in left], left=left,
+                                    talks=play.TALKS[0], frames=g.frame - f0))
+        print('c%d cleo done: raised %s, %d talks, %d frames' % (
+            self.chapter, [n for n in names if n not in left], play.TALKS[0], g.frame - f0), flush=True)
+
     def has_tablet(self):
         return chapter1.TABLET in chapter1.party_items(self.g)
 
@@ -468,6 +521,8 @@ class Run(chapter1.Run):
             for a, x, y in getattr(self, '_fatal', ()):
                 nav.TRIP_SOFT.setdefault(a, set()).add((x, y))
             try:
+                if CLEO_RAISE:
+                    self.cleo_raise()
                 nav.to_town(g, self.on_int, lambda g: self.after())
             finally:
                 self._homeward = False
@@ -1240,6 +1295,14 @@ DOWN_NORM = 10               # downs per 100 training fights taken as normal (ol
 # Area A B1-B4, Area B B1-B5)
 LADDERS = [(8, 7, 6, 5), (22, 21, 20, 19), (27, 26, 25, 24, 23)]
 GOLD_MOST = 15              # gold trips a chapter's training may insert
+# (revision 9, agent 14) Cresson's party's fixed meeting on Underground B3 (fixed_meet_table
+# 0x8005e6ac, talk id 0x16, in RAM coordinates; the docs' "E8 N6"), placed whenever the
+# party arrives on the floor (npc_availability 0x80018bd4). Cleo's Kadorto is free and
+# certain (C-talk.md §5; emulator check 2026-10-14, rips/agents/chapters/cleo/).
+CLEO = (6, 8, 17)
+CLEO_RAISE = True
+CLEO_DETOUR = 150           # plan steps the detour may add to the walk home
+CLEO_GOLD_SHARE = 0.25      # ... for a temple fee this share of the party's gold or more
 RECOVER_MOST = 30           # Grounds trips for the Tablet's holder inside one goal
 BOSS_WIPES = 2              # failed tries at a goal before each further try trains a level
 FIGHT_WAIT = 2400
