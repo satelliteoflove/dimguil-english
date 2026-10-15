@@ -743,6 +743,14 @@ def front_rank(g, ri):
     return (tier, -c['max_hp'] * (1 + (10 - ac) / 10))
 
 
+def mixed_party(g):
+    """Good and Evil in the party together (an alignment changed after joining, or a
+    recruit): the tavern won't take them back as one party, so nothing that steps members
+    out and re-forms it may run (suite round 2026-10-15: 14 stuck cases ended "Their
+    alignments won't mix." in reorder_party and second_purse)."""
+    return {0, 2} <= {g.char(ri)['align'] for ri in town.town_party(g)}
+
+
 def reorder_party(g, log):
     """In town before setting out (town_upkeep, ahead of Boltac's so the gear follows the
     rows): put the three best front-liners (front_rank) in positions 0-2 and the rest
@@ -752,6 +760,8 @@ def reorder_party(g, log):
     slots = town.town_slots(g)
     party = [ri for ri in slots if ri is not None]
     if len(party) < 4 or None in slots[:len(party)]:
+        return
+    if mixed_party(g):
         return
     front = set(sorted(party, key=lambda ri: front_rank(g, ri))[:3])
     if set(party[:3]) == front:
@@ -877,7 +887,7 @@ def second_purse(g, log, k):
     pooled back on the keeper, and the tail is re-formed in its old order."""
     slots = town.town_slots(g)
     order = [ri for ri in slots if ri is not None]
-    if len(order) < 2 or None in slots[:len(order)]:
+    if len(order) < 2 or None in slots[:len(order)] or mixed_party(g):
         return
     top = max(g.char(ri)['level'] for ri in order)
     fee = 250 * top
@@ -1001,6 +1011,8 @@ def backup_visit(g, log):
     most twice (the second pass serves the member who stepped out). The Mule is made only
     when storage has nowhere else to go. Logged: 'backups' (the plan), 'backup put' /
     'backup take' per item, 'equip edge'."""
+    if mixed_party(g):
+        return
     gear.MULE_OK[0] = MULE
     seen = {}
     for _ in range(BACKUP_VISITS + 2):
