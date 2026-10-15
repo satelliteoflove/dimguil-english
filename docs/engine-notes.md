@@ -142,6 +142,56 @@ glance". By subsystem:
     EVENTMES 181; the win sets story_flags bit 11 (fight reward 0x800c0748, type 10,
     EVENTMES 182). The floor load (0x800a8f1c) locks the door's two squares while bits
     10 and 11 are both clear.
+- **The glyph pad's words.** END on the pad (0x800b989c) checks the typed word against
+  seven: at Area X's pedestal words 0-4 (STAFF, LABORATORY, WAREHOUSE, ENERGY and a fifth)
+  each need a stone in the Tablet (0x800b7248: 4, 6, 0, 7, 3) and set story_flags bits 4,
+  5, 6, 7 and 20 (0x800ba32c, EVENTMES 136-140); word 5, DIMGUIL, counts only at Area D's
+  altar (area 32) and word 6 only in area 21 (EVENTMES 109). Anything else gets EVENTMES
+  126, or 204 at the altar. **[code]**, chapter 14 (2026-10-15).
+- **Area D (areas 32-34).**
+  - The altar (0x2c in area 32, B3 E11 N19, facing south) works only while story bits 10
+    and 23 are clear: EVENTMES 199 and a yes/no (prompt 0x16); with the Tablet, EVENTMES
+    203 and 201 and the pad. DIMGUIL brings EVENTMES 205 and Mother's fight (dispatcher
+    0x800c1070 case 0x1c, fight 0xd); the win is reward type 0xb, story bit 23. With bit
+    23 set (or during the wall's scene, 0x80079878 = 0x1b) and bit 10 clear, the floor
+    load clears every wall of (11, 5), the altar's south side, the only way on.
+  - The fifth Guardians are 0x65 with p1 18 at B3 E10 N9: EVENTMES 284, and the win sets
+    story bit 18.
+  - Locked doors (type 2: p1 the bit in 0x800795fc that unlocks it, p2 the lock's
+    difficulty, p3 the side) open the locked-door menu on Investigate (game_state 8,
+    0x800ae1c8): a member from the party picker, then Pick the lock, Calnova or leave
+    (cursor 0x8007b716). The pick succeeds 70% of the time when (level x 5, +25 for a
+    Thief or Ninja, +10 for classes 7-8, + the sixth stat) / 10 reaches p2, else 15%,
+    less 0x8007e838, which each failure raises by 10 (to 50 at most) and each step
+    lowers by 1. Calnova needs the
+    seventh-level alchemist spell known and a point, and works 95% of the time unless
+    spells are sealed. The roll reads the character at roster index 0x80079791, which
+    the menu's first step sets to 1, not the member picked (0x800798d1, used only for the
+    status check): probably a bug, not yet checked in the emulator. B2's two locked
+    doors by the ladder (E13 N12 south, p1 6; E12 N13 west, p1 5) both have p2 8.
+  - Spell sealing: any step onto a square whose square_flags bit 31 is set puts
+    nomagic_steps at 232, and each step takes one off (maze_step_hp 0x800c5570), so it's
+    about 232 steps, not the 1000 the fan FAQ gives. Area D has 54, 32 and 49 such
+    squares on B3, B2 and B1: the rooms around the seeping pillars.
+  - The small door (0x51 at B1 E10 N12, facing north) needs bit 10 clear and the Gold
+    Gauntlets in the party: EVENTMES 222, then (dispatcher case 0x1f) the one able member
+    goes, or the party picker asks who (game_state 0x11; cursor x 0x8007b6f0 = -99, 1 or
+    101 for the column, y 0x8007b6f2 = 0x48 front row or 0x62 back). Prompt 0x18 checks
+    that member wears all four gold pieces (0x800b7508: items 0x13d-0x140 with the
+    equipped bit). If so: story bit 10, the MONS003.STR movie, EVENTMES 224 and 237;
+    if not, EVENTMES 225 or 226 and they're ashes (status 0x100, HP 0, a death counted).
+    After the pick, the prompt's outcome waits about 1,200 frames with the maze calm and
+    the prompt still pending (0x80079907 = 0x18) before EVENTMES 224. **[emu]**
+  - Mimicry mode's end (bit 10) swaps the maps of areas 18-34 for second files; the
+    harness reads the site's data/maps/dim/mimicry/ from then on.
+  - The floor load's wall and lock changes (0x800a8f1c) run from the map load
+    (0x800a9268) only when 0x80079878 is 0 or 0x1b, so not when the party arrives by a
+    lift (17), and again after every camp (MAIN 0x80019428 through maze_exit_code 0xfc).
+    Back down Area D's lift after Mother, the altar's south wall at (11, 5) is still up
+    until the party camps or fights; a camp brings it down. **[emu]** (c14v3, 2026-10-15)
+  - B1 E11 N10 (0x68) starts a one-time scene (talk 0x1a, maze_event_flags bit 7) while
+    no member has char_flags bit 0.
+  **[code]**, chapter 14 (2026-10-15).
 
 ### Wipes and bodies (A-maze.md §4-6, D-battle.md, fallen-parties.md)
 
