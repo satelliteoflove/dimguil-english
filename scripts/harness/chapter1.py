@@ -58,6 +58,7 @@ VARIANTS = [
      ('Xia', 'Gnome', 'F', 'Good', 'Priest')],
 ]
 PREMADE_GOOD = ['Venus', 'Earth', 'Mercury']
+STRIP_STANDBYS = True      # strategy revision 6: the other premades' gear to the made three, the rest sold (Run.strip_standbys)
 
 
 def party_items(g):
@@ -1193,8 +1194,69 @@ class Run:
                 self.note('class fallback', name, cls)
             made.append(r['index'])
         names = {g.name(i): i for i in range(g.roster_count())}
+        if STRIP_STANDBYS and GEAR:
+            self.strip_standbys(made, [i for n, i in names.items() if n not in PREMADE_GOOD and i not in made])
         town.form_party(g, [names[n] for n in PREMADE_GOOD] + made)
         return True
+
+    def strip_standbys(self, made, standbys):
+        """(strategy revision 6, main's option a, 2026-10-14) The premades left in the
+        tavern (Uranus, Jupiter, Mars: Neutral standbys) start with armor, shields, helms,
+        gauntlets and boots the made members can wear. With them in a party beside the
+        made three: out to the Grounds, they take everything off, each piece that's an
+        upgrade goes to a made member (gear.plan_gives), the made three equip, then home,
+        Boltac's buys what the standbys still carry, and the gold is pooled on a made
+        member. The party is emptied for the real one. A standby who fills in later gets
+        what the shop and the spare packs offer then."""
+        g = self.g
+        on_int = on_interrupt_factory(self.log)
+        if not standbys:
+            return
+        town.form_party(g, standbys + made)
+        town.to_town_bar(g)
+        town.begin_adventure(g)
+        for ri in standbys:
+            gear.equip(g, g.party_slots().index(ri), self.log, none=True)
+        filled = set()          # (receiver, slot) given a piece: the plan compares with what's
+        for _ in range(16):     # worn, which changes only at the equip below
+            plan = [p for p in gear.plan_gives(g, standbys + made, to=made)
+                    if p[0] in standbys and (p[2], p[3]) not in filled]
+            if not plan:
+                break
+            ri, w, rj, sl, gain = plan[0]
+            k = next((j for j, x in gear.pack(g, ri) if x == w), None)
+            if gear.give(g, g.party_slots().index(ri), k, g.party_slots().index(rj), self.log) != 'given':
+                break
+            filled.add((rj, sl))
+        for ri in made:
+            if gear.wants_equip(g, ri):
+                gear.equip(g, g.party_slots().index(ri), self.log)
+        if camp.in_camp(g):
+            camp.close_camp(g)
+        maze.to_town(g, on_int)
+        town.to_town_bar(g)
+        g0 = sum(g.char(i)['gold'] for i in town.town_party(g))
+        for ri in standbys:
+            pos = town.town_slots(g).index(ri)
+            for _ in range(10):
+                left = [(k, w) for k, w in gear.pack(g, ri) if gear.item(g, w & 0x1ff)['price']]
+                if not left:
+                    break
+                r = town.boltac_sell(g, pos, left[0][0])
+                self.log.append((g.frame, 'sell', g.char(ri)['name'], gear.name(left[0][1] & 0x1ff), r['outcome']))
+                if r['outcome'] != 'sold':
+                    break
+            if town._at_trade_menu(g):
+                town.boltac_leave(g)
+        town.to_town_bar(g)
+        gold = town.pool_gold(g, town.town_slots(g).index(made[0]), 'tavern')
+        town.to_town_bar(g)
+        self.log.append((g.frame, 'standbys stripped', dict(sold=gold - g0, gold=gold,
+                         worn={g.char(i)['name']: [gear.name(x & 0x1ff) for x in g.char(i)['items']] for i in made})))
+        for pos in reversed(range(6)):
+            if town.town_slots(g)[pos] is not None:
+                town.remove_member(g, pos)
+        town.to_town_bar(g)
 
     def upkeep(self):
         g = self.g

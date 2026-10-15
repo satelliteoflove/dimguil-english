@@ -298,9 +298,10 @@ def items_menu(g, slot_pos):
     ui.confirm_until(g, lambda: g.u8(camp.SPELL_STATE) == 5 and g.u8(camp.SUB) != 15, 300, 'Items')
 
 
-def equip(g, slot_pos, log=None):
+def equip(g, slot_pos, log=None, none=False):
     """Camp > Inspect > member at party slot slot_pos > Items > Equip, answering every slot
-    prompt with choose(). Returns {slot: chosen item id or None}."""
+    prompt with choose() (none: with nothing, to take everything off). Returns {slot:
+    chosen item id or None}."""
     ri = g.party_slots()[slot_pos]
     before = dict(pack(g, ri))
     items_menu(g, slot_pos)
@@ -316,7 +317,7 @@ def equip(g, slot_pos, log=None):
             s = g.u8(EQ_SLOT)
             n = g.u8(EQ_COUNT)
             cands = [struct.unpack('<h', g.e.read(EQ_CANDS + 2 * j, 2))[0] for j in range(n)]
-            k = choose(g, ri, s, cands, before)
+            k = None if none else choose(g, ri, s, cands, before)
             want = cands.index(k) + 1 if k is not None else 0
             chosen[s] = (before[k] & 0x1ff) if k is not None else None
             ui.move_cursor(g, EQ_CURSOR, want, 'down', 'up', wrap=n + 1, what='equip slot %d' % s)
@@ -607,7 +608,7 @@ def gear_value(g, rj, it, taken=None):
     return best
 
 
-def plan_gives(g, members):
+def plan_gives(g, members, to=None):
     """[(holder ri, item word, receiver ri, slot, gain)]: each identified weapon or armor
     not worn goes to the member it helps most (the holder keeps it if that's them), best
     gains first, one piece per member and slot."""
@@ -619,7 +620,7 @@ def plan_gives(g, members):
             it = item(g, w & 0x1ff)
             if it['cat'] > 5 and not cloak(it):
                 continue
-            for rj in members:
+            for rj in (to or members):
                 if g.char(rj)['status'] >= 0x20:
                     continue
                 gain, s = gear_value(g, rj, it)
