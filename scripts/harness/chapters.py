@@ -486,6 +486,32 @@ class Run(chapter1.Run):
                 low.append((g.char(i)['name'], n, f))
         return low
 
+    def points_spent(self, share=None):
+        """Strategy revision 3 (Gaiden advice): a training trip heads home before the next
+        square once the casters' points at levels 3-7 are under `share` of what they had
+        after the last Stables, summed over the party, or the heals are (HEAL_OPTS points,
+        each counted at its mean HP up to 40). Returns the shares when it's time, else None.
+        Unknown full points (a resumed run) don't count here; points_low handles those."""
+        g = self.g
+        share = share or POINTS_HOME
+        n = f = hn = hf = 0
+        for i in g.party():
+            full = self.full_points.get(i)
+            if not full or g.char(i)['status'] >= 0x20:
+                continue
+            now = g.char(i)['raw'][0x5c:0x78]
+            for sc in range(4):
+                for lv in range(2, 7):
+                    n += now[sc * 7 + lv]; f += full[sc * 7 + lv]
+            for sid, sc, lv, mean in HEAL_OPTS:
+                w = min(mean, 40)
+                hn += now[sc * 7 + lv - 1] * w; hf += full[sc * 7 + lv - 1] * w
+        out = dict(points=round(n / f, 2) if f >= 4 else None, heals=round(hn / hf, 2) if hf >= 40 else None)
+        if any(v is not None and v < share for v in out.values()):
+            self.note('points spent', out)
+            return out
+        return None
+
     def maporfic(self):
         """Maporfic from camp before a boss (B-camp.md: party AC -2 for 1250 steps,
         0x8007e82a), if a priest knows it and it isn't running."""
@@ -726,6 +752,9 @@ class Run(chapter1.Run):
                         break
                     if chapter1.needs_town(g) and self.town_helps():
                         why = None
+                        break
+                    if POINTS_HOME and self.points_spent():
+                        why = 'points'
                         break
                     if HP_HEAL:
                         if self.hp_heal():
@@ -1165,6 +1194,7 @@ TOPUP = False                # heal to what the trip's worst monster can't take 
 HP_HEAL = True               # Chris's HP lines after every training fight (Run.hp_heal)
 HOME_DEAD = 0x80 | 0x100 | 0x200  # dead, ash, lost: the walk home may run (Run.homeward_run)
 AVOID_FATAL = True           # the walk home keeps off the square of the trip's fatal fixed fight (nav.TRIP_SOFT)
+POINTS_HOME = 0.5           # agent 13 (strategy revision 3): a training trip goes home when points or heals are this low (Run.points_spent)
 POINTS_TRAIN = True         # agent 8: a training trip from the maze goes home first when points are low
 DEATH_RETRY = False         # agent 8, 2026-10-14 (Chris): a training trip with a death isn't reloaded
 POISON_HOME = True          # agent 7, 2026-10-14: cure poison first after a fight; home if it stays
