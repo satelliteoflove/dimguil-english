@@ -111,6 +111,28 @@ glance". By subsystem:
   (5, 9), (5, 15), (8, 12); B5 (7, 8), (7, 15)) are a walk through B3, B2 and B1 from
   the others. Found from the fan site's map data with the harness's planner
   (2026-10-15); Chris's own B4/B5 trip from the same state never went there.
+- **Area C's moving floors.** `square_arrive` (0x800ba48c) runs event 0x45 (about 540
+  squares over areas 28-31) by turning the party to face the record's p1 and moving it
+  a square that way, and again on each square it lands on, stairs and chutes included,
+  until a square without one. Event 0x44, the nine turning tiles (p1 0-8), does the
+  same with the facing `table[p1 * 3 + panel[p1]]`, the table at 0x800ef240 (in MAZE.BIN)
+  and the panel's settings at 0x80087a30 (one byte a tile, 0-2). Neither runs while
+  story_flags bit 10 or bit 27 is set (`maze_prompt_result` toggles bit 27 on some
+  switch's Yes; which switch wasn't traced). Followed this way, door C's ride with the
+  walkthrough's settings ends at C-B2 E16 N13 and door B's at E10 N10, as the walkthrough
+  says. **[code]**; the squares are from the site's map files.
+  - The panel (event 0x4e at C-B1 E10 N6, facing west, prompt 0x15) runs as game_state
+    0x10 (frame handler 0x800c8640): 0x80079790 is the switch under the cursor (Right and
+    Left, 0-8 round), 0x80079791 the picture row (Down and Up, 0-2 round); Circle sets
+    the switch to the row, Cross or Start leaves.
+  - The B4 switch (event 0x47 at E8 N12, facing east, prompt 0x11) toggles story_flags
+    bit 21, so a second press undoes it; the silver stone's device (0x46 at E9 N12,
+    facing west) needs bit 21 and the Tablet, and sets the Tablet's stone bit 7. Event
+    0x48 is a second switch the same way, toggling bit 22 (prompt 0x12).
+  - The Greater Golem's door (0x4d, C-B2 E11 N10, facing north) starts its fight after
+    EVENTMES 181; the win sets story_flags bit 11 (fight reward 0x800c0748, type 10,
+    EVENTMES 182). The floor load (0x800a8f1c) locks the door's two squares while bits
+    10 and 11 are both clear.
 
 ### Wipes and bodies (A-maze.md §4-6, D-battle.md, fallen-parties.md)
 
