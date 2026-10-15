@@ -638,10 +638,12 @@ def default_policy(g, m, opts):
     # a member out of the fight in one that matters: Dialko for paralysis or sleep, Madi
     # for stone too (dim.json: Dialko cures paralysis and sleep in battle; Madi all but
     # death and ash)
-    # a confused front-liner's stray blows kill allies in any fight, so their cure doesn't
-    # wait for the fight to matter
+    # a confused member's stray blows kill allies in any fight, so their cure doesn't wait
+    # for the fight to matter. Any row: half a confused member's swings go to a random ally
+    # in either row, and the reach check passes for the party (party_melee 0x800a8c2c), so
+    # a back-row member with a short weapon still hits allies (main, 2026-10-14)
     wild = any(rk is not None and member_state(g, k)[1] & 0x02 and member_state(g, k)[1] < 0x80
-               for k, rk in enumerate(ids[:3]))
+               for k, rk in enumerate(ids))
     if (big or wild) and len(M):
         for k, rk in enumerate(ids):
             if rk is None or k == m:
@@ -649,12 +651,12 @@ def default_policy(g, m, opts):
             st = member_state(g, k)[1]
             if st >= 0x80:
                 continue
-            # a confused front-liner (0x02) too: half their blows go to a random target,
+            # a confused member (0x02) too: half their blows go to a random target,
             # allies included (party_melee 0x800a8c2c), for about 13 rounds (counter 127,
             # -10 a round); in battle only Madi (spell_madi 0x800ae6e8: status cleared
             # below 0x80) and Morfis (party) cure it, Dialko doesn't (0x38 only,
             # FUN_800b2974). n1v1m chapter 9: confused Dax killed Uranus twice.
-            for sid, bits in ((tactics.DIALKO, 0x28), (tactics.MADI, 0x68 | (0x02 if k < 3 else 0))):
+            for sid, bits in ((tactics.DIALKO, 0x28), (tactics.MADI, 0x6a)):
                 if st & bits and sid in by_id and CAST.get(('cure', k), 0) < ROUND:
                     CAST[('cure', k)] = ROUND
                     c = by_id[sid]
