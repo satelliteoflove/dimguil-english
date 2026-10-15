@@ -99,12 +99,23 @@ class Stopped(Exception):
     log.jsonl and the final state are still written."""
 
 
+_STOP = []
+
+
 def _stop(signum, frame):
-    raise Stopped('SIGTERM')
+    # raised from the next frame tick: a signal landing in the emulator's ctypes callback
+    # would only print the exception and run on
+    _STOP.append(signum)
+
+
+def _stop_tick():
+    if _STOP:
+        raise Stopped('SIGTERM')
 
 
 import signal
 signal.signal(signal.SIGTERM, _stop)
+g.t.ticks.append(_stop_tick)
 t0 = time.time()
 ok = True
 try:
