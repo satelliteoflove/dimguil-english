@@ -108,6 +108,18 @@ def points(g):
     return sum(sum(g.char(ri)['raw'][0x5c:0x78]) for ri in battle.party_ids(g) if ri is not None)
 
 
+def points_lv(g):
+    """The party's spell points by level 1-7, all schools."""
+    out = [0] * 7
+    for ri in battle.party_ids(g):
+        if ri is not None:
+            r = g.char(ri)['raw']
+            for sch in range(4):
+                for lv in range(7):
+                    out[lv] += r[0x5c + sch * 7 + lv]
+    return out
+
+
 def hp(g):
     return sum(max(battle.member_state(g, s)[0], 0) for s, ri in enumerate(battle.party_ids(g)) if ri is not None)
 
@@ -119,7 +131,7 @@ def run_one(g, st, seed):
     if not to_command(g):
         return dict(state=st, seed=seed, skip='no command phase')
     ids = battle.party_ids(g)
-    p0, h0 = points(g), hp(g)
+    p0, h0, pl0 = points(g), hp(g), points_lv(g)
     casters0 = {k for k in tactics.groups(g) if caster_group(tactics.info(g, k))}
     gone = {}
     orig = battle.command_phase
@@ -142,6 +154,7 @@ def run_one(g, st, seed):
     wiped = all(h <= 0 or s >= 0x20 for h, s in st_all)
     won = res['ovl'] == 'MAZE' and not wiped and not (res['fled'] or (0, 0))[0]
     return dict(state=st, seed=seed, won=won, wiped=wiped, rounds=res['rounds'], spent=p0 - points(g),
+                spent_lv=[a - b for a, b in zip(pl0, points_lv(g))],
                 hp_lost=h0 - hp(g), down=len(res['down_end']), dead=len(res['dead_end']),
                 ran=res['ran'], fled=res['fled'], runs=res['runs'],
                 casts=[(c[0], sp(c[1])) for c in res['casts']], casters=sorted(casters0),
@@ -218,17 +231,20 @@ def table(d, by_state=False):
                 rows[(v, r, st if by_state else '')].append(None)
                 continue
             rows[(v, r, st if by_state else '')].append(x)
-    print('%-8s %-3s %-34s %4s %4s %4s %6s %6s %7s %5s %5s %4s %4s %6s %5s' % (
-        'variant', 'run', 'state', 'n', 'won', 'wipe', 'rounds', 'spent', 'hp_lost', 'down', 'dead', 'ran', 'll',
-        'c_down', 'err'))
+    print('%-8s %-3s %-34s %4s %4s %4s %6s %6s %5s %5s %7s %5s %5s %4s %4s %6s %5s' % (
+        'variant', 'run', 'state', 'n', 'won', 'wipe', 'rounds', 'spent', 'L4-5', 'L6-7', 'hp_lost', 'down', 'dead',
+        'ran', 'll', 'c_down', 'err'))
     for key in sorted(rows, key=lambda k: (k[1], k[2], ['base', 'story', 'new'].index(k[0]) if k[0] in ('base', 'story', 'new') else 9, k[0])):
         xs = [x for x in rows[key] if x]
         err = len(rows[key]) - len(xs)
         n = len(xs) or 1
         cd = [x['caster_down'] for x in xs if x.get('caster_down') is not None]
-        print('%-8s %-3s %-34s %4d %4d %4d %6.2f %6.2f %7.1f %5d %5d %4d %4d %6s %5d' % (
+        sl = [x.get('spent_lv') for x in xs if x.get('spent_lv')]
+        l45 = '%.2f' % (sum(v[3] + v[4] for v in sl) / len(sl)) if sl else '-'
+        l67 = '%.2f' % (sum(v[5] + v[6] for v in sl) / len(sl)) if sl else '-'
+        print('%-8s %-3s %-34s %4d %4d %4d %6.2f %6.2f %5s %5s %7.1f %5d %5d %4d %4d %6s %5d' % (
             key[0], key[1], key[2][-34:], len(xs), sum(x['won'] for x in xs), sum(x['wiped'] for x in xs),
-            sum(x['rounds'] for x in xs) / n, sum(x['spent'] for x in xs) / n, sum(x['hp_lost'] for x in xs) / n,
+            sum(x['rounds'] for x in xs) / n, sum(x['spent'] for x in xs) / n, l45, l67, sum(x['hp_lost'] for x in xs) / n,
             sum(x['down'] for x in xs), sum(x['dead'] for x in xs), sum(1 for x in xs if x['ran']),
             sum(1 for x in xs if x['ll']), '%.2f' % (sum(cd) / len(cd)) if cd else '-', err))
 

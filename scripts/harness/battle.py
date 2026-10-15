@@ -857,11 +857,19 @@ def default_policy(g, m, opts):
     # point of a level holding a heal they know
     rec = me['raw']
     cands = []
+    finish = []         # (casterfocus) spells above CHEAP_LEVEL in a cheap fight, for focus_pick only
     for sid, c in by_id.items():
         sch, lv = c[1], c[2]
+        capped = False
         if not big:
             if lv > tactics.CHEAP_LEVEL:
-                continue
+                # (casterfocus) a caster group a level 4-5 spell kills this round is worth
+                # that point even in a fight that doesn't matter (Tzalik at a lone Lorks
+                # caster, where Mahalito and Montino took three rounds)
+                if not (tactics.CASTER_FOCUS and lv < KEEP_LEVEL
+                        and (sid in tactics.DAMAGE or sid in tactics.DEATH)):
+                    continue
+                capped = True
         elif CHEAPEST and lv >= KEEP_LEVEL and not boss:
             continue                    # (c) levels 6-7 wait for bosses and bad fights
         keep = BOSS_KEEP.get(ri, {}).get((sch, lv), 0)
@@ -874,7 +882,7 @@ def default_policy(g, m, opts):
             for k in M:
                 v = tactics.value(g, sid, k, M, me['level'], CAST)
                 if v > 0:
-                    cands.append((v, ('spell', sid, sch, lv, c[3], ('group', k)), (sid, k), lv))
+                    (finish if capped else cands).append((v, ('spell', sid, sch, lv, c[3], ('group', k)), (sid, k), lv))
         elif boss and sid in (tactics.BAMATU, tactics.MAPORFIC, tactics.CORTU):
             v = tactics.support_value(g, sid, M, CAST, party_hp)
             if v > 0 and M:
@@ -903,10 +911,12 @@ def default_policy(g, m, opts):
         it_act = item_choice(g, ri, me, M, big, best_own)
         if it_act:
             return it_act
+    fp = focus_pick(g, m, me, M, cands + finish, opts) if tactics.CASTER_FOCUS and M and (cands or finish) else None
+    if fp and fp not in ('fight', 'cheap') and not cands:
+        cands = [fp]
     if cands:
         cands.sort(key=lambda x: -x[0])
         pick_ = cands[0]
-        fp = focus_pick(g, m, me, M, cands, opts) if tactics.CASTER_FOCUS and M else None
         if fp == 'fight':
             return ('fight',)
         if fp == 'cheap':
