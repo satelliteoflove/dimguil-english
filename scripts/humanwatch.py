@@ -61,7 +61,7 @@ ROSTER, REC = 0x7d708, 0xd0
 PARTY_REC = 0x7e810
 GROUPS, COMBAT, MREC = 0x8c480, 0x8e230, 0x8a918
 OVL = {1: 'JOUKA', 2: 'MAZE', 3: 'BATTLE', 4: 'HAZURE', 5: 'MCARD'}
-CMD_PHASE, CHEST_PHASE = 0x1c, 0x42
+CMD_PHASE, CHEST_PHASE, FRIENDLY_PHASE = 0x1c, 0x42, 0x66   # 0x66: "A friendly monster appears" (battle.py)
 CAMP, START_MENU = 3, 0x34      # game states: the camp, the maze's START menu (spells, items)
 FACILITY = {5: None, 1: None, 10: 'tavern', 15: 'inn', 20: 'boltac', 25: 'temple',
             30: 'training', 40: 'edge'}
@@ -533,6 +533,8 @@ class Watch:
                                     sp={c['name']: c['sp'] for c in brief(F['before']) if c['sp']}))
         if s['phase'] == CMD_PHASE and (p is s or p['phase'] != CMD_PHASE):
             F['rounds'] += 1
+        if s['phase'] == FRIENDLY_PHASE:
+            F['friendly'] = True
         if s['phase'] == CHEST_PHASE and self.chest is None:
             self.chest = dict(f0=s['f'], k0=len(F['msgs']))
 
@@ -569,6 +571,8 @@ class Watch:
         groups_end = [dict(id=q['id'], n=q['n'], up=q['up']) for q in last.get('groups', [])]
         if s['mode'] == 'town':
             outcome = 'town'          # a wipe, or the party carried home
+        elif F.get('friendly') and not exp:
+            outcome = 'friendly'      # a friendly monster, left alone
         elif fled[0] and not exp:
             outcome = 'fled'          # the groups read empty after a run too
         elif all(q['up'] == 0 for q in last.get('groups', [])) and last.get('groups'):
@@ -602,7 +606,9 @@ class Watch:
         if self.chest is not None:
             texts = shown(cm)
             idx = [m['idx'] for m in cm if m['file'] == 'FIGHTMSG.OBJ']
-            if 242 in idx:
+            # "Oops! <trap>!!" is 242, but the text matcher can name another string with
+            # the same words (chris1 logged Magic Drain as 224), so check the text too
+            if 242 in idx or any(t.startswith('Oops!') for t in texts):
                 how = 'sprung'
             elif 241 in idx:
                 how = 'disarmed'
