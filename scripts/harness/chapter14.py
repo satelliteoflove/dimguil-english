@@ -114,6 +114,13 @@ def drive(g, step, limit=4000):
         if g.u8(maze.EVENT_BOX) or maze.box_up(g):
             play.close_box(g)
             continue
+        if g.u8(maze.GAME_STATE) == 0 and g.u8(maze.MSG) == 2:
+            # a help-bar line that waits for a press ("* Success! *" after a picked lock:
+            # c14v3r, "event drive" with the door open; neither box test sees it)
+            g.step(20)
+            if g.u8(maze.GAME_STATE) == 0 and g.u8(maze.MSG) == 2:
+                ui.press_until(g, 'circle', lambda: g.u8(maze.MSG) != 2, 120, 'help line')
+            continue
         g.step()
     raise Stuck('event drive', where=g.where())
 
