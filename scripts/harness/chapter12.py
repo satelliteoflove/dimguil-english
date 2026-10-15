@@ -42,6 +42,7 @@ PANEL_STATE = 0x10
 SEL, ROW = 0x80079790, 0x80079791
 # switch index (0-8) -> row, for door B (switches 4-6) and door C (7-8)
 PANEL_WANT = {3: 0, 4: 2, 5: 1, 6: 2, 7: 1}
+DOOR_B = (31, 11, 16)       # C-B1 E11 N7, south of door B
 
 
 def panel_ok(g):
@@ -125,11 +126,16 @@ class Chapter12:
                 return True
             if not panel_ok(g) and not panel():
                 return False
+            # the boss checks happen at door B: its ride ends in a pocket (C-B2 E10 N10
+            # and the Golem's door) whose only other way out, the stairs down at E10 N9,
+            # lands on B3's floor that carries the party straight back up (n1v0u, 2026-10-15:
+            # "short at a boss door" there, then "no route" home six times)
             run.ready()
-            run.go((30, 10, 13))
+            run.go(DOOR_B)
             while run.door_ready():
                 run.ready(train=False)
-                run.go((30, 10, 13))
+                run.go(DOOR_B)
+            run.go((30, 10, 13))
             run.heal()
             run.examine((30, 11, 13), 0, fight=True)
             run.after()
