@@ -116,6 +116,28 @@ def back_row(g, ri):
     return False
 
 
+AC_BY_HP = True            # agent 13 (strategy revision 7): AC weighs more on low-HP members
+AC_HP_MAX = 2.0            # ... up to this many times over
+
+
+def ac_weight(g, ri):
+    """How much a point of AC is worth on roster index ri against the party's median
+    member: median max HP / theirs, held to 1-AC_HP_MAX. The monster AI's column 1
+    fights the reachable member with the least HP (monster_ai 0x800cffb0 ->
+    monster_target_weakest), and a hit costs a low-HP member more of their life, so
+    the back row's 45-HP mages at AC 5-6 get their armor before the 150-HP fighters."""
+    if not AC_BY_HP:
+        return 1.0
+    for slots in (g.party_slots(), town.town_slots(g)):
+        if ri in slots:
+            hp = sorted(g.char(r)['max_hp'] for r in slots if r is not None)
+            mine = g.char(ri)['max_hp']
+            if not mine or not hp:
+                return 1.0
+            return max(1.0, min(AC_HP_MAX, hp[len(hp) // 2] / mine))
+    return 1.0
+
+
 def worth(g, ri, it, slot):
     """score() for roster index ri where they stand: a weapon that can't reach from the
     back row is worth nothing to a back-row member (b1v3d chapter 9: a level-14 Mage in
@@ -133,6 +155,8 @@ def worth(g, ri, it, slot):
         # back row with a Rod, worth 7 against the flat 4, while a Bullwhip and a Target
         # Shield, 6.5 + 12, were in stock; with the Rod on, a shield was never offered)
         return wscore(it) - max(TWO_HAND_COST, lost, best_shield(g, ri))
+    if slot >= 2 or slot == 1 and it['cat'] == 2:
+        return score(it, slot) * ac_weight(g, ri)      # armor and shields: AC by HP
     return score(it, slot)
 
 
