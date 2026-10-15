@@ -152,8 +152,17 @@ def choose_group(g, offered, prefer=None, spread=False):
         return _vrng.choice(alive)
     if prefer in alive:
         return prefer               # a spell's or Dispel's chosen group (tactics.py)
+    rank = {}
+    if tactics.CASTER_FOCUS and not spread and FOCUS_M[0] == ROUND and FOCUS_M[1]:
+        # (casterfocus) the caster groups first, in tactics.caster_order; one the members
+        # before have likely killed this round goes after every other group
+        M = FOCUS_M[1]
+        order = tactics.caster_order(M, KILL_FIRST)
+        live = tactics.caster_order(M, KILL_FIRST, skip_done=True)
+        for i, k in enumerate(order):
+            rank[k] = live.index(k) if k in live else 100 + i
     lone = set()
-    if CASTER_FIRST and not spread:
+    if CASTER_FIRST and not spread and not rank:
         # a lone monster that paralyzes a row or casts group damage: one kill removes it
         # (tactics.first_weight; agent 13, main's call)
         for k in alive:
@@ -163,13 +172,14 @@ def choose_group(g, offered, prefer=None, spread=False):
                 continue
             if (m.get('para') or m.get('gdmg')) and len(m['mons']) == 1:
                 lone.add(k)
-    return min(alive, key=lambda k: (KILL_FIRST.get(group_id(g, k), 9), k not in lone, k != prefer,
+    return min(alive, key=lambda k: (KILL_FIRST.get(group_id(g, k), 9), rank.get(k, 99), k not in lone, k != prefer,
                                      -g.u8(GROUPS + k * 8 + 5) if spread else 0, k))
 
 
-def aim(g, m, prefer, log):
+def aim(g, m, prefer, log, fight=False):
     """At a group pick (Fight, a spell, Dispel...): choose the group and confirm it,
-    checked in the member's command record (pick.pick_group). False if it couldn't."""
+    checked in the member's command record (pick.pick_group). False if it couldn't.
+    fight: a Fight's blows go on this round's tactics.FOCUS (casterfocus)."""
     try:
         lay = pick.layout(g)
     except pick.PickError:
@@ -184,6 +194,9 @@ def aim(g, m, prefer, log):
         log.append((m, 'aim failed', want, gid, str(e)[:80]))
         return False
     log.append((m, 'aim', want, gid, r['target'], lay['mode']))
+    if fight and tactics.CASTER_FOCUS:
+        tactics.focus_reset(ROUND)
+        tactics.FOCUS['dmg'][want] = tactics.FOCUS['dmg'].get(want, 0.0) + tactics.member_melee(g, m, want)
     return True
 
 
@@ -725,6 +738,7 @@ def default_policy(g, m, opts):
     lv = sorted(g.char(rk)['level'] for rk in ids if rk is not None)
     bad = losing(g)
     lost = tactics.disable(g, M, members(g))
+    FOCUS_M[:] = [ROUND, M]
     why = tactics.matters(g, M, party_hp, lv[len(lv) // 2] if lv else None, party, lost)
     if not why and LONG_FIGHT and M and tactics.SPELLS_ON and party:
         # the weakest member under the monsters' 'fight the weakest' blows (AI column 1):
@@ -892,23 +906,80 @@ def default_policy(g, m, opts):
     if cands:
         cands.sort(key=lambda x: -x[0])
         pick_ = cands[0]
-        if CHEAPEST and big and not boss:
+        fp = focus_pick(g, m, me, M, cands, opts) if tactics.CASTER_FOCUS and M else None
+        if fp == 'fight':
+            return ('fight',)
+        if fp == 'cheap':
+            # (casterfocus) the caster groups are likely dead this round already: what's
+            # left is a fight without them, so no spells above CHEAP_LEVEL for it (a
+            # Tiltowait after Badi and Tzalik had the casters, pf_c9_s101/f05), unless
+            # it's a story fight or going badly
+            fp = None
+            if not (why == 'story' or bad):
+                cands = [c_ for c_ in cands if c_[3] <= tactics.CHEAP_LEVEL]
+                if not cands:
+                    return ('fight',) if FIGHT in opts else ('parry',) if PARRY in opts else ('first',)
+                pick_ = cands[0]
+        if fp:
+            pick_ = fp
+        elif CHEAPEST and big and not boss:
             # (c) the cheapest spell that does most of what the best one would
             ok = [c_ for c_ in cands if c_[0] >= CHEAP_SHARE * cands[0][0]]
             pick_ = min(ok, key=lambda c_: (c_[3], -c_[0]))
-        if len(cands) > 1 and _vary():
+        if not fp and len(cands) > 1 and _vary():
             pick_ = cands[1]
         v, act, key, _ = pick_
-        if v > fight_v and (v >= MIN_SPELL_VALUE or big):
+        if fp or v > fight_v and (v >= MIN_SPELL_VALUE or big):
             CAST[key[0]] = CAST.get(key[0], 0) + 1
             if key[1] is not None:
                 CAST[key] = CAST.get(key, 0) + 1
             if PLANNING and (key[0] in tactics.DAMAGE or key[0] in tactics.DEATH or key[0] in tactics.DISABLE):
                 tactics.value(g, key[0], key[1], M, me['level'], CAST, commit=True)
+            if tactics.CASTER_FOCUS and key[1] is not None and key[0] != 'dispel':
+                tactics.focus_commit(g, key[0], key[1], M, me['level'])
             return act
     if FIGHT in opts:
         return ('fight',)
     return ('parry',) if PARRY in opts else ('first',)
+
+
+FOCUS_M = [None, None]      # (round, M) the policy last rated, for choose_group (casterfocus)
+
+
+def focus_pick(g, m, me, M, cands, opts):
+    """(casterfocus) This member's part in taking out the caster groups (tactics.caster_order,
+    leaving out those the members before have likely killed this round): 'fight' when its
+    blows on the first such group, with what's already on it, likely kill it (no points
+    spent); else the cheapest damage or death spell among cands (by level, then the
+    better chance) likely to kill every monster of a caster group this round
+    (tactics.finish_p >= FINISH_P), trying the groups in order; else None, and the
+    policy's best value stands (a fight with no caster groups, or casters no spell
+    finishes this round: Montino, Katino, a big spell at a pack); 'cheap' when every caster
+    group is likely dead this round already."""
+    order = tactics.caster_order(M, KILL_FIRST, skip_done=True)
+    if not order:
+        return 'cheap' if tactics.caster_order(M, KILL_FIRST) else None
+    k0 = order[0]
+    if FIGHT in opts:
+        x = tactics.member_melee(g, m, k0)
+        if x > 0:
+            tactics.FOCUS['dmg'][k0] = tactics.FOCUS['dmg'].get(k0, 0.0) + x
+            alone = tactics.dead_p(k0, M[k0])
+            tactics.FOCUS['dmg'][k0] -= x
+            if alone >= tactics.DONE_P:
+                return 'fight'
+    for k in order:
+        fin = []
+        for c_ in cands:
+            sid, t = c_[2]
+            if t != k or not (sid in tactics.DAMAGE or sid in tactics.DEATH):
+                continue
+            p = tactics.finish_p(sid, M[k], me['level'])
+            if p >= tactics.FINISH_P:
+                fin.append((c_[3], -p, -c_[0], c_))
+        if fin:
+            return min(fin, key=lambda x: x[:3])[3]
+    return None
 
 
 def _flee_msgs(g, n0):
@@ -1015,7 +1086,7 @@ def command_member(g, policy, log):
             g.step(1)
             continue
         if pick.pick_screen(g) is not None:
-            if not aim(g, m, prefer, log) and pick.pick_screen(g) is not None \
+            if not aim(g, m, prefer, log, fight=act[0] == 'fight') and pick.pick_screen(g) is not None \
                     and g.u8(MEMBER) == m:
                 _press_change(g, 'circle', what='target')
             continue

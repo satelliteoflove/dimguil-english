@@ -26,7 +26,7 @@ monster's expected damage a round: its mean attack (swings x dice) at half its h
 landing, or for a caster 8 a level, whichever is more; a breather adds half its HP over
 three members.
 """
-import struct
+import math, struct
 
 MREC = 0x8008a918
 COMBAT = 0x8008e230
@@ -213,8 +213,13 @@ def info(g, k):
         # (agent 16) each damage spell's casts a round per monster, for battle.para_rush
         dcast = [(p_dmg * pr / tot, sid) for pr, sid in dmg if sid in DAMAGE]
         fight_p = p_fight
+        # (casterfocus) its status column's spells and that column's chance a round, for
+        # caster_danger's debuffs; and every spell it casts, abilities included
+        p_status = p[5] if sts else 0.0
+        spells = {sid for _, sid in dmg + sts} | {src[1] for _, src, _ in dsrc if src[0] == 'spell'}
     else:
         dsrc, dcast, fight_p = [], [], 1.0
+        sts, p_status, spells = [], 0.0, set()
         threat_spell = 8 * lv if caster else 0
         threat = max(melee_round, 8 * lv if caster else 0)
         if r[0xc9]:
@@ -231,7 +236,7 @@ def info(g, k):
                 blow=(blow_f, blow_b), death=death, dsrc=dsrc, dcast=dcast, fight_p=fight_p, dis_hp=0.0, dis_hp_spell=0.0,
                 para=para_caster(dsrc, dmg + sts if SPELLS_ON else []),
                 gdmg=any(sid in DAMAGE and DAMAGE[sid][1] != 'one' for _, sid in (dmg if SPELLS_ON else [])),
-                silenced=silenced(g, k),
+                silenced=silenced(g, k), sts=sts, p_status=p_status, spells=spells,
                 screen=g.u8(GROUPS + k * 8 + 7), mons=standing(g, k))
 
 
@@ -366,7 +371,7 @@ def disable(g, M, members, scale=None):
     T = sum(M[k]['threat'] * len(M[k]['mons']) * scale.get(k, 1.0) for k in M)
     worth = T / len(members)             # a member-round lost: the fight runs that much longer
     for k in M:
-        M[k]['dis_hp'] = M[k]['dis_hp_spell'] = 0.0
+        M[k]['dis_hp'] = M[k]['dis_hp_spell'] = M[k]['dis_hp_cast'] = 0.0
     lost = []
     for slot, raw, mlv in members:
         has_spells = any(raw[0x5c:0x5c + 28])
@@ -404,6 +409,8 @@ def disable(g, M, members, scale=None):
                 m['dis_hp'] += hp_
                 if src[0] == 'spell' and silenceable:
                     m['dis_hp_spell'] += hp_
+                if src[0] == 'spell':
+                    m['dis_hp_cast'] += hp_          # (casterfocus) spells and spell abilities
         out = 1.0
         for kind, q in keep.items():
             h, w = 1 - q, wake(kind, mlv)
@@ -453,40 +460,46 @@ def melee_on(g, k, M):
     the members who can act and would aim at it: k is the lowest-numbered group their
     weapon reaches (battle.choose_group, kill-first aside). Hits land on rand(20) >= T,
     T = 19 + k - AC + AC modifier - to-hit, held to 19, Oslo's bonus off, at least 1."""
+    return sum(member_melee(g, slot, k, M) for slot in range(6))
+
+
+def member_melee(g, slot, k, M=None):
+    """One member's part of melee_on: its expected melee damage a round on group k, 0 when
+    it can't act or its weapon doesn't reach k. With M, only when k is also the lowest group
+    its weapon reaches (melee_on's rule); without, any group it reaches (casterfocus)."""
+    ri = struct.unpack('<b', g.e.read(PARTY + slot, 1))[0]
+    if ri < 0:
+        return 0.0
+    c = g.e.read(COMBAT + slot * 0xe, 0xe)
+    if struct.unpack_from('<H', c, 0xc)[0] >= 8:
+        return 0.0
     d = rec(g, k)
     ac = struct.unpack_from('<b', d, 0x7a)[0]
-    mods = [struct.unpack('<b', g.e.read(COMBAT + k * 0x7e + j * 0xe + 4, 1))[0] for j, _, _ in M[k]['mons']]
-    acmod = mods[0] if mods else 0
+    mons = standing(g, k)
+    acmod = struct.unpack('<b', g.e.read(COMBAT + k * 0x7e + mons[0][0] * 0xe + 4, 1))[0] if mons else 0
     b = g.u8(OSLO)
+    r = g.e.read(ROSTER + ri * ROSTER_LEN, ROSTER_LEN)
+    items = struct.unpack_from('<10H', r, 0x20)
+    main = any(x != 0xffff and x & 0x1000 for x in items)
+    second = any(x != 0xffff and not x & 0x1000 and x & 0x800 for x in items)
+    hit = struct.unpack_from('<h', r, 0x84)[0]
     tot = 0.0
-    for slot in range(6):
-        ri = struct.unpack('<b', g.e.read(PARTY + slot, 1))[0]
-        if ri < 0:
+    for hand, used in ((0, main or not second), (1, second)):
+        if not used:
             continue
-        c = g.e.read(COMBAT + slot * 0xe, 0xe)
-        if struct.unpack_from('<H', c, 0xc)[0] >= 8:
+        reach = weapon_reach(g, r[0x9c + hand], slot)
+        if k > reach or M is not None and k != min(x for x in M if x <= reach):
             continue
-        r = g.e.read(ROSTER + ri * ROSTER_LEN, ROSTER_LEN)
-        items = struct.unpack_from('<10H', r, 0x20)
-        main = any(x != 0xffff and x & 0x1000 for x in items)
-        second = any(x != 0xffff and not x & 0x1000 and x & 0x800 for x in items)
-        hit = struct.unpack_from('<h', r, 0x84)[0]
-        for hand, used in ((0, main or not second), (1, second)):
-            if not used:
-                continue
-            reach = weapon_reach(g, r[0x9c + hand], slot)
-            if not (k <= reach and k == min(x for x in M if x <= reach)):
-                continue
-            T = min(19, 19 + k - ac + acmod - hit) - b
-            if b and T >= 15:
-                T -= 3
-            elif b and 13 <= T <= 14:
-                T = 12
-            T = max(1, T)
-            sw = max(1, min(10, c[8] + r[0x94 + hand]))
-            n, sides = max(1, r[0x96 + hand * 3]), max(1, r[0x97 + hand * 3])
-            bonus = struct.unpack_from('<b', r, 0x98 + hand * 3)[0]
-            tot += sw * max(0, 20 - T) / 20 * (n * (sides + 1) / 2 + bonus)
+        T = min(19, 19 + k - ac + acmod - hit) - b
+        if b and T >= 15:
+            T -= 3
+        elif b and 13 <= T <= 14:
+            T = 12
+        T = max(1, T)
+        sw = max(1, min(10, c[8] + r[0x94 + hand]))
+        n, sides = max(1, r[0x96 + hand * 3]), max(1, r[0x97 + hand * 3])
+        bonus = struct.unpack_from('<b', r, 0x98 + hand * 3)[0]
+        tot += sw * max(0, 20 - T) / 20 * (n * (sides + 1) / 2 + bonus)
     return tot
 
 
@@ -537,6 +550,7 @@ PLAN = dict(round=None, dmg={}, dis={})
 def plan_reset(rnd):
     if PLAN['round'] != rnd:
         PLAN.update(round=rnd, dmg={}, dis={})
+    focus_reset(rnd)
 
 
 def _left(t, j, hp):
@@ -788,3 +802,134 @@ def matters_detail(g, M, party_hp, party_level=None, party=None, lost=None):
                 two_rounds=round(threat * 2, 1), median_level=party_level, why=why,
                 fixed=g.u8(FIXED), lost=lost and dict(share=lost['share'], L=round(lost['L'], 2), members=lost['lost']),
                 at_risk=[(s_, h, round(b, 1)) for s_, h, b in at_risk(g, M, party or [])])
+
+
+# Caster focus (Chris, 2026-10-15, after playing a chapter 9 trip by hand: "The main thing
+# is to take out the casters first. They really hurt with sleep, paralysis, debuffs and
+# group damage. You don't need to lead with the biggest spells. You need to focus your
+# damage on the casters."). A caster group is one whose monsters' spells (and abilities
+# that cast a spell) cost the party CASTER_MIN hit points a round or more each:
+# caster_danger. The party's blows and its damage spells go at the caster groups in
+# caster_order, the most dangerous first, then the quickest to kill (the fewest hit points
+# standing, so a lone caster goes down in one round); battle.choose_group aims the
+# fighters, battle.focus_pick the casters: the cheapest damage or death spell likely to
+# kill the whole group this round (finish_p). What the members commanded before have
+# already put on a group this round (FOCUS) moves the next member on to the next caster
+# group once this one is likely dead (dead_p).
+CASTER_FOCUS = True
+CASTER_MIN = 3.0
+# debuffs a monster casts at the party (dim.json): hit points a cast is reckoned to cost,
+# roughly 3 an AC point over the rest of the fight. Dilto (5, AC +2), Morlis (6, AC +4
+# and fear), Poba (65, +1), Mapoba (70, +2), Nofis (46, magic resistance -5%), Bacortu
+# (14, a barrier the party's spells don't get through), Badumas (74, attack down)
+DEBUFF_HP = {5: 6, 6: 12, 65: 3, 70: 6, 46: 3, 14: 6, 74: 6}
+CLOUDS = {45, 48, 51, 54, 57, 62}      # DAMAGE counts their three rounds; a third lands this round
+FINISH_P = 0.5          # a spell "likely to finish" a group: every monster in it dies this round at this chance
+DONE_P = 0.75           # a group the members before have likely killed this round
+FOCUS = dict(round=None, dmg={}, spell={})      # this round: group -> melee expected, -> spells' kill chances
+
+
+def focus_reset(rnd):
+    if FOCUS['round'] != rnd:
+        FOCUS.update(round=rnd, dmg={}, spell={})
+
+
+def caster_danger(m):
+    """Hit points a round one of group m's monsters costs the party by casting: its damage
+    and death spells (info threat_spell), the members its sleep, paralysis and silence
+    spells and spell abilities take out of the fight (disable() dis_hp_cast; 0 until
+    disable has run on M), and its debuffs (DEBUFF_HP, at its AI row's status-column
+    chance)."""
+    sts = m.get('sts', [])
+    tot = sum(pr for pr, _ in sts) or 1
+    deb = m.get('p_status', 0.0) * sum(pr / tot * DEBUFF_HP[sid] for pr, sid in sts if sid in DEBUFF_HP)
+    return m.get('threat_spell', 0.0) + m.get('dis_hp_cast', 0.0) + deb
+
+
+def group_hp(m):
+    return sum(max(0, hp) for _, hp, _ in m['mons'])
+
+
+def caster_order(M, kill_first=None, skip_done=False):
+    """The caster groups present, first to kill first: kill-first monsters (battle.KILL_FIRST
+    by id), then by danger (caster_danger of the monsters that can cast now: asleep,
+    paralyzed or silenced ones count 0.3, they come back), in bands of a factor of two so
+    near-equal casters tie, then the fewest hit points standing. skip_done: leave out
+    groups the members commanded before have likely killed this round (dead_p)."""
+    out = []
+    for k, m in M.items():
+        if not m['mons']:
+            continue
+        kf = kill_first.get(m['id'], 9) if kill_first else 9
+        d = caster_danger(m)
+        if kf == 9 and d < CASTER_MIN:
+            continue
+        if skip_done and dead_p(k, m) >= DONE_P:
+            continue
+        act = sum(1.0 if st < 8 and j not in m.get('silenced', ()) else 0.3 for j, _, st in m['mons'])
+        de = d * act / len(m['mons'])
+        band = int(math.log2(de)) if de >= 1 else 0
+        out.append(((kf, -band, group_hp(m), k), k))
+    return [k for _, k in sorted(out)]
+
+
+def dead_p(k, m):
+    """The chance group k is dead by the end of this round from what the members commanded
+    before put on it (FOCUS): melee counted as half a kill at the group's hit points and a
+    sure one at 1.5 times them, each spell at its finish_p."""
+    hp = group_hp(m)
+    if hp <= 0:
+        return 1.0
+    x = FOCUS['dmg'].get(k, 0.0)
+    q = 1 - min(1.0, max(0.0, x / hp - 0.5))
+    for p in FOCUS['spell'].get(k, []):
+        q *= 1 - p
+    return 1 - q
+
+
+def death_p(m, sid, clevel):
+    """The chance a death spell sid kills one of group m's monsters (value()'s rules)."""
+    kind, base = DEATH[sid]
+    if sid == 15:
+        return lands(m, sid) if m['flags'] & UNDEAD else 0.0
+    if sid == 38:
+        return lands(m, sid) * (1 - save_adj(base, m['level'], clevel)) if m['flags'] & SUMMONED else 0.0
+    if sid == 59:
+        return 0.0 if m['flags'] & UNDEAD or m['level'] > 8 else 1.0
+    if m['flags'] & DEATH_IMMUNE:
+        return 0.0
+    return lands(m, sid) * (1 - save_adj(base, m['level'], clevel))
+
+
+def finish_p(sid, m, clevel):
+    """The chance sid cast at group m (or reaching it) kills every monster standing in it
+    this round: for damage, each monster's chance it lands times value()'s kill rule (a
+    kill at the monster's HP, half one at 70% of it; a cloud's first round only); a
+    one-target spell only finishes a group of one."""
+    mons = m['mons']
+    if not mons:
+        return 0.0
+    if sid in DAMAGE:
+        mean, kind, el = DAMAGE[sid]
+        if kind == 'one' and len(mons) > 1:
+            return 0.0
+        f = 0.5 if m['resist'] & el and el else 2.0 if m['weak'] & el and el else 1.0
+        d = mean * f / (3 if sid in CLOUDS else 1)
+        p = 1.0
+        for _, hp, _ in mons:
+            p *= lands(m, sid) * (1.0 if d >= hp else 0.5 if d >= hp * 0.7 else 0.0)
+        return p
+    if sid in DEATH:
+        if DEATH[sid][0] == 'one' and len(mons) > 1:
+            return 0.0
+        return death_p(m, sid, clevel) ** len(mons)
+    return 0.0
+
+
+def focus_commit(g, sid, k, M, clevel):
+    """Put a cast of sid at group k on this round's FOCUS: its finish_p on each group it
+    reaches."""
+    if sid in DAMAGE or sid in DEATH:
+        kind = DAMAGE[sid][1] if sid in DAMAGE else DEATH[sid][0]
+        for t in targets(g, k, kind, M):
+            FOCUS['spell'].setdefault(t, []).append(finish_p(sid, M[t], clevel))
