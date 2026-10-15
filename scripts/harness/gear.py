@@ -887,6 +887,12 @@ def room_move(g):
         for k, w in pack(g, ri):
             if w & (EQUIPPED | CURSED) or not w & IDENT or w & 0x1ff == LATUMOFIS or cure_item(g, w):
                 continue
+            if w & 0x1ff >= IMPORTANT_ID:
+                # quest items stay with their holder: the emptiest pack can be a recruit's
+                # who leaves the party later (n1v3u, 2026-10-15: three gold pieces went to
+                # Jo and Kai on a gold trip and left with them; chapter 14's crystal
+                # failed six times on "gold piece missing")
+                continue
             it = item(g, w & 0x1ff)
             cands.append((usable(g, ri, it) and it['cat'] <= 6, not usable(g, to, it), ri, k))
     if not cands:
@@ -1251,6 +1257,12 @@ def backup_plan(g, members=None):
     for b in [x for x in broom if x is not None]:
         for _, w in pack(g, b):
             if w & EQUIPPED:
+                continue
+            if w & 0x1ff >= IMPORTANT_ID:
+                # a quest item a standby carries comes back first (n1v3u: the gold set)
+                rj = max(alive, key=lambda x: free[x])
+                if free[rj] > 0:
+                    move(b, rj, 'take', w, 'quest', 1e6)
                 continue
             gain, rj, why, s = mule_use(g, w, alive, taken)
             if rj is None or free[rj] <= 0:
