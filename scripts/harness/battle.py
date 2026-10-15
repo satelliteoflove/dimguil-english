@@ -18,7 +18,7 @@ RAM (BATTLE resident; docs/re/D-battle.md, and probe.py on the harness disc 2026
   0x8008c480 battle_groups: 8 bytes per group, +4 count, +5 standing
   0x8007e812 the party's roster indices
 """
-import random, struct
+import math, random, struct
 from harness import ui, pick, tactics
 from harness.game import Stuck
 
@@ -361,6 +361,132 @@ def long_fight(g, M, party_hp, lost=None):
     return FIGHT_INFO[key]
 
 
+PARA_RUSH = 0               # (agent 16) 1: a paralysis rush (para_rush) is a likely loss and runs; 2: it's
+                            # fought out. Off: on f07 (the 17 Were Centipedes, 30 battle-RNG seeds) running
+                            # wiped 9, fighting as before 6, fighting it out 5 of 11; running left far fewer
+                            # members down (15 against 65 in the fights survived). Main's call.
+MAPORFIC_ON = 0x8007e82a    # the party's Maporfic: monsters' to-hit 2 worse (D-battle.md "Melee: monsters attack")
+
+
+def _poisson_ge(mu, k):
+    """P(Poisson(mu) >= k)."""
+    if k <= 0:
+        return 1.0
+    t, c = math.exp(-mu), 0.0
+    for i in range(k):
+        c += t
+        t *= mu / (i + 1)
+    return max(0.0, 1.0 - c)
+
+
+def para_rush(g, M):
+    """The monsters' next round counted in paralysis (agent 16, from the Were Centipede
+    packs: a 17-pack paralyzed a full-HP L17-20 party in round 1 of n1v0q/r, and a party
+    with nobody below status 0x20 is wiped, party_wiped 0x800c59a0; their damage never came
+    into it). For each member who can act: the expected paralyzing events on it this
+    round (lam), from
+      - melee: monsters that can act x the fight share x the attack's use (69/31%, attack
+        3 always) x swings x the chance a swing hits this member (monster_melee 0x800aaa04:
+        T = 22 + Maporfic 2 - AC + AC modifier - (level / 2 + 1), 1..19, (20 - T) x 5%) x
+        the attack's effect chance x (99 - the member's resistance) / 100, spread over the
+        members the attack reaches (front row without the reach bit; groups 3-4 of a random
+        fight don't melee);
+      - Lorks and other paralysis spells (tactics.DIS_SPELL 'para'): casters that can cast x
+        the status share x tactics.status_lands for this member, half when it picks one of
+        two rows; one cast takes the whole row, so the events compound per member;
+    and the chance it goes down to the damage spells (tactics.info dcast: Dalosto, mean
+    50, one target at random): casters x cast share, its hits Poisson, down at
+    ceil(hp / mean) of them, past magic resistance. A rush: the expected events on the
+    members left standing reach the members standing. Returns the numbers, or None when
+    there's nothing paralyzing."""
+    ids = party_ids(g)
+    tgt, act = [], []                 # (slot, raw, level, hp, AC + modifier)
+    for slot, ri in enumerate(ids):
+        if ri is None:
+            continue
+        hp, st = member_state(g, slot)
+        if hp <= 0 or st >= 0x20:
+            continue
+        c = g.char(ri)
+        ac = struct.unpack('b', c['raw'][0x86:0x87])[0] + struct.unpack('b', g.e.read(tactics.COMBAT + slot * 0xe + 4, 1))[0]
+        x = (slot, c['raw'], c['level'], hp, ac)
+        tgt.append(x)
+        if st < 8:
+            act.append(x)
+    if not act or not M:
+        return None
+    front = [x for x in tgt if x[0] < 3]
+    rows2 = bool(front) and len(front) < len(tgt)
+    tbl = g.e.read(tactics.EFFECT_RES, 8)
+    screen = g.u8(tactics.GROUPS + 7)
+    mapo = 2 if g.u8(MAPORFIC_ON) else 0
+    lam = {x[0]: 0.0 for x in act}
+    hits = {x[0]: 0.0 for x in act}   # damage-spell hits expected
+    dmg = {x[0]: 0.0 for x in act}    # and their damage
+    para = False
+    for k, m in M.items():
+        r = tactics.rec(g, k)
+        mons = [j for j, hp, st in m['mons'] if st < 8]
+        n_all = len(mons)
+        n_spell = len([j for j in mons if j not in m['silenced']])
+        atk = [r[o:o + 10] for o in (0xac, 0xb6, 0xc0)]
+        nouns = [struct.unpack_from('<H', a, 0)[0] for a in atk]
+        ability = [0x100 <= n < 1621 for n in nouns]
+        reach_any = bool((atk[0][7] | atk[1][7]) & tactics.BACK_REACH)
+        if not (k > 2 and not g.u8(tactics.FIXED) and not reach_any):
+            use1 = ability[1] or (nouns[1] < 0xff or nouns[1] >= 0x8000) and atk[1][3] > 0
+            for i, u in ((0, 0.69 if use1 else 1.0), (1, 0.31 if use1 else 0.0), (2, 1.0 if atk[2][3] else 0.0)):
+                a = atk[i]
+                if not u or ability[i] or not a[3] or not a[8]:
+                    continue
+                reach = tgt if a[7] & tactics.BACK_REACH else front
+                if not reach:
+                    continue
+                for bit, (kind, idx) in tactics.DIS_HIT.items():
+                    if kind != 'para' or not a[7] & bit:
+                        continue
+                    para = True
+                    for slot, raw, lv, hp, ac in act:
+                        if not any(x[0] == slot for x in reach):
+                            continue
+                        T = min(19, max(1, 22 + mapo - ac - (m['level'] // 2 + 1) + (2 if i == 2 else 0)))
+                        lam[slot] += (n_all * m['fight_p'] * u * min(11, a[3]) * (20 - T) / 20 * a[8] / 100
+                                      * max(0, 99 - raw[0xb0 + idx]) / 100 / len(reach))
+        for rate, src, reach in m['dsrc']:
+            if src[0] != 'spell' or tactics.DIS_SPELL[src[1]][0] != 'para':
+                continue
+            para = True
+            sid, silenceable = src[1], src[2]
+            n = n_spell if silenceable else n_all
+            share = 0.5 if tactics.DIS_SPELL[sid][4] == 'row' and rows2 else 1.0
+            for slot, raw, lv, hp, ac in act:
+                lam[slot] += n * rate * share * tactics.status_lands(raw, lv, sid, m['level'], tbl, screen)
+        for rate, sid in m.get('dcast', []):
+            mean, kind, _ = tactics.DAMAGE[sid]
+            casts = n_spell * rate
+            for slot, raw, lv, hp, ac in act:
+                land = max(0.0, 1 - min(255, raw[0x87 + tactics.school(sid)] + screen + 1) / 100)
+                f = 1.0 / len(tgt) if kind == 'one' else (0.5 if rows2 else 1.0) if kind == 'group' else 1.0
+                hits[slot] += casts * f * land
+                dmg[slot] += casts * f * land * mean
+    if not para:
+        return None
+    down = {}
+    for slot, raw, lv, hp, ac in act:
+        h = hits[slot]
+        down[slot] = _poisson_ge(h, int(-(-hp * h // dmg[slot]))) if h and dmg[slot] else 0.0
+    standing = sum(1 - down[s] for s in lam)
+    events = sum(lam[s] * (1 - down[s]) for s in lam)
+    # paralysis doesn't wear off (party_upkeep 0x800a73f4), so it compounds: the monsters'
+    # next two rounds, less a cure from each Dialko or Madi caster still acting in between
+    cures = sum(math.exp(-lam[s]) * (1 - down[s]) for s, raw, lv, hp, ac in act
+                if any(c[0] in (tactics.DIALKO, tactics.MADI) for c in castable(g, ids[s])))
+    events2 = 2 * events - cures
+    return dict(events=round(events, 2), events2=round(events2, 2), cures=round(cures, 2),
+                standing=round(standing, 2), rush=events2 >= standing,
+                lam={s: round(v, 2) for s, v in lam.items()}, down={s: round(v, 2) for s, v in down.items() if v >= 0.01})
+
+
 def likely_loss(g, M, party_hp):
     """A fight the party expects to lose, judged at round 1 before anyone acts: the rated
     monster damage a round (tactics.info threat, as matters() sums it) is at least the
@@ -378,6 +504,15 @@ def likely_loss(g, M, party_hp):
     # is two rounds of it; the old rating (every breather breathing every round) one
     rounds = 2 if tactics.SPELLS_ON else 1
     T = sum(M[k]['threat'] * len(M[k]['mons']) for k in M)
+    if PARA_RUSH and tactics.SPELLS_ON:
+        pr = para_rush(g, M)
+        if pr and pr['rush']:
+            if PARA_RUSH == 2:
+                # test mode: a rush is fought out, never run from (a failed run hands the
+                # monsters a free round of Lorks)
+                FIGHT_INFO.setdefault('para_rush', []).append((ROUND, pr['events2'], pr['standing']))
+                return None
+            return dict(threat=round(T), party_hp=party_hp, threat_left=round(T), para=pr)
     mem = members(g)
     M = {k: dict(v) for k, v in M.items()}          # tactics.disable writes dis_hp
     lost = tactics.disable(g, M, mem)

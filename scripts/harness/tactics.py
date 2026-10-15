@@ -210,8 +210,11 @@ def info(g, k):
         reach_round = sum(reach) / len(reach) * 0.5 if reach else 0
         focus = (p[1] * melee_round, p[1] * reach_round)
         dsrc = disable_sources(g, k, r, p_fight, p[5] if sts else 0.0, sts)
+        # (agent 16) each damage spell's casts a round per monster, for battle.para_rush
+        dcast = [(p_dmg * pr / tot, sid) for pr, sid in dmg if sid in DAMAGE]
+        fight_p = p_fight
     else:
-        dsrc = []
+        dsrc, dcast, fight_p = [], [], 1.0
         threat_spell = 8 * lv if caster else 0
         threat = max(melee_round, 8 * lv if caster else 0)
         if r[0xc9]:
@@ -225,7 +228,7 @@ def info(g, k):
                 flags=struct.unpack_from('<I', r, 0xa8)[0],
                 resist=struct.unpack_from('<H', r, 0xcc)[0],
                 weak=struct.unpack_from('<H', r, 0xce)[0], caster=caster, threat=threat, threat_spell=threat_spell,
-                blow=(blow_f, blow_b), death=death, dsrc=dsrc, dis_hp=0.0, dis_hp_spell=0.0,
+                blow=(blow_f, blow_b), death=death, dsrc=dsrc, dcast=dcast, fight_p=fight_p, dis_hp=0.0, dis_hp_spell=0.0,
                 para=para_caster(dsrc, dmg + sts if SPELLS_ON else []),
                 gdmg=any(sid in DAMAGE and DAMAGE[sid][1] != 'one' for _, sid in (dmg if SPELLS_ON else [])),
                 silenced=silenced(g, k),
@@ -331,6 +334,20 @@ def silenced(g, k):
     return {j for j in range(9) if g.u8(COMBAT + k * 0x7e + j * 0xe + 2)}
 
 
+def status_lands(raw, mlv, sid, clevel, tbl, screen):
+    """The chance a monster's status spell sid (DIS_SPELL) cast at level clevel takes a
+    member (roster raw, level mlv): past magic resistance and the magic screen, then the save
+    (status_spell 0x800b173c, see above). tbl: EFFECT_RES read; screen: battle_groups +7."""
+    kind, ki, base, rbit, rows = DIS_SPELL[sid]
+    mr = raw[0x87 + school(sid)] + screen
+    land = max(0.0, 1 - min(255, mr + 1) / 100)
+    save = 85 if struct.unpack_from('<H', raw, 0xae)[0] & rbit else base
+    if ki < 3:
+        save += raw[0xb0 + tbl[ki]]
+    save += 4 * max(0, mlv - clevel)
+    return land * (1 - min(100, max(5, save)) / 100)
+
+
 def disable(g, M, members, scale=None):
     """The share of the party's actions monsters present take away a round (fix 1), over
     the next two rounds from now, and each monster's part of it in hit points. members:
@@ -363,13 +380,7 @@ def disable(g, M, members, scale=None):
                 if src[0] == 'spell':
                     _, sid, silenceable = src
                     kind, ki, base, rbit, rows = DIS_SPELL[sid]
-                    mr = raw[0x87 + school(sid)] + screen
-                    land = max(0.0, 1 - min(255, mr + 1) / 100)
-                    save = 85 if struct.unpack_from('<H', raw, 0xae)[0] & rbit else base
-                    if ki < 3:
-                        save += raw[0xb0 + tbl[ki]]
-                    save += 4 * max(0, mlv - m['level'])
-                    p = land * (1 - min(100, max(5, save)) / 100)
+                    p = status_lands(raw, mlv, sid, m['level'], tbl, screen)
                     share = 1.0 if rows == 'all' or not (front and back) else 0.5
                     n = n_spell if silenceable else n_all
                 else:
