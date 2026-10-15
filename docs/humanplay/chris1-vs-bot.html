@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>One training trip: Chris and the bot</title>
+<style>
+  :root { --ink:#1d2330; --muted:#5d6678; --rule:#d5d9e2; --paper:#f7f8fb; --chris:#2f6f4f; --bot:#8a4b16; --mark:#fff1c7; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink);
+         font: 17px/1.6 "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif; }
+  main { max-width: 860px; margin: 0 auto; padding: 40px 28px 80px; }
+  h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 6px; }
+  .sub { color: var(--muted); margin: 0 0 32px; }
+  h2 { font-size: 1.3rem; margin: 44px 0 10px; padding-top: 14px; border-top: 1px solid var(--rule); }
+  p, li { max-width: 72ch; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0 8px; font-size: .95rem;
+          font-family: system-ui, sans-serif; }
+  th, td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { font-weight: 600; color: var(--muted); }
+  td.c { color: var(--chris); font-weight: 600; }
+  td.b { color: var(--bot); font-weight: 600; }
+  th.c { color: var(--chris); } th.b { color: var(--bot); }
+  .num { font-variant-numeric: tabular-nums; }
+  .route { font-family: system-ui, sans-serif; font-size: .92rem; line-height: 2; }
+  .route span { display: inline-block; padding: 0 7px; border-radius: 3px; margin: 2px 1px;
+                background: #e6e9f0; }
+  .route span.hot { background: #f3c9a8; }
+  .who { font-weight: 600; margin-right: 8px; }
+  .callout { background: var(--mark); padding: 12px 16px; border-left: 4px solid #e0b43c; margin: 16px 0; }
+  .q { color: var(--muted); font-style: italic; }
+  code { font-family: ui-monospace, monospace; font-size: .88em; }
+</style>
+</head>
+<body>
+<main>
+<h1>One training trip: Chris and the bot</h1>
+<p class="sub">Chapter 9, the n1v0 chain's party in town (state <code>goal_06_train_04</code>), one trip to
+Area B and back. Chris played it on 2026-10-15 with the read-only watcher running. The bot's trip
+is from the same state on the current harness (battle seed 101, its clean run). Logs:
+<code>rips/humanplay/chris1/log.jsonl</code> and <code>rips/humanplay/bot/watch/log.jsonl</code>.</p>
+
+<h2>The trip in numbers</h2>
+<table class="num">
+<tr><th></th><th class="c">Chris</th><th class="b">Bot (seed 101)</th></tr>
+<tr><td>Game time out of town</td><td class="c">about 77 minutes</td><td class="b">about 18 minutes</td></tr>
+<tr><td>Fights</td><td class="c">17: 13 won, 4 over before a round</td><td class="b">17: 10 won, 7 ran</td></tr>
+<tr><td>Spells cast in fights</td><td class="c">31</td><td class="b">42</td></tr>
+<tr><td>Items used in fights</td><td class="c">3 (Latumofis, Dios ×2)</td><td class="b">3 (Mahalito scrolls)</td></tr>
+<tr><td>Experience each</td><td class="c">53,915</td><td class="b">33,702</td></tr>
+<tr><td>Gold each</td><td class="c">2,252</td><td class="b">1,594</td></tr>
+<tr><td>Deaths</td><td class="c">0</td><td class="b">0 (but 2 of 4 seeds wiped, 1 lost two members)</td></tr>
+<tr><td>Chests</td><td class="c">2: one disarmed, one set off (Magic Drain)</td><td class="b">2: both disarmed</td></tr>
+<tr><td>Floors of Area B</td><td class="c">B5, B4</td><td class="b">B5, B4, B3, B2, B1, twice over</td></tr>
+</table>
+<p>You earned 60% more experience in one trip and lost nobody. The bot is about four times
+quicker per trip in game time, so per minute it earns more. That part isn't a fair
+measure of either, since you were also looking around, reading and talking to me.</p>
+
+<h2>The biggest difference: where the party went</h2>
+<p>Both trips were meant to train on Area B's B4 and B5. You stayed there, partly because the
+live map only guided you as far as B4. The bot, sent to the same two floors, didn't stay.</p>
+<div class="route">
+<p><span class="who" style="color:var(--chris)">Chris</span>
+<span>Area X</span> <span>B5</span> <span>B4</span> <span>B5</span> <span>Area X</span></p>
+<p><span class="who" style="color:var(--bot)">Bot</span>
+<span>Area X</span> <span>B5</span> <span>B4</span> <span class="hot">B3</span> <span class="hot">B2</span>
+<span class="hot">B1</span> <span class="hot">B2</span> <span class="hot">B3</span> <span>B4</span>
+<span class="hot">B3</span> <span class="hot">B2</span> <span class="hot">B1</span> <span class="hot">B2</span>
+<span class="hot">B3</span> <span>B4</span> <span>B5</span> <span>Area X</span></p>
+</div>
+<p>The bot's "B4/B5 training" walked up through B3, B2 and B1 and back down, twice. B3 is
+where the Were Centipede packs live, and both wipes from this same state (seeds 102 and
+104) happened on B3. You didn't go there this time, so there's no comparison of how a human
+handles those packs yet; the next play test goes down to B1 for that. Either way, the bot was
+never meant to be on B3-B1 on this trip, so a good part of the chapter 9-10 wipe problem may be
+the route, not the fighting.</p>
+<div class="callout">Next step on the bot side: find out why its training walk leaves the training
+floors (my guess is that it heads for squares on B4 it can only reach through B3-B1, such as
+unspent fight squares), and keep it on the floors it was sent to.</div>
+
+<h2>How you fought</h2>
+<ul>
+<li><strong>Caster parties: you disabled them first.</strong> You opened against the Ogre and
+Goblin parties with Katino (and once Cortu and Maporfic). Both fights were over in two rounds
+with scratches. The bot ran from those same parties five times (the Ogres, Kobolds, Goblins and
+Gremlins), and when it did fight them it opened with its biggest spells: Tiltowait on a Kobold
+party, or Cortu, Badi, Tzalik and Ladalto two rounds in a row.</li>
+<li><strong>Easy fights: weapons only.</strong> The Shrine's set fights (Kobolds, Orcs) and a
+lone Cool you finished with melee, no spells. The bot never met those.</li>
+<li><strong>Maporfic in a fight.</strong> You cast it in the opening round against the Ogres.
+The bot casts it once at the start of a trip, not in fights.</li>
+<li><strong>The long fight.</strong> Were Amoeba and 14 Cuchumaquics, with the Banshees they called:
+six rounds, 11 spells (mostly Mahalito, plus Lahalito, Ladalto and Bamordi) and a Latumofis
+potion. It's the one fight that looked like the bot's grind.</li>
+<li><strong>Yuan-Ti.</strong> Their tridents reached Bea in the back row five times (19, 17, 9, 5
+and 4 damage), taking her to 10 of 43. Earth's Dialma and two of Bea's Dios potions kept her up,
+and Earth healed her in camp afterwards (Dialma ×2). Worth knowing that this fight's weapons hit
+the back row.</li>
+<li><strong>Four fights ended before a round</strong> (rabbits and monkeys, a Were Jaguar, a lone
+Magical Rabbit pack, a Cool with Alligators). <span class="q">The log doesn't say how. Did you run
+from them, or did they leave?</span></li>
+</ul>
+
+<h2>Healing and points</h2>
+<ul>
+<li>You used the healing switch on B4 (E5 N18, facing west), which brought everyone to full HP
+for free. The bot doesn't know it exists; an agent is now reading the code for it and will teach
+the bot to use these spots.</li>
+<li>You healed in camp once, after the Yuan-Ti, and used potions in fights rather than spells.
+The bot spends Earth's points in camp more often.</li>
+<li>You came home with about three quarters of the mages' low-level points used. You didn't end
+the trip on HP; points and the time spent seem to have decided it.</li>
+</ul>
+
+<h2>Chests</h2>
+<ul>
+<li>The first (Ghost Swarm): Mercury inspected, Cy cast Calfo, Mercury disarmed it.</li>
+<li>The second: Mercury inspected three times and read Spell Blaster each time. The disarm set
+off a Magic Drain, which hit your points. <span class="q">Did you pick Spell Blaster at "Choose the
+trap"? If so, Mercury misread it three times running, which the bot's chest rules don't plan
+for.</span> (The watcher logged this chest as "left"; that's a watcher bug, and I'll fix it.)</li>
+<li>The bot's two chests went cleanly, one of them with Calfo after a Spell Blaster reading
+that Calfo corrected to Rainbow Flash.</li>
+</ul>
+
+<h2>Town</h2>
+<ul>
+<li><strong>Before setting out</strong>, you made Ace (the standby) the mule: the Rings of Jewels,
+the Jade Mask, the Ankh of Senility, the Partisan and the Battle Drum went to him, and three
+Rings of Jewels were sold (745 gold). The bot hands gear around inside the party but never to
+the standby.</li>
+<li>Cy tried to identify the Battle Drum at the Edge of Town three times and was frightened each
+time; the castle cured it. (Identify there can't succeed above the Bishop's level; the Drum's is 20.)</li>
+<li><strong>After the trip</strong>, a room at the inn (160 gold) restored everyone's points, and Bea's
+better room her HP.</li>
+<li>Cy identified six finds at the Edge of Town. Two were cursed (the Cursed Plate and Cursed Robe)
+and ended up stuck on Cy: 750 + 750 gold to deal with the plate, 5,000 for the robe. The sales
+(Night Cloak, Round Shield, Bo Shuriken) brought in 2,250. The curses cost more than the trip's
+gold for one member.</li>
+</ul>
+
+<h2>Candidates for bot rules</h2>
+<p>For us to talk through, one at a time. None of these is built.</p>
+<ol>
+<li>Keep training on the floors it was sent to.</li>
+<li>Against caster parties, open with Katino (or Montino on the casters) instead of running or
+nuking.</li>
+<li>Melee only against fights the front row can clearly handle.</li>
+<li>Use the healing spots (in progress).</li>
+<li>Give spare valuables to a standby as the mule, the way you did with Ace.</li>
+<li>Be warier of a thief's chest readings, and of identifying unknown armor and robes that may
+be cursed.</li>
+</ol>
+</main>
+</body>
+</html>
