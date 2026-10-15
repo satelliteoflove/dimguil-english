@@ -347,7 +347,10 @@ using each, are in `rips/re/work/A/encounters.txt`.
 The group file is then loaded from table 1, index id + 0x2c.
 
 Group ids are monster group records (D's subject). Type-2 groups (340 and up) are
-probably the human enemy parties **[inf]**.
+probably the human enemy parties **[inf]**. In the harness (2026-10-15, chapter 9 and
+10 trips on Area B) every human party met there came with `encounter_id` 0xfffe, on the
+fixed 3x2 grid (0x80079bde = 1), one member a group (monster ids 351-463), and could be
+fled: `party_flee_roll` only needs 0xffff or 0xfffe. **[emu]**
 
 <a id="npc-parties"></a>
 ## 8. NPC parties in the maze

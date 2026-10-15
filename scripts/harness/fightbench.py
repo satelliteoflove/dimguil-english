@@ -5,6 +5,7 @@
     python3 scripts/harness/fightbench.py probe STATE...
     python3 scripts/harness/fightbench.py run OUT.jsonl SEEDS STATE...   (SEEDS: 1-20)
     python3 scripts/harness/fightbench.py prefight STATE OUTREL SEED CHAPTER [NAME]
+    python3 scripts/harness/fightbench.py table DIR [by-state]
 
 STATE is a path under rips/harness without .state (or a full .state path), saved at a
 fight's start (trip_log.py's PREFIGHT=, or tools/prefight.py here). The battle's rolls follow
@@ -201,6 +202,37 @@ def prefight(g, state, outrel, seed, chapter, name):
     print(res, n[0], 'fights')
 
 
+def table(d, by_state=False):
+    """Sum a bench directory's VARIANT_rN_STATE.jsonl files: per variant and run setting
+    (and per state with by_state), fights, won, wiped, mean rounds, points spent, HP lost,
+    members down and dead at the end, fights run from, likely losses, mean round the last
+    caster group fell."""
+    import glob, collections
+    rows = collections.defaultdict(list)
+    for fn in sorted(glob.glob(os.path.join(d, '*_r[01]_*.jsonl'))):
+        b = os.path.basename(fn)[:-6]
+        v, r, st = b.split('_', 2)
+        for l in open(fn):
+            x = json.loads(l)
+            if 'skip' in x or 'error' in x:
+                rows[(v, r, st if by_state else '')].append(None)
+                continue
+            rows[(v, r, st if by_state else '')].append(x)
+    print('%-8s %-3s %-34s %4s %4s %4s %6s %6s %7s %5s %5s %4s %4s %6s %5s' % (
+        'variant', 'run', 'state', 'n', 'won', 'wipe', 'rounds', 'spent', 'hp_lost', 'down', 'dead', 'ran', 'll',
+        'c_down', 'err'))
+    for key in sorted(rows, key=lambda k: (k[1], k[2], ['base', 'story', 'new'].index(k[0]) if k[0] in ('base', 'story', 'new') else 9, k[0])):
+        xs = [x for x in rows[key] if x]
+        err = len(rows[key]) - len(xs)
+        n = len(xs) or 1
+        cd = [x['caster_down'] for x in xs if x.get('caster_down') is not None]
+        print('%-8s %-3s %-34s %4d %4d %4d %6.2f %6.2f %7.1f %5d %5d %4d %4d %6s %5d' % (
+            key[0], key[1], key[2][-34:], len(xs), sum(x['won'] for x in xs), sum(x['wiped'] for x in xs),
+            sum(x['rounds'] for x in xs) / n, sum(x['spent'] for x in xs) / n, sum(x['hp_lost'] for x in xs) / n,
+            sum(x['down'] for x in xs), sum(x['dead'] for x in xs), sum(1 for x in xs if x['ran']),
+            sum(1 for x in xs if x['ll']), '%.2f' % (sum(cd) / len(cd)) if cd else '-', err))
+
+
 def seeds(s):
     a, _, b = s.partition('-')
     return list(range(int(a), int(b or a) + 1))
@@ -208,6 +240,9 @@ def seeds(s):
 
 if __name__ == '__main__':
     apply_set()
+    if sys.argv[1] == 'table':
+        table(sys.argv[2], by_state=len(sys.argv) > 3)
+        sys.exit()
     g = Game(capture=True)
     if sys.argv[1] == 'probe':
         for st in sys.argv[2:]:
