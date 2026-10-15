@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Dimguil live map</title>
+<style>
+  :root {
+    --ground: #10182a; --floor: #1a2740; --grid: #24334f; --wall: #dfe7f3;
+    --door: #8fb3e8; --hidden: #c77dff; --path: #f2b134; --you: #6fe3a0; --ink: #e8edf5;
+    --muted: #8a9ab5;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--ground); color: var(--ink);
+         font: 16px/1.5 "Iosevka Aile", "IBM Plex Sans", system-ui, sans-serif; }
+  main { display: flex; flex-wrap: wrap; gap: 28px; padding: 20px 24px; align-items: flex-start; }
+  svg { flex: 0 0 auto; width: min(92vh, 720px); height: auto; }
+  aside { flex: 1 1 300px; max-width: 460px; }
+  h1 { font-size: 1.6rem; margin: 0 0 2px; font-weight: 600; }
+  .where { color: var(--muted); margin: 0 0 18px; }
+  .banner { background: #3a2a10; color: var(--path); padding: 6px 10px; border-radius: 4px;
+            margin: 0 0 14px; display: none; }
+  ol { padding-left: 1.4em; margin: 0 0 20px; }
+  ol li { margin: 0 0 8px; }
+  ol li:first-child { color: var(--path); font-weight: 600; }
+  label { display: block; color: var(--muted); font-size: .9rem; margin-bottom: 4px; }
+  select { font: inherit; background: var(--floor); color: var(--ink); border: 1px solid var(--grid);
+           padding: 4px 6px; border-radius: 4px; width: 100%; }
+  select:focus-visible { outline: 2px solid var(--path); }
+  .hint { color: var(--muted); font-size: .85rem; margin-top: 10px; }
+  .key span { display: inline-block; margin-right: 14px; }
+  .sw { display: inline-block; width: 12px; height: 12px; margin-right: 5px; vertical-align: -1px;
+        border-radius: 2px; }
+  .cell { cursor: pointer; }
+  .cell:hover { fill: #22355a; }
+</style>
+</head>
+<body>
+<main>
+  <svg id="map" viewBox="-26 -26 700 700" role="img" aria-label="Map of the current floor"></svg>
+  <aside>
+    <h1 id="floor">Waiting for the game</h1>
+    <p class="where" id="where"></p>
+    <p class="banner" id="banner"></p>
+    <ol id="steps"></ol>
+    <label for="dest">Heading for</label>
+    <select id="dest"></select>
+    <p class="hint">Or click a square on the map to head there.</p>
+    <p class="hint key">
+      <span><i class="sw" style="background:var(--you)"></i>you</span>
+      <span><i class="sw" style="background:var(--path)"></i>the way</span>
+      <span><i class="sw" style="background:var(--door)"></i>door</span>
+      <span><i class="sw" style="background:var(--hidden)"></i>hidden door</span>
+      <span>&#9650; stairs, chute or lift</span>
+      <span>&#9670; Investigate here</span>
+    </p>
+  </aside>
+</main>
+<script>
+const C = 28, NS = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById('map');
+let last = null, cur = null;
+
+function el(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  (parent || svg).appendChild(e);
+  return e;
+}
+
+// rock: off the floor's grid, or walled on all four sides
+const solid = (s, x, y) => !s.present[y][x] || s.walls[y][x].every(v => v === 1);
+
+function draw(s) {
+  svg.textContent = '';
+  for (let i = 0; i < 24; i++) {
+    el('text', {x: i * C + C / 2, y: -9, 'text-anchor': 'middle', fill: '#8a9ab5', 'font-size': 10}).textContent = i;
+    el('text', {x: -8, y: i * C + C / 2 + 4, 'text-anchor': 'end', fill: '#8a9ab5', 'font-size': 10}).textContent = 23 - i;
+  }
+  el('text', {x: -20, y: -9, fill: '#8a9ab5', 'font-size': 10}).textContent = 'N\\E';
+  for (let y = 0; y < 24; y++) for (let x = 0; x < 24; x++) {
+    const r = el('rect', {x: x * C, y: y * C, width: C, height: C,
+                          fill: solid(s, x, y) ? 'var(--ground)' : 'var(--floor)',
+                          stroke: 'var(--grid)', 'stroke-width': 0.5, class: 'cell'});
+    r.addEventListener('click', () => setDest([s.area, x, y]));
+    const t = el('title', {}, r); t.textContent = 'E' + x + ' N' + (23 - y);
+  }
+  // the way
+  if (s.path && s.path.length > 1) {
+    el('polyline', {points: s.path.map(([x, y]) => (x * C + C / 2) + ',' + (y * C + C / 2)).join(' '),
+                    fill: 'none', stroke: 'var(--path)', 'stroke-width': 4, 'stroke-linecap': 'round',
+                    'stroke-linejoin': 'round', opacity: 0.9});
+  }
+  if (s.goal) el('circle', {cx: s.goal[0] * C + C / 2, cy: s.goal[1] * C + C / 2, r: C / 2 - 3,
+                            fill: 'none', stroke: 'var(--path)', 'stroke-width': 3});
+  if (s.dest && s.dest[0] === s.area)
+    el('rect', {x: s.dest[1] * C + 3, y: s.dest[2] * C + 3, width: C - 6, height: C - 6, fill: 'none',
+                stroke: 'var(--path)', 'stroke-width': 2, 'stroke-dasharray': '3 3'});
+  // marks
+  for (const m of s.marks || []) {
+    const cx = m.x * C + C / 2, cy = m.y * C + C / 2;
+    const g = el('g', {});
+    if (m.kind === 'go')
+      el('path', {d: `M${cx} ${cy - 7} L${cx + 7} ${cy + 6} L${cx - 7} ${cy + 6} Z`, fill: '#b9c7dd'}, g);
+    else
+      el('path', {d: `M${cx} ${cy - 7} L${cx + 7} ${cy} L${cx} ${cy + 7} L${cx - 7} ${cy} Z`, fill: '#b9c7dd'}, g);
+    el('title', {}, g).textContent = 'E' + m.x + ' N' + (23 - m.y) + ': ' + m.tip;
+  }
+  // walls: draw n and w of every square, e and s on the far edges
+  const col = ['', 'var(--wall)', 'var(--door)', 'var(--hidden)'];
+  for (let y = 0; y < 24; y++) for (let x = 0; x < 24; x++) {
+    if (solid(s, x, y)) continue;
+    const w = s.walls[y][x], X = x * C, Y = y * C;
+    const seg = (v, x1, y1, x2, y2) => { if (v) el('line', {x1, y1, x2, y2, stroke: col[v],
+      'stroke-width': v === 1 ? 3 : 4, 'stroke-linecap': 'square', 'stroke-dasharray': v === 3 ? '4 3' : ''}); };
+    seg(w[0], X, Y, X + C, Y);
+    seg(w[3], X, Y, X, Y + C);
+    if (x === 23 || solid(s, x + 1, y) || !s.walls[y][x + 1][3]) seg(w[1], X + C, Y, X + C, Y + C);
+    if (y === 23 || solid(s, x, y + 1) || !s.walls[y + 1][x][0]) seg(w[2], X, Y + C, X + C, Y + C);
+  }
+  // you
+  const cx = s.x * C + C / 2, cy = s.y * C + C / 2;
+  el('path', {d: `M0 -10 L8 8 L0 4 L-8 8 Z`, fill: 'var(--you)', stroke: '#0b1220', 'stroke-width': 1.5,
+              transform: `translate(${cx} ${cy}) rotate(${s.face * 90})`});
+}
+
+function show(s) {
+  const ban = document.getElementById('banner');
+  if (!s.ok) {
+    ban.style.display = 'block';
+    ban.textContent = 'No reading: ' + s.why;
+    return;
+  }
+  document.getElementById('floor').textContent = s.floor;
+  document.getElementById('where').textContent = s.where.replace(s.floor + ', ', '');
+  ban.style.display = s.mode === 'battle' ? 'block' : 'none';
+  ban.textContent = 'In battle.';
+  const ol = document.getElementById('steps');
+  ol.textContent = '';
+  for (const t of s.steps) { const li = document.createElement('li'); li.textContent = t; ol.appendChild(li); }
+  const sel = document.getElementById('dest');
+  if (!sel.options.length) {
+    for (const [l, p] of s.places) { const o = new Option(l, p.join(',')); sel.add(o); }
+    sel.add(new Option('A square I clicked', 'custom'));
+  }
+  const key = s.dest.join(',');
+  sel.value = [...sel.options].some(o => o.value === key) ? key : 'custom';
+  draw(s);
+}
+
+async function setDest(d) {
+  await fetch('/dest', {method: 'POST', body: JSON.stringify({dest: d})});
+}
+document.getElementById('dest').addEventListener('change', e => {
+  if (e.target.value !== 'custom') setDest(e.target.value.split(',').map(Number));
+});
+
+async function tick() {
+  try {
+    const r = await fetch('/state', {cache: 'no-store'});
+    const t = await r.text();
+    if (t !== last) { last = t; show(JSON.parse(t)); }
+  } catch (e) {
+    document.getElementById('banner').style.display = 'block';
+    document.getElementById('banner').textContent = 'The map server is not answering.';
+  }
+  setTimeout(tick, 300);
+}
+tick();
+</script>
+</body>
+</html>
