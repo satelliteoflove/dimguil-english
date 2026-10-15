@@ -807,9 +807,10 @@ def matters_detail(g, M, party_hp, party_level=None, party=None, lost=None):
 # Caster focus (Chris, 2026-10-15, after playing a chapter 9 trip by hand: "The main thing
 # is to take out the casters first. They really hurt with sleep, paralysis, debuffs and
 # group damage. You don't need to lead with the biggest spells. You need to focus your
-# damage on the casters."). A caster group is one whose monsters' spells (and abilities
-# that cast a spell) cost the party CASTER_MIN hit points a round or more each:
-# caster_danger. The party's blows and its damage spells go at the caster groups in
+# damage on the casters."). A caster group is one whose monsters cast sleep, paralysis,
+# silence, confusion, death, a debuff or group damage, or whose spells (and abilities that
+# cast a spell) cost the party CASTER_MIN hit points a round or more each (is_caster;
+# caster_danger rates them). The party's blows and its damage spells go at the caster groups in
 # caster_order, the most dangerous first, then the quickest to kill (the fewest hit points
 # standing, so a lone caster goes down in one round); battle.choose_group aims the
 # fighters, battle.focus_pick the casters: the cheapest damage or death spell likely to
@@ -823,6 +824,11 @@ CASTER_MIN = 3.0
 # and fear), Poba (65, +1), Mapoba (70, +2), Nofis (46, magic resistance -5%), Bacortu
 # (14, a barrier the party's spells don't get through), Badumas (74, attack down)
 DEBUFF_HP = {5: 6, 6: 12, 65: 3, 70: 6, 46: 3, 14: 6, 74: 6}
+# the spells that make a group a caster group whatever their rated worth (the brief: sleep,
+# paralysis, silence and other disabling spells, debuffs, group damage): Katino,
+# Katiqurea, Montino, Lorks, Galtomas, the confusing Sios/Lios/Masios/Lasios, the death
+# spells and Labadi, and DEBUFF_HP's; group damage by info's gdmg
+CASTER_SPELLS = {0, 49, 25, 69, 81, 82, 63, 66, 72, 34, 40, 37, 59} | set(DEBUFF_HP)
 CLOUDS = {45, 48, 51, 54, 57, 62}      # DAMAGE counts their three rounds; a third lands this round
 FINISH_P = 0.5          # a spell "likely to finish" a group: every monster in it dies this round at this chance
 DONE_P = 0.75           # a group the members before have likely killed this round
@@ -846,6 +852,13 @@ def caster_danger(m):
     return m.get('threat_spell', 0.0) + m.get('dis_hp_cast', 0.0) + deb
 
 
+def is_caster(m):
+    """Group m is a caster group: it casts one of CASTER_SPELLS (abilities included), group
+    damage or paralysis, or its spells are worth CASTER_MIN a round anyway (a Dalosto)."""
+    return bool(m.get('spells', set()) & CASTER_SPELLS or m.get('gdmg') or m.get('para')
+                or caster_danger(m) >= CASTER_MIN)
+
+
 def group_hp(m):
     return sum(max(0, hp) for _, hp, _ in m['mons'])
 
@@ -862,7 +875,7 @@ def caster_order(M, kill_first=None, skip_done=False):
             continue
         kf = kill_first.get(m['id'], 9) if kill_first else 9
         d = caster_danger(m)
-        if kf == 9 and d < CASTER_MIN:
+        if kf == 9 and not is_caster(m):
             continue
         if skip_done and dead_p(k, m) >= DONE_P:
             continue
