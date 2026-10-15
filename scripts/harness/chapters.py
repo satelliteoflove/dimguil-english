@@ -341,9 +341,14 @@ class Run(chapter1.Run):
                     # tries, gives and equipping, so the party fights the rest of the trip
                     # in it (risky tries stay for the setting-out camp)
                     gear.camp_loot(g, self.log, on_int=self.on_int)
-                critical = self.hp_heal()
+                # (healspots) on the walk out, a heal spot nearer than home heals for free:
+                # no spells, the train loop walks there (ToSpot)
+                spot = HEAL_SPOT and getattr(self, '_walking_out', False) and self.spot_choice()
+                critical = [] if spot else self.hp_heal()
             finally:
                 self._topping = False
+            if spot:
+                raise ToSpot(spot)
             if critical and getattr(self, '_walking_out', False):
                 raise TurnHome(critical)
         if HEALER_HOME and (getattr(self, '_walking_out', False) or getattr(self, '_goal_walk', False)) \
@@ -975,6 +980,7 @@ class Run(chapter1.Run):
         battle.TRIP_BLOW[:] = [0.0, 0.0]
         l0 = len(self.log)
         self._heals_out = False
+        self._spot_bad = set()          # heal spots that didn't work this trip
         battle.RUN_WHEN_LOSING = True
         tactics.TRAINING = True
         battle.RUN_OK = True            # the walk to the first square may run (FLEE_RULE)
@@ -988,6 +994,8 @@ class Run(chapter1.Run):
                     if self.fights() - n0 >= fights:
                         why = 'fight count'
                         break
+                    if HEAL_SPOT:
+                        self.spot_heal()
                     if chapter1.needs_town(g) and self.town_helps():
                         why = None
                         break
@@ -1010,16 +1018,22 @@ class Run(chapter1.Run):
                         chapter1.heal_in_camp(g, self.log, on_int=self.on_int)
                     if nav.plan(g, (area,) + sq) is None:
                         continue
+                    spot = None
                     self._walking_out = True
                     try:
                         self.go((area,) + sq)
                         battle.RUN_OK = False   # at the grinding spot: fight it out
+                    except ToSpot as t:
+                        spot = t.args[0]
                     except TurnHome as t:
                         self.note('turn home', t.args[0])
                         why = 'critical'
                         break
                     finally:
                         self._walking_out = False
+                    if spot:
+                        # (healspots) hurt on the walk out: the heal spot, then the next square
+                        self.spot_heal(spot)
                 else:
                     why = 'squares done'
                     continue
@@ -1118,6 +1132,57 @@ class Run(chapter1.Run):
         if cures and cures[0] == (sch, lv):
             r += 1
         return r
+
+    def spot_choice(self):
+        """(healspots) (steps, square, facing) of the nearest heal spot (HEAL_SPOTS) when the
+        party wants one: a standing member under SPOT_LINE of max HP or with a status the
+        switch clears (SPOT_FIX), nobody dead, ash or lost (that trip goes home), and the
+        spot nearer than the Grounds' entrance (nav.cost). Else None."""
+        g = self.g
+        if not HEAL_SPOTS or not maze.in_maze(g) or g.overlay() in ('JOUKA', 'HAZURE', 'BATTLE'):
+            return None
+        cs = [g.char(i) for i in g.party()]
+        if any(c['status'] & HOME_DEAD for c in cs) or not any(
+                c['status'] & SPOT_FIX or c['max_hp'] and c['hp'] < c['max_hp'] * SPOT_LINE for c in cs):
+            return None
+        here = (g_area(g),) + g.pos()
+        home = nav.cost(g, (0,) + maze.ENTRANCE[0])
+        best = None
+        for sq, face in HEAL_SPOTS.items():
+            if sq in getattr(self, '_spot_bad', ()):
+                continue
+            b = 0 if sq == here else nav.cost(g, sq)
+            if b is None or home is not None and b >= home:
+                continue
+            if best is None or b < best[0]:
+                best = (b, sq, face)
+        return best
+
+    def spot_heal(self, choice=None):
+        """(healspots) Walk to the heal spot spot_choice picks (or `choice`), face its
+        switch, Investigate and answer Yes. Logged as 'heal spot'. True when everyone
+        standing came out at full HP with no status."""
+        g = self.g
+        choice = choice or self.spot_choice()
+        if not choice:
+            return False
+        steps, sq, face = choice
+        hp = lambda: sum(max(0, g.char(i)['hp']) for i in g.party())
+        hp0, f0, pol = hp(), g.frame, self.policy
+        self.policy = type('SpotPolicy', (pol or LaterPolicy,), dict(prompt='yes'))
+        try:
+            self.examine(sq, face)
+        finally:
+            self.policy = pol
+        cs = [g.char(i) for i in g.party()]
+        ok = (g_area(g),) + g.pos() == sq and all(
+            c['hp'] == c['max_hp'] and not c['status'] for c in cs if not c['status'] & HOME_DEAD)
+        if not ok:
+            self._spot_bad = getattr(self, '_spot_bad', set()) | {sq}
+        self.note('heal spot', dict(at=sq, steps=steps, hp=[hp0, hp()], ok=ok, frames=g.frame - f0))
+        print('c%d heal spot %s: %d steps, HP %d -> %d%s' % (
+            self.chapter, sq, steps, hp0, hp(), '' if ok else ' (not healed)'), flush=True)
+        return ok
 
     def home_heal(self):
         """(main, 2026-10-14: 5 of n1v6's 8 chapter 10 deaths came walking home hurt) A
@@ -1515,7 +1580,23 @@ def g_area(g):
 
 class TurnHome(Exception):
     """A member stays under 1/3 of max HP with the heals gone: the walk out ends."""
-LADDER = False               # training floor by deaths per trip (ladder_areas)
+
+
+class ToSpot(Exception):
+    """A training fight left the party hurt and a heal spot is nearer than home: the walk
+    out stops and the party goes to the spot (Run.spot_choice), then on with the trip."""
+
+
+# (healspots) the heal switches, square event 0x3f (MAZE square_examine 0x800bb790 case 0x3f,
+# maze_prompt_result 0x800befcc prompt 0xe; A-maze.md "Heal spots"): Investigate facing the
+# record's p1 and answer Yes, and every member not dead, ash or lost gets full HP, status
+# 0 and poison 0. Free, no flag, repeatable. (area, x, y) in RAM coordinates: facing
+# (0 N, 1 E, 2 S, 3 W). Area B B4 E5 N18, Area E B3 E12 N4, Dragon B1 E10 N13.
+HEAL_SPOTS = {(24, 5, 5): 3, (37, 12, 19): 0, (42, 10, 10): 3}
+HEAL_SPOT = True            # use them on training trips when one is nearer than home (Run.spot_choice)
+SPOT_LINE = 2 / 3           # ... for a standing member under this share of max HP, or a status the switch clears
+SPOT_FIX = 0x7f             # afraid, confused, poisoned, asleep, K.O., paralyzed, stoned
+LADDER = False              # training floor by deaths per trip (ladder_areas)
 PULL_BACK = True             # agent 11 (Chris): too hard an area -> train in the easier one (pull_areas)
 PULL_TRIPS = 3               # ... judged on its last few trips
 PULL_DEATHS = 2              # ... a death on this many of them
