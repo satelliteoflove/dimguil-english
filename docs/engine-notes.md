@@ -229,6 +229,58 @@ glance". By subsystem:
   before each of the three loads (0x800a421c, 0x800a54d8, 0x800a5534), from a routine
   in the dead FUN_800c3188. A second SsSeqStop on a stopped or closed slot is harmless.
 
+### Treasure after a fight: chest, loose loot or gold
+
+Read 2026-10-15 from BATTLE (`battle_main` 0x800a2cd8, `chest_open` 0x800c5ed0,
+`chest_present` 0x800cb9e4, `chest_loot` 0x800c7fd0, `fixed_battle_setup` 0x800b4eb8) and
+checked against the harness logs (`scripts/trebox.py`, `scripts/chesttally.py`;
+docs/re/H-chests.md has the counts and the other games). D-battle.md's "Chests and traps" says a chest follows every won random battle;
+that misses the encounter-source test below, so wandering fights never get one.
+
+- **Who gets anything.** The chest phase (`battle_phase` 'B', `chest_open` state 5) only
+  runs when the party didn't flee, `0x80079b51 & 0xc0` is clear, the fight is a maze
+  encounter (`encounter_id` 0xffff or 0xfffe) or an NPC party (`encounter_source` 4), and
+  the area isn't the Training Maze (FUN_800c9600). Story and guardian fights with their own
+  ids never reach it, so they pay nothing; `chest_present` also refuses ids 0x91-0xab and
+  the Training Maze. **[code]**
+- **Which reward record.** Each monster record has a 1-based reward number at +0x83
+  (+0x82 is copied to 0x800da74d and never read). `fixed_battle_setup` copies group 1's
+  +0x83 to 0x800da74c (0x800b57ec: `lbu a0,0x153(monster_records)`), or the party
+  leader's in a party layout (0x800b58b0), and `chest_present` stores it minus 1 in the
+  byte 0x80079954 (no symbol yet). The records are DATA03/TRE_BOX.BIN (table 1 index 0x1b8,
+  loaded to 0x801c5400): 30 of 0x5c bytes. Every monster in the maze encounter tables has
+  1-30; the 29 with 0 are event monsters (145-173). The MPT parties use 1-25 (the Diamond
+  Knights 0), the NPC parties 1-25. **[code]** (`scripts/trebox.py`)
+- **Chest or not.** A chest (the 3D box, FUN_800152fc, and the trap menu) only when
+  `encounter_source` is 2, a fight square, and the index is under 30. Otherwise
+  `chest_open` jumps straight to state 0x50 and `chest_loot` pays with no chest:
+  - a wandering token (source 0, id 0xffff, the moving red magic circles): gold only.
+    `chest_loot` gives items only when the source is 2 or 4 or the id is 0xfffe.
+  - a type-2 token (source 0, id 0xfffe: the MPT parties of goblins, orcs, ogres and the
+    like) or an NPC party fight (source 4): gold and items, loose.
+  So a won fight-square fight always brings a chest, a won magic-circle fight always
+  pays gold and never an item, and a party fight pays gold and sometimes items. **[code]**
+  The harness agrees: 217 of 217 fights on a fight square had a chest, none of 584
+  monster fights off one, none of 431 party fights, none of 425 story fights. **[emu]**
+- **Leave** on the chest menu ends the battle with nothing, gold included. A trap that
+  goes off still pays the loot afterwards, unless it wiped the party. After an Alarm
+  fight is won, `chest_open` sees 0x80079784 = 1, clears it, and pays the original
+  chest's loot with no chest. **[code]**
+- **What a record pays** (`chest_loot`, FUN_800c8388). Gold = (c d s + b at +0x50..+0x52)
+  × the u32 at +0x54 × (dice at +0x58..+0x5a), split among members below status 0x20;
+  every record's minimum is above 0, so every paying fight gives gold. Items, if +0 is 1
+  (it is in all 30): three slots k, each paying on `rand_below(85)` <= the u32 at +8 + 4k,
+  so a slot printed as N% pays (N+1)/85 (20 → 25%, 80 → 95%). A slot's item is
+  +0x14 + 4k (base) + step × +0x20 + 4k + `rand_below(+0x38 + 4k)`, where step starts at 0
+  and goes up while `rand_below(90)` <= +0x44 + 4k, to at most +0x2c + 4k. The item goes
+  to a random standing member with a free slot, and is lost if nobody has room. **[code]**
+  The gold ranges match emonoya's table exactly; its slot and step percentages are the raw
+  record values, so the real odds are a little higher.
+- The shape is Wizardry I's (TREWARD: chest flag, trap bits, up to N entries of chance,
+  gold dice, item range), and the split is the same idea: Wizardry I pays a monster's
+  wandering table (nearly all gold only) away from its fixed-fight squares and its room
+  table (nearly all chests) on them. **[inf]** for the lineage.
+
 ### The town (E-town.md)
 
 - **Temple.** The fee (level × 100 paralysis, × 200 stone, × 250 dead, × 500 ashes) is
