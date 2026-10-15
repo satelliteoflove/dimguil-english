@@ -46,6 +46,12 @@ HEAL_ONE = [64, 21, 30, 33, 36, 58]     # weakest first (Diomas, Dios, Dial, Dia
 # 3d8, Diomas 3d2; Madi and Kadios to full)
 HEAL_MEAN = {64: 4.5, 21: 5, 30: 9, 33: 13.5, 36: 999, 58: 999}
 HEAL_RISK = False       # (d) heal a member who couldn't survive another hit
+HEAL_WORTH = True       # (bossfight) in a fight that matters, a heal only where it keeps someone alive (heal_worth)
+HEAL_SHARE = 0.5        # ... and heals at least this share of what they're expected to lose this round
+HEAL_CLEAR = 1.25       # ... and lifts them to this many times it and past the worst one blow (a Dial from 7 to 16
+                        # against 10 expected left Mercury to a Beast's club, chdev/a7_pf/f07 seed 7)
+CASTER_BOSS = True      # (bossfight) a fight that matters with kill-rank-0 casters counts as a boss for Cortu and BOSS_FOCUS_SHARE
+BOSS_FOCUS_SHARE = 0.5  # (bossfight) a boss fight's focus_pick finisher gives way to a turn worth twice as much
 TRIP_BLOW = [0.0, 0.0]  # the worst one-action damage seen this trip, front and back row (chapters.train)
 KEEP_LEVEL = 6         # (c) spell levels kept for story/boss fights and fights going badly
 BOSS_KEEP = {}         # roster index -> {(school, level): points} kept on the walk to a boss
@@ -154,6 +160,10 @@ def choose_group(g, offered, prefer=None, spread=False):
     if prefer in alive:
         return prefer               # a spell's or Dispel's chosen group (tactics.py)
     rank = {}
+    kr = {}
+    if FOCUS_M[0] == ROUND and FOCUS_M[1]:
+        # kill-first by id or by what the group casts (tactics.kill_rank)
+        kr = {k: tactics.kill_rank(v, KILL_FIRST) for k, v in FOCUS_M[1].items()}
     if tactics.CASTER_FOCUS and not spread and FOCUS_M[0] == ROUND and FOCUS_M[1]:
         # (casterfocus) the caster groups first, in tactics.caster_order; one the members
         # before have likely killed this round goes after every other group
@@ -173,7 +183,7 @@ def choose_group(g, offered, prefer=None, spread=False):
                 continue
             if (m.get('para') or m.get('gdmg')) and len(m['mons']) == 1:
                 lone.add(k)
-    return min(alive, key=lambda k: (KILL_FIRST.get(group_id(g, k), 9), rank.get(k, 99), k not in lone, k != prefer,
+    return min(alive, key=lambda k: (kr.get(k, KILL_FIRST.get(group_id(g, k), 9)), rank.get(k, 99), k not in lone, k != prefer,
                                      -g.u8(GROUPS + k * 8 + 5) if spread else 0, k))
 
 
@@ -808,12 +818,32 @@ def default_policy(g, m, opts):
     # party's HP in two rounds (smoke2, 2026-10-14: Area B's five-member human party, rated
     # cheap, wiped a level-14 party in 8 rounds that Tiltowait had beaten with one loss)
     boss = why in (tactics.HEAVY if CHEAPEST else ('story',)) or bad
+    if HEAL_WORTH and FIGHT_INFO.get('likely_loss'):
+        boss = True                     # (bossfight) a likely loss gets what a boss does
+    # (bossfight) a fight that matters against casters of kill rank 0 (Tiltowait-class
+    # damage, Bakadi, Katiqurea: tactics.kill_rank) gets a boss's Cortu and turn choice
+    # too (n1v6t chapter 14: Area D's human parties, Blaze's Tiltowait and the
+    # MadPsionic's Lasios and Galtomas, wiped the party as random fights)
+    casters_boss = boss or (CASTER_BOSS and big and any(tactics.kill_rank(v, KILL_FIRST) == 0 for v in M.values()))
     # heal: (d) a member who couldn't survive another hit of the worst monster that
     # reaches them, or anyone below 40%; the cheapest heal that lifts them clear of it,
     # else the strongest there is
     hurt = []
     risk = {s_: b for s_, h, b in tactics.danger(g, M, party)} if HEAL_RISK else {}
-    if not HEAL_RISK:
+    if HEAL_WORTH and big and M:
+        # (bossfight) in a fight that matters a heal has to be worth the turn (Chris,
+        # 2026-10-15: "If I'm in battle, and my characters are level 15+, I'm not going to
+        # be spending my time casting small heals... it's hardly worth a turn, at that
+        # level, in a battle that critical"): only for a member likely to die this round
+        # (HP below what they're expected to lose, tactics.incoming), with a heal that
+        # keeps them above it and is at least HEAL_SHARE of it; the cheapest such heal,
+        # the most hurt such member. Otherwise the turn goes to offense or protection
+        # (n1v0w's four losses at chapter 13's Guardians: Dial nearly every round from the
+        # Bishop, Madi and Dialma from the Priest, against Tiltowait at ~80 a member).
+        act = heal_worth(g, M, party, by_id)
+        if act:
+            return act
+    elif not HEAL_RISK:
         # the old rule: the most hurt member below 40%, the strongest heal there is
         old = [(hp / mx, k) for k, hp, mx in party if mx and hp * 10 < mx * 4]
         if old:
@@ -896,6 +926,10 @@ def default_policy(g, m, opts):
                 v = tactics.value(g, sid, k, M, me['level'], CAST)
                 if v > 0:
                     (finish if capped else cands).append((v, ('spell', sid, sch, lv, c[3], ('group', k)), (sid, k), lv))
+        elif casters_boss and sid == tactics.CORTU and tactics.CORTU_SCREEN:
+            v = tactics.cortu_value(g, M, me['level'])
+            if v > 0 and M:
+                cands.append((v, ('spell', sid, sch, lv, c[3], ('group', min(M))), (sid, None), lv))
         elif boss and sid in (tactics.BAMATU, tactics.MAPORFIC, tactics.CORTU):
             v = tactics.support_value(g, sid, M, CAST, party_hp)
             if v > 0 and M:
@@ -956,6 +990,11 @@ def default_policy(g, m, opts):
             if not cands:
                 return ('fight',) if FIGHT in opts else ('parry',) if PARRY in opts else ('first',)
             pick_ = cands[0]
+        if fp and casters_boss and HEAL_WORTH and fp[0] < BOSS_FOCUS_SHARE * cands[0][0]:
+            # (bossfight) in a boss fight or a likely loss the cheap finisher doesn't
+            # stand against a much better turn: Tzalik to finish an Arch Priest left
+            # chapter 13's Arch Mage casting Tiltowait into a thin magic screen
+            fp = None
         if fp:
             pick_ = fp
         elif CHEAPEST and big and not boss:
@@ -973,10 +1012,37 @@ def default_policy(g, m, opts):
                 tactics.value(g, key[0], key[1], M, me['level'], CAST, commit=True)
             if tactics.CASTER_FOCUS and key[1] is not None and key[0] != 'dispel':
                 tactics.focus_commit(g, key[0], key[1], M, me['level'])
+            if key[0] == tactics.CORTU and tactics.CORTU_SCREEN:
+                tactics.cortu_commit(g, me['level'])
             return act
     if FIGHT in opts:
         return ('fight',)
     return ('parry',) if PARRY in opts else ('first',)
+
+
+def heal_worth(g, M, party, by_id):
+    """(bossfight) The heal worth a turn in a fight that matters, or None: for the most
+    hurt member likely to die this round (HP at or below tactics.incoming), the cheapest
+    heal they know of (HEAL_ONE order) whose mean, capped at the HP they're missing,
+    lifts them to HEAL_CLEAR times that, and past the worst single action that reaches them
+    (tactics.danger), and is at least HEAL_SHARE of it."""
+    inc = tactics.incoming(g, M, party)
+    blow = {s_: b for s_, _, b in tactics.danger(g, M, party)}
+    for k, hp, mx in sorted(party, key=lambda x: x[1] / x[2] if x[2] else 1):
+        d = inc.get(k, 0.0)
+        if hp <= 0 or hp > d or CAST.get(('healed', k), -1) == ROUND:
+            continue
+        clear = max(HEAL_CLEAR * d, blow.get(k, 0.0))
+        for sid in HEAL_ONE:
+            if sid not in by_id:
+                continue
+            eff = min(HEAL_MEAN.get(sid, 999), mx - hp)
+            if hp + eff >= clear and eff >= HEAL_SHARE * d:
+                c = by_id[sid]
+                CAST[('healed', k)] = ROUND
+                FIGHT_INFO.setdefault('heals', []).append((ROUND, k, sid, hp, round(d)))
+                return ('spell', sid, c[1], c[2], c[3], ('member', k))
+    return None
 
 
 FOCUS_M = [None, None]      # (round, M) the policy last rated, for choose_group (casterfocus)
@@ -1729,6 +1795,7 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
     FIGHT_INFO.pop('likely_loss', None)
     FIGHT_INFO.pop('loss_rounds', None)
     FIGHT_INFO.pop('items', None)
+    FIGHT_INFO.pop('heals', None)
     for k_ in [k_ for k_ in FIGHT_INFO if isinstance(k_, tuple) and k_[0] == 'long'] + ['long', 'focus']:
         FIGHT_INFO.pop(k_, None)
     msg0 = len(g.cap.messages) if g.cap else 0
