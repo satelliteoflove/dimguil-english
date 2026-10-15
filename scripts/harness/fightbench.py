@@ -156,7 +156,7 @@ def run_one(g, st, seed):
     return dict(state=st, seed=seed, won=won, wiped=wiped, rounds=res['rounds'], spent=p0 - points(g),
                 spent_lv=[a - b for a, b in zip(pl0, points_lv(g))],
                 hp_lost=h0 - hp(g), down=len(res['down_end']), dead=len(res['dead_end']),
-                ran=res['ran'], fled=res['fled'], runs=res['runs'],
+                ran=res['ran'], fled=res['fled'], runs=res['runs'], runs_skipped=res.get('runs_skipped'),
                 casts=[(c[0], sp(c[1])) for c in res['casts']], casters=sorted(casters0),
                 caster_down=max(gone.values(), default=0) if all(v is not None for v in gone.values()) else None,
                 ll=bool(res['likely_loss']), matters=res['matters'], story=res['story'],
@@ -217,7 +217,8 @@ def prefight(g, state, outrel, seed, chapter, name):
 
 def table(d, by_state=False):
     """Sum a bench directory's VARIANT_rN_STATE.jsonl files: per variant and run setting
-    (and per state with by_state), fights, won, wiped, mean rounds, points spent, HP lost,
+    (and per state with by_state), fights, won, wiped, mean rounds, points spent (all, levels
+    4-5, levels 6-7; fights not wiped: a wiped party's points read as spent), HP lost,
     members down and dead at the end, fights run from, likely losses, mean round the last
     caster group fell."""
     import glob, collections
@@ -239,12 +240,13 @@ def table(d, by_state=False):
         err = len(rows[key]) - len(xs)
         n = len(xs) or 1
         cd = [x['caster_down'] for x in xs if x.get('caster_down') is not None]
-        sl = [x.get('spent_lv') for x in xs if x.get('spent_lv')]
+        sl = [x.get('spent_lv') for x in xs if x.get('spent_lv') and not x['wiped']]
+        sp = [x['spent'] for x in xs if not x['wiped']] or [0]
         l45 = '%.2f' % (sum(v[3] + v[4] for v in sl) / len(sl)) if sl else '-'
         l67 = '%.2f' % (sum(v[5] + v[6] for v in sl) / len(sl)) if sl else '-'
         print('%-8s %-3s %-34s %4d %4d %4d %6.2f %6.2f %5s %5s %7.1f %5d %5d %4d %4d %6s %5d' % (
             key[0], key[1], key[2][-34:], len(xs), sum(x['won'] for x in xs), sum(x['wiped'] for x in xs),
-            sum(x['rounds'] for x in xs) / n, sum(x['spent'] for x in xs) / n, l45, l67, sum(x['hp_lost'] for x in xs) / n,
+            sum(x['rounds'] for x in xs) / n, sum(sp) / len(sp), l45, l67, sum(x['hp_lost'] for x in xs) / n,
             sum(x['down'] for x in xs), sum(x['dead'] for x in xs), sum(1 for x in xs if x['ran']),
             sum(1 for x in xs if x['ll']), '%.2f' % (sum(cd) / len(cd)) if cd else '-', err))
 

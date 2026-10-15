@@ -780,7 +780,19 @@ def default_policy(g, m, opts):
         # the casters spent), from a costly fight, at FLEE_MIN or better; the losing state
         # heals and fights (Chris, 2026-10-14)
         many = sum(len(v['mons']) for v in M.values()) >= MANY
-        if why or many:
+        costly = why or many
+        if costly and why != 'story' and not bad and tactics.CASTER_FOCUS:
+            # (casterfocus) a caster party the party's first round likely clears of its
+            # casters isn't costly unless what's left is: the walk out ran from Area B's
+            # human parties as 'threat', 'many' and 'long fight' once they stopped being
+            # story fights (trip_new_c9_s101), and a failed run hands their Madalto a round
+            cr = caster_round(g, M, party_hp)
+            if cr and not cr['costly']:
+                sk = FIGHT_INFO.setdefault('runs_skipped', [])
+                if not sk or sk[-1][0] != ROUND:
+                    sk.append((ROUND, why or 'many', cr))
+                costly = False
+        if costly:
             ch = flee_chance(g)
             if ch >= FLEE_MIN:
                 FIGHT_INFO.setdefault('runs', []).append((ROUND, ch, why or 'many'))
@@ -925,11 +937,24 @@ def default_policy(g, m, opts):
             # Tiltowait after Badi and Tzalik had the casters, pf_c9_s101/f05), unless
             # it's a story fight or going badly
             fp = None
+            # and spells valued without the groups the members before have likely killed
+            # (Montino twice at a lone mage the Fighter's blows were taking,
+            # trip_new_c9_s101)
+            M2 = {k: v for k, v in M.items() if tactics.dead_p(k, v) < tactics.DONE_P}
+            c2 = []
+            for v, act, key, lv in cands:
+                if key[1] is not None and key[1] not in M2:
+                    continue
+                if key[0] in tactics.DAMAGE or key[0] in tactics.DEATH or key[0] in tactics.DISABLE:
+                    v = tactics.value(g, key[0], key[1], M2, me['level'], CAST)
+                if v > 0:
+                    c2.append((v, act, key, lv))
+            cands = sorted(c2, key=lambda x: -x[0])
             if not (why == 'story' or bad):
                 cands = [c_ for c_ in cands if c_[3] <= tactics.CHEAP_LEVEL]
-                if not cands:
-                    return ('fight',) if FIGHT in opts else ('parry',) if PARRY in opts else ('first',)
-                pick_ = cands[0]
+            if not cands:
+                return ('fight',) if FIGHT in opts else ('parry',) if PARRY in opts else ('first',)
+            pick_ = cands[0]
         if fp:
             pick_ = fp
         elif CHEAPEST and big and not boss:
@@ -954,6 +979,57 @@ def default_policy(g, m, opts):
 
 
 FOCUS_M = [None, None]      # (round, M) the policy last rated, for choose_group (casterfocus)
+CASTER_KILL_MARGIN = 1.25   # caster_round: the party's best round reaches the casters' HP this many times over
+
+
+def caster_round(g, M, party_hp):
+    """(casterfocus) Whether the party's first round likely kills every caster group
+    (tactics.caster_order), and whether the fight left after that is still costly for the
+    walk-out run rule. The round: each member that can act adds its best against one
+    caster group, its blows (tactics.member_melee) or a damage or death spell below
+    KEEP_LEVEL it has points for (mean x the chance it lands, a death spell's chance x the
+    HP; capped at the group's HP); 'killed' when that reaches CASTER_KILL_MARGIN times
+    the casters' HP. Costly after: the other groups' rated threat over two rounds,
+    stretched by the actions they take away (tactics.disable), reaches half the party's
+    HP, or MANY or more of them stand. None without caster groups."""
+    order = tactics.caster_order(M, KILL_FIRST)
+    if not order:
+        return None
+    hp_c = sum(tactics.group_hp(M[k]) for k in order)
+    D = 0.0
+    for slot, ri in enumerate(party_ids(g)):
+        if ri is None:
+            continue
+        hp, st = member_state(g, slot)
+        if hp <= 0 or st >= 8:
+            continue
+        lvl = g.char(ri)['level']
+        best = max(tactics.member_melee(g, slot, k) for k in order)
+        for sid, school, level, i in castable(g, ri):
+            if level >= KEEP_LEVEL or not (sid in tactics.DAMAGE or sid in tactics.DEATH):
+                continue
+            for k in order:
+                m = M[k]
+                ghp = tactics.group_hp(m)
+                if sid in tactics.DAMAGE:
+                    mean, kind, el = tactics.DAMAGE[sid]
+                    f = 0.5 if m['resist'] & el and el else 2.0 if m['weak'] & el and el else 1.0
+                    mons = m['mons'][:1] if kind == 'one' else m['mons']
+                    d = tactics.lands(m, sid) * sum(min(mean * f / (3 if sid in tactics.CLOUDS else 1), h)
+                                                    for _, h, _ in mons)
+                else:
+                    mons = m['mons'][:1] if tactics.DEATH[sid][0] == 'one' else m['mons']
+                    d = tactics.death_p(m, sid, lvl) * sum(h for _, h, _ in mons)
+                best = max(best, min(d, ghp))
+        D += best
+    killed = D >= CASTER_KILL_MARGIN * hp_c
+    rest = {k: dict(v) for k, v in M.items() if k not in order}
+    T = sum(v['threat'] * len(v['mons']) for v in rest.values())
+    L = tactics.disable(g, rest, members(g))['L'] if rest else 1.0
+    n = sum(len(v['mons']) for v in rest.values())
+    costly = not killed or T * 2 * L >= party_hp / 2 or n >= MANY
+    return dict(casters=order, caster_hp=hp_c, dmg=round(D), killed=killed, rest_threat=round(T, 1),
+                rest_L=round(L, 2), rest_n=n, costly=costly)
 
 
 def focus_pick(g, m, me, M, cands, opts):
@@ -1647,6 +1723,7 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
     FIGHT_INFO['matters'], FIGHT_INFO['casts'] = False, []
     FIGHT_INFO.pop('first', None)
     FIGHT_INFO.pop('runs', None)
+    FIGHT_INFO.pop('runs_skipped', None)
     FIGHT_INFO.pop('loss_checked', None)
     FIGHT_INFO.pop('likely_loss', None)
     FIGHT_INFO.pop('loss_rounds', None)
@@ -1743,7 +1820,7 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
                 where=where, story=tactics.STORY[0],
                 matters=FIGHT_INFO['matters'], casts=list(FIGHT_INFO['casts']),
                 ran=sum(1 for a in log if a[1] == 'run'),
-                runs=FIGHT_INFO.get('runs', []), likely_loss=FIGHT_INFO.get('likely_loss'), loss_rounds=FIGHT_INFO.get('loss_rounds', []), long=FIGHT_INFO.get('long'), focus=FIGHT_INFO.get('focus'),
+                runs=FIGHT_INFO.get('runs', []), runs_skipped=FIGHT_INFO.get('runs_skipped', []), likely_loss=FIGHT_INFO.get('likely_loss'), loss_rounds=FIGHT_INFO.get('loss_rounds', []), long=FIGHT_INFO.get('long'), focus=FIGHT_INFO.get('focus'),
                 fled=_flee_msgs(g, msg0),
                 first=FIGHT_INFO.get('first'), hp_end=_party_hp(g), items=_items_after(g),
                 down_end=[g.char(ri)['name'] for ri in g.party() if g.char(ri)['status'] >= 0x20],
