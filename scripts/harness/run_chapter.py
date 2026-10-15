@@ -43,6 +43,8 @@ ap.add_argument('--from', dest='src')
 ap.add_argument('--screens')
 ap.add_argument('--no-cases', action='store_true',
                 help="don't add stuck states to the regression suite (dev runs, old-disc states)")
+ap.add_argument('--shots', default='chapters/shots',
+                help='where the per-string shots go, under rips/harness (a dev run keeps its own)')
 a = ap.parse_args()
 first, _, last = a.chapters.partition('-')
 first, last = int(first), int(last or first)
@@ -52,7 +54,7 @@ if first > 1 and not a.src:
 out = 'chapters/' + a.name
 d = os.path.join(OUT, out)
 os.makedirs(d, exist_ok=True)
-g = Game(capture=True, shots_dir=os.path.join(OUT, 'chapters/shots'))
+g = Game(capture=True, shots_dir=os.path.join(OUT, a.shots))
 scr = None
 if a.screens:
     from harness.screens import Screens
