@@ -627,14 +627,17 @@ class Run(chapter1.Run):
                 gear.camp_loot(g, self.log, on_int=self.on_int)
             chapter1.heal_in_camp(g, self.log, on_int=self.on_int)
 
-    def ready(self, home_below=None):
+    def ready(self, home_below=None, train=True):
         """Before a boss: home if anyone is dead or under home_below of max HP once the
         priests have healed what they can (the Cots heal everyone to full there), else
-        heal to READY_HP from camp."""
+        heal to READY_HP from camp. train=False after a door check's trip home (the
+        boss training is done once a try)."""
         g = self.g
         home_below = home_below or READY_HOME
         self._ready_goal = getattr(self, '_goal_name', None)
-        self.boss_training()
+        self._door_trips = 0 if train else getattr(self, '_door_trips', 0)
+        if train:
+            self.boss_training()
         self.fit()
         self.keep_for_boss()
         if g.overlay() in ('JOUKA', 'HAZURE'):
@@ -658,6 +661,55 @@ class Run(chapter1.Run):
                                'down before a boss' if chapter1.out_of_action(g) else 'HP before a boss')
             finally:
                 chapter1.COT_BELOW = keep
+
+    def boss_short(self):
+        """What the boss fight would lack at the door: a member down (chapter1.SERIOUS), the
+        Cortu stack (the Cortu mages' level-3 points under CORTU_STACK - 1, or what they had
+        after the Stables if less: the n1v0q replay won with three), Madi (the Madi priests'
+        level-6 points under 2, or their full), or the heals (the priests' Dial, Dialma and
+        Madi levels 4-6 under POINTS_READY of what they had after the Stables)."""
+        g = self.g
+        short = []
+        if chapter1.out_of_action(g):
+            short.append('down')
+        for sid, sch, lv, want in ((tactics.CORTU, 0, 3, tactics.CORTU_STACK - 1), (tactics.MADI, 1, 6, 2)):
+            who = [i for i in g.party() if g.char(i)['status'] < 0x20
+                   and sid in battle.known_spells(g.char(i)['raw'], sch, lv)]
+            if not who:
+                continue
+            k = 0x5c + sch * 7 + lv - 1
+            have = sum(g.char(i)['raw'][k] for i in who)
+            full = sum(self.full_points[i][k - 0x5c] if self.full_points.get(i) else want for i in who)
+            if have < min(want, full):
+                short.append(('Cortu' if sid == tactics.CORTU else 'Madi', have, min(want, full)))
+        have = full = 0
+        for i in g.party():
+            raw = g.char(i)['raw']
+            if g.char(i)['status'] >= 0x20 or not self.full_points.get(i):
+                continue
+            if any(h in tactics.HEALS for lv in (4, 5, 6) for h in battle.known_spells(raw, 1, lv)):
+                have += sum(raw[0x5c + 7 + lv - 1] for lv in (4, 5, 6))
+                full += sum(self.full_points[i][7 + lv - 1] for lv in (4, 5, 6))
+        if full and have < full * POINTS_READY:
+            short.append(('heals', have, full))
+        return short
+
+    def door_ready(self):
+        """At a boss's door after the walk (main, 2026-10-14): anyone down or the boss's
+        points short (boss_short) send the party home to rest and walk back, at most
+        DOOR_TRIPS times a try; then it fights as it stands. trip_home raises the dead
+        at the temple, or from camp only where the temple is out of reach, as before.
+        True when the party went home (ready(train=False) and walk again)."""
+        short = self.boss_short()
+        if not short:
+            return False
+        n = getattr(self, '_door_trips', 0)
+        self.note('door short', getattr(self, '_goal_name', None), short, n)
+        if n >= DOOR_TRIPS:
+            return False
+        self._door_trips = n + 1
+        self.trip_home('short at a boss door')
+        return True
 
     def keep_for_boss(self):
         """On the walk from ready() to a boss, each mage who knows Cortu keeps their share
@@ -1398,6 +1450,7 @@ FIGHT_WAIT = 2400
 READY_HP = 0.9              # a boss fight starts with everyone at this share of max HP
 READY_HOME = 0.7            # ... or the party goes home first if healing can't reach this
 POINTS_READY = 0.6          # ... or the casters' points at levels 3-7 are under this share
+DOOR_TRIPS = 2              # home trips from a boss's door (door_ready) before it fights as it stands
 TOWN_GOLD = 100             # party gold under which a trip home can't buy anything
 
 

@@ -131,6 +131,9 @@ class Chapter10:
                 return True
             run.ready()
             run.go((23, 9, 10))
+            while run.door_ready():         # down or the boss's points short: home and back
+                run.ready(train=False)
+                run.go((23, 9, 10))
             run.heal()
             run.go((23, 9, 11))
             run.after()
