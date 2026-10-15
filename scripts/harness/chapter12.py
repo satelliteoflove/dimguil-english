@@ -48,8 +48,9 @@ def panel_ok(g):
     return all(g.u8(nav.PANEL + i) == k for i, k in PANEL_WANT.items())
 
 
-def drive_panel(g, log):
-    """From the Investigate: Yes to EVENTMES 183, set PANEL_WANT, leave the panel."""
+def drive_panel(g, log, want=None):
+    """From the Investigate: Yes to EVENTMES 183, set want (PANEL_WANT), leave the panel."""
+    want = PANEL_WANT if want is None else want
     f0 = g.frame
     while g.u8(maze.GAME_STATE) != PANEL_STATE:
         if g.frame - f0 > 3000:
@@ -71,7 +72,7 @@ def drive_panel(g, log):
             continue
         g.step()
     g.step(30)
-    for i, k in sorted(PANEL_WANT.items()):
+    for i, k in sorted(want.items()):
         ui.move_cursor(g, SEL, i, 'right', 'left', wrap=9, what='panel switch')
         ui.move_cursor(g, ROW, k, 'down', 'up', wrap=3, what='panel row')
         if g.u8(nav.PANEL + i) != k:
