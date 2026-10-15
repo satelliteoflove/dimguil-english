@@ -142,6 +142,18 @@ glance". By subsystem:
     EVENTMES 181; the win sets story_flags bit 11 (fight reward 0x800c0748, type 10,
     EVENTMES 182). The floor load (0x800a8f1c) locks the door's two squares while bits
     10 and 11 are both clear.
+  - The lift between B2 and B4 at E21 N8 (type 0x4b on both floors) works on Investigate
+    facing west, with no flag and no prompt: FUN_800ce108 sets scene 0x80079878 to 0x1d
+    (run by FUN_800c8038, countdown 0xca) to area 0x1c + 2 from B4 (area 28), else + 0,
+    so each end goes to the other.
+  - The wreck at B4 E21 N6 has type 0x49 records on three sides (E21 N5, E20 N6, E21 N7,
+    p1 0, 1, 2: the facing each wants, so towards the wreck). Before mimicry mode ends
+    (story bit 10) it prints EVENTMES 185 only. After, with no member carrying item 0x13a
+    (the Demon's Statue; party_lacks_item 0x800b73e0 looks for the id with bit 0x4000),
+    EVENTMES 186 and prompt 0x13: Yes prints 187 and gives 0x13a (0x800cbb0c: the first
+    free pack slot in party order, flagged 0x4000, else game_state 3, the drop picker);
+    No prints 188 and the statue stays for another visit. **[code]**, chapter 15
+    (2026-10-15).
 - **The glyph pad's words.** END on the pad (0x800b989c) checks the typed word against
   seven: at Area X's pedestal words 0-4 (STAFF, LABORATORY, WAREHOUSE, ENERGY and a fifth)
   each need a stone in the Tablet (0x800b7248: 4, 6, 0, 7, 3) and set story_flags bits 4,
