@@ -650,6 +650,13 @@ def town_upkeep(g, log):
     reorder_party(g, log)
     g2 = party_gold(g)
     if GEAR:
+        # the Bishop's Identify at the Edge of Town first: no fear there, so every unknown
+        # at or below their level is tried until it's known (gear.edge_identify)
+        try:
+            gear.edge_identify(g, log)
+        except Stuck as s:
+            log.append((g.frame, 'edge identify stuck', s.what))
+            gear.edge_leave(g)
         # Boltac's: identify, uncurse, sell, buy (gear.shop), keeping a dead member's
         # raise in reserve; the party equips in camp once it sets out (Chris, 2026-10-14)
         try:

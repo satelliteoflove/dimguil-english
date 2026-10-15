@@ -367,6 +367,10 @@ class Run(chapter1.Run):
         Anyone left afraid or wearing a cursed item: back into town (fear clears there,
         Boltac's uncurses) and out again, at most `most` times, then a safe-only camp."""
         g = self.g
+        if gear.EDGE_ID:
+            # the risky tries happen at the Edge of Town now (gear.edge_identify, no fear)
+            gear.camp_loot(g, self.log, on_int=self.on_int)
+            return
         for _ in range(most):
             gear.RISKY = True
             try:

@@ -618,6 +618,124 @@ def plan_gives(g, members):
     return out
 
 
+# --- the Bishop's Identify at the Edge of Town (agent 13, strategy revision 1) ---
+# Prepare for Adventure > Inspect Character > Items > Identify (HAZURE): edge_prepare
+# 0x800a3be0, edge_inspect 0x800a3f50 (0x800796e1: 25 "Inspect whom?", party grid column
+# 0x80079c5b and row 0x80079c5e; 35 its menu, cursor 0x80079c60, 0 Spells 1 Items; 45 the
+# Items menu, cursor 0x80079c65: Identify Use Give Equip Drop), edge_identify_item
+# 0x800a982c (0x800796e5: 15 the list, cursor 0x80079c6b over every pack slot; a press
+# rolls, then a message 0x80079565 = 1, a press back to the list). Same odds as camp: (level
+# - item level + 1) x 20 held to 5-75, none above the Bishop's level; but a miss never
+# makes the Bishop afraid. Below twice the item's level (95 - chance) / 4 % of misses on a
+# cursed kind put it on cursed (0xa000), which Boltac's uncurses right after. So the Bishop
+# tries each item until it's known, before the shop, and the risky camp tries go.
+EDGE_ID = True
+EDGE_TRIES = 60            # tries an item a visit: 95% of 5% items identified
+EDGE_STATE, EDGE_GX, EDGE_GY, EDGE_CUR, EDGE_ITEMS_CUR = (
+    0x800796e1, 0x80079c5b, 0x80079c5e, 0x80079c60, 0x80079c65)
+EDGE_ID_STATE, EDGE_ITEM_CUR, EDGE_MSG = 0x800796e5, 0x80079c6b, 0x80079565
+
+
+def _edge_press(g, cond, what, wait=120):
+    """One circle, then wait for cond; a press that didn't land is repeated (each screen
+    takes a few frames to come up, and a second press there opens its first entry)."""
+    for _ in range(4):
+        g.tap('circle')
+        f0 = g.frame
+        while g.frame - f0 < wait:
+            if cond():
+                g.step(8)
+                return
+            g.step()
+    raise Stuck(what, st=g.u8(EDGE_STATE), id=g.u8(EDGE_ID_STATE))
+
+
+def will_try(g, bpos, w):
+    """The Bishop at bpos will work on unknown w: in camp now (bishop_can), or with
+    EDGE_ID at the Edge of Town on the next town visit (any item at or below their level),
+    so camp gathers it into their pack."""
+    if bishop_can(g, bpos, w):
+        return True
+    return EDGE_ID and id_level(g, w & 0x1ff) <= g.char(g.party_slots()[bpos])['level']
+
+
+def edge_targets(g, ri):
+    lv = g.char(ri)['level']
+    return [(k, w) for k, w in unknowns(g, ri) if id_level(g, w & 0x1ff) <= lv]
+
+
+def edge_identify(g, log=None):
+    """In town: the Bishop (alive, not afraid) identifies the unknowns in their own pack at
+    the Edge of Town, each until it's known or EDGE_TRIES. Back at the town bar after.
+    Returns [(item name, outcome, tries)]."""
+    if not EDGE_ID:
+        return []
+    slots = town.town_slots(g)
+    pos = next((p for p, ri in enumerate(slots) if ri is not None and g.char(ri)['cls'] == BISHOP
+                and g.char(ri)['status'] == 0), None)
+    if pos is None or not edge_targets(g, slots[pos]):
+        return []
+    ri = slots[pos]
+    town.enter(g, 'edge')
+    ui.wait_until(g, lambda: g.u8(town.FAC_SUB) == 5 or g.u8(town.EDGE_CURSOR) == 0, 300, 'edge menu')
+    ui.move_cursor(g, town.EDGE_CURSOR, 0, 'down', 'up', what='edge row')
+    ui.move_cursor(g, town.EDGE_ICON, 3, 'right', 'left', what='Prepare icon')
+    _edge_press(g, lambda: g.u8(EDGE_STATE) == 25, 'Prepare > Inspect')
+    g.step(8)
+    ui.move_cursor(g, EDGE_GY, pos // 3, 'down', 'up', what='inspect row')
+    ui.move_cursor(g, EDGE_GX, pos % 3, 'right', 'left', what='inspect col')
+    _edge_press(g, lambda: g.u8(EDGE_STATE) == 35, 'inspect the Bishop')
+    g.step(8)
+    ui.move_cursor(g, EDGE_CUR, 1, 'down', 'up', what='Items')
+    _edge_press(g, lambda: g.u8(EDGE_STATE) == 45, 'Items')
+    g.step(8)
+    ui.move_cursor(g, EDGE_ITEMS_CUR, ITEMS_IDENTIFY, 'down', 'up', what='Identify')
+    _edge_press(g, lambda: g.u8(EDGE_ID_STATE) == 15, 'Identify')
+    g.step(8)
+    c = g.char(ri)
+    out = []
+    for _, w in sorted(edge_targets(g, ri), key=lambda kw: -id_level(g, kw[1] & 0x1ff)):
+        chance, safe = id_odds(c['level'], id_level(g, w & 0x1ff))
+        res, t = 'failed', 0
+        while t < EDGE_TRIES:
+            k = next((j for j, x in pack(g, ri) if x == w), None)
+            if k is None:
+                break
+            ui.move_cursor(g, EDGE_ITEM_CUR, k, 'down', 'up', wrap=max(1, g.u8(LIST_COUNT)),
+                           what='edge identify item')
+            ui.press_until(g, 'circle', lambda: g.u8(EDGE_ID_STATE) != 15, 60, 'edge identify')
+            t += 1
+            ui.wait_until(g, lambda: g.u8(EDGE_MSG) or g.u8(EDGE_ID_STATE) == 15, 120, 'edge result')
+            ui.press_until(g, 'circle', lambda: g.u8(EDGE_ID_STATE) == 15 and not g.u8(EDGE_MSG), 120,
+                           'edge result away')
+            g.step(4)
+            nw = dict(pack(g, ri)).get(k, 0)
+            res = 'identified' if nw & IDENT else 'cursed on' if nw & CURSED else 'failed'
+            if res != 'failed':
+                break
+        TRIED[w] = TRIED.get(w, 0) + t
+        out.append((name(w & 0x1ff), res, t))
+        if log is not None:
+            log.append((g.frame, 'identify edge', c['name'], name(w & 0x1ff), chance, safe, res, t))
+    edge_leave(g)
+    return out
+
+
+def edge_leave(g, limit=900):
+    """Back out of the Edge of Town's Prepare screens to the town bar (Back to Town)."""
+    f0 = g.frame
+    while g.overlay() == 'HAZURE' and g.u8(town.FAC_SUB) != 5:
+        if g.frame - f0 > limit:
+            raise Stuck('edge back out', st=g.u8(EDGE_STATE), sub=g.u8(town.FAC_SUB))
+        g.tap('cross')
+        g.step(20)
+    if g.overlay() == 'HAZURE':
+        ui.move_cursor(g, town.EDGE_CURSOR, 0, 'down', 'up', what='edge row')
+        ui.move_cursor(g, town.EDGE_ICON, 7, 'right', 'left', wrap=8, what='Back to Town icon')
+        ui.confirm_until(g, lambda: g.overlay() == 'JOUKA', limit, 'Back to Town')
+    town.to_town_bar(g)
+
+
 def gather_for_bishop(g, bpos, log=None, room_keep=0):
     """Give unknown items from the others to the Bishop while their pack has room."""
     bri = g.party_slots()[bpos]
@@ -629,12 +747,12 @@ def gather_for_bishop(g, bpos, log=None, room_keep=0):
         if ri is None or pos == bpos or g.char(ri)['status'] >= 0x20:
             continue
         for k, w in unknowns(g, ri):
-            if bishop_can(g, bpos, w):
+            if will_try(g, bpos, w):
                 ch, safe = id_odds(blv, id_level(g, w & 0x1ff))
                 cands.append((-safe, TRIED.get(w, 0) > 0, -ch, pos, ri, w))
     cands.sort(key=lambda c: c[:4])
     for _, _, _, pos, ri, w in cands:
-        if not bishop_can(g, bpos, w):
+        if not will_try(g, bpos, w):
             continue
         if len(pack(g, bri)) >= 10 - room_keep:
             # the Bishop's pack is full: hand the giver something the Bishop can't
@@ -643,10 +761,10 @@ def gather_for_bishop(g, bpos, log=None, room_keep=0):
             # (an unknown with worse odds than this one goes too, the worst first)
             odds = lambda x: id_odds(blv, id_level(g, x & 0x1ff))[::-1]
             spare = [(j, x) for j, x in pack(g, bri) if not x & (EQUIPPED | CURSED)
-                     and (x & IDENT or not bishop_can(g, bpos, x) or odds(x) < odds(w))]
+                     and (x & IDENT or not will_try(g, bpos, x) or odds(x) < odds(w))]
             if not spare:
                 break
-            spare.sort(key=lambda jx: (2 if jx[1] & IDENT else 0 if not bishop_can(g, bpos, jx[1]) else 1,
+            spare.sort(key=lambda jx: (2 if jx[1] & IDENT else 0 if not will_try(g, bpos, jx[1]) else 1,
                                        odds(jx[1]), jx[0]))
             if len(pack(g, ri)) >= 10:
                 k = next((j for j, x in pack(g, ri) if x == w), None)
@@ -734,7 +852,7 @@ def camp_loot(g, log=None, on_int=None):
                 break
             bpos = b[0]
             bri = g.party_slots()[bpos]
-            if not any(bishop_can(g, bpos, w) for ri in g.party() for k, w in unknowns(g, ri)):
+            if not any(will_try(g, bpos, w) for ri in g.party() for k, w in unknowns(g, ri)):
                 break
             gather_for_bishop(g, bpos, log)
             got = identify_in_camp(g, bpos, log)
