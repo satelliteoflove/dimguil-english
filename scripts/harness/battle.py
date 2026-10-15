@@ -624,14 +624,23 @@ def default_policy(g, m, opts):
     # a member out of the fight in one that matters: Dialko for paralysis or sleep, Madi
     # for stone too (dim.json: Dialko cures paralysis and sleep in battle; Madi all but
     # death and ash)
-    if big and len(M):
+    # a confused front-liner's stray blows kill allies in any fight, so their cure doesn't
+    # wait for the fight to matter
+    wild = any(rk is not None and member_state(g, k)[1] & 0x02 and member_state(g, k)[1] < 0x80
+               for k, rk in enumerate(ids[:3]))
+    if (big or wild) and len(M):
         for k, rk in enumerate(ids):
             if rk is None or k == m:
                 continue
             st = member_state(g, k)[1]
             if st >= 0x80:
                 continue
-            for sid, bits in ((tactics.DIALKO, 0x28), (tactics.MADI, 0x68)):
+            # a confused front-liner (0x02) too: half their blows go to a random target,
+            # allies included (party_melee 0x800a8c2c), for about 13 rounds (counter 127,
+            # -10 a round); in battle only Madi (spell_madi 0x800ae6e8: status cleared
+            # below 0x80) and Morfis (party) cure it, Dialko doesn't (0x38 only,
+            # FUN_800b2974). n1v1m chapter 9: confused Dax killed Uranus twice.
+            for sid, bits in ((tactics.DIALKO, 0x28), (tactics.MADI, 0x68 | (0x02 if k < 3 else 0))):
                 if st & bits and sid in by_id and CAST.get(('cure', k), 0) < ROUND:
                     CAST[('cure', k)] = ROUND
                     c = by_id[sid]
