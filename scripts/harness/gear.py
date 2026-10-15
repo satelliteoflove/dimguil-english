@@ -253,10 +253,14 @@ ITEMS_CURSOR = 0x80079c5e        # Identify, Use, Give, Equip, Drop
 ITEMS_EQUIP = 3
 
 
-def choose(g, ri, slot, cands, before):
+def choose(g, ri, slot, cands, before, prefer=None):
     """The candidate (pack index) to put on in `slot`, or None: the best identified one
-    the member can wear uncursed; the accessory that was on before stays on."""
+    the member can wear uncursed; the accessory that was on before stays on. prefer: item
+    ids put on whenever they're candidates (the gold set for the small door, chapter 14)."""
     words = dict(pack(g, ri))
+    for k in cands:
+        if prefer and words.get(k, 0) & 0x1ff in prefer:
+            return k
     if slot == 6:
         # the accessory slot: a cloak by AC (b1v3b chapter 4, 2026-10-14: two spare Shadow
         # Cloaks filled the Bishop's pack); anything else that was on stays on
@@ -303,23 +307,24 @@ def items_menu(g, slot_pos):
     ui.confirm_until(g, lambda: g.u8(camp.SPELL_STATE) == 5 and g.u8(camp.SUB) != 15, 300, 'Items')
 
 
-def equip(g, slot_pos, log=None, none=False):
+def equip(g, slot_pos, log=None, none=False, prefer=None):
     """Camp > Inspect > member at party slot slot_pos > Items > Equip, answering every slot
-    prompt with choose() (none: with nothing, to take everything off). Returns {slot:
-    chosen item id or None}."""
+    prompt with choose() (none: with nothing, to take everything off; prefer: choose's).
+    Returns {slot: chosen item id or None}."""
     ri = g.party_slots()[slot_pos]
     before = dict(pack(g, ri))
     items_menu(g, slot_pos)
     ui.move_cursor(g, ITEMS_CURSOR, ITEMS_EQUIP, 'down', 'up', what='Equip')
     ui.confirm_until(g, lambda: g.u8(camp.SPELL_STATE) == 0x19, 300, 'Equip')
-    chosen = _equip_prompts(g, ri, before, lambda: g.u8(camp.SPELL_STATE) == 0x19, none, EQ_CURSOR)
+    chosen = _equip_prompts(g, ri, before, lambda: g.u8(camp.SPELL_STATE) == 0x19, none, EQ_CURSOR,
+                            prefer)
     if log is not None:
         log.append((g.frame, 'equip', g.char(ri)['name'],
                     {s: name(i) if i else None for s, i in chosen.items()}))
     return chosen
 
 
-def _equip_prompts(g, ri, before, running, none=False, cursor=EQ_CURSOR):
+def _equip_prompts(g, ri, before, running, none=False, cursor=EQ_CURSOR, prefer=None):
     """Answer equip_menu's slot prompts (MAZE 0x800daa1c, HAZURE 0x800afa9c: the same
     fields but the cursor, camp's 0x80079c60 and the Edge's 0x80079c6b, each 0 for none
     and k for candidate k - 1) while running() holds."""
@@ -333,7 +338,7 @@ def _equip_prompts(g, ri, before, running, none=False, cursor=EQ_CURSOR):
             s = g.u8(EQ_SLOT)
             n = g.u8(EQ_COUNT)
             cands = [struct.unpack('<h', g.e.read(EQ_CANDS + 2 * j, 2))[0] for j in range(n)]
-            k = None if none else choose(g, ri, s, cands, before)
+            k = None if none else choose(g, ri, s, cands, before, prefer)
             want = cands.index(k) + 1 if k is not None else 0
             chosen[s] = (before[k] & 0x1ff) if k is not None else None
             ui.move_cursor(g, cursor, want, 'down', 'up', wrap=n + 1, what='equip slot %d' % s)
