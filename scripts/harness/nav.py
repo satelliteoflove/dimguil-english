@@ -673,6 +673,17 @@ def travel(g, dest, on_int, after=None, max_legs=40, keep=None):
                 if g.u8(SCENE) in RIDES:
                     break
             ride(g)
+            # still on a transfer square: a ladder can take longer than that to move the
+            # party (c14v3t, 2026-10-15: Area D B1's ladder down after the crystal, "no
+            # route" from (34, 13, 13) six times, the party on B2 when the state was saved)
+            F0 = floor(g.u8(maze.AREA))
+            if F0 and g.pos() in F0['transfers']:
+                a0 = (g.u8(maze.AREA),) + g.pos()
+                for _ in range(75):
+                    if (g.u8(maze.AREA),) + g.pos() != a0:
+                        break
+                    g.step(8)
+                ride(g)
             here = (g.u8(maze.AREA),) + g.pos()
             if here == tuple(dest):
                 return legs
