@@ -103,6 +103,14 @@ glance". By subsystem:
   - Ghidra's case labels in `maze_prompt_result` are wrong in places: it shows prompt 1
     sharing the heal and 0x11 sharing the spell refill. The jump table at 0x800a1918
     sends 1 to the pillar fight (0x800bf018) and 0x11 to a fixed toggle of bit 0x200000.
+- **Area B's west rooms.** B4 and B5 (areas 24 and 23) each have a west part, x 4-9 in
+  game coordinates (not B4's south-west corner: Chris walked to the heal switch at
+  (5, 5) without leaving B4), joined to each other by the stairs at (8, 10) but not to
+  the rest of either floor. The only way in is B3's stairs at (5, 13) down to B4
+  (4, 13), and B3's west side is reached through B2 and B1. So five of B4 and B5's fight squares (B4
+  (5, 9), (5, 15), (8, 12); B5 (7, 8), (7, 15)) are a walk through B3, B2 and B1 from
+  the others. Found from the fan site's map data with the harness's planner
+  (2026-10-15); Chris's own B4/B5 trip from the same state never went there.
 
 ### Wipes and bodies (A-maze.md §4-6, D-battle.md, fallen-parties.md)
 

@@ -218,10 +218,11 @@ def cost(g, dest, start=None):
     return out[0] if out else 0
 
 
-def plan(g, dest, start=None, items=None, out=None):
+def plan(g, dest, start=None, items=None, out=None, keep=None):
     """Cheapest way from start (default: here) to dest = (area, x, y). Returns a list of
     legs: ('walk', area, x, y) to reach a square on the same floor (a transfer square
-    included), ('link', link) for an Investigate join. None if no way is known."""
+    included), ('link', link) for an Investigate join. None if no way is known.
+    keep: floors the way doesn't leave once it's on one of them (a training trip's)."""
     if start is None:
         start = (g.u8(maze.AREA),) + g.pos()
     if items is None:
@@ -274,6 +275,8 @@ def plan(g, dest, start=None, items=None, out=None):
                 else:
                     nxt.append(((area, nx, ny), cost, ('step',)))
         for n2, cost, how in nxt:
+            if keep and area in keep and n2[0] not in keep:
+                continue
             c2 = c + cost
             if c2 < dist.get(n2, 1e9):
                 dist[n2] = c2
@@ -456,9 +459,10 @@ def walk_floor(g, x, y, on_int):
                         soft=soft, stop_area=True)
 
 
-def travel(g, dest, on_int, after=None, max_legs=40):
+def travel(g, dest, on_int, after=None, max_legs=40, keep=None):
     """Walk to dest = (area, x, y) across floors. on_int handles interruptions (battles,
-    talks, boxes); after(g) runs an Investigate's event to calm. Returns legs taken."""
+    talks, boxes); after(g) runs an Investigate's event to calm; keep as plan's. Returns
+    legs taken."""
     from harness import chapter1
     if after is None:
         log = []
@@ -469,7 +473,7 @@ def travel(g, dest, on_int, after=None, max_legs=40):
         here = (g.u8(maze.AREA),) + g.pos()
         if here == tuple(dest):
             return legs
-        p = plan(g, tuple(dest))
+        p = plan(g, tuple(dest), keep=keep)
         if not p:
             for _ in range(15):
                 g.step(8)
@@ -479,10 +483,10 @@ def travel(g, dest, on_int, after=None, max_legs=40):
             here = (g.u8(maze.AREA),) + g.pos()
             if here == tuple(dest):
                 return legs
-            p = plan(g, tuple(dest))
+            p = plan(g, tuple(dest), keep=keep)
         if not p and step_off(g, on_int):
             here = (g.u8(maze.AREA),) + g.pos()
-            p = plan(g, tuple(dest))
+            p = plan(g, tuple(dest), keep=keep)
         if not p:
             raise Stuck('no route', at=here, dest=dest)
         leg = p[0]
