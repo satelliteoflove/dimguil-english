@@ -109,7 +109,9 @@ def back_reach(it):
 
 def back_row(g, ri):
     """Whether roster index ri stands in the back row (positions 3-5), in the maze or in
-    town."""
+    town (a backup equipping in town, _FRONT: no)."""
+    if ri in _FRONT:
+        return False
     for slots in (g.party_slots(), town.town_slots(g)):
         if ri in slots:
             return slots.index(ri) >= 3
@@ -310,9 +312,20 @@ def equip(g, slot_pos, log=None, none=False):
     items_menu(g, slot_pos)
     ui.move_cursor(g, ITEMS_CURSOR, ITEMS_EQUIP, 'down', 'up', what='Equip')
     ui.confirm_until(g, lambda: g.u8(camp.SPELL_STATE) == 0x19, 300, 'Equip')
+    chosen = _equip_prompts(g, ri, before, lambda: g.u8(camp.SPELL_STATE) == 0x19, none, EQ_CURSOR)
+    if log is not None:
+        log.append((g.frame, 'equip', g.char(ri)['name'],
+                    {s: name(i) if i else None for s, i in chosen.items()}))
+    return chosen
+
+
+def _equip_prompts(g, ri, before, running, none=False, cursor=EQ_CURSOR):
+    """Answer equip_menu's slot prompts (MAZE 0x800daa1c, HAZURE 0x800afa9c: the same
+    fields but the cursor, camp's 0x80079c60 and the Edge's 0x80079c6b, each 0 for none
+    and k for candidate k - 1) while running() holds."""
     chosen = {}
     end = g.frame + 3000
-    while g.u8(camp.SPELL_STATE) == 0x19:
+    while running():
         if g.frame > end:
             raise Stuck('equip', slot=g.u8(EQ_SLOT), st=g.u8(EQ_STATE))
         if g.u8(EQ_PROMPT) == 1 and g.u8(EQ_STATE) == 0xf:
@@ -323,10 +336,10 @@ def equip(g, slot_pos, log=None, none=False):
             k = None if none else choose(g, ri, s, cands, before)
             want = cands.index(k) + 1 if k is not None else 0
             chosen[s] = (before[k] & 0x1ff) if k is not None else None
-            ui.move_cursor(g, EQ_CURSOR, want, 'down', 'up', wrap=n + 1, what='equip slot %d' % s)
+            ui.move_cursor(g, cursor, want, 'down', 'up', wrap=n + 1, what='equip slot %d' % s)
             sig = (s, g.u8(EQ_STATE), g.u8(EQ_PROMPT))
             ui.press_until(g, 'circle', lambda: (g.u8(EQ_SLOT), g.u8(EQ_STATE), g.u8(EQ_PROMPT)) != sig
-                           or g.u8(camp.SPELL_STATE) != 0x19, 120, 'equip pick')
+                           or not running(), 120, 'equip pick')
             continue
         if g.u8(EQ_STATE) == 0x78:
             ui.press_until(g, 'cross', lambda: g.u8(EQ_STATE) != 0x78, 120, 'no special power')
@@ -338,9 +351,33 @@ def equip(g, slot_pos, log=None, none=False):
             ui.press_until(g, 'circle', lambda: g.u8(CAMP_MSG) == 0, 120, 'equip message')
             continue
         g.step()
+    return chosen
+
+
+_FRONT = set()      # roster indexes worth() treats as front-row (a backup equipping in town)
+
+
+def edge_equip(g, pos, log=None, stay=False):
+    """At the Edge of Town: Prepare > Inspect the member at party position pos > Items >
+    Equip (HAZURE equip_menu 0x800afa9c, camp's prompt fields but the cursor at
+    0x80079c6b: EQ_STATE runs 5, 10, 15 at each slot's prompt, 20, ... 110, then 0; the
+    Edge's state 0x800796e1 stays 45; mulerule probes, 2026-10-15). Used on a backup in town, scored as if it
+    stood in the front row. Back at the town bar after (stay: at "Inspect whom?")."""
+    ri = town.town_slots(g)[pos]
+    before = dict(pack(g, ri))
+    _edge_items(g, pos)
+    ui.move_cursor(g, EDGE_ITEMS_CUR, ITEMS_EQUIP, 'down', 'up', what='edge Equip')
+    _FRONT.add(ri)
+    try:
+        _edge_press(g, lambda: g.u8(EQ_STATE) != 0, 'edge Equip')
+        chosen = _equip_prompts(g, ri, before, lambda: g.u8(EQ_STATE) != 0, cursor=EDGE_ITEM_CUR)
+    finally:
+        _FRONT.discard(ri)
+    g.step(8)
     if log is not None:
-        log.append((g.frame, 'equip', g.char(ri)['name'],
+        log.append((g.frame, 'equip edge', g.char(ri)['name'],
                     {s: name(i) if i else None for s, i in chosen.items()}))
+    _edge_back(g) if stay else edge_leave(g)
     return chosen
 
 
@@ -1008,15 +1045,235 @@ def mule_use(g, w, members, taken=None):
     return best
 
 
+# --- backups (Chris, 2026-10-15, from his own play) ---
+# "If the item is very expensive and I can't identify it yet, then I have to leave it
+# behind unless I have extra space. If the item is good enough but not as good as my
+# current equipment, I'll usually leave it behind, preferably in a lower-level backup
+# character." Everything else is sold. In his play test the party's spares went to Ace, a
+# low-level standby Fighter, before setting out.
+# So, each town visit after Boltac's (backup_plan, carried out by chapter1.backup_visit):
+#   wear     a spare piece of gear (no member gains from it) that a standby gains at least
+#            BACKUP_GAIN from goes to the standby it helps most (the lower level on a tie)
+#            and is put on there at the Edge of Town (edge_equip): the standbys become
+#            better stand-ins. Boltac's doesn't sell those (gear.shop).
+#   keep     a spare that's valuable (the old mule's keepers) is stored on a standby.
+#   room     when the party's packs have fewer than ROOM_MIN free slots: valuable unknowns
+#            the Bishop can't try yet (above their level), then identified valuables the
+#            party never equips or uses in battle (rings, an Ankh), the most valuable first,
+#            are stored the same way until the room is back.
+#   take     a standby's or the Mule's unworn item that's now an upgrade for a member
+#            comes back (mule_use). While the room stays at ROOM_MIN or more, so do battle
+#            items, the unknowns the Bishop can now try (to the Bishop) and a standby's
+#            unworn leftovers nobody gains from (sold at the next visit).
+# Storage goes to a standby with room past BACKUP_KEEP free slots (one already coming in
+# first, then one who can use the item, then the most room); only when none has room, to the Mule, made then (the overflow:
+# standbys' packs fill with their own gear and a trip's leftovers, and valuables gather
+# over eleven chapters). Potions, scrolls, items whose spell the battle code casts (attack,
+# death, disabling, Madi/Morfis) and important items (no price, ids 310 on) stay with the
+# party. A backup must be alive, in the tavern, and of an alignment that mixes with the
+# party's (Good and Evil don't).
+ROOM_MIN = 12           # free pack slots the party keeps for a trip's loot
+BACKUP_KEEP = 2         # free slots a standby keeps for the loot of a trip it fills in on
+BACKUP_GAIN = 1.0       # least gain (gear_value) worth handing a piece down for
+IMPORTANT_ID = 310      # camp_drop 0x800e0a5c: ids 310 on are "an important item"
+STORE_MAX = 10          # storage moves a visit, beyond the hand-downs
+
+
+def mixes(g, ri, members):
+    """Roster index ri may join a party of `members`: Good and Evil don't mix."""
+    al = {g.char(m)['align'] for m in members}
+    a = g.char(ri)['align']
+    return not (a == 0 and 2 in al or a == 2 and 0 in al)
+
+
+def backups(g, members):
+    """The standbys a town visit can hand items to: alive, in the tavern, not the Mule,
+    their alignment mixing with the party's; the lowest level first."""
+    out = [i for i in town.tavern_candidates(g) if g.name(i) != MULE_NAME and mixes(g, i, members)]
+    return sorted(out, key=lambda i: (g.char(i)['level'], i))
+
+
+def party_keeps(g, w):
+    """An item that rides with the party whatever the room: no price or an important id
+    (the Tablet, the Jade Mask), a potion or scroll (subtypes 20, 21), a Madi/Morfis item,
+    or an identified item whose spell battle.item_choice casts."""
+    from harness import tactics
+    i = w & 0x1ff
+    it = item(g, i)
+    if not it['price'] or i >= IMPORTANT_ID or it['sub'] in (20, 21) or cure_item(g, w):
+        return True
+    bs = g.u8(ITEMS + i * 0x4c + 0x1b)
+    return bool(w & IDENT) and bs != 0xff and (
+        bs & 0x7f in tactics.DAMAGE or bs & 0x7f in tactics.DEATH or bs & 0x7f in tactics.DISABLE)
+
+
+def backup_gain(g, w, backs, taken=None):
+    """(gain, backup ri, slot) of the standby a piece of gear helps most (gear_value over
+    what they wear, or what `taken` already plans for them), at least BACKUP_GAIN; the
+    lower level on a tie. (0, None, None) if none."""
+    it = item(g, w & 0x1ff)
+    if not w & IDENT or w & CURSED or (it['cat'] > 5 and not cloak(it)):
+        return (0, None, None)
+    best = (0, None, None)
+    for b in backs:             # lowest level first: a tie stays with the first
+        _FRONT.add(b)
+        try:
+            gain, s = gear_value(g, b, it, taken)
+        finally:
+            _FRONT.discard(b)
+        if s is not None and gain >= BACKUP_GAIN and gain > best[0]:
+            best = (gain, b, s)
+    return best
+
+
+def room(g, members):
+    return sum(10 - len(pack(g, ri)) for ri in members if g.char(ri)['status'] == 0)
+
+
+def bishop_level(g, members):
+    return max([g.char(ri)['level'] for ri in members
+                if g.char(ri)['cls'] == BISHOP and g.char(ri)['status'] == 0] or [0])
+
+
+def backup_plan(g, members=None):
+    """[(backup ri or None, member ri, 'put' | 'take', item word, why, value)]: what this
+    town visit moves between the party and its backups (see above). None stands for the
+    Mule when it hasn't been made yet and storage needs it. Plans only; RAM reads."""
+    members = list(members or town.town_party(g))
+    alive = [ri for ri in members if g.char(ri)['status'] == 0]
+    if not alive:
+        return []
+    backs = backups(g, members)
+    mi = mule(g)
+    free = {ri: 10 - len(pack(g, ri)) for ri in alive}
+    broom = {b: 10 - len(pack(g, b)) for b in backs}
+    if mi is not None and mi not in members and g.char(mi)['status'] == 0 and mixes(g, mi, members):
+        broom[mi] = 10 - len(pack(g, mi))
+    elif mi is None and MULE_OK[0] and g.roster_count() < 20:
+        broom[None] = 8             # a new mule: a Long Sword and Leather Armor of its own
+    plan = []
+
+    def move(b, ri, kind, w, why, v):
+        plan.append((b, ri, kind, w, why, v))
+        d = 1 if kind == 'put' else -1
+        free[ri] += d
+        broom[b] -= d
+
+    # what's in a pack already goes to its member in camp: counted as worn (as gear.shop)
+    taken = {(rj, s): item(g, w & 0x1ff) for _, w, rj, s, _ in plan_gives(g, alive)}
+    # take: a backup's unworn item that's now an upgrade for a member (a battle item
+    # comes back further down, only while the room allows)
+    battle = []
+    for b in [x for x in broom if x is not None]:
+        for _, w in pack(g, b):
+            if w & EQUIPPED:
+                continue
+            gain, rj, why, s = mule_use(g, w, alive, taken)
+            if rj is None or free[rj] <= 0:
+                continue
+            if why == 'battle':
+                battle.append((b, w))
+                continue
+            if s is not None:
+                taken[(rj, s)] = item(g, w & 0x1ff)
+            move(b, rj, 'take', w, why, round(gain, 1))
+    # wear: the party's spare gear to the standby it helps most
+    btaken, store, crowd = {}, [], []
+    blv = bishop_level(g, alive)
+    for ri in alive:
+        for _, w in pack(g, ri):
+            if w & (EQUIPPED | CURSED) or party_keeps(g, w):
+                continue
+            v = sell_value(g, w)
+            it = item(g, w & 0x1ff)
+            if w & IDENT and spare(g, w, members):
+                gain, b, s = backup_gain(g, w, [x for x in backs if broom[x] > 0], btaken)
+                if b is not None:
+                    btaken[(b, s)] = it
+                    move(b, ri, 'put', w, 'wear', round(gain, 1))
+                elif valuable(g, w):
+                    store.append((v, ri, w, 'keep'))
+            elif w & IDENT and it['cat'] == 7 and not cloak(it) and valuable(g, w):
+                crowd.append((1, -v, ri, w, 'room'))
+            elif not w & IDENT and valuable(g, w) and id_level(g, w & 0x1ff) > blv:
+                crowd.append((0, -v, ri, w, 'unknown'))
+
+    def store_to(w):
+        it = item(g, w & 0x1ff)
+        cands = [b for b in backs if broom[b] > BACKUP_KEEP]
+        if cands:
+            # a backup already coming in first: each one in costs a tavern swap
+            used = {p[0] for p in plan}
+            return max(cands, key=lambda b: (b in used, usable(g, b, it), broom[b], -b))
+        for b in (mi, None):
+            if b in broom and broom[b] > 0:
+                return b
+        return False
+
+    n = 0
+    for v, ri, w, why in sorted(store, key=lambda x: -x[0]):
+        b = store_to(w)
+        if b is False or n >= STORE_MAX:
+            break
+        move(b, ri, 'put', w, why, v)
+        n += 1
+    short = sum(free.values()) < ROOM_MIN
+    for _, negv, ri, w, why in sorted(crowd, key=lambda x: x[:2]):
+        if sum(free.values()) >= ROOM_MIN or n >= STORE_MAX:
+            break
+        b = store_to(w)
+        if b is False:
+            break
+        move(b, ri, 'put', w, why, -negv)
+        n += 1
+    # with room to spare: battle items, then the unknowns the Bishop can now try (to the
+    # Bishop), then a standby's unworn leftovers come back
+    if not short:
+        for b, w in battle:
+            rj = max(alive, key=lambda x: free[x])
+            if free[rj] <= 0 or sum(free.values()) - 1 < ROOM_MIN:
+                break
+            move(b, rj, 'take', w, 'battle', 0)
+    bish = next((ri for ri in alive if g.char(ri)['cls'] == BISHOP), None)
+    if not short and bish is not None:
+        for b in [x for x in broom if x is not None]:
+            for _, w in pack(g, b):
+                if w & (EQUIPPED | IDENT) or id_level(g, w & 0x1ff) > blv:
+                    continue
+                if free[bish] <= 0 or sum(free.values()) - 1 < ROOM_MIN:
+                    break
+                move(b, bish, 'take', w, 'identify', sell_value(g, w))
+    # a standby's unworn leftovers nobody gains from (what a hand-down replaced, the
+    # starting kit) come back to be sold at the next visit
+    if not short:
+        for b in backs:
+            for _, w in pack(g, b):
+                if w & (EQUIPPED | CURSED) or not w & IDENT or party_keeps(g, w) or valuable(g, w) \
+                        or any(p[3] == w and p[0] == b for p in plan):
+                    continue
+                if not spare(g, w, alive) or backup_gain(g, w, backs)[1] is not None:
+                    continue
+                rj = max(alive, key=lambda x: free[x])
+                if free[rj] <= 0 or sum(free.values()) - 1 < ROOM_MIN:
+                    break
+                move(b, rj, 'take', w, 'sell', sell_value(g, w))
+    return plan
+
+
+MULE_OK = [True]        # chapter1.MULE: the Mule may be made for storage
+
+
 def _edge_items(g, pos):
-    """From the town bar: Edge of Town > Prepare > Inspect the member at party position
-    pos > Items (edge_identify's path)."""
-    town.enter(g, 'edge')
-    ui.wait_until(g, lambda: g.u8(town.FAC_SUB) == 5 or g.u8(town.EDGE_CURSOR) == 0, 300, 'edge menu')
-    ui.move_cursor(g, town.EDGE_CURSOR, 0, 'down', 'up', what='edge row')
-    ui.move_cursor(g, town.EDGE_ICON, 3, 'right', 'left', what='Prepare icon')
-    _edge_press(g, lambda: g.u8(EDGE_STATE) == 25, 'Prepare > Inspect')
-    g.step(8)
+    """To the Items menu of the member at party position pos: from the town bar through
+    Edge of Town > Prepare > Inspect (edge_identify's path), or straight from "Inspect
+    whom?" (state 25) when a session is already there (_edge_back)."""
+    if not (g.overlay() == 'HAZURE' and g.u8(EDGE_STATE) == 25):
+        town.enter(g, 'edge')
+        ui.wait_until(g, lambda: g.u8(town.FAC_SUB) == 5 or g.u8(town.EDGE_CURSOR) == 0, 300, 'edge menu')
+        ui.move_cursor(g, town.EDGE_CURSOR, 0, 'down', 'up', what='edge row')
+        ui.move_cursor(g, town.EDGE_ICON, 3, 'right', 'left', what='Prepare icon')
+        _edge_press(g, lambda: g.u8(EDGE_STATE) == 25, 'Prepare > Inspect')
+        g.step(8)
     ui.move_cursor(g, EDGE_GY, pos // 3, 'down', 'up', what='inspect row')
     ui.move_cursor(g, EDGE_GX, pos % 3, 'right', 'left', what='inspect col')
     _edge_press(g, lambda: g.u8(EDGE_STATE) == 35, 'inspect member')
@@ -1026,11 +1283,29 @@ def _edge_items(g, pos):
     g.step(8)
 
 
-def edge_trade(g, pos, mpos, moves, log=None):
-    """At the Edge of Town, between the member at party position pos and the mule at
-    mpos: moves [('put', word, *note): member to mule, ('take', word, *note): mule to
-    member], each logged ('mule deposit' / 'mule withdraw', member, item, outcome, *note).
-    A move into a full pack is skipped. Back at the town bar after. Returns [(kind, name, out)]."""
+def _edge_back(g, limit=600):
+    """Back to "Inspect whom?" (state 25) with cross, one screen a press (the Give lists
+    -> to whom -> Items -> the member's menu -> 25; mulerule probe, 2026-10-15), for the
+    next member in the same Edge of Town visit."""
+    end = g.frame + limit
+    while g.u8(EDGE_STATE) != 25:
+        if g.frame > end or g.overlay() != 'HAZURE':
+            raise Stuck('edge back to inspect', st=g.u8(EDGE_STATE), give=g.u8(GIVE_STATE))
+        sig = (g.u8(EDGE_STATE), g.u8(GIVE_STATE), g.u8(EQ_STATE))
+        g.tap('cross')
+        f0 = g.frame
+        while g.frame - f0 < 60 and (g.u8(EDGE_STATE), g.u8(GIVE_STATE), g.u8(EQ_STATE)) == sig:
+            g.step()
+        g.step(6)
+
+
+def edge_trade(g, pos, mpos, moves, log=None, stay=False):
+    """At the Edge of Town, between the member at party position pos and the backup (a
+    standby or the Mule) at mpos: moves [('put', word, *note): member to backup, ('take',
+    word, *note): backup to member], each logged ('backup put' / 'backup take', member,
+    backup, item, outcome, *note). A move into a full pack is skipped. Back at the town
+    bar after, or with stay at "Inspect whom?" for the next trade (_edge_back). Returns
+    [(kind, name, out)]."""
     slots = town.town_slots(g)
     ri, mi = slots[pos], slots[mpos]
     out = []
@@ -1038,7 +1313,7 @@ def edge_trade(g, pos, mpos, moves, log=None):
     ui.move_cursor(g, EDGE_ITEMS_CUR, ITEMS_GIVE, 'down', 'up', what='Give')
     _edge_press(g, lambda: g.u8(GIVE_STATE) == 5, 'edge Give')
     g.step(8)
-    ui.move_cursor(g, CAMP_TARGET, mpos, 'right', 'left', wrap=6, what='give to the mule')
+    ui.move_cursor(g, CAMP_TARGET, mpos, 'right', 'left', wrap=6, what='give to the backup')
     _edge_press(g, lambda: g.u8(GIVE_STATE) == 15, 'edge give lists')
     g.step(8)
     for kind, w, *note in moves:
@@ -1065,9 +1340,9 @@ def edge_trade(g, pos, mpos, moves, log=None):
                 g.step(8)
         out.append((kind, name(w & 0x1ff), res))
         if log is not None:
-            log.append((g.frame, 'mule deposit' if kind == 'put' else 'mule withdraw',
-                        g.char(ri)['name'], name(w & 0x1ff), res) + tuple(note))
-    edge_leave(g)
+            log.append((g.frame, 'backup put' if kind == 'put' else 'backup take',
+                        g.char(ri)['name'], g.char(mi)['name'], name(w & 0x1ff), res) + tuple(note))
+    _edge_back(g) if stay else edge_leave(g)
     return out
 
 
@@ -1457,7 +1732,7 @@ def shop(g, log, reserve):
     """One visit to Boltac's after a trip: for each member, identify unknown items and
     uncurse cursed ones (cheapest first, each while it costs at most a quarter of the
     party's gold over `reserve`), sell identified weapons and armor nobody would wear
-    (spare) unless they're valuable (the mule keeps those), then buy, best gain per gold first, the upgrades the gold over `reserve` allows. The
+    (spare) unless they're valuable or a standby would wear them (backup_plan), then buy, best gain per gold first, the upgrades the gold over `reserve` allows. The
     gold is pooled on the member being served first. Returns a list of what was done."""
     done = []
     slots = town.town_slots(g)
@@ -1519,13 +1794,26 @@ def shop(g, log, reserve):
             done.append((which, g.char(ri)['name'], name(w & 0x1ff), cost, r))
             log.append((g.frame, which, g.char(ri)['name'], name(w & 0x1ff), cost, r))
         trade_done()
-    # sell what nobody would wear, unless it's worth a lot (valuable: the mule keeps it)
+    # sell what nobody would wear, unless it's worth a lot (valuable: a backup keeps it)
+    # or a standby would wear it (backup_plan's hand-downs, Chris 2026-10-15)
+    from collections import Counter
+    handed = Counter((ri, w) for b, ri, kind, w, why, v in backup_plan(g, [ri for _, ri in members])
+                     if kind == 'put' and why == 'wear')
     for pos, ri in members:
-        while True:
-            sell = next(((k, w) for k, w in pack(g, ri) if spare(g, w, [rj for _, rj in members])
-                         and not valuable(g, w)), None)
+        keep = Counter({w: n for (rj, w), n in handed.items() if rj == ri})
+        sells = []
+        for k, w in pack(g, ri):
+            if not spare(g, w, [rj for _, rj in members]) or valuable(g, w):
+                continue
+            if keep[w] > 0:
+                keep[w] -= 1
+                continue
+            sells.append(w)
+        for w in sells:
+            k = next((j for j, x in pack(g, ri) if x == w), None)
+            sell = None if k is None else (k, w)
             if sell is None:
-                break
+                continue
             r = town.boltac_sell(g, pos, sell[0])
             done.append(('sell', g.char(ri)['name'], name(sell[1] & 0x1ff), r['outcome']))
             log.append((g.frame, 'sell', g.char(ri)['name'], name(sell[1] & 0x1ff), r['outcome']))

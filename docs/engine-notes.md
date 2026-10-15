@@ -304,6 +304,15 @@ glance". By subsystem:
   slot `0x80079c65` (the Items menu's cursor, 2). The code was copied from the camp's
   Give, where `0x80079c60` is the list row. Only items with a regen value (Item +0x21)
   are affected; not yet seen in play.
+- **Equip at the Edge of Town** (Prepare > Inspect > Items > Equip, `equip_menu` HAZURE
+  0x800afa9c) runs the camp's equip prompts on the same fields: slot `0x80079b7a`,
+  prompt `0x80079562`, state `0x8007956c` (5, 10, then 15 at each slot's prompt, 20, and
+  110 then 0 at the end), candidates at `0x800905e0`. Only the cursor differs: the
+  Edge's list row `0x80079c6b` instead of camp's `0x80079c60` (0 for none, k for
+  candidate k - 1, in both). The Edge's own state `0x800796e1`
+  stays at 45 throughout. Cross backs out one screen a press: the Give lists, "to
+  whom?", Items, the member's menu, then "Inspect whom?" (45 -> 35 -> 25), so one visit
+  can serve several members (emulator, 2026-10-15, the harness backups).
 
 ### Records (G-records.md)
 
