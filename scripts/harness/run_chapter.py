@@ -92,6 +92,19 @@ if a.src:
     print('points known for', sorted(r.full_points))
     # the chapter's log and pull-backs, saved beside goal states (agent 14)
     r.resume_memory = chapters.load_memory(g, a.src)
+
+
+class Stopped(Exception):
+    """SIGTERM (agent 16): a run stopped by PID ends as an error does, so result.json,
+    log.jsonl and the final state are still written."""
+
+
+def _stop(signum, frame):
+    raise Stopped('SIGTERM')
+
+
+import signal
+signal.signal(signal.SIGTERM, _stop)
 t0 = time.time()
 ok = True
 try:
