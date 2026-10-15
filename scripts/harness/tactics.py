@@ -74,6 +74,8 @@ GDMG_FIRST = 2.0
 CORTU_STACK = 4          # Cortu casts a boss fight (support_value), each worth 3/4 of the last
 DEATH_THREAT = True      # (agent 14) a monster's death spells count in its threat (info)
 DEATH_LANDS = 0.5        # ... landing on about half the casts (save and magic screen)
+DEATH_REACH = True       # (bossfight) ... Bakadi on every member of a row
+DEATH_EXTRA = 1.0        # (bossfight) killing or screening off a death caster: its deaths count this much again (danger_of, casting_danger)
 HELPLESS_MELEE = True    # (revision 10) Katino and Lorks count the front-liners' extra damage (helpless_bonus)
 DEBUFF_MIN = 0.3         # (fix 3) sleep, silence, paralysis only where a monster's chance of being caught is this
 
@@ -169,6 +171,7 @@ def info(g, k):
     melee_round = sum(melee) / len(melee) * 0.5 if melee else 0
     breath_one = hp / 2 * 0.75 if r[0xc9] else 0
     death = False
+    threat_death = 0.0
     if SPELLS_ON:
         ai = struct.unpack_from('<H', r, 0x88)[0]
         p = [x / 100 for x in g.e.read(AI_WEIGHTS + (ai - 1) * 13, 13)] if ai else [1.0] + [0] * 12
@@ -197,10 +200,15 @@ def info(g, k):
             # Guardians' ArchPriests rated 2.9 a round while their Badi killed three; now 22.5)
             tot_s = sum(pr for pr, _ in sts) or 1
             hp_m = [g.char(i)['max_hp'] for i in g.party()]
-            d_round = p[5] * sum(pr for pr, sid in sts if sid in DEATH) / tot_s * DEATH_LANDS \
-                * (sum(hp_m) / len(hp_m) if hp_m else 0)
+            # (bossfight) Bakadi takes a row, each member saving on their own at 65
+            # (D-battle.md), so it counts ROW members at 35% each (n1v0w chapter 13: the
+            # Arch Priests' Bakadi rated as one Badi, and Cortu stopped while they stood)
+            d_round = p[5] * sum(pr * (ROW * 0.35 / DEATH_LANDS if DEATH_REACH and sid == 40 else 1)
+                                 for pr, sid in sts
+                                 if sid in DEATH) / tot_s * DEATH_LANDS * (sum(hp_m) / len(hp_m) if hp_m else 0)
             threat += d_round
             threat_spell += d_round
+            threat_death = d_round
         # monster_ai 0x800cffb0: columns 3-4 damage (spell entry 0), 5 status (1), 6 buff
         # (2), 7 heal (3), 8 cure (4); a column it has no spells for falls back to fighting
         has = [any(r[0x8f + sc * 5 + e] != 0xff for sc in range(4)) for e in range(5)]
@@ -233,6 +241,7 @@ def info(g, k):
                 flags=struct.unpack_from('<I', r, 0xa8)[0],
                 resist=struct.unpack_from('<H', r, 0xcc)[0],
                 weak=struct.unpack_from('<H', r, 0xce)[0], caster=caster, threat=threat, threat_spell=threat_spell,
+                threat_death=threat_death,
                 blow=(blow_f, blow_b), death=death, dsrc=dsrc, dcast=dcast, fight_p=fight_p, dis_hp=0.0, dis_hp_spell=0.0,
                 para=para_caster(dsrc, dmg + sts if SPELLS_ON else []),
                 gdmg=any(sid in DAMAGE and DAMAGE[sid][1] != 'one' for _, sid in (dmg if SPELLS_ON else [])),
@@ -517,8 +526,9 @@ def helpless_bonus(g, sid, t, m, frac, M):
 
 def danger_of(m):
     """What one of group m's monsters costs the party a round it stands: its damage threat
-    and the actions it takes away (disable(): dis_hp, 0 until it has run)."""
-    return m['threat'] + m.get('dis_hp', 0.0)
+    and the actions it takes away (disable(): dis_hp, 0 until it has run); its death
+    spells DEATH_EXTRA times again, for the dead member's turns (bossfight)."""
+    return m['threat'] + m.get('dis_hp', 0.0) + DEATH_EXTRA * m.get('threat_death', 0.0)
 
 
 def lands(m, sid):
@@ -544,12 +554,12 @@ def targets(g, k, kind, M):
 # this round's casts already chosen (battle.default_policy): group -> {monster: expected
 # damage} and group -> chance it's already disabled, so a second caster doesn't spend a
 # point on what the first one's spell will likely finish (reset each round)
-PLAN = dict(round=None, dmg={}, dis={})
+PLAN = dict(round=None, dmg={}, dis={}, screen=None)
 
 
 def plan_reset(rnd):
     if PLAN['round'] != rnd:
-        PLAN.update(round=rnd, dmg={}, dis={})
+        PLAN.update(round=rnd, dmg={}, dis={}, screen=None)
     focus_reset(rnd)
 
 
@@ -659,6 +669,8 @@ def support_value(g, sid, M, cast_counts, party_alive):
         return 0.15 * melee * 3
     if sid == MAPORFIC and n < 1:
         return 0.10 * melee * 3
+    if sid == CORTU and CORTU_SCREEN:
+        return 0.0                      # cortu_value (battle.default_policy)
     if sid == CORTU and n < CORTU_STACK:
         # (agent 14, the community's boss advice: stack Cortu) each cast takes the screen to
         # 3/4 of what it was + 2 x level (spell_cortu, D-battle.md), so each adds 3/4 of
@@ -864,16 +876,17 @@ def group_hp(m):
 
 
 def caster_order(M, kill_first=None, skip_done=False):
-    """The caster groups present, first to kill first: kill-first monsters (battle.KILL_FIRST
-    by id), then by danger (caster_danger of the monsters that can cast now: asleep,
-    paralyzed or silenced ones count 0.3, they come back), in bands of a factor of two so
-    near-equal casters tie, then the fewest hit points standing. skip_done: leave out
-    groups the members commanded before have likely killed this round (dead_p)."""
+    """The caster groups present, first to kill first: kill-first monsters (kill_rank:
+    battle.KILL_FIRST by id, or by what they cast), then by danger (caster_danger of the
+    monsters that can cast now: asleep, paralyzed or silenced ones count 0.3, they come
+    back), in bands of a factor of two so near-equal casters tie, then the fewest hit
+    points standing. skip_done: leave out groups the members commanded before have likely
+    killed this round (dead_p)."""
     out = []
     for k, m in M.items():
         if not m['mons']:
             continue
-        kf = kill_first.get(m['id'], 9) if kill_first else 9
+        kf = kill_rank(m, kill_first)
         d = caster_danger(m)
         if kf == 9 and not is_caster(m):
             continue
@@ -946,3 +959,111 @@ def focus_commit(g, sid, k, M, clevel):
         kind = DAMAGE[sid][1] if sid in DAMAGE else DEATH[sid][0]
         for t in targets(g, k, kind, M):
             FOCUS['spell'].setdefault(t, []).append(finish_p(sid, M[t], clevel))
+
+
+# Dangerous casters by what they cast (bossfight, 2026-10-15). battle.KILL_FIRST names
+# chapter 4's and chapter 10's Guardians by id; chapter 13's (Arch Mages 456, Arch Priests
+# 440, Arch Lords 473 at Area C B4 E5 N11) weren't on it. kill_rank gives any group the
+# same first places from its record: 0 for a monster that, at KILL_RANK_P a round or more,
+# casts party-wide damage of Tiltowait's class (mean x members reached >= HEAVY_DMG:
+# Tiltowait, Lasios, Galtomas, Ladalto), group death (Bakadi) or sleep on everyone
+# (Katiqurea); 1 for Badi (death to one) at that chance; else 9, and caster_order's danger
+# bands decide. The chapter 13 Arch Lords cast Badi and Bakadi 5% of their rounds and stay
+# at 9.
+KILL_RANK_BY_SPELLS = True
+KILL_RANK_P = 0.1
+HEAVY_DMG = 150
+RANK_STATUS = {40: 0, 49: 0, 34: 1}
+
+
+def spell_rank(sid):
+    """kill_rank's place for a monster's spell sid, or 9."""
+    if sid in DAMAGE:
+        mean, kind, _ = DAMAGE[sid]
+        if kind != 'one' and mean * (6 if kind == 'all' else ROW) >= HEAVY_DMG:
+            return 0
+        return 9
+    return RANK_STATUS.get(sid, 9)
+
+
+def kill_rank(m, kill_first=None):
+    """Group m's place to kill or silence first: kill_first's (battle.KILL_FIRST by monster
+    id) where it has one, else by its spells and how often it casts them (see above)."""
+    kf = kill_first.get(m['id'], 9) if kill_first else 9
+    if not KILL_RANK_BY_SPELLS or not SPELLS_ON:
+        return kf
+    p = {}
+    for pr, sid in m.get('dcast', []):
+        p[sid] = p.get(sid, 0.0) + pr
+    sts = m.get('sts', [])
+    tot = sum(pr for pr, _ in sts) or 1
+    for pr, sid in sts:
+        p[sid] = p.get(sid, 0.0) + m.get('p_status', 0.0) * pr / tot
+    for sid, x in p.items():
+        if x >= KILL_RANK_P:
+            kf = min(kf, spell_rank(sid))
+    return kf
+
+
+# Cortu by what it adds (bossfight, 2026-10-15). Cortu sets the party's magic screen
+# (battle_groups +7, group 0) to 3/4 of what it was + 2 x the caster's level, up to 90
+# (D-battle.md), and every hostile spell, death spells included, is shrugged off at
+# the target's resistance + that screen + 1 in 100. Above 10 the screen drops 5-10 a
+# round (counters_tick). So a cast is worth the points of screen it adds, as the share
+# of the casters' damage and death a round that stops landing, for CORTU_ROUNDS rounds;
+# nothing once the screen is near 90 or the casters are down or silenced. The winning
+# chains at chapter 13's Guardians kept a level-18 mage casting it every round.
+CORTU_SCREEN = True
+CORTU_ROUNDS = 3.0
+SCREEN_CAP = 90
+PARTY_SCREEN = GROUPS + 7
+
+
+def screen_now(g):
+    """The party's magic screen with this round's Cortu casts already chosen (PLAN)."""
+    s = PLAN.get('screen')
+    return g.u8(PARTY_SCREEN) if s is None else s
+
+
+def casting_danger(M):
+    """Hit points a round the monsters' spells cost the party, from the monsters that can
+    cast now (not asleep, paralyzed or silenced): caster_danger each, with its death
+    spells' part counted 1 + DEATH_EXTRA times: a member killed loses their turns for the
+    rest of the fight as well as their hit points."""
+    t = 0.0
+    for m in M.values():
+        act = [j for j, _, st in m['mons'] if st < 8 and j not in m.get('silenced', ())]
+        t += (caster_danger(m) + DEATH_EXTRA * m.get('threat_death', 0.0)) * len(act)
+    return t
+
+
+def cortu_value(g, M, clevel):
+    s = screen_now(g)
+    gain = min(SCREEN_CAP, 0.75 * s + 2 * clevel) - s
+    if gain <= 0:
+        return 0.0
+    return gain / 100 * casting_danger(M) * CORTU_ROUNDS
+
+
+def cortu_commit(g, clevel):
+    s = screen_now(g)
+    PLAN['screen'] = min(SCREEN_CAP, 0.75 * s + 2 * clevel)
+
+
+def incoming(g, M, party):
+    """{slot: hit points member slot is expected to lose this round}: the monsters' spells
+    (damage and death, info threat_spell) spread over the standing members and cut by the
+    party's magic screen, their blows and breath (the rest of info threat) over the front
+    row. party: [(slot, hp, max)]."""
+    up = [s for s, hp, _ in party if hp > 0]
+    if not up:
+        return {}
+    front = [s for s in up if s < 3] or up
+    cut = 1 - min(SCREEN_CAP, screen_now(g)) / 100
+    sp = ml = 0.0
+    for m in M.values():
+        act = [j for j, _, st in m['mons'] if st < 8]
+        cast = [j for j in act if j not in m.get('silenced', ())]
+        sp += m['threat_spell'] * len(cast)
+        ml += (m['threat'] - m['threat_spell']) * len(act)
+    return {s: sp * cut / len(up) + (ml / len(front) if s in front else 0.0) for s in up}
