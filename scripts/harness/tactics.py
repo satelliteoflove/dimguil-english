@@ -680,6 +680,8 @@ def dispel_value(g, k, M, cls, clevel):
 STORY_ONLY = False       # (a) only story and boss fights count as fixed, not a floor's fight squares
 KILL_HITS = False        # (d) a monster that can kill a member in one or two hits makes it matter
 STORY = [None]          # battle.fight sets it at the fight's start (story_fight)
+RANDOM_NOT_STORY = True  # (casterfocus) a fixed grid met as a random encounter isn't a story fight
+ENCOUNTER_ID = 0x800797f4   # u16: 0xffff / 0xfffe for a random encounter (battle.fleeable)
 TRAINING = False        # chapters.train: a training trip, home walk included
 
 
@@ -690,6 +692,12 @@ def story_fight(g):
     on the squares and as roamers between them (smoke1: B4 (13, 16), not a square), so a
     training trip's fixed fights never count."""
     if not g.u8(FIXED):
+        return False
+    if RANDOM_NOT_STORY and (struct.unpack('<H', g.e.read(ENCOUNTER_ID, 2))[0] + 2) & 0xffff < 2:
+        # (casterfocus) a fixed grid met as a random encounter (encounter_id 0xffff or 0xfffe,
+        # the ones a party can run from; battle.fleeable) isn't a story fight: Area B's
+        # human parties (0xfffe) were rated 'story', so the walk out and home ran from them
+        # at round 1 and a fight with them opened with Tiltowait, Cortu and Badi
         return False
     if not STORY_ONLY:
         return True
