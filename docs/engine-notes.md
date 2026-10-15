@@ -86,6 +86,13 @@ glance". By subsystem:
   fight squares, signs, doors, pillars...); stepping on a square runs `square_arrive`,
   Investigate runs `square_examine`. Hidden doors are found by a search roll on each
   step. A-maze.md §9-10.
+- **Area B's west rooms.** B4 and B5 (areas 24 and 23) each have a west part, x 4-9 in
+  game coordinates, joined to each other by the stairs at (8, 10) but not to the rest
+  of either floor. The only way in is B3's stairs at (5, 13) down to B4 (4, 13), and
+  B3's west side is reached through B2 and B1. So five of B4 and B5's fight squares (B4
+  (5, 9), (5, 15), (8, 12); B5 (7, 8), (7, 15)) are a walk through B3, B2 and B1 from
+  the others. Found from the fan site's map data with the harness's planner
+  (2026-10-15); Chris's own B4/B5 trip from the same state never went there.
 
 ### Wipes and bodies (A-maze.md §4-6, D-battle.md, fallen-parties.md)
 
