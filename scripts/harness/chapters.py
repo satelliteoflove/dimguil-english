@@ -346,6 +346,16 @@ class Run(chapter1.Run):
                 self._topping = False
             if critical and getattr(self, '_walking_out', False):
                 raise TurnHome(critical)
+        if HEALER_HOME and (getattr(self, '_walking_out', False) or getattr(self, '_goal_walk', False)) \
+                and not getattr(self, '_homeward', False) and not getattr(self, '_gold', False) \
+                and g.overlay() not in ('JOUKA', 'HAZURE', 'BATTLE') and self.healers_down():
+            # (agent 16) a healer down on the walk out or a goal walk turns the party home, once
+            # the party's own cures have had their try (n1v0r chapter 10: Earth died in the
+            # red stone's fight and the walk on met a Were Centipede pack with no healer)
+            chapter1.cure_in_camp(g, self.log, on_int=self.on_int)
+            down = self.healers_down()
+            if down and self.town_helps():
+                raise TurnHome('healer down: ' + ', '.join(down))
         if TOPUP and tactics.TRAINING and self.fights() > n and not getattr(self, '_topping', False) \
                 and g.overlay() not in ('JOUKA', 'HAZURE', 'BATTLE'):
             # heal up after each training fight, not only at the next fight square: the
@@ -408,11 +418,36 @@ class Run(chapter1.Run):
 
     def go(self, dest):
         """To dest = (area, x, y) from wherever the party is, town included. Without the
-        Tablet past the Grounds there's no way in: NoTablet."""
+        Tablet past the Grounds there's no way in: NoTablet. A goal's walk (not training)
+        that loses a healer goes home and walks again, HEALER_TRIPS times at most."""
         self.ensure_maze()
         if dest[0] != 0 and not self.has_tablet() and nav.plan(self.g, tuple(dest)) is None:
             raise NoTablet()
-        return nav.travel(self.g, tuple(dest), self.on_int, lambda g: self.after())
+        if tactics.TRAINING or getattr(self, '_goal_walk', False):
+            return nav.travel(self.g, tuple(dest), self.on_int, lambda g: self.after())
+        for k in range(HEALER_TRIPS + 1):
+            self._goal_walk = k < HEALER_TRIPS
+            try:
+                return nav.travel(self.g, tuple(dest), self.on_int, lambda g: self.after())
+            except TurnHome as t:
+                self._goal_walk = False         # the walk home itself doesn't turn
+                self.note('turn home', t.args[0])
+                self.trip_home('healer down')
+                self.ensure_maze()
+            finally:
+                self._goal_walk = False
+
+    def healers_down(self):
+        """Names of the members who know a Priest heal (tactics.HEALS) and are out of
+        action (chapter1.SERIOUS)."""
+        g = self.g
+        out = []
+        for i in g.party():
+            c = g.char(i)
+            if c['status'] & chapter1.SERIOUS and any(
+                    h in tactics.HEALS for lv in range(1, 8) for h in battle.known_spells(c['raw'], 1, lv)):
+                out.append(c['name'])
+        return out
 
     def cleo_why(self):
         """(revision 9, Chris) Why the walk home should go by Cresson's party for a free
@@ -1411,6 +1446,8 @@ TOPUP = False                # heal to what the trip's worst monster can't take 
 HOME_HEAL = True             # (main) before the homeward leg, heal to 2/3 or full (Run.home_heal)
 HP_HEAL = True               # Chris's HP lines after every training fight (Run.hp_heal)
 HOME_DEAD = 0x80 | 0x100 | 0x200  # dead, ash, lost: the walk home may run (Run.homeward_run)
+HEALER_HOME = True           # (agent 16) a healer down on the walk out or a goal walk turns the party home
+HEALER_TRIPS = 2             # ... a goal walk goes home and back at most this many times
 AVOID_FATAL = True           # the walk home keeps off the square of the trip's fatal fixed fight (nav.TRIP_SOFT)
 POINTS_HOME = 0.5           # agent 13 (strategy revision 3): a training trip goes home when points or heals are this low (Run.points_spent)
 POINTS_TRAIN = True         # agent 8: a training trip from the maze goes home first when points are low
