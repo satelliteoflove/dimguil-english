@@ -157,6 +157,10 @@ class Wiped(Exception):
     pass
 
 
+class Blocked(Exception):
+    """A goal that can't succeed from here, whatever the retries (Run.goal stops)."""
+
+
 def walk(g, xy, log):
     maze.walk_to(g, xy[0], xy[1], on_interrupt_factory(log))
 
@@ -1345,6 +1349,11 @@ class Run:
                 r = fn()
             except Wiped:
                 r = 'wiped'
+            except Blocked as b:
+                # a try can't change it: no retries (n1v3u chapter 14, the gold set out
+                # of the party, six identical tries)
+                self.note('blocked', name, str(b))
+                raise Stuck('goal blocked', goal=name, why=str(b))
             except Stuck as s:
                 tag = '%s/stuck_%02d_%s_%d' % (self.out, len(self.goals), name, tries)
                 try:

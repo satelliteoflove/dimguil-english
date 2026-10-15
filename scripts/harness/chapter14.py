@@ -152,6 +152,22 @@ def worn_gold(g, ri):
     return {w & 0x1ff for _, w in gear.pack(g, ri) if w & gear.EQUIPPED and w & 0x1ff in GOLD}
 
 
+def gold_out(g):
+    """{piece name: holder} for gold pieces not in the party (a standby's, a lost
+    member's), or {} if all four ride with it. Not in the roster at all: 'nobody'."""
+    from harness import town
+    party = set(g.party() or town.town_party(g))
+    have = {w & 0x1ff for ri in party for _, w in gear.pack(g, ri)}
+    out = {}
+    for i in GOLD:
+        if i in have:
+            continue
+        who = [g.char(ri)['name'] for ri in range(g.roster_count())
+               if any(w & 0x1ff == i for _, w in gear.pack(g, ri))]
+        out[gear.name(i)] = who[0] if who else 'nobody'
+    return out
+
+
 def holder(g, piece, but):
     for pos, ri in enumerate(g.party_slots()):
         if ri is None or pos == but:
@@ -177,8 +193,7 @@ def dress(run, pos):
             continue
         h = holder(g, missing[0], pos)
         if h is None:
-            run.note('gold piece missing', gear.name(missing[0]))
-            return False
+            raise chapter1.Blocked('gold piece missing: %s' % gear.name(missing[0]))
         hpos, k = h
         if len(gear.pack(g, ri)) < 10:
             gear.give(g, hpos, k, pos, log)
@@ -320,6 +335,15 @@ class Chapter14:
                 return True
             if not nav.flag(g, DOORS, 6):
                 return False
+            out = gold_out(g)
+            if out:
+                # a standby holds pieces: a town visit's backups bring them back
+                # (gear.backup_plan's quest takes)
+                run.note('gold set out of the party', out)
+                run.trip_home('gold set')
+                out = gold_out(g)
+                if out:
+                    raise chapter1.Blocked('gold set out of the party: %s' % out)
             run.fit()
             run.go(SMALL)
             run.after()
