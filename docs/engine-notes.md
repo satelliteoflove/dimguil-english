@@ -153,7 +153,11 @@ glance". By subsystem:
     EVENTMES 186 and prompt 0x13: Yes prints 187 and gives 0x13a (0x800cbb0c: the first
     free pack slot in party order, flagged 0x4000, else game_state 3, the drop picker);
     No prints 188 and the statue stays for another visit. **[code]**, chapter 15
-    (2026-10-15).
+    (2026-10-15). The drop picker comes straight from the prompt's Yes, with no box:
+    SISETU 92 and 303 ("Your pack is full. Who will drop it?") two frames after game_state
+    turns 3, the member chosen with the camp's cursor (0x800796cc column, 0x800796cd
+    row, starting on the first member), then SISETU 90 for their list. A cross backs
+    out and the item stays where it was. **[emu]** (c15v1a-c, 2026-10-15)
 - **The glyph pad's words.** END on the pad (0x800b989c) checks the typed word against
   seven: at Area X's pedestal words 0-4 (STAFF, LABORATORY, WAREHOUSE, ENERGY and a fifth)
   each need a stone in the Tablet (0x800b7248: 4, 6, 0, 7, 3) and set story_flags bits 4,
