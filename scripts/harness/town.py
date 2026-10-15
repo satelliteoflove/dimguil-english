@@ -225,6 +225,19 @@ def _spend_bonus(g, cls):
                 break
 
 
+def _class_bonus(g, cls):
+    """Take the class on the cursor and spend what bonus is left, to "Is this all right?"
+    (90). A class whose minimums use the whole bonus skips the distribution (70 -> 85 ->
+    90 with no press): circles pressed waiting for 80 then ran on through 105 and
+    registered the character (suite round 2026-10-15, party:t4v4/t4v6: a Bishop rolled
+    with exactly its minimums, thrown away and registered all the same)."""
+    ui.press_until(g, 'circle', lambda: g.u8(CS) != 70, 300, 'class')
+    ui.wait_until(g, lambda: g.u8(CS) in (80, 90), 300, 'class (ready)')
+    if g.u8(CS) == 80:
+        _spend_bonus(g, cls)
+        ui.confirm_until(g, lambda: g.u8(CS) == 90, 300, 'distribute')
+
+
 def _create_once(g, name, race, sex, align, cls, retrain, delay):
     """One pass through creation. None if the roll didn't offer cls (the character was
     finished and thrown away), else the registered character's dict."""
@@ -248,9 +261,7 @@ def _create_once(g, name, race, sex, align, cls, retrain, delay):
     offered = class_list(g)
     if want not in offered:
         choose_list(g, 0, len(offered), 'class')
-        ui.confirm_until(g, lambda: g.u8(CS) == 80, 300, 'class')
-        _spend_bonus(g, CLASSES[offered[0]])
-        ui.confirm_until(g, lambda: g.u8(CS) == 90, 300, 'distribute')
+        _class_bonus(g, CLASSES[offered[0]])
         yes_no(g, True, 'is this all right')
         ui.confirm_until(g, lambda: g.u8(CS) == 105, 300, 'all right')
         # cancel is No here (state 'n', 110); moving the list cursor to No and confirming
@@ -267,9 +278,7 @@ def _create_once(g, name, race, sex, align, cls, retrain, delay):
 
     bonus = g.u8(BONUS)
     choose_list(g, offered.index(want), len(offered), 'class')
-    ui.confirm_until(g, lambda: g.u8(CS) == 80, 300, 'class')
-    _spend_bonus(g, cls)
-    ui.confirm_until(g, lambda: g.u8(CS) == 90, 300, 'distribute')
+    _class_bonus(g, cls)
     yes_no(g, True, 'is this all right')
     ui.confirm_until(g, lambda: g.u8(CS) == 105, 300, 'all right')
     yes_no(g, True, 'use this character')
