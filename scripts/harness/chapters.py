@@ -698,6 +698,11 @@ class Run(chapter1.Run):
         """Heal to frac (READY_HP) from camp, where the party stands."""
         if self.g.overlay() not in ('JOUKA', 'HAZURE'):
             try:
+                if chapter1.anyone_dead(self.g):
+                    # a status first: hurt() leaves out a poisoned member, so heal_strong
+                    # never healed one (n1v0p chapter 10: Venus, poisoned on the way, went
+                    # into the Guardians at 49 of 103 and Earth spent rounds on Madi)
+                    chapter1.cure_in_camp(self.g, self.log, on_int=self.on_int)
                 chapter1.heal_strong(self.g, self.log, frac or READY_HP, on_int=self.on_int)
                 # heal() comes just before a boss: the party's AC too (Chris, 2026-10-14)
                 self.maporfic()
