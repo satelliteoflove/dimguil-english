@@ -31,9 +31,43 @@ The armor fits only a Fighter, Samurai or Lord (class mask 0x31), the rest a Val
 well; all four have price 0, so Boltac's never takes them, and the battle policy never
 Uses an item (their battle spells break them half the time).
 """
-from harness import chapters, gear, nav
+from harness import chapters, chapter1, gear, maze, nav, play, ui
+from harness.game import Stuck
 
 STORY = 0x80079b44
+CHOICE = 0x0e       # game_state while the altar's Red/Green menu waits (0x800c1070 case 0x15)
+
+
+def altar(g, log):
+    """From the Investigate: through EVENTMES 97 to the Red/Green menu, Red (cursor
+    0x8007e800 = 0), Circle. after_event doesn't know game_state 0x0e (n1v3r/n1v6p
+    chapter 11, 2026-10-15: "after event" six times with the menu open on Red)."""
+    f0 = g.frame
+    while g.u8(maze.GAME_STATE) != CHOICE:
+        if g.frame - f0 > 3000:
+            raise Stuck('no altar menu', where=g.where())
+        if g.u8(maze.GAME_STATE) == play.PROMPT:
+            ui.move_cursor(g, play.PROMPT_CURSOR, 0, 'down', 'up', what='altar yes/no')
+            ui.confirm_until(g, lambda: g.u8(maze.GAME_STATE) != play.PROMPT, 300, 'altar yes')
+            continue
+        if maze.calm(g):
+            for _ in range(chapter1.QUIET):
+                g.step()
+                if not maze.calm(g):
+                    break
+            else:
+                return False
+            continue
+        if g.u8(maze.EVENT_BOX) or maze.box_up(g):
+            play.close_box(g)
+            continue
+        g.step()
+    g.step(20)
+    if g.u8(play.PROMPT_CURSOR) != 0:
+        ui.move_cursor(g, play.PROMPT_CURSOR, 0, 'down', 'up', limit=120, what='altar red')
+    ui.confirm_until(g, lambda: g.u8(maze.GAME_STATE) != CHOICE, 300, 'altar red')
+    log.append((g.frame, 'altar', 'red'))
+    return True
 PIECES = (('helm', 0x140, (22, 9, 12), 3), ('armor', 0x13d, (22, 9, 7), 3),
           ('gauntlets', 0x13e, (22, 9, 15), 3), ('boots', 0x13f, (22, 14, 8), 1))
 
@@ -58,7 +92,15 @@ class Chapter11:
             if nav.flag(g, STORY, 9):
                 return True
             run.fit()
-            run.examine((19, 11, 12), 3)
+            for _ in range(3):
+                run.go((19, 11, 12))
+                if not maze.face(g, 3):
+                    run.after()
+                if (g.u8(maze.AREA),) + g.pos() == (19, 11, 12) and g.u8(maze.FACE) == 3:
+                    break
+            chapter1.investigate(g)
+            altar(g, run.log)
+            run.after()
             return nav.flag(g, STORY, 9)
 
         def bed(i, at, facing):
