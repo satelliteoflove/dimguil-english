@@ -71,6 +71,7 @@ PARA_FIRST = 3.0
 # Venus twice on the walk home and wiped n1v3 once). battle.choose_group puts fighters'
 # blows on such a lone caster first.
 GDMG_FIRST = 2.0
+CORTU_STACK = 4          # Cortu casts a boss fight (support_value), each worth 3/4 of the last
 HELPLESS_MELEE = True    # (revision 10) Katino and Lorks count the front-liners' extra damage (helpless_bonus)
 DEBUFF_MIN = 0.3         # (fix 3) sleep, silence, paralysis only where a monster's chance of being caught is this
 
@@ -621,8 +622,11 @@ def support_value(g, sid, M, cast_counts, party_alive):
         return 0.15 * melee * 3
     if sid == MAPORFIC and n < 1:
         return 0.10 * melee * 3
-    if sid == CORTU and n < 2:
-        return 0.25 * spells * 3
+    if sid == CORTU and n < CORTU_STACK:
+        # (agent 14, the community's boss advice: stack Cortu) each cast takes the screen to
+        # 3/4 of what it was + 2 x level (spell_cortu, D-battle.md), so each adds 3/4 of
+        # the last one's gain: 2L, 3.5L, 4.6L, 5.5L
+        return 0.25 * spells * 3 * 0.75 ** n
     return 0.0
 
 
