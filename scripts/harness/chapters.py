@@ -630,6 +630,7 @@ class Run(chapter1.Run):
         heal to READY_HP from camp."""
         g = self.g
         home_below = home_below or READY_HOME
+        self._ready_goal = getattr(self, '_goal_name', None)
         self.boss_training()
         self.fit()
         if g.overlay() in ('JOUKA', 'HAZURE'):
@@ -653,6 +654,16 @@ class Run(chapter1.Run):
                                'down before a boss' if chapter1.out_of_action(g) else 'HP before a boss')
             finally:
                 chapter1.COT_BELOW = keep
+
+    def replay_trains(self, name):
+        """(main, 2026-10-14: n1v0o stopped on two identical wipes at chapter 10's
+        Guardians) A boss goal (one that calls ready) on a chapter with training floors goes
+        on after a replayed failure: its next try trains a level first (boss_training), so
+        it isn't the same fight. At most BOSS_REPLAYS failed tries."""
+        import sys
+        mod = sys.modules.get('harness.chapter%d' % self.chapter)
+        return (getattr(self, '_ready_goal', None) == name and bool(getattr(mod, 'TRAIN_AREAS', None))
+                and self.boss_wipes() + 1 < BOSS_REPLAYS)
 
     def boss_wipes(self):
         """Tries of the goal under way that ended in a wipe or casualties."""
@@ -1304,6 +1315,7 @@ CLEO_RAISE = True
 CLEO_DETOUR = 150           # plan steps the detour may add to the walk home
 CLEO_GOLD_SHARE = 0.25      # ... for a temple fee this share of the party's gold or more
 RECOVER_MOST = 30           # Grounds trips for the Tablet's holder inside one goal
+BOSS_REPLAYS = 6            # failed tries at a boss goal before a replayed one stops the run
 BOSS_WIPES = 2              # failed tries at a goal before each further try trains a level
 FIGHT_WAIT = 2400
 READY_HP = 0.9              # a boss fight starts with everyone at this share of max HP

@@ -1079,6 +1079,11 @@ class Run:
     def note(self, *a):
         self.log.append((self.g.frame,) + a)
 
+    def replay_trains(self, name):
+        """Whether a replayed failure of goal `name` can go on: the next try trains first
+        (chapters.Run, boss goals)."""
+        return False
+
     def fail_sig(self, r):
         """What a failed try ended on: its result and its last fight (place, monster groups,
         rounds, runs, HP and who was down at the end), or None without a fight."""
@@ -1134,7 +1139,8 @@ class Run:
             # the same fight the same way as the last one is a replay: n1v0d chapter 3 ran
             # from the same 14 Wing Lizards at 178 HP six times. Stop instead of replaying
             sig_ = self.fail_sig(r)
-            if sig_ is not None and sig_ == getattr(self, '_last_fail', None) and self._last_fail_goal == name:
+            if sig_ is not None and sig_ == getattr(self, '_last_fail', None) and self._last_fail_goal == name \
+                    and not self.replay_trains(name):
                 raise Stuck('goal replays', goal=name, last=r, sig=str(sig_))
             self._last_fail, self._last_fail_goal = sig_, name
             self.note('retry', name, r)
