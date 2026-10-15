@@ -72,6 +72,8 @@ PARA_FIRST = 3.0
 # blows on such a lone caster first.
 GDMG_FIRST = 2.0
 CORTU_STACK = 4          # Cortu casts a boss fight (support_value), each worth 3/4 of the last
+DEATH_THREAT = True      # (agent 14) a monster's death spells count in its threat (info)
+DEATH_LANDS = 0.5        # ... landing on about half the casts (save and magic screen)
 HELPLESS_MELEE = True    # (revision 10) Katino and Lorks count the front-liners' extra damage (helpless_bonus)
 DEBUFF_MIN = 0.3         # (fix 3) sleep, silence, paralysis only where a monster's chance of being caught is this
 
@@ -189,6 +191,16 @@ def info(g, k):
         death = any(sid in DEATH for _, sid in sts)
         threat = p_fight * melee_round + p_dmg * spell_round + p_breath * breath_one * ROW
         threat_spell = p_dmg * spell_round
+        if death and DEATH_THREAT:
+            # (agent 14) a death spell takes a whole member: its status column's chance of
+            # one, at DEATH_LANDS, times the party's mean max HP (n1v0 chapter 10: the
+            # Guardians' ArchPriests rated 2.9 a round while their Badi killed three; now 22.5)
+            tot_s = sum(pr for pr, _ in sts) or 1
+            hp_m = [g.char(i)['max_hp'] for i in g.party()]
+            d_round = p[5] * sum(pr for pr, sid in sts if sid in DEATH) / tot_s * DEATH_LANDS \
+                * (sum(hp_m) / len(hp_m) if hp_m else 0)
+            threat += d_round
+            threat_spell += d_round
         # monster_ai 0x800cffb0: columns 3-4 damage (spell entry 0), 5 status (1), 6 buff
         # (2), 7 heal (3), 8 cure (4); a column it has no spells for falls back to fighting
         has = [any(r[0x8f + sc * 5 + e] != 0xff for sc in range(4)) for e in range(5)]
