@@ -97,13 +97,94 @@ EXTRA_SEALED = {7: {(7, 11, 3): [(NPC_FLAGS, 28)], (6, 11, 1): [(NPC_FLAGS, 28)]
                 # the green one east of E15 N11 (15, 12) until bit 8 (lit green; red
                 # clears it). The site's map shows neither lock (chapter 11)
                 22: {(11, 12, 3): [(0x80079b44, 9)], (10, 12, 1): [(0x80079b44, 9)],
-                     (15, 12, 1): [(0x80079b44, 8)], (16, 12, 3): [(0x80079b44, 8)]}}
+                     (15, 12, 1): [(0x80079b44, 8)], (16, 12, 3): [(0x80079b44, 8)]},
+                # Area C B2's Greater Golem door, north of E11 N10 (11, 13): locked at each
+                # floor load (squares (11, 13) and (11, 12)) while story bits 10 and 11 are
+                # both clear; the Golem's fight sets 11 (MAZE 0x800c0748, chapter 12)
+                30: {(11, 13, 0): [(0x80079b44, 11)], (11, 12, 2): [(0x80079b44, 11)]}}
 # Sides that close once a flag is set: area -> {(x, y, side): (addr, bit)}. B2's passage
 # between E13 N12 and E14 N12 shuts when the winding machine runs (story_flags bit 2):
 # the wall it hauls up on B3 comes down here (walkthrough 05-moon-door; f1v3f 2026-10-13
 # went up and down B1-B2's stairs 40 times, the site's map calling it open).
 STORY_FLAGS = 0x80079b44
 EXTRA_SHUT_AFTER = {7: {(13, 11, 1): (STORY_FLAGS, 2), (14, 11, 3): (STORY_FLAGS, 2)}}
+
+# Area C's moving floors (square_arrive 0x45, MAZE 0x800ba48c): stepping on turns the
+# party to the record's p1 and moves it a square that way, again on each square it's
+# carried onto, stairs and chutes included, until a square without one. The turning
+# tiles (0x44, nine of them, p1 0-8) do the same with the facing the switch panel set:
+# TILE_DIRS[p1 * 3 + PANEL[p1]] (MAZE 0x800ef240; the panel, chapter 12). Neither runs
+# while story_flags bit 10 or 27 is set. Followed this way, door C's ride ends at
+# C-B2 E16 N13 and door B's at E10 N10 with the walkthrough's settings, as it says.
+BELTS = (0x44, 0x45)
+TILE_DIRS = (0, 1, 2, 1, 3, 0, 1, 2, 3, 2, 0, 3, 2, 3, 1, 2, 1, 3, 0, 3, 2, 2, 1, 0, 3, 2, 1)
+PANEL = 0x80087a30
+
+
+def belts_on(g):
+    return g is None or not (flag(g, STORY_FLAGS, 10) or flag(g, STORY_FLAGS, 27))
+
+
+def belt_dir(g, F, xy):
+    """The way the moving floor at xy carries the party, or None."""
+    b = F.get('belts', {}).get(xy)
+    if b is None or not belts_on(g):
+        return None
+    t, p1 = b
+    if t == 0x45:
+        return p1 & 3
+    k = g.u8(PANEL + p1) if g is not None else 0
+    return TILE_DIRS[p1 * 3 + (k if k < 3 else 0)]
+
+
+def carry(g, node, most=300):
+    """Where the moving floors leave a party that steps onto node = (area, x, y), and how
+    many squares it's carried; None if they go round in a circle."""
+    area, x, y = node
+    seen = set()
+    n = 0
+    while n < most:
+        F = floor(area)
+        if F is None:
+            return None
+        if n and (x, y) in F['transfers']:
+            area, x, y = F['transfers'][(x, y)]
+            n += 1
+            continue
+        d = belt_dir(g, F, (x, y))
+        if d is None or F['walls'][(x, y)][d] in (1, 3):
+            return (area, x, y), n
+        if (area, x, y, d) in seen:
+            return None
+        seen.add((area, x, y, d))
+        x, y = x + maze.DIRV[d][0], y + maze.DIRV[d][1]
+        n += 1
+    return None
+
+
+def on_belt(g):
+    F = floor(g.u8(maze.AREA))
+    return bool(F) and belt_dir(g, F, g.pos()) is not None
+
+
+def wait_carry(g, limit=6000):
+    """After a step onto a moving floor: wait until the floors have set the party down
+    (still a while, off them), or something interrupts."""
+    f0 = g.frame
+    last, still = None, 0
+    while g.frame - f0 < limit:
+        if maze.in_maze(g) and maze.interrupted(g) and g.u8(maze.GAME_STATE) != 0:
+            return
+        here = (g.u8(maze.AREA),) + g.pos()
+        if here == last and maze.calm(g):
+            still += 1
+        else:
+            still = 0
+        last = here
+        if still >= (240 if on_belt(g) else 30):
+            return
+        g.step()
+
 
 _floor = {}
 
@@ -125,10 +206,13 @@ def floor(area):
         for x in range(24):
             walls[(x, 23 - N)] = [int(W[s][N][x]) for s in 'nesw']
     transfers, arrive, voids, secret, sealed, fights = {}, set(), set(), {}, {}, set()
-    circles, switches = {}, {}
+    circles, switches, belts = {}, {}, {}
     for e in d['events']:
         t = e['raw']['type']
         sq = [(x, 23 - N) for x, N in e.get('squares', [])]
+        if t in BELTS:
+            for s in sq:
+                belts[s] = (t, e['raw']['params'][0])
         if t in TRANSFER_KINDS and e.get('to') and e['to'].get('floor', -1) >= 0:
             to = (e['to']['floor'], e['to']['x'], 23 - e['to']['y'])
             for s in sq:
@@ -163,7 +247,7 @@ def floor(area):
     _floor[area] = dict(walls=walls, transfers=transfers, arrive=arrive, voids=voids,
                         secret=secret, sealed=sealed, closed=closed, fights=fights, shut=shut,
                         circles={xy: c for xy, c in circles.items() if c[0] in switches},
-                        switches=switches,
+                        switches=switches, belts=belts,
                         shut_after=dict(EXTRA_SHUT_AFTER.get(area, {})))
     return _floor[area]
 
@@ -267,6 +351,12 @@ def plan(g, dest, start=None, items=None, out=None, keep=None):
                         or (nx, ny) in F['voids']:
                     continue
                 cost = 1
+                if st != 'hidden' and (area, nx, ny) != dest \
+                        and belt_dir(g, F, (nx, ny)) is not None:
+                    cr = carry(g, (area, nx, ny))
+                    if cr:
+                        nxt.append((cr[0], 2 + cr[1] // 2, ('carry', (area, nx, ny))))
+                    continue
                 if (nx, ny) in F['arrive'] and (nx, ny) not in F['transfers'] \
                         and (area, nx, ny) != dest:
                     cost = 40
@@ -295,13 +385,23 @@ def plan(g, dest, start=None, items=None, out=None, keep=None):
         n = p
     path.reverse()
     legs = []
+    cut = False
     for p, how, n in path:
+        if how[0] == 'carry':
+            # the walk ends on the moving floor; the ride is the end of the leg
+            n, how = how[1], ('step',)
+            cut_next = True
+        else:
+            cut_next = False
         if how[0] == 'step':
-            if legs and legs[-1][0] == 'walk' and legs[-1][1] == n[0]:
+            if legs and legs[-1][0] == 'walk' and legs[-1][1] == n[0] and not cut:
                 legs[-1] = ('walk',) + n
             else:
                 legs.append(('walk',) + n)
-        elif how[0] == 'link':
+            cut = cut_next
+            continue
+        cut = False
+        if how[0] == 'link':
             legs.append(('link', how[1]))
         elif how[0] == 'find':
             # walk to the side's square, find the door; the plan is made again after
@@ -318,6 +418,8 @@ def avoid_squares(g, area, target):
     if not F:
         return set(), set()
     hard = (set(F['transfers']) | F['voids']) - {target}
+    if belts_on(g):
+        hard |= set(F.get('belts', {})) - {target}
     for sq, fl in EXTRA_AVOID_AFTER.get(area, {}).items():
         if flag(g, *fl) and sq != target:
             hard.add(sq)
@@ -455,8 +557,14 @@ def find_door(g, leg, on_int, after):
 def walk_floor(g, x, y, on_int):
     area = g.u8(maze.AREA)
     hard, soft = avoid_squares(g, area, (x, y))
+    carried = set(F_belts(g, area))
     return maze.walk_to(g, x, y, on_int, avoid=hidden_blocked(g, area), closed=hard,
-                        soft=soft, stop_area=True)
+                        soft=soft, stop_area=True, carry=carried)
+
+
+def F_belts(g, area):
+    F = floor(area)
+    return set(F.get('belts', {})) if F and belts_on(g) else set()
 
 
 def travel(g, dest, on_int, after=None, max_legs=40, keep=None):
@@ -470,6 +578,9 @@ def travel(g, dest, on_int, after=None, max_legs=40, keep=None):
     legs = 0
     while legs < max_legs:
         ride(g)
+        if F_belts(g, g.u8(maze.AREA)) or on_belt(g):
+            wait_carry(g)
+            ride(g)
         here = (g.u8(maze.AREA),) + g.pos()
         if here == tuple(dest):
             return legs
