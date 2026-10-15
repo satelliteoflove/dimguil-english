@@ -117,10 +117,10 @@ glance". By subsystem:
   until a square without one. Event 0x44, the nine turning tiles (p1 0-8), does the
   same with the facing `table[p1 * 3 + panel[p1]]`, the table at 0x800ef240 (in MAZE.BIN)
   and the panel's settings at 0x80087a30 (one byte a tile, 0-2). Neither runs while
-  story_flags bit 10 or bit 27 is set (`maze_prompt_result` toggles bit 27 on some
-  switch's Yes; which switch wasn't traced). Followed this way, door C's ride with the
-  walkthrough's settings ends at C-B2 E16 N13 and door B's at E10 N10, as the walkthrough
-  says. **[code]**; the squares are from the site's map files.
+  story_flags bit 10 or bit 27 is set (bit 27 is B4's floor switch, below). Followed this
+  way, door C's ride with the walkthrough's settings ends at C-B2 E16 N13 and door B's at
+  E10 N10, as the walkthrough says. **[code]**; the squares are from the site's map
+  files.
   - The panel (event 0x4e at C-B1 E10 N6, facing west, prompt 0x15) runs as game_state
     0x10 (frame handler 0x800c8640): 0x80079790 is the switch under the cursor (Right and
     Left, 0-8 round), 0x80079791 the picture row (Down and Up, 0-2 round); Circle sets
@@ -129,6 +129,15 @@ glance". By subsystem:
     bit 21, so a second press undoes it; the silver stone's device (0x46 at E9 N12,
     facing west) needs bit 21 and the Tablet, and sets the Tablet's stone bit 7. Event
     0x48 is a second switch the same way, toggling bit 22 (prompt 0x12).
+  - The B4 room past the snake door (EVENTMES 184 on the door at E9 N2): its 28 type 0x4a
+    squares hurt the party on arrival unless story_flags bit 22 is set, and that's the
+    0x48 switch, at E5 N12 facing east, past the Guardians (0x65 at E5 N11, p1 17:
+    EVENTMES 283, encounter 0x24, and the win sets bit 17). The switch that stops the
+    moving floors is event 0x5c at B4 E2 N20, facing west: EVENTMES 197, and its Yes
+    (prompt 0x1b) toggles bit 27, the bit `square_arrive` checks before 0x44 and 0x45.
+    Before Area D, door C's ride reaches the snake door with switches 7-9 on the panel at
+    rows 2, 0, 0 (the walkthrough's mountain, mountain, moon); followed over the site's
+    maps no other setting of the three gets there. **[code]**, chapter 13 (2026-10-15).
   - The Greater Golem's door (0x4d, C-B2 E11 N10, facing north) starts its fight after
     EVENTMES 181; the win sets story_flags bit 11 (fight reward 0x800c0748, type 10,
     EVENTMES 182). The floor load (0x800a8f1c) locks the door's two squares while bits
