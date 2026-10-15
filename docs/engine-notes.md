@@ -164,6 +164,16 @@ glance". By subsystem:
   5, 6, 7 and 20 (0x800ba32c, EVENTMES 136-140); word 5, DIMGUIL, counts only at Area D's
   altar (area 32) and word 6 only in area 21 (EVENTMES 109). Anything else gets EVENTMES
   126, or 204 at the altar. **[code]**, chapter 14 (2026-10-15).
+- **Area A's altar and the gold stone.** The altar is record type 0x5e at B2 E6 N5 (area
+  21, game (6, 18)), a square only the post-mimicry map reaches, through the hidden door
+  east of E4 N5 (type 3, p1 31). `square_examine` takes it facing north only. With the
+  Tablet and no stone 3 in it (0x800b7248 reads the Tablet's item_state bits: 0 when the
+  bit is set, -1 when not, -2 without a Tablet) it prints EVENTMES 108 and the dispatcher's
+  case 0x1d opens the glyph pad (0x800b957c); otherwise EVENTMES 103 alone. On the pad,
+  word 6 (0x800ef3a4 + 60: GAME) counts only in area 21: EVENTMES 109, then 110 (case
+  0x26), then case 0x27 starts fight type 0x13 with reward type 0xd. Any other word gets
+  EVENTMES 104. The win runs FUN_800b7310(3), setting the gold stone (bit 3, the eighth),
+  and EVENTMES 111. **[code]**, chapter 16 (2026-10-15).
 - **Area D (areas 32-34).**
   - The altar (0x2c in area 32, B3 E11 N19, facing south) works only while story bits 10
     and 23 are clear: EVENTMES 199 and a yes/no (prompt 0x16); with the Tablet, EVENTMES
