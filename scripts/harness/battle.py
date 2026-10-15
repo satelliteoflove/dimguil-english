@@ -73,7 +73,9 @@ FIXED = 0x80079bde          # 1 in a fixed battle (up to 6 groups on a 3x2 grid)
 # party for up to 64), and the priest's Badi kills a character outright.
 CASTER_FIRST = True         # fighters' blows on a lone para/group-damage caster first (choose_group)
 KILL_FIRST = {366: 0, 358: 1,       # Arch Mage, Arch Priest (Underground B2 E7 N22)
-              454: 0, 438: 1}       # the same pair at Area A B1 E16 N11
+              454: 0, 438: 1,       # the same pair at Area A B1 E16 N11
+              455: 0, 439: 1}       # and at Area B B1 E9 N11, chapter 10's Guardians (n1v0o: their
+                                    # Tiltowait and Badi wiped the party in 3 rounds, twice)
 # against a kill-first monster: Montino (25, silence a group; in a fixed battle it takes
 # the row, so at the Guardians it reaches the Arch Priest and the Arch Mage both) up to
 # MONTINO_TRIES times a battle, then Badi (34, death to one). The B2 Arch Mage shrugs off
