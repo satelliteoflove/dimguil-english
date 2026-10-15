@@ -39,7 +39,15 @@ class Run(chapter1.Run):
         self._pull = {}             # pulled-back training areas: area -> easier area, level, log index
         self._since = {}            # area -> log index of the last return to it (its window starts there)
         self._ch_l0 = 0             # log index where the chapter began
+        self.resume_memory = None   # memory_path's side file of the --from state (agent 14)
         chapter1.CURE_LOG = self.log
+
+    def checkpoint(self, name):
+        """chapter1.Run.checkpoint, plus side files a run resumed from the goal state reads
+        (agent 14): the casters' points (save_points) and the chapter's memory (save_memory)."""
+        super().checkpoint(name)
+        save_points(self.g, self.ckpt, self.full_points)
+        save_memory(self, self.ckpt)
 
     def guarded(self, fn):
         """fn, with NoTablet handled where it happens: Grounds trips for gold until the
@@ -82,6 +90,15 @@ class Run(chapter1.Run):
         cls = CHAPTERS[n]
         t0, f0, k0, s0, l0 = time.time(), g.frame, len(self.goals), len(self.stuck), len(self.log)
         self._ch_l0, self._pull, self._since = l0, {}, {}
+        m, self.resume_memory = self.resume_memory, None
+        if m and m.get('chapter') == n:
+            # resumed mid-chapter (agent 14): the chapter's log so far, pull-backs and
+            # returns, as the goal state's run left them; this run's trend starts after them
+            self.log.extend(tuple(x) for x in m['log'])
+            self._pull = {tuple(k): dict(v, to=tuple(v['to']), at=l0 + v['at']) for k, v in m['pull']}
+            self._since = {tuple(k): l0 + v for k, v in m['since']}
+            l0 = len(self.log)
+            print('memory c%d: %d log lines, pulls %s' % (n, len(m['log']), sorted(self._pull)), flush=True)
         gold0 = chapter1.party_gold(g)
         if n == 1:
             # chapter 1 keeps its own loop (training trips until level 7, then the pillars)
@@ -1272,6 +1289,30 @@ def save_points(g, name, full):
     from it knows them (load_points)."""
     with open(points_path(g, name), 'w') as f:
         json.dump({str(k): v for k, v in full.items()}, f)
+
+
+def memory_path(g, name):
+    return os.path.splitext(g.path(name))[0] + '.memory.json'
+
+
+def save_memory(r, name):
+    """The chapter's log since it began, its pull-backs (Run._pull) and returns
+    (Run._since), with log indices counted from the chapter's start, beside a goal state
+    (agent 14): a run resumed from it trains and pulls back as this one would have."""
+    l0 = r._ch_l0
+    m = dict(chapter=r.chapter, log=r.log[l0:],
+             pull=[[list(k), dict(v, to=list(v['to']), at=v['at'] - l0)] for k, v in r._pull.items()],
+             since=[[list(k), v - l0] for k, v in r._since.items()])
+    with open(memory_path(r.g, name), 'w') as f:
+        json.dump(m, f, default=str)
+
+
+def load_memory(g, name):
+    try:
+        with open(memory_path(g, name)) as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return None
 
 
 def load_points(g, name):

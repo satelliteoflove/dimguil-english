@@ -90,6 +90,8 @@ if a.src:
     # the casters' points after the last Stables, saved beside cN_end (agent 8)
     r.full_points = chapters.load_points(g, a.src)
     print('points known for', sorted(r.full_points))
+    # the chapter's log and pull-backs, saved beside goal states (agent 14)
+    r.resume_memory = chapters.load_memory(g, a.src)
 t0 = time.time()
 ok = True
 try:
