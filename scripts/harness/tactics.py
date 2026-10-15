@@ -709,6 +709,11 @@ STORY = [None]          # battle.fight sets it at the fight's start (story_fight
 RANDOM_NOT_STORY = True  # (casterfocus) a fixed grid met as a random encounter isn't a story fight
 ENCOUNTER_ID = 0x800797f4   # u16: 0xffff / 0xfffe for a random encounter (battle.fleeable)
 TRAINING = False        # chapters.train: a training trip, home walk included
+# (chapter 16) squares (area, x, y) whose event starts a boss fight from the dispatcher
+# (fight types like 0xd Mother, 0x13 the Crystal Men): those come with FIXED 0, so they
+# were rated as any fight ('above median level', no Bamatu or Maporfic: c16v1a wiped three
+# times). Chapters add their altars.
+BOSS_AT = set()
 
 
 def story_fight(g):
@@ -717,6 +722,10 @@ def story_fight(g):
     floors' fixed fights aren't bosses. Area B's human parties come on fixed grids both
     on the squares and as roamers between them (smoke1: B4 (13, 16), not a square), so a
     training trip's fixed fights never count."""
+    if BOSS_AT:
+        from harness import maze
+        if (g.u8(maze.AREA),) + tuple(g.pos()) in BOSS_AT:
+            return True
     if not g.u8(FIXED):
         return False
     if RANDOM_NOT_STORY and (struct.unpack('<H', g.e.read(ENCOUNTER_ID, 2))[0] + 2) & 0xffff < 2:

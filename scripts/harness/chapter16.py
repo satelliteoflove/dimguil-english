@@ -25,7 +25,7 @@ Goals, each proved by RAM:
   out          back in town.
 Not done: Guy's party (NPC_MES1 287) is a random meeting, not a goal.
 """
-from harness import chapters, chapter3, chapter6, chapter14, maze, nav
+from harness import chapters, chapter3, chapter6, chapter14, maze, nav, tactics
 
 STORY = 0x80079b44
 ROOM = (21, 5, 18)              # past the hidden door
@@ -34,6 +34,7 @@ DOOR_P1 = 31
 GOLD_BIT = 3
 PAD_WORDS = 0x800ef3a4          # seven words of ten glyphs (A = 0, 0xff pad)
 RIDDLE = 'GAME'
+tactics.BOSS_AT.add(ALTAR)     # the Crystal Men's fight starts there with FIXED 0
 
 
 def here(g):
