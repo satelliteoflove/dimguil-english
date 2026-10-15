@@ -334,7 +334,12 @@ def plan(g, dest, start=None, items=None, out=None, keep=None):
         # "no route" from the Grounds to anywhere on B3 past it)
         placed = node == start or prev.get(node, (None, ('step',)))[1][0] in ('link', 'jump')
         if not placed and (x, y) in F['transfers']:
-            nxt.append((F['transfers'][(x, y)], 1, ('jump',)))
+            to = F['transfers'][(x, y)]
+            # a landing on a moving floor rides on (Area C B2's stairs at E10 N9 land on
+            # B3's belt: n1v0u chapter 12, 2026-10-15, "no route" home from the Golem's
+            # door six times)
+            cr = carry(g, to) if belt_dir(g, floor(to[0]) or {}, to[1:]) is not None else None
+            nxt.append((cr[0] if cr else to, 1 + (cr[1] // 2 if cr else 0), ('jump',)))
         else:
             for L in LINKS:
                 if L['at'] == node and (L.get('need') is None or L['need'] in items):
