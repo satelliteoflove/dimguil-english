@@ -71,6 +71,7 @@ PARA_FIRST = 3.0
 # Venus twice on the walk home and wiped n1v3 once). battle.choose_group puts fighters'
 # blows on such a lone caster first.
 GDMG_FIRST = 2.0
+HELPLESS_MELEE = True    # (revision 10) Katino and Lorks count the front-liners' extra damage (helpless_bonus)
 DEBUFF_MIN = 0.3         # (fix 3) sleep, silence, paralysis only where a monster's chance of being caught is this
 
 
@@ -399,6 +400,84 @@ def wake(kind, mlv):
     return 0.2                  # paralysis, stone: only a cure (Dialko, Madi) ends them
 
 
+# (revision 10, agent 14) a party hit on a monster that can't act (status 2 or more:
+# confused, poisoned, asleep, paralyzed...) does damage + rand(damage) (melee_apply_hits
+# 0x800a963c; to-hit doesn't change, party_melee 0x800a8c2c), about half again. So
+# Katino and Lorks are also worth the front-liners' extra damage on the group they hit,
+# for the rounds it stays down: monster_upkeep 0x800a6aa0 wakes a monster with chance
+# min(4 x level, 35)% a round (paralysis 2 x level).
+PARTY = 0x8007e812          # the party's roster indices by slot (-1 empty)
+OSLO = 0x8007e830           # the party's to-hit bonus while Oslo or Maoslo lasts
+REACH_ROW = 0x8007989d      # fixed battles: reach 2 means the front row's groups (weapon_reach 0x800c94a8)
+REACH_ALL = 0x800798b8      # ... and reach 4 every group
+ROSTER, ROSTER_LEN = 0x8007d708, 0xd0
+WAKE_K = {SLEEP: 4, KATIQUREA: 4, PARALYZE: 2}
+
+
+def weapon_reach(g, code, slot):
+    """The last group a weapon reaches from party slot `slot` (weapon_reach 0x800c94a8)."""
+    r = code & 7
+    if code & 3:
+        r = r << 1 if slot < 3 else code & 2
+    if g.u8(FIXED) == 1:
+        r = g.u8(REACH_ROW) if r == 2 else g.u8(REACH_ALL) if r == 4 else r
+    return r
+
+
+def melee_on(g, k, M):
+    """The party's expected melee damage a round on group k (party_melee 0x800a8c2c), from
+    the members who can act and would aim at it: k is the lowest-numbered group their
+    weapon reaches (battle.choose_group, kill-first aside). Hits land on rand(20) >= T,
+    T = 19 + k - AC + AC modifier - to-hit, held to 19, Oslo's bonus off, at least 1."""
+    d = rec(g, k)
+    ac = struct.unpack_from('<b', d, 0x7a)[0]
+    mods = [struct.unpack('<b', g.e.read(COMBAT + k * 0x7e + j * 0xe + 4, 1))[0] for j, _, _ in M[k]['mons']]
+    acmod = mods[0] if mods else 0
+    b = g.u8(OSLO)
+    tot = 0.0
+    for slot in range(6):
+        ri = struct.unpack('<b', g.e.read(PARTY + slot, 1))[0]
+        if ri < 0:
+            continue
+        c = g.e.read(COMBAT + slot * 0xe, 0xe)
+        if struct.unpack_from('<H', c, 0xc)[0] >= 8:
+            continue
+        r = g.e.read(ROSTER + ri * ROSTER_LEN, ROSTER_LEN)
+        items = struct.unpack_from('<10H', r, 0x20)
+        main = any(x != 0xffff and x & 0x1000 for x in items)
+        second = any(x != 0xffff and not x & 0x1000 and x & 0x800 for x in items)
+        hit = struct.unpack_from('<h', r, 0x84)[0]
+        for hand, used in ((0, main or not second), (1, second)):
+            if not used:
+                continue
+            reach = weapon_reach(g, r[0x9c + hand], slot)
+            if not (k <= reach and k == min(x for x in M if x <= reach)):
+                continue
+            T = min(19, 19 + k - ac + acmod - hit) - b
+            if b and T >= 15:
+                T -= 3
+            elif b and 13 <= T <= 14:
+                T = 12
+            T = max(1, T)
+            sw = max(1, min(10, c[8] + r[0x94 + hand]))
+            n, sides = max(1, r[0x96 + hand * 3]), max(1, r[0x97 + hand * 3])
+            bonus = struct.unpack_from('<b', r, 0x98 + hand * 3)[0]
+            tot += sw * max(0, 20 - T) / 20 * (n * (sides + 1) / 2 + bonus)
+    return tot
+
+
+def helpless_bonus(g, sid, t, m, frac, M):
+    """What disabling a share `frac` of group t's monsters adds to the front-liners'
+    melee (revision 10): half their damage a round on it, for the rounds it stays down
+    (half the casting round, then (1-q)/q), at most half its hit points left."""
+    if frac <= 0:
+        return 0.0
+    q = min(WAKE_K[sid] * m['level'], 35) / 100
+    rounds = 0.5 + (1 - q) / q
+    hp = sum(max(0, _left(t, j, h)) for j, h, _ in m['mons'])
+    return 0.5 * frac * min(melee_on(g, t, M) * rounds, hp)
+
+
 def danger_of(m):
     """What one of group m's monsters costs the party a round it stands: its damage threat
     and the actions it takes away (disable(): dis_hp, 0 until it has run)."""
@@ -524,6 +603,8 @@ def value(g, sid, k, M, clevel, cast_counts, commit=False):
                 continue
             p_new = p * (1 - PLAN['dis'].get(t, 0))
             v += sum(p_new * worth for _ in mons)
+            if HELPLESS_MELEE and sid in WAKE_K and m['mons']:
+                v += helpless_bonus(g, sid, t, m, p_new * len(mons) / len(m['mons']), M)
             if commit and mons:
                 PLAN['dis'][t] = 1 - (1 - PLAN['dis'].get(t, 0)) * (1 - p)
         return v
