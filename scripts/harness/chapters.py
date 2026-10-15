@@ -27,11 +27,42 @@ def chapter(cls):
     return cls
 
 
+class LiveLog(list):
+    """The run's log, also written to live.jsonl a line at a time as it grows, so a run can
+    be read while it's going (Chris, 2026-10-15: log.jsonl is only written at the end)."""
+
+    def __init__(self, path, items=()):
+        super().__init__()
+        self._f = open(path, 'w')
+        self.extend(items)
+
+    def _write(self, x):
+        self._f.write(json.dumps(x, default=str) + '\n')
+        self._f.flush()
+
+    def append(self, x):
+        super().append(x)
+        self._write(x)
+
+    def extend(self, xs):
+        xs = list(xs)
+        super().extend(xs)
+        for x in xs:
+            self._write(x)
+
+    def __iadd__(self, xs):
+        self.extend(xs)
+        return self
+
+
 class Run(chapter1.Run):
     """chapter1.Run's goal and checkpoint machinery, run chapter by chapter."""
 
     def __init__(self, g, **kw):
         super().__init__(g, **kw)
+        d = os.path.join(chapter1.OUT, self.out)
+        os.makedirs(d, exist_ok=True)
+        self.log = LiveLog(os.path.join(d, 'live.jsonl'), self.log)
         self.chapter = 1
         self.chapter_results = []
         self.full_points = {}       # roster index -> spell points after the last Stables
