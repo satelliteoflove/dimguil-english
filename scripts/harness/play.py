@@ -271,8 +271,8 @@ def drop_picker(g, limit=3000):
     0x800cbb0c with every pack full sets it straight from a prompt's Yes, no box (c15v1a
     chapter 15, 2026-10-15: the Demon's Statue after a chest filled the last slot; the
     camp's cross backed out of "Who will drop it?", the statue stayed in the wreck, and
-    the goal was stuck "after camp" four times). Circle picks the member under the
-    cursor, then drop_prompt throws away spare loot."""
+    the goal was stuck "after camp" four times). The member is one with something
+    throwable, then drop_prompt throws away spare loot."""
     f0 = g.frame
     asked = set()
     while g.u8(maze.GAME_STATE) == 3 and maze.in_maze(g):
@@ -285,10 +285,19 @@ def drop_picker(g, limit=3000):
                   if ms[j]['file'] not in ('STATUS.OBJ', 'I_NAME_E.OBJ', None)), None)
         if j is not None and j not in asked and ms[j]['file'] == 'SISETU.OBJ' \
                 and ms[j]['idx'] == 303:
-            # "Who will drop it?", the party bar printed after it
+            # "Who will drop it?", the party bar printed after it. The cursor is the camp's
+            # (0x800796cc column, 0x800796cd row) and starts on the first member; pick one
+            # with something throwable (c15v1b: Uranus, all worn gold and the Jade Mask,
+            # refused for 3,000 frames)
             asked.add(j)
-            n = len(ms)
             g.step(10)
+            from harness import camp, gear
+            slots = g.party_slots()
+            who = next((p for p, ri in enumerate(slots) if ri is not None
+                        and any(gear.throwable(g, w) for _, w in gear.pack(g, ri))), None)
+            if who is not None:
+                camp._pick_member(g, who, 'who drops')
+            n = len(g.cap.messages)
             ui.press_until(g, 'circle', lambda: len(g.cap.messages) > n
                            or g.u8(maze.GAME_STATE) != 3, 120, 'who drops')
             g.step(20)
