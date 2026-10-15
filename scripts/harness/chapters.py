@@ -353,14 +353,20 @@ class Run(chapter1.Run):
                 raise TurnHome(critical)
         if HEALER_HOME and (getattr(self, '_walking_out', False) or getattr(self, '_goal_walk', False)) \
                 and not getattr(self, '_homeward', False) and not getattr(self, '_gold', False) \
-                and g.overlay() not in ('JOUKA', 'HAZURE', 'BATTLE') and self.healers_down():
+                and g.overlay() not in ('JOUKA', 'HAZURE', 'BATTLE') and (
+                    self.healers_down() or OUT_HOME and self.members_out()):
             # (agent 16) a healer down on the walk out or a goal walk turns the party home, once
             # the party's own cures have had their try (n1v0r chapter 10: Earth died in the
-            # red stone's fight and the walk on met a Were Centipede pack with no healer)
+            # red stone's fight and the walk on met a Were Centipede pack with no healer).
+            # (nodead) So does any member the cures leave dead, stoned, ashed, lost, paralyzed
+            # or poisoned (Chris, 2026-10-15: "A party should not proceed 'as normal'"; n1v1w
+            # chapter 10: Venus died on the walk to a fight square and the party fought on)
             chapter1.cure_in_camp(g, self.log, on_int=self.on_int)
             down = self.healers_down()
-            if down and self.town_helps():
-                raise TurnHome('healer down: ' + ', '.join(down))
+            out = self.members_out() if OUT_HOME else []
+            if (down or out) and self.town_helps():
+                raise TurnHome('healer down: ' + ', '.join(down) if down else
+                               'member out: ' + ', '.join(out))
         if ROAMER_DOOR and getattr(self, '_goal_walk', False) and self.fights() > n \
                 and g.overlay() not in ('JOUKA', 'HAZURE', 'BATTLE'):
             areas = (g_area(g), getattr(self, '_dest', (None,))[0])
@@ -462,7 +468,7 @@ class Run(chapter1.Run):
             except TurnHome as t:
                 self._goal_walk = False         # the walk home itself doesn't turn
                 self.note('turn home', t.args[0])
-                self.trip_home('healer down')
+                self.trip_home(t.args[0].split(':')[0])
                 self.ensure_maze()
             finally:
                 self._goal_walk = False
@@ -483,6 +489,12 @@ class Run(chapter1.Run):
         if not hp_only:
             short += [x for x in self.boss_short() if x == 'down' or x[0] == 'heals']
         return short
+
+    def members_out(self):
+        """(nodead) Names of the members dead, stoned, ashed, lost, paralyzed or poisoned
+        (OUT_BITS): the party doesn't carry on with them."""
+        g = self.g
+        return [g.char(i)['name'] for i in g.party() if g.char(i)['status'] & battle.OUT_BITS]
 
     def healers_down(self):
         """Names of the members who know a Priest heal (tactics.HEALS) and are out of
@@ -603,7 +615,10 @@ class Run(chapter1.Run):
             self.trip_end(reason)
             if chapter1.GEAR and not chapter1.party_wiped(g):
                 gear.camp_loot(g, self.log, on_int=self.on_int)
-            self._homeward = tactics.TRAINING
+            # (nodead) every walk home may run by the homeward rule, a goal's too (n1v1w
+            # chapter 10: Dax fell at the Guardians' door and the walk home from B4 fought
+            # 14 fights with him dead, ran from none, and lost Mercury and Earth)
+            self._homeward = tactics.TRAINING or HOME_RUN_ALL
             battle.RUN_OK = self._homeward and self.homeward_run()
             for a, x, y in getattr(self, '_fatal', ()):
                 nav.TRIP_SOFT.setdefault(a, set()).add((x, y))
@@ -705,7 +720,8 @@ class Run(chapter1.Run):
         g = self.g
         if g.overlay() in ('JOUKA', 'HAZURE'):
             return
-        if chapter1.needs_town(g):
+        if chapter1.needs_town(g) or OUT_HOME and self.members_out() and self.town_helps():
+            # (nodead) needs_town tried the cures; poison they left goes home too
             self.trip_home()
         else:
             if chapter1.GEAR and gear.loot_work(g):
@@ -1563,6 +1579,8 @@ HOME_HEAL = True             # (main) before the homeward leg, heal to 2/3 or fu
 HP_HEAL = True               # Chris's HP lines after every training fight (Run.hp_heal)
 HOME_DEAD = 0x80 | 0x100 | 0x200  # dead, ash, lost: the walk home may run (Run.homeward_run)
 HEALER_HOME = True           # (agent 16) a healer down on the walk out or a goal walk turns the party home
+OUT_HOME = True             # (nodead) a member dead, stoned, ashed, lost, paralyzed or poisoned after the cures turns a walk out or a goal walk home
+HOME_RUN_ALL = True         # (nodead) a goal's walk home may run as a training trip's does (Run.homeward_run)
 HEALER_TRIPS = 2             # ... a goal walk goes home and back at most this many times
 ROAMER_DOOR = True           # (agent 16) a goal walk short for the floor's type-2 parties goes home first (Run.roamer_short)
 TYPE2_ROUNDS = 2             # ... the standing HP must cover this many rounds of the worst one's threat
