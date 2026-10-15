@@ -306,6 +306,17 @@ These were also named by G. The rules as read here: [code]
   - It pays **price / 2**. Potions and scrolls pay price / 10 × uses left.
   - Stock goes up by one (potions and scrolls go to unlimited).
   - The item is marked seen for the catalog.
+- **What the catalog lists** (2026-10-14). The seen flags are `items_seen` at 0x8008a040,
+  40 bytes, item n = bit (n & 7) of byte n >> 3 (ids 0-0x132; saves keep 39 bytes). **[code]**
+  Writers, all in JOUKA: `boltac_main` 0x800ba6e0 marks every item with a non-zero starting
+  stock (item +0x1a) on entering the shop with a party; `boltac_sell` (0x800c067c,
+  0x800c0b18) marks the sold item; `boltac_identify` (0x800c2758, 0x800c2a28) marks the item
+  it identifies. Nothing else does: not buying, loot, a Bishop's identify, equipping,
+  chests or gifts (every overlay scanned). **[code]** The list builder `FUN_800df424` hides an
+  entry only when its stock (0x8008a0b0) is 0 and its seen bit is clear, so an item in stock
+  shows too. **[code]** In play (Chris), selling a Night Cloak added it; the shop's Identify
+  on an item didn't, which the code doesn't explain (maybe the item was already identified
+  or in stock); worth a retest on an out-of-stock unknown.
   - [emu: Uranus sold his equipped PLATE MAIL, price 1500: gold 50000 → 50750, stock 1 → 2]
 - **The free item.** If a sale leaves nothing sold out (all 307 stock bytes non-zero)
   and the flag is clear:
