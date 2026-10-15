@@ -162,7 +162,9 @@ def _drop_prompt_msg(g):
                 return None
             done.add(j)
             return j, m['idx']
-        if m['file'] not in ('SISETU.OBJ', 'STATUS.OBJ'):
+        # the list's lines: item names (I_NAME_E) and the SISETU marks between them; a
+        # list shown again after a No to 238 prints its names after the 90 too
+        if m['file'] not in ('SISETU.OBJ', 'STATUS.OBJ', 'I_NAME_E.OBJ'):
             return None
     return None
 
