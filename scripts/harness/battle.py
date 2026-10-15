@@ -48,6 +48,10 @@ HEAL_MEAN = {64: 4.5, 21: 5, 30: 9, 33: 13.5, 36: 999, 58: 999}
 HEAL_RISK = False       # (d) heal a member who couldn't survive another hit
 TRIP_BLOW = [0.0, 0.0]  # the worst one-action damage seen this trip, front and back row (chapters.train)
 KEEP_LEVEL = 6         # (c) spell levels kept for story/boss fights and fights going badly
+BOSS_KEEP = {}         # roster index -> {(school, level): points} kept on the walk to a boss
+                       # (chapters.Run.keep_for_boss): spent only in the story fight or one
+                       # going badly (n1v0q chapter 10: the walk to the Guardians took the
+                       # mages' level-3 points, one Cortu instead of four, two wipes)
 CHEAPEST = False        # (c) in a fight that matters, the cheapest spell that does most of the job
 CHEAP_SHARE = 0.6      # ... "most": this share of the best candidate's value
 PLANNING = False        # a later caster in a round sees what the earlier ones' spells will likely do
@@ -667,6 +671,9 @@ def default_policy(g, m, opts):
                 continue
         elif CHEAPEST and lv >= KEEP_LEVEL and not boss:
             continue                    # (c) levels 6-7 wait for bosses and bad fights
+        keep = BOSS_KEEP.get(ri, {}).get((sch, lv), 0)
+        if keep and why != 'story' and not bad and rec[0x5c + sch * 7 + lv - 1] <= keep:
+            continue                    # the boss's points (BOSS_KEEP)
         if rec[0x5c + sch * 7 + lv - 1] <= 1 and (not boss if CHEAPEST else not big) and any(
                 h in tactics.HEALS for h in known_spells(rec, sch, lv)):
             continue

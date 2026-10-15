@@ -73,6 +73,7 @@ class Run(chapter1.Run):
         try:
             super().goal(name, self.guarded(fn))
         finally:
+            battle.BOSS_KEEP.clear()
             for s in self.stuck[k:]:
                 print('stuck c%d %s try %d: %s %s' % (self.chapter, name, s['try_'], s['what'],
                                                       s['where']), flush=True)
@@ -635,6 +636,7 @@ class Run(chapter1.Run):
         self._ready_goal = getattr(self, '_goal_name', None)
         self.boss_training()
         self.fit()
+        self.keep_for_boss()
         if g.overlay() in ('JOUKA', 'HAZURE'):
             self.raise_all()
         if g.overlay() in ('JOUKA', 'HAZURE'):
@@ -656,6 +658,22 @@ class Run(chapter1.Run):
                                'down before a boss' if chapter1.out_of_action(g) else 'HP before a boss')
             finally:
                 chapter1.COT_BELOW = keep
+
+    def keep_for_boss(self):
+        """On the walk from ready() to a boss, each mage who knows Cortu keeps their share
+        of CORTU_STACK level-3 points (battle.BOSS_KEEP); cleared when the goal ends. Main,
+        2026-10-14: the n1v0q Guardians tries arrived with the mages' level-3 points spent
+        on the walk's ten fights."""
+        g = self.g
+        who = [i for i in g.party() if g.char(i)['status'] < 0x20
+               and tactics.CORTU in battle.known_spells(g.char(i)['raw'], 0, 3)]
+        battle.BOSS_KEEP.clear()
+        for k, i in enumerate(who):
+            n = tactics.CORTU_STACK // len(who) + (1 if k < tactics.CORTU_STACK % len(who) else 0)
+            battle.BOSS_KEEP[i] = {(0, 3): n}
+        if who:
+            self.note('boss keep', getattr(self, '_goal_name', None),
+                      [(g.char(i)['name'], battle.BOSS_KEEP[i][(0, 3)]) for i in who])
 
     def replay_trains(self, name):
         """(main, 2026-10-14: n1v0o stopped on two identical wipes at chapter 10's
