@@ -86,6 +86,23 @@ glance". By subsystem:
   fight squares, signs, doors, pillars...); stepping on a square runs `square_arrive`,
   Investigate runs `square_examine`. Hidden doors are found by a search roll on each
   step. A-maze.md §9-10.
+- **Heal spots.** Event 0x3f is a wall switch ("There's a switch on the wall. Will you
+  press it?", EVENTMES 167) that heals. `square_examine` (0x800bb790) case 0x3f needs
+  the party facing the record's p1, then sets prompt 0xe. On Yes, `maze_prompt_result`
+  (0x800befcc, prompt 0xe at 0x800bf5e8) gives every member whose status has none of
+  0x380 (dead, ashes, lost) full HP, status 0, poison 0 and +0x79 0. Spell points
+  aren't touched and the dead stay dead. There's no cost and no flag, so it works every
+  time. Three squares: Area B B4 E5 N18 facing west, Area E B3 E12 N4 facing north,
+  Dragon B1 E10 N13 facing west. **[code]**, checked in the emulator on B4 (2026-10-15).
+  - The same switch text has other effects on other event types: 0x40 poisons the party
+    (prompt 0xf, poison +50; one sits on B4 at E5 N5 facing south), 0x42 toggles
+    `maze_event_flags` bit p2 (prompt 0x10), and 0x6c refills spell points (prompt 0x1f,
+    which calls a MAZE copy of the spell point recalc, 0x800be8e0). Event 0x50 (Area D's
+    seeping pillars, EVENTMES 210/211) refills spell points with no prompt. A-maze.md
+    "Heal spots" has the squares.
+  - Ghidra's case labels in `maze_prompt_result` are wrong in places: it shows prompt 1
+    sharing the heal and 0x11 sharing the spell refill. The jump table at 0x800a1918
+    sends 1 to the pillar fight (0x800bf018) and 0x11 to a fixed toggle of bit 0x200000.
 
 ### Wipes and bodies (A-maze.md §4-6, D-battle.md, fallen-parties.md)
 
