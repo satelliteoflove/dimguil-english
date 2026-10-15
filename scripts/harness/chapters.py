@@ -525,7 +525,7 @@ class Run(chapter1.Run):
             ks = battle.known_spells(c['raw'], 1, 4)
             if c['status'] < 0x20 and 32 in ks and c['raw'][0x5c + 7 + 3]:
                 try:
-                    camp.cast(g, slot, 1, 4, ks.index(32))
+                    camp.cast(g, slot, 1, 4, ks.index(32), done=lambda: g.u8(0x8007e82a) != 0)
                     self.note('maporfic', c['name'], g.u8(0x8007e82a))
                 except Stuck as s:
                     # a spell with no target goes back to the level's list (state 10),
