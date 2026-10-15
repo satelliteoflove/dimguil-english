@@ -144,7 +144,7 @@ DROP_CURSOR = 0x80079c60     # "Drop which item?": the pack position under the c
 DROP_YES = 0x80079c65        # "Really throw it away?": 0 Yes, 1 No (the default)
 
 
-DROP_PROMPTS = (90, 36, 237)
+DROP_PROMPTS = (90, 36, 237, 238)
 
 
 def _drop_prompt_msg(g):
@@ -169,11 +169,19 @@ def _drop_prompt_msg(g):
 
 def drop_choice(g):
     """The pack position to throw away: the last one that's spare loot (unequipped, an id
-    under 0x100, so not the Tablet, a stone or a story item) in every full pack, since
-    which member the game asks isn't known here."""
+    under 0x100, so not the Tablet, a stone or a story item) in the most full packs, since
+    which member the game asks isn't known here; positions already tried at this prompt
+    (refused as equipped or important) come last. Before, a position that wasn't spare
+    loot in every full pack fell back to 9: n1v0t chapter 11 (2026-10-15) picked Uranus's
+    GOLD HELM there, "This is an important item. Drop it?" No, and the same pick again
+    until "event box too long"."""
     full = [g.char(i)['items'] for i in g.party() if len(g.char(i)['items']) >= 10]
-    ok = lambda k: all(k < len(p) and not p[k] & 0x2000 and (p[k] & 0x1ff) < 0x100 for p in full)
-    return next((k for k in range(9, -1, -1) if ok(k)), 9)
+    tried = g.__dict__.setdefault('_drop_tried', set())
+    if len(tried) >= 10:
+        tried.clear()
+    spare = lambda k: sum(k < len(p) and not p[k] & 0x2000 and (p[k] & 0x1ff) < 0x100
+                          for p in full)
+    return max((k for k in range(9, -1, -1) if k not in tried), key=spare)
 
 
 def drop_prompt(g):
@@ -187,7 +195,9 @@ def drop_prompt(g):
     last = ('SISETU.OBJ', p[1]) if p else None
     if last == ('SISETU.OBJ', 90):
         ui.wait_until(g, lambda: g.u8(maze.PRINTER) != 4, 120, 'drop list')
-        ui.move_cursor(g, DROP_CURSOR, drop_choice(g), 'down', 'up', what='drop item')
+        k = drop_choice(g)
+        g._drop_tried.add(k)
+        ui.move_cursor(g, DROP_CURSOR, k, 'down', 'up', what='drop item')
         n = len(g.cap.messages)
         ui.press_until(g, 'circle', lambda: len(g.cap.messages) > n, 120, 'pick drop item')
         g.step(20)
@@ -198,6 +208,16 @@ def drop_prompt(g):
         n = len(g.cap.messages)
         ui.press_until(g, 'circle', lambda: len(g.cap.messages) > n or g.u8(DROP_YES) != 0,
                        120, 'throw away')
+        g.step(20)
+        g.__dict__.setdefault('_drop_tried', set()).clear()
+        return True
+    if last == ('SISETU.OBJ', 238):
+        # "This is an important item. Drop it?" (cursor on No): No, back to the list,
+        # where drop_choice picks another position
+        g.step(20)
+        ui.move_cursor(g, DROP_YES, 1, 'down', 'up', what='important item no')
+        n = len(g.cap.messages)
+        ui.press_until(g, 'circle', lambda: len(g.cap.messages) > n, 120, 'keep important item')
         g.step(20)
         return True
     if last == ('SISETU.OBJ', 237):
