@@ -48,6 +48,9 @@ HEAL_MEAN = {64: 4.5, 21: 5, 30: 9, 33: 13.5, 36: 999, 58: 999}
 HEAL_RISK = False       # (d) heal a member who couldn't survive another hit
 HEAL_WORTH = True       # (bossfight) in a fight that matters, a heal only where it keeps someone alive (heal_worth)
 HEAL_SHARE = 0.5        # ... and heals at least this share of what they're expected to lose this round
+HEAL_CLEAR = 1.25       # ... and lifts them to this many times it and past the worst one blow (a Dial from 7 to 16
+                        # against 10 expected left Mercury to a Beast's club, chdev/a7_pf/f07 seed 7)
+CASTER_BOSS = True      # (bossfight) a fight that matters with kill-rank-0 casters counts as a boss for Cortu and BOSS_FOCUS_SHARE
 BOSS_FOCUS_SHARE = 0.5  # (bossfight) a boss fight's focus_pick finisher gives way to a turn worth twice as much
 TRIP_BLOW = [0.0, 0.0]  # the worst one-action damage seen this trip, front and back row (chapters.train)
 KEEP_LEVEL = 6         # (c) spell levels kept for story/boss fights and fights going badly
@@ -817,6 +820,11 @@ def default_policy(g, m, opts):
     boss = why in (tactics.HEAVY if CHEAPEST else ('story',)) or bad
     if HEAL_WORTH and FIGHT_INFO.get('likely_loss'):
         boss = True                     # (bossfight) a likely loss gets what a boss does
+    # (bossfight) a fight that matters against casters of kill rank 0 (Tiltowait-class
+    # damage, Bakadi, Katiqurea: tactics.kill_rank) gets a boss's Cortu and turn choice
+    # too (n1v6t chapter 14: Area D's human parties, Blaze's Tiltowait and the
+    # MadPsionic's Lasios and Galtomas, wiped the party as random fights)
+    casters_boss = boss or (CASTER_BOSS and big and any(tactics.kill_rank(v, KILL_FIRST) == 0 for v in M.values()))
     # heal: (d) a member who couldn't survive another hit of the worst monster that
     # reaches them, or anyone below 40%; the cheapest heal that lifts them clear of it,
     # else the strongest there is
@@ -918,7 +926,7 @@ def default_policy(g, m, opts):
                 v = tactics.value(g, sid, k, M, me['level'], CAST)
                 if v > 0:
                     (finish if capped else cands).append((v, ('spell', sid, sch, lv, c[3], ('group', k)), (sid, k), lv))
-        elif boss and sid == tactics.CORTU and tactics.CORTU_SCREEN:
+        elif casters_boss and sid == tactics.CORTU and tactics.CORTU_SCREEN:
             v = tactics.cortu_value(g, M, me['level'])
             if v > 0 and M:
                 cands.append((v, ('spell', sid, sch, lv, c[3], ('group', min(M))), (sid, None), lv))
@@ -982,7 +990,7 @@ def default_policy(g, m, opts):
             if not cands:
                 return ('fight',) if FIGHT in opts else ('parry',) if PARRY in opts else ('first',)
             pick_ = cands[0]
-        if fp and boss and HEAL_WORTH and fp[0] < BOSS_FOCUS_SHARE * cands[0][0]:
+        if fp and casters_boss and HEAL_WORTH and fp[0] < BOSS_FOCUS_SHARE * cands[0][0]:
             # (bossfight) in a boss fight or a likely loss the cheap finisher doesn't
             # stand against a much better turn: Tzalik to finish an Arch Priest left
             # chapter 13's Arch Mage casting Tiltowait into a thin magic screen
@@ -1016,17 +1024,20 @@ def heal_worth(g, M, party, by_id):
     """(bossfight) The heal worth a turn in a fight that matters, or None: for the most
     hurt member likely to die this round (HP at or below tactics.incoming), the cheapest
     heal they know of (HEAL_ONE order) whose mean, capped at the HP they're missing,
-    lifts them above that and is at least HEAL_SHARE of it."""
+    lifts them to HEAL_CLEAR times that, and past the worst single action that reaches them
+    (tactics.danger), and is at least HEAL_SHARE of it."""
     inc = tactics.incoming(g, M, party)
+    blow = {s_: b for s_, _, b in tactics.danger(g, M, party)}
     for k, hp, mx in sorted(party, key=lambda x: x[1] / x[2] if x[2] else 1):
         d = inc.get(k, 0.0)
         if hp <= 0 or hp > d or CAST.get(('healed', k), -1) == ROUND:
             continue
+        clear = max(HEAL_CLEAR * d, blow.get(k, 0.0))
         for sid in HEAL_ONE:
             if sid not in by_id:
                 continue
             eff = min(HEAL_MEAN.get(sid, 999), mx - hp)
-            if hp + eff > d and eff >= HEAL_SHARE * d:
+            if hp + eff >= clear and eff >= HEAL_SHARE * d:
                 c = by_id[sid]
                 CAST[('healed', k)] = ROUND
                 FIGHT_INFO.setdefault('heals', []).append((ROUND, k, sid, hp, round(d)))
