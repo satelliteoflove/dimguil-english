@@ -1011,9 +1011,46 @@ def battle_use(g, w):
         bs & 0x7f in tactics.DAMAGE or bs & 0x7f in tactics.DEATH or bs & 0x7f in tactics.DISABLE)
 
 
+def knows(g, members, sid):
+    """A standing member of `members` can cast spell id sid (school * 21 + (level - 1) * 3
+    + k, battle.known_spells)."""
+    from harness import battle
+    school, rest = divmod(sid, 21)
+    if school > 3:
+        return False
+    return any(sid in battle.known_spells(g.char(ri)['raw'], school, rest // 3 + 1)
+               for ri in members if g.char(ri)['status'] == 0)
+
+
+def worth_keeping(g, w, members):
+    """Not sold whatever nobody uses (Chris, 2026-10-15: he sold his Rings of Jewels,
+    "basically useless except at the very early part of the game"). An unknown: valuable()
+    (the item table gives its price, spell and power away). An identified item: only a
+    special power (+0x0d) or a spell (+0x1b) no member of `members` can cast already
+    (the Ring of Jewels' Dumapic is a level-1 Mage spell); the price alone keeps nothing."""
+    if not w & IDENT:
+        return valuable(g, w)
+    r = g.e.read(ITEMS + (w & 0x1ff) * 0x4c, 0x4c)
+    if r[0x0d]:
+        return True
+    return r[0x1b] != 0xff and not knows(g, members, r[0x1b] & 0x7f)
+
+
+def sellable(g, w, members):
+    """Boltac's would take it off the party: a spare (spare()), or an identified ring,
+    amulet or other charm (category 7, not a cloak) not worn, that battle never casts
+    and that isn't a potion, scroll or important item (party_keeps)."""
+    if spare(g, w, members):
+        return True
+    if w & (EQUIPPED | CURSED) or not w & IDENT:
+        return False
+    it = item(g, w & 0x1ff)
+    return it['cat'] == 7 and not cloak(it) and bool(it['price']) and not party_keeps(g, w)
+
+
 def keeper(g, w, members):
-    """A spare (Boltac's would take it) that's valuable: the mule holds it."""
-    return spare(g, w, members) and valuable(g, w)
+    """A spare (Boltac's would take it) worth keeping: a backup holds it."""
+    return sellable(g, w, members) and worth_keeping(g, w, members)
 
 
 def mule(g):
@@ -1056,17 +1093,21 @@ def mule_use(g, w, members, taken=None):
 #            BACKUP_GAIN from goes to the standby it helps most (the lower level on a tie)
 #            and is put on there at the Edge of Town (edge_equip): the standbys become
 #            better stand-ins. Boltac's doesn't sell those (gear.shop).
-#   keep     a spare that's valuable (the old mule's keepers) is stored on a standby.
+#   keep     a spare worth keeping (worth_keeping: a spell the party can't cast or a
+#            special power; an instrument a standby can play) is stored on a standby.
+#            Anything else identified that nobody uses is sold, whatever its price
+#            (Chris sold his Rings of Jewels).
 #   room     when the party's packs have fewer than ROOM_MIN free slots: valuable unknowns
-#            the Bishop can't try yet (above their level), then identified valuables the
-#            party never equips or uses in battle (rings, an Ankh), the most valuable first,
-#            are stored the same way until the room is back.
+#            the Bishop can't try yet (above their level), then identified charms worth
+#            keeping that the party never equips or casts in battle, the most valuable
+#            first, are stored the same way until the room is back.
 #   take     a standby's or the Mule's unworn item that's now an upgrade for a member
 #            comes back (mule_use). While the room stays at ROOM_MIN or more, so do battle
 #            items, the unknowns the Bishop can now try (to the Bishop) and a standby's
 #            unworn leftovers nobody gains from (sold at the next visit).
 # Storage goes to a standby with room past BACKUP_KEEP free slots (one already coming in
-# first, then one who can use the item, then the most room); only when none has room, to the Mule, made then (the overflow:
+# first, then one who can use the item, then the most room), then the Mule if it exists,
+# then a standby's reserve; only when none has room, to the Mule, made then (the overflow:
 # standbys' packs fill with their own gear and a trip's leftovers, and valuables gather
 # over eleven chapters). Potions, scrolls, items whose spell the battle code casts (attack,
 # death, disabling, Madi/Morfis) and important items (no price, ids 310 on) stay with the
@@ -1191,9 +1232,10 @@ def backup_plan(g, members=None):
                 if b is not None:
                     btaken[(b, s)] = it
                     move(b, ri, 'put', w, 'wear', round(gain, 1))
-                elif valuable(g, w):
+                elif worth_keeping(g, w, alive) or it['cat'] == 6 and any(usable(g, x, it) for x in backs):
+                    # (an instrument a standby Bard can play is gear a standby can use)
                     store.append((v, ri, w, 'keep'))
-            elif w & IDENT and it['cat'] == 7 and not cloak(it) and valuable(g, w):
+            elif w & IDENT and it['cat'] == 7 and not cloak(it) and worth_keeping(g, w, alive):
                 crowd.append((1, -v, ri, w, 'room'))
             elif not w & IDENT and valuable(g, w) and id_level(g, w & 0x1ff) > blv:
                 crowd.append((0, -v, ri, w, 'unknown'))
@@ -1205,9 +1247,15 @@ def backup_plan(g, members=None):
             # a backup already coming in first: each one in costs a tavern swap
             used = {p[0] for p in plan}
             return max(cands, key=lambda b: (b in used, usable(g, b, it), broom[b], -b))
-        for b in (mi, None):
-            if b in broom and broom[b] > 0:
-                return b
+        if mi is not None and mi in broom and broom[mi] > 0:
+            return mi
+        # a standby's reserve before a new Mule (making one costs a Training Grounds trip)
+        cands = [b for b in backs if broom[b] > 0]
+        if cands:
+            used = {p[0] for p in plan}
+            return max(cands, key=lambda b: (b in used, usable(g, b, it), broom[b], -b))
+        if None in broom and broom[None] > 0:
+            return None
         return False
 
     n = 0
@@ -1246,12 +1294,14 @@ def backup_plan(g, members=None):
     # a standby's unworn leftovers nobody gains from (what a hand-down replaced, the
     # starting kit) come back to be sold at the next visit
     if not short:
-        for b in backs:
+        for b in [x for x in broom if x is not None]:
             for _, w in pack(g, b):
-                if w & (EQUIPPED | CURSED) or not w & IDENT or party_keeps(g, w) or valuable(g, w) \
-                        or any(p[3] == w and p[0] == b for p in plan):
+                if w & (EQUIPPED | CURSED) or not w & IDENT or party_keeps(g, w) \
+                        or worth_keeping(g, w, alive) or any(p[3] == w and p[0] == b for p in plan):
                     continue
-                if not spare(g, w, alive) or backup_gain(g, w, backs)[1] is not None:
+                it = item(g, w & 0x1ff)
+                if not sellable(g, w, alive) or backup_gain(g, w, backs)[1] is not None \
+                        or it['cat'] == 6 and any(usable(g, x, it) for x in backs):
                     continue
                 rj = max(alive, key=lambda x: free[x])
                 if free[rj] <= 0 or sum(free.values()) - 1 < ROOM_MIN:
@@ -1794,16 +1844,18 @@ def shop(g, log, reserve):
             done.append((which, g.char(ri)['name'], name(w & 0x1ff), cost, r))
             log.append((g.frame, which, g.char(ri)['name'], name(w & 0x1ff), cost, r))
         trade_done()
-    # sell what nobody would wear, unless it's worth a lot (valuable: a backup keeps it)
-    # or a standby would wear it (backup_plan's hand-downs, Chris 2026-10-15)
+    # sell what nobody would wear or use, unless it's worth keeping (worth_keeping: a
+    # spell the party can't cast, a special power) or a backup takes it (backup_plan's
+    # hand-downs and storage; Chris 2026-10-15)
     from collections import Counter
     handed = Counter((ri, w) for b, ri, kind, w, why, v in backup_plan(g, [ri for _, ri in members])
-                     if kind == 'put' and why == 'wear')
+                     if kind == 'put')
     for pos, ri in members:
         keep = Counter({w: n for (rj, w), n in handed.items() if rj == ri})
         sells = []
         for k, w in pack(g, ri):
-            if not spare(g, w, [rj for _, rj in members]) or valuable(g, w):
+            mem = [rj for _, rj in members]
+            if not sellable(g, w, mem) or worth_keeping(g, w, mem):
                 continue
             if keep[w] > 0:
                 keep[w] -= 1
