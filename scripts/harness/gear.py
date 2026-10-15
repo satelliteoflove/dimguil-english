@@ -156,7 +156,10 @@ def worth(g, ri, it, slot):
         # Shield, 6.5 + 12, were in stock; with the Rod on, a shield was never offered)
         return wscore(it) - max(TWO_HAND_COST, lost, best_shield(g, ri))
     if slot >= 2 or slot == 1 and it['cat'] == 2:
-        return score(it, slot) * ac_weight(g, ri)      # armor and shields: AC by HP
+        v = score(it, slot) * ac_weight(g, ri)          # armor and shields: AC by HP
+        if g.char(ri)['cls'] in HEALER_CLASSES and cure_item(g, it['id'] | IDENT):
+            v += CURE_WORN          # a Ring of Madi is only on the battle Use list worn
+        return v
     return score(it, slot)
 
 
@@ -811,7 +814,7 @@ def swap_back(g, rj, w_in):
     worn, not cursed, not a Latumofis, nothing rj gains from; what rj can't use first."""
     cands = []
     for j, x in pack(g, rj):
-        if x & (EQUIPPED | CURSED) or not x & IDENT or x == w_in or x & 0x1ff == LATUMOFIS:
+        if x & (EQUIPPED | CURSED) or not x & IDENT or x == w_in or x & 0x1ff == LATUMOFIS or cure_item(g, x):
             continue
         it = item(g, x & 0x1ff)
         if (it['cat'] <= 5 or cloak(it)) and gear_value(g, rj, it)[1] is not None:
@@ -840,7 +843,7 @@ def room_move(g):
     cands = []
     for ri in full:
         for k, w in pack(g, ri):
-            if w & (EQUIPPED | CURSED) or not w & IDENT or w & 0x1ff == LATUMOFIS:
+            if w & (EQUIPPED | CURSED) or not w & IDENT or w & 0x1ff == LATUMOFIS or cure_item(g, w):
                 continue
             it = item(g, w & 0x1ff)
             cands.append((usable(g, ri, it) and it['cat'] <= 6, not usable(g, to, it), ri, k))
@@ -857,6 +860,51 @@ def make_room(g, log=None, most=4):
         if not mv:
             break
         ri, k, rj = mv
+        slots = g.party_slots()
+        if give(g, slots.index(ri), k, slots.index(rj), log) != 'given':
+            break
+        n += 1
+    return n
+
+
+# --- confusion cures (main, 2026-10-14) ---
+# Only Madi (spell_madi 0x800ae6e8) and Morfis (spell_morfis 0x800af20c) cure confusion in
+# battle, and Boltac stocks no item that casts them but the 75,000 gold Staff of Curing
+# (Potion of Madi 10,000, Ring of Madi 15,000, Golden Rod 30,000; items.txt). One that turns
+# up is never sold, rides with the Priest or Bishop, and is Used on a confused member
+# (battle.cure_item_choice).
+CURE_SIDS = (36, 56)        # Madi, Morfis
+HEALER_CLASSES = (2, 11)    # Priest, Bishop (town.CLASSES)
+CURE_WORN = 3               # worth() of a worn cure item (not a weapon) to a Priest or Bishop
+
+
+def cure_item(g, w):
+    """An identified item whose battle spell (+0x1b) is Madi or Morfis."""
+    bs = g.u8(ITEMS + (w & 0x1ff) * 0x4c + 0x1b)
+    return bool(w & IDENT) and bs != 0xff and bs & 0x7f in CURE_SIDS
+
+
+def cure_moves(g):
+    """[(from roster index, pack index, to roster index)]: a cure item that isn't worn, in
+    the pack of someone who isn't a Priest or Bishop, to the one with the most room."""
+    healers = [ri for ri in g.party() if g.char(ri)['cls'] in HEALER_CLASSES
+               and g.char(ri)['status'] < 0x20]
+    if not healers:
+        return []
+    to = min(healers, key=lambda ri: len(pack(g, ri)))
+    if len(pack(g, to)) >= 10:
+        return []
+    return [(ri, k, to) for ri in g.party() if ri not in healers
+            for k, w in pack(g, ri) if not w & (EQUIPPED | CURSED) and cure_item(g, w)]
+
+
+def place_cures(g, log=None):
+    n = 0
+    for _ in range(3):
+        mv = cure_moves(g)
+        if not mv:
+            break
+        ri, k, rj = mv[0]
         slots = g.party_slots()
         if give(g, slots.index(ri), k, slots.index(rj), log) != 'given':
             break
@@ -914,6 +962,7 @@ def camp_loot(g, log=None, on_int=None):
             done += 1
         done += equip_party(g, log, on_int=on_int)
         done += place_potions(g, log)
+        done += place_cures(g, log)
     except Stuck as s:
         if s.what != 'camp interrupted' or on_int is None:
             raise
@@ -931,7 +980,8 @@ def loot_work(g):
     if any(p[0] != p[2] and (len(pack(g, p[2])) < 10 or swap_back(g, p[2], p[1]) is not None)
            for p in plan_gives(g, g.party())):
         return True
-    return any(wants_equip(g, i) for i in g.party()) or bool(potion_moves(g)) or bool(room_move(g))
+    return (any(wants_equip(g, i) for i in g.party()) or bool(potion_moves(g)) or bool(room_move(g))
+            or bool(cure_moves(g)))
 
 
 # --- potions (Chris, 2026-10-14) ---
@@ -1315,7 +1365,7 @@ def shop(g, log, reserve):
         while True:
             sell = None
             for k, w in pack(g, ri):
-                if w & (EQUIPPED | CURSED) or not w & IDENT:
+                if w & (EQUIPPED | CURSED) or not w & IDENT or cure_item(g, w):
                     continue
                 it = item(g, w & 0x1ff)
                 if not it['price']:

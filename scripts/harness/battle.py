@@ -465,6 +465,43 @@ def item_options(g, ri):
     return out
 
 
+def confused_harm(g, k):
+    """Whether confused member k can really hurt someone (main, 2026-10-14): two rounds of
+    its weapon (gear.wscore; 4 bare-handed) reach the HP of the weakest other member still
+    standing. Half its swings go to a random ally in either row (party_melee 0x800a8c2c)."""
+    from harness import gear
+    ids = party_ids(g)
+    w = gear.equipped(g, ids[k]).get(0)
+    d = gear.wscore(w) if w else 4
+    hp = [member_state(g, j)[0] for j, rj in enumerate(ids) if rj is not None and j != k
+          and member_state(g, j)[1] < 0x80 and member_state(g, j)[0] > 0]
+    return bool(hp) and 2 * d >= min(hp)
+
+
+def cure_item_choice(g, ri, k):
+    """A Madi or Morfis item on roster index ri's battle Use list, Used on confused member k
+    (party slot), or None. Only when k can really hurt someone (confused_harm), and never a
+    worn item that can break and that its wearer relies on (a weapon, or gear worth
+    something without the cure: the battle-item rule). Logged with the battle items."""
+    from harness import gear
+    if not confused_harm(g, k):
+        return None
+    eq = gear.equipped(g, ri)
+    for it in item_options(g, ri):
+        if it['sid'] not in gear.CURE_SIDS:
+            continue
+        if it['eq'] and it['br']:
+            rec = gear.item(g, it['id'])
+            slot = next((s_ for s_, x in eq.items() if x and x['id'] == it['id']), None)
+            if rec['cat'] == 0 or slot is None or gear.score(rec, slot) > 0:
+                continue
+        FIGHT_INFO.setdefault('items', []).append(dict(who=g.char(ri)['name'], ri=ri, item=gear.name(it['id']),
+                                                       id=it['id'], k=it['k'], w=it['w'], sid=it['sid'],
+                                                       cons=it['cons'], v=None, round=ROUND, cure=k))
+        return ('use', it['idx'], it['sid'], it['id'], ('member', k))
+    return None
+
+
 def item_choice(g, ri, me, M, big, best_own):
     """A Use action for an attack item, or None (Chris, 2026-10-14). The item's spell is
     valued as tactics values the spell (resistances, saves, group size; the user's level
@@ -661,6 +698,11 @@ def default_policy(g, m, opts):
                     CAST[('cure', k)] = ROUND
                     c = by_id[sid]
                     return ('spell', sid, c[1], c[2], c[3], ('member', k))
+            if st & 0x02 and USE in opts and CAST.get(('cure', k), 0) < ROUND:
+                act = cure_item_choice(g, ri, k)
+                if act:
+                    CAST[('cure', k)] = ROUND
+                    return act
     # every spell and target, valued in hit points (tactics.py): in a fight that doesn't
     # matter, nothing above CHEAP_LEVEL and no support spells, and a healer keeps the last
     # point of a level holding a heal they know
@@ -819,6 +861,13 @@ def command_member(g, policy, log):
         ui.wait_until(g, lambda: g.u8(SCREEN) == USE_LIST, 120, 'use list')
         ui.move_cursor(g, LIST, act[1], 'down', 'up', what='use item')
         _press_change(g, 'circle', what='use item')
+        if act[-1][0] == 'member':
+            # a cure item on a member: the same member grid as a spell's (screen 51)
+            ui.wait_until(g, lambda: g.u8(SCREEN) not in TRANSIENT, 120, 'after use')
+            if g.u8(SCREEN) == 51:
+                slot = act[-1][1]
+                ui.move_cursor(g, PGRID_Y, slot // 3, 'down', 'up', what='target row')
+                ui.move_cursor(g, PGRID_X, slot % 3, 'right', 'left', what='target col')
     # a target step: an enemy group pick is aimed (aim); anything else (a member) takes
     # what's selected. Stop at the next member or the overview.
     prefer = act[-1][1] if act[0] in ('spell', 'dispel', 'use') and act[-1][0] == 'group' else None

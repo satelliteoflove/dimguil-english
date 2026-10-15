@@ -1239,7 +1239,8 @@ class Run:
         for ri in standbys:
             pos = town.town_slots(g).index(ri)
             for _ in range(10):
-                left = [(k, w) for k, w in gear.pack(g, ri) if gear.item(g, w & 0x1ff)['price']]
+                left = [(k, w) for k, w in gear.pack(g, ri) if gear.item(g, w & 0x1ff)['price']
+                        and not gear.cure_item(g, w)]      # Madi/Morfis items aren't sold
                 if not left:
                     break
                 r = town.boltac_sell(g, pos, left[0][0])
