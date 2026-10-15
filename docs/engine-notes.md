@@ -40,7 +40,15 @@ on 2026-10-10 and 11; the earlier notes below came from translating the game.
   with two small LCGs in the executable (D-battle.md, "Randomness"). The town calls `rand_upto(2)` every frame, so
   waiting a different number of frames before the same button presses changes the next
   roll: that's how the emulator tests checked both sides of a threshold without
-  writing to RAM.
+  writing to RAM. Battle rolls don't follow frame timing: `rand_below` keeps its LCG
+  state at 0x80079a34 (`battle_rng_state`, x * 0x41c64e6d + 0x3039), and a fight
+  started from a save state plays out the same whatever frames are waited first, so
+  the harness's old "seed" (a few frames of waiting) gave the same fight every time.
+  Writing a seeded value to 0x80079a34 after loading the state gives a real spread of
+  fights from one state. The harness benches do this
+  (`rips/agents/chapters/ag16/fight_rng.py`). On the 17 Were Centipedes at Area B
+  (26,8,14) it showed 30 different fights: 6 wipes under the current rules, 9 when
+  running at round 1. It's a write of data, for testing only.
 - **Records.** Twenty characters at 0x8007d708 (0xd0 bytes each), twenty party records
   at 0x8008f8c8 (54 bytes), the party you walk with mirrored at 0x8007e810, 382 item
   records at 0x80052bf2 in the executable, and monster records loaded per battle at
