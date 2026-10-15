@@ -315,8 +315,8 @@ These were also named by G. The rules as read here: [code]
   chests or gifts (every overlay scanned). **[code]** The list builder `FUN_800df424` hides an
   entry only when its stock (0x8008a0b0) is 0 and its seen bit is clear, so an item in stock
   shows too. **[code]** In play (Chris), selling a Night Cloak added it; the shop's Identify
-  on an item didn't, which the code doesn't explain (maybe the item was already identified
-  or in stock); worth a retest on an out-of-stock unknown.
+  on the cloak didn't, because it was already identified, so no identify ran (Chris's
+  reading, consistent with the code).
   - [emu: Uranus sold his equipped PLATE MAIL, price 1500: gold 50000 → 50750, stock 1 → 2]
 - **The free item.** If a sale leaves nothing sold out (all 307 stock bytes non-zero)
   and the flag is clear:
