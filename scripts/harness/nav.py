@@ -120,6 +120,26 @@ BELTS = (0x44, 0x45)
 TILE_DIRS = (0, 1, 2, 1, 3, 0, 1, 2, 3, 2, 0, 3, 2, 3, 1, 2, 1, 3, 0, 3, 2, 2, 1, 0, 3, 2, 1)
 PANEL = 0x80087a30
 
+# Arrive squares that stop mattering once a flag is set, and ones that hurt until then
+# (chapter 13, Area C B4): a Guardians' fixed fight (0x65) runs only while story_flags bit
+# p1 is clear (the win sets it), and the room past the snake door's 0x4a squares burn the
+# party only while bit 22 (the device at E5 N12) is clear. c13v3 (2026-10-15), after the
+# Guardians: on to the device at (5, 11), whose only ways in are the Guardians' square and
+# the burning floor, both soft avoids, so walk_to fell back to its shortest way, over
+# (8, 16) into the burn's white-out scene: "close maze box" six times.
+QUIET_AFTER = {0x65: lambda p: (STORY_FLAGS, p[0]), 0x4a: lambda p: (STORY_FLAGS, 22)}
+HURTS = {0x4a}
+
+
+def quiet(g, F, xy):
+    """True if the arrive square xy does nothing now (its flag set)."""
+    fl = F.get('quiet_after', {}).get(xy)
+    return bool(fl) and g is not None and flag(g, *fl)
+
+
+def hurts(g, F, xy):
+    return xy in F.get('hurts', ()) and not quiet(g, F, xy)
+
 
 def belts_on(g):
     return g is None or not (flag(g, STORY_FLAGS, 10) or flag(g, STORY_FLAGS, 27))
@@ -207,6 +227,7 @@ def floor(area):
             walls[(x, 23 - N)] = [int(W[s][N][x]) for s in 'nesw']
     transfers, arrive, voids, secret, sealed, fights = {}, set(), set(), {}, {}, set()
     circles, switches, belts = {}, {}, {}
+    quiet_after, hurt = {}, set()
     for e in d['events']:
         t = e['raw']['type']
         sq = [(x, 23 - N) for x, N in e.get('squares', [])]
@@ -221,6 +242,11 @@ def floor(area):
             arrive.update(sq)
         if t == 0x14:
             fights.update(sq)
+        if t in QUIET_AFTER:
+            for s in sq:
+                quiet_after[s] = QUIET_AFTER[t](e['raw']['params'])
+        if t in HURTS:
+            hurt.update(sq)
         if e['kind'] == 'void':
             voids.update(sq)
         if t == 3:
@@ -247,7 +273,7 @@ def floor(area):
     _floor[area] = dict(walls=walls, transfers=transfers, arrive=arrive, voids=voids,
                         secret=secret, sealed=sealed, closed=closed, fights=fights, shut=shut,
                         circles={xy: c for xy, c in circles.items() if c[0] in switches},
-                        switches=switches, belts=belts,
+                        switches=switches, belts=belts, quiet_after=quiet_after, hurts=hurt,
                         shut_after=dict(EXTRA_SHUT_AFTER.get(area, {})))
     return _floor[area]
 
@@ -363,7 +389,9 @@ def plan(g, dest, start=None, items=None, out=None, keep=None):
                         nxt.append((cr[0], 2 + cr[1] // 2, ('carry', (area, nx, ny))))
                     continue
                 if (nx, ny) in F['arrive'] and (nx, ny) not in F['transfers'] \
-                        and (area, nx, ny) != dest:
+                        and (area, nx, ny) != dest and not quiet(g, F, (nx, ny)):
+                    if hurts(g, F, (nx, ny)):
+                        continue
                     cost = 40
                 if st == 'hidden':
                     nxt.append(((area, nx, ny), cost + FIND_COST, ('find', (x, y, d))))
@@ -428,10 +456,12 @@ def avoid_squares(g, area, target):
     for sq, fl in EXTRA_AVOID_AFTER.get(area, {}).items():
         if flag(g, *fl) and sq != target:
             hard.add(sq)
+    hard |= {sq for sq in F.get('hurts', ()) if sq != target and hurts(g, F, sq)}
     for sq, (bit, _) in F.get('circles', {}).items():
         if flag(g, MAZE_EVENTS, bit) and sq != target:
             hard.add(sq)
     soft = (F['arrive'] | TRIP_SOFT.get(area, set())) - hard - {target}
+    soft = {sq for sq in soft if not quiet(g, F, sq)}
     return hard, soft
 
 
