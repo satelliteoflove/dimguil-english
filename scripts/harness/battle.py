@@ -93,6 +93,7 @@ CAST = {}          # this battle's casts by spell id (fight() clears it)
 # matters (tactics.matters, or losing) at any command phase, and each cast as
 # (member name, spell id, school, level)
 FIGHT_INFO = dict(matters=False, casts=[])
+OUT_BITS = 0x04 | 0x20 | 0x40 | 0x80 | 0x100 | 0x200   # poison, paralysis, stone, dead, ash, lost
 # VARY > 0: a goal's retry (chapter1.Run.goal sets it to the try number - 1). The game's
 # rolls don't move with time, only with what's done, so a retry has to choose
 # differently or it replays the same fight: then a fighter may take another group on
@@ -1731,6 +1732,10 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
     for k_ in [k_ for k_ in FIGHT_INFO if isinstance(k_, tuple) and k_[0] == 'long'] + ['long', 'focus']:
         FIGHT_INFO.pop(k_, None)
     msg0 = len(g.cap.messages) if g.cap else 0
+    # (nodead) who started the fight dead, stoned, ashed, lost, paralyzed or poisoned
+    # (Chris, 2026-10-15: the party shouldn't carry on with them; harness/nodead.py)
+    out_start = [[g.char(ri)['name'], g.char(ri)['status'] & OUT_BITS] for ri in g.party()
+                 if g.char(ri)['status'] & OUT_BITS]
     tactics.STORY[0] = None
     where = (g.u8(MAZE_AREA),) + tuple(g.pos())
     _vrng.seed(VARY * 7919 + 1)
@@ -1825,4 +1830,4 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
                 first=FIGHT_INFO.get('first'), hp_end=_party_hp(g), items=_items_after(g),
                 down_end=[g.char(ri)['name'] for ri in g.party() if g.char(ri)['status'] >= 0x20],
                 dead_end=[g.char(ri)['name'] for ri in g.party() if g.char(ri)['status'] & 0x380],
-                deaths=death_tags(g, msg0))
+                deaths=death_tags(g, msg0), out_start=out_start)
