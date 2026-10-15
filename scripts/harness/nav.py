@@ -665,6 +665,7 @@ def travel(g, dest, on_int, after=None, max_legs=40, keep=None):
         here = (g.u8(maze.AREA),) + g.pos()
         if here == tuple(dest):
             return legs
+        reload_walls(g)
         p = plan(g, tuple(dest), keep=keep)
         if not p:
             for _ in range(15):
@@ -692,6 +693,33 @@ def travel(g, dest, on_int, after=None, max_legs=40, keep=None):
         _, area, x, y = leg
         walk_floor(g, x, y, on_int)
     raise Stuck('travel too long', dest=dest)
+
+
+def reload_walls(g):
+    """A camp when RAM still draws shut a side EXTRA_OPEN_AFTER has opened. The floor load
+    that changes the walls (MAZE 0x800a8f1c) runs from the map load only when 0x80079878 is
+    0 or 0x1b, so not on a lift's arrival (17), and after every camp (MAIN 0x80019428,
+    maze_exit_code 0xfc). c14v3 (2026-10-15): back from town by Area D's lift after Mother,
+    B3's altar wall at (11, 5) was still up, and walk_to found "no path" six times; a camp
+    took it down."""
+    F = floor(g.u8(maze.AREA))
+    if not F or not F.get('open_after') or not maze.in_maze(g):
+        return False
+    wm = maze.wallmap(g)
+    if not any(flag(g, *fl) and maze.side(wm, x, y, d) == 1
+               for (x, y, d), fl in F['open_after'].items()):
+        return False
+    from harness import camp
+    if not maze.calm(g) and not maze.settle(g):
+        return False
+    try:
+        camp.open_camp(g)
+        g.step(30)
+        camp.close_camp(g)
+    except Stuck:
+        return False        # a fight or a talk instead: the walk's interrupt handling runs it
+    g.step(60)
+    return True
 
 
 def step_off(g, on_int):
