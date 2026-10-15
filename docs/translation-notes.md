@@ -202,6 +202,13 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 - **"Companions," not "comrades" (2:231).** Chris: "comrade" carries a connotation for
   American players that doesn't fit. Balbo's 仲間 is now "companions"; the other uses
   are listed under To revisit.
+- **Balbo's introduction (2:96, 2026-10-15).** Chris found it awkward in play; no
+  reviewer had flagged it, so it was still the first draft. 何だよ,そんなことか? is
+  "what, *that's* what you're asking?", not "that's all?" (which read as disappointment
+  that it was over); the fragment "Pain in the neck, but fine" became full sentences;
+  and "I guess" was dropped, since ま,よろしくな is gruff but friendly, not grudging.
+  Now "Huh? That's all you wanted? What a pain. Oh, all right... Name's Balbo. I'm a
+  Lord. Well, nice to meetcha." Chris thought the rest of Balbo's party's talk read fine.
 - **The leaders' maze-encounter voice (NPC scene 3, Balbo's progress reports,
   2026-10-05).** When Balbo's party meets you in the maze, the Japanese drops his own
   voice (俺様, ねぇ, チッ) for a stiff, superior one: 君たち, 〜たまえ, 〜かね, 我々. The
