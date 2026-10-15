@@ -164,7 +164,9 @@ def _drop_prompt_msg(g):
             return j, m['idx']
         # the list's lines: item names (I_NAME_E) and the SISETU marks between them; a
         # list shown again after a No to 238 prints its names after the 90 too
-        if m['file'] not in ('SISETU.OBJ', 'STATUS.OBJ', 'I_NAME_E.OBJ'):
+        # (file None: a base whose file the capture hasn't confirmed yet, as in a fresh
+        # load of a state)
+        if m['file'] not in ('SISETU.OBJ', 'STATUS.OBJ', 'I_NAME_E.OBJ', None):
             return None
     return None
 
@@ -249,6 +251,58 @@ def drop_prompt(g):
         g.step(40)
         return True
     return False
+
+
+def drop_pending(g):
+    """True if the latest SISETU line, past the party bar's and the list's lines, is
+    the drop picker's ("Who will drop it?", "Drop which item?" and the rest)."""
+    ms = g.cap.messages if g.cap else []
+    for j in range(len(ms) - 1, max(-1, len(ms) - 60), -1):
+        m = ms[j]
+        if m['file'] == 'SISETU.OBJ':
+            return m['idx'] in (92, 303) + DROP_PROMPTS
+        if m['file'] not in ('STATUS.OBJ', 'I_NAME_E.OBJ', None):
+            return False
+    return False
+
+
+def drop_picker(g, limit=3000):
+    """The drop picker as game_state 3, the camp's state: a story item given by MAZE
+    0x800cbb0c with every pack full sets it straight from a prompt's Yes, no box (c15v1a
+    chapter 15, 2026-10-15: the Demon's Statue after a chest filled the last slot; the
+    camp's cross backed out of "Who will drop it?", the statue stayed in the wreck, and
+    the goal was stuck "after camp" four times). The member is one with something
+    throwable, then drop_prompt throws away spare loot."""
+    f0 = g.frame
+    asked = set()
+    while g.u8(maze.GAME_STATE) == 3 and maze.in_maze(g):
+        if g.frame - f0 > limit:
+            raise Stuck('drop picker', where=g.where())
+        if drop_prompt(g):
+            continue
+        ms = g.cap.messages if g.cap else []
+        j = next((j for j in range(len(ms) - 1, max(-1, len(ms) - 60), -1)
+                  if ms[j]['file'] not in ('STATUS.OBJ', 'I_NAME_E.OBJ', None)), None)
+        if j is not None and j not in asked and ms[j]['file'] == 'SISETU.OBJ' \
+                and ms[j]['idx'] == 303:
+            # "Who will drop it?", the party bar printed after it. The cursor is the camp's
+            # (0x800796cc column, 0x800796cd row) and starts on the first member; pick one
+            # with something throwable (c15v1b: Uranus, all worn gold and the Jade Mask,
+            # refused for 3,000 frames)
+            asked.add(j)
+            g.step(10)
+            from harness import camp, gear
+            slots = g.party_slots()
+            who = next((p for p, ri in enumerate(slots) if ri is not None
+                        and any(gear.throwable(g, w) for _, w in gear.pack(g, ri))), None)
+            if who is not None:
+                camp._pick_member(g, who, 'who drops')
+            n = len(g.cap.messages)
+            ui.press_until(g, 'circle', lambda: len(g.cap.messages) > n
+                           or g.u8(maze.GAME_STATE) != 3, 120, 'who drops')
+            g.step(20)
+            continue
+        g.step(10)
 
 
 def close_box(g, limit=600, react=20):
@@ -351,7 +405,14 @@ def wait_settled(g, limit=1800):
             if maze.calm(g):
                 return 'calm'
             if g.u8(maze.GAME_STATE) == 3:
-                return 'camp'
+                # the drop picker's lines print a frame or two after the state changes
+                for _ in range(30):
+                    if drop_pending(g) or g.u8(maze.GAME_STATE) != 3:
+                        break
+                    g.step()
+                if g.u8(maze.GAME_STATE) != 3:
+                    continue
+                return 'drop' if drop_pending(g) else 'camp'
             if g.u8(maze.GAME_STATE) == PROMPT:
                 return 'prompt'
             if g.u8(maze.GAME_STATE) == 0 and g.u8(maze.MSG) in (2, 3):
@@ -376,6 +437,9 @@ def handle_interrupt(g, policy=Policy, log=None):
             continue
         if what == 'box':
             close_box(g)
+            continue
+        if what == 'drop':
+            drop_picker(g)
             continue
         if what == 'camp':
             from harness import camp

@@ -60,6 +60,12 @@ for _xy in ((12, 3), (13, 3)):
     # ladder up): the only way back from the mural room (q9r1 chapter 9, 2026-10-14: "no
     # route" from (17, 3))
     LINKS.append(dict(at=(19,) + _xy, face=0, step=False, to=(20,) + _xy, what='ladder up'))
+# Area C's lift between B2 and B4 at E21 N8 (21, 15) (record type 0x4b, square_examine
+# 0x800bb790): Investigate facing west, and FUN_800ce108 starts scene 0x1d to area 0x1c
+# + (2 from B4, else 0), so B2 (30) goes down to B4 (28) and B4 back up. No flag, no
+# prompt.
+LINKS.append(dict(at=(30, 21, 15), face=3, step=False, to=(28, 21, 15), what='C lift down'))
+LINKS.append(dict(at=(28, 21, 15), face=3, step=False, to=(30, 21, 15), what='C lift up'))
 # Transfers the site doesn't decode: area -> {(x, y): (area, x, y)}. The jewel lift's
 # B3 end (event 0xc with p3 = 4, square_arrive) takes the party up on arrival; its
 # params give the destination in game coordinates (x 12, y 11, area 4).
@@ -67,7 +73,8 @@ EXTRA_TRANSFERS = {6: {(12, 11): (4, 11, 11)}}
 # The lift rides (0x80079878 = 9 down, 10 up; countdown at 0x8008a000) pass through the
 # floors between, with the area byte changing on the way: up from B3 it reads 1, 2, 3,
 # then 4, and the party ends at 4F (11, 11) about 1,050 frames after stepping on.
-RIDES = (9, 10, 15)         # 15: the lift to Area X (B3 E15 N12, ~500 frames)
+RIDES = (9, 10, 15, 0x1d)   # 15: the lift to Area X (B3 E15 N12, ~500 frames); 0x1d: Area
+                            # C's B2-B4 lift (FUN_800ce108, run by FUN_800c8038)
 SCENE, SCENE_COUNT = 0x80079878, 0x8008a000
 # Sides the site doesn't decode as sealed: area -> {(x, y, side): [(addr, bit), ...]}.
 # The stream on B2 west of E7 N12 (record type 0x24 at (7, 11)) lets nobody across until
