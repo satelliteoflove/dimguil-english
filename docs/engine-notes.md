@@ -174,6 +174,11 @@ glance". By subsystem:
   0x26), then case 0x27 starts fight type 0x13 with reward type 0xd. Any other word gets
   EVENTMES 104. The win runs FUN_800b7310(3), setting the gold stone (bit 3, the eighth),
   and EVENTMES 111. **[code]**, chapter 16 (2026-10-15).
+  The fight is five Crystal Men in one group, not one. They nullify many spells, cast
+  Mogato and Labadi, and their eye beams and hand rays reach the back row. Like Mother's
+  fight it starts with FIXED (0x80079bde) at 0, so nothing in battle RAM marks it as a
+  story fight. **[emu]** (c16v1a-b, 2026-10-15: a level 17-21 party killed none of them
+  in 12 rounds and wiped).
 - **Area D (areas 32-34).**
   - The altar (0x2c in area 32, B3 E11 N19, facing south) works only while story bits 10
     and 23 are clear: EVENTMES 199 and a yes/no (prompt 0x16); with the Tablet, EVENTMES
