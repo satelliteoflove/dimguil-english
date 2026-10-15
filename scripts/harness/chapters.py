@@ -512,9 +512,10 @@ class Run(chapter1.Run):
             return out
         return None
 
-    def maporfic(self):
+    def maporfic(self, keep=0):
         """Maporfic from camp before a boss (B-camp.md: party AC -2 for 1250 steps,
-        0x8007e82a), if a priest knows it and it isn't running."""
+        0x8007e82a), if a priest knows it and it isn't running. keep: Priest level 4
+        points the caster holds back (Dial is level 4 too)."""
         g = self.g
         if g.u8(0x8007e82a):
             return
@@ -523,7 +524,7 @@ class Run(chapter1.Run):
                 continue
             c = g.char(ri)
             ks = battle.known_spells(c['raw'], 1, 4)
-            if c['status'] < 0x20 and 32 in ks and c['raw'][0x5c + 7 + 3]:
+            if c['status'] < 0x20 and 32 in ks and c['raw'][0x5c + 7 + 3] > keep:
                 try:
                     camp.cast(g, slot, 1, 4, ks.index(32), done=lambda: g.u8(0x8007e82a) != 0)
                     self.note('maporfic', c['name'], g.u8(0x8007e82a))
@@ -756,6 +757,10 @@ class Run(chapter1.Run):
                     if POINTS_HOME and self.points_spent():
                         why = 'points'
                         break
+                    if MAPORFIC_TRIP:
+                        # Maporfic all trip (strategy revision 5): again when its 1250
+                        # steps run out, while the priest keeps two level 4 points for Dial
+                        self.maporfic(keep=MAPORFIC_KEEP)
                     if HP_HEAL:
                         if self.hp_heal():
                             why = 'critical'
@@ -1189,7 +1194,8 @@ class Run(chapter1.Run):
         return lv[len(lv) // 2]
 
 
-MAPORFIC_TRIP = False        # Maporfic from camp as a training trip sets out
+MAPORFIC_TRIP = True         # Maporfic from camp as a training trip sets out, and again when it lapses (agent 13, revision 5)
+MAPORFIC_KEEP = 2            # ... the recast keeps this many Priest level 4 points (Dial)
 TOPUP = False                # heal to what the trip's worst monster can't take in two hits
 HP_HEAL = True               # Chris's HP lines after every training fight (Run.hp_heal)
 HOME_DEAD = 0x80 | 0x100 | 0x200  # dead, ash, lost: the walk home may run (Run.homeward_run)
