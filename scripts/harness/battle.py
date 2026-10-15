@@ -807,8 +807,21 @@ def command_phase(g, policy, log):
         if g.u8(LEVEL) == 1 and g.u8(SCREEN) == 9:
             command_member(g, policy, log)
         elif g.u8(SCREEN) in WAITING:
-            # the members overview, or "Is this all right?" (cursor on Yes)
-            _press_change(g, 'circle', 120, 'command flow')
+            # the members overview, or "Is this all right?" (cursor on Yes). On the
+            # overview a press on a member who can't act (asleep) does nothing: move to
+            # the next member and press again (n1v1m chapter 9, agent 13: the cursor sat
+            # on Dax asleep, screen 5, and circle never changed it)
+            try:
+                _press_change(g, 'circle', 120, 'command flow')
+            except Stuck:
+                if g.u8(SCREEN) != 5:
+                    raise
+                for b in ('right', 'down', 'left', 'up'):
+                    try:
+                        _press_change(g, b, 40, 'command flow, next member')
+                        break
+                    except Stuck:
+                        pass
         else:
             # a screen in transition: a press now would carry into the next menu. One
             # that stays put isn't a transition but a pick left waiting (a group pick,
