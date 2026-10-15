@@ -52,6 +52,7 @@ LOCK_STATE, PICK_STATE = 8, 0x11
 SUB = 0x80079790                        # the locked-door menu's step
 LOCK_CUR = 0x8007b716                   # its cursor (s16): -0x26 Pick, -0x1a Calnova, -0xe leave
 PICK_LOCK = -0x26
+PENDING = 0x80079907                    # maze_prompt_pending
 PICK_X, PICK_Y = 0x8007b6f0, 0x8007b6f2   # party picker (s16): x -99/1/101, y 0x48 front, 0x62 back
 
 
@@ -102,6 +103,12 @@ def drive(g, step, limit=4000):
         if g.u8(maze.GAME_STATE) == play.PROMPT:
             ui.move_cursor(g, play.PROMPT_CURSOR, 0, 'down', 'up', what='event yes')
             ui.confirm_until(g, lambda: g.u8(maze.GAME_STATE) != play.PROMPT, 300, 'event yes')
+            continue
+        if g.u8(PENDING) and g.u8(maze.GAME_STATE) == 0:
+            # a prompt's outcome still to run: after the small door's pick, prompt 0x18
+            # waits ~1,200 calm frames (the crystal's movie loading) before EVENTMES 224
+            # (c14v3s: the drive called that calm and the goal failed twice)
+            g.step()
             continue
         if maze.calm(g):
             for _ in range(chapter1.QUIET):
