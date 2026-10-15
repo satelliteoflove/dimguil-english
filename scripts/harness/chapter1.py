@@ -673,6 +673,15 @@ def town_upkeep(g, log):
             log.append((g.frame, 'shop stuck', s.what))
             town.to_town_bar(g)
         gold_note(g, log, 'shop', g2)
+    # a raise the party can't pay or soon earn: the least useful valuable is sold
+    if GEAR and MULE:
+        need = mule_need(g)
+        if need:
+            try:
+                mule_sell(g, log, need)
+            except Stuck as s:
+                log.append((g.frame, 'mule sell stuck', s.what))
+                _mule_recover(g)
     # Boltac's sales can pay a raise the temple turned down: back to the temple (n1v1
     # chapter 7, agent 8, 2026-10-14: Eve's raise failed to ashes, Venus and Earth were
     # "poor" at 1,970, the sales made it 5,270 for their 5,250, and they waited a trip)
@@ -690,6 +699,10 @@ def town_upkeep(g, log):
                 town.to_town_bar(g)
         reorder_party(g, log)
         town.to_town_bar(g)
+    # the mule (Chris, 2026-10-14): valuables Boltac's would have bought go to a character
+    # who stays in town, and come back out as upgrades or battle items
+    if GEAR and MULE:
+        mule_visit(g, log)
     # the gold rides with the member least likely to die (back row, the Bishop first),
     # not split six ways: a mass death no longer locks the raise money in the dead (n1v0
     # chapter 3, 2026-10-14: five dead with 1,300 each, the temple 'poor'). The shop
@@ -894,6 +907,218 @@ def second_purse(g, log, k):
     _PURSE_ORDER.clear()
 
 
+MULE = True
+MULE_SELL_TRIPS = 1     # a shortfall one trip's income covers is earned, not sold for
+
+
+def make_mule(g, log):
+    """Create the mule at the Training Grounds (a Neutral Human Fighter: Neutral mixes
+    with any party). Creation costs nothing; the new character brings 100 gold
+    (training_create 0x800af5d8 sets new_char.gold = 100) and a Long Sword and Leather
+    Armor (mule15 test, 2026-10-14). The Training Grounds send the party back to the
+    tavern (seen in the same test), so it's formed again in its order."""
+    if g.roster_count() >= 20:
+        return None
+    order = town.town_party(g)
+    try:
+        r = town.create_character(g, gear.MULE_NAME, 'Human', 'M', 'Neutral', 'Fighter', retrain=False)
+    except Stuck as s:
+        log.append((g.frame, 'mule make stuck', s.what))
+        r = None
+    town.to_town_bar(g)
+    if town.town_party(g) != order:
+        for ri in town.town_party(g)[::-1]:
+            town.remove_member(g, town.town_slots(g).index(ri))
+        town.to_town_bar(g)
+        town.form_party(g, order)
+        town.to_town_bar(g)
+    if r is None:
+        return None
+    mi = r['index']
+    log.append((g.frame, 'mule made', mi, r['frames'], g.char(mi)['gold'],
+                [gear.name(w & 0x1ff) for _, w in gear.pack(g, mi)]))
+    return mi
+
+
+def mule_moves(g):
+    """{roster index: [('put'|'take', word, why, value)]}: the mule's items that are now
+    an upgrade or a battle item go to the member they help (gear.mule_use), then the
+    party's keepers (gear.keeper) go to the mule, most valuable first, while it has room."""
+    members = town.town_party(g)
+    mi = gear.mule(g)
+    # what's already in a pack goes to its member in camp: counted as worn (as gear.shop)
+    taken = {(rj, s): gear.item(g, w & 0x1ff) for _, w, rj, s, _ in gear.plan_gives(g, members)}
+    moves = {}
+    room = 10
+    if mi is not None:
+        room -= len(gear.pack(g, mi))
+        got = {}
+        for _, w in gear.pack(g, mi):
+            gain, rj, why, s = gear.mule_use(g, w, members, taken)
+            if rj is None or len(gear.pack(g, rj)) + got.get(rj, 0) >= 10:
+                continue
+            if s is not None:
+                taken[(rj, s)] = gear.item(g, w & 0x1ff)
+            got[rj] = got.get(rj, 0) + 1
+            moves.setdefault(rj, []).append(('take', w, why, round(gain, 1)))
+            room += 1
+    dep = sorted(((gear.sell_value(g, w), ri, w) for ri in members if g.char(ri)['status'] == 0
+                  for _, w in gear.pack(g, ri) if gear.keeper(g, w, members)), reverse=True)
+    for v, ri, w in dep[:max(0, room)]:
+        moves.setdefault(ri, []).append(('put', w, 'keep', v))
+    return moves
+
+
+def _mule_in(g, log, mi, avoid=()):
+    """The mule joins; a full party first lets out its lowest-level member not in
+    `avoid` (gold pooled on another, leave_party). Returns the leaver or None."""
+    leaver = None
+    if len(town.town_party(g)) >= 6:
+        slots = town.town_slots(g)
+        here = [p for p, ri in enumerate(slots) if ri is not None]
+        pos = min([p for p in here if slots[p] not in avoid] or here,
+                  key=lambda p: (g.char(slots[p])['level'], -p))
+        leaver = leave_party(g, log, pos)
+        town.to_town_bar(g)
+    _MULE_OUT[:] = [leaver]
+    town.form_party(g, [mi])
+    town.to_town_bar(g)
+    return leaver
+
+
+_MULE_OUT = []          # the member out for the mule, for _mule_recover
+
+
+def _mule_out(g, mi, leaver):
+    """The mule leaves; the member out for it comes back into the same position."""
+    if mi in town.town_party(g):
+        town.remove_member(g, town.town_slots(g).index(mi))
+        town.to_town_bar(g)
+    if leaver is not None and leaver not in town.town_party(g):
+        town.form_party(g, [leaver])
+        town.to_town_bar(g)
+    _MULE_OUT.clear()
+
+
+def _mule_recover(g):
+    if g.overlay() == 'HAZURE':
+        gear.edge_leave(g)
+    elif town._at_trade_menu(g):
+        town.boltac_leave(g)
+    town.to_town_bar(g)
+    mi = gear.mule(g)
+    if mi is not None and _MULE_OUT:
+        _mule_out(g, mi, _MULE_OUT[0])
+
+
+def mule_visit(g, log):
+    """In town, before the gold is pooled for the trip: the mule comes into the party
+    (for a member who has nothing to trade), trades with each member at the Edge of
+    Town (gear.edge_trade), and leaves. A second pass serves the member who stepped out.
+    The mule is made the first time a keeper turns up."""
+    for _ in range(2):
+        mv = mule_moves(g)
+        if not mv:
+            return
+        mi = gear.mule(g)
+        if mi is None:
+            mi = make_mule(g, log)
+            if mi is None:
+                return
+            mv = mule_moves(g)
+        if mi in town.town_party(g) or g.char(mi)['status'] != 0:
+            log.append((g.frame, 'mule away', g.char(mi)['status']))
+            return
+        try:
+            leaver = _mule_in(g, log, mi, set(mv))
+            mpos = town.town_slots(g).index(mi)
+            # members who take go first: that frees the mule's room for the deposits
+            for ri, moves in sorted(mv.items(), key=lambda x: not any(m[0] == 'take' for m in x[1])):
+                if ri not in town.town_slots(g):
+                    continue
+                moves.sort(key=lambda m: m[0] != 'put')    # a member's deposits free their room
+                gear.edge_trade(g, town.town_slots(g).index(ri), mpos, moves, log)
+            _mule_out(g, mi, leaver)
+        except Stuck as s:
+            log.append((g.frame, 'mule stuck', s.what))
+            _mule_recover(g)
+            return
+        if leaver is None or leaver not in mv:
+            return
+
+
+def mule_need(g):
+    """The fee of the cheapest raise the party can't pay (members near the party's top
+    level, as gear.shop's reserve), when the shortfall is more than MULE_SELL_TRIPS
+    trips' income (the last four trips' mean) or no trip is measured yet; else 0."""
+    members = town.town_party(g)
+    if not members:
+        return 0
+    gold = party_gold(g)
+    top = max(g.char(ri)['level'] for ri in members)
+    fees = [g.char(ri)['level'] * temple_rate(g.char(ri)['status']) for ri in town.temple_patients(g)
+            if g.char(ri)['level'] >= top - 3]
+    fees = [f for f in fees if f > gold]
+    if not fees:
+        return 0
+    inc = INCOME[-4:]
+    if inc and min(fees) - gold <= MULE_SELL_TRIPS * sum(inc) / len(inc):
+        return 0
+    return min(fees)
+
+
+def mule_sell(g, log, need):
+    """Sell keepers (the party's, then the mule's stock), the least useful first
+    (gear.mule_use: no use, then the smallest gain, then the lowest sale value), until
+    the party's gold reaches `need`; nothing if they can't cover it all. A sale the need
+    doesn't call for after all is dropped, the cheapest first. Returns the gold made."""
+    members = town.town_party(g)
+    mi = gear.mule(g)
+    cands = [(ri, w) for ri in members for _, w in gear.pack(g, ri) if gear.keeper(g, w, members)]
+    if mi is not None and mi not in members and g.char(mi)['status'] == 0:
+        cands += [(mi, w) for _, w in gear.pack(g, mi) if w & gear.IDENT
+                  and not w & (gear.CURSED | gear.EQUIPPED) and gear.item(g, w & 0x1ff)['price']
+                  and not gear.cure_item(g, w)]
+    gold = party_gold(g)
+    val = lambda c: gear.sell_value(g, c[1])
+    if gold + sum(val(c) for c in cands) < need:
+        log.append((g.frame, 'mule sell short', need, gold, sum(val(c) for c in cands)))
+        return 0
+
+    def use(c):
+        gain, rj, why, _ = gear.mule_use(g, c[1], members)
+        return (why is not None, gain, val(c))
+    pick, total = [], gold
+    for c in sorted(cands, key=use):
+        if total >= need:
+            break
+        pick.append(c)
+        total += val(c)
+    for c in sorted(pick, key=val):
+        if total - val(c) >= need:
+            pick.remove(c)
+            total -= val(c)
+    g0 = gold
+    leaver = _mule_in(g, log, mi) if any(ri == mi for ri, _ in pick) else None
+    for ri, w in pick:
+        k = next((j for j, x in gear.pack(g, ri) if x == w), None)
+        if k is None:
+            continue
+        r = town.boltac_sell(g, town.town_slots(g).index(ri), k)
+        log.append((g.frame, 'mule sell', g.char(ri)['name'], gear.name(w & 0x1ff), val((ri, w)),
+                    need, r['outcome']))
+    if town._at_trade_menu(g):
+        town.boltac_leave(g)
+    town.to_town_bar(g)
+    if mi is not None and mi in town.town_party(g):
+        if g.char(mi)['gold']:
+            # the mule's sales pooled on the party before it leaves
+            town.pool_gold(g, next(p for p, x in enumerate(town.town_slots(g)) if x not in (None, mi)), 'tavern')
+            town.to_town_bar(g)
+        _mule_out(g, mi, leaver)
+    return party_gold(g) - g0
+
+
 def party_gold(g):
     return sum(g.char(i)['gold'] for i in (g.party() or town.town_party(g)))
 
@@ -1043,7 +1268,7 @@ def fill_party(g, log, size=6):
     goal with five members)."""
     tried = set()
     while len(town.town_party(g)) < size:
-        cand = [i for i in town.tavern_candidates(g) if i not in tried]
+        cand = [i for i in town.tavern_candidates(g) if i not in tried and g.name(i) != gear.MULE_NAME]
         if not cand:
             break
         ri = max(cand, key=lambda i: (g.char(i)['level'], -i))
@@ -1239,8 +1464,9 @@ class Run:
         for ri in standbys:
             pos = town.town_slots(g).index(ri)
             for _ in range(10):
+                # Madi/Morfis items aren't sold, nor anything valuable (the standby keeps it)
                 left = [(k, w) for k, w in gear.pack(g, ri) if gear.item(g, w & 0x1ff)['price']
-                        and not gear.cure_item(g, w)]      # Madi/Morfis items aren't sold
+                        and not gear.cure_item(g, w) and not gear.valuable(g, w)]
                 if not left:
                     break
                 r = town.boltac_sell(g, pos, left[0][0])

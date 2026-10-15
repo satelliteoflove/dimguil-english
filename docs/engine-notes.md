@@ -263,6 +263,22 @@ glance". By subsystem:
 - **The save** is one file of two blocks: a header and a 0x2400-byte image whose layout
   is fully mapped (`scripts/re/savefile.py` decodes it). Nothing in saving, loading or
   resuming touches characters left in the maze.
+- **Creation costs nothing.** A new character starts with 100 gold (`training_create`
+  0x800af5d8 sets `new_char.gold = 100`); a Fighter also brings a Long Sword and Leather
+  Armor, worn. Going to the Training Grounds empties the party: everyone waits in the
+  tavern (emulator, 2026-10-14, the harness mule).
+- **Out of the party, a character keeps everything.** The tavern's Remove Member
+  (`tavern_remove_member` JOUKA 0x800aa0a4, state 0x19) writes only the party record
+  (0x8007e812 slot = 0xff, then the parties table); it never touches the roster
+  (0x8007d708, 0xd0 a record, pack words at +0x20). A spare character can hold items.
+- **Give at the Edge of Town** (Prepare > Inspect > Items > Give, `edge_give_item`
+  HAZURE 0x800b3c6c) shows both packs side by side and moves items either way; it won't
+  open for a character with an empty pack. Its regeneration bookkeeping reads the wrong
+  pack slot: after a give it takes the given item's regen from slot `0x80079c60` (the
+  Inspect menu's cursor, 1 here) instead of the list row `0x80079c6b`, and a swap reads
+  slot `0x80079c65` (the Items menu's cursor, 2). The code was copied from the camp's
+  Give, where `0x80079c60` is the list row. Only items with a regen value (Item +0x21)
+  are affected; not yet seen in play.
 
 ### Records (G-records.md)
 

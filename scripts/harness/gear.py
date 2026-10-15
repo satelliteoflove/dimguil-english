@@ -912,6 +912,165 @@ def place_cures(g, log=None):
     return n
 
 
+def spare(g, w, members):
+    """Item word w is one Boltac's would take off the party: identified, not worn, cursed
+    or a Madi/Morfis item, with a price, and an instrument no member can equip, or weapon,
+    armor or cloak no member in `members` (roster indexes) can use or gains from (Chris,
+    2026-10-14; camp Give passes it on otherwise)."""
+    if w & (EQUIPPED | CURSED) or not w & IDENT or cure_item(g, w):
+        return False
+    it = item(g, w & 0x1ff)
+    if not it['price']:
+        return False
+    alive = [rj for rj in members if g.char(rj)['status'] < 0x20]
+    if it['cat'] == 6:
+        # an instrument nobody here can equip (b1v3d: a Harp of Silence, 5,000 gold to
+        # identify, carried for good)
+        return not any(usable(g, rj, it) for rj in alive)
+    if it['cat'] > 5 and not cloak(it):
+        return False
+    return not any(better(g, rj, it, s, equipped(g, rj).get(s)) for rj in alive for s in range(7))
+
+
+# --- the mule (Chris, 2026-10-14) ---
+# A player rarely sells a valuable item unless they must: a character who stays in town
+# holds the spares. Valuable: Boltac pays VALUABLE_SELL or more (item +0x16), or it has a
+# spell (+0x1b battle spell, the site's 使) or a special power (+0x0d use/equip effect, the
+# site's SP, the game's "Unleash its special power?"). The on-hit bits (+0x05 bits 0-6,
+# the site's 付: KO 5% on a 5 gold Anointed Mace) don't count. Such an item is sold only
+# for gold the party really needs (chapter1.mule_sell).
+# The trade runs at the Edge of Town (no maze trip): Prepare > Inspect a member > Items >
+# Give, edge_give_item 0x800b3c6c (state 0x80079569): 5 "to whom?" (camp_target
+# 0x80079948, a party position, right/left), circle -> 15 two lists side by side (column
+# 0x80079c64: 0 the inspected member's pack, 1 the receiver's; row 0x80079c6b), circle
+# moves the item under the cursor into the other pack's first free slot (0x14) or asks
+# for a swap when that pack is full (0x19); a worn (0x2000) or cursed (0x8000) item gets
+# a message (0x80079565). It opens only when the inspected member has an item (state 0
+# returns at once on an empty pack), so the party member is inspected, not the mule.
+# Roster members keep their packs out of the party: tavern_remove_member (JOUKA
+# 0x800aa0a4, state 0x19) writes only the party record (0x8007e812 slot = 0xff and the
+# parties table), never the roster (0x8007d708, 0xd0 a record, pack words at +0x20).
+VALUABLE_SELL = 5000
+MULE_NAME = 'Mule'
+EDGE_COL = 0x80079c64
+
+
+def valuable(g, w):
+    r = g.e.read(ITEMS + (w & 0x1ff) * 0x4c, 0x4c)
+    return struct.unpack_from('<I', r, 0x16)[0] >= VALUABLE_SELL or r[0x1b] != 0xff or r[0x0d] != 0
+
+
+def battle_use(g, w):
+    """An identified potion or scroll the battle code would use (battle.item_choice:
+    attack, death or disabling spells), or a Madi/Morfis item."""
+    if not w & IDENT:
+        return False
+    if cure_item(g, w):
+        return True
+    from harness import tactics
+    a = ITEMS + (w & 0x1ff) * 0x4c
+    bs = g.u8(a + 0x1b)
+    return bs != 0xff and g.u8(a + 3) in (20, 21) and (
+        bs & 0x7f in tactics.DAMAGE or bs & 0x7f in tactics.DEATH or bs & 0x7f in tactics.DISABLE)
+
+
+def keeper(g, w, members):
+    """A spare (Boltac's would take it) that's valuable: the mule holds it."""
+    return spare(g, w, members) and valuable(g, w)
+
+
+def mule(g):
+    """Roster index of the mule, or None."""
+    return next((i for i in range(g.roster_count()) if g.name(i) == MULE_NAME), None)
+
+
+def sell_value(g, w):
+    return g.u32(ITEMS + (w & 0x1ff) * 0x4c + 0x16)
+
+
+def mule_use(g, w, members, taken=None):
+    """(gain, roster index, why, slot) of the mule's item w for the party, the member it
+    helps most (gear_value over what they wear or `taken` plans): an upgrade, else a
+    battle item for the member with the most room; (0, None, None, None) if neither."""
+    if not w & IDENT or w & CURSED:
+        return (0, None, None, None)
+    it = item(g, w & 0x1ff)
+    alive = [rj for rj in members if g.char(rj)['status'] == 0]
+    best = (0, None, None, None)
+    if it['cat'] <= 6 or cloak(it):
+        for rj in alive:
+            gain, s = gear_value(g, rj, it, taken)
+            if s is not None and gain > best[0]:
+                best = (gain, rj, 'upgrade', s)
+    if best[1] is None and battle_use(g, w) and alive:
+        rj = min(alive, key=lambda x: len(pack(g, x)))
+        best = (0, rj, 'battle', None)
+    return best
+
+
+def _edge_items(g, pos):
+    """From the town bar: Edge of Town > Prepare > Inspect the member at party position
+    pos > Items (edge_identify's path)."""
+    town.enter(g, 'edge')
+    ui.wait_until(g, lambda: g.u8(town.FAC_SUB) == 5 or g.u8(town.EDGE_CURSOR) == 0, 300, 'edge menu')
+    ui.move_cursor(g, town.EDGE_CURSOR, 0, 'down', 'up', what='edge row')
+    ui.move_cursor(g, town.EDGE_ICON, 3, 'right', 'left', what='Prepare icon')
+    _edge_press(g, lambda: g.u8(EDGE_STATE) == 25, 'Prepare > Inspect')
+    g.step(8)
+    ui.move_cursor(g, EDGE_GY, pos // 3, 'down', 'up', what='inspect row')
+    ui.move_cursor(g, EDGE_GX, pos % 3, 'right', 'left', what='inspect col')
+    _edge_press(g, lambda: g.u8(EDGE_STATE) == 35, 'inspect member')
+    g.step(8)
+    ui.move_cursor(g, EDGE_CUR, 1, 'down', 'up', what='Items')
+    _edge_press(g, lambda: g.u8(EDGE_STATE) == 45, 'Items')
+    g.step(8)
+
+
+def edge_trade(g, pos, mpos, moves, log=None):
+    """At the Edge of Town, between the member at party position pos and the mule at
+    mpos: moves [('put', word, *note): member to mule, ('take', word, *note): mule to
+    member], each logged ('mule deposit' / 'mule withdraw', member, item, outcome, *note).
+    A move into a full pack is skipped. Back at the town bar after. Returns [(kind, name, out)]."""
+    slots = town.town_slots(g)
+    ri, mi = slots[pos], slots[mpos]
+    out = []
+    _edge_items(g, pos)
+    ui.move_cursor(g, EDGE_ITEMS_CUR, ITEMS_GIVE, 'down', 'up', what='Give')
+    _edge_press(g, lambda: g.u8(GIVE_STATE) == 5, 'edge Give')
+    g.step(8)
+    ui.move_cursor(g, CAMP_TARGET, mpos, 'right', 'left', wrap=6, what='give to the mule')
+    _edge_press(g, lambda: g.u8(GIVE_STATE) == 15, 'edge give lists')
+    g.step(8)
+    for kind, w, *note in moves:
+        src, dst, col = (ri, mi, 0) if kind == 'put' else (mi, ri, 1)
+        k = next((j for j, x in pack(g, src) if x == w), None)
+        res = 'gone' if k is None else 'full' if len(pack(g, dst)) >= 10 else None
+        if res is None and g.u8(GIVE_STATE) != 15:
+            res = 'closed'
+        if res is None:
+            n0 = len(pack(g, dst))
+            ui.move_cursor(g, EDGE_COL, col, 'right', 'left', wrap=2, what='edge give column')
+            ui.move_cursor(g, EDGE_ITEM_CUR, k, 'down', 'up', wrap=max(1, g.u8(LIST_COUNT)),
+                           what='edge give item')
+            ui.press_until(g, 'circle', lambda: g.u8(GIVE_STATE) != 15 or g.u8(EDGE_MSG), 60, 'edge give')
+            ui.wait_until(g, lambda: len(pack(g, dst)) > n0 or g.u8(EDGE_MSG)
+                          or g.u8(GIVE_STATE) in (0, 0x19), 180, 'edge give result')
+            res = 'moved' if len(pack(g, dst)) > n0 else 'refused'
+            if g.u8(EDGE_MSG) or g.u8(GIVE_STATE) == 0x19:
+                ui.press_until(g, 'cross' if g.u8(GIVE_STATE) == 0x19 else 'circle',
+                               lambda: not g.u8(EDGE_MSG) and g.u8(GIVE_STATE) in (0, 15), 180,
+                               'edge give message')
+            if res == 'moved':
+                ui.wait_until(g, lambda: g.u8(GIVE_STATE) in (0, 15), 120, 'edge give back')
+                g.step(8)
+        out.append((kind, name(w & 0x1ff), res))
+        if log is not None:
+            log.append((g.frame, 'mule deposit' if kind == 'put' else 'mule withdraw',
+                        g.char(ri)['name'], name(w & 0x1ff), res) + tuple(note))
+    edge_leave(g)
+    return out
+
+
 def camp_loot(g, log=None, on_int=None):
     """In camp in the maze: the Bishop identifies (gathering the others' unknown items
     first), identified gear goes to whoever gains most (Give), then everyone equips
@@ -1297,8 +1456,8 @@ SURPLUS = 20               # gold over the reserve this many times a fee is trul
 def shop(g, log, reserve):
     """One visit to Boltac's after a trip: for each member, identify unknown items and
     uncurse cursed ones (cheapest first, each while it costs at most a quarter of the
-    party's gold over `reserve`), sell identified weapons and armor nobody would wear,
-    then buy, best gain per gold first, the upgrades the gold over `reserve` allows. The
+    party's gold over `reserve`), sell identified weapons and armor nobody would wear
+    (spare) unless they're valuable (the mule keeps those), then buy, best gain per gold first, the upgrades the gold over `reserve` allows. The
     gold is pooled on the member being served first. Returns a list of what was done."""
     done = []
     slots = town.town_slots(g)
@@ -1360,32 +1519,11 @@ def shop(g, log, reserve):
             done.append((which, g.char(ri)['name'], name(w & 0x1ff), cost, r))
             log.append((g.frame, which, g.char(ri)['name'], name(w & 0x1ff), cost, r))
         trade_done()
-    # sell what nobody would wear
+    # sell what nobody would wear, unless it's worth a lot (valuable: the mule keeps it)
     for pos, ri in members:
         while True:
-            sell = None
-            for k, w in pack(g, ri):
-                if w & (EQUIPPED | CURSED) or not w & IDENT or cure_item(g, w):
-                    continue
-                it = item(g, w & 0x1ff)
-                if not it['price']:
-                    continue
-                if it['cat'] == 6:
-                    # an instrument nobody here can equip (b1v3d: a Harp of Silence, 5,000
-                    # gold to identify, carried for good)
-                    if any(usable(g, rj, it) for _, rj in members if g.char(rj)['status'] < 0x20):
-                        continue
-                    sell = (k, w)
-                    break
-                if it['cat'] > 5 and not cloak(it):
-                    continue
-                # sold only if no member in the party can use it, or everyone who can
-                # has better (Chris, 2026-10-14); camp Give passes it on otherwise
-                if any(better(g, rj, it, s, equipped(g, rj).get(s))
-                       for _, rj in members if g.char(rj)['status'] < 0x20 for s in range(7)):
-                    continue
-                sell = (k, w)
-                break
+            sell = next(((k, w) for k, w in pack(g, ri) if spare(g, w, [rj for _, rj in members])
+                         and not valuable(g, w)), None)
             if sell is None:
                 break
             r = town.boltac_sell(g, pos, sell[0])
