@@ -554,7 +554,7 @@
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "{ff13} breathes a sweet breath.",
+                    "translation": "{ff13} blows a sweet breath.",
                     "addStringTerminator": true,
                     "compress": true
                 },
@@ -687,7 +687,7 @@
                 {
                     "length": 22,
                     "source": "NA",
-                    "translation": "{ff13} breathes a holy breath.",
+                    "translation": "{ff13} blows a holy breath.",
                     "addStringTerminator": true,
                     "compress": true
                 },

@@ -770,6 +770,9 @@ Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
 - NPC_MES4 107, Cresson on the young party (とてもにぎやかだったのですよ): "They were ever
   so lively." was British → "They were such a lively bunch.", which keeps her fond, chatty
   tone.
+- FIGHTMSG 78 and 97 (甘い息を吹き掛けた): "breathes a sweet breath" repeated itself →
+  "Sleeper blows a sweet breath.", and the holy one to match. Chris found "exhales" didn't
+  read well.
 
 ## To revisit
 
