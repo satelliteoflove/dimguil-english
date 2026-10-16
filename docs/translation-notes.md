@@ -78,8 +78,9 @@ see all of it.
   DRUM.", "Noisy Tempter plays VIOLIN OF MADNESS." and "Lilia plays LUTE."; Venus Man
   Trap's pollen uses the existing "sprays" (55), like Fire Rock's red-hot stones. The
   abilities' glare nouns (I_NAME_E 705, 707, 709, 713, 鋭い目付き) became "piercing
-  eyes", so the line doesn't say glare twice; the melee one, 665 (鋭い目つき, the same
-  word), keeps "a piercing glare" for "Fear glares at Uranus with a piercing glare.". The
+  eyes", so the line doesn't say glare twice. The melee one, 665 (鋭い目つき, the same
+  word, used only with "glares at" by Fear, Medusa and Kel), followed on Chris's ask:
+  "Fear glares at Uranus with piercing eyes." instead of "...with a piercing glare.". The
   three instrument attacks had pointed at the party's whole-sentence instrument lines
   (60, 63, 64); the codes inside them print nothing there, so they read "Noisy Tempter
   plays . VIOLIN OF MADNESS." and "Lilia strikes up . LUTE.".
