@@ -764,6 +764,13 @@ Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
   equip, so "limited gear" (Chris).
 - SISETU 210, the Psionic (装備できる物は少ない, as the Mage): "few items" → "limited
   gear", to match. "Casters" moved up a line so no line passes 190 px (176/190/150).
+- The three-part dial door (EVENTMES 158-163, Guy 1:288, Balbo 2:88-89): one word,
+  "disc", as the Japanese has throughout (三層に分かれた円盤, 小さい/中間の/外側の円盤,
+  三つの円盤). "The door has a disc split into three layers." / "Will you turn the
+  disc?" / "the small disc" / "the middle disc" / "The disc quietly turns back."; Guy's
+  "a disc here split into three layers"; Balbo's "three discs" stays. On screen it's a
+  carved centre disc with two bands around it (docs/shots/ring-dial/). Chris: "disc"
+  throughout, it's more faithful.
 - SISETU 208, the Bard at creation (楽器を奏でて,呪文と同様の効果を発揮する ... 盗賊技能有り):
   "Instruments that work like spells." had no verb → "Their music works like spells." (the
   playing does it, not the instrument alone, and the Japanese names no songs). "and have

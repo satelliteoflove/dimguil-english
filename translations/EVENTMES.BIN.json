@@ -959,25 +959,25 @@
                 {
                     "length": 71,
                     "source": "NA",
-                    "translation": "The door has a dial of three rings.\nIt's locked, and won't budge.\nWill you turn the dial?",
+                    "translation": "The door has a disc split into three layers.\nIt's locked, and won't budge.\nWill you turn the disc?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 42,
                     "source": "NA",
-                    "translation": "The door has a dial of three rings.\nThe door is unlocked.",
+                    "translation": "The door has a disc split into three layers.\nThe door is unlocked.",
                     "addStringTerminator": true
                 },
                 {
                     "length": 26,
                     "source": "NA",
-                    "translation": " \nHow far will you turn the small ring?",
+                    "translation": " \nHow far will you turn the small disc?",
                     "addStringTerminator": true
                 },
                 {
                     "length": 27,
                     "source": "NA",
-                    "translation": " \nHow far will you turn the middle ring?",
+                    "translation": " \nHow far will you turn the middle disc?",
                     "addStringTerminator": true
                 },
                 {
@@ -989,7 +989,7 @@
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": " \nNothing happens. The dial quietly turns back.",
+                    "translation": " \nNothing happens. The disc quietly turns back.",
                     "addStringTerminator": true
                 },
                 {
