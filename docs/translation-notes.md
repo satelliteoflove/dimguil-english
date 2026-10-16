@@ -727,6 +727,8 @@ Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
   "Um, you seem to match us at about 0%." read as the people matching, with "about" odd
   beside an exact figure → "Hmm... it looks like your results / match 0% of ours."
   (Chris's wording).
+- NPC_MES4 33 and 39, the 26 glyphs laid out (研究も進むというものだ): "our research is
+  bound to get on" was British → "bound to progress", a scholar's word (Chris).
 
 ## To revisit
 
