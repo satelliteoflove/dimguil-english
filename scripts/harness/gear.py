@@ -658,6 +658,8 @@ def plan_gives(g, members, to=None):
     not worn goes to the member it helps most (the holder keeps it if that's them), best
     gains first, one piece per member and slot."""
     cands = []
+    lv = sorted(g.char(x)['level'] for x in members)
+    mid = lv[len(lv) // 2] if lv else 0
     for ri in members:
         for k, w in pack(g, ri):
             if w & (EQUIPPED | CURSED) or not w & IDENT:
@@ -667,6 +669,11 @@ def plan_gives(g, members, to=None):
                 continue
             for rj in (to or members):
                 if g.char(rj)['status'] >= 0x20:
+                    continue
+                if w & 0x1ff >= IMPORTANT_ID and g.char(rj)['level'] < mid:
+                    # quest gear stays off the low-level fill-ins a rejoin takes out (n1v6u
+                    # chapter 14: Venus gave the gold set to recruit Sam, level 1, who left
+                    # wearing it)
                     continue
                 gain, s = gear_value(g, rj, it)
                 if s is not None:
