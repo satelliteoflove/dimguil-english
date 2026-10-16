@@ -1423,7 +1423,7 @@
                 {
                     "length": 75,
                     "source": "NA",
-                    "translation": "Instruments that work like spells.\nThey learn Mage spells, slowly,\nand have thieving skills.",
+                    "translation": "Their music works like spells.\nThey learn Mage spells, slowly,\nand have some thieving skill.",
                     "compress": true,
                     "addStringTerminator": true
                 },

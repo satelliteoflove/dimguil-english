@@ -718,6 +718,11 @@ Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
 - SISETU 191, the Dracon at creation (唯一ブレスを吐くことができる): "the only race that
   breathes" read as breathing air → "the only race with a breath attack. / Scaly skin
   resists specials." (166/156/135 px; the widest race and class line is 190).
+- SISETU 208, the Bard at creation (楽器を奏でて,呪文と同様の効果を発揮する ... 盗賊技能有り):
+  "Instruments that work like spells." had no verb → "Their music works like spells." (the
+  playing does it, not the instrument alone, and the Japanese names no songs). "and have
+  thieving skills" → "and have some thieving skill", the Ranger's (207) wording, since
+  their skills fall short of a Thief's (Chris).
 
 ## To revisit
 
