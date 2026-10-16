@@ -690,6 +690,9 @@ Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
   item comes in): "Your pack is full. Swap it for something." → "Your pack is full. Choose
   an item to swap." The old line read as "go find something"; the game wants one of the
   pack's items picked to trade out. 210 px against 206.
+- NPC_MES3 16, the little elf's parting line (失礼します): "Excuse me." → "Goodbye.".
+  失礼します is the polite way out of a room; "Excuse me." read as an apology or an
+  interruption. Chris chose "Goodbye." without the leading dots her hello has.
 
 ## To revisit
 
