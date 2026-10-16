@@ -1304,7 +1304,7 @@
                 {
                     "length": 67,
                     "source": "NA",
-                    "translation": "Half dragon, half human, and the\nonly race that breathes. Scaly\nskin makes them resist specials.",
+                    "translation": "Half dragon, half human, and the\nonly race with a breath attack.\nScaly skin resists specials.",
                     "compress": true,
                     "addStringTerminator": true
                 },

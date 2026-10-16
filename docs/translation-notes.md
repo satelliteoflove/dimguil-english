@@ -715,6 +715,9 @@ Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
   names left "HP." alone on the second line ("Kobold Priest recovers 12 / HP."), and the
   font has no non-breaking space, so the line now always breaks after the name, the way
   the game shows long-name casts ("Kobold Priest / casts Bamatu."). Chris's choice.
+- SISETU 191, the Dracon at creation (唯一ブレスを吐くことができる): "the only race that
+  breathes" read as breathing air → "the only race with a breath attack. / Scaly skin
+  resists specials." (166/156/135 px; the widest race and class line is 190).
 
 ## To revisit
 
