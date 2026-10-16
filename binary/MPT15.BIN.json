@@ -1,0 +1,6 @@
+{
+    "file": "DATA02/MPT15.BIN",
+    "edits": {
+        "102da": "17 25 32 ba 2d 32 ba ff 21 0b 36 31 33 36 ff 40 00 00"
+    }
+}

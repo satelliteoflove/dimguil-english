@@ -562,7 +562,7 @@
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "PRIEST'S MACE",
                     "addStringTerminator": true
                 },
                 {
@@ -802,7 +802,7 @@
                 {
                     "length": 15,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "FAERIE'S CLOTHES",
                     "addStringTerminator": true
                 },
                 {
@@ -1078,7 +1078,7 @@
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "GLOVE OF THE DEAD",
                     "addStringTerminator": true
                 },
                 {
@@ -3216,7 +3216,7 @@
                 {
                     "length": 8,
                     "source": "NA",
-                    "translation": "PRIESTS MACE",
+                    "translation": "PRIEST'S MACE",
                     "addStringTerminator": true,
                     "compress": true
                 },
@@ -6587,7 +6587,7 @@
                 {
                     "length": 14,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff22}PRIEST'S MACE",
                     "addStringTerminator": true
                 },
                 {
@@ -6827,7 +6827,7 @@
                 {
                     "length": 18,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff22}FAERIE'S\nCLOTHES",
                     "addStringTerminator": true
                 },
                 {
@@ -7103,7 +7103,7 @@
                 {
                     "length": 16,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff22}GLOVE OF\nTHE DEAD",
                     "addStringTerminator": true
                 },
                 {
