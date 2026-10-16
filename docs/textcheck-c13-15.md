@@ -58,6 +58,10 @@ to entangle everyone in sticky goo." First confirm that the verb index is stored
 attack in the record. If it isn't, 214 needs a small code change that uses a separate
 verb for those four.
 
+**Fixed (2026-10-15, wt/verbfix).** The verb index is per attack and the template is fixed
+by the attack's noun, so it was a data fix. Every ability's verb was checked, not only these
+four; see `translation-notes.md`, "Monster abilities with no target".
+
 ### 2. FIGHTMSG 106: blank line in the dispel message
 
 - JP: `{ff18}は {ff11}0体の\n{ff13}の 呪いを解いた`

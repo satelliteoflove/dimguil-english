@@ -52,6 +52,32 @@ see all of it.
 - **Battle lines ending in a digraph's space (2026-10-13).** "Giant Ant calls for help! A /
   monster appears." sat 2 px left; a break after "A ", "s " etc. now draws the letter alone (`asm/word_wrap.asm`).
 
+- **Monster abilities with no target (FIGHTMSG 214, 2026-10-15).** A monster's attack
+  verb is written for the targeted line, "Basilisk glares at Venus with its many eyes."
+  (108/109). An ability (a shriek, a dance, a gaze: an attack noun of 683 or more) prints
+  214 instead, "{monster} {verb} {noun}." with nobody named, so the same verbs gave
+  "Ghost startles a shriek.", "Merry Puppet tries to lull a strange dance.", "Were Bat
+  glares at a piercing glare." and "Giant Spider tries to entangle sticky goo.". The
+  Japanese reads fine both ways (ゴースト は 金切り声 で 驚かせた), because the particle
+  sits in the verb. Which template prints is fixed per attack by its noun (code in
+  `engine-notes.md`, "Battle text and monster files"), so the fix is data: the abilities
+  got targetless verbs of their own in FIGHTMSG 65-71 and 74, which the game never used
+  (65-71 are 未使用), and their verb bytes point there (82 attacks in 69 monster and party
+  files, `binary/*.verbs.json`, written by `scripts/re/attackverbs.py --write`). Verbs 46
+  and 76 were only ever used by abilities, so they were reworded in place. The lines are
+  now "Ghost startles everyone with a shriek.", "Merry Puppet tries to lull everyone with
+  a strange dance.", "Were Bat glares at everyone with a piercing glare.", "Giant Spider
+  tries to entangle everyone in sticky goo.", "Smelia tries to melt everyone with eerie
+  smoke.", "Succubus stares at everyone with a sultry look.", "Greater Golem fires BIG
+  GUN.", "Nex tepehua throws ASH OF CONFUSION.", "Old Drummer beats DEVIL'S DRUM.",
+  "Noisy Tempter plays VIOLIN OF MADNESS." and "Lilia plays LUTE."; Venus Man Trap's pollen
+  uses the existing "sprays" (55), like Fire Rock's red-hot stones. The three instrument
+  attacks had pointed at the party's whole-sentence instrument lines (60, 63, 64); the
+  codes inside them print nothing there, so they read "Noisy Tempter plays . VIOLIN OF
+  MADNESS." and "Lilia strikes up . LUTE.". "Glares at everyone with a piercing
+  glare" repeats itself; "fixes everyone with a piercing glare" is the alternative, still
+  to decide.
+
 - **Inn and Temple lines off center (2026-10-13).** "Not enough gold." sat 9 px left (x fixed for the
   Japanese, `asm/inn_gold_message.asm`); the Temple's chant 10 px (`asm/temple_layout.asm`).
 

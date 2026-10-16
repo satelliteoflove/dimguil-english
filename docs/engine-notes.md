@@ -744,6 +744,28 @@ patches in `asm/`.
   attacks (claws, fangs, stinger). The verb indexes FIGHTMSG.OBJ.
 - In a battle, the current group's monster record is at 0x801b0680 (in
   rips/states/battle_wriggle.state).
+- **Which template an attack prints** is fixed by its noun (code read 2026-10-15).
+  `monster_attack_roll` (BATTLE 0x800aaed0) adds 427 (0x800aafe8), takes 2000 off a noun
+  of 2000 or more and flags it (0x800ab084), and sends a noun of 683 or more to
+  `cast_spell` as an innate ability with the attack's +6 byte as the spell (0x800ab0d0).
+  `cast_spell` (0x800abcc0) sets message code 5 for a monster's ability, the action code
+  is now a spell, so `battle_run_actions` (0x800a8548) returns 3 and
+  `battle_message_build` (0x800b4194) prints FIGHTMSG 214 "{ff13} {ff15} {ff14}." with
+  no target. Any other noun is a melee hit: return 2, and 108 or 109 (109 when the 2000
+  flag was set) "{ff13} {ff15} {ff18} with {ff14}.". {ff15} is FIGHTMSG[0x80079a14] and
+  {ff14} I_NAME_E[0x80079a9a] (MAIN 0x8001ebf4); both are copied from the attack's verb
+  byte and noun. So one attack never prints both. Attack 2 runs when its raw noun is
+  0xff or more or it has swings, attack 3 only with swings (`monster_melee` 0x800aaa04);
+  no attack 3 on the disc is an ability.
+- The party's lines (98/99) get verbs 1-20 only: 2s+1 or 2s+2 for the weapon's subtype
+  s (0-8; only weapons carry the hand bits), 19/20 bare-handed (0x800a963c), through a
+  20-byte table at 0x800a12f8. Instruments use 60, 62, 63 and 64 as whole sentences and
+  other items 212 (`cast_spell`). Breath messages are +0xca - 50, i.e. 78-97.
+- FIGHTMSG 65-71 (未使用, 65 without a terminator in the original), 61 and 74 are
+  never printed: no record's verb byte, no party verb, and no constant in the code
+  reaches them. The English uses 65-71 and 74 for the abilities' targetless verbs (the
+  verbfix work, 2026-10-15); `scripts/re/attackverbs.py` lists every attack, its verb and
+  its template, and writes the verb patches (`binary/*.verbs.json`).
 - `battleshow.py` renders any template/verb/noun combination in the real battle box, with
   `--monster NAME` to try other name lengths.
 - NPC parties fight as monsters. The encounter loader (0x80021268) loads the enemy file
