@@ -763,9 +763,24 @@ patches in `asm/`.
   other items 212 (`cast_spell`). Breath messages are +0xca - 50, i.e. 78-97.
 - FIGHTMSG 65-71 (未使用, 65 without a terminator in the original), 61 and 74 are
   never printed: no record's verb byte, no party verb, and no constant in the code
-  reaches them. The English uses 65-71 and 74 for the abilities' targetless verbs (the
-  verbfix work, 2026-10-15); `scripts/re/attackverbs.py` lists every attack, its verb and
-  its template, and writes the verb patches (`binary/*.verbs.json`).
+  reaches them. The English uses 61, 65-71 and 74 for the abilities' targetless verbs
+  (the verbfix work, 2026-10-15); `scripts/re/attackverbs.py` lists every attack, its verb
+  and its template, and writes the verb patches (`binary/*.verbs.json`).
+- **Who an ability hits** (code read 2026-10-15). The ability's spell (attack +6) runs
+  through `cast_spell` with the target `monster_attack_roll` picked from the spell's flags
+  (`spell_flags_table` 0x800d5874). The party is group 0 with a front row (members 0-2)
+  and a back row (3-5). 0x40 (one group) hits a row: the target byte is 0 (front) or, when
+  0x80079c32 and 0x800799e4 are both set (inferred: both rows standing), rand(2), and the
+  handlers (`spell_damage_group` 0x800b0930, `spell_lios` 0x800af924,
+  `status_spell_targets` 0x800b1524) take members 0-2, or 3-5 when it's set. 0x20 (one
+  enemy) hits one member (`monster_target_random`). Neither bit hits the whole party:
+  Tiltowait, Katiqurea and Galtomas hit both rows and group 7, Matokani all six. On the
+  disc: rows for Katino, Melito, Lahalito, Ladalto, Maliqua, Barenes, Lios, Lorks, Masios
+  and Bakadi abilities (most of them); one member for Badi and Labadi (Mictlan, Armor
+  Zombie, Chamiabac, Demon Liche); the whole party for Tiltowait, Katiqurea, Matokani and
+  Galtomas (Greater Golem, Demon Lord, Venus Man Trap, Goblin Canon, Rosea, Gauntlet
+  Zombie, Mother). Seen in a fight: a Ghost's shriek (Lios) hit Venus, Dax and Uranus, and
+  the next one Earth, Mercury and Eve.
 - `battleshow.py` renders any template/verb/noun combination in the real battle box, with
   `--monster NAME` to try other name lengths.
 - NPC parties fight as monsters. The encounter loader (0x80021268) loads the enemy file

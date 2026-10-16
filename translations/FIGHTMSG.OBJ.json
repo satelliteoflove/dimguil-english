@@ -330,7 +330,7 @@
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "tries to lull everyone with",
+                    "translation": "tries to lull them with",
                     "addStringTerminator": true,
                     "compress": true
                 },
@@ -435,7 +435,7 @@
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "{ff18} plays {ff14}.",
+                    "translation": "stares with",
                     "addStringTerminator": true,
                     "compress": true
                 },
@@ -470,28 +470,28 @@
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "glares at everyone with",
+                    "translation": "glares at them with",
                     "addStringTerminator": true,
                     "compress": true
                 },
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "startles everyone with",
+                    "translation": "startles them with",
                     "addStringTerminator": true,
                     "compress": true
                 },
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "tries to melt everyone with",
+                    "translation": "tries to melt them with",
                     "addStringTerminator": true,
                     "compress": true
                 },
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "stares at everyone with",
+                    "translation": "flashes",
                     "addStringTerminator": true,
                     "compress": true
                 },
@@ -540,7 +540,7 @@
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "tries to entangle everyone in",
+                    "translation": "tries to entangle them in",
                     "addStringTerminator": true,
                     "compress": true
                 },

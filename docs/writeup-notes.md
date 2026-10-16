@@ -215,13 +215,16 @@ checks found two things the first voicing fix (9a955ba) had left.
   both. 140 abilities on the disc, 16 verbs; 12 of the verbs read wrong without a target,
   and three were the party's whole-sentence instrument lines ("Noisy Tempter plays .
   VIOLIN OF MADNESS.").
-- Fix, data only: targetless verbs in FIGHTMSG 65-71 and 74 (never printed; 65-71 are
-  未使用), 82 verb bytes repointed in 69 files, 46 and 76 reworded in place.
-- Checked: battleshow.py for all 22 verb/noun pairs at their longest names and at
+- Fix, data only: targetless verbs in FIGHTMSG 61, 65-71 and 74 (never printed; 65-71
+  are 未使用), 82 verb bytes repointed in 69 files, 46 and 76 reworded in place. The
+  first wording said "everyone"; reading who each ability hits showed most hit one row
+  and some one member, so the object became "them" (Chris's call), with "flashes a
+  sultry look" and "stares with hollow eyes" where no object fits.
+- Checked: battleshow.py for all 22 ability verb/noun pairs at their longest names and at
   "Skeleton Warrior" (16, the longest); real fights on the built disc (fightshow.py):
-  "Ghost startles everyone with a shriek." (each member took damage), "Wight glares at
-  everyone with a piercing glare." and, unchanged, "Fear glares at Uranus with a
-  piercing glare.". Shots in docs/shots/ability-verbs/.
+  "Ghost startles them with a shriek." (the front row took damage, the next shriek the
+  back row), and, unchanged, "Fear glares at Uranus with a piercing glare.". Shots in
+  docs/shots/ability-verbs/.
 - Tooling found broken on the way: battleshow.py copied the word wrap's 2026-09 range
   into old states, which hung the battle on today's build for most combinations; it now
   needs a state made on the build's code. Forcing a group onto a floor it doesn't

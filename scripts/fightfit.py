@@ -34,7 +34,7 @@ RANGES = {'ff13': range(3, 18), 'ff18': range(1, 9), 'ff12': range(1, 9),
 VERBS = range(1, 78)  # FIGHTMSG strings inserted as {ff15}
 # Verbs only monster abilities use, so they only ever appear in 214 "{ff13} {ff15} {ff14}."
 # (scripts/re/attackverbs.py lists who uses which verb in which template).
-TARGETLESS = {46, 65, 66, 67, 68, 69, 70, 71, 74, 76}
+TARGETLESS = {46, 61, 65, 66, 67, 68, 69, 70, 71, 74, 76}
 SKIP = {297}
 # a plain space, and the digraphs that end in one (see asm/word_wrap.asm)
 SPACES = set(range(0x8b, 0x93)) | {0xad, 0xae, 0xb2, 0xb7, 0xba}

@@ -27,7 +27,7 @@ second message slot); the script flags any such record.
 
 The {ff15} verbs were written for 108/109 ("startles Venus with a shriek"), so in 214
 several read wrong ("Ghost startles a shriek."). TARGETLESS below gives those abilities a
-verb of their own: FIGHTMSG 65-71 (unused, 未使用) and 74 (unused), or an existing verb
+verb of their own: FIGHTMSG 65-71 (unused, 未使用), 61 and 74 (unused), or an existing verb
 that already reads right without a target. Verbs 46 and 76 are only ever used in 214, so
 their strings were reworded in place instead.
 
@@ -47,16 +47,18 @@ REC = 0xd0
 # Old verb -> targetless verb, for abilities (template 214) only.
 TARGETLESS = {
     16: 65,   # takes aim at -> fires (BIG GUN)
-    45: 66,   # glares at -> glares at everyone with (a piercing glare)
-    47: 67,   # startles -> startles everyone with (a shriek, eerie smoke)
-    48: 68,   # tries to melt -> tries to melt everyone with (eerie smoke)
+    45: 66,   # glares at -> glares at them with (piercing eyes: nouns 705/707/709/713)
+    47: 67,   # startles -> startles them with (a shriek, eerie smoke)
+    48: 68,   # tries to melt -> tries to melt them with (eerie smoke)
     56: 55,   # pelts -> sprays (pollen), 55 already reads "Fire Rock sprays red-hot stones."
-    58: 69,   # stares at -> stares at everyone with (a sultry look, hollow eyes)
+    58: 69,   # stares at -> flashes (a sultry look); Mictlan's hollow eyes: ONE_MEMBER
     60: 70,   # "{ff18} plays {ff14}." (a whole sentence for the party's item use) -> plays
     63: 70,   # "{ff18} strikes up {ff14}." -> plays (LUTE)
     64: 74,   # "{ff18} beats {ff14}." -> beats (DEVIL'S DRUM)
     73: 71,   # pelts -> throws (ASH OF CONFUSION)
 }
+# (old verb, noun) -> verb, where one noun needs its own: Mictlan's Badi hits one member
+BY_NOUN = {(58, 714): 61}   # stares with (hollow eyes)
 
 
 def strings(name):
@@ -117,7 +119,8 @@ def main():
         edits = collections.defaultdict(dict)
         for r in rows:
             if r['ability'] and r['verb'] in TARGETLESS:
-                edits[r['file']][f"{r['off'] + 2:x}"] = f"{TARGETLESS[r['verb']]:02x}"
+                v = BY_NOUN.get((r['verb'], r['noun']), TARGETLESS[r['verb']])
+                edits[r['file']][f"{r['off'] + 2:x}"] = f"{v:02x}"
         for fn, e in sorted(edits.items()):
             path = os.path.join(ROOT, 'binary', fn + '.verbs.json')
             with open(path, 'w', encoding='utf-8') as f:
