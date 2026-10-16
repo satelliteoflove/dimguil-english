@@ -573,7 +573,7 @@
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "Gather gold on this character?",
+                    "translation": "Pool all gold on this character?",
                     "compress": true,
                     "addStringTerminator": true
                 },

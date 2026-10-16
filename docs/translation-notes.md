@@ -682,6 +682,10 @@ Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
 - FIGHTMSG 18 (を 放った, a ranged weapon type's second verb): "looses at" → "fires at".
   "Looses" is the archer's word but reads as a typo for "loses"; "shoots" and "takes aim
   at" already belong to the next weapon type, so "fires at" keeps them apart.
+- SISETU 84 (このキャラクタにお金を集めますか?, the shop's offer when a buyer is short):
+  "Gather gold on this character?" → "Pool all gold on this character?", matching the Pool
+  Gold command (SISETU 395, STATUS 93). 159 px, under the 167 px of SISETU 83 in the same
+  box.
 
 ## To revisit
 
