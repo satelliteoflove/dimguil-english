@@ -440,6 +440,44 @@ The preferred fix is a close-to-literal reading, fitted to the box.
     of the Sun" (NPC2 82) and "the Sun tablet" (NPC3 68) now say "Tablet of the Sun".
     The keyboard's "small tablets" are 石板 too, which the new name now matches.
 
+- **Four more slips, and spaces in two-word monster names (Chris, 2026-10-16).**
+  Found in the chapter 13-15 text check (`textcheck-c13-15.md`, items 3 and 12) and
+  checked against the earlier games: none is a series spelling.
+  - GLOVE OF DEAD (死者の小手) is now GLOVE OF THE DEAD, FAERIE'S CLOTHE (妖精の服) is
+    FAERIE'S CLOTHES, PRIESTS MACE (僧侶のメイス) is PRIEST'S MACE, and HobGoblin is
+    Hobgoblin. The two-line forms break GLOVE OF / THE DEAD and FAERIE'S / CLOTHES.
+    Copies changed: I_NAME_E 92, 132, 178 and their two-line forms 1031, 1071, 1117,
+    plus 519 (the mace as an attack noun); the card game's MESSAGE.DAT 832, 872, 918;
+    M_CATALG 2:376; MPT14's records; ITEM.DAT's catalog list. ITEM_CA.DAT keeps the old
+    names; the game doesn't load it. No battle copy (BATTLE.BIN) has any of them.
+  - The catalog list and the card game's list have no spare bytes. The card game's
+    copies of FAERIE'S / CLOTHES and GLOVE OF / THE DEAD drop the space before the
+    break (2 bytes over otherwise). The catalog list drops it in those two, and in
+    EMERALD, SAPPHIRE and SCARLET ROBES to make room for THE; the catalog draws the
+    break as a new line, so the space never showed. The catalog reads these names one
+    after another, so they have to stay packed in order (`engine-notes.md`, "Item
+    catalog"). Repacking also fixed "0FEATHERED CAP" in the Hats list, a stray byte the
+    IRON GLOVES fix had left behind.
+  - Two-word names in the party fights (MPT01-39, NPT15) were stored with a bare line
+    break, `Arch{ff21}Ninja`, which the enemy grid draws on two lines and every battle
+    message drops: "ArchNinja kicks Venus." Each such slot (name, unidentified, plural,
+    unidentified plural) now has a space before the break, as `Man in {ff21}Robe`
+    already did, so messages read "Arch Ninja kicks Venus." and the grid is unchanged.
+    That includes the unidentified Man in Robe/Armor plurals and Small Shadow.
+    Nex{ff21}tepehua and Tepe{ff21}yollotl stay as they are: each is one word split for
+    the grid.
+  - **Goblin Assassin still prints "GoblinAssassin"** in messages ("GoblinAssassin casts
+    Fisqurea."). `Goblin{ff21}Assassin` is 16 bytes, the most a slot holds, so there's
+    no room for the space. Fixing it would take a code change: the name copy at MAIN
+    0x8001ebf4 could turn a dropped break into a space for every name.
+  - Names that reach 10 letters with the space (Arch Ninja, Rage Beast, Orc Knight, Orc
+    Healer) now take FIGHTMSG 151, "Orc Knight / takes 14 damage.", which reads fine.
+  - Cutie Thief's second SHORT SWORD attack used verb 213, the item menu's "Use it on
+    whom?", in a melee line: an original data bug. It now uses 3, "stabs" ("Cutie Thief
+    stabs Jupiter with SHORT SWORD."), through `scripts/re/attackverbs.py`'s MELEE table.
+  Shots: `docs/shots/name-fixes/` (fights forced and items placed through RAM to set
+  them up; no text was written).
+
 ### Game bug fixes (2026-10-11)
 
 Chris decided the patch fixes the original game's clear bugs and reopens text a bug cut
@@ -793,9 +831,5 @@ Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
   These are the developer's uppercase names, so the original likely does the same.
   Left as they are (Chris, 2026-10-09): fixing it is a bigger job than it's worth, and
   the names still read.
-- **Monster names run together in battle text?** (found 2026-10-14, harness chapter 8,
-  not checked). The bot's text capture showed "OldDrummer" and "ArchFighter" in battle
-  messages, and "Strange  Figure" with two spaces in the group list. The translations
-  have the spaces right (MESSAGE.DAT "Arch Fighter"), so it's either the game's display
-  or the capture reading it. Check on screen before calling it a problem. Parked (Chris,
-  2026-10-14: "don't worry about it for now").
+- **Monster names run together in battle text** (found 2026-10-14). Fixed 2026-10-16
+  except Goblin Assassin (see "Four more slips, and spaces in two-word monster names").

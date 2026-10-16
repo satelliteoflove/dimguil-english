@@ -33,8 +33,9 @@ their strings were reworded in place instead.
 
 --built DIR reads the files from a built disc tree (default: the clean disc), so the
 patched verb bytes show up. --verbs prints only the per-verb summary. --write writes
-binary/<file>.verbs.json for every ability whose verb TARGETLESS changes (kept apart from
-the name patches that nptnames.py and namefixes.py write).
+binary/<file>.verbs.json for every ability whose verb TARGETLESS changes and every melee
+attack MELEE fixes (kept apart from the name patches that nptnames.py and namefixes.py
+write).
 """
 import collections, json, os, struct, sys
 
@@ -59,6 +60,10 @@ TARGETLESS = {
 }
 # (old verb, noun) -> verb, where one noun needs its own: Mictlan's Badi hits one member
 BY_NOUN = {(58, 714): 61}   # stares with (hollow eyes)
+# Melee attacks whose verb is wrong in the original data: (English name, attack slot, old
+# verb) -> verb. Cutie Thief's second SHORT SWORD attack points at 213, the item menu's
+# "Use it on whom?", so it printed "Cutie Thief Use it on whom? Venus with SHORT SWORD."
+MELEE = {('Cutie Thief', 2, 213): 3}   # stabs
 
 
 def strings(name):
@@ -87,7 +92,7 @@ def attacks(disc):
             continue
         d = open(os.path.join(d2, fn), 'rb').read()
         for g, o in enumerate(records(d), 1):
-            en = dec(d, o + 0x24).replace('{ff21}', ' ')
+            en = dec(d, o + 0x24).replace(' {ff21}', ' ').replace('{ff21}', ' ')
             for k in range(3):
                 a = o + 0xac + 10 * k
                 raw, verb, swings = struct.unpack_from('<HBB', d, a)
@@ -118,8 +123,12 @@ def main():
     if '--write' in a:
         edits = collections.defaultdict(dict)
         for r in rows:
+            v = None
             if r['ability'] and r['verb'] in TARGETLESS:
                 v = BY_NOUN.get((r['verb'], r['noun']), TARGETLESS[r['verb']])
+            elif not r['ability']:
+                v = MELEE.get((r['name'], r['slot'], r['verb']))
+            if v is not None:
                 edits[r['file']][f"{r['off'] + 2:x}"] = f"{v:02x}"
         for fn, e in sorted(edits.items()):
             path = os.path.join(ROOT, 'binary', fn + '.verbs.json')
