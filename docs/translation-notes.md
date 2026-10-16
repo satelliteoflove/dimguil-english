@@ -797,6 +797,13 @@ Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
   the British idiom (to many Americans "full of beans" means talking nonsense).
 - NPC_MES2 220, Reiran (あたしもがんばろっと): "Okay! Guess I'll try hard too." → "Okay!
   Guess I'll do my best too.", がんばる as doing her best, in her own light rhythm.
+- 古代文字 is "ancient glyphs" everywhere now (Chris). The scholars and the NPCs already
+  said glyphs; the events said "ancient letters" (59 strings in EVENTMES), and "a glyph
+  on the pedestal lights up" follows. Also SISETU 411 "Decipher Ancient Glyphs" (was
+  Script), SISETU 670 "Choose an ancient glyph.", the Valkyrie breastplate's "Ancient
+  glyphs over the heart" (ITEM.DAT), and FIGHTMSG's mural "in strange glyphs"
+  (見知らぬ文字, but it draws the same symbols). Ordinary writing keeps "letters": "in
+  modern letters", the password and name prompts, "Choose a letter of the alphabet."
 - SISETU 208, the Bard at creation (楽器を奏でて,呪文と同様の効果を発揮する ... 盗賊技能有り):
   "Instruments that work like spells." had no verb → "Their music works like spells." (the
   playing does it, not the instrument alone, and the Japanese names no songs). "and have

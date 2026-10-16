@@ -2799,7 +2799,7 @@
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "Decipher Ancient Script",
+                    "translation": "Decipher Ancient Glyphs",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -4459,7 +4459,7 @@
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "Choose an ancient letter.",
+                    "translation": "Choose an ancient glyph.",
                     "compress": true,
                     "addStringTerminator": true
                 },

@@ -2047,7 +2047,7 @@
                 {
                     "length": 131,
                     "source": "NA",
-                    "translation": "Before you, a huge mural covers the wall.\nWhat could the center show?{ff26}\rOh? In the lower right, in strange letters,\n]{ff30}5{ancient_d}{ancient_i}{ancient_m}{ancient_g}{ancient_u}{ancient_i}{ancient_l}{ff30}0[\nis written.{ff26}",
+                    "translation": "Before you, a huge mural covers the wall.\nWhat could the center show?{ff26}\rOh? In the lower right, in strange glyphs,\n]{ff30}5{ancient_d}{ancient_i}{ancient_m}{ancient_g}{ancient_u}{ancient_i}{ancient_l}{ff30}0[\nis written.{ff26}",
                     "compress": true,
                     "addStringTerminator": true
                 }
