@@ -1374,7 +1374,7 @@
                 {
                     "length": 70,
                     "source": "NA",
-                    "translation": "Experts at attack magic, and a\nspellcasting class. Low HP and\nfew items; not for the front.",
+                    "translation": "Experts at attack magic. Casters\nwith low HP and limited gear;\nnot for the front.",
                     "compress": true,
                     "addStringTerminator": true
                 },
