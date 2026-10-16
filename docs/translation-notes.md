@@ -702,6 +702,10 @@ Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
   of a demon; nothing in the game makes it a demon's, so Chris chose the plain form.
 - Kept: SISETU 36 "Really throw it away?" (本当に捨てますか?), though the command is "Drop".
   Chris: it makes clearer that the item won't come back.
+- SISETU 147, the Temple's prompt after "Heal Character" (404; both 助ける): "Help whom?"
+  → "Heal whom?", one verb for both. Chris: "Help Character" doesn't sound like a temple,
+  and raising the dead isn't quite healing either, so "Heal" is the best of the plain
+  words for now; a better one for both would be welcome.
 
 ## To revisit
 
