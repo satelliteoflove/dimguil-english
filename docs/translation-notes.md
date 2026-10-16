@@ -774,6 +774,11 @@ Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
   longer "the large ring". The Fortune Teller stays faithful with rings (SISETU 339
   3つの輪 ... 大きな輪, topic 353 輪の扉 "Ring Door"): the original itself mixes the two,
   and the Japanese fan FAQ (emonoya.net) slips between 円盤 and 輪 the same way.
+- NPC_MES4 62, Bergamot (・・おまえさんたちゃ物覚えが悪いのぉ・・・): "..Memories like sieves,
+  you lot..." → "...You folks sure got memories like sieves...": three dots like the rest
+  of the game, and an American old codger's "you folks" for the British "you lot" (his
+  voice sheet). Alba's, Zaril's and Bergamot's other "you lot" lines wait for their
+  scenes.
 - SISETU 208, the Bard at creation (楽器を奏でて,呪文と同様の効果を発揮する ... 盗賊技能有り):
   "Instruments that work like spells." had no verb → "Their music works like spells." (the
   playing does it, not the instrument alone, and the Japanese names no songs). "and have
