@@ -1147,7 +1147,7 @@
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "{ff13} recovers {ff11}1.",
+                    "translation": "{ff13}\nrecovers {ff11}1 HP.",
                     "compress": true,
                     "addStringTerminator": true
                 },

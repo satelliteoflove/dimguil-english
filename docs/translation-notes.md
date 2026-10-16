@@ -710,6 +710,11 @@ Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
   "Earth is drained of 1 level(s).". Ruby Hand drains one level, so the singular is the
   usual case. Chris kept "drained" because level drain is the game's term ("Restore
   drained levels", "resists level drain"); fightfit passes.
+- FIGHTMSG 163, the monster heal ({ff13}は {ff11}1回復した): "Kobold Priest recovers 12."
+  → "Kobold Priest" / "recovers 12 HP.", to match 143. With a plain space, mid-length
+  names left "HP." alone on the second line ("Kobold Priest recovers 12 / HP."), and the
+  font has no non-breaking space, so the line now always breaks after the name, the way
+  the game shows long-name casts ("Kobold Priest / casts Bamatu."). Chris's choice.
 
 ## To revisit
 
