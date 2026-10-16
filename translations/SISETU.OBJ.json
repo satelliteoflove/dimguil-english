@@ -1437,7 +1437,7 @@
                 {
                     "length": 73,
                     "source": "NA",
-                    "translation": "They learn spells that work on the\nmind through words of power.\nCasters with low HP and few items.",
+                    "translation": "They learn spells that work on the\nmind through words of power. Casters\nwith low HP and limited gear.",
                     "compress": true,
                     "addStringTerminator": true
                 },

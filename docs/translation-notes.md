@@ -762,6 +762,8 @@ Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
   magic-user family (the Compendium's 魔術師系 type, "Mages"; the Alchemist and Psionic
   are 魔術師の部類 too), so it reads "Casters" as theirs do; 装備できる物 is what they can
   equip, so "limited gear" (Chris).
+- SISETU 210, the Psionic (装備できる物は少ない, as the Mage): "few items" → "limited
+  gear", to match. "Casters" moved up a line so no line passes 190 px (176/190/150).
 - SISETU 208, the Bard at creation (楽器を奏でて,呪文と同様の効果を発揮する ... 盗賊技能有り):
   "Instruments that work like spells." had no verb → "Their music works like spells." (the
   playing does it, not the instrument alone, and the Japanese names no songs). "and have
