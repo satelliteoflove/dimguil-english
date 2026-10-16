@@ -729,6 +729,9 @@ Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
   (Chris's wording).
 - NPC_MES4 33 and 39, the 26 glyphs laid out (研究も進むというものだ): "our research is
   bound to get on" was British → "bound to progress", a scholar's word (Chris).
+- NPC_MES4 107, Cresson on the young party (とてもにぎやかだったのですよ): "They were ever
+  so lively." was British → "They were such a lively bunch.", which keeps her fond, chatty
+  tone.
 
 ## To revisit
 
