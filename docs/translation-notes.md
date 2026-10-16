@@ -770,7 +770,10 @@ Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
   disc?" / "the small disc" / "the middle disc" / "The disc quietly turns back."; Guy's
   "a disc here split into three layers"; Balbo's "three discs" stays. On screen it's a
   carved centre disc with two bands around it (docs/shots/ring-dial/). Chris: "disc"
-  throughout, it's more faithful.
+  throughout, it's more faithful. The last prompt is "the outer disc" (外側の円盤), no
+  longer "the large ring". The Fortune Teller stays faithful with rings (SISETU 339
+  3つの輪 ... 大きな輪, topic 353 輪の扉 "Ring Door"): the original itself mixes the two,
+  and the Japanese fan FAQ (emonoya.net) slips between 円盤 and 輪 the same way.
 - SISETU 208, the Bard at creation (楽器を奏でて,呪文と同様の効果を発揮する ... 盗賊技能有り):
   "Instruments that work like spells." had no verb → "Their music works like spells." (the
   playing does it, not the instrument alone, and the Japanese names no songs). "and have
