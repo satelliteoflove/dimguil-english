@@ -700,6 +700,8 @@ Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
 - I_NAME_E 1253, the statue in the pack: the developer's "DEMON'S STATUE" → "DEMON
   STATUE", matching their pickup name (314). The Japanese is 悪魔の石像, a stone statue
   of a demon; nothing in the game makes it a demon's, so Chris chose the plain form.
+- Kept: SISETU 36 "Really throw it away?" (本当に捨てますか?), though the command is "Drop".
+  Chris: it makes clearer that the item won't come back.
 
 ## To revisit
 
