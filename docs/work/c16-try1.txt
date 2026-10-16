@@ -1,0 +1,210 @@
+14288 Crystal Man
+14288 (5)
+14466 Uranus slashes at Crystal Man with EPEE OF EXCELLENCE.
+14516 The attack misses.
+14540 Venus casts Madalto.
+14695 Crystal Man takes 24 damage.
+14713 Crystal Man takes 18 damage.
+14731 Crystal Man nullifies the spell.
+14767 Crystal Man takes 15 damage.
+14789 Eve casts Lahalito.
+14930 Crystal Man nullifies the spell.
+14966 Crystal Man takes 17 damage.
+14984 Crystal Man takes 11 damage.
+15002 Crystal Man takes 17 damage.
+15024 Earth hits Crystal Man with STAFF OF CURING.
+15092 Hits 1 times!
+15092 Crystal Man takes 16 damage.
+15122 Mercury looses at Crystal Man with BLOW GUN.
+15170 The attack misses.
+15194 Crystal Man shoots Eve with beams from its eyes.
+15212 Dodged the attack.
+15236 Dax attacks Crystal Man with SWORD OF EXCELLENCE.
+15296 Hits 1 times!
+15296 Crystal Man takes 20 damage.
+15322 Dax slashes at Crystal Man with EPEE OF SWINGING.
+15380 Hits 2 times!
+15380 Crystal Man takes 23 damage.
+15408 Crystal Man takes aim at Eve with strange rays from its hands.
+15428 Dodged the attack.
+15452 Crystal Man shoots Earth with beams from its eyes.
+15470 Hits 2 times!
+15470 Earth takes 25 damage.
+15500 Earth is decapitated!
+15524 Crystal Man casts Mogato.
+15542 But nothing happens.
+15564 Crystal Man shoots Eve with beams from its eyes.
+15584 Dodged the attack.
+15620 Crystal Man
+15620 (5)
+15786 Uranus slashes at Crystal Man with EPEE OF EXCELLENCE.
+15836 The attack misses.
+15860 Mercury looses at Crystal Man with BLOW GUN.
+15920 Hits 1 times!
+15920 Crystal Man takes 2 damage.
+15950 Dax attacks Crystal Man with SWORD OF EXCELLENCE.
+15998 The attack misses.
+16018 Dax attacks Crystal Man with EPEE OF SWINGING.
+16064 The attack misses.
+16086 Crystal Man takes aim at Eve with strange rays from its hands.
+16106 Dodged the attack.
+16130 Venus casts Madalto.
+16279 Crystal Man nullifies the spell.
+16315 Crystal Man takes 20 damage.
+16333 Crystal Man takes 24 damage.
+16351 Crystal Man takes 18 damage.
+16373 Eve casts Lahalito.
+16514 Crystal Man nullifies the spell.
+16532 Crystal Man takes 11 damage.
+16550 Crystal Man takes 13 damage.
+16568 Crystal Man takes 20 damage.
+16586 Crystal Man takes 13 damage.
+16608 Crystal Man takes aim at Mercury with strange rays from its hands.
+16634 Dodged the attack.
+16658 Crystal Man shoots Eve with beams from its eyes.
+16676 Hits 1 times!
+16676 Eve takes 14 damage.
+16712 Crystal Man takes aim at Eve with strange rays from its hands.
+16730 Dodged the attack.
+16754 Crystal Man shoots Eve with beams from its eyes.
+16772 Dodged the attack.
+16808 Crystal Man
+16808 (5)
+16974 Uranus attacks Crystal Man with EPEE OF EXCELLENCE.
+17036 The attack misses.
+17060 Venus casts Madalto.
+17203 Crystal Man takes 27 damage.
+17221 Crystal Man nullifies the spell.
+17275 Crystal Man takes 29 damage.
+17297 Eve casts Lahalito.
+17438 Crystal Man nullifies the spell.
+17456 Crystal Man takes 16 damage.
+17474 Crystal Man takes 19 damage.
+17492 Crystal Man nullifies the spell.
+17532 Mercury peppers Crystal Man with BLOW GUN.
+17582 The attack misses.
+17606 Dax attacks Crystal Man with SWORD OF EXCELLENCE.
+17654 The attack misses.
+17674 Dax slashes at Crystal Man with EPEE OF SWINGING.
+17720 The attack misses.
+17742 Crystal Man shoots Eve with beams from its eyes.
+17762 Hits 1 times!
+17762 Eve takes 12 damage.
+17798 Crystal Man shoots Eve with beams from its eyes.
+17816 Dodged the attack.
+17840 Crystal Man casts Labadi.
+17858 Uranus takes 296 damage.
+17880 Crystal Man casts Mogato.
+17900 But nothing happens.
+17922 Crystal Man takes aim at Eve with strange rays from its hands.
+17942 Dodged the attack.
+17978 Crystal Man
+17978 (5)
+18088 Uranus slashes at Crystal Man with EPEE OF EXCELLENCE.
+18138 The attack misses.
+18162 Mercury peppers Crystal Man with BLOW GUN.
+18216 The attack misses.
+18240 Venus runs through Crystal Man with SKULL DAGGER.
+18288 The attack misses.
+18308 Venus runs through Crystal Man with SKULL DAGGER.
+18360 The attack misses.
+18382 Crystal Man takes aim at Uranus with strange rays from its hands.
+18408 Hits 1 times!
+18408 Uranus takes 22 damage.
+18438 Uranus is paralyzed.
+18456 Uranus dies.
+18480 Dax attacks Crystal Man with SWORD OF EXCELLENCE.
+18528 The attack misses.
+18548 Dax attacks Crystal Man with EPEE OF SWINGING.
+18606 Hits 1 times!
+18606 Crystal Man takes 11 damage.
+18634 Crystal Man casts Mogato.
+18654 But nothing happens.
+18676 Crystal Man casts Labadi.
+18696 Venus takes 133 damage.
+18718 Eve casts Lahalito.
+18857 Crystal Man takes 13 damage.
+18875 Crystal Man takes 16 damage.
+18893 Crystal Man takes 15 damage.
+18911 Crystal Man takes 16 damage.
+18929 Crystal Man takes 17 damage.
+18951 Crystal Man shoots Venus with beams from its eyes.
+18971 Hits 2 times!
+18971 Venus takes 24 damage.
+19001 Venus dies.
+19025 Crystal Man casts Mogato.
+19043 But nothing happens.
+19077 Crystal Man
+19077 (5)
+19161 Crystal Man shoots Eve with beams from its eyes.
+19181 Hits 1 times!
+19181 Eve takes 8 damage.
+19217 Mercury peppers Crystal Man with BLOW GUN.
+19271 The attack misses.
+19295 Crystal Man casts Labadi.
+19313 Dax takes 155 damage.
+19335 Crystal Man takes aim at Eve with strange rays from its hands.
+19355 Hits 1 times!
+19355 Eve takes 20 damage.
+19385 Eve is paralyzed.
+19409 Dax slashes at Crystal Man with SWORD OF EXCELLENCE.
+19457 The attack misses.
+19477 Dax attacks Crystal Man with EPEE OF SWINGING.
+19523 The attack misses.
+19545 Crystal Man shoots Dax with beams from its eyes.
+19565 Hits 1 times!
+19565 Dax takes 8 damage.
+19595 Dax dies.
+19619 Crystal Man casts Labadi.
+19637 Eve takes 7 damage.
+19671 Crystal Man
+19671 (5)
+19687 Mercury looses at Crystal Man with BLOW GUN.
+19737 The attack misses.
+19761 Crystal Man takes aim at Eve with strange rays from its hands.
+19779 Dodged the attack.
+19803 Crystal Man shoots Eve with beams from its eyes.
+19821 Dodged the attack.
+19845 Crystal Man takes aim at Eve with strange rays from its hands.
+19863 Dodged the attack.
+19887 Crystal Man shoots Eve with beams from its eyes.
+19905 Dodged the attack.
+19929 Crystal Man takes aim at Eve with strange rays from its hands.
+19947 Hits 1 times!
+19947 Eve takes 20 damage.
+19977 Eve is paralyzed.
+19995 Eve dies.
+20031 Crystal Man
+20031 (5)
+20049 Mercury looses at Crystal Man with BLOW GUN.
+20099 The attack misses.
+20123 Crystal Man shoots Mercury with beams from its eyes.
+20141 Hits 1 times!
+20141 Mercury takes 9 damage.
+20177 Crystal Man shoots Mercury with beams from its eyes.
+20195 Hits 3 times!
+20195 Mercury takes 34 damage.
+20231 Crystal Man shoots Mercury with beams from its eyes.
+20249 Dodged the attack.
+20273 Crystal Man shoots Mercury with beams from its eyes.
+20291 Hits 1 times!
+20291 Mercury takes 9 damage.
+20327 Crystal Man casts Mogato.
+20345 But nothing happens.
+20379 Crystal Man
+20379 (5)
+20395 Mercury looses at Crystal Man with BLOW GUN.
+20457 Hits 1 times!
+20457 Crystal Man takes 2 damage.
+20481 Crystal Man is poisoned.
+20505 Crystal Man shoots Mercury with beams from its eyes.
+20523 Hits 2 times!
+20523 Mercury takes 24 damage.
+20559 Crystal Man takes aim at Mercury with strange rays from its hands.
+20583 Dodged the attack.
+20607 Crystal Man takes aim at Mercury with strange rays from its hands.
+20631 Dodged the attack.
+20655 Crystal Man shoots Mercury with beams from its eyes.
+20673 Hits 2 times!
+20673 Mercury takes 16 damage.
+20703 Mercury dies.
