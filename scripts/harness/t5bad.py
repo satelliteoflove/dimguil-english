@@ -24,7 +24,11 @@ from harness import t5check
 
 ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
 ST = os.path.join(ROOT, 'rips/states')
-EVENTMES = os.path.join(ROOT, 'rips/dirty/dimguil/DATA06/EVENTMES.BIN')
+# the disc under test's copy (suite_round.sh installs it); rips/dirty is whatever this
+# checkout last built, and a stale copy puts the strings at the wrong offsets
+EVENTMES = os.path.join(ROOT, 'rips/harness/disc/dimguil/DATA06/EVENTMES.BIN')
+if not os.path.exists(EVENTMES):
+    EVENTMES = os.path.join(ROOT, 'rips/dirty/dimguil/DATA06/EVENTMES.BIN')
 OLD_DISC = os.path.join(ROOT, 'rips/harness/disc/f068468/dimguil-en.cue')
 OLD_T2 = os.path.join(ROOT, 'rips/harness/t2/states') + '/'
 EV_RAM = 0x801a0400          # where EVENTMES loads; searching the Shrine door prints string 11

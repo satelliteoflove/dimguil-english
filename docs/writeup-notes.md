@@ -206,6 +206,57 @@ checks found two things the first voicing fix (9a955ba) had left.
   old states, so they had never run MAIN's word wrap fix either ("blow away " kept its
   trailing space there, and not on a cold boot).
 
+**One verb, two sentences (2026-10-15, wt/verbfix).**
+- Seen: "Ghost startles a shriek.", "Were Bat glares at a piercing glare." in bot runs.
+- Cause: a monster's verb is written for "{monster} {verb} {target} with {noun}." (108/109),
+  but an ability (attack noun 683 or more) goes through cast_spell and prints 214,
+  "{monster} {verb} {noun}.", with no target. Japanese hides it: the particle sits in the
+  verb (で 驚かせた). Read in BATTLE: the noun alone decides the path, so no attack prints
+  both. 140 abilities on the disc, 16 verbs; 12 of the verbs read wrong without a target,
+  and three were the party's whole-sentence instrument lines ("Noisy Tempter plays .
+  VIOLIN OF MADNESS.").
+- Fix, data only: targetless verbs in FIGHTMSG 61, 65-71 and 74 (never printed; 65-71
+  are 未使用), 82 verb bytes repointed in 69 files, 46 and 76 reworded in place. The
+  first wording said "everyone"; reading who each ability hits showed most hit one row
+  and some one member, so the object became "them" (Chris's call), with "flashes a
+  sultry look" and "stares with hollow eyes" where no object fits.
+- Checked: battleshow.py for all 22 ability verb/noun pairs at their longest names and at
+  "Skeleton Warrior" (16, the longest); real fights on the built disc (fightshow.py):
+  "Ghost startles them with a shriek." (the front row took damage, the next shriek the
+  back row), and, unchanged, "Fear glares at Uranus with a piercing glare.". Shots in
+  docs/shots/ability-verbs/.
+- Tooling found broken on the way: battleshow.py copied the word wrap's 2026-09 range
+  into old states, which hung the battle on today's build for most combinations; it now
+  needs a state made on the build's code. Forcing a group onto a floor it doesn't
+  belong to hangs the battle's start (phase 4) on the original data too, so real fights
+  start from a harness state on the group's own floor.
+
+**An empty line in a battle message (2026-10-15, a1529b7).** The text check of the
+chapter 13-15 bot runs found "Earth dispels Noisy Tempter." / (empty line) / "(4
+destroyed)". The template is `{ff18} dispels {ff13}.\n({ff11}0 destroyed)`, and with a
+5-letter character and a 13-letter monster the first line fills all 24 codes. The word
+wrap breaks as soon as a line is full, and then the explicit line break comes along and
+breaks again (the expanded bytes end the line `c2 ff21 ff21`). `fightfit.py` never saw
+it because the message still fit in 3 lines. Taught to look for two breaks in a row, it
+finds this one in 80 of the name-length combinations, and one more string: 188, "{ff13}
+nullifies\nthe spell.", with a 16-letter monster name.
+The fix is in `asm/word_wrap.asm`: when the line is full, the code looks at the next two
+bytes of the source and, if they're {ff21}, leaves the break to it. The end of a message
+needed nothing, since the original already takes an automatic break back off there.
+Room was short once more. The test took three more instructions and the area had two
+nops. The check that decides whether to break had a branch for each condition; it's now
+one branch, and the load of the source pointer moved into that branch's delay slot,
+which freed the third. Checked with the R3000 interpreter from the digraph fix
+(`rips/re/work/wrapblank/wrapcmp.py`), old and new MAIN on every FIGHTMSG string and
+every name length: 127,118 expansions with wrapping on and as many with it off. With it
+off (every caller but the battle box), nothing changed. With it on, 81 changed, each only
+by a dropped {ff21} where the old one had two in a row: 80 in 106 and 1 in 188, the same
+combinations `fightfit.py` names. MAIN differs from the previous build in 22 words, all
+between 0x8001e308 and 0x8001e40c. In the real battle box, from a fresh battle state on
+each build, 106 and 188 lose the empty line and nothing else moves:
+`docs/shots/wrap-blank/sheet_before_after.png`. The build (md5
+0ff429ce5e32f96da50e66fc008b9d7a) passed a full suite round, 344 of 344.
+
 ## Working without reading Japanese
 
 - Chris doesn't read Japanese. Each line was shown literally, sentence by sentence,

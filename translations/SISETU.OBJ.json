@@ -573,7 +573,7 @@
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "Gather gold on this character?",
+                    "translation": "Pool all gold on this character?",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -769,7 +769,7 @@
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": "Your pack is full. Swap it for something.",
+                    "translation": "Your pack is full. Choose an item to swap.",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -996,7 +996,7 @@
                 {
                     "length": 10,
                     "source": "NA",
-                    "translation": "Help whom?",
+                    "translation": "Heal whom?",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -1304,7 +1304,7 @@
                 {
                     "length": 67,
                     "source": "NA",
-                    "translation": "Half dragon, half human, and the\nonly race that breathes. Scaly\nskin makes them resist specials.",
+                    "translation": "Half dragon, half human, and the\nonly race with a breath attack.\nScaly skin resists specials.",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -1374,7 +1374,7 @@
                 {
                     "length": 70,
                     "source": "NA",
-                    "translation": "Experts at attack magic, and a\nspellcasting class. Low HP and\nfew items; not for the front.",
+                    "translation": "Experts at attack magic. Casters\nwith low HP and limited gear;\nnot for the front.",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -1423,7 +1423,7 @@
                 {
                     "length": 75,
                     "source": "NA",
-                    "translation": "Instruments that work like spells.\nThey learn Mage spells, slowly,\nand have thieving skills.",
+                    "translation": "Their music works like spells.\nThey learn Mage spells, slowly,\nand have some thieving skill.",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -1437,7 +1437,7 @@
                 {
                     "length": 73,
                     "source": "NA",
-                    "translation": "They learn spells that work on the\nmind through words of power.\nCasters with low HP and few items.",
+                    "translation": "They learn spells that work on the\nmind through words of power. Casters\nwith low HP and limited gear.",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -2121,7 +2121,7 @@
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": "Your pack is full. Swap it for something.",
+                    "translation": "Your pack is full. Choose an item to swap.",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -2799,7 +2799,7 @@
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "Decipher Ancient Script",
+                    "translation": "Decipher Ancient Glyphs",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -4459,7 +4459,7 @@
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "Choose an ancient letter.",
+                    "translation": "Choose an ancient glyph.",
                     "compress": true,
                     "addStringTerminator": true
                 },

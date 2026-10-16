@@ -30,6 +30,13 @@
 ; source. Without that, a word that fills the line exactly ("...Xicalli with") left the
 ; following space to start the next line (" BLOW GUN."), one half-space off center.
 ;
+; A full line in plain text doesn't break when the source's next code is {ff21}: that
+; explicit break ends the line itself. Before, both went in and left an empty line
+; ("Earth dispels Noisy Tempter." / "" / "(4 destroyed)", FIGHTMSG 106). The end of the
+; message, {ff40}, needs nothing: the original takes an automatic break back off there
+; (0x8001e418). Room: @check now loads the source pointer in its branch's delay slot,
+; for break_at, with one branch on both conditions.
+;
 ; The function has three inline copies of its "write {ff21}" sequence at 21
 ; instructions each. All three now go through one routine, write_break, which returns
 ; through t7 (the original function uses no t registers, and nothing it calls runs
@@ -131,16 +138,20 @@ letters:
     j       write_break
     addiu   t7, t7, lo(0x8001e350)
 
-; Plain text: break and carry on (t0 = 0x80080000). A plain space next in the source is
-; skipped, so it can't start the new line.
+; Plain text: break and carry on (t0 = 0x80080000, t3 = the source pointer). A plain
+; space next in the source is skipped, so it can't start the new line. {ff21} next: no
+; break, it makes its own (s3 = 0xff, s2 = 0x21).
 break_at:
-    lw      t3, -0x6614(t0)         ; source: the next byte
     lui     t7, hi(0x8001e410)
-    lbu     t4, 0(t3)
-    addiu   t7, t7, lo(0x8001e410)
+    lbu     t4, 0(t3)               ; source: the next byte
+    lbu     t5, 1(t3)               ; and the one after
+    bne     t4, s3, @@nobreak
     xori    t4, t4, SPACE
+    beq     t5, s2, 0x8001e410      ; {ff21}: no automatic break
+@@nobreak:
+    addiu   t3, t3, 1               ; (beq's delay slot, harmless when taken)
     bnez    t4, write_break
-    addiu   t3, t3, 1
+    addiu   t7, t7, lo(0x8001e410)
     j       write_break
     sw      t3, -0x6614(t0)         ; a plain space: skip it
 
@@ -202,11 +213,11 @@ is_space_low:
 @uncount:
     addiu   t2, t2, -1              ; a control code isn't part of the word
 @check:
-    slt     t5, s0, t1
-    beqz    t5, break_at            ; line full
-    slt     t5, t1, t2
-    bnez    t5, break_at            ; next word won't fit
-    nop
+    slt     t5, s0, t1              ; 0 = line full
+    slt     t6, t1, t2              ; 1 = next word won't fit
+    sltu    t5, t6, t5              ; 1 = neither
+    beqz    t5, break_at
+    lw      t3, -0x6614(t0)         ; source pointer, for break_at (unused otherwise)
 .if . != 0x8001e410
     .error "the plain-text path must fall through to 0x8001e410"
 .endif

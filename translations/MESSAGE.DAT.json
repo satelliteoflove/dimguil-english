@@ -5736,7 +5736,7 @@
                 {
                     "length": 16,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "GIANT'S AXE",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -5750,7 +5750,7 @@
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "DEVIL'S STICK",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -6002,7 +6002,7 @@
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "PRIEST'S MACE",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -6282,7 +6282,7 @@
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "FAERIE'S\nCLOTHES",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -6415,7 +6415,7 @@
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "DAMAGED GLOVES",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -6604,7 +6604,7 @@
                 {
                     "length": 15,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "GLOVE OF\nTHE DEAD",
                     "compress": null,
                     "addStringTerminator": true
                 },

@@ -134,7 +134,7 @@
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "looses at",
+                    "translation": "fires at",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -330,7 +330,7 @@
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "tries to lull",
+                    "translation": "tries to lull them with",
                     "addStringTerminator": true,
                     "compress": true
                 },
@@ -435,7 +435,7 @@
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "{ff18} plays {ff14}.",
+                    "translation": "stares with",
                     "addStringTerminator": true,
                     "compress": true
                 },
@@ -463,49 +463,49 @@
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "-",
-                    "addStringTerminator": false,
-                    "compress": true
-                },
-                {
-                    "length": 6,
-                    "source": "NA",
-                    "translation": "-",
+                    "translation": "fires",
                     "addStringTerminator": true,
                     "compress": true
                 },
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "-",
+                    "translation": "glares at them with",
                     "addStringTerminator": true,
                     "compress": true
                 },
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "-",
+                    "translation": "startles them with",
                     "addStringTerminator": true,
                     "compress": true
                 },
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "-",
+                    "translation": "tries to melt them with",
                     "addStringTerminator": true,
                     "compress": true
                 },
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "-",
+                    "translation": "flashes",
                     "addStringTerminator": true,
                     "compress": true
                 },
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "-",
+                    "translation": "plays",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 6,
+                    "source": "NA",
+                    "translation": "throws",
                     "addStringTerminator": true,
                     "compress": true
                 },
@@ -526,7 +526,7 @@
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "buffets",
+                    "translation": "beats",
                     "addStringTerminator": true,
                     "compress": true
                 },
@@ -540,7 +540,7 @@
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "tries to entangle",
+                    "translation": "tries to entangle them in",
                     "addStringTerminator": true,
                     "compress": true
                 },
@@ -554,7 +554,7 @@
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "{ff13} breathes a sweet breath.",
+                    "translation": "{ff13} blows a sweet breath.",
                     "addStringTerminator": true,
                     "compress": true
                 },
@@ -687,7 +687,7 @@
                 {
                     "length": 22,
                     "source": "NA",
-                    "translation": "{ff13} breathes a holy breath.",
+                    "translation": "{ff13} blows a holy breath.",
                     "addStringTerminator": true,
                     "compress": true
                 },
@@ -965,7 +965,7 @@
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "{ff18} is drained of {ff11}2 levels.",
+                    "translation": "{ff18} is drained of {ff11}2 level(s).",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -1007,7 +1007,7 @@
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "{ff18} recovers {ff11}1.",
+                    "translation": "{ff18} recovers {ff11}1 HP.",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -1147,7 +1147,7 @@
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "{ff13} recovers {ff11}1.",
+                    "translation": "{ff13}\nrecovers {ff11}1 HP.",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -2047,7 +2047,7 @@
                 {
                     "length": 131,
                     "source": "NA",
-                    "translation": "Before you, a huge mural covers the wall.\nWhat could the center show?{ff26}\rOh? In the lower right, in strange letters,\n]{ff30}5{ancient_d}{ancient_i}{ancient_m}{ancient_g}{ancient_u}{ancient_i}{ancient_l}{ff30}0[\nis written.{ff26}",
+                    "translation": "Before you, a huge mural covers the wall.\nWhat could the center show?{ff26}\rOh? In the lower right, in strange glyphs,\n]{ff30}5{ancient_d}{ancient_i}{ancient_m}{ancient_g}{ancient_u}{ancient_i}{ancient_l}{ff30}0[\nis written.{ff26}",
                     "compress": true,
                     "addStringTerminator": true
                 }

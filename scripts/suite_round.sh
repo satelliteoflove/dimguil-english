@@ -35,6 +35,8 @@ if [ "$MD5" != "$OLD" ]; then
   done
   echo "build $LABEL, md5 $MD5, from $BUILD, installed $(date -Iseconds)" > "$D/BUILD.txt"
 fi
+# t5bad's event box cases write strings at their offsets in the disc's own EVENTMES
+mkdir -p "$D/dimguil/DATA06" && cp "$BUILD/dimguil/DATA06/EVENTMES.BIN" "$D/dimguil/DATA06/EVENTMES.BIN"
 [ "$(md5sum "$D/dimguil-en.bin" | cut -d' ' -f1)" = "$MD5" ] || { echo "install mismatch" >&2; exit 1; }
 echo "disc $LABEL md5 $MD5 installed; starting round"
 exec python3 -u scripts/harness/regress.py --note "$NOTE" "$@"

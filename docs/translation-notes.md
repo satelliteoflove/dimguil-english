@@ -52,6 +52,39 @@ see all of it.
 - **Battle lines ending in a digraph's space (2026-10-13).** "Giant Ant calls for help! A /
   monster appears." sat 2 px left; a break after "A ", "s " etc. now draws the letter alone (`asm/word_wrap.asm`).
 
+- **Monster abilities with no target (FIGHTMSG 214, 2026-10-15).** A monster's attack
+  verb is written for the targeted line, "Basilisk glares at Venus with its many eyes."
+  (108/109). An ability (a shriek, a dance, a gaze: an attack noun of 683 or more) prints
+  214 instead, "{monster} {verb} {noun}." with nobody named, so the same verbs gave
+  "Ghost startles a shriek.", "Merry Puppet tries to lull a strange dance.", "Were Bat
+  glares at a piercing glare." and "Giant Spider tries to entangle sticky goo.". The
+  Japanese reads fine both ways (ゴースト は 金切り声 で 驚かせた), because the particle
+  sits in the verb. Which template prints is fixed per attack by its noun (code in
+  `engine-notes.md`, "Battle text and monster files"), so the fix is data: the abilities
+  got targetless verbs of their own in FIGHTMSG 61, 65-71 and 74, which the game never
+  printed (65-71 are 未使用), and their verb bytes point there (82 attacks in 69 monster
+  and party files, `binary/*.verbs.json`, written by `scripts/re/attackverbs.py
+  --write`). Verbs 46 and 76 were only ever used by abilities, so they were reworded in
+  place. Against the party most abilities hit one row, a few one member and five the
+  whole party (the table is in `engine-notes.md`), and the line can't say which, so the
+  object is "them", as the Japanese leaves it unsaid. Chris chose "them" over "everyone"
+  (2026-10-15): it's right for a row, and it also reads right when summoned undead or
+  other creatures fight on the party's side. The lines are now "Ghost startles them with
+  a shriek.", "Merry Puppet tries to lull them with a strange dance.", "Wight glares at
+  them with piercing eyes.", "Giant Spider tries to entangle them in sticky goo.",
+  "Smelia tries to melt them with eerie smoke.", "Succubus flashes a sultry look.",
+  "Mictlan stares with hollow eyes." (its Badi hits one member; slot 61), "Greater Golem
+  fires BIG GUN.", "Nex tepehua throws ASH OF CONFUSION.", "Old Drummer beats DEVIL'S
+  DRUM.", "Noisy Tempter plays VIOLIN OF MADNESS." and "Lilia plays LUTE."; Venus Man
+  Trap's pollen uses the existing "sprays" (55), like Fire Rock's red-hot stones. The
+  abilities' glare nouns (I_NAME_E 705, 707, 709, 713, 鋭い目付き) became "piercing
+  eyes", so the line doesn't say glare twice. The melee one, 665 (鋭い目つき, the same
+  word, used only with "glares at" by Fear, Medusa and Kel), followed on Chris's ask:
+  "Fear glares at Uranus with piercing eyes." instead of "...with a piercing glare.". The
+  three instrument attacks had pointed at the party's whole-sentence instrument lines
+  (60, 63, 64); the codes inside them print nothing there, so they read "Noisy Tempter
+  plays . VIOLIN OF MADNESS." and "Lilia strikes up . LUTE.".
+
 - **Inn and Temple lines off center (2026-10-13).** "Not enough gold." sat 9 px left (x fixed for the
   Japanese, `asm/inn_gold_message.asm`); the Temple's chant 10 px (`asm/temple_layout.asm`).
 
@@ -202,6 +235,13 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 - **"Companions," not "comrades" (2:231).** Chris: "comrade" carries a connotation for
   American players that doesn't fit. Balbo's 仲間 is now "companions"; the other uses
   are listed under To revisit.
+- **Balbo's introduction (2:96, 2026-10-15).** Chris found it awkward in play; no
+  reviewer had flagged it, so it was still the first draft. 何だよ,そんなことか? is
+  "what, *that's* what you're asking?", not "that's all?" (which read as disappointment
+  that it was over); the fragment "Pain in the neck, but fine" became full sentences;
+  and "I guess" was dropped, since ま,よろしくな is gruff but friendly, not grudging.
+  Now "Huh? That's all you wanted? What a pain. Oh, all right... Name's Balbo. I'm a
+  Lord. Well, nice to meetcha." Chris thought the rest of Balbo's party's talk read fine.
 - **The leaders' maze-encounter voice (NPC scene 3, Balbo's progress reports,
   2026-10-05).** When Balbo's party meets you in the maze, the Japanese drops his own
   voice (俺様, ねぇ, チッ) for a stiff, superior one: 君たち, 〜たまえ, 〜かね, 我々. The
@@ -399,6 +439,57 @@ The preferred fix is a close-to-literal reading, fitted to the box.
     length, so every event line keeps its breaks; the NPC lines that said "Lithograph
     of the Sun" (NPC2 82) and "the Sun tablet" (NPC3 68) now say "Tablet of the Sun".
     The keyboard's "small tablets" are 石板 too, which the new name now matches.
+
+- **Four more slips, and spaces in two-word monster names (Chris, 2026-10-16).**
+  Found in the chapter 13-15 text check (`textcheck-c13-15.md`, items 3 and 12) and
+  checked against the earlier games: none is a series spelling.
+  - GLOVE OF DEAD (死者の小手) is now GLOVE OF THE DEAD, FAERIE'S CLOTHE (妖精の服) is
+    FAERIE'S CLOTHES, PRIESTS MACE (僧侶のメイス) is PRIEST'S MACE, and HobGoblin is
+    Hobgoblin. The two-line forms break GLOVE OF / THE DEAD and FAERIE'S / CLOTHES.
+    Copies changed: I_NAME_E 92, 132, 178 and their two-line forms 1031, 1071, 1117,
+    plus 519 (the mace as an attack noun); the card game's MESSAGE.DAT 832, 872, 918;
+    M_CATALG 2:376; MPT14's records; ITEM.DAT's catalog list. ITEM_CA.DAT keeps the old
+    names; the game doesn't load it. No battle copy (BATTLE.BIN) has any of them.
+  - The catalog list and the card game's list have no spare bytes. The card game's
+    copies of FAERIE'S / CLOTHES and GLOVE OF / THE DEAD drop the space before the
+    break (2 bytes over otherwise). The catalog list drops it in those two, and in
+    EMERALD, SAPPHIRE and SCARLET ROBES to make room for THE; the catalog draws the
+    break as a new line, so the space never showed. The catalog reads these names one
+    after another, so they have to stay packed in order (`engine-notes.md`, "Item
+    catalog"). Repacking also fixed "0FEATHERED CAP" in the Hats list, a stray byte the
+    IRON GLOVES fix had left behind.
+  - Two-word names in the party fights (MPT01-39, NPT15) were stored with a bare line
+    break, `Arch{ff21}Ninja`, which the enemy grid draws on two lines and every battle
+    message drops: "ArchNinja kicks Venus." Each such slot (name, unidentified, plural,
+    unidentified plural) now has a space before the break, as `Man in {ff21}Robe`
+    already did, so messages read "Arch Ninja kicks Venus." and the grid is unchanged.
+    That includes the unidentified Man in Robe/Armor plurals and Small Shadow.
+    Nex{ff21}tepehua and Tepe{ff21}yollotl stay as they are: each is one word split for
+    the grid.
+  - **Goblin Assassin still prints "GoblinAssassin"** in messages ("GoblinAssassin casts
+    Fisqurea."). `Goblin{ff21}Assassin` is 16 bytes, the most a slot holds, so there's
+    no room for the space. Fixing it would take a code change: the name copy at MAIN
+    0x8001ebf4 could turn a dropped break into a space for every name.
+  - Names that reach 10 letters with the space (Arch Ninja, Rage Beast, Orc Knight, Orc
+    Healer) now take FIGHTMSG 151, "Orc Knight / takes 14 damage.", which reads fine.
+  - Cutie Thief's second SHORT SWORD attack used verb 213, the item menu's "Use it on
+    whom?", in a melee line: an original data bug. It now uses 3, "stabs" ("Cutie Thief
+    stabs Jupiter with SHORT SWORD."), through `scripts/re/attackverbs.py`'s MELEE table.
+  Shots: `docs/shots/name-fixes/` (fights forced and items placed through RAM to set
+  them up; no text was written).
+- **Three more item names (Chris, 2026-10-16).** From the chapter 1-13 text check
+  (`textcheck-c1-13.md`, item 14); Bartok's Trading Post finds each only in Dimguil.
+  - AXE OF GIANT'S (巨人の斧) is now GIANT'S AXE, matching GIANT'S CLUB (巨人の棍棒),
+    one line everywhere as that one is.
+  - DEVILS STICK (悪魔の小杖) is now DEVIL'S STICK, as DEMON'S STAFF and DEVIL'S DRUM
+    are spelled. DEMONS TOOTH stays: that's Wizardry VI's own spelling.
+  - HURT GLOVES (傷ついた小手, "damaged gauntlets") is now DAMAGED GLOVES, the two-line
+    form DAMAGED / GLOVES. This is a rename, not a typo fix: players looking it up in
+    most Dimguil item lists online will find it as HURT GLOVES.
+  - Copies changed: I_NAME_E 54, 56, 151, the two-line forms 993, 995, 1090, and the
+    attack nouns 481, 483, 686; the card game's MESSAGE.DAT 794, 796, 891; ITEM.DAT's
+    catalog list. GIANT'S AXE gives up five bytes in each packed list, which the other
+    two take.
 
 ### Game bug fixes (2026-10-11)
 
@@ -617,9 +708,10 @@ about them, as the developers wrote them; the item details screen already shows 
 use an item. "Has died of old age" (SISETU 65/66) stays too, though the character is
 Lost and deleted: it reads as final and matches the Japanese (decisions.md item 19).
 The Training Maze sign (492) stays as well; it never says a wipe there is free, its box
-is full, and the site documents the cost (decisions.md item 20). The Smoke Demon and Venus Man
-Trap Compendium entries stay too (in-world lore; the site gives the real resistances;
-decisions.md item 21). Madalqua's "freezing cold" battle lines stay
+is full, and the site documents the cost (decisions.md item 20). The Venus Man Trap
+Compendium entry stays too (in-world lore; the site gives the real resistances;
+decisions.md item 21). The Smoke Demon's was corrected on 2026-10-14: swords do full
+damage, and it resists Alchemist spells 80%. Madalqua's "freezing cold" battle lines stay
 too, though its element is Tiltowait's; the site notes it (decisions.md item 22).
 
 ### Our mistranslation corrections (2026-10-11)
@@ -634,6 +726,101 @@ only).
   hidden power raises Strength for good." → "A mace that adds power and accuracy just by
   equipping it. Its hidden power raises Strength itself. It truly lives up to its name."
 - 118 Golden Axe: "Strength and accuracy rise too." → "It also hits harder and truer."
+
+### Text check of bot runs (2026-10-15)
+
+Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
+- FIGHTMSG 18 (を 放った, a ranged weapon type's second verb): "looses at" → "fires at".
+  "Looses" is the archer's word but reads as a typo for "loses"; "shoots" and "takes aim
+  at" already belong to the next weapon type, so "fires at" keeps them apart.
+- SISETU 84 (このキャラクタにお金を集めますか?, the shop's offer when a buyer is short):
+  "Gather gold on this character?" → "Pool all gold on this character?", matching the Pool
+  Gold command (SISETU 395, STATUS 93). 159 px, under the 167 px of SISETU 83 in the same
+  box.
+- SISETU 112 and 314 (アイテムがいっぱいです。どれかと交換してください, a full pack when an
+  item comes in): "Your pack is full. Swap it for something." → "Your pack is full. Choose
+  an item to swap." The old line read as "go find something"; the game wants one of the
+  pack's items picked to trade out. 210 px against 206.
+- NPC_MES3 16, the little elf's parting line (失礼します): "Excuse me." → "Goodbye.".
+  失礼します is the polite way out of a room; "Excuse me." read as an apology or an
+  interruption. Chris chose "Goodbye." without the leading dots her hello has.
+- FIGHTMSG 143 ({ff18}は {ff11}1回復した): "Mercury recovers 10." → "Mercury recovers 10
+  HP.", which says what came back. Only party members print it (monsters get 163); the
+  worst case, an 8-letter name and Labadi's 5-digit drain, is 23 of 24 codes, one line
+  (shots: worktrees/verbfix/docs/shots/heal-line/compare.png).
+- I_NAME_E 1253, the statue in the pack: the developer's "DEMON'S STATUE" → "DEMON
+  STATUE", matching their pickup name (314). The Japanese is 悪魔の石像, a stone statue
+  of a demon; nothing in the game makes it a demon's, so Chris chose the plain form.
+- Kept: SISETU 36 "Really throw it away?" (本当に捨てますか?), though the command is "Drop".
+  Chris: it makes clearer that the item won't come back.
+- SISETU 147, the Temple's prompt after "Heal Character" (404; both 助ける): "Help whom?"
+  → "Heal whom?", one verb for both. Chris: "Help Character" doesn't sound like a temple,
+  and raising the dead isn't quite healing either, so "Heal" is the best of the plain
+  words for now; a better one for both would be welcome.
+- FIGHTMSG 137 ({ff18}は {ff11}2レベル吸い取られた): "Earth is drained of 1 levels." →
+  "Earth is drained of 1 level(s).". Ruby Hand drains one level, so the singular is the
+  usual case. Chris kept "drained" because level drain is the game's term ("Restore
+  drained levels", "resists level drain"); fightfit passes.
+- FIGHTMSG 163, the monster heal ({ff13}は {ff11}1回復した): "Kobold Priest recovers 12."
+  → "Kobold Priest" / "recovers 12 HP.", to match 143. With a plain space, mid-length
+  names left "HP." alone on the second line ("Kobold Priest recovers 12 / HP."), and the
+  font has no non-breaking space, so the line now always breaks after the name, the way
+  the game shows long-name casts ("Kobold Priest / casts Bamatu."). Chris's choice.
+- SISETU 191, the Dracon at creation (唯一ブレスを吐くことができる): "the only race that
+  breathes" read as breathing air → "the only race with a breath attack. / Scaly skin
+  resists specials." (166/156/135 px; the widest race and class line is 190).
+- SISETU 201, the Mage at creation (魔術師の部類に入る。HPは低く装備できる物は少なく):
+  "and a spellcasting class ... few items" → "Experts at attack magic. Casters / with low
+  HP and limited gear; / not for the front." 魔術師 is the game's word for the whole
+  magic-user family (the Compendium's 魔術師系 type, "Mages"; the Alchemist and Psionic
+  are 魔術師の部類 too), so it reads "Casters" as theirs do; 装備できる物 is what they can
+  equip, so "limited gear" (Chris).
+- SISETU 210, the Psionic (装備できる物は少ない, as the Mage): "few items" → "limited
+  gear", to match. "Casters" moved up a line so no line passes 190 px (176/190/150).
+- The three-part dial door (EVENTMES 158-163, Guy 1:288, Balbo 2:88-89): one word,
+  "disc", as the Japanese has throughout (三層に分かれた円盤, 小さい/中間の/外側の円盤,
+  三つの円盤). "The door has a disc split into three layers." / "Will you turn the
+  disc?" / "the small disc" / "the middle disc" / "The disc quietly turns back."; Guy's
+  "a disc here split into three layers"; Balbo's "three discs" stays. On screen it's a
+  carved centre disc with two bands around it (docs/shots/ring-dial/). Chris: "disc"
+  throughout, it's more faithful. The last prompt is "the outer disc" (外側の円盤), no
+  longer "the large ring". The Fortune Teller stays faithful with rings (SISETU 339
+  3つの輪 ... 大きな輪, topic 353 輪の扉 "Ring Door"): the original itself mixes the two,
+  and the Japanese fan FAQ (emonoya.net) slips between 円盤 and 輪 the same way.
+- NPC_MES4 62, Bergamot (・・おまえさんたちゃ物覚えが悪いのぉ・・・): "..Memories like sieves,
+  you lot..." → "...You folks sure got memories like sieves...": three dots like the rest
+  of the game, and an American old codger's "you folks" for the British "you lot" (his
+  voice sheet). Alba's, Zaril's and Bergamot's other "you lot" lines wait for their
+  scenes.
+- NPC_MES4 105, Cleo on Fontana's party (みんな若くて元気いっぱいでしたよ): "All young and
+  full of beans." → "They were all young and full of energy.", a full sentence without
+  the British idiom (to many Americans "full of beans" means talking nonsense).
+- NPC_MES2 220, Reiran (あたしもがんばろっと): "Okay! Guess I'll try hard too." → "Okay!
+  Guess I'll do my best too.", がんばる as doing her best, in her own light rhythm.
+- 古代文字 is "ancient glyphs" everywhere now (Chris). The scholars and the NPCs already
+  said glyphs; the events said "ancient letters" (59 strings in EVENTMES), and "a glyph
+  on the pedestal lights up" follows. Also SISETU 411 "Decipher Ancient Glyphs" (was
+  Script), SISETU 670 "Choose an ancient glyph.", the Valkyrie breastplate's "Ancient
+  glyphs over the heart" (ITEM.DAT), and FIGHTMSG's mural "in strange glyphs"
+  (見知らぬ文字, but it draws the same symbols). Ordinary writing keeps "letters": "in
+  modern letters", the password and name prompts, "Choose a letter of the alphabet."
+- SISETU 208, the Bard at creation (楽器を奏でて,呪文と同様の効果を発揮する ... 盗賊技能有り):
+  "Instruments that work like spells." had no verb → "Their music works like spells." (the
+  playing does it, not the instrument alone, and the Japanese names no songs). "and have
+  thieving skills" → "and have some thieving skill", the Ranger's (207) wording, since
+  their skills fall short of a Thief's (Chris).
+- NPC_MES4 84, Cresson's decipher score (どうやらあなたたちとの適合率は{ff11}0%でしょうか):
+  "Um, you seem to match us at about 0%." read as the people matching, with "about" odd
+  beside an exact figure → "Hmm... it looks like your results / match 0% of ours."
+  (Chris's wording).
+- NPC_MES4 33 and 39, the 26 glyphs laid out (研究も進むというものだ): "our research is
+  bound to get on" was British → "bound to progress", a scholar's word (Chris).
+- NPC_MES4 107, Cresson on the young party (とてもにぎやかだったのですよ): "They were ever
+  so lively." was British → "They were such a lively bunch.", which keeps her fond, chatty
+  tone.
+- FIGHTMSG 78 and 97 (甘い息を吹き掛けた): "breathes a sweet breath" repeated itself →
+  "Sleeper blows a sweet breath.", and the holy one to match. Chris found "exhales" didn't
+  read well.
 
 ## To revisit
 
@@ -695,3 +882,5 @@ only).
   These are the developer's uppercase names, so the original likely does the same.
   Left as they are (Chris, 2026-10-09): fixing it is a bigger job than it's worth, and
   the names still read.
+- **Monster names run together in battle text** (found 2026-10-14). Fixed 2026-10-16
+  except Goblin Assassin (see "Four more slips, and spaces in two-word monster names").

@@ -65,7 +65,8 @@ Nearly all the cost is context re-read on every step (2.6 billion tokens re-read
 - **Model by task.** Routine work (running hunts and replays, repeating a test, moving
   files, checking fits) runs on Sonnet or Haiku; root-causing, fix design and review run
   on the strongest model.
-- **Short reports.** The full report goes in a file (`rips/agents/NAME/report.md`); the
+- **Short reports.** The full report goes in the agent's status file, under "## Report N"
+  (agents can't write report files; the harness blocks them); the
   message to the coordinator is a few lines: result, md5, files changed, the report's
   path, and anything that needs a decision.
 

@@ -223,6 +223,13 @@ character is a Bishop (inferred from the flag it reads).
   whose level is exactly twice the item's, and a touch roll that lands exactly on the
   threshold. In effect those keep trying until something else happens (inferred from the
   code; not seen in play).
+- **The Edge of Town's identify is different** (`edge_identify_item`, HAZURE 0x800a982c,
+  2026-10-15). Same chance formula, but it only succeeds when the Bishop's level is at
+  least the item's identify level; below that, every try fails, so the 5% floor never
+  applies there. A miss never makes the Bishop afraid; only a cursed kind can still go on.
+  **[code]** Found in play: Chris's level 14 Bishop missed 110 times on the Battle Drum
+  (item 298, identify level 20). The camp identify above has no such gate, so in camp
+  that item is 5% a try, with the touch risk.
 - For an item that's already identified, the same screen shows its details. That screen
   prints SISETU 603 "Magic Item" and 604 "EVENT Item", which are untranslated English on
   the original disc.

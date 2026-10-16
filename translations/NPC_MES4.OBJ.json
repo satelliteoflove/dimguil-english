@@ -209,7 +209,7 @@
                 {
                     "length": 60,
                     "source": "NA",
-                    "translation": "Bergamot\n\"With all 26 ancient glyphs laid out like\n this, our research is bound to get on.\"",
+                    "translation": "Bergamot\n\"With all 26 ancient glyphs laid out like\n this, our research is bound to progress.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -245,7 +245,7 @@
                 {
                     "length": 60,
                     "source": "NA",
-                    "translation": "Old man\n\"With all 26 ancient glyphs laid out like\n this, our research is bound to get on.\"",
+                    "translation": "Old man\n\"With all 26 ancient glyphs laid out like\n this, our research is bound to progress.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -383,7 +383,7 @@
                 {
                     "length": 65,
                     "source": "NA",
-                    "translation": "Bergamot\n\"..Memories like sieves, you lot...\n I'm a Priest by the name o' Bergamot.\"",
+                    "translation": "Bergamot\n\"...You folks sure got memories like sieves...\n I'm a Priest by the name o' Bergamot.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -515,7 +515,7 @@
                 {
                     "length": 98,
                     "source": "NA",
-                    "translation": "Cresson\n\"The ancient glyphs, is it?\n\r Let me see.\n Shall we compare them with our results?\n\r Um, you seem to match us at about {ff11}0%.\"",
+                    "translation": "Cresson\n\"The ancient glyphs, is it?\n\r Let me see.\n Shall we compare them with our results?\n\r Hmm... it looks like your results\n match {ff11}0% of ours.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -641,7 +641,7 @@
                 {
                     "length": 95,
                     "source": "NA",
-                    "translation": "Cleo\n\"The other day a party with a Samurai\n named Fontana came here.\n\r All young and full of beans.\n Ah, it's a fine thing to be young.\"",
+                    "translation": "Cleo\n\"The other day a party with a Samurai\n named Fontana came here.\n\r They were all young and full of energy.\n Ah, it's a fine thing to be young.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -653,7 +653,7 @@
                 {
                     "length": 56,
                     "source": "NA",
-                    "translation": "Cresson\n\"A party of young adventurers came by.\n They were ever so lively.\"",
+                    "translation": "Cresson\n\"A party of young adventurers came by.\n They were such a lively bunch.\"",
                     "addStringTerminator": true
                 },
                 {

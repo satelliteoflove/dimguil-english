@@ -42,8 +42,6 @@ Nothing open.
 
 ## The site (Bartok's Trading Post session)
 
-9. **The wipe rules and rescue fees** for the walkthrough's front page: the wording.
-   Facts checked against the code. The site session holds the drafts.
-10. **Two Compendium notes** (Smoke Demon, Venus Man Trap), whether to add a note on the
-    2-Head Snake's level-drain claim, and a review of the Compendium branch
-    (http://127.0.0.1:4321/monsters/dimguil/ps/#compendium).
+9. **Two Compendium notes** (Smoke Demon, Venus Man Trap), whether to add a note on the
+   2-Head Snake's level-drain claim, and a review of the Compendium branch
+   (http://127.0.0.1:4321/monsters/dimguil/ps/#compendium).

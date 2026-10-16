@@ -382,6 +382,58 @@ glance". By subsystem:
   before each of the three loads (0x800a421c, 0x800a54d8, 0x800a5534), from a routine
   in the dead FUN_800c3188. A second SsSeqStop on a stopped or closed slot is harmless.
 
+### Treasure after a fight: chest, loose loot or gold
+
+Read 2026-10-15 from BATTLE (`battle_main` 0x800a2cd8, `chest_open` 0x800c5ed0,
+`chest_present` 0x800cb9e4, `chest_loot` 0x800c7fd0, `fixed_battle_setup` 0x800b4eb8) and
+checked against the harness logs (`scripts/trebox.py`, `scripts/chesttally.py`;
+docs/re/H-chests.md has the counts and the other games). D-battle.md's "Chests and traps" says a chest follows every won random battle;
+that misses the encounter-source test below, so wandering fights never get one.
+
+- **Who gets anything.** The chest phase (`battle_phase` 'B', `chest_open` state 5) only
+  runs when the party didn't flee, `0x80079b51 & 0xc0` is clear, the fight is a maze
+  encounter (`encounter_id` 0xffff or 0xfffe) or an NPC party (`encounter_source` 4), and
+  the area isn't the Training Maze (FUN_800c9600). Story and guardian fights with their own
+  ids never reach it, so they pay nothing; `chest_present` also refuses ids 0x91-0xab and
+  the Training Maze. **[code]**
+- **Which reward record.** Each monster record has a 1-based reward number at +0x83
+  (+0x82 is copied to 0x800da74d and never read). `fixed_battle_setup` copies group 1's
+  +0x83 to 0x800da74c (0x800b57ec: `lbu a0,0x153(monster_records)`), or the party
+  leader's in a party layout (0x800b58b0), and `chest_present` stores it minus 1 in the
+  byte 0x80079954 (no symbol yet). The records are DATA03/TRE_BOX.BIN (table 1 index 0x1b8,
+  loaded to 0x801c5400): 30 of 0x5c bytes. Every monster in the maze encounter tables has
+  1-30; the 29 with 0 are event monsters (145-173). The MPT parties use 1-25 (the Diamond
+  Knights 0), the NPC parties 1-25. **[code]** (`scripts/trebox.py`)
+- **Chest or not.** A chest (the 3D box, FUN_800152fc, and the trap menu) only when
+  `encounter_source` is 2, a fight square, and the index is under 30. Otherwise
+  `chest_open` jumps straight to state 0x50 and `chest_loot` pays with no chest:
+  - a wandering token (source 0, id 0xffff, the moving red magic circles): gold only.
+    `chest_loot` gives items only when the source is 2 or 4 or the id is 0xfffe.
+  - a type-2 token (source 0, id 0xfffe: the MPT parties of goblins, orcs, ogres and the
+    like) or an NPC party fight (source 4): gold and items, loose.
+  So a won fight-square fight always brings a chest, a won magic-circle fight always
+  pays gold and never an item, and a party fight pays gold and sometimes items. **[code]**
+  The harness agrees: 217 of 217 fights on a fight square had a chest, none of 584
+  monster fights off one, none of 431 party fights, none of 425 story fights. **[emu]**
+- **Leave** on the chest menu ends the battle with nothing, gold included. A trap that
+  goes off still pays the loot afterwards, unless it wiped the party. After an Alarm
+  fight is won, `chest_open` sees 0x80079784 = 1, clears it, and pays the original
+  chest's loot with no chest. **[code]**
+- **What a record pays** (`chest_loot`, FUN_800c8388). Gold = (c d s + b at +0x50..+0x52)
+  × the u32 at +0x54 × (dice at +0x58..+0x5a), split among members below status 0x20;
+  every record's minimum is above 0, so every paying fight gives gold. Items, if +0 is 1
+  (it is in all 30): three slots k, each paying on `rand_below(85)` <= the u32 at +8 + 4k,
+  so a slot printed as N% pays (N+1)/85 (20 → 25%, 80 → 95%). A slot's item is
+  +0x14 + 4k (base) + step × +0x20 + 4k + `rand_below(+0x38 + 4k)`, where step starts at 0
+  and goes up while `rand_below(90)` <= +0x44 + 4k, to at most +0x2c + 4k. The item goes
+  to a random standing member with a free slot, and is lost if nobody has room. **[code]**
+  The gold ranges match emonoya's table exactly; its slot and step percentages are the raw
+  record values, so the real odds are a little higher.
+- The shape is Wizardry I's (TREWARD: chest flag, trap bits, up to N entries of chance,
+  gold dice, item range), and the split is the same idea: Wizardry I pays a monster's
+  wandering table (nearly all gold only) away from its fixed-fight squares and its room
+  table (nearly all chests) on them. **[inf]** for the lineage.
+
 ### The town (E-town.md)
 
 - **Temple.** The fee (level × 100 paralysis, × 200 stone, × 250 dead, × 500 ashes) is
@@ -680,6 +732,23 @@ patches in `asm/`.
   digraph (`fightfit.py --digraphs`); no event or NPC text can, since only the battle
   call wraps and no explicit line break in them follows one. FIGHTMSG strings without
   `"compress": true` (0, 103, 113, 214, 255, 264-285, 287) are encoded with no digraphs.
+  A full line with an explicit {ff21} next in the source got the automatic break and then
+  the explicit one, so an empty line sat between ("Earth dispels Noisy Tempter." / "" /
+  "(4 destroyed)", FIGHTMSG 106 with a 5-letter character and a 13-letter monster; 188
+  "{ff13} nullifies\nthe spell." with a 16-letter one). `break_at` now reads the next two
+  source bytes and, if they're {ff21}, goes back to 0x8001e410 with no break; the explicit
+  break then sets the column to 0 (0x8001e160). Only "line full" can get there with
+  {ff21} next: at a space, the lookahead measures an empty word. {ff40} needed nothing:
+  when a message ends at column 0, the function's tail (0x8001e418) backs the buffer up
+  over the last {ff21} and writes the {ff40} there. The name paths can't break before an
+  {ff21} either: the break before a name tests that name, and the break inside one only
+  fires past the line. Room: @check (0x8001e3fc) tests both conditions with one branch
+  (slt, slt, sltu) and loads the source pointer for `break_at` in that branch's delay
+  slot (nothing at 0x8001e410 reads t3, so it's harmless when not taken), which freed the
+  `lw` `break_at` began with; s3 = 0xff and s2 = 0x21 let a bne and a beq test the two
+  bytes with no constants. 0x8001e2fc-0x8001e350 is now full. `fightfit.py` models the
+  rule and reports a blank line (two breaks in a row); 106 and 188 were the only strings
+  that could leave one (2026-10-15).
 
 ### Text buffer
 
@@ -858,6 +927,19 @@ patches in `asm/`.
   (1-9%). Each picture is a copy of the panel's parchment with the item on it, so only
   the item is moved or scaled and it goes back onto the bare parchment
   (`graphics/item_panel_bg.png`); scaling the whole picture misaligned the texture.
+- **The catalog's name list reads its names one after another** (2026-10-16, the
+  namefix work). ITEM.DAT section 5 (0x5c234a, after a u16 block size 0x1979) is 349
+  u32 offsets, then the names. JOUKA 0x800e1d20 walks the file's blocks by their u16
+  sizes, copies the block (0x80024c40), takes only the first offset, and reads the names
+  in turn up to each {ff40} (0x800e4570). The other offsets aren't used there. So the
+  names must stay in order with nothing between them. Pointing a repeated name (KATANA,
+  STAFF...) at an earlier copy dropped a string from the run, and the last read ran off
+  the list into section 6: the catalog went black and the CPU sat in the exception
+  handler. A byte left after a shortened name is read as the start of the next one:
+  the IRON GLOVES fix left a 00 after it, and the Hats list showed "0FEATHERED CAP"
+  (glyph 00 draws as 0) until `namefixes.py` repacked the list.
+  `rips/agents/namefix/` in the namefix worktree has the coverage diff and the variants
+  tried.
 
 ### Battle text and monster files
 
@@ -879,6 +961,57 @@ patches in `asm/`.
   92 Katino casts and dances in 19 rounds.)
 - In a battle, the current group's monster record is at 0x801b0680 (in
   rips/states/battle_wriggle.state).
+- **Which template an attack prints** is fixed by its noun (code read 2026-10-15).
+  `monster_attack_roll` (BATTLE 0x800aaed0) adds 427 (0x800aafe8), takes 2000 off a noun
+  of 2000 or more and flags it (0x800ab084), and sends a noun of 683 or more to
+  `cast_spell` as an innate ability with the attack's +6 byte as the spell (0x800ab0d0).
+  `cast_spell` (0x800abcc0) sets message code 5 for a monster's ability, the action code
+  is now a spell, so `battle_run_actions` (0x800a8548) returns 3 and
+  `battle_message_build` (0x800b4194) prints FIGHTMSG 214 "{ff13} {ff15} {ff14}." with
+  no target. Any other noun is a melee hit: return 2, and 108 or 109 (109 when the 2000
+  flag was set) "{ff13} {ff15} {ff18} with {ff14}.". {ff15} is FIGHTMSG[0x80079a14] and
+  {ff14} I_NAME_E[0x80079a9a] (MAIN 0x8001ebf4); both are copied from the attack's verb
+  byte and noun. So one attack never prints both. Attack 2 runs when its raw noun is
+  0xff or more or it has swings, attack 3 only with swings (`monster_melee` 0x800aaa04);
+  no attack 3 on the disc is an ability.
+- The party's lines (98/99) get verbs 1-20 only: 2s+1 or 2s+2 for the weapon's subtype
+  s (0-8; only weapons carry the hand bits), 19/20 bare-handed (0x800a963c), through a
+  20-byte table at 0x800a12f8. Instruments use 60, 62, 63 and 64 as whole sentences and
+  other items 212 (`cast_spell`). Breath messages are +0xca - 50, i.e. 78-97.
+- FIGHTMSG 65-71 (未使用, 65 without a terminator in the original), 61 and 74 are
+  never printed: no record's verb byte, no party verb, and no constant in the code
+  reaches them. The English uses 61, 65-71 and 74 for the abilities' targetless verbs
+  (the verbfix work, 2026-10-15); `scripts/re/attackverbs.py` lists every attack, its verb
+  and its template, and writes the verb patches (`binary/*.verbs.json`).
+- **Who an ability hits** (code read 2026-10-15). The ability's spell (attack +6) runs
+  through `cast_spell` with the target `monster_attack_roll` picked from the spell's flags
+  (`spell_flags_table` 0x800d5874). The party is group 0 with a front row (members 0-2)
+  and a back row (3-5). 0x40 (one group) hits a row: the target byte is 0 (front) or, when
+  0x80079c32 and 0x800799e4 are both set (inferred: both rows standing), rand(2), and the
+  handlers (`spell_damage_group` 0x800b0930, `spell_lios` 0x800af924,
+  `status_spell_targets` 0x800b1524) take members 0-2, or 3-5 when it's set. 0x20 (one
+  enemy) hits one member (`monster_target_random`). Neither bit hits the whole party:
+  Tiltowait, Katiqurea and Galtomas hit both rows and group 7, Matokani all six. On the
+  disc: rows for Katino, Melito, Lahalito, Ladalto, Maliqua, Barenes, Lios, Lorks, Masios
+  and Bakadi abilities (most of them); one member for Badi and Labadi (Mictlan, Armor
+  Zombie, Chamiabac, Demon Liche); the whole party for Tiltowait, Katiqurea, Matokani and
+  Galtomas (Greater Golem, Demon Lord, Venus Man Trap, Goblin Canon, Rosea, Gauntlet
+  Zombie, Mother). Seen in a fight: a Ghost's shriek (Lios) hit Venus, Dax and Uranus, and
+  the next one Earth, Mercury and Eve.
+- **Monster names lose their line break in messages** (code read 2026-10-15,
+  rips/agents/namebreaks). The party records (MPT, NPT) store two-word names with {ff21}
+  for the two-line enemy grid. MAIN 0x8001ebf4, which copies a name into a message for
+  {ff13}/{ff18}, keeps the break only when 0x80079a9c has 0x400 (set only by the grid,
+  BATTLE 0x800cdbb8) and otherwise skips both bytes (0x8001efb0-0x8001efd8), so
+  "Arch{ff21}Ninja" printed "ArchNinja". A space before the break fixes the message and
+  leaves the grid as it was (`namefixes.py`, 2026-10-16). The name length that picks
+  FIGHTMSG 150 "{ff13} takes N damage." or 151 (the same with a break after the name) is
+  counted by BATTLE 0x800b4cf0 from the singular slot, skipping the break and counting
+  the space; 10 or more takes 151 (0x800b4450, 0x800b4964, 0x800b12b8). The space moved
+  Arch Ninja, Rage Beast, Orc Knight and Orc Healer to 151, which reads fine ("Orc
+  Knight / takes 14 damage."). Spell damage printed 151 for a short name too ("Kobold /
+  takes 7 damage." after Halito and Badios), so some path picks 151 without measuring;
+  not traced.
 - `battleshow.py` renders any template/verb/noun combination in the real battle box, with
   `--monster NAME` to try other name lengths.
 - NPC parties fight as monsters. The encounter loader (0x80021268) loads the enemy file

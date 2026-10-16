@@ -4716,7 +4716,7 @@
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "Hobgoblin",
                     "addStringTerminator": true
                 },
                 {
@@ -5439,7 +5439,7 @@
                 {
                     "length": 125,
                     "source": "NA",
-                    "translation": "A kind of lesser\ndemon whose body is\nmade of smoke, so\nswords barely harm\nit. Best to attack\nwith spells before it\ncalls for help.",
+                    "translation": "A kind of lesser\ndemon whose body is\nmade of smoke, which\nshrugs off alchemy\nbut not a sword. Best\nto finish it off\nbefore it calls for\nhelp.",
                     "addStringTerminator": true
                 },
                 {
