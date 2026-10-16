@@ -749,6 +749,19 @@ patches in `asm/`.
   (1-9%). Each picture is a copy of the panel's parchment with the item on it, so only
   the item is moved or scaled and it goes back onto the bare parchment
   (`graphics/item_panel_bg.png`); scaling the whole picture misaligned the texture.
+- **The catalog's name list reads its names one after another** (2026-10-16, the
+  namefix work). ITEM.DAT section 5 (0x5c234a, after a u16 block size 0x1979) is 349
+  u32 offsets, then the names. JOUKA 0x800e1d20 walks the file's blocks by their u16
+  sizes, copies the block (0x80024c40), takes only the first offset, and reads the names
+  in turn up to each {ff40} (0x800e4570). The other offsets aren't used there. So the
+  names must stay in order with nothing between them. Pointing a repeated name (KATANA,
+  STAFF...) at an earlier copy dropped a string from the run, and the last read ran off
+  the list into section 6: the catalog went black and the CPU sat in the exception
+  handler. A byte left after a shortened name is read as the start of the next one:
+  the IRON GLOVES fix left a 00 after it, and the Hats list showed "0FEATHERED CAP"
+  (glyph 00 draws as 0) until `namefixes.py` repacked the list.
+  `rips/agents/namefix/` in the namefix worktree has the coverage diff and the variants
+  tried.
 
 ### Battle text and monster files
 
@@ -798,6 +811,20 @@ patches in `asm/`.
   Galtomas (Greater Golem, Demon Lord, Venus Man Trap, Goblin Canon, Rosea, Gauntlet
   Zombie, Mother). Seen in a fight: a Ghost's shriek (Lios) hit Venus, Dax and Uranus, and
   the next one Earth, Mercury and Eve.
+- **Monster names lose their line break in messages** (code read 2026-10-15,
+  rips/agents/namebreaks). The party records (MPT, NPT) store two-word names with {ff21}
+  for the two-line enemy grid. MAIN 0x8001ebf4, which copies a name into a message for
+  {ff13}/{ff18}, keeps the break only when 0x80079a9c has 0x400 (set only by the grid,
+  BATTLE 0x800cdbb8) and otherwise skips both bytes (0x8001efb0-0x8001efd8), so
+  "Arch{ff21}Ninja" printed "ArchNinja". A space before the break fixes the message and
+  leaves the grid as it was (`namefixes.py`, 2026-10-16). The name length that picks
+  FIGHTMSG 150 "{ff13} takes N damage." or 151 (the same with a break after the name) is
+  counted by BATTLE 0x800b4cf0 from the singular slot, skipping the break and counting
+  the space; 10 or more takes 151 (0x800b4450, 0x800b4964, 0x800b12b8). The space moved
+  Arch Ninja, Rage Beast, Orc Knight and Orc Healer to 151, which reads fine ("Orc
+  Knight / takes 14 damage."). Spell damage printed 151 for a short name too ("Kobold /
+  takes 7 damage." after Halito and Badios), so some path picks 151 without measuring;
+  not traced.
 - `battleshow.py` renders any template/verb/noun combination in the real battle box, with
   `--monster NAME` to try other name lengths.
 - NPC parties fight as monsters. The encounter loader (0x80021268) loads the enemy file
