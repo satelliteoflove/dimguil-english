@@ -334,7 +334,7 @@
                 {
                     "length": 14,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "GIANT'S AXE",
                     "addStringTerminator": true
                 },
                 {
@@ -346,7 +346,7 @@
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "DEVIL'S STICK",
                     "addStringTerminator": true
                 },
                 {
@@ -916,7 +916,7 @@
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "DAMAGED GLOVES",
                     "addStringTerminator": true
                 },
                 {
@@ -2950,7 +2950,7 @@
                 {
                     "length": 7,
                     "source": "NA",
-                    "translation": "AXE OF GIANT'S",
+                    "translation": "GIANT'S AXE",
                     "addStringTerminator": true,
                     "compress": true
                 },
@@ -2964,7 +2964,7 @@
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "DEVILS STICK",
+                    "translation": "DEVIL'S STICK",
                     "addStringTerminator": true,
                     "compress": true
                 },
@@ -4381,7 +4381,7 @@
                 {
                     "length": 9,
                     "source": "NA",
-                    "translation": "DEVILS STICK",
+                    "translation": "DEVIL'S STICK",
                     "addStringTerminator": true,
                     "compress": true
                 },
@@ -6359,7 +6359,7 @@
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff22}GIANT'S AXE",
                     "addStringTerminator": true
                 },
                 {
@@ -6371,7 +6371,7 @@
                 {
                     "length": 14,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff22}DEVIL'S STICK",
                     "addStringTerminator": true
                 },
                 {
@@ -6941,7 +6941,7 @@
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "{ff22}DAMAGED\nGLOVES",
                     "addStringTerminator": true
                 },
                 {

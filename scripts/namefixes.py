@@ -85,8 +85,12 @@ UNIDENTIFIED = {
 # takes the room from the space before a break, which the catalog never shows:
 # BREASTPLATE, FAERIE'S and GLOVE OF drop theirs, and GLOVE OF THE DEAD's three extra
 # letters come from the three robes after it. PRIEST'S MACE's apostrophe uses the byte
-# IRON GLOVES gave up. See item_list() for how the list is read.
+# IRON GLOVES gave up. GIANT'S AXE, one line like GIANT'S CLUB, frees six bytes, which
+# DEVIL'S STICK and DAMAGED GLOVES take. See item_list() for how the list is read.
 ITEM_DAT = 'DATA07/ITEM.DAT', [
+    ("AXE OF {ff21}GIANT'S", "GIANT'S AXE"),
+    ('DEVILS STICK', "DEVIL'S STICK"),
+    ('HURT GLOVES', 'DAMAGED GLOVES'),
     ('DISPLASER {ff21}ROBE', 'DISPLACER {ff21}ROBE'),
     ('B-PLATE OF {ff21}GOODNESS', 'BREASTPLATE{ff21}OF BOONS'),
     ('STEEL GLOVES', 'IRON GLOVES'),

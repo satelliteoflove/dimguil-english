@@ -477,6 +477,19 @@ The preferred fix is a close-to-literal reading, fitted to the box.
     stabs Jupiter with SHORT SWORD."), through `scripts/re/attackverbs.py`'s MELEE table.
   Shots: `docs/shots/name-fixes/` (fights forced and items placed through RAM to set
   them up; no text was written).
+- **Three more item names (Chris, 2026-10-16).** From the chapter 1-13 text check
+  (`textcheck-c1-13.md`, item 14); Bartok's Trading Post finds each only in Dimguil.
+  - AXE OF GIANT'S (巨人の斧) is now GIANT'S AXE, matching GIANT'S CLUB (巨人の棍棒),
+    one line everywhere as that one is.
+  - DEVILS STICK (悪魔の小杖) is now DEVIL'S STICK, as DEMON'S STAFF and DEVIL'S DRUM
+    are spelled. DEMONS TOOTH stays: that's Wizardry VI's own spelling.
+  - HURT GLOVES (傷ついた小手, "damaged gauntlets") is now DAMAGED GLOVES, the two-line
+    form DAMAGED / GLOVES. This is a rename, not a typo fix: players looking it up in
+    most Dimguil item lists online will find it as HURT GLOVES.
+  - Copies changed: I_NAME_E 54, 56, 151, the two-line forms 993, 995, 1090, and the
+    attack nouns 481, 483, 686; the card game's MESSAGE.DAT 794, 796, 891; ITEM.DAT's
+    catalog list. GIANT'S AXE gives up five bytes in each packed list, which the other
+    two take.
 
 ### Game bug fixes (2026-10-11)
 

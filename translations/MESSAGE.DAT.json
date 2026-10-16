@@ -5736,7 +5736,7 @@
                 {
                     "length": 16,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "GIANT'S AXE",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -5750,7 +5750,7 @@
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "DEVIL'S STICK",
                     "compress": null,
                     "addStringTerminator": true
                 },
@@ -6415,7 +6415,7 @@
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "",
+                    "translation": "DAMAGED GLOVES",
                     "compress": null,
                     "addStringTerminator": true
                 },
