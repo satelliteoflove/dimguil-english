@@ -832,8 +832,13 @@ def default_policy(g, m, opts):
     # too (n1v6t chapter 14: Area D's human parties, Blaze's Tiltowait and the
     # MadPsionic's Lasios and Galtomas, wiped the party as random fights)
     casters_boss = boss or (CASTER_BOSS and big and any(tactics.kill_rank(v, KILL_FIRST) == 0 for v in M.values()))
-    # (support) a boss's buffs and debuffs, unless the plain plan wins quickly anyway
-    sup = support_plan(g, M) if SUPPORT and boss and M else None
+    # (support) buffs and debuffs only in the special fights (Chris, 2026-10-16): a story or
+    # boss fight met outside a training trip (or on a chapter's BOSS_AT square), or one rated
+    # a likely loss; ordinary fights, a training trip's fixed fight squares and fights merely
+    # going badly (losing) play as before. And not when the plain plan wins quickly anyway.
+    special = SUPPORT and bool(M) and (why == 'story' and (not tactics.TRAINING or tactics.at_boss(g))
+                                       or bool(FIGHT_INFO.get('likely_loss')))
+    sup = support_plan(g, M) if special else None
     if sup and sup['quick']:
         sup = None
     # heal: (d) a member who couldn't survive another hit of the worst monster that
@@ -901,7 +906,7 @@ def default_policy(g, m, opts):
                     CAST[('cure', k)] = ROUND
                     c = by_id[sid]
                     return ('spell', sid, c[1], c[2], c[3], ('member', k))
-            if SUPPORT and st & 0x28 and USE in opts and CAST.get(('cure', k), 0) < ROUND:
+            if special and st & 0x28 and USE in opts and CAST.get(('cure', k), 0) < ROUND:
                 # (support) a Dialko potion or a Madi or Morfis item on the paralyzed or
                 # asleep, where this member has no spell for it (crystal_policy's Thief)
                 act = cure_item_choice(g, ri, k, sids=(tactics.DIALKO,) + gear_cures(), harm=False)
@@ -946,12 +951,13 @@ def default_policy(g, m, opts):
                 if v > 0:
                     (finish if capped else cands).append((v, ('spell', sid, sch, lv, c[3], ('group', k)), (sid, k), lv))
         elif casters_boss and sid == tactics.CORTU and tactics.CORTU_SCREEN:
-            v = tactics.cortu_value(g, M, me['level'], max(tactics.CORTU_ROUNDS, sup['horizon']) if sup else None)
+            v = (tactics.cortu_value(g, M, me['level'], max(tactics.CORTU_ROUNDS, sup['horizon']), drain=True) if sup
+                 else tactics.cortu_value(g, M, me['level']))
             if v > 0 and M:
                 cands.append((v, ('spell', sid, sch, lv, c[3], ('group', min(M))), (sid, None), lv))
-        elif SUPPORT and sid in SUPPORT_SIDS:
+        elif special and sid in SUPPORT_SIDS:
             if sup:
-                sup_ok[sid] = c         # (support) valued in support_cands
+                sup_ok[sid] = c         # (support) valued in support_cands; none in a quick win
         elif boss and sid in (tactics.BAMATU, tactics.MAPORFIC, tactics.CORTU):
             v = tactics.support_value(g, sid, M, CAST, party_hp)
             if v > 0 and M:
@@ -1362,7 +1368,7 @@ def support_plan(g, M):
     R = _sim(g, mem, M, None)
     plan = dict(R=round(R, 1), quick=R <= SUPPORT_QUICK, stacks={})
     if not plan['quick']:
-        threat = {k: sum(tactics.danger_of(M[k]) for _ in M[k]['mons']) for k in M}
+        threat = {k: (tactics.danger_of(M[k]) + M[k].get('threat_drain', 0.0)) * len(M[k]['mons']) for k in M}
         for k in sorted(M):
             if not any(x['own'] == k for x in mem) or not any(x['deb'] or x['items'] for x in mem):
                 continue

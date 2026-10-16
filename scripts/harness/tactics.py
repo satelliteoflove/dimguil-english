@@ -196,18 +196,20 @@ def info(g, k):
         death = any(sid in DEATH for _, sid in sts)
         threat = p_fight * melee_round + p_dmg * spell_round + p_breath * breath_one * ROW
         threat_spell = p_dmg * spell_round
+        threat_drain = 0.0
         if DRAIN_THREAT and any(sid in DRAIN for _, sid in dmg + sts):
             # (support) Labadi takes nearly all of one member's HP (ch16 t1: 297, 287 and 281
             # off Uranus) and isn't in DAMAGE, so the Crystal Men's spells rated nothing and
             # Cortu stayed home: DRAIN's share of the party's mean max HP a cast, in whichever
-            # spell column the record has it (damage, entry 0, or status, entry 1)
+            # spell column the record has it (damage, entry 0, or status, entry 1). Kept out
+            # of threat, so the fight ratings (matters, likely_loss) are as they were; only
+            # battle's support plan counts it (casting_danger drain=True)
             hp_m = [g.char(i)['max_hp'] for i in g.party()]
             mean_hp = sum(hp_m) / len(hp_m) if hp_m else 0
             tot_s = sum(pr for pr, _ in sts) or 1
             d_round = (p_dmg * sum(pr / tot * DRAIN[sid] for pr, sid in dmg if sid in DRAIN)
                        + p[5] * sum(pr / tot_s * DRAIN[sid] for pr, sid in sts if sid in DRAIN)) * mean_hp
-            threat += d_round
-            threat_spell += d_round
+            threat_drain = d_round
         if death and DEATH_THREAT:
             # (agent 14) a death spell takes a whole member: its status column's chance of
             # one, at DEATH_LANDS, times the party's mean max HP (n1v0 chapter 10: the
@@ -240,6 +242,7 @@ def info(g, k):
         p_status = p[5] if sts else 0.0
         spells = {sid for _, sid in dmg + sts} | {src[1] for _, src, _ in dsrc if src[0] == 'spell'}
     else:
+        threat_drain = 0.0
         dsrc, dcast, fight_p = [], [], 1.0
         sts, p_status, spells = [], 0.0, set()
         threat_spell = 8 * lv if caster else 0
@@ -255,7 +258,7 @@ def info(g, k):
                 flags=struct.unpack_from('<I', r, 0xa8)[0],
                 resist=struct.unpack_from('<H', r, 0xcc)[0],
                 weak=struct.unpack_from('<H', r, 0xce)[0], caster=caster, threat=threat, threat_spell=threat_spell,
-                threat_death=threat_death,
+                threat_death=threat_death, threat_drain=threat_drain,
                 blow=(blow_f, blow_b), death=death, dsrc=dsrc, dcast=dcast, fight_p=fight_p, dis_hp=0.0, dis_hp_spell=0.0,
                 para=para_caster(dsrc, dmg + sts if SPELLS_ON else []),
                 gdmg=any(sid in DAMAGE and DAMAGE[sid][1] != 'one' for _, sid in (dmg if SPELLS_ON else [])),
@@ -731,6 +734,14 @@ TRAINING = False        # chapters.train: a training trip, home walk included
 BOSS_AT = set()
 
 
+def at_boss(g):
+    """The party stands on a chapter's boss square (BOSS_AT)."""
+    if not BOSS_AT:
+        return False
+    from harness import maze
+    return (g.u8(maze.AREA),) + tuple(g.pos()) in BOSS_AT
+
+
 def story_fight(g):
     """A fixed fight met outside a training trip and off the floor's fight squares (the
     site's event type 0x14): a story or boss fight. Chris, 2026-10-14: the training
@@ -1049,7 +1060,7 @@ def screen_now(g):
     return g.u8(PARTY_SCREEN) if s is None else s
 
 
-def casting_danger(M):
+def casting_danger(M, drain=False):
     """Hit points a round the monsters' spells cost the party, from the monsters that can
     cast now (not asleep, paralyzed or silenced): caster_danger each, with its death
     spells' part counted 1 + DEATH_EXTRA times: a member killed loses their turns for the
@@ -1057,18 +1068,20 @@ def casting_danger(M):
     t = 0.0
     for m in M.values():
         act = [j for j, _, st in m['mons'] if st < 8 and j not in m.get('silenced', ())]
-        t += (caster_danger(m) + DEATH_EXTRA * m.get('threat_death', 0.0)) * len(act)
+        t += (caster_danger(m) + DEATH_EXTRA * m.get('threat_death', 0.0)
+              + (m.get('threat_drain', 0.0) if drain else 0.0)) * len(act)
     return t
 
 
-def cortu_value(g, M, clevel, rounds=None):
+def cortu_value(g, M, clevel, rounds=None, drain=False):
     """rounds: the rounds the screen is counted over (CORTU_ROUNDS; battle's support plan
-    passes the fight's expected length, since the screen lasts the fight)."""
+    passes the fight's expected length, since the screen lasts the fight); drain: Labadi
+    counts (casting_danger)."""
     s = screen_now(g)
     gain = min(SCREEN_CAP, 0.75 * s + 2 * clevel) - s
     if gain <= 0:
         return 0.0
-    return gain / 100 * casting_danger(M) * (CORTU_ROUNDS if rounds is None else rounds)
+    return gain / 100 * casting_danger(M, drain) * (CORTU_ROUNDS if rounds is None else rounds)
 
 
 def melee_in(g, M, pmod=None, mapo=None):
