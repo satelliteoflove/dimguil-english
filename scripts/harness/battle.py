@@ -1020,6 +1020,157 @@ def default_policy(g, m, opts):
     return ('parry',) if PARRY in opts else ('first',)
 
 
+# (chapter 16) fight-specific policies by the square the fight starts on (area, x, y):
+# battle.fight uses one in place of default_policy there, while FIGHT_POLICIES is on
+FIGHT_POLICIES = True
+POLICY_AT = {}
+
+# (chapter 16) the Crystal Men at Area A B2's altar: AC -30, Mage 30% / Priest 70%
+# resistant, death-immune, five 6-swing eye beams (25% decapitation) and 3-swing hand rays
+# (40% paralysis) that reach the back row, Labadi. Party to-hit on group 1 is
+# T = 50 + AC modifier - to-hit, held to 19 (5% a swing): Dax (28) needs the modifier
+# below -3 to hit more, Uranus (24) below -7. Each Morlis (-4 a monster, Mage, nullified
+# per monster) or Dilto (-2, never nullified) past that adds 10-20% a swing for the three
+# front-liners for the rest of the fight. Monster to-hit on the party is
+# 11 - AC + AC modifier with Maporfic on, also held to 19: Bamatu (+3) until every member
+# is at the cap; past it, nothing lowers their hits further. So: stack the AC
+# modifier down, keep the magic screen (Cortu) up against Labadi, Madi the Labadi'd and
+# the paralyzed, potions of Dial (Dialko) from the Thief.
+CM_STACK_TO = -24       # stack Morlis/Dilto until the standing monsters' mean modifier is this
+CM_CORTU_BELOW = 50     # a Cortu when the party's screen (this round's casts counted) is below this
+CM_CORTU_FIRST = 1      # Venus opens with Cortu
+CM_HEAL_HP = 30         # Madi a member at or below this many HP (or CM_HEAL_FRAC of max)
+CM_HEAL_FRAC = 0.3
+CM_MAPOBA = 1           # the Thief reads the Scroll of Mapoba in round 1
+CM_MORLIS = 1           # Morlis before Dilto (0: Dilto only)
+CM_VENUS_AFTER = 'fight'  # Venus once the stack is done: 'fight' or 'spell' (Madalto)
+CM_PARTY_CAP = 1        # Bamatu until every member's monster to-hit threshold is held to 19
+CM_PLAN = dict(round=None, mod=0.0, screen=None)
+
+
+def _cm_mods(g, k):
+    """[(member, HP, AC modifier)] of group k's standing monsters."""
+    out = []
+    for j, h, st in tactics.info(g, k)['mons']:
+        c = g.e.read(COMBAT + k * 0x7e + j * 0xe, 0xe)
+        out.append((j, h, struct.unpack_from('<b', c, 4)[0]))
+    return out
+
+
+def _cm_party_mod(g, s):
+    return struct.unpack_from('<b', g.e.read(COMBAT + s * 0xe, 0xe), 4)[0]
+
+
+def crystal_policy(g, m, opts):
+    """The Crystal Men's fight (chapter 16): see CM_STACK_TO and the notes above it.
+    Anything it has no rule for goes to default_policy."""
+    ids = party_ids(g)
+    ri = ids[m]
+    me = g.char(ri)
+    M = {k: tactics.info(g, k) for k in tactics.groups(g)}
+    M = {k: v for k, v in M.items() if v['mons']}
+    if not M:
+        return default_policy(g, m, opts)
+    k = min(M)
+    mods = _cm_mods(g, k)
+    if CM_PLAN['round'] != ROUND:
+        CM_PLAN.update(round=ROUND, mod=0.0, screen=g.u8(tactics.PARTY_SCREEN), bamatu=0)
+        FIGHT_INFO.setdefault('cm', []).append(dict(
+            r=ROUND, mons=[(h, a) for _, h, a in mods], screen=g.u8(tactics.PARTY_SCREEN),
+            party=[(member_state(g, s)[0], member_state(g, s)[1], _cm_party_mod(g, s))
+                   for s, r_ in enumerate(ids) if r_ is not None]))
+    cast = castable(g, ri) if SPELL in opts else []
+    by_id = {c[0]: c for c in cast}
+
+    def spell(sid, target):
+        c = by_id[sid]
+        CAST[sid] = CAST.get(sid, 0) + 1
+        return ('spell', sid, c[1], c[2], c[3], target)
+    mean_mod = sum(a for _, _, a in mods) / len(mods) + CM_PLAN['mod']
+    # members: (slot, HP, status, max HP, AC) for the living
+    party = []
+    for s, r_ in enumerate(ids):
+        if r_ is None:
+            continue
+        h, st = member_state(g, s)
+        if st & 0x3c0 or h <= 0:
+            continue
+        c_ = g.char(r_)
+        party.append((s, h, st, c_['max_hp'], struct.unpack_from('<b', c_['raw'], 0x86)[0]))
+    mapo = 2 if g.u8(MAPORFIC_ON) else 0
+    # the members a monster's swing still hits more than 5% of the time
+    uncapped = [s for s, h, st, mx, ac in party
+                if 22 + mapo - ac + _cm_party_mod(g, s) + 3 * CM_PLAN['bamatu'] - 13 < 19]
+    low = sorted((h / mx, s) for s, h, st, mx, ac in party
+                 if (h <= CM_HEAL_HP or h <= CM_HEAL_FRAC * mx) and CAST.get(('healed', s), -1) != ROUND)
+    para = [s for s, h, st, mx, ac in party if st & 0x28 and CAST.get(('cure', s), -1) != ROUND]
+    is_cls = me['cls']
+    # the healer (a Priest): Madi on the most hurt, then the paralyzed (Dialko, Madi, the
+    # Staff of Curing's Morfis for two or more), then Bamatu to the cap
+    if is_cls == 2:
+        if low and 36 in by_id:
+            CAST[('healed', low[0][1])] = ROUND
+            CAST[('cure', low[0][1])] = ROUND
+            return spell(36, ('member', low[0][1]))
+        if len(para) >= 2 and USE in opts:
+            for it in item_options(g, ri):
+                if it['sid'] == 56:
+                    for s in para:
+                        CAST[('cure', s)] = ROUND
+                    return ('use', it['idx'], 56, it['id'], ('group', k))
+        if para:
+            for sid in (tactics.DIALKO, tactics.MADI):
+                if sid in by_id:
+                    CAST[('cure', para[0])] = ROUND
+                    return spell(sid, ('member', para[0]))
+        if CM_PARTY_CAP and uncapped and tactics.BAMATU in by_id:
+            CM_PLAN['bamatu'] += 1
+            return spell(tactics.BAMATU, ('group', k))
+        return ('fight',) if FIGHT in opts else ('parry',)
+    # the Thief: Mapoba in round 1, then Dialko potions on the paralyzed
+    if is_cls == 3:
+        its = item_options(g, ri) if USE in opts else []
+        if CM_MAPOBA and not CAST.get('cm_mapoba'):
+            for it in its:
+                if it['sid'] == 70:
+                    CAST['cm_mapoba'] = 1
+                    CM_PLAN['mod'] -= 2
+                    return ('use', it['idx'], 70, it['id'], ('group', k))
+        if para:
+            for it in its:
+                if it['sid'] == tactics.DIALKO:
+                    CAST[('cure', para[0])] = ROUND
+                    return ('use', it['idx'], it['sid'], it['id'], ('member', para[0]))
+        return ('parry',) if PARRY in opts else ('first',)
+    # the mages (Venus, Eve): Cortu below CM_CORTU_BELOW, the AC stack, then damage
+    if by_id and any(sid in by_id for sid in (tactics.CORTU, tactics.MORLIS, tactics.DILTO)):
+        scr = CM_PLAN['screen']
+        first_cortu = CM_CORTU_FIRST and ROUND == 1 and is_cls != 0xb
+        if tactics.CORTU in by_id and (first_cortu or scr < CM_CORTU_BELOW):
+            CM_PLAN['screen'] = min(90, 0.75 * scr + 2 * me['level'])
+            return spell(tactics.CORTU, ('group', k))
+        # the Bishop: Bamatu when the healer can't (dead) and the party isn't capped
+        if is_cls == 0xb and CM_PARTY_CAP and uncapped and tactics.BAMATU in by_id and not any(
+                g.char(ids[s])['cls'] == 2 for s, *_ in party):
+            CM_PLAN['bamatu'] += 1
+            return spell(tactics.BAMATU, ('group', k))
+        if mean_mod > CM_STACK_TO:
+            if CM_MORLIS and tactics.MORLIS in by_id:
+                CM_PLAN['mod'] -= 4 * (1 - M[k]['mr'][0] / 100)
+                return spell(tactics.MORLIS, ('group', k))
+            if tactics.DILTO in by_id:
+                CM_PLAN['mod'] -= 2
+                return spell(tactics.DILTO, ('group', k))
+        if m < 3 and CM_VENUS_AFTER == 'fight' and FIGHT in opts:
+            return ('fight',)
+        for sid in (13, 10, 9):          # Madalto, Lahalito, Tzalik
+            if sid in by_id:
+                return spell(sid, ('group', k))
+    if FIGHT in opts:
+        return ('fight',)
+    return default_policy(g, m, opts)
+
+
 def heal_worth(g, M, party, by_id):
     """(bossfight) The heal worth a turn in a fight that matters, or None: for the most
     hurt member likely to die this round (HP at or below tactics.incoming), the cheapest
@@ -1798,6 +1949,7 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
     FIGHT_INFO.pop('heals', None)
     for k_ in [k_ for k_ in FIGHT_INFO if isinstance(k_, tuple) and k_[0] == 'long'] + ['long', 'focus']:
         FIGHT_INFO.pop(k_, None)
+    FIGHT_INFO.pop('cm', None)
     msg0 = len(g.cap.messages) if g.cap else 0
     # (nodead) who started the fight dead, stoned, ashed, lost, paralyzed or poisoned
     # (Chris, 2026-10-15: the party shouldn't carry on with them; harness/nodead.py)
@@ -1805,6 +1957,8 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
                  if g.char(ri)['status'] & OUT_BITS]
     tactics.STORY[0] = None
     where = (g.u8(MAZE_AREA),) + tuple(g.pos())
+    if FIGHT_POLICIES and policy is default_policy and where in POLICY_AT:
+        policy = POLICY_AT[where]
     _vrng.seed(VARY * 7919 + 1)
     chest_result = None
     chest_mark = len(g.cap.messages) if g.cap else 0
@@ -1889,7 +2043,7 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
                 break
             g.step()
     return dict(rounds=rounds, frames=g.frame - f0, actions=log, ovl=g.overlay(), chest=chest_result,
-                where=where, story=tactics.STORY[0],
+                where=where, story=tactics.STORY[0], policy=policy.__name__, cm=FIGHT_INFO.get('cm'),
                 matters=FIGHT_INFO['matters'], casts=list(FIGHT_INFO['casts']),
                 ran=sum(1 for a in log if a[1] == 'run'),
                 runs=FIGHT_INFO.get('runs', []), runs_skipped=FIGHT_INFO.get('runs_skipped', []), likely_loss=FIGHT_INFO.get('likely_loss'), loss_rounds=FIGHT_INFO.get('loss_rounds', []), long=FIGHT_INFO.get('long'), focus=FIGHT_INFO.get('focus'),

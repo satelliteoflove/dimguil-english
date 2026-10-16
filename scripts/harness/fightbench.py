@@ -20,7 +20,11 @@ whether the fight is fixed and fleeable.
 run: one line per (state, seed): won, rounds, the party's spell points spent, HP lost,
 members down or dead, runs, casts, and the round the last caster group fell. SET=K=V,...
 sets battle/tactics flags first (ints, or floats with a dot). HARNESS= picks the harness
-copy (default: this one).
+copy (default: this one). CHAPTER=N imports chapterN first (its BOSS_AT and POLICY_AT
+registrations); TEXT=1 keeps each fight's FIGHTMSG lines in the output.
+
+goalfight: a chapter goal run from a goal state, stopped at its first boss or story
+fight, whose start is saved to OUTREL (goalfight STATE OUTREL SEED CHAPTER GOAL).
 """
 import json, os, struct, sys, random
 H = os.environ.get('HARNESS', os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
@@ -128,6 +132,7 @@ def run_one(g, st, seed):
     load(g, st)
     if seed:
         g.e.write(0x80079a34, struct.pack('<I', random.Random(seed).getrandbits(32)))
+    msg0 = len(g.cap.messages) if g.cap else 0
     if not to_command(g):
         return dict(state=st, seed=seed, skip='no command phase')
     ids = battle.party_ids(g)
@@ -165,7 +170,10 @@ def run_one(g, st, seed):
                 heals=battle.FIGHT_INFO.get('heals'),
                 ll=bool(res['likely_loss']), matters=res['matters'], story=res['story'],
                 why=(res.get('first') or {}).get('why'),
-                acts=[a for a in res['actions'] if a[1] in ('spell', 'fight', 'aim', 'run', 'parry', 'use', 'dispel')])
+                acts=[a for a in res['actions'] if a[1] in ('spell', 'fight', 'aim', 'run', 'parry', 'use', 'dispel')],
+                policy=res.get('policy'), cm=res.get('cm'),
+                text=[battle._flat(x['text']) for x in g.cap.messages[msg0:]
+                      if x['file'] == 'FIGHTMSG.OBJ'] if os.environ.get('TEXT') and g.cap else None)
 
 
 def caster_group(m):
@@ -214,6 +222,46 @@ def prefight(g, state, outrel, seed, chapter, name):
         for x in r.log[l0:]:
             f.write(json.dumps(x, default=str)[:20000] + '\n')
     print(res, n[0], 'fights')
+
+
+class _AtFight(Exception):
+    pass
+
+
+def goalfight(g, state, outrel, seed, chapter, goal):
+    """A chapter goal run from a goal state (as run_chapter --from runs it), stopped at its
+    first fight that counts as a boss or story fight there (tactics.BOSS_AT, a fixed grid):
+    the state at the fight's start goes to rips/harness/OUTREL.state (chapter 16's Crystal
+    Men: goalfight ch16/c16v1b/goal_01_hidden_door ch16/bench/cm_pre 1 16 gold_stone)."""
+    import importlib
+    from harness import chapters
+    load(g, state)
+    if seed:
+        g.e.write(0x80079a34, struct.pack('<I', random.Random(seed).getrandbits(32)))
+    importlib.import_module('harness.chapter%d' % chapter)
+    r = chapters.Run(g, seed=seed, variant=0, out=os.path.dirname(outrel), auto_cases=False)
+    r.retries = 1
+    r.chapter = chapter
+    base = state[:-6] if state.endswith('.state') else os.path.join(OUT, state)
+    r.ckpt = base
+    r.full_points = chapters.load_points(g, base)
+    fns = dict(chapters.CHAPTERS[chapter]().goals(r))
+    orig = battle.fight
+
+    def fight(g_, *a, **k):
+        tactics.STORY[0] = None
+        if tactics.story_fight(g_):
+            g_.save(outrel)
+            raise _AtFight()
+        return orig(g_, *a, **k)
+    battle.fight = fight
+    try:
+        fns[goal]()
+        print('goal ended with no boss fight')
+    except _AtFight:
+        print('saved', outrel, 'at', (g.u8(0x8007e844),) + tuple(g.pos()), 'maporfic', g.u8(battle.MAPORFIC_ON))
+    finally:
+        battle.fight = orig
 
 
 def table(d, by_state=False):
@@ -270,7 +318,15 @@ if __name__ == '__main__':
         # prefight STATE OUTREL SEED CHAPTER [NAME]
         prefight(g, sys.argv[2], sys.argv[3], int(sys.argv[4]), int(sys.argv[5]),
                  sys.argv[6] if len(sys.argv) > 6 else 'train')
+    elif sys.argv[1] == 'goalfight':
+        # goalfight STATE OUTREL SEED CHAPTER GOAL
+        goalfight(g, sys.argv[2], sys.argv[3], int(sys.argv[4]), int(sys.argv[5]), sys.argv[6])
     elif sys.argv[1] == 'run':
+        if os.environ.get('CHAPTER'):
+            # the chapter's own registrations (tactics.BOSS_AT, battle.POLICY_AT)
+            import importlib
+            importlib.import_module('harness.chapter%s' % os.environ['CHAPTER'])
+            apply_set()
         out, ss = sys.argv[2], seeds(sys.argv[3])
         for st in sys.argv[4:]:
             for s in ss:
