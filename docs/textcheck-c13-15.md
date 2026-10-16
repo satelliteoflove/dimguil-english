@@ -79,6 +79,10 @@ FIGHTMSG 188 "{ff13} nullifies\nthe spell." with a 16-letter monster name.
 {ff21} or {ff40}, and add a blank-line check to `fightfit.py`. A text-only fix for 106:
 `{ff18} dispels {ff13}. ({ff11}0 destroyed)`, which lets the word wrap place the count.
 
+**Fixed** (2026-10-15, a1529b7, the proper fix): `asm/word_wrap.asm` doesn't break a full
+line when {ff21} comes next, and `fightfit.py` reports blank lines. Shots:
+`docs/shots/wrap-blank/`.
+
 ### 3. Monster names run together in battle messages (parked item, cause found)
 
 - Printed in these runs: "ArchNinja kicks Venus with its feet.", "ArchPriest casts
