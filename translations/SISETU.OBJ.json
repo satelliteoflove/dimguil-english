@@ -769,7 +769,7 @@
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": "Your pack is full. Swap it for something.",
+                    "translation": "Your pack is full. Choose an item to swap.",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -2121,7 +2121,7 @@
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": "Your pack is full. Swap it for something.",
+                    "translation": "Your pack is full. Choose an item to swap.",
                     "compress": true,
                     "addStringTerminator": true
                 },

@@ -686,6 +686,10 @@ Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
   "Gather gold on this character?" → "Pool all gold on this character?", matching the Pool
   Gold command (SISETU 395, STATUS 93). 159 px, under the 167 px of SISETU 83 in the same
   box.
+- SISETU 112 and 314 (アイテムがいっぱいです。どれかと交換してください, a full pack when an
+  item comes in): "Your pack is full. Swap it for something." → "Your pack is full. Choose
+  an item to swap." The old line read as "go find something"; the game wants one of the
+  pack's items picked to trade out. 210 px against 206.
 
 ## To revisit
 
