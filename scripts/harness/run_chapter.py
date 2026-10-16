@@ -3,6 +3,7 @@
 
     python3 scripts/harness/run_chapter.py NAME --chapters 1-3 [--seed N] [--variant K]
                                            [--from STATE] [--screens DIR] [--no-cases]
+                                           [--battle-rng]
 
 Chapter 1 starts from power-on unless --from is given; a later first chapter needs
 --from (the previous chapter's end state, e.g. chapters/c1v0/c1_end). Outputs go to
@@ -16,8 +17,13 @@ to the live list between suite rounds), not in the live cases.jsonl; --no-cases 
 none. Each battle's BATTLE code is checked once in RAM against the disc under test's
 BATTLE.BIN at the spell-sound fix's 36 words (bugs.md 1.15), so a run from a state made on
 an older disc shows which code its fights ran: result.json 'battle_code'.
+
+From a state, --seed changes nothing: it only times the boot and the character rerolls,
+and the fights roll on battle_rng_state (0x80079a34, docs/engine-notes.md "Randomness"),
+which the state keeps. --battle-rng writes a value from --seed there after loading (as
+fightbench does), so runs from one state with different seeds get different fights.
 """
-import argparse, json, os, sys, time, traceback
+import argparse, json, os, random, struct, sys, time, traceback
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 from harness.game import Game, OUT, DISC
 from harness import chapters, regress
@@ -41,6 +47,8 @@ ap.add_argument('--seed', type=int, default=0)
 ap.add_argument('--variant', type=int, default=0)
 ap.add_argument('--from', dest='src')
 ap.add_argument('--screens')
+ap.add_argument('--battle-rng', action='store_true',
+                help='with --from: seed battle_rng_state from --seed after loading')
 ap.add_argument('--no-cases', action='store_true',
                 help="don't add stuck states to the regression suite (dev runs, old-disc states)")
 ap.add_argument('--shots', default='chapters/shots',
@@ -86,6 +94,8 @@ def check_battle_code():
 g.t.ticks.append(check_battle_code)
 if a.src:
     g.load(a.src)
+    if a.battle_rng:
+        g.e.write(0x80079a34, struct.pack('<I', random.Random(a.seed).getrandbits(32)))
 r = chapters.Run(g, seed=a.seed, variant=a.variant, out=out, auto_cases=not a.no_cases)
 if a.src:
     r.ckpt = a.src
@@ -136,6 +146,7 @@ except Exception as e:
         pass
 res['ok'] = ok
 res['from'] = a.src
+res['battle_rng'] = bool(a.src and a.battle_rng)
 res['chapters_asked'] = [first, last]
 res['wall'] = round(time.time() - t0, 1)
 res['total_frames'] = g.frame
