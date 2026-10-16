@@ -8,7 +8,8 @@ moves an inserted name ({ff13} and friends) to a new line when it won't fit on t
 current one, and with asm/word_wrap.asm it also looks ahead at each space and breaks
 there if the next word won't fit. The layout depends on the lengths of the names, so
 every combination is tried: monster 3-17 ("Skeleton Warriors"), character 1-8, item or
-attack noun 3-18, spell 3-9, number 1-5, and each length the verbs actually have.
+attack noun 3-18, spell 3-9, number 1-5, and each length the verbs actually have (the
+verbs only monster abilities use, in TARGETLESS, are tried in 214 alone).
 Every automatic break replaces a plain space just before it, and a plain space that comes
 straight after a break in plain text is dropped (word_wrap.asm), so neither end of a line
 gets one. Reports messages that can run past 3 lines, split a word (only possible for text
@@ -31,6 +32,9 @@ CAP = 24
 RANGES = {'ff13': range(3, 18), 'ff18': range(1, 9), 'ff12': range(1, 9),
           'ff16': range(3, 10), 'ff14': range(3, 19), 'ff11': range(1, 6)}
 VERBS = range(1, 78)  # FIGHTMSG strings inserted as {ff15}
+# Verbs only monster abilities use, so they only ever appear in 214 "{ff13} {ff15} {ff14}."
+# (scripts/re/attackverbs.py lists who uses which verb in which template).
+TARGETLESS = {46, 61, 65, 66, 67, 68, 69, 70, 71, 74, 76}
 SKIP = {297}
 # a plain space, and the digraphs that end in one (see asm/word_wrap.asm)
 SPACES = set(range(0x8b, 0x93)) | {0xad, 0xae, 0xb2, 0xb7, 0xba}
@@ -105,8 +109,10 @@ def simulate(toks, lens):
 
 def main():
     strings = load_json(os.path.join(ROOT, 'translations/FIGHTMSG.OBJ.json'))['sections'][0]['strings']
-    ranges = dict(RANGES, ff15=sorted({len(descfit.encode(strings[i].get('translation') or ''))
-                                       for i in VERBS} - {0}))
+    def verb_lens(verbs):
+        return sorted({len(descfit.encode(strings[i].get('translation') or '')) for i in verbs} - {0})
+    targeted = dict(RANGES, ff15=verb_lens(set(VERBS) - TARGETLESS))
+    every = dict(RANGES, ff15=verb_lens(VERBS))
     digraphs = '--digraphs' in sys.argv[1:]
     bad = ndig = 0
     for i, s in enumerate(strings):
@@ -114,6 +120,7 @@ def main():
         if i in SKIP or not re.search('[a-z]', text):
             continue
         toks = tokens(text, s.get('compress') is True)
+        ranges = every if i == 214 else targeted
         names = sorted({t[1] for t in toks if t[0] == 'var' and t[1] in ranges})
         hit = None
         for combo in itertools.product(*(ranges[n] for n in names)):

@@ -330,7 +330,7 @@
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "tries to lull",
+                    "translation": "tries to lull them with",
                     "addStringTerminator": true,
                     "compress": true
                 },
@@ -435,7 +435,7 @@
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "{ff18} plays {ff14}.",
+                    "translation": "stares with",
                     "addStringTerminator": true,
                     "compress": true
                 },
@@ -463,49 +463,49 @@
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "-",
-                    "addStringTerminator": false,
-                    "compress": true
-                },
-                {
-                    "length": 6,
-                    "source": "NA",
-                    "translation": "-",
+                    "translation": "fires",
                     "addStringTerminator": true,
                     "compress": true
                 },
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "-",
+                    "translation": "glares at them with",
                     "addStringTerminator": true,
                     "compress": true
                 },
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "-",
+                    "translation": "startles them with",
                     "addStringTerminator": true,
                     "compress": true
                 },
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "-",
+                    "translation": "tries to melt them with",
                     "addStringTerminator": true,
                     "compress": true
                 },
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "-",
+                    "translation": "flashes",
                     "addStringTerminator": true,
                     "compress": true
                 },
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "-",
+                    "translation": "plays",
+                    "addStringTerminator": true,
+                    "compress": true
+                },
+                {
+                    "length": 6,
+                    "source": "NA",
+                    "translation": "throws",
                     "addStringTerminator": true,
                     "compress": true
                 },
@@ -526,7 +526,7 @@
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "buffets",
+                    "translation": "beats",
                     "addStringTerminator": true,
                     "compress": true
                 },
@@ -540,7 +540,7 @@
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "tries to entangle",
+                    "translation": "tries to entangle them in",
                     "addStringTerminator": true,
                     "compress": true
                 },

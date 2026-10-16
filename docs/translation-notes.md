@@ -52,6 +52,38 @@ see all of it.
 - **Battle lines ending in a digraph's space (2026-10-13).** "Giant Ant calls for help! A /
   monster appears." sat 2 px left; a break after "A ", "s " etc. now draws the letter alone (`asm/word_wrap.asm`).
 
+- **Monster abilities with no target (FIGHTMSG 214, 2026-10-15).** A monster's attack
+  verb is written for the targeted line, "Basilisk glares at Venus with its many eyes."
+  (108/109). An ability (a shriek, a dance, a gaze: an attack noun of 683 or more) prints
+  214 instead, "{monster} {verb} {noun}." with nobody named, so the same verbs gave
+  "Ghost startles a shriek.", "Merry Puppet tries to lull a strange dance.", "Were Bat
+  glares at a piercing glare." and "Giant Spider tries to entangle sticky goo.". The
+  Japanese reads fine both ways (ゴースト は 金切り声 で 驚かせた), because the particle
+  sits in the verb. Which template prints is fixed per attack by its noun (code in
+  `engine-notes.md`, "Battle text and monster files"), so the fix is data: the abilities
+  got targetless verbs of their own in FIGHTMSG 61, 65-71 and 74, which the game never
+  printed (65-71 are 未使用), and their verb bytes point there (82 attacks in 69 monster
+  and party files, `binary/*.verbs.json`, written by `scripts/re/attackverbs.py
+  --write`). Verbs 46 and 76 were only ever used by abilities, so they were reworded in
+  place. Against the party most abilities hit one row, a few one member and five the
+  whole party (the table is in `engine-notes.md`), and the line can't say which, so the
+  object is "them", as the Japanese leaves it unsaid. Chris chose "them" over "everyone"
+  (2026-10-15): it's right for a row, and it also reads right when summoned undead or
+  other creatures fight on the party's side. The lines are now "Ghost startles them with
+  a shriek.", "Merry Puppet tries to lull them with a strange dance.", "Wight glares at
+  them with piercing eyes.", "Giant Spider tries to entangle them in sticky goo.",
+  "Smelia tries to melt them with eerie smoke.", "Succubus flashes a sultry look.",
+  "Mictlan stares with hollow eyes." (its Badi hits one member; slot 61), "Greater Golem
+  fires BIG GUN.", "Nex tepehua throws ASH OF CONFUSION.", "Old Drummer beats DEVIL'S
+  DRUM.", "Noisy Tempter plays VIOLIN OF MADNESS." and "Lilia plays LUTE."; Venus Man
+  Trap's pollen uses the existing "sprays" (55), like Fire Rock's red-hot stones. The
+  abilities' glare nouns (I_NAME_E 705, 707, 709, 713, 鋭い目付き) became "piercing
+  eyes", so the line doesn't say glare twice; the melee one, 665 (鋭い目つき, the same
+  word), keeps "a piercing glare" for "Fear glares at Uranus with a piercing glare.". The
+  three instrument attacks had pointed at the party's whole-sentence instrument lines
+  (60, 63, 64); the codes inside them print nothing there, so they read "Noisy Tempter
+  plays . VIOLIN OF MADNESS." and "Lilia strikes up . LUTE.".
+
 - **Inn and Temple lines off center (2026-10-13).** "Not enough gold." sat 9 px left (x fixed for the
   Japanese, `asm/inn_gold_message.asm`); the Temple's chant 10 px (`asm/temple_layout.asm`).
 

@@ -1,0 +1,6 @@
+{
+    "file": "DATA02/MPT02.BIN",
+    "edits": {
+        "10f78": "4a"
+    }
+}

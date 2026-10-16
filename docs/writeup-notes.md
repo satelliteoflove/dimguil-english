@@ -206,6 +206,31 @@ checks found two things the first voicing fix (9a955ba) had left.
   old states, so they had never run MAIN's word wrap fix either ("blow away " kept its
   trailing space there, and not on a cold boot).
 
+**One verb, two sentences (2026-10-15, wt/verbfix).**
+- Seen: "Ghost startles a shriek.", "Were Bat glares at a piercing glare." in bot runs.
+- Cause: a monster's verb is written for "{monster} {verb} {target} with {noun}." (108/109),
+  but an ability (attack noun 683 or more) goes through cast_spell and prints 214,
+  "{monster} {verb} {noun}.", with no target. Japanese hides it: the particle sits in the
+  verb (で 驚かせた). Read in BATTLE: the noun alone decides the path, so no attack prints
+  both. 140 abilities on the disc, 16 verbs; 12 of the verbs read wrong without a target,
+  and three were the party's whole-sentence instrument lines ("Noisy Tempter plays .
+  VIOLIN OF MADNESS.").
+- Fix, data only: targetless verbs in FIGHTMSG 61, 65-71 and 74 (never printed; 65-71
+  are 未使用), 82 verb bytes repointed in 69 files, 46 and 76 reworded in place. The
+  first wording said "everyone"; reading who each ability hits showed most hit one row
+  and some one member, so the object became "them" (Chris's call), with "flashes a
+  sultry look" and "stares with hollow eyes" where no object fits.
+- Checked: battleshow.py for all 22 ability verb/noun pairs at their longest names and at
+  "Skeleton Warrior" (16, the longest); real fights on the built disc (fightshow.py):
+  "Ghost startles them with a shriek." (the front row took damage, the next shriek the
+  back row), and, unchanged, "Fear glares at Uranus with a piercing glare.". Shots in
+  docs/shots/ability-verbs/.
+- Tooling found broken on the way: battleshow.py copied the word wrap's 2026-09 range
+  into old states, which hung the battle on today's build for most combinations; it now
+  needs a state made on the build's code. Forcing a group onto a floor it doesn't
+  belong to hangs the battle's start (phase 4) on the original data too, so real fights
+  start from a harness state on the group's own floor.
+
 ## Working without reading Japanese
 
 - Chris doesn't read Japanese. Each line was shown literally, sentence by sentence,
