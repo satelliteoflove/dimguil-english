@@ -1037,8 +1037,8 @@ POLICY_AT = {}
 # modifier down, keep the magic screen (Cortu) up against Labadi, Madi the Labadi'd and
 # the paralyzed, potions of Dial (Dialko) from the Thief.
 CM_STACK_TO = -24       # stack Morlis/Dilto until the standing monsters' mean modifier is this
-CM_CORTU_BELOW = 50     # a Cortu when the party's screen (this round's casts counted) is below this
-CM_CORTU_FIRST = 1      # Venus opens with Cortu
+CM_CORTU_BELOW = 30     # a Cortu when the party's screen (this round's casts counted) is below this
+CM_CORTU_FIRST = 0      # Venus opens with Cortu (1); 0 opens on the AC stack
 CM_HEAL_HP = 30         # Madi a member at or below this many HP (or CM_HEAL_FRAC of max)
 CM_HEAL_FRAC = 0.3
 CM_MAPOBA = 1           # the Thief reads the Scroll of Mapoba in round 1
