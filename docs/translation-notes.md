@@ -723,6 +723,10 @@ Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
   playing does it, not the instrument alone, and the Japanese names no songs). "and have
   thieving skills" → "and have some thieving skill", the Ranger's (207) wording, since
   their skills fall short of a Thief's (Chris).
+- NPC_MES4 84, Cresson's decipher score (どうやらあなたたちとの適合率は{ff11}0%でしょうか):
+  "Um, you seem to match us at about 0%." read as the people matching, with "about" odd
+  beside an exact figure → "Hmm... it looks like your results / match 0% of ours."
+  (Chris's wording).
 
 ## To revisit
 

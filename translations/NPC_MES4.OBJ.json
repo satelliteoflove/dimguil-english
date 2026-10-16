@@ -515,7 +515,7 @@
                 {
                     "length": 98,
                     "source": "NA",
-                    "translation": "Cresson\n\"The ancient glyphs, is it?\n\r Let me see.\n Shall we compare them with our results?\n\r Um, you seem to match us at about {ff11}0%.\"",
+                    "translation": "Cresson\n\"The ancient glyphs, is it?\n\r Let me see.\n Shall we compare them with our results?\n\r Hmm... it looks like your results\n match {ff11}0% of ours.\"",
                     "addStringTerminator": true
                 },
                 {
