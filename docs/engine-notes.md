@@ -554,6 +554,23 @@ patches in `asm/`.
   digraph (`fightfit.py --digraphs`); no event or NPC text can, since only the battle
   call wraps and no explicit line break in them follows one. FIGHTMSG strings without
   `"compress": true` (0, 103, 113, 214, 255, 264-285, 287) are encoded with no digraphs.
+  A full line with an explicit {ff21} next in the source got the automatic break and then
+  the explicit one, so an empty line sat between ("Earth dispels Noisy Tempter." / "" /
+  "(4 destroyed)", FIGHTMSG 106 with a 5-letter character and a 13-letter monster; 188
+  "{ff13} nullifies\nthe spell." with a 16-letter one). `break_at` now reads the next two
+  source bytes and, if they're {ff21}, goes back to 0x8001e410 with no break; the explicit
+  break then sets the column to 0 (0x8001e160). Only "line full" can get there with
+  {ff21} next: at a space, the lookahead measures an empty word. {ff40} needed nothing:
+  when a message ends at column 0, the function's tail (0x8001e418) backs the buffer up
+  over the last {ff21} and writes the {ff40} there. The name paths can't break before an
+  {ff21} either: the break before a name tests that name, and the break inside one only
+  fires past the line. Room: @check (0x8001e3fc) tests both conditions with one branch
+  (slt, slt, sltu) and loads the source pointer for `break_at` in that branch's delay
+  slot (nothing at 0x8001e410 reads t3, so it's harmless when not taken), which freed the
+  `lw` `break_at` began with; s3 = 0xff and s2 = 0x21 let a bne and a beq test the two
+  bytes with no constants. 0x8001e2fc-0x8001e350 is now full. `fightfit.py` models the
+  rule and reports a blank line (two breaks in a row); 106 and 188 were the only strings
+  that could leave one (2026-10-15).
 
 ### Text buffer
 
