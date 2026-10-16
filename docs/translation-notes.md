@@ -782,6 +782,8 @@ Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
 - NPC_MES4 105, Cleo on Fontana's party (みんな若くて元気いっぱいでしたよ): "All young and
   full of beans." → "They were all young and full of energy.", a full sentence without
   the British idiom (to many Americans "full of beans" means talking nonsense).
+- NPC_MES2 220, Reiran (あたしもがんばろっと): "Okay! Guess I'll try hard too." → "Okay!
+  Guess I'll do my best too.", がんばる as doing her best, in her own light rhythm.
 - SISETU 208, the Bard at creation (楽器を奏でて,呪文と同様の効果を発揮する ... 盗賊技能有り):
   "Instruments that work like spells." had no verb → "Their music works like spells." (the
   playing does it, not the instrument alone, and the Japanese names no songs). "and have
