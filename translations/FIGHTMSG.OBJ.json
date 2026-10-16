@@ -965,7 +965,7 @@
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "{ff18} is drained of {ff11}2 levels.",
+                    "translation": "{ff18} is drained of {ff11}2 level(s).",
                     "compress": true,
                     "addStringTerminator": true
                 },

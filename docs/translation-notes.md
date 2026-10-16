@@ -706,6 +706,10 @@ Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
   → "Heal whom?", one verb for both. Chris: "Help Character" doesn't sound like a temple,
   and raising the dead isn't quite healing either, so "Heal" is the best of the plain
   words for now; a better one for both would be welcome.
+- FIGHTMSG 137 ({ff18}は {ff11}2レベル吸い取られた): "Earth is drained of 1 levels." →
+  "Earth is drained of 1 level(s).". Ruby Hand drains one level, so the singular is the
+  usual case. Chris kept "drained" because level drain is the game's term ("Restore
+  drained levels", "resists level drain"); fightfit passes.
 
 ## To revisit
 
