@@ -77,6 +77,8 @@ DEATH_LANDS = 0.5        # ... landing on about half the casts (save and magic s
 DEATH_REACH = True       # (bossfight) ... Bakadi on every member of a row
 DEATH_EXTRA = 1.0        # (bossfight) killing or screening off a death caster: its deaths count this much again (danger_of, casting_danger)
 HELPLESS_MELEE = True    # (revision 10) Katino and Lorks count the front-liners' extra damage (helpless_bonus)
+DRAIN = {37: 0.75}       # (support) Labadi: the share of a member's max HP one cast takes (it leaves a few)
+DRAIN_THREAT = True      # (support) ... counted in a monster's spell threat (info)
 DEBUFF_MIN = 0.3         # (fix 3) sleep, silence, paralysis only where a monster's chance of being caught is this
 
 
@@ -194,6 +196,18 @@ def info(g, k):
         death = any(sid in DEATH for _, sid in sts)
         threat = p_fight * melee_round + p_dmg * spell_round + p_breath * breath_one * ROW
         threat_spell = p_dmg * spell_round
+        if DRAIN_THREAT and any(sid in DRAIN for _, sid in dmg + sts):
+            # (support) Labadi takes nearly all of one member's HP (ch16 t1: 297, 287 and 281
+            # off Uranus) and isn't in DAMAGE, so the Crystal Men's spells rated nothing and
+            # Cortu stayed home: DRAIN's share of the party's mean max HP a cast, in whichever
+            # spell column the record has it (damage, entry 0, or status, entry 1)
+            hp_m = [g.char(i)['max_hp'] for i in g.party()]
+            mean_hp = sum(hp_m) / len(hp_m) if hp_m else 0
+            tot_s = sum(pr for pr, _ in sts) or 1
+            d_round = (p_dmg * sum(pr / tot * DRAIN[sid] for pr, sid in dmg if sid in DRAIN)
+                       + p[5] * sum(pr / tot_s * DRAIN[sid] for pr, sid in sts if sid in DRAIN)) * mean_hp
+            threat += d_round
+            threat_spell += d_round
         if death and DEATH_THREAT:
             # (agent 14) a death spell takes a whole member: its status column's chance of
             # one, at DEATH_LANDS, times the party's mean max HP (n1v0 chapter 10: the
@@ -472,10 +486,11 @@ def melee_on(g, k, M):
     return sum(member_melee(g, slot, k, M) for slot in range(6))
 
 
-def member_melee(g, slot, k, M=None):
+def member_melee(g, slot, k, M=None, dmod=0):
     """One member's part of melee_on: its expected melee damage a round on group k, 0 when
     it can't act or its weapon doesn't reach k. With M, only when k is also the lowest group
-    its weapon reaches (melee_on's rule); without, any group it reaches (casterfocus)."""
+    its weapon reaches (melee_on's rule); without, any group it reaches (casterfocus).
+    dmod: added to the group's AC modifier (support: what a Morlis or Dilto stack would do)."""
     ri = struct.unpack('<b', g.e.read(PARTY + slot, 1))[0]
     if ri < 0:
         return 0.0
@@ -499,7 +514,7 @@ def member_melee(g, slot, k, M=None):
         reach = weapon_reach(g, r[0x9c + hand], slot)
         if k > reach or M is not None and k != min(x for x in M if x <= reach):
             continue
-        T = min(19, 19 + k - ac + acmod - hit) - b
+        T = min(19, 19 + k - ac + acmod + dmod - hit) - b
         if b and T >= 15:
             T -= 3
         elif b and 13 <= T <= 14:
@@ -1046,12 +1061,67 @@ def casting_danger(M):
     return t
 
 
-def cortu_value(g, M, clevel):
+def cortu_value(g, M, clevel, rounds=None):
+    """rounds: the rounds the screen is counted over (CORTU_ROUNDS; battle's support plan
+    passes the fight's expected length, since the screen lasts the fight)."""
     s = screen_now(g)
     gain = min(SCREEN_CAP, 0.75 * s + 2 * clevel) - s
     if gain <= 0:
         return 0.0
-    return gain / 100 * casting_danger(M) * CORTU_ROUNDS
+    return gain / 100 * casting_danger(M) * (CORTU_ROUNDS if rounds is None else rounds)
+
+
+def melee_in(g, M, pmod=None, mapo=None):
+    """(support) The monsters' expected melee damage on the party a round (monster_melee
+    0x800aaa04, D-battle.md "Melee: monsters attack"): for each monster that can act, its
+    fight share (info fight_p) x each attack's use (attack 1 69% / attack 2 31% when it has
+    one, attack 3 always, 2 harder) x swings (at most 11) x the chance a swing hits x the
+    dice mean, spread evenly over the members it reaches (the front row, or everyone with
+    the reach bit; groups 3-4 of a random fight without reach don't melee). The chance:
+    T = 22 + Maporfic 2 - AC + AC modifier - (level / 2 + 1), 1..19, hits on rand(20) >= T.
+    pmod: {slot: extra AC modifier} (Bamatu +3 each, Porfic +4 the caster); mapo: Maporfic
+    on (True) or off, else as it is."""
+    pmod = pmod or {}
+    on = (g.u8(0x8007e82a) != 0) if mapo is None else mapo
+    tgt = []
+    for slot in range(6):
+        ri = struct.unpack('<b', g.e.read(PARTY + slot, 1))[0]
+        if ri < 0:
+            continue
+        c = g.e.read(COMBAT + slot * 0xe, 0xe)
+        hp, st = struct.unpack_from('<h', c, 6)[0], struct.unpack_from('<H', c, 0xc)[0]
+        if hp <= 0 or st >= 0x80:
+            continue
+        r = g.e.read(ROSTER + ri * ROSTER_LEN, ROSTER_LEN)
+        ac = struct.unpack_from('<b', r, 0x86)[0] - struct.unpack_from('<b', c, 4)[0] - pmod.get(slot, 0)
+        tgt.append((slot, ac))
+    front = [x for x in tgt if x[0] < 3] or tgt
+    tot = 0.0
+    for k, m in M.items():
+        r = rec(g, k)
+        n = len([j for j, _, st in m['mons'] if st < 8])
+        if not n:
+            continue
+        atk = [r[o:o + 10] for o in (0xac, 0xb6, 0xc0)]
+        nouns = [struct.unpack_from('<H', a, 0)[0] for a in atk]
+        ability = [0x100 <= x < 1621 for x in nouns]
+        reach_any = bool((atk[0][7] | atk[1][7]) & BACK_REACH)
+        if k > 2 and not g.u8(FIXED) and not reach_any:
+            continue
+        use1 = ability[1] or (nouns[1] < 0xff or nouns[1] >= 0x8000) and atk[1][3] > 0
+        for i, u in ((0, 0.69 if use1 else 1.0), (1, 0.31 if use1 else 0.0), (2, 1.0 if atk[2][3] else 0.0)):
+            a = atk[i]
+            if not u or ability[i] or not a[3] or not a[4]:
+                continue
+            reach = tgt if a[7] & BACK_REACH else front
+            if not reach:
+                continue
+            dice = a[4] * (a[5] + 1) / 2 + a[6]
+            for slot, ac in reach:
+                T = 22 + (2 if on else 0) - ac - (m['level'] // 2 + 1)
+                T = min(19, max(1, T + (2 if i == 2 and T < 18 else 0)))
+                tot += n * m['fight_p'] * u * min(11, a[3]) * (20 - T) / 20 * dice / len(reach)
+    return tot
 
 
 def cortu_commit(g, clevel):
