@@ -676,6 +676,13 @@ only).
   equipping it. Its hidden power raises Strength itself. It truly lives up to its name."
 - 118 Golden Axe: "Strength and accuracy rise too." → "It also hits harder and truer."
 
+### Text check of bot runs (2026-10-15)
+
+Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
+- FIGHTMSG 18 (を 放った, a ranged weapon type's second verb): "looses at" → "fires at".
+  "Looses" is the archer's word but reads as a typo for "loses"; "shoots" and "takes aim
+  at" already belong to the next weapon type, so "fires at" keeps them apart.
+
 ## To revisit
 
 - **Fontana's maze encounters (3:72, 75, 88, 278).** Same register shift as Balbo's
