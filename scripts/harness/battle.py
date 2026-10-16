@@ -951,7 +951,8 @@ def default_policy(g, m, opts):
                 if v > 0:
                     (finish if capped else cands).append((v, ('spell', sid, sch, lv, c[3], ('group', k)), (sid, k), lv))
         elif casters_boss and sid == tactics.CORTU and tactics.CORTU_SCREEN:
-            v = (tactics.cortu_value(g, M, me['level'], max(tactics.CORTU_ROUNDS, sup['horizon']), drain=True) if sup
+            v = (tactics.cortu_value(g, M, me['level'], min(CORTU_SUP_ROUNDS, max(tactics.CORTU_ROUNDS, sup['horizon'])),
+                                     drain=True) if sup
                  else tactics.cortu_value(g, M, me['level']))
             if v > 0 and M:
                 cands.append((v, ('spell', sid, sch, lv, c[3], ('group', min(M))), (sid, None), lv))
@@ -983,6 +984,20 @@ def default_policy(g, m, opts):
         from harness import gear
         w = gear.equipped(g, ri).get(0)
         fight_v = gear.wscore(w) * 0.5 if w and gear.back_reach(w) else 0
+    if sup and FIGHT_REAL and m < 3 and FIGHT in opts:
+        # (support) once the stack lands a front-liner's blows are worth more than 3 x level
+        # (crystal_policy's Venus fights after the stack)
+        fight_v = max(fight_v, max([tactics.member_melee(g, m, k, M) for k in M] + [0.0]))
+    if sup and sup['stacks'] and STACK_FIRST:
+        # (support) the stack is the plan (support_plan's simulation: it takes rounds off
+        # killing the group), so a stack cast still needed goes ahead of this member's damage
+        # spells and its Fight; Cortu, the party's AC and heals still weigh in by value (the
+        # threat behind the stack's worth leaves out what kills outright, the Crystal Men's
+        # decapitating beams)
+        other = max([c_[0] for c_ in cands if c_[2][0] not in SUPPORT_SIDS and c_[2][0] != tactics.CORTU]
+                    + [fight_v]) + 1
+        cands = [(max(v, other) if STACK_V.get((m, key[0], key[1]), 0) > 0 else v, act, key, lv)
+                 for v, act, key, lv in cands]
     if ITEMS_IN_BATTLE and USE in opts and M:
         best_own = max([c_[0] for c_ in cands] + [fight_v])
         it_act = item_choice(g, ri, me, M, big, best_own)
@@ -1236,6 +1251,10 @@ MAPOBA = 70
 SUPPORT_SIDS = (tactics.BAMATU, tactics.MAPORFIC, tactics.PORFIC, tactics.DILTO, tactics.MORLIS, MAPOBA,
                 tactics.BADUMAS)
 SPLAN = dict(round=None, by={})     # this round's support chosen so far: slot -> (sid, k)
+STACK_V = {}            # (slot, sid, k) -> the AC-stack part of support_value's last rating
+CORTU_SUP_ROUNDS = 5.0  # Cortu's horizon in a support fight at most (test fight: 10 Cortus over 8 rounds)
+FIGHT_REAL = True       # in a support fight a front-liner's Fight is rated at its real melee (member_melee)
+STACK_FIRST = True      # a stack cast the plan wants outranks the member's damage and its Fight
 
 
 def _spell_dmg(g, sid, k, M, clevel):
@@ -1373,7 +1392,10 @@ def support_plan(g, M):
             if not any(x['own'] == k for x in mem) or not any(x['deb'] or x['items'] for x in mem):
                 continue
             f = [sum(v) for v in zip(*[_curve(g, x, k, M) for x in mem if x['own'] == k])]
-            if not f or f[-1] <= 0 or f[0] >= STACK_FLOOR * f[-1]:
+            # a stack begun (on this monster id) goes on to STACK_TO; a new one starts only
+            # near the floor (test fight: it stopped at 67 of 368 once past the floor share)
+            begun = M[k]['id'] in FIGHT_INFO.get('stacked', ())
+            if not f or f[-1] <= 0 or f[0] >= (STACK_TO if begun else STACK_FLOOR) * f[-1]:
                 continue
             target = next(d for d, v in enumerate(f) if v >= STACK_TO * f[-1])
             r0 = _sim(g, mem, M, k)
@@ -1382,6 +1404,7 @@ def support_plan(g, M):
             if saved < STACK_SAVE or target <= 0:
                 continue
             worth = saved * (STACK_LEFT * threat[k] + sum(v for t, v in threat.items() if t != k))
+            FIGHT_INFO.setdefault('stacked', set()).add(M[k]['id'])
             plan['stacks'][k] = dict(target=target, r0=round(r0, 1), r1=round(r1, 1),
                                      melee=(round(f[0]), round(f[target]), round(f[-1])),
                                      vpt=worth / target)
@@ -1440,6 +1463,7 @@ def support_value(g, m, sid, k, M, plan):
         st = plan['stacks'].get(t)
         if st:
             v += st['vpt'] * max(0.0, min(pts_, st['target'] - acm.get(t, 0.0)))
+    STACK_V[(m, sid, k)] = v
     if e.get('party') or e.get('mapo'):
         on = bool(g.u8(MAPORFIC_ON)) or mapo
         if e.get('mapo') and on:
@@ -2263,9 +2287,10 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
     for k_ in [k_ for k_ in FIGHT_INFO if isinstance(k_, tuple) and k_[0] == 'long'] + ['long', 'focus']:
         FIGHT_INFO.pop(k_, None)
     FIGHT_INFO.pop('cm', None)
-    for k_ in [k_ for k_ in FIGHT_INFO if isinstance(k_, tuple) and k_[0] == 'support'] + ['support']:
+    for k_ in [k_ for k_ in FIGHT_INFO if isinstance(k_, tuple) and k_[0] == 'support'] + ['support', 'stacked']:
         FIGHT_INFO.pop(k_, None)
     SPLAN.update(round=None, by={})
+    STACK_V.clear()
     msg0 = len(g.cap.messages) if g.cap else 0
     # (nodead) who started the fight dead, stoned, ashed, lost, paralyzed or poisoned
     # (Chris, 2026-10-15: the party shouldn't carry on with them; harness/nodead.py)
