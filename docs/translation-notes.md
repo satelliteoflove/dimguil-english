@@ -693,6 +693,13 @@ Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
 - NPC_MES3 16, the little elf's parting line (失礼します): "Excuse me." → "Goodbye.".
   失礼します is the polite way out of a room; "Excuse me." read as an apology or an
   interruption. Chris chose "Goodbye." without the leading dots her hello has.
+- FIGHTMSG 143 ({ff18}は {ff11}1回復した): "Mercury recovers 10." → "Mercury recovers 10
+  HP.", which says what came back. Only party members print it (monsters get 163); the
+  worst case, an 8-letter name and Labadi's 5-digit drain, is 23 of 24 codes, one line
+  (shots: worktrees/verbfix/docs/shots/heal-line/compare.png).
+- I_NAME_E 1253, the statue in the pack: the developer's "DEMON'S STATUE" → "DEMON
+  STATUE", matching their pickup name (314). The Japanese is 悪魔の石像, a stone statue
+  of a demon; nothing in the game makes it a demon's, so Chris chose the plain form.
 
 ## To revisit
 

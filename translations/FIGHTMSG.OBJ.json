@@ -1007,7 +1007,7 @@
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "{ff18} recovers {ff11}1.",
+                    "translation": "{ff18} recovers {ff11}1 HP.",
                     "compress": true,
                     "addStringTerminator": true
                 },
