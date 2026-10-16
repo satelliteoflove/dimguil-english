@@ -494,13 +494,13 @@
           ],
           "strings": "NPC_MES4 30-41",
           "placement": "Game: the scholars find the pedestal of small tablets, all 26 ancient glyphs, and call it a switch; that is the central computer in Area X (event map S19). harano doesn't mention the meeting.",
-          "blurb": "Cleo's group got to the central computer before you and found its pedestal of small tablets. Bergamot is thrilled: \"With all 26 ancient glyphs laid out like this, our research is bound to get on.\" Cresson decides the thing is some kind of switch, and they pack up for the library: \"We'll leave the rest to you.\"",
+          "blurb": "Cleo's group got to the central computer before you and found its pedestal of small tablets. Bergamot is thrilled: \"With all 26 ancient glyphs laid out like this, our research is bound to progress.\" Cresson decides the thing is some kind of switch, and they pack up for the library: \"We'll leave the rest to you.\"",
           "quotes": [
             {
               "file": "NPC_MES4",
               "idx": 33,
               "speaker": "Bergamot",
-              "text": "With all 26 ancient glyphs laid out like this, our research is bound to get on."
+              "text": "With all 26 ancient glyphs laid out like this, our research is bound to progress."
             },
             {
               "file": "NPC_MES4",
