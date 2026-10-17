@@ -70,6 +70,28 @@ Nearly all the cost is context re-read on every step (2.6 billion tokens re-read
   message to the coordinator is a few lines: result, md5, files changed, the report's
   path, and anything that needs a decision.
 
+## Long runs: launch, hand back, pick up fresh
+
+An agent never waits inside its own session for a long job: a chapter run, a chain, a
+bench of dozens of fights, anything over a few minutes. Waiting costs it context every
+time it wakes to check, and it gets cut off partway. On 2026-10-16 chapter 17's agent
+launched three runs, waited, ran out of room before any finished, and sent the same
+half-finished report three times. The fix is to split such work into short jobs:
+
+1. **Launch agent:** writes or changes the code, commits it, launches the runs detached
+   (nohup or setsid, PIDs and log paths in the status file), and hands back at once with
+   what it launched and how a run's result is read.
+2. **Watcher:** the coordinator starts one background wait on those PIDs (an until-loop
+   on `kill -0`, run_in_background) and gets a notification when they end. No agent is
+   alive in the meantime.
+3. **Analysis agent:** a fresh agent with a short brief reads the results from the status
+   file and the run outputs, makes the next fix, and launches the next runs, which
+   starts the cycle again.
+
+Every agent then starts clean and ends cleanly, and nothing it did is lost when it stops.
+A detached run survives its agent being stopped. Short waits (a single fight bench of a
+few minutes, a build) can stay inside one agent.
+
 ## Status files
 
 Each agent keeps `rips/agents/NAME/STATUS.md`, updated at each milestone: the task, the

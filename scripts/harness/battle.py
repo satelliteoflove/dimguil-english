@@ -637,17 +637,24 @@ def confused_harm(g, k):
     return bool(hp) and 2 * d >= min(hp)
 
 
-def cure_item_choice(g, ri, k):
+def gear_cures():
+    from harness import gear
+    return tuple(gear.CURE_SIDS)
+
+
+def cure_item_choice(g, ri, k, sids=None, harm=True):
     """A Madi or Morfis item on roster index ri's battle Use list, Used on confused member k
     (party slot), or None. Only when k can really hurt someone (confused_harm), and never a
     worn item that can break and that its wearer relies on (a weapon, or gear worth
-    something without the cure: the battle-item rule). Logged with the battle items."""
+    something without the cure: the battle-item rule). Logged with the battle items.
+    (support) sids: the cures to look for (gear.CURE_SIDS); harm=False skips confused_harm
+    (a paralyzed member)."""
     from harness import gear
-    if not confused_harm(g, k):
+    if harm and not confused_harm(g, k):
         return None
     eq = gear.equipped(g, ri)
     for it in item_options(g, ri):
-        if it['sid'] not in gear.CURE_SIDS:
+        if it['sid'] not in (sids or gear.CURE_SIDS) or not harm and not it['ident']:
             continue
         if it['eq'] and it['br']:
             rec = gear.item(g, it['id'])
@@ -825,6 +832,15 @@ def default_policy(g, m, opts):
     # too (n1v6t chapter 14: Area D's human parties, Blaze's Tiltowait and the
     # MadPsionic's Lasios and Galtomas, wiped the party as random fights)
     casters_boss = boss or (CASTER_BOSS and big and any(tactics.kill_rank(v, KILL_FIRST) == 0 for v in M.values()))
+    # (support) buffs and debuffs only in the special fights (Chris, 2026-10-16): a story or
+    # boss fight met outside a training trip (or on a chapter's BOSS_AT square), or one rated
+    # a likely loss; ordinary fights, a training trip's fixed fight squares and fights merely
+    # going badly (losing) play as before. And not when the plain plan wins quickly anyway.
+    special = SUPPORT and bool(M) and (why == 'story' and (not tactics.TRAINING or tactics.at_boss(g))
+                                       or bool(FIGHT_INFO.get('likely_loss')))
+    sup = support_plan(g, M) if special else None
+    if sup and sup['quick']:
+        sup = None
     # heal: (d) a member who couldn't survive another hit of the worst monster that
     # reaches them, or anyone below 40%; the cheapest heal that lifts them clear of it,
     # else the strongest there is
@@ -890,6 +906,13 @@ def default_policy(g, m, opts):
                     CAST[('cure', k)] = ROUND
                     c = by_id[sid]
                     return ('spell', sid, c[1], c[2], c[3], ('member', k))
+            if special and st & 0x28 and USE in opts and CAST.get(('cure', k), 0) < ROUND:
+                # (support) a Dialko potion or a Madi or Morfis item on the paralyzed or
+                # asleep, where this member has no spell for it (crystal_policy's Thief)
+                act = cure_item_choice(g, ri, k, sids=(tactics.DIALKO,) + gear_cures(), harm=False)
+                if act:
+                    CAST[('cure', k)] = ROUND
+                    return act
             if st & 0x02 and USE in opts and CAST.get(('cure', k), 0) < ROUND:
                 act = cure_item_choice(g, ri, k)
                 if act:
@@ -901,6 +924,7 @@ def default_policy(g, m, opts):
     rec = me['raw']
     cands = []
     finish = []         # (casterfocus) spells above CHEAP_LEVEL in a cheap fight, for focus_pick only
+    sup_ok = {}         # (support) support spells past the point rules, for support_cands
     for sid, c in by_id.items():
         sch, lv = c[1], c[2]
         capped = False
@@ -927,9 +951,14 @@ def default_policy(g, m, opts):
                 if v > 0:
                     (finish if capped else cands).append((v, ('spell', sid, sch, lv, c[3], ('group', k)), (sid, k), lv))
         elif casters_boss and sid == tactics.CORTU and tactics.CORTU_SCREEN:
-            v = tactics.cortu_value(g, M, me['level'])
+            v = (tactics.cortu_value(g, M, me['level'], min(CORTU_SUP_ROUNDS, max(tactics.CORTU_ROUNDS, sup['horizon'])),
+                                     drain=True) if sup
+                 else tactics.cortu_value(g, M, me['level']))
             if v > 0 and M:
                 cands.append((v, ('spell', sid, sch, lv, c[3], ('group', min(M))), (sid, None), lv))
+        elif special and sid in SUPPORT_SIDS:
+            if sup:
+                sup_ok[sid] = c         # (support) valued in support_cands; none in a quick win
         elif boss and sid in (tactics.BAMATU, tactics.MAPORFIC, tactics.CORTU):
             v = tactics.support_value(g, sid, M, CAST, party_hp)
             if v > 0 and M:
@@ -940,6 +969,8 @@ def default_policy(g, m, opts):
                 v = tactics.armor_value(g, sid, k, M, CAST)
                 if v > 0:
                     cands.append((v, ('spell', sid, sch, lv, c[3], ('group', k)), (sid, k), lv))
+    if sup:
+        cands += support_cands(g, m, ri, me, sup_ok, M, sup, opts)
     if DISPEL in opts:
         for k in M:
             v = tactics.dispel_value(g, k, M, me['cls'], me['level'])
@@ -953,6 +984,23 @@ def default_policy(g, m, opts):
         from harness import gear
         w = gear.equipped(g, ri).get(0)
         fight_v = gear.wscore(w) * 0.5 if w and gear.back_reach(w) else 0
+    if sup and FIGHT_REAL and m < 3 and FIGHT in opts:
+        # (support) once the stack lands a front-liner's blows are worth more than 3 x level
+        # (crystal_policy's Venus fights after the stack)
+        fight_v = max(fight_v, max([tactics.member_melee(g, m, k, M) for k in M] + [0.0]))
+    if sup and sup['stacks'] and STACK_FIRST:
+        # (support) the stack is the plan (support_plan's simulation: it takes rounds off
+        # killing the group), so a stack cast still needed goes ahead of this member's damage
+        # spells and its Fight; Cortu, the party's AC and heals still weigh in by value (the
+        # threat behind the stack's worth leaves out what kills outright, the Crystal Men's
+        # decapitating beams)
+        covered = CORTU_COVER and tactics.screen_now(g) >= 2 * me['level']
+        other = max([c_[0] for c_ in cands if c_[2][0] not in SUPPORT_SIDS
+                     and (c_[2][0] != tactics.CORTU or covered)] + [fight_v]) + 1
+        # (bench 2) plus a hundredth of their own value, so Morlis's 4 points still beat
+        # Dilto's 2 (bench 1's max(v, other) tied them, and Dilto came first)
+        cands = [(max(v, other) + v / 100 if STACK_V.get((m, key[0], key[1]), 0) > 0 else v, act, key, lv)
+                 for v, act, key, lv in cands]
     if ITEMS_IN_BATTLE and USE in opts and M:
         best_own = max([c_[0] for c_ in cands] + [fight_v])
         it_act = item_choice(g, ri, me, M, big, best_own)
@@ -1014,6 +1062,8 @@ def default_policy(g, m, opts):
                 tactics.focus_commit(g, key[0], key[1], M, me['level'])
             if key[0] == tactics.CORTU and tactics.CORTU_SCREEN:
                 tactics.cortu_commit(g, me['level'])
+            if sup and key[0] in SUPPORT_SIDS:
+                support_commit(m, key[0], key[1], g, M)
             return act
     if FIGHT in opts:
         return ('fight',)
@@ -1169,6 +1219,307 @@ def crystal_policy(g, m, opts):
     if FIGHT in opts:
         return ('fight',)
     return default_policy(g, m, opts)
+
+
+# (support) Buffs and debuffs in the fights that need them (Chris, 2026-10-16: they can
+# decide a fight, especially in later chapters, where the player is expected to use every
+# advantage). crystal_policy showed the way at chapter 16's Crystal Men (0 of 40 wins under
+# the old default, 39 of 40 with it): no extra damage, but Morlis and Dilto stacked until
+# the front line hit their AC -30, Bamatu and Mapoba until the monsters' swings sat at the
+# 5% floor, Cortu against Labadi, and Madi and Dialko for the drained and the paralyzed.
+# Here the same ideas are valued from what RAM gives, in a story or boss fight, one going
+# badly or a likely loss (default_policy's boss), and only when the party's plain plan
+# (support_plan) needs more than SUPPORT_QUICK rounds:
+#   - the enemy AC stack (Morlis -4 a monster past mage resistance, Dilto -2, Mapoba -2 on
+#     every group), on a group where the front line's melee is under STACK_FLOOR of what
+#     it would be with every swing at 95% (tactics.member_melee with dmod), up to STACK_TO
+#     of it, when simulating the fight with the stack (_sim) takes STACK_SAVE rounds or more
+#     off killing the group: worth the rounds saved times the threat those rounds carry
+#     (the group's at STACK_LEFT, it dies down, and the other groups' in full), shared
+#     over the AC points the stack needs;
+#   - the party's AC (Bamatu +3, Mapoba +2, Maporfic, Porfic +4 the caster): the monsters'
+#     melee it takes off (tactics.melee_in) times the rounds left (horizon);
+#   - Cortu: tactics.cortu_value over the same horizon instead of CORTU_ROUNDS;
+#   - Dialko, Madi and Morfis items on the paralyzed and asleep, where no one's spell does.
+SUPPORT = True
+SUPPORT_QUICK = 2.0     # a fight the plain plan wins in this many rounds or fewer gets no buffs
+SUPPORT_HORIZON = 8.0   # rounds a lasting buff is counted over at most
+SIM_CAP = 20            # _sim gives up here (a fight the party can't win as it fights)
+STACK_FLOOR = 0.3       # stack a group's AC when the party's melee on it is under this share of its most
+STACK_TO = 0.9          # ... up to this share
+STACK_SAVE = 1.0        # ... when the stack takes this many rounds or more off killing the group
+STACK_LEFT = 0.5        # the stacked group's threat share counted in the rounds saved
+STACK_DMAX = 48         # AC points the stack looks down to
+MAPOBA = 70
+SUPPORT_SIDS = (tactics.BAMATU, tactics.MAPORFIC, tactics.PORFIC, tactics.DILTO, tactics.MORLIS, MAPOBA,
+                tactics.BADUMAS)
+SPLAN = dict(round=None, by={})     # this round's support chosen so far: slot -> (sid, k)
+STACK_V = {}            # (slot, sid, k) -> the AC-stack part of support_value's last rating
+CORTU_SUP_ROUNDS = 5.0  # Cortu's horizon in a support fight at most (test fight: 10 Cortus over 8 rounds)
+FIGHT_REAL = True       # in a support fight a front-liner's Fight is rated at its real melee (member_melee)
+STACK_FIRST = True      # a stack cast the plan wants outranks the member's damage and its Fight
+STACK_KEEP = 0.0        # (bench 2) a stack begun stays in the plan while it saves more rounds than this
+                        # (STACK_SAVE is for starting one; bench 1: stacks dropped at -12 of -24 when the
+                        # plain plan's rounds fell to 4-5, and Madalto went on at AC still near the floor)
+STACK_NEAR = True       # (bench 2) while the front line's melee on the group is under STACK_FLOOR of its
+                        # most, the group's threat counts in full in the rounds saved (it isn't dying down)
+CORTU_COVER = True      # (bench 2) with a stack in the plan, Cortu goes ahead of a stack cast only while
+                        # the screen (this round's casts counted) is below what one cast of the caster's
+                        # puts up from nothing (2 x level); bench 1: 7 Cortus a fight against crystal's 3
+
+
+def _spell_dmg(g, sid, k, M, clevel):
+    """One cast of a damage or death spell on group k: its expected damage there (the
+    chance it lands, the element, each monster's HP as the cap)."""
+    m = M[k]
+    if sid in tactics.DAMAGE:
+        mean, kind, el = tactics.DAMAGE[sid]
+        f = 0.5 if m['resist'] & el and el else 2.0 if m['weak'] & el and el else 1.0
+        mons = m['mons'][:1] if kind == 'one' else m['mons']
+        return tactics.lands(m, sid) * sum(min(mean * f, h) for _, h, _ in mons)
+    if sid in tactics.DEATH:
+        mons = m['mons'][:1] if tactics.DEATH[sid][0] == 'one' else m['mons']
+        return tactics.death_p(m, sid, clevel) * sum(h for _, h, _ in mons)
+    return 0.0
+
+
+def _use_ok(it):
+    """A battle item support may Use: identified, and used up (potion, scroll) or never
+    breaking."""
+    return it['ident'] and (it['cons'] or not it['br'])
+
+
+def _sim_members(g, M):
+    """The members who can act, for _sim: their melee group (the lowest their weapon
+    reaches), melee there now, damage and death spells as (damage on each group, school,
+    level), spell points by (school, level), and their enemy-AC debuffs as (AC points on
+    each group, school, level), Mapoba items as ('item', index)."""
+    out = []
+    for slot, ri in enumerate(party_ids(g)):
+        if ri is None:
+            continue
+        hp, st = member_state(g, slot)
+        if hp <= 0 or st >= 8:
+            continue
+        c = g.char(ri)
+        rec = c['raw']
+        own, mel = None, 0.0
+        for k in sorted(M):
+            x = tactics.member_melee(g, slot, k, M)
+            if x > 0:
+                own, mel = k, x
+                break
+        spells, deb, pts = [], [], {}
+        for sid, school, level, i in castable(g, ri):
+            pts[(school, level)] = rec[0x5c + school * 7 + level - 1]
+            if sid in tactics.DAMAGE or sid in tactics.DEATH:
+                spells.append(({k: _spell_dmg(g, sid, k, M, c['level']) for k in M}, school, level))
+            elif sid == tactics.MORLIS:
+                deb.append(({k: 4 * tactics.lands(M[k], sid) for k in M}, school, level))
+            elif sid == tactics.DILTO:
+                deb.append(({k: 2.0 for k in M}, school, level))
+            elif sid == MAPOBA:
+                deb.append(({k: 2.0 for k in M}, school, level))
+        items = 0
+        for it in item_options(g, ri):
+            if it['sid'] == MAPOBA and _use_ok(it):
+                items += 1 if it['cons'] else SIM_CAP
+        out.append(dict(slot=slot, own=own, mel=mel, curve=None, spells=spells, deb=deb, pts=pts, items=items))
+    return out
+
+
+def _curve(g, x, k, M):
+    """Member x's melee on group k with the group's AC modifier d points lower, d = 0..STACK_DMAX."""
+    if x['curve'] is None or x['curve'][0] != k:
+        if x['own'] != k:
+            x['curve'] = (k, [0.0] * (STACK_DMAX + 1))
+        else:
+            x['curve'] = (k, [tactics.member_melee(g, x['slot'], k, M, dmod=-d) for d in range(STACK_DMAX + 1)])
+    return x['curve'][1]
+
+
+def _sim(g, mem, M, k, target=0, stack=False):
+    """Rounds the party needs to take group k's HP (all groups' when k is None), fractional,
+    SIM_CAP when it doesn't: each member who can act, in turn each round, takes its melee
+    (at the stack reached so far) or its best spell it still has points for, whichever does
+    more; with stack, the members with a debuff cast it first while the AC points so far
+    are short of target, at the most points a cast."""
+    H = sum(tactics.group_hp(M[t]) for t in (M if k is None else [k]))
+    if H <= 0:
+        return 0.0
+    pts = [dict(x['pts']) for x in mem]
+    items = [x['items'] for x in mem]
+    d = 0.0
+    for r in range(1, SIM_CAP + 1):
+        dmg, dd = 0.0, 0.0
+        for i, x in enumerate(mem):
+            if stack and d + dd < target:
+                best = None
+                for steps, school, level in x['deb']:
+                    if pts[i].get((school, level), 0) > 0 and (best is None or steps[k] > best[0]):
+                        best = (steps[k], (school, level))
+                if items[i] and (best is None or 2.0 > best[0]):
+                    best = (2.0, None)
+                if best and best[0] > 0:
+                    dd += best[0]
+                    if best[1] is None:
+                        items[i] -= 1
+                    else:
+                        pts[i][best[1]] -= 1
+                    continue
+            if k is None:
+                mel = x['mel']
+            else:
+                mel = _curve(g, x, k, M)[min(STACK_DMAX, int(d))] if x['own'] == k else 0.0
+            best = (mel, None)
+            for dk, school, level in x['spells']:
+                v = max(dk.values()) if k is None else dk[k]
+                if v > best[0] and pts[i].get((school, level), 0) > 0:
+                    best = (v, (school, level))
+            if best[1]:
+                pts[i][best[1]] -= 1
+            dmg += best[0]
+        d += dd
+        if dmg >= H:
+            return r - 1 + H / dmg
+        H -= dmg
+    return float(SIM_CAP)
+
+
+def support_plan(g, M):
+    """(support) This round's plan, once a round (FIGHT_INFO): R the rounds the plain plan
+    needs to clear the fight (_sim), quick when that's SUPPORT_QUICK or fewer; stacks
+    {group: dict(target AC points, rounds saved, vpt the worth of an AC point)} for the
+    groups worth an AC stack; horizon, the rounds a lasting buff is counted over."""
+    key = ('support', ROUND)
+    if key in FIGHT_INFO:
+        return FIGHT_INFO[key]
+    mem = _sim_members(g, M)
+    R = _sim(g, mem, M, None)
+    plan = dict(R=round(R, 1), quick=R <= SUPPORT_QUICK, stacks={})
+    if not plan['quick']:
+        threat = {k: (tactics.danger_of(M[k]) + M[k].get('threat_drain', 0.0)) * len(M[k]['mons']) for k in M}
+        for k in sorted(M):
+            if not any(x['own'] == k for x in mem) or not any(x['deb'] or x['items'] for x in mem):
+                continue
+            f = [sum(v) for v in zip(*[_curve(g, x, k, M) for x in mem if x['own'] == k])]
+            # a stack begun (on this monster id) goes on to STACK_TO; a new one starts only
+            # near the floor (test fight: it stopped at 67 of 368 once past the floor share)
+            begun = M[k]['id'] in FIGHT_INFO.get('stacked', ())
+            if not f or f[-1] <= 0 or f[0] >= (STACK_TO if begun else STACK_FLOOR) * f[-1]:
+                continue
+            target = next(d for d, v in enumerate(f) if v >= STACK_TO * f[-1])
+            r0 = _sim(g, mem, M, k)
+            r1 = _sim(g, mem, M, k, target, stack=True)
+            saved = r0 - r1
+            if target <= 0 or saved <= STACK_KEEP or saved < STACK_SAVE and not begun:
+                plan.setdefault('dropped', {})[k] = (target, round(r0, 1), round(r1, 1), round(f[0]), round(f[-1]))
+                continue
+            near = STACK_NEAR and f[0] < STACK_FLOOR * f[-1]
+            worth = saved * ((1.0 if near else STACK_LEFT) * threat[k] + sum(v for t, v in threat.items() if t != k))
+            FIGHT_INFO.setdefault('stacked', set()).add(M[k]['id'])
+            plan['stacks'][k] = dict(target=target, r0=round(r0, 1), r1=round(r1, 1),
+                                     melee=(round(f[0]), round(f[target]), round(f[-1])),
+                                     vpt=worth / target, near=near)
+    saved = max([s_['r0'] - s_['r1'] for s_ in plan['stacks'].values()] + [0])
+    plan['horizon'] = min(SUPPORT_HORIZON, max(0.0, R - saved - 0.5))
+    FIGHT_INFO[key] = plan
+    FIGHT_INFO.setdefault('support', []).append(dict(r=ROUND, R=plan['R'], quick=plan['quick'],
+                                                     horizon=round(plan['horizon'], 1),
+                                                     stacks={k: dict(v, vpt=round(v['vpt'], 1))
+                                                             for k, v in plan['stacks'].items()},
+                                                     dropped=plan.get('dropped')))
+    return plan
+
+
+def _splan(m):
+    """This round's support chosen by the members before m: (enemy AC points by group,
+    party AC modifier by slot, Maporfic cast)."""
+    if SPLAN['round'] != ROUND:
+        SPLAN.update(round=ROUND, by={})
+    acm, pm, mapo = {}, {}, False
+    for slot, (sid, k, e) in SPLAN['by'].items():
+        if slot == m:
+            continue
+        for t, v in e.get('ac', {}).items():
+            acm[t] = acm.get(t, 0.0) + v
+        for t, v in e.get('party', {}).items():
+            pm[t] = pm.get(t, 0) + v
+        mapo = mapo or e.get('mapo', False)
+    return acm, pm, mapo
+
+
+def _support_effect(g, m, sid, k, M):
+    """What a support cast does: enemy AC points by group, party AC modifier by slot, Maporfic."""
+    slots = [s_ for s_, ri in enumerate(party_ids(g)) if ri is not None]
+    if sid == tactics.MORLIS:
+        return dict(ac={k: 4 * tactics.lands(M[k], sid)})
+    if sid == tactics.DILTO:
+        return dict(ac={k: 2.0})
+    if sid == MAPOBA:
+        return dict(ac={t: 2.0 for t in M}, party={s_: 2 for s_ in slots})
+    if sid == tactics.BAMATU:
+        return dict(party={s_: 3 for s_ in slots})
+    if sid == tactics.PORFIC:
+        return dict(party={m: 4})
+    if sid == tactics.MAPORFIC:
+        return dict(mapo=True)
+    return {}
+
+
+def support_value(g, m, sid, k, M, plan):
+    """(support) What support spell sid on group k (None: the party) is worth this round,
+    in hit points, after what the members before m chose (SPLAN)."""
+    acm, pm, mapo = _splan(m)
+    e = _support_effect(g, m, sid, k, M)
+    v = 0.0
+    for t, pts_ in e.get('ac', {}).items():
+        st = plan['stacks'].get(t)
+        if st:
+            v += st['vpt'] * max(0.0, min(pts_, st['target'] - acm.get(t, 0.0)))
+    STACK_V[(m, sid, k)] = v
+    if e.get('party') or e.get('mapo'):
+        on = bool(g.u8(MAPORFIC_ON)) or mapo
+        if e.get('mapo') and on:
+            return v
+        base = tactics.melee_in(g, M, pm, on)
+        pm2 = dict(pm)
+        for t, x in e.get('party', {}).items():
+            pm2[t] = pm2.get(t, 0) + x
+        v += (base - tactics.melee_in(g, M, pm2, on or e.get('mapo', False))) * plan['horizon']
+    if sid == tactics.BADUMAS:
+        v = tactics.armor_value(g, sid, k, M, CAST)
+    return v
+
+
+def support_commit(m, sid, k, g, M):
+    SPLAN['by'][m] = (sid, k, _support_effect(g, m, sid, k, M))
+
+
+def support_cands(g, m, ri, me, by_id, M, plan, opts):
+    """(support) The candidates default_policy weighs for support spells and items:
+    (value, action, key, level)."""
+    out = []
+    for sid in SUPPORT_SIDS:
+        if sid not in by_id:
+            continue
+        c = by_id[sid]
+        for k in (sorted(M) if sid in (tactics.MORLIS, tactics.DILTO, tactics.BADUMAS) else [min(M)]):
+            v = support_value(g, m, sid, k, M, plan)
+            if v > 0:
+                out.append((v, ('spell', sid, c[1], c[2], c[3], ('group', k)), (sid, k), c[2]))
+    if USE in opts:
+        seen = set()
+        for it in item_options(g, ri):
+            sid = it['sid']
+            if sid not in SUPPORT_SIDS or sid in by_id or sid in seen or not _use_ok(it):
+                continue
+            seen.add(sid)
+            k = min(M)
+            v = support_value(g, m, sid, k, M, plan)
+            if v > 0:
+                out.append((v, ('use', it['idx'], sid, it['id'], ('group', k)), (sid, k), 0))
+    return out
 
 
 def heal_worth(g, M, party, by_id):
@@ -1950,6 +2301,10 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
     for k_ in [k_ for k_ in FIGHT_INFO if isinstance(k_, tuple) and k_[0] == 'long'] + ['long', 'focus']:
         FIGHT_INFO.pop(k_, None)
     FIGHT_INFO.pop('cm', None)
+    for k_ in [k_ for k_ in FIGHT_INFO if isinstance(k_, tuple) and k_[0] == 'support'] + ['support', 'stacked']:
+        FIGHT_INFO.pop(k_, None)
+    SPLAN.update(round=None, by={})
+    STACK_V.clear()
     msg0 = len(g.cap.messages) if g.cap else 0
     # (nodead) who started the fight dead, stoned, ashed, lost, paralyzed or poisoned
     # (Chris, 2026-10-15: the party shouldn't carry on with them; harness/nodead.py)
@@ -2044,6 +2399,7 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
             g.step()
     return dict(rounds=rounds, frames=g.frame - f0, actions=log, ovl=g.overlay(), chest=chest_result,
                 where=where, story=tactics.STORY[0], policy=policy.__name__, cm=FIGHT_INFO.get('cm'),
+                support=FIGHT_INFO.get('support'),
                 matters=FIGHT_INFO['matters'], casts=list(FIGHT_INFO['casts']),
                 ran=sum(1 for a in log if a[1] == 'run'),
                 runs=FIGHT_INFO.get('runs', []), runs_skipped=FIGHT_INFO.get('runs_skipped', []), likely_loss=FIGHT_INFO.get('likely_loss'), loss_rounds=FIGHT_INFO.get('loss_rounds', []), long=FIGHT_INFO.get('long'), focus=FIGHT_INFO.get('focus'),
