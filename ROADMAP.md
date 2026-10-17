@@ -18,7 +18,9 @@ fixing glaring and game-breaking bugs and cleaning up rough translations. v0.8.0
 condition, that the text removed at the original team's request be translated again,
 was met on 2026-10-03. As of 2026-10-10 v0.8.0 isn't tagged yet and the repo is still
 private. Left to do: the release readme, the changelog entry and the release title
-(Chris writes these), then make the repo public and push the tag. There's no
+(Chris writes these), then make the repo public and push the tag. It also waits for the
+harness bot to play through to the ending (Chris, 2026-10-17), the gate for going public
+set on 2026-10-12. There's no
 announcement, and the README says not to play it until 0.9.0. Further 0.8.x releases
 follow as fixes land.
 

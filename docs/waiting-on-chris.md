@@ -18,11 +18,6 @@ Nothing open.
 
 ## Release
 
-8. **v0.8.0 and the harness gate.** ROADMAP still plans v0.8.0 (repo public, tag
-   pushed) as soon as the readme, changelog and title are written. Since 2026-10-12 the
-   harness runs are the gate for going public. Does v0.8.0 wait for the harness to reach
-   the ending, or go out as the beta it is?
-
 ## The site (Bartok's Trading Post session)
 
 9. **Two Compendium notes** (Smoke Demon, Venus Man Trap), whether to add a note on the
