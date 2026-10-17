@@ -168,10 +168,11 @@ def run_one(g, st, seed):
                 caster_down=gone[0] if gone else None,
                 deaths=[(d['who'], d['what'], d['by']) for d in res.get('deaths') or []],
                 heals=battle.FIGHT_INFO.get('heals'),
+                items=[(u['who'], u['item'], u['round']) for u in battle.FIGHT_INFO.get('items') or []],
                 ll=bool(res['likely_loss']), matters=res['matters'], story=res['story'],
                 why=(res.get('first') or {}).get('why'),
                 acts=[a for a in res['actions'] if a[1] in ('spell', 'fight', 'aim', 'run', 'parry', 'use', 'dispel')],
-                policy=res.get('policy'), cm=res.get('cm'),
+                policy=res.get('policy'), cm=res.get('cm'), support=res.get('support'),
                 text=[battle._flat(x['text']) for x in g.cap.messages[msg0:]
                       if x['file'] == 'FIGHTMSG.OBJ'] if os.environ.get('TEXT') and g.cap else None)
 
