@@ -18,12 +18,11 @@ other work unless it says **blocks**.
 
 ## Text
 
-5. **"Picking the lock..." runs into the game's dots** (SISETU 526), and **"{name} can't
-   act." sits off center** (SISETU 525, x computed for the Japanese). Both are small
-   code or text fixes. **Decided 2026-10-17:** both lose their own dots (9337727), and
-   the x formula for 525 gets patched; in progress, comes off once verified and merged.
+Nothing open.
 
 ## Release
+
+Nothing open.
 
 ## The site (Bartok's Trading Post session)
 
