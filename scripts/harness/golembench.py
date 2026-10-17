@@ -23,6 +23,19 @@ Arms, by environment (all investigation only, nothing in the game files):
               Morlis then Dilto from the mages until the group's mean AC modifier is
               CM_STACK_TO, Bamatu to the cap, Madi on the low) with CM_STACK_TO = -N.
   SET=K=V,... battle/tactics flags (fightbench.apply_set).
+  NOFIS=N     the monsters' Nofis count 0x80079932 held at N or more in every fight of the
+              chain, as if the party had cast Nofis N times (spell_nofis 0x800ca3c4 adds
+              one a cast, up to 21). battle_main clears it at each fight's start
+              (0x800a5ea4, 0x800a6024), so it's written at each command input, not before
+              the Investigate. The resistance roll (spell_damage_core 0x800b0c6c) is
+              rand(100) < r - (r/5) N + 1; dice damage spells (spell_damage_one 0x800b0b50,
+              which spell_damage_group calls too) count N at most 4. A ceiling test: the
+              main party has no Alchemist.
+  NOFIS_AWARE=1  tactics.lands counts that N (the bot's own lands() reads only the
+              resistance and the screen, so it rates spells as if no Nofis was cast).
+  FIRE=1      fire-resistant gear (resist bit 0x80, which the Fire Golem's breath matches)
+              on each member without it, through the camp's Equip menu before the
+              Investigate; the item is written into the pack by RAM first (FIRE_GEAR).
 SAVEAT=REL saves each fight's start to rips/harness/REL_ENC.state.
 DISC= a .cue to run on (default the harness disc; its dimguil/SLPS_026.91 beside it for
 the code lay); TEXT=1 keeps the FIGHTMSG lines.
@@ -143,8 +156,56 @@ def members(g):
             continue
         c = g.char(ri)
         out.append(dict(slot=s, name=c['name'], hp=c['hp'], max_hp=c['max_hp'], status=c['status'],
-                        level=c['level'], sp=sum(c['raw'][0x5c:0x78])))
+                        level=c['level'], sp=sum(c['raw'][0x5c:0x78]), save=c['raw'][0x81],
+                        rb=struct.unpack_from('<HH', c['raw'], 0xac), ac=struct.unpack_from('<b', c['raw'], 0x86)[0]))
     return out
+
+
+NOFIS_M = 0x80079932            # the monsters' Nofis count (spell_nofis 0x800ca3c4)
+NOFIS_N = [0]
+
+
+def lands_nofis(m, sid):
+    """tactics.lands with the monsters' Nofis count (spell_damage_core 0x800b0c6c: resisted
+    on rand(100) < r - (r/5) N + 1, r = school resistance + screen; dice damage spells count
+    N at most 4, spell_damage_one 0x800b0b50)."""
+    r = min(255, m['mr'][tactics.school(sid)] + m['screen'])
+    n = min(NOFIS_N[0], 4) if sid in tactics.DAMAGE else NOFIS_N[0]
+    return max(0.0, 1 - max(0, min(255, r - (r // 5) * n + 1)) / 100)
+
+
+# fire-resistant gear by member class (FIRE=1): each is a chest item (TRE_BOX records 10-30),
+# none in Boltac's stock in these states. (item id, the unequipped pack item it replaces)
+FIRE_GEAR = {
+    4: (197, (261, 243, 250)),      # Samurai (Venus): PLATE OF DAIMYO for BUSHI SCALE; pack: a scroll/potion
+    11: (202, (256, 250, 243)),     # Bishop (Eve): FIRE CHAIN MAIL for BREAST PLATE
+    3: (209, (250, 241, 247)),      # Thief (Mercury, Faerie): FAERIE CAP for FEATHERED CAP
+    2: (273, (250, 243)),           # Priest (Earth, v5b; two-handed staff, no shield): AMULET OF FLAMES for SHADOW CLOAK
+}
+
+
+def fire_gear(g, log):
+    from harness import gear, camp
+    done = []
+    for pos, ri in enumerate(g.party_slots()):
+        if ri is None:
+            continue
+        c = g.char(ri)
+        if struct.unpack_from('<H', c['raw'], 0xac)[0] & 0x80 or c['cls'] not in FIRE_GEAR:
+            continue
+        iid, spare = FIRE_GEAR[c['cls']]
+        words = struct.unpack_from('<10H', c['raw'], 0x20)
+        k = next((j for j, w in enumerate(words) if w == 0xffff), None)
+        if k is None:
+            k = next(j for j, w in enumerate(words) if w != 0xffff and not w & 0x2000 and w & 0x1ff in spare)
+        from harness.game import ROSTER, ROSTER_LEN
+        g.e.write(ROSTER + ri * ROSTER_LEN + 0x20 + 2 * k, struct.pack('<H', iid | 0x4000))
+        g.e.write(ROSTER + ri * ROSTER_LEN + 0x34 + k, b'\x00')      # item_state
+        ch = gear.equip(g, pos, log, prefer={iid})
+        done.append((c['name'], iid, words[k] & 0x1ff if words[k] != 0xffff else None, ch))
+    if camp.in_camp(g):
+        camp.close_camp(g)
+    return done
 
 
 def ring_held(g):
@@ -161,6 +222,12 @@ def bench_one(g, st, seed):
     stack = int(os.environ.get('STACK') or 0)
     if stack:
         battle.CM_STACK_TO = -stack
+    nofis = int(os.environ.get('NOFIS') or 0)
+    NOFIS_N[0] = nofis
+    gear_log = []
+    fire = fire_gear(g, gear_log) if os.environ.get('FIRE') else None
+    if fire is not None:
+        print('fire gear', fire, flush=True)
     fights = []
     orig = battle.fight
     msg0 = len(g.cap.messages) if g.cap else 0
@@ -170,6 +237,19 @@ def bench_one(g, st, seed):
         where = here(g_)
         if stack and where in FIGHT_AT and policy is battle.default_policy:
             policy = battle.crystal_policy
+        seen = []
+        if nofis:
+            if battle.FIGHT_POLICIES and policy is battle.default_policy and where in battle.POLICY_AT:
+                policy = battle.POLICY_AT[where]
+            inner = policy
+
+            def policy(g2, m, opts):
+                v = g2.s8(NOFIS_M)
+                seen.append(v)
+                if v < nofis:
+                    g2.e.write(NOFIS_M, bytes([nofis]))
+                return inner(g2, m, opts)
+            policy.__name__ = inner.__name__
         if os.environ.get('SAVEAT'):
             g_.save('%s_%d' % (os.environ['SAVEAT'], enc))
         pre = members(g_)
@@ -188,7 +268,7 @@ def bench_one(g, st, seed):
             items=[(u['who'], u['item'], u['round']) for u in battle.FIGHT_INFO.get('items') or []],
             acts=[a for a in res['actions'] if a[1] in ('spell', 'fight', 'aim', 'run', 'parry', 'use', 'dispel')],
             policy=res.get('policy'), support=res.get('support'), cm=res.get('cm'),
-            oslo=g_.u8(OSLO_LEVEL),
+            oslo=g_.u8(OSLO_LEVEL), nofis_seen=sorted(set(seen)), nofis_end=g_.s8(NOFIS_M),
             text=[battle._flat(x['text']) for x in g_.cap.messages[m0:]
                   if x['file'] == 'FIGHTMSG.OBJ'] if os.environ.get('TEXT') and g_.cap else None))
         print('  fight enc %d at %s: won %s wiped %s rounds %d dead %s drained %s' % (
@@ -223,7 +303,8 @@ def bench_one(g, st, seed):
     ring = g.overlay() != 'JOUKA' and bool(g.party()) and ring_held(g)
     evs = [m['idx'] for m in g.cap.messages[msg0:] if m['file'] == 'EVENTMES.BIN'] if g.cap else []
     return dict(state=st, seed=seed, arm=dict(oslo=bool(os.environ.get('OSLO')), stack=stack,
-                                              set=os.environ.get('SET', '')),
+                                              set=os.environ.get('SET', ''), nofis=nofis,
+                                              aware=bool(os.environ.get('NOFIS_AWARE')), fire=fire),
                 ring=ring, end=here(g) if g.overlay() not in ('JOUKA', 'HAZURE') else g.overlay(),
                 fights=fights, won=sum(f['won'] for f in fights), events=evs, error=err,
                 party=members(g) if g.overlay() not in ('JOUKA', 'HAZURE') else None)
@@ -231,6 +312,8 @@ def bench_one(g, st, seed):
 
 if __name__ == '__main__':
     apply_set()
+    if os.environ.get('NOFIS_AWARE'):
+        tactics.lands = lands_nofis
     # states made on an older disc keep its MAIN; every load lays this disc's fix words and
     # MAIN_CODE over it, as suite cases and run_chapter --from do (regress.overlay_main)
     from harness import regress
