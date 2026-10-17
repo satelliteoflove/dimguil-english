@@ -107,6 +107,10 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 
 ### Deliberate choices
 
+- **Ghost Swarm's trap message names HP (FIGHTMSG 254; Chris, 2026-10-17).** 体力が激減した
+  is HP dropping sharply; the trap leaves every standing member with 2 to 10 HP and
+  touches no stat (docs/re/lock-test.md). "{name}'s strength drains away." read as the
+  Strength stat; now "{name}'s HP plummets."
 - **The ornate door's locked message is one line (EVENTMES 33; Chris, 2026-10-17).** It
   prints in the one-line message bar (`square_examine` case 0x1e), so "is locked." after
   the line break never showed. Now "The door adorned with beautiful ornaments is

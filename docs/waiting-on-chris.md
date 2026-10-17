@@ -11,8 +11,6 @@ Nothing open.
 
 ## Text
 
-4. **Ghost Swarm's trap message** (FIGHTMSG 254). 体力が激減した is "{name}'s strength
-   drains away"; 体力 here is HP. Recommendation: "{name}'s HP plummets." or similar.
 5. **"Picking the lock..." runs into the game's dots** (SISETU 526), and **"{name} can't
    act." sits off center** (SISETU 525, x computed for the Japanese). Both are small
    code or text fixes. Recommendation: fix both.
