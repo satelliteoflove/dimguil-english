@@ -980,6 +980,23 @@ fight used the rebuilt values (damage bonus 9, 4, 0, 0). [emu]
 So the drift is real in the original but never reaches play. Not a bug worth fixing;
 moved to "harmless". No question for Chris.
 
+### 3.5 The Ninja's beheading and the Monk's knock-out from class never apply
+
+`battle_derive_stats` (BATTLE 0x800a197c) gives a Ninja (class 12) hit effect 0x40,
+beheading, at 11%, and a Monk (13) knock-out at 11%, on top of their gear. It tests the
+class in $s3, which the function never loads: it holds the caller's value, 2 at battle
+start or a screen Y coordinate on a panel redraw, never 12 or 13. [code] In 2,700 calls
+with a Ninja in the party, $s3 was only 2, 0xc0 or 0xda, and the Ninja's chance read 20
+(the bare-hand 20% alone, 0x800a2880). [emu] So the class bonus is dead; bare-handed
+Ninjas and Monks still get their 20%, and weapons their own chances (ninja.md).
+
+Question for Chris: fixing it (load the class into $s3) gives every Ninja 11% more
+beheading and every Monk 11% more knock-out, armed or not. Fix it, or keep the odds as
+the game plays? Found 2026-10-17 (docs/re/ninja.md).
+
+A related oddity, harmless as far as seen: for a monster target, the resistance bytes for
+effects it isn't immune to are never set; they read 0 in all 16 checks. [code] [emu]
+
 ## Not bugs, or harmless
 
 - **2.7, the greeting blocks nothing picks**: duplicates of blocks that are picked, with

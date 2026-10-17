@@ -199,9 +199,10 @@ stepping `battle_phase` (0x800796fa). Seen in the emulator, a fight round goes 0
   floor, not the training maze), only for random encounters, and only if the first
   group's record has flag 0x1000 at +0xcc. The chance is 10% if its +0xa8 has bit 1 or 2,
   15% for bit 4, 5% for bit 8 or 0x1000, 25% otherwise; it's rolled once, for the first
-  party member whose party-copy byte 0x8007e81e+i lacks 0x40. **[code]** (bit 0x40 of
-  that byte is probably Evil alignment **[inf]**; then an all-Evil party never meets
-  friendly monsters.) A friendly encounter shows FIGHTMSG 263.
+  party member whose party-copy byte 0x8007e81e+i lacks 0x40. **[code]** Bit 0x40 of that
+  byte is Neutral (the tavern stores 0 Good, 0x40 Neutral, 0x80 Evil; E-town.md), so an
+  all-Neutral party never meets friendly monsters. **[code]** (This doc first guessed
+  Evil; corrected 2026-10-17, ninja.md.) A friendly encounter shows FIGHTMSG 263.
 
 ## Each round: upkeep
 
@@ -578,7 +579,10 @@ quarter...). The first breath of a battle from a character above level 8 hits ev
 
 - **Hide** (-8): only if not already hidden, rand(100) <= level/2 + 15 must pass first;
   then rand(level + 9) of 7 or more hides (194), else "tries to hide, but fails" (193).
-  **[code]**
+  **[code]** The first roll only runs when `hidden` (0x8007974c) is -1, and nothing in
+  the decompiled C writes -1 (battle start writes 0, hiding 1), so in practice hiding is
+  just the second roll: 63% at level 10, 76% at 20, 82% at 30 (ninja.md). **[code; the
+  "no writer" part is a search of the C]**
 - **Ambush** (-7, from hiding): to-hit 4 better and the target takes + rand(damage). But
   each swing first rolls rand(16383) mod (2 × target level + attacker level): above
   1.25 × attacker level and the attacker is spotted ("But they're spotted.", 124) and the
