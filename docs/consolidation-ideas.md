@@ -2,6 +2,9 @@
 
 Not a plan yet; written for Chris to choose from.
 
+Option 1 was chosen on 2026-10-16 and done on 2026-10-17: `scripts/texttool.py` replaced the
+Kotlin tool, with a byte-identical disc.
+
 ## What's in the repo now
 
 | Piece | Language / toolchain | Size | Needed for |

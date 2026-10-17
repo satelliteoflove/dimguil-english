@@ -50,7 +50,7 @@ EXCLUDE = [
 ]
 PLACEHOLDERS = {'\u3042\u307e\u308a', '\u30c0\u30df\u30fc'}  # unused slots: amari ("left over"), damii ("dummy")
 
-# Checked outside the dumped files (the Kotlin dumper only reads sections.json):
+# Checked outside the dumped files (the dumper, texttool.py, only reads sections.json):
 OTHER_TEXT = [
     ('DATA02 M_DTnnn/MPTnn', 'monster records carry English name slots beside the Japanese'),
     ('DATA02 NPTnn', 'English slots held katakana; fixed by binary/NPTnn.BIN.json'),

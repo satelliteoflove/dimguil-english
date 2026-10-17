@@ -13,7 +13,6 @@
 #                  rips/harness/regress; see agent-workflow.md)
 #   rips/states    the standard test states (mkstates.py)
 #   rips/probe     probe helpers the suite's screen cases import (fixstate.py)
-#   build/         the encoder jar
 # Remove with: git worktree remove ../worktrees/NAME (then delete the branch if merged).
 set -eu
 cd "$(dirname "$0")/.."
@@ -31,5 +30,4 @@ for d in clean harness states probe; do
   [ -e "$MAIN/rips/$d" ] && ln -s "$MAIN/rips/$d" "$DEST/rips/$d"
 done
 [ -f "$MAIN/rips/testsave.mcd" ] && cp "$MAIN/rips/testsave.mcd" "$DEST/rips/"
-[ -d "$MAIN/build" ] && ln -s "$MAIN/build" "$DEST/build"
 echo "$DEST"
