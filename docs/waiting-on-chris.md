@@ -11,11 +11,6 @@ Nothing open.
 
 ## Text
 
-2. **Fontana's rescue offer** (NPC_MES3 153). Ours reads as pure kindness ("Soft-hearted
-   bunch… We'll take good care of them") while the fee is half the gold and every other
-   item. The Japanese お人好し (closer to "easy marks") and 悪いようにはしませんから ("we
-   won't do you wrong") carry the irony. Recommendation: rework it to keep the edge, as
-   Guy's and Balbo's lines do. `docs/re/rescue-test.md`.
 3. **The ornate door's message is cut off** (EVENTMES 33). It prints in a one-line bar,
    so the second line, "is locked.", never shows. Recommendation: join it into one line
    (about 265 px, it fits). `docs/re/lock-test.md`.
