@@ -275,6 +275,9 @@ BATTLE_CENTERING_SPACING equ 0x6
 
     .endarea
 
+    // PushMatrix's stack (0x800739f8, 20 entries of 0x20), entries 2-19. Nothing nests
+    // PushMatrix deeper than 1, by every jal from its callers and in a watched run of
+    // every chapter (engine-notes, "The VWF block and libds's play list").
     .org  80073a40h
     .area 80073c74h-.
     VWF_desc_wrapper:

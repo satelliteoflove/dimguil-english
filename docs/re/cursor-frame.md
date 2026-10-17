@@ -294,7 +294,9 @@ ON/OFF row layout is the Music row's, so the values line up with the rows above.
   (0x800ac5bc-0x800ac657 [0x800d9ccc-0x800d9d67]). The toggle and the drawing take
   exactly 37.
 - Free space elsewhere, for the record: the existing patches put new code at MAIN
-  0x80060e97-0x80060fe7 and 0x80073a40-0x80073c74 (vwf.asm), 0x80073c78-0x80073cf4
+  0x800159b8-0x80015bf3 (moved there from 0x80060e97, which turned out to be libds's
+  play list; engine-notes "The VWF block and libds's play list") and
+  0x80073a40-0x80073c74 (vwf.asm), 0x80073c78-0x80073cf4
   (catalog_vwf.asm), JOUKA 0x800a6c40 (bugfix_temple_lost.asm, an unreferenced debug
   menu) and several MCARD regions (the bugfix_* files). None is known in MAZE or HAZURE.
   Holding both tables in MAIN would work but splits the change between MAIN and the
