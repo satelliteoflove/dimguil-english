@@ -402,6 +402,19 @@ glance". By subsystem:
   doesn't handle, and the game froze. `asm/bugfix_spell_sound_reload.asm` stops it
   before each of the three loads (0x800a421c, 0x800a54d8, 0x800a5534), from a routine
   in the dead FUN_800c3188. A second SsSeqStop on a stopped or closed slot is harmless.
+- Bacortu in fixed battles (bugs.md 1.16). Bacortu carries the one-group flag 0x40, so in
+  a fixed battle its pick stores a row (1 or 2, see the picker above), but `spell_bacortu`
+  (0x800c9e2c) skipped `spell_group_range` and used the row as a group number: until
+  2026-10-17 the party's cast sealed group 1 or group 2 whatever was aimed at.
+  `asm/bugfix_bacortu_rows.asm` points `spell_handlers[14]` (0x800d83c4) at a routine in
+  the dead FUN_800c3188 (0x800c31a4) that, in a fixed battle with the party or its summons
+  casting at a monster row, runs `spell_group_range` and the original handler for each
+  group in the row, as `spell_madalto` does; everything else calls the original handler
+  once. Each group gets the caster's level; there's still no resistance check. Unlike
+  Madalto's checks it also tests the caster, since a monster's Banoka-bounced spell
+  targets its own group, a group number and not a row. That case, for the spells that do
+  go through `spell_group_range` (Madalto, Montino, Morlis and the rest), still treats the
+  group number as a row in a fixed battle; it's left as it was.
 
 ### Treasure after a fight: chest, loose loot or gold
 
@@ -517,8 +530,8 @@ that misses the encounter-source test below, so wandering fights never get one.
 
 ### Bugs, descriptions and open decisions
 
-- `docs/re/bugs.md`: every bug found, in three groups. Group 1 (sixteen clear bugs,
-  three of them found by the harness runs, one by the rescue test and one by the lock test) is fixed in `asm/bugfix_*.asm`.
+- `docs/re/bugs.md`: every bug found, in three groups. Group 1 (seventeen clear bugs,
+  four of them found by the harness runs, one by the rescue test and one by the lock test) is fixed in `asm/bugfix_*.asm`.
 - `docs/re/description-check.md`: item, spell, Compendium and help text checked against
   the records and the code (18 spell ranges in the original are wrong).
 - `docs/re/decisions.md`: the open questions and Chris's decision on each (all decided).
@@ -716,6 +729,18 @@ patches in `asm/`.
   redone if a word changes. The Inn's "To the next level, you need N more exp." under
   100 exp is one line at fixed x 28 and 124 (0x800c7c30), left aligned like the
   original; at 100 or more it's two centered lines (2026-10-13).
+- The maze's message bar (y 0xa2, printed with FUN_8001d368) centers on x 160; in the
+  emulator's shots the game's x shows 14 px further right, and the bar spans 14-334
+  there. "{name} can't act." (SISETU 525), from the locked-door menu (MAZE FUN_800ae1c8,
+  state 2) when the picked member has status & 0x3e0, was placed by fixed-width
+  arithmetic: the name loop (0x800ae3f8-0x800ae47c) sets s2 to the index of the 0x40 in
+  the name's 0xff 0x40 terminator (name length + 1), and x = (320 - 12 × (s2 + 10)) / 2
+  (0x800ae480-0x800ae498), the Japanese line in 12 px glyphs. The English sat 48-63 px
+  left. `asm/cant_act_centering.asm` makes it x = 136 - 5 × s2 / 2, for name letters of
+  about 5 px (VWF_LUT + 1: lowercase 4-8, mostly 5-6; capitals 7-10) and " can't act."
+  at 49 px; mixed-case names of 1-8 letters land within 2.5 px of 160 (measured: -1.8 to
+  +0.8 for Jo, Lu, Kai, Earth, Mercury). The first replaced word is the loop branch's
+  delay slot and still writes only v1, which the loop reloads (2026-10-17).
 - The NPC talk runs with MCARD.BIN at 0x800a1000, not MAZE.BIN.
 - The dungeon NPC box is 288 px by 3 lines, pages split by `\n\r`.
 - The battle box wraps at 24 glyph codes per line. Messages are expanded by 0x8001dfc0

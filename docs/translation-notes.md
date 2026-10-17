@@ -87,6 +87,10 @@ see all of it.
 
 - **Inn and Temple lines off center (2026-10-13).** "Not enough gold." sat 9 px left (x fixed for the
   Japanese, `asm/inn_gold_message.asm`); the Temple's chant 10 px (`asm/temple_layout.asm`).
+- **"{name} can't act." off center (SISETU 525; Chris, 2026-10-17).** The locked-door
+  menu placed it for twelve-pixel Japanese glyphs, 48-63 px left of the bar's middle in
+  English; the x is now computed for the English widths (`asm/cant_act_centering.asm`,
+  docs/re/lock-test.md problem 4).
 
 ### Machine-written habits (the Q1 sweep)
 
@@ -107,6 +111,26 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 
 ### Deliberate choices
 
+- **"Picking the lock" and "Searching" carry no dots of their own (SISETU 526, 441;
+  Chris, 2026-10-17).** The game animates a row of dots after each, spaced for the
+  Japanese (鍵開け挑戦中, 調査中, no dots), so ours doubled up and the first animated dots
+  landed on "lock..." (docs/re/lock-test.md problem 3). The animation supplies them now.
+- **Ghost Swarm's trap message names HP (FIGHTMSG 254; Chris, 2026-10-17).** 体力が激減した
+  is HP dropping sharply; the trap leaves every standing member with 2 to 10 HP and
+  touches no stat (docs/re/lock-test.md). "{name}'s strength drains away." read as the
+  Strength stat; now "{name}'s HP plummets."
+- **The ornate door's locked message is one line (EVENTMES 33; Chris, 2026-10-17).** It
+  prints in the one-line message bar (`square_examine` case 0x1e), so "is locked." after
+  the line break never showed. Now "The door adorned with beautiful ornaments is
+  locked.", about 265 px of the bar's ~296 (docs/re/lock-test.md), echoing EVENTMES 34.
+- **Fontana's rescue offer keeps its edge (NPC_MES3 153; Chris, 2026-10-17).** お人好し is
+  good-natured to the point of being easy to take advantage of, and 悪いようにはしませんから
+  is the stock reassurance of someone cutting a deal in his own favor. His party's fee is
+  half the gold and every other item, which the offer never mentions. "You're a
+  soft-hearted bunch, too... We'll take good care of them" read as pure kindness; now
+  "You're too nice for your own good. / Well, I suppose we are too. / Don't worry, we'll
+  treat you right." Like the Japanese, it lands in hindsight, once the party sees what
+  was taken. それでは is "Until next time." (Chris's wording).
 - **Attack verb 9 is "bashes" (FIGHTMSG 9, を 打ち降ろした; Chris, 2026-10-12).** The
   battle line is "{attacker} {verb} {target} with {weapon}.", and the Japanese verb takes
   the weapon as its object, so "brings down on" read oddly ("Cy brings down on Giant
@@ -255,6 +279,23 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   clipped ("Sorry, but this is a strategy meeting. Don't interrupt."). 2:264-265 also
   lost a sneer the old English had added ("beyond the likes of you"); the Japanese is a
   warning.
+  **Settled 2026-10-17 (Chris): each character keeps their own voice, a little more
+  formal when doing business.** A wider check found all three leaders, Guy included,
+  drop into the same stiff register in the same two kinds of line, and only there: the
+  story progress reports at puzzle spots, and the talk menu's shared service offers
+  (rescue, refusal, item sale), which are one template across the three parties (Guy
+  1:163, Balbo 2:142 and Fontana 3:151 open with nearly the same sentence; so do the
+  sale offers 1:167, 2:146, 3:155). Fontana, a shy 13-year-old (僕, です), talks like
+  an adult man at 3:278 (知らないか? …悩んでいるんだ), and the seams show inside single
+  lines (2:263 has 俺達 and then 君たち…たまえ; 2:142 opens with 我々 and is back to 俺達
+  and からな by 144-145). No in-story reason covers that, so it reads as a production
+  seam (generic party-leader text, flavored per character unevenly), not
+  characterization, and carrying it into English would only reproduce the seam.
+  So: Balbo stays Balbo, Fontana stays Fontana, Guy stays Guy. Business lines can tighten
+  up (fuller sentences, fewer tics) but don't switch to a different person's register.
+  Balbo's body-collection offer (2:142-145) stands as Chris left it on 2026-10-10.
+  Don't reopen this per line; a new case only needs checking that the speaker still
+  sounds like themselves.
 - **Artemisia's "see each other again" (2:44 and 3:25).** また会いましょうね is an
   ordinary friendly parting, and her next line is "Oh gosh, what am I even saying?"
   The Japanese joke is that she hears her own warmth as too forward. "Let's meet
@@ -823,6 +864,12 @@ Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
   read well.
 
 ## To revisit
+
+- **"Searching" and the game's first dot (SISETU 441; Chris, 2026-10-17: polish later).**
+  With its own dots gone, the animation's first dot lands 1 px after the "g", so it can
+  read as "Searching." before the rest of the row. Tiny; a leading or trailing space, or
+  nudging the dots' x, would part them. Shots: worktrees/actfix/rips/agents/actfix/shots/
+  dots_zoom.png and sheet_after_b3_search.png.
 
 - **Fontana's maze encounters (3:72, 75, 88, 278).** Same register shift as Balbo's
   reports. Handle them the same way when NPC_MES3 is reviewed: his own words, a little

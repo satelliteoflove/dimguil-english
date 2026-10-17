@@ -92,6 +92,17 @@ Every agent then starts clean and ends cleanly, and nothing it did is lost when 
 A detached run survives its agent being stopped. Short waits (a single fight bench of a
 few minutes, a build) can stay inside one agent.
 
+## Watching runs
+
+`python3 scripts/monitor.py` is a live terminal view of every chapter run, suite round and
+fight bench, refreshed every 2 seconds (`--once` prints one frame). Keys: Tab, 1-4 or a click
+focuses a panel; arrows, j/k or the mouse wheel select; PgUp/PgDn and g/G page; Enter opens a
+run's detail (every goal, death and retry), or on a bench, every fight with its deaths, run tries,
+casts and battle text ([ and ] scroll a fight); z zooms the panel; r shows running runs only;
+H widens the hours shown; q quits. It reads
+only the files the harness already writes, so runs need nothing special to show up.
+Its samples go to `rips/monitor/history.jsonl`, so the graphs survive a restart.
+
 ## Status files
 
 Each agent keeps `rips/agents/NAME/STATUS.md`, updated at each milestone: the task, the

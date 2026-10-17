@@ -253,6 +253,7 @@ at these spots.
 | MAIN | text_expand (0x8001e164, 0x8001e2a4, 0x8001e2fc, 0x8001e370) | word_wrap.asm |
 | MAZE | FUN_800a1ecc (0x800a1f7c, 0x800a1f9c, 0x800a1fc0) | voicing_marks.asm, vwf.asm |
 | MAZE | text_draw (0x800a20e0) | voicing_marks.asm |
+| MAZE | FUN_800ae1c8 (0x800ae480) | cant_act_centering.asm |
 | MAZE | FUN_800ba48c (0x800bab9c) | return_prompt_icon.asm |
 | MAZE | FUN_800bed7c (0x800bef6c) | training_sign_pool.asm |
 | MAZE | FUN_800d9304 (0x800d9cd8) | english_only.asm |

@@ -160,6 +160,29 @@ chant through the harness's own trip home to the temple, from a state in the maz
 (JOUKA isn't in RAM there, so it came from the new disc), 64 to 84 px, midpoint 150.5
 to 160.5. Shots: `rips/re/work/notenoughgold/shots/`.
 
+**"{name} can't act." and the lock dots (2026-10-17; lock-test.md problems 3 and 4).**
+The lock test found two lines on the locked-door menu still laid out for the Japanese.
+- Seen: "Kai can't act." (SISETU 525, picking a dead or paralyzed member) about 50 px
+  left of the bar's middle; "Picking the lock..." (526) with the game's own animated
+  dots landing on its full stops.
+- Cause, 525: the menu computes the line's x itself, as (320 - 12 × (name length + 11)) / 2,
+  twelve pixels a glyph for {name}は,行動できません。. The English font is proportional and
+  the line is far shorter, so it sat 48 px (Jo) to 63 px (Mercury) left.
+- Cause, 526 and 441: the game draws a row of dots after 鍵開け挑戦中 and 調査中, which
+  carry none, so the English's own "..." doubled them.
+- Fix: the x is now 136 - 5 × (name length + 1) / 2, five instructions in place of seven
+  in MAZE (`asm/cant_act_centering.asm`), which puts mixed-case names of 1-8 letters
+  within 2.5 px of center by the font's widths. The texts lost their dots (9337727).
+- Checked on the built disc, f8417983, with button presses only: the party saved at each
+  door with Save and Suspend, the disc powered on with that card and the party resumed,
+  so code and text both came from the new disc. Ink middles for Jo, Lu, Kai, Earth and
+  Mercury went from 48-63 px left to between 1.8 px left and 0.8 px right. The first
+  dot now sits 4 px after "lock". A lesson: the first round of shots, from states made
+  on the older disc, still showed "Picking the lock..." because text files stay in RAM
+  like code does; only the power-on round counts.
+- Shots: `rips/agents/actfix/shots/` (`sheet_cantact_before_after.png`, `dots_zoom.png`,
+  `sheet_after_b3_pick.png`).
+
 **The voicing marks, second round: centering and "b  away" (2026-10-13).** The T5 screen
 checks found two things the first voicing fix (9a955ba) had left.
 - Seen: every event line with `"` or the digraph "w " sat right of center, about 2 px
@@ -837,3 +860,25 @@ then nothing, for good.
   meeting with the talk overlay loaded. A rolling state every 30 frames, with the
   buttons recorded since, worked, but only once the replay stopped adding the one idle
   frame that loading a state normally runs.
+
+**The seal that landed on the wrong monster (2026-10-17, bugs.md 1.16).** Found by the
+harness while it was learning to use silencing spells in chapter 17: the Bishop aimed
+Bacortu at an Ogre Sorcerer in the back row, and the game sealed the Ogre in front of it.
+- Cause: in set fights (story fights and the roaming parties) a group spell picks a whole
+  row, and the pick is stored as 1 or 2. Every other group spell turns that into the row's
+  groups before it does anything. Bacortu's code skipped that step and read the 1 or 2 as
+  a group number, so it always sealed group 1 or group 2. The message reads the same
+  either way, so a player had no way to tell.
+- The fix sends Bacortu through the same row step as the others, then seals each group in
+  the row. Ordinary fights call the original code untouched. It points the spell's entry
+  in the handler table at a 46-word routine, placed in the leftover space of the dead
+  routine the spell-sound fix had already borrowed from. 47 words in BATTLE.BIN.
+- One check the other spells don't make: who's casting. A monster's spell that bounces
+  back off Banoka targets the monster's own group by number, not a row, so only the
+  party's cast is expanded. (The other row spells don't check this; that's left alone.)
+- Checked on the built disc with states made on it, no RAM written: aimed at the back row
+  of the roaming party, both Ogre Sorcerers were sealed, and one of them lost a Cortu to
+  "But spells are sealed." that round; aimed at the front row, the three front groups.
+  The suite's old disc on the same fight sealed the Ogre. In ordinary fights only the
+  group aimed at was sealed, and the seal stayed with its monster when the groups were
+  renumbered.

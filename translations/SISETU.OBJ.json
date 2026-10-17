@@ -3008,7 +3008,7 @@
                 {
                     "length": 6,
                     "source": "NA",
-                    "translation": "Searching...",
+                    "translation": "Searching",
                     "compress": true,
                     "addStringTerminator": true
                 },
@@ -3533,7 +3533,7 @@
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "Picking the lock...",
+                    "translation": "Picking the lock",
                     "compress": true,
                     "addStringTerminator": true
                 },

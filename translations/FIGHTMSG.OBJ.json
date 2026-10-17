@@ -1780,7 +1780,7 @@
                 {
                     "length": 16,
                     "source": "NA",
-                    "translation": "{ff18}'s strength drains away.",
+                    "translation": "{ff18}'s HP plummets.",
                     "compress": true,
                     "addStringTerminator": true
                 },
