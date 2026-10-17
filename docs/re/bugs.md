@@ -25,6 +25,12 @@ him first. So each entry is in one of three groups:
 
 Entries keep their numbers after a follow-up moves them to another group.
 
+Bugs our own patch caused aren't listed here; they're written up where the patch's code
+is described in `docs/engine-notes.md` and in `docs/writeup-notes.md`. So far: the
+voicing-mark hang ("Text printer") and the freeze on the town logo after the ending
+("The VWF block and libds's play list": Remisse's width table and centering wrappers sat
+in libds DsPlay's play list, which the credits' CD audio call wrote over).
+
 ## Group 1: clear bugs
 
 ### 1.1 Guy's statue warning shows a stranger the wrong line (NPC_MES1 89 for 87)

@@ -35,7 +35,9 @@ RAM,0x80079bb4,talk_block,global,confirmed,code read 2026-10-10,"Which 30-byte s
 RAM,0x8007981c,talk_state,global,confirmed,code read 2026-10-10,"The talk handlers' state machine (0x28 talk menu, 0x41 offer, 0x42 yes/no, 0x43 reply).",s16
 RAM,0x80079c5a,yesno_cursor,global,confirmed,docs/engine-notes.md,Two-option cursor: 0 = first option (yes).,u8
 RAM,0x8008b400,text_buffer,global,confirmed,"textbuf.py, engine-notes","Expanded message text; unbounded, live data from 0x8008b640.",
-RAM,0x80060e97,vwf_widths,table,confirmed,descfit.py,Variable-width font widths by glyph code (English font).,
+RAM,0x80060dfc,ds_play_state,table,confirmed,"code read and write watch 2026-10-17 (vwffix)","libds DsPlay (0x800393f0) state, to 0x80061137: +0x10 the TOC buffer DsGetToc (0x80038180) fills, +0x1a0 (0x80060f9c) the play list, up to 99 tracks and a 0. Remisse's patch had VWF_LUT and the overlay centering wrappers at 0x80060e97-0x80060fe7, inside it; the patched build now puts them at 0x800159b8 (asm/vwf_lut.inc).",
+MAIN,0x800159b8,unused_sprite_setup_a,function,confirmed,"refscan/deadcode and watched chapter sweep 2026-10-17 (vwffix)","Sprite slot setup (0x8007b4d0 records, flag 0x1000000); no caller, jump, branch, pointer or la in any module. The patched build overwrites it and unused_sprite_setup_b with VWF_LUT and the overlay centering wrappers (asm/vwf_lut.inc).",
+MAIN,0x80015ad8,unused_sprite_setup_b,function,confirmed,"refscan/deadcode and watched chapter sweep 2026-10-17 (vwffix)","unused_sprite_setup_a with flag 0; no caller in any module. Overwritten in the patched build (asm/vwf_lut.inc).",
 RAM,0x8008b390,glyph_layers,table,confirmed,"evsweep.py, castlecrawl.py","Glyph layer table: start, size per layer.",
 RAM,0x80079938,glyph_layer_used,global,confirmed,evsweep.py,"Glyph sprites in use, per layer.",
 RAM,0x80079c38,glyph_total_used,global,confirmed,castlecrawl.py,Running total of glyph sprites in use.,u16

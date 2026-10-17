@@ -645,10 +645,86 @@ patches in `asm/`.
   only when its id is non-zero (0x800360dc, 0x80036efc), so a slot whose id is written
   last can't go out half-written.
 
+### The VWF block and libds's play list (the post-ending freeze)
+
+- After the ending (credits, START, the automatic save) the game froze on the town logo
+  over six "Empty" boxes. The CPU sat in the kernel's unresolved-exception loop (0x5d0);
+  the kernel's TCB (0xa000e29c) had EPC 0x800a2004, cause 0x28 (Reserved Instruction),
+  ra 0x80060f9c. Every chapter 18 run hit it. Ours, not the game's.
+- MAIN 0x800393f0 is libds DsPlay (between DsSearchFile's object and
+  DsStartReadySystem). Its state runs 0x80060dfc-0x80061137 (the next variable,
+  0x80061138, is DSREADY's): +0x10 (0x80060e0c) is the TOC buffer DsGetToc (0x80038180)
+  fills, 4 bytes per entry, entry 0 plus one per track (4 entries on this disc, to
+  0x80060e1b); +0x1a0 (0x80060f9c) is the play list, the caller's track list copied in,
+  up to 99 tracks and a 0 (to 0x80061128). Read in the code; a write watch over the
+  whole state saw only these.
+- Remisse's vwf.asm put VWF_LUT and the HAZURE, JOUKA, MAZE and MCARD centering wrappers
+  at 0x80060e97-0x80060fe7, all inside that state: the table over TOC entries 34-54, the
+  wrappers over play-list entries 0-19. The range is zeros on the disc, and nothing
+  touches it until king_ending (JOUKA 0x800a52cc) calls DsPlay(1, {3, 0}, 0) for the
+  credits' CD track (0x800a5ae0; FUN_800a5cb4's call at 0x800a5e7c stops it). The play
+  list's 3 and 0 land on centering_JOUKA_wrapper + 0x10 (its `lw ra` and
+  `j 0x800dbe58`). The next centered town line (town_print, JOUKA 0x800dbd7c, the first
+  after the save) runs into the MAZE wrapper, jumps to MAZE's 0x800a1fa8, which is JOUKA
+  data, and dies at 0x800a2004. The save itself was already written.
+- Only the wrappers were hit. The table would take a disc with 34 or more tracks.
+- Moved to 0x800159b8-0x80015bf3 (`asm/vwf_lut.inc`): FUN_800159b8 and FUN_80015ad8, two
+  sprite-slot setups (the 0x8007b4d0 records, with and without flag 0x1000000) that
+  nothing calls. Checked in every module (MAIN and all seven overlays): no jal, j or
+  branch into the range, no pointer word, no lui/addiu pair that makes an address in it
+  (`rips/agents/vwffix/tools/refscan.py`, `deadcode.py`), and Ghidra lists no caller. The
+  block needs 0x149 bytes from 0x800159bb; the rest (to 0x80015bf3) stays dead code.
+- Watched over a run of every chapter (1-18, one run each from the previous chapter's
+  end state, chapter 1 from power-on; 5.7 million frames, about 26 hours of play, with
+  chapter 17 cut off after 90 minutes of training): with exec coverage and read
+  and write watches on 0x800159b8-0x80015bf3, nothing ran there, read it or wrote it
+  except the BIOS loading the executable at boot, and RAM matched the disc at every
+  check (578 checks; summary in `rips/agents/vwffix/runs/sweep/summary.txt`). The
+  kernel's exception handler reads the word at EPC when an interrupt lands in patched
+  code (pc 0xccc); that's the only other reader, and it reads code, not data.
+- The table's address keeps the old one's alignment (0x800159bb, 3 mod 4), and a pad
+  byte follows it, so the table, the pad and the four wrappers are the same 0x149 bytes
+  as before. get_VWF_spacing_in_a0 compares the code with CHARSET_SIZE loaded by `lui`
+  (0xd10000), so it has no real bound; a code past 0xd7 reads the bytes after the table,
+  and those are unchanged. (No English text encodes past 0xd7; the sweep's only read
+  past the digraphs' end was 0xd7 itself.)
+- vwf.asm's other MAIN area, 0x80073a40-0x80073c74, is PushMatrix's stack (0x800739f8,
+  20 entries of 0x20, depth at 0x800739f4): entries 2-19. Static worst case, following
+  every jal from each PushMatrix caller (MAIN 0x80016524, GsSetLightMatrix 0x8003de88,
+  four in CMAIN): depth 1. The sweep saw depth 1 at most (0x800739f4 never above 0x20)
+  and no game write past entry 0. catalog_vwf.asm's 0x80073c78-0x80073cf4 is the stack's
+  overflow and underflow printf strings, only printed on an error.
+- Checked on the built disc (md5 edeb302b3ac31790c9c4116b6a8e1b7e), no RAM written: a
+  Save and Suspend card from chapter 18's the_man state, then power-on, Load Data and
+  Resume Adventure on each disc, and chapter 18's goals from there. Same frames on both
+  up to the save. After it the old disc froze on the logo (EPC 0x800a2004, ra
+  0x80060f9c); the new one reached the town bar, and the tavern and inn showed their
+  centered lines. 179 per-string shots (battle, talks, town, events) and 22 boot-to-maze
+  shots came out pixel-identical on the two discs.
+- What the original does after the ending (checked 2026-10-17 on the Japanese disc,
+  from power-on with a Save and Suspend card made at the Grounds' entrance with the
+  ring, then Load Data, Resume Adventure, triangle into town; the same input on the
+  fixed disc and on the old one). After START the Save screen (MCARD, game_state 0x32)
+  saves by itself (with a save already on the card it asks "Overwrite it?", No
+  selected). Then the town logo over six "Empty" boxes: that's the game's own screen,
+  the party disbanded (town_state 1; circle was pressed there on every disc, as the
+  harness does). Then the town bar
+  (town_state 5) with the cursor on the tavern and no party, and the town works. The
+  standing members are titled (roster +0xc5 bit 0), the first one has the 1,000,000,
+  the dead aren't titled, and everyone is in town (area 0xff). The fixed disc ends in the
+  same states in the same order, with the same roster (names, levels, status, gold,
+  titles, location), 45 frames later
+  (27,615 against 27,570 from power-on). The old disc froze on the logo. On the Japanese
+  disc DsPlay writes the same 3 and 0 at 0x80060f9c: it's the library's, there too.
+- A save state made before this fix keeps the old MAIN, while the overlays reload from
+  the disc and jump to the new address: such a state crashes at its first centered line.
+  Test it from power-on or a state made on a fixed disc.
+
 ### Text printer
 
 - One printer (reader at 0x8001e0c0) draws dialogue, battle and event text. Codes below
-  0xd8 are English glyphs and digraphs, priced by the VWF table at 0x80060e97.
+  0xd8 are English glyphs and digraphs, priced by the VWF table at 0x800159bb
+  (0x80060e97 before the post-ending freeze fix; `asm/vwf_lut.inc`).
 - Glyphs 0xb6 and 0xb7 are `"` and the digraph `w ` in the English font, but the
   Japanese voicing marks (゛ ゜) to the printers, which drew the glyph before them in its
   voiced form and swallowed the mark. The maze's event box (0x8001ff04) did it after any

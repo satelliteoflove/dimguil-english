@@ -1,4 +1,5 @@
 .psx
+.include "../asm/vwf_lut.inc"   ; paths are from rips/, as with .open
 
 EXTRA_SPACING equ 1
 DEFAULT_SPACING equ 0xc
@@ -210,8 +211,14 @@ BATTLE_CENTERING_SPACING equ 0x6
         j       centering_BATTLE_wrapper_1b
         nop
 
-    .org  80060e97h
-    .area 80060fe7h-.
+    // The width table and the overlay wrappers live in two dead routines (vwf_lut.inc).
+    // Remisse's patch put them at 0x80060e97-0x80060fe7, which is libds DsPlay's state
+    // (0x80060dfc-0x80061137): the TOC buffer DsGetToc fills and, from 0x80060f9c, the
+    // play list DsPlay copies its track list into. The ending's CD audio call
+    // (king_ending, DsPlay with {3, 0}) wrote 3 and 0 over centering_JOUKA_wrapper, and
+    // the next centered town line crashed into data (the freeze after "The End").
+    .org  VWF_LUT_AT
+    .area VWF_BLOCK_END-.
     VWF_LUT:
         //  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, :
         .db 6, 3, 5, 5, 5, 5, 5, 5, 5, 5, 4, 7, 6, 6, 6, 6, 6, 6, 7, 3, 5, 7, 6, 9, 7, 6, 6, 6, 6, 6, 7, 7, 6, 9, 7, 6, 6, 4, 5, 4, 4, 4, 4, 5, 6, 3, 4, 5, 3, 7, 5, 4, 5, 5, 4, 4, 4, 5, 5, 7, 5, 5, 4, 3
@@ -224,6 +231,10 @@ BATTLE_CENTERING_SPACING equ 0x6
         .db    9,    5, 3, 3, 5,   11,  7,    7, 15,  3,   11,    15,    11, 3, 3, 11,  8,  9,  8,  7, 5, 1, 11, 2, 5, 11, 2, 3,   5, 3,  12,  2,  9, 11, 11, 12,  5
         //  ma, me, wa, we, mo, mi
         .db 12, 12, 12, 12, 12, 11
+        // get_VWF_spacing_in_a0 doesn't stop at 0xd8 (CHARSET_SIZE is used with lui), so
+        // codes past the table read the bytes after it. This pad byte and VWF_LUT_AT's
+        // alignment keep those what they were at 0x80060e97 (a 0, then the wrappers).
+        .db 0
         .align
 
     centering_HAZURE_wrapper:
@@ -264,6 +275,9 @@ BATTLE_CENTERING_SPACING equ 0x6
 
     .endarea
 
+    // PushMatrix's stack (0x800739f8, 20 entries of 0x20), entries 2-19. Nothing nests
+    // PushMatrix deeper than 1, by every jal from its callers and in a watched run of
+    // every chapter (engine-notes, "The VWF block and libds's play list").
     .org  80073a40h
     .area 80073c74h-.
     VWF_desc_wrapper:

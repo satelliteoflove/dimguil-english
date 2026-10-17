@@ -20,7 +20,14 @@ import json, os, re, sys
 
 ROOT = os.path.join(os.path.dirname(__file__), '..')
 EXE = os.path.join(ROOT, 'rips/dirty/dimguil/SLPS_026.91')
-VWF_LUT = 0x80060e97 - 0x8000f800
+
+def vwf_block():
+    """VWF_LUT's address in MAIN, from asm/vwf_lut.inc (where vwf.asm puts it)."""
+    m = re.search(r'^VWF_LUT_AT\s+equ\s+(0x[0-9a-fA-F]+)', open(os.path.join(ROOT, 'asm/vwf_lut.inc')).read(), re.M)
+    return int(m.group(1), 16)
+
+
+VWF_LUT = vwf_block() - 0x8000f800
 
 
 def _table(path):

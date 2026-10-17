@@ -882,3 +882,44 @@ Bacortu at an Ogre Sorcerer in the back row, and the game sealed the Ogre in fro
   The suite's old disc on the same fight sealed the Ogre. In ordinary fights only the
   group aimed at was sealed, and the seal stayed with its monster when the groups were
   renumbered.
+
+**The freeze after "The End" (2026-10-17, 4601e4e; ours, not the game's).** Found by the
+harness's first runs through the ending, chapter 18: after the credits and the automatic
+save, the game stopped on the town logo over six "Empty" boxes, every time.
+- Cause: Remisse's variable-width font patch put its width table and four small jump
+  routines (the centering wrappers for the town, the Edge of Town, the maze and the talks)
+  in a stretch of zeros in the executable. The zeros were the CD library's state for
+  playing audio tracks. The only time the game plays one is the credits, and the call
+  copied its track list (3, then a 0) over two words of the town's wrapper. The next
+  centered line in town jumped into data. The save had already been written, so the
+  player's game was safe, but they'd see a hang right after "The End".
+- Finding it: a write watch on the block from the King's audience caught the library
+  writing the two words at the start of the credit roll. The library's own code gave the
+  rest: 0x80060dfc-0x80061137 is one structure, a disc table of contents followed by the
+  play list, and the whole block was inside it.
+- The fix moves the block into two routines nothing in the game calls (0x800159b8, 0x23c
+  bytes, of which the block takes 0x149). "Nothing calls" was checked three ways: every
+  jump, branch, pointer and address-building instruction in all eight code files; Ghidra's
+  callers; and a watched run of all 18 chapters (5.7 million frames, about 26 hours of play) with nothing reading,
+  writing or running the range after boot. The table keeps its old alignment, so the
+  bytes past its end, which the width lookup reads for any code past the table, are
+  exactly what they were.
+- Numbers: 3 bytes changed in each of four overlays, the block plus two address loads in
+  the executable. Disc md5 edeb302b3ac31790c9c4116b6a8e1b7e.
+- Checked on the built disc with no RAM written. A memory card saved in Area Z before the
+  final fight, then power-on, Load Data and Resume on each disc, and the bot played the
+  coffin fight and the ending from there. Both discs ran the same frames up to the save.
+  The old disc then froze exactly as before; the new one went on to the town bar, the
+  tavern and the inn. 179 per-string shots and 22 boot-to-maze shots were pixel-identical
+  between the discs. Shots: `rips/agents/vwffix/shots/` (`sheet_before_after_ending.png`,
+  `sheet_before_after_text.png`).
+- What "fixed" means was checked against the original, not assumed: the Japanese disc,
+  booted with a card saved at the castle entrance with the ring, played the same ending
+  with the same buttons. It shows the town logo over six empty boxes after the save (the
+  game breaking up the party, not a hang), then on circle the town with no party. The
+  fixed disc does the same, with the same characters, titles and gold afterwards.
+  Shots: `sheet_original_jp_vs_new_vs_old_after_ending.png` (rows: original, fixed,
+  old).
+- A harness lesson: the first try on the fixed disc also "froze", but only because that
+  card already held a save, so the ending's automatic save stopped at "Overwrite it?" with
+  No selected. The ending goal assumes an empty card.
