@@ -274,7 +274,13 @@ description-check.md.)
 
 `monster_ai` (0x800cffb0) picks each monster's action: **[code]**
 
-1. Confused: 72% attacks a random group (action -12).
+1. Confused: 72% attacks a random group (action -12): in an ordinary fight (0x80079bde =
+   0) any monster group, its own included; in a fixed battle only another group, and with
+   none it acts normally. The golem fights are ordinary fights with one group
+   (0x80079bde 0, 0x800798b8 1, read in the golem bench), so a confused golem spends 72%
+   of its turns hitting itself. **[code, emu]** A monster group's targets
+   (`monster_target_random` 0x800d0754) are party members only, never a summoned
+   group. **[code]**
 2. Otherwise it rolls rand(100) against its AI row (table 0x800d89e0, 13 columns,
    the row is +0x88): the columns are fight a random reachable member, fight the
    reachable member with the least HP, defend, damage spell (single), damage spell
@@ -318,7 +324,9 @@ or breath). **[code]** A hidden party member that's picked is skipped 70% of the
   weapon's dice. **[code]**
 - **Bonuses.** If the target can't act (status 2 or more: confused, poisoned, asleep...)
   or the attacker is hiding: damage + rand(damage), up to almost double. If the weapon's
-  slaying bits (+0xa8) match the monster's class bits: ×2. **[code]**
+  slaying bits (+0xa8) match the monster's class bits: ×2. **[code]** +0xa8 is the OR of every equipped
+  item's slay bits (FUN_800a2450), so a ring counts: the TROLLKIN RING (slay 0x104000)
+  doubles damage on the golems (class 0x4000, giants). **[code]**
 - **Weapon effects.** If the weapon has hit effects (+0x8c), they're rolled after damage
   (below). The code works out a level-difference bonus for them, but the function never
   reads it (see bugs). **[code]**
@@ -414,9 +422,21 @@ Caldu and Ihalon have none (not castable in battle). **[code]**
 Every hostile spell first rolls against the target's resistance to the caster's school
 (party +0x87.., monsters +0xa3..), plus the target side's magic screen (Cortu). Nofis
 cuts it by a fifth per cast on the other side (counters 0x80079932 for the monsters'
-resistance, 0x80079949 for the party's, up to 21; single-target damage spells count at
-most 4). The roll is rand(100) < resistance - (resistance/5 × Nofis) + 1, so **even a
-target with no resistance shrugs off 1% of spells.** **[code]** Messages: 186 (party), 187
+resistance, 0x80079949 for the party's, up to 21; dice damage spells count at most 4,
+because `spell_damage_one` 0x800b0b50 caps both counters at 4 for its call and
+`spell_damage_group` calls it for each target). The roll is rand(100) < resistance -
+(resistance/5 × Nofis) + 1, so **even a target with no resistance shrugs off 1% of
+spells.** **[code]** A cast takes a fifth of the resistance, not 5 points: 12 against the
+golems' 60. Both counters are cleared at a fight's start (0x800a5ea4, 0x800a6024 from
+`battle_main` phase 0) and end (0x800a6024, phases 'T' and 'Z'). **[code, emu]** (golem
+bench, 2026-10-17: the counter written at the first command input read 0 each fight.)
+
+Not every hostile spell rolls it: `cast_spell` 0x800abcc0 has no resistance roll before
+`spell_dispatch`, and the AC spells (Morlis 0x800acb94, Dilto 0x800c9b2c, Mapoba
+0x800afaf0) go straight to `spell_ac_change` 0x800b083c, so they always land, -4 / -2 a
+monster, the modifier held to -99..99. **[code]** Status spells roll it once in
+`status_spell` and the psionic spells twice (their damage, then the confusion).
+**[code]** Messages: 186 (party), 187
 (when it's an item or ability), 188 (monster nullifies), 168 (group 7).
 
 ### Damage spells
@@ -467,7 +487,12 @@ resisting cold doesn't help against it.
 **Psionic damage** (`psionic_damage` 0x800b34b0): dice damage, then, if the target can
 still act, confusion with chance p (a status save of 100 - p), halved if the target
 resists bit 8 and 80% if it's weak to it. Sios 2d2 and 65%, Lios 2d2 and 65% (skips dead
-targets), Masios 8d2 and 60%, Lasios 8d9 and 60%. **[code]**
+targets), Masios 8d2 and 60%, Lasios 8d9 and 60%. **[code]** There's no immunity check:
+`status_spell` 0x800b173c kind 8 sets the confused bit unless it's already set, so a
+monster that resists confusion (+0xcc bit 8, both golems) is only harder to confuse
+(p halved), never immune. Against the Fire Golem (Psionic 60) a Sios lands about 5% of
+the time (39% x 39% x 32%), the Shadow Golem about 7%; after five Nofis about 28%.
+**[code]** Monsters don't recover from confusion in `monster_upkeep`.
 
 ### Status spells and saving throws
 
@@ -566,7 +591,18 @@ targeted). For each standing member: **[code]**
 - if the member is still standing, a second save (+4 if resistant) or the side effect:
   sleep 35%, poison 40%, stone 30%, confusion 30%, paralysis 30%, death 20%, by the
   breath's low bits.
-- The party's magic screen is halved first.
+- The party's magic screen (0x8008c487, group 0's) is halved first, at every breath, but
+  the breath's own roll doesn't read it: `cast_spell` sets 0x80079758 = 1 for a breath
+  (action -9) and `spell_damage_core`'s breath branch uses only save × 5 for a party
+  target. So Cortu does nothing against breath, and each breath halves whatever Cortu
+  built. **[code]**
+- Breath only ever targets the party (target_group 0); a summoned group (7) can't take it.
+  **[code]**
+- The element test is resist bits & (b | (b & 0xe0) << 2 | (b & 0xe0) << 7) & 0x119f, b
+  the breath byte (+0xc9): element 0x20 is fire (0x80), so the Fire Golem's breath; 0x80
+  matches fire (0x80) and 0x1000, and sets the death side effect, so the Shadow Golem's
+  death scream is a breath that fire resistance (or 0x1000: Gnome, Hobbit, Lizardman, Mook)
+  halves. **[code]**
 
 **The party** (`party_breath` 0x800b36dc, a race ability **[inf]**: FIGHTMSG 207/208 "breathes
 acid"): damage = the breather's current HP >> times breathed this battle (so half, then a
