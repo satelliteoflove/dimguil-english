@@ -9,13 +9,14 @@
 ; 0x1f = kanji), 24-26 type (6 = normal, 3 = half width), 27-29 width-5 (7 = newline).
 ; Single-byte code c sits at u = (c % 21) * 12, v = (c / 21) * 12 + 0x50.
 ;
-; cat_adv recovers c from u,v and advances by VWF_LUT[c] + 1 (Remisse's table at
-; 0x80060e97, vwf.asm), the same spacing the main text engine uses. Kanji and anything
+; cat_adv recovers c from u,v and advances by VWF_LUT[c] + 1 (Remisse's table, placed by
+; vwf.asm at VWF_LUT_AT, vwf_lut.inc), the same spacing the main text engine uses. Kanji and anything
 ; outside the table keep 12px. The table ends with the ma me wa we mo mi digraphs at
 ; 0xd2-0xd7, so the bound is 0xd8; stopping at 0xd1 spaced those a pixel short. The pen advances in the draw loop, one or two centering
 ; measures, and the per-glyph measure used for struct widths and line wrapping.
 
 .psx
+.include "../asm/vwf_lut.inc"   ; paths are from rips/, as with .open
 .open "dirty/dimguil/SLPS_026.91", 0x8000f800
 ; GsPushMatrix/GsPopMatrix overflow messages and an unreferenced "not implemented"
 ; string; only ever passed to printf on a matrix stack error.
@@ -43,9 +44,9 @@ cat_adv:
     mflo    t7                  ; c
     sltiu   t9, t7, 0xd8        ; the table runs to 0xd7 (mi)
     beqz    t9, @@fixed
-    lui     t9, 0x8006
+    lui     t9, hi(VWF_LUT_AT)
     addu    t9, t9, t7
-    lbu     v0, 0x0e97(t9)
+    lbu     v0, lo(VWF_LUT_AT)(t9)
     nop
     addu    v0, v0, v1
     jr      ra
