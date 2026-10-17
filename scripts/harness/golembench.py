@@ -36,6 +36,17 @@ Arms, by environment (all investigation only, nothing in the game files):
   FIRE=1      fire-resistant gear (resist bit 0x80, which the Fire Golem's breath matches)
               on each member without it, through the camp's Equip menu before the
               Investigate; the item is written into the pack by RAM first (FIRE_GEAR).
+  MORLIS=1    in the chain's fights every member who has Morlis (Mage 3) casts it at the golem
+              while its AC modifier (combatant +4) is above -97, then Dilto (Mage 2); the
+              rest as the policy says. spell_morlis 0x800acb94 and spell_dilto 0x800c9b2c
+              call spell_ac_change 0x800b083c (-4, -2; held to -99..99) with no resistance
+              roll, and cast_spell 0x800abcc0 rolls none before spell_dispatch.
+  CONFUSE=1   the golem's confused bit (combatant status 0x2) set at each command input: a
+              ceiling for Sios/Lios/Masios/Lasios, whose confusion (psionic_damage
+              0x800b34b0 -> status_spell 0x800b173c kind 8) has no immunity check.
+  TROLL=1     a TROLLKIN RING (slay 0x104000; the golems' class bits 0x4000, giants) on
+              each front-row member through the camp Equip menu, written into the pack by
+              RAM first; FUN_800a2450 ORs every equipped item's slay bits into +0xa8.
 SAVEAT=REL saves each fight's start to rips/harness/REL_ENC.state.
 DISC= a .cue to run on (default the harness disc; its dimguil/SLPS_026.91 beside it for
 the code lay); TEXT=1 keeps the FIGHTMSG lines.
@@ -184,20 +195,31 @@ FIRE_GEAR = {
 }
 
 
-def fire_gear(g, log):
+TROLL_SPARE = (243, 250, 261, 241, 247, 256, 275, 99, 314)   # unequipped pack items a ring may replace
+
+
+def fire_gear(g, log, troll=False):
     from harness import gear, camp
     done = []
     for pos, ri in enumerate(g.party_slots()):
         if ri is None:
             continue
         c = g.char(ri)
-        if struct.unpack_from('<H', c['raw'], 0xac)[0] & 0x80 or c['cls'] not in FIRE_GEAR:
-            continue
-        iid, spare = FIRE_GEAR[c['cls']]
+        if troll:
+            if pos > 2:
+                continue
+            iid, spare = 290, TROLL_SPARE
+        else:
+            if struct.unpack_from('<H', c['raw'], 0xac)[0] & 0x80 or c['cls'] not in FIRE_GEAR:
+                continue
+            iid, spare = FIRE_GEAR[c['cls']]
         words = struct.unpack_from('<10H', c['raw'], 0x20)
         k = next((j for j, w in enumerate(words) if w == 0xffff), None)
         if k is None:
-            k = next(j for j, w in enumerate(words) if w != 0xffff and not w & 0x2000 and w & 0x1ff in spare)
+            k = next((j for j, w in enumerate(words) if w != 0xffff and not w & 0x2000 and w & 0x1ff in spare),
+                     None)
+        if k is None:       # (Uranus: a full pack of gear) any unequipped item, the last first
+            k = max(j for j, w in enumerate(words) if w != 0xffff and not w & 0x2000)
         from harness.game import ROSTER, ROSTER_LEN
         g.e.write(ROSTER + ri * ROSTER_LEN + 0x20 + 2 * k, struct.pack('<H', iid | 0x4000))
         g.e.write(ROSTER + ri * ROSTER_LEN + 0x34 + k, b'\x00')      # item_state
@@ -228,6 +250,11 @@ def bench_one(g, st, seed):
     fire = fire_gear(g, gear_log) if os.environ.get('FIRE') else None
     if fire is not None:
         print('fire gear', fire, flush=True)
+    troll = fire_gear(g, gear_log, troll=True) if os.environ.get('TROLL') else None
+    if troll is not None:
+        print('trollkin rings', troll, flush=True)
+    morlis = bool(os.environ.get('MORLIS'))
+    confuse = bool(os.environ.get('CONFUSE'))
     fights = []
     orig = battle.fight
     msg0 = len(g.cap.messages) if g.cap else 0
@@ -238,16 +265,47 @@ def bench_one(g, st, seed):
         if stack and where in FIGHT_AT and policy is battle.default_policy:
             policy = battle.crystal_policy
         seen = []
-        if nofis:
+        obs = dict(fixed=set(), ngroups=set(), mod_min=0, morlis=0, dilto=0, confused_set=0)
+        mplan = dict(round=None, d=0)
+        if nofis or morlis or confuse:
             if battle.FIGHT_POLICIES and policy is battle.default_policy and where in battle.POLICY_AT:
                 policy = battle.POLICY_AT[where]
             inner = policy
 
             def policy(g2, m, opts):
-                v = g2.s8(NOFIS_M)
-                seen.append(v)
-                if v < nofis:
-                    g2.e.write(NOFIS_M, bytes([nofis]))
+                obs['fixed'].add(g2.u8(tactics.FIXED))
+                obs['ngroups'].add(g2.s8(0x800798b8))
+                if nofis:
+                    v = g2.s8(NOFIS_M)
+                    seen.append(v)
+                    if v < nofis:
+                        g2.e.write(NOFIS_M, bytes([nofis]))
+                ks = [k for k in tactics.groups(g2) if tactics.info(g2, k)['mons']]
+                if confuse:
+                    for k in ks:
+                        for j, h, st in tactics.info(g2, k)['mons']:
+                            a = tactics.COMBAT + k * 0x7e + j * 0xe + 0xc
+                            v = g2.u16(a)
+                            if v < 0x80 and not v & 2:
+                                g2.e.write(a, struct.pack('<H', v | 2))
+                                obs['confused_set'] += 1
+                if morlis and ks and battle.SPELL in opts:
+                    k = min(ks)
+                    mods = battle._cm_mods(g2, k)
+                    if mods:
+                        obs['mod_min'] = min(obs['mod_min'], min(a for _, _, a in mods))
+                        if mplan['round'] != battle.ROUND:
+                            mplan.update(round=battle.ROUND, d=0)
+                        mean = sum(a for _, _, a in mods) / len(mods) + mplan['d']
+                        ri = battle.party_ids(g2)[m]
+                        by_id = {c[0]: c for c in battle.castable(g2, ri)}
+                        if mean > -97:
+                            for sid, d, key in ((tactics.MORLIS, 4, 'morlis'), (tactics.DILTO, 2, 'dilto')):
+                                if sid in by_id:
+                                    c = by_id[sid]
+                                    mplan['d'] -= d
+                                    obs[key] += 1
+                                    return ('spell', sid, c[1], c[2], c[3], ('group', k))
                 return inner(g2, m, opts)
             policy.__name__ = inner.__name__
         if os.environ.get('SAVEAT'):
@@ -269,6 +327,7 @@ def bench_one(g, st, seed):
             acts=[a for a in res['actions'] if a[1] in ('spell', 'fight', 'aim', 'run', 'parry', 'use', 'dispel')],
             policy=res.get('policy'), support=res.get('support'), cm=res.get('cm'),
             oslo=g_.u8(OSLO_LEVEL), nofis_seen=sorted(set(seen)), nofis_end=g_.s8(NOFIS_M),
+            obs=dict(obs, fixed=sorted(obs['fixed']), ngroups=sorted(obs['ngroups'])),
             text=[battle._flat(x['text']) for x in g_.cap.messages[m0:]
                   if x['file'] == 'FIGHTMSG.OBJ'] if os.environ.get('TEXT') and g_.cap else None))
         print('  fight enc %d at %s: won %s wiped %s rounds %d dead %s drained %s' % (
@@ -304,7 +363,8 @@ def bench_one(g, st, seed):
     evs = [m['idx'] for m in g.cap.messages[msg0:] if m['file'] == 'EVENTMES.BIN'] if g.cap else []
     return dict(state=st, seed=seed, arm=dict(oslo=bool(os.environ.get('OSLO')), stack=stack,
                                               set=os.environ.get('SET', ''), nofis=nofis,
-                                              aware=bool(os.environ.get('NOFIS_AWARE')), fire=fire),
+                                              aware=bool(os.environ.get('NOFIS_AWARE')), fire=fire,
+                                              troll=troll, morlis=morlis, confuse=confuse),
                 ring=ring, end=here(g) if g.overlay() not in ('JOUKA', 'HAZURE') else g.overlay(),
                 fights=fights, won=sum(f['won'] for f in fights), events=evs, error=err,
                 party=members(g) if g.overlay() not in ('JOUKA', 'HAZURE') else None)
