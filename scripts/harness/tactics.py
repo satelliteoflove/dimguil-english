@@ -733,9 +733,9 @@ def value(g, sid, k, M, clevel, cast_counts, commit=False):
 #     stops 6% of its spells, four about 70%, so a cast is valued as its share of the best
 #     stack of up to SEAL_STACK casts over SEAL_ROUNDS rounds, as the AC stack is shared
 #     over its points. In a fixed battle the pick stores a row (1 front, 2 back) as the
-#     target, and spell_bacortu uses it as a group number with no row expansion, so the
-#     party's Bacortu seals group 1 or 2 whatever group was aimed at (seal_group; seen in
-#     ch17/ffr/silence/seal_trace.py: aimed at a back-row Ogre Sorcerer, it sealed group 2).
+#     target; the original game sealed group 1 or 2 whatever was aimed at (seen in
+#     ch17/ffr/silence/seal_trace.py), and since bugfix_bacortu_rows.asm the cast seals
+#     every group in the row, each by the caster's level (seal_groups; pick.py's rows).
 # SILENCE_FIRST (test): with most of the danger (SILENCE_FIRST_SHARE) in one or two groups'
 # spells, Montino at those groups goes ahead of the member's other turns but a finisher.
 # Bench (ch17 report 5, four Area E type-2 starts x seeds 1-20, flag off and on): no change
@@ -799,18 +799,19 @@ def seal_after(s, r):
 FRONT_N, BACK_N = 0x800796d3, 0x8007967c     # fixed battle: groups in the front and back rows (s8; pick.py)
 
 
-def seal_group(g, k):
-    """The group the party's Bacortu aimed at group k seals (see above): k in a random
-    battle; in a fixed one the row's number, 2 for the back row while both stand, else 1."""
+def seal_groups(g, k, M):
+    """The groups the party's Bacortu aimed at group k seals (see above): k in a random
+    battle; in a fixed one every group of k's row (row 2 while both rows stand)."""
     if not g.u8(FIXED):
-        return k
+        return [k]
     front = struct.unpack('<b', g.e.read(FRONT_N, 1))[0]
     back = struct.unpack('<b', g.e.read(BACK_N, 1))[0]
-    return 2 if front > 0 and back >= 1 and k > front else 1
+    row = lambda j: 2 if front > 0 and back >= 1 and j > front else 1
+    return [j for j in M if row(j) == row(k)] or [k]
 
 
 def seal_value(g, k, M, clevel, rounds=None):
-    """(silence) Bacortu on group k (the group it seals: seal_group) now, in hit points
+    """(silence) Bacortu sealing group k (one of seal_groups) now, in hit points
     (see above), after this round's casts planned (PLAN seal)."""
     if k not in M:
         return 0.0

@@ -508,9 +508,10 @@ of level 8 or below that isn't undead") is exactly right.
   resistance check (`spell_bacortu` 0x800c9e2c, called straight from `spell_dispatch`).
   In a fixed battle the party's group pick stores a row (1 front, 2 back) as
   `target_group`, and `spell_bacortu` uses it as a group number without
-  `spell_group_range`, so the party's Bacortu seals group 1 or group 2 whatever it was
-  aimed at (seen in the harness: aimed at a back-row Ogre Sorcerer, it sealed group 2,
-  an Ogre). A sealing level of 60 on two level-13 casters lost 13 of their 23 spells,
+  `spell_group_range`, so in the original game the party's Bacortu sealed group 1 or
+  group 2 whatever it was aimed at (seen in the harness: aimed at a back-row Ogre
+  Sorcerer, it sealed group 2, an Ogre). Fixed in the patch: it now seals every group of
+  the row (`asm/bugfix_bacortu_rows.asm`, bugs.md 1.16). A sealing level of 60 on two level-13 casters lost 13 of their 23 spells,
   against 54% from the formula. **[code]** **[run]**
   Breath halves the party's screen. **[code]**
 - Badumas: each of the target group's attacks loses a damage die, up to 4 times. **[code]**

@@ -1015,12 +1015,12 @@ def default_policy(g, m, opts):
         elif sil and sid == tactics.BACORTU:
             seen_ = set()
             for k in M:
-                t_ = tactics.seal_group(g, k)       # a fixed battle: group 1 or 2 (tactics)
-                if t_ in seen_:
+                ts_ = tuple(tactics.seal_groups(g, k, M))     # a fixed battle: k's whole row (tactics)
+                if ts_ in seen_:
                     continue
-                seen_.add(t_)
-                v = tactics.seal_value(g, t_, M, me['level'],
-                                       min(CORTU_SUP_ROUNDS, max(tactics.SEAL_ROUNDS, sup['horizon'])) if sup else None)
+                seen_.add(ts_)
+                R_ = min(CORTU_SUP_ROUNDS, max(tactics.SEAL_ROUNDS, sup['horizon'])) if sup else None
+                v = sum(tactics.seal_value(g, t_, M, me['level'], R_) for t_ in ts_)
                 if v > 0:
                     cands.append((v, ('spell', sid, sch, lv, c[3], ('group', k)), (sid, k), lv))
         elif special and sid in SUPPORT_SIDS:
@@ -1139,7 +1139,8 @@ def default_policy(g, m, opts):
             if key[0] == tactics.CORTU and tactics.CORTU_SCREEN:
                 tactics.cortu_commit(g, me['level'])
             if key[0] == tactics.BACORTU and key[1] in M:
-                tactics.seal_commit(g, tactics.seal_group(g, key[1]), M, me['level'])
+                for t_ in tactics.seal_groups(g, key[1], M):
+                    tactics.seal_commit(g, t_, M, me['level'])
             if sup and key[0] in SUPPORT_SIDS:
                 support_commit(m, key[0], key[1], g, M)
             return act
