@@ -994,8 +994,9 @@ def default_policy(g, m, opts):
         # spells and its Fight; Cortu, the party's AC and heals still weigh in by value (the
         # threat behind the stack's worth leaves out what kills outright, the Crystal Men's
         # decapitating beams)
-        other = max([c_[0] for c_ in cands if c_[2][0] not in SUPPORT_SIDS and c_[2][0] != tactics.CORTU]
-                    + [fight_v]) + 1
+        covered = CORTU_COVER and tactics.screen_now(g) >= 2 * me['level']
+        other = max([c_[0] for c_ in cands if c_[2][0] not in SUPPORT_SIDS
+                     and (c_[2][0] != tactics.CORTU or covered)] + [fight_v]) + 1
         cands = [(max(v, other) if STACK_V.get((m, key[0], key[1]), 0) > 0 else v, act, key, lv)
                  for v, act, key, lv in cands]
     if ITEMS_IN_BATTLE and USE in opts and M:
@@ -1255,6 +1256,14 @@ STACK_V = {}            # (slot, sid, k) -> the AC-stack part of support_value's
 CORTU_SUP_ROUNDS = 5.0  # Cortu's horizon in a support fight at most (test fight: 10 Cortus over 8 rounds)
 FIGHT_REAL = True       # in a support fight a front-liner's Fight is rated at its real melee (member_melee)
 STACK_FIRST = True      # a stack cast the plan wants outranks the member's damage and its Fight
+STACK_KEEP = 0.0        # (bench 2) a stack begun stays in the plan while it saves more rounds than this
+                        # (STACK_SAVE is for starting one; bench 1: stacks dropped at -12 of -24 when the
+                        # plain plan's rounds fell to 4-5, and Madalto went on at AC still near the floor)
+STACK_NEAR = True       # (bench 2) while the front line's melee on the group is under STACK_FLOOR of its
+                        # most, the group's threat counts in full in the rounds saved (it isn't dying down)
+CORTU_COVER = True      # (bench 2) with a stack in the plan, Cortu goes ahead of a stack cast only while
+                        # the screen (this round's casts counted) is below what one cast of the caster's
+                        # puts up from nothing (2 x level); bench 1: 7 Cortus a fight against crystal's 3
 
 
 def _spell_dmg(g, sid, k, M, clevel):
@@ -1401,20 +1410,23 @@ def support_plan(g, M):
             r0 = _sim(g, mem, M, k)
             r1 = _sim(g, mem, M, k, target, stack=True)
             saved = r0 - r1
-            if saved < STACK_SAVE or target <= 0:
+            if target <= 0 or saved <= STACK_KEEP or saved < STACK_SAVE and not begun:
+                plan.setdefault('dropped', {})[k] = (target, round(r0, 1), round(r1, 1), round(f[0]), round(f[-1]))
                 continue
-            worth = saved * (STACK_LEFT * threat[k] + sum(v for t, v in threat.items() if t != k))
+            near = STACK_NEAR and f[0] < STACK_FLOOR * f[-1]
+            worth = saved * ((1.0 if near else STACK_LEFT) * threat[k] + sum(v for t, v in threat.items() if t != k))
             FIGHT_INFO.setdefault('stacked', set()).add(M[k]['id'])
             plan['stacks'][k] = dict(target=target, r0=round(r0, 1), r1=round(r1, 1),
                                      melee=(round(f[0]), round(f[target]), round(f[-1])),
-                                     vpt=worth / target)
+                                     vpt=worth / target, near=near)
     saved = max([s_['r0'] - s_['r1'] for s_ in plan['stacks'].values()] + [0])
     plan['horizon'] = min(SUPPORT_HORIZON, max(0.0, R - saved - 0.5))
     FIGHT_INFO[key] = plan
     FIGHT_INFO.setdefault('support', []).append(dict(r=ROUND, R=plan['R'], quick=plan['quick'],
                                                      horizon=round(plan['horizon'], 1),
                                                      stacks={k: dict(v, vpt=round(v['vpt'], 1))
-                                                             for k, v in plan['stacks'].items()}))
+                                                             for k, v in plan['stacks'].items()},
+                                                     dropped=plan.get('dropped')))
     return plan
 
 
