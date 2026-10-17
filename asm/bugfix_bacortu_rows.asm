@@ -36,7 +36,7 @@
     .word   spell_bacortu_rows
 
 .org 0x800c31a4
-.area 0x800c330c - .
+.area 0x800c3300 - .            ; vwf.asm uses 0x800c3300-0x800c3307
 spell_bacortu_rows:
     addiu   sp, sp, -0x20
     sw      ra, 0x18(sp)
