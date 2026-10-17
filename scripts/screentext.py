@@ -12,7 +12,7 @@ one layer and row.
 
 As a module: Text(emu).start() ... .lines() -> [Line]
 """
-import argparse, os, sys
+import argparse, os, re, sys
 sys.path.insert(0, os.path.dirname(__file__))
 import emu
 
@@ -20,8 +20,16 @@ ACCEPT, REFUSE = 0x8001f840, 0x8001f9cc
 ALLOC = 0x8001f150                    # (size, layer): sets up one layer
 FONTREAD = 0x8001f4ec                  # lbu v1, 0x80079705
 FONTFLAG = 0x80079705
-VWF = 0x80060e97
 ROOT = os.path.join(os.path.dirname(__file__), '..')
+
+
+def vwf_block():
+    """VWF_LUT's address in MAIN, from asm/vwf_lut.inc (where vwf.asm puts it)."""
+    m = re.search(r'^VWF_LUT_AT\s+equ\s+(0x[0-9a-fA-F]+)', open(os.path.join(ROOT, 'asm/vwf_lut.inc')).read(), re.M)
+    return int(m.group(1), 16)
+
+
+VWF = vwf_block()
 s16 = lambda v: (v & 0xffff) - 0x10000 if v & 0x8000 else v & 0xffff
 
 
