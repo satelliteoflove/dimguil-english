@@ -861,6 +861,12 @@ Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
 
 ## To revisit
 
+- **"Searching" and the game's first dot (SISETU 441; Chris, 2026-10-17: polish later).**
+  With its own dots gone, the animation's first dot lands 1 px after the "g", so it can
+  read as "Searching." before the rest of the row. Tiny; a leading or trailing space, or
+  nudging the dots' x, would part them. Shots: worktrees/actfix/rips/agents/actfix/shots/
+  dots_zoom.png and sheet_after_b3_search.png.
+
 - **Fontana's maze encounters (3:72, 75, 88, 278).** Same register shift as Balbo's
   reports. Handle them the same way when NPC_MES3 is reviewed: his own words, a little
   more in charge.
