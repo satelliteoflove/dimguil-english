@@ -94,6 +94,10 @@ def check_battle_code():
 g.t.ticks.append(check_battle_code)
 if a.src:
     g.load(a.src)
+    # a state made before the VWF move keeps the old MAIN while the overlays it loads jump to
+    # the new home (regress.MAIN_CODE): lay the disc's code over it, as suite cases do
+    for adr, code in regress.disc_main_code():
+        g.e.write(adr, code)
     if a.battle_rng:
         g.e.write(0x80079a34, struct.pack('<I', random.Random(a.seed).getrandbits(32)))
 r = chapters.Run(g, seed=a.seed, variant=a.variant, out=out, auto_cases=not a.no_cases)
