@@ -997,7 +997,9 @@ def default_policy(g, m, opts):
         covered = CORTU_COVER and tactics.screen_now(g) >= 2 * me['level']
         other = max([c_[0] for c_ in cands if c_[2][0] not in SUPPORT_SIDS
                      and (c_[2][0] != tactics.CORTU or covered)] + [fight_v]) + 1
-        cands = [(max(v, other) if STACK_V.get((m, key[0], key[1]), 0) > 0 else v, act, key, lv)
+        # (bench 2) plus a hundredth of their own value, so Morlis's 4 points still beat
+        # Dilto's 2 (bench 1's max(v, other) tied them, and Dilto came first)
+        cands = [(max(v, other) + v / 100 if STACK_V.get((m, key[0], key[1]), 0) > 0 else v, act, key, lv)
                  for v, act, key, lv in cands]
     if ITEMS_IN_BATTLE and USE in opts and M:
         best_own = max([c_[0] for c_ in cands] + [fight_v])
