@@ -660,24 +660,49 @@ def gear_cures():
     return tuple(gear.CURE_SIDS)
 
 
+# (Chris, 2026-10-17) a worn cure item that can break (the Staff of Curing, a weapon) is
+# Used when nobody still to be commanded this round can cast Madi or Morfis (gear's
+# CURE_HOLD puts it on a member who isn't the Madi caster, for when that caster is the one
+# confused)
+CURE_WORN_USE = True
+
+
+def cure_caster_free(g, m):
+    """A member commanded after party slot m this round (slots go in order) who can act
+    (standing, not asleep, paralyzed, stoned or confused) and has a Madi or Morfis cast left."""
+    from harness import gear
+    for j, rj in enumerate(party_ids(g)):
+        if rj is None or j <= m:
+            continue
+        hp, st = member_state(g, j)
+        if hp <= 0 or st & 0x6a or st >= 0x80:
+            continue
+        if any(c[0] in gear.CURE_SIDS for c in castable(g, rj)):
+            return True
+    return False
+
+
 def cure_item_choice(g, ri, k, sids=None, harm=True):
     """A Madi or Morfis item on roster index ri's battle Use list, Used on confused member k
     (party slot), or None. Only when k can really hurt someone (confused_harm), and never a
     worn item that can break and that its wearer relies on (a weapon, or gear worth
-    something without the cure: the battle-item rule). Logged with the battle items.
+    something without the cure: the battle-item rule), unless nobody after this member
+    can cast the cure this round (CURE_WORN_USE). Logged with the battle items.
     (support) sids: the cures to look for (gear.CURE_SIDS); harm=False skips confused_harm
     (a paralyzed member)."""
     from harness import gear
     if harm and not confused_harm(g, k):
         return None
     eq = gear.equipped(g, ri)
+    me = party_ids(g).index(ri) if ri in party_ids(g) else 5
     for it in item_options(g, ri):
         if it['sid'] not in (sids or gear.CURE_SIDS) or not harm and not it['ident']:
             continue
         if it['eq'] and it['br']:
             rec = gear.item(g, it['id'])
             slot = next((s_ for s_, x in eq.items() if x and x['id'] == it['id']), None)
-            if rec['cat'] == 0 or slot is None or gear.score(rec, slot) > 0:
+            if (rec['cat'] == 0 or slot is None or gear.score(rec, slot) > 0) \
+                    and not (CURE_WORN_USE and not cure_caster_free(g, me)):
                 continue
         FIGHT_INFO.setdefault('items', []).append(dict(who=g.char(ri)['name'], ri=ri, item=gear.name(it['id']),
                                                        id=it['id'], k=it['k'], w=it['w'], sid=it['sid'],
@@ -1208,6 +1233,14 @@ def crystal_policy(g, m, opts):
                  if (h <= CM_HEAL_HP or h <= CM_HEAL_FRAC * mx) and CAST.get(('healed', s), -1) != ROUND)
     para = [s for s, h, st, mx, ac in party if st & 0x28 and CAST.get(('cure', s), -1) != ROUND]
     is_cls = me['cls']
+    if is_cls != 2 and len(para) >= 2 and USE in opts:
+        # (Chris, 2026-10-17) gear.CURE_HOLD may put the Staff of Curing on a member who
+        # isn't the Priest: they Use its Morfis as the Priest would
+        for it in item_options(g, ri):
+            if it['sid'] == 56:
+                for s in para:
+                    CAST[('cure', s)] = ROUND
+                return ('use', it['idx'], 56, it['id'], ('group', k))
     # the healer (a Priest): Madi on the most hurt, then the paralyzed (Dialko, Madi, the
     # Staff of Curing's Morfis for two or more), then Bamatu to the cap
     if is_cls == 2:

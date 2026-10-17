@@ -168,7 +168,7 @@ def run_one(g, st, seed):
                 ran=res['ran'], fled=res['fled'], runs=res['runs'], runs_skipped=res.get('runs_skipped'),
                 casts=[(c[0], sp(c[1])) for c in res['casts']], casters=sorted(casters0),
                 caster_down=gone[0] if gone else None,
-                deaths=[(d['who'], d['what'], d['by']) for d in res.get('deaths') or []],
+                deaths=[(d['who'], d['what'], d['by'], d.get('how')) for d in res.get('deaths') or []],
                 heals=battle.FIGHT_INFO.get('heals'),
                 items=[(u['who'], u['item'], u['round']) for u in battle.FIGHT_INFO.get('items') or []],
                 ll=bool(res['likely_loss']), matters=res['matters'], story=res['story'],

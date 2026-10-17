@@ -79,6 +79,22 @@ DEATH_EXTRA = 1.0        # (bossfight) killing or screening off a death caster: 
 HELPLESS_MELEE = True    # (revision 10) Katino and Lorks count the front-liners' extra damage (helpless_bonus)
 DRAIN = {37: 0.75}       # (support) Labadi: the share of a member's max HP one cast takes (it leaves a few)
 DRAIN_THREAT = True      # (support) ... counted in a monster's spell threat (info)
+# Confusion (Chris, 2026-10-17, c17v4a: an Orc Esper's Lasios confused Dax, Earth and Mercury,
+# and Dax killed everyone). Sios, Lios, Masios and Lasios confuse each member they hurt at
+# CONFUSE's chance (psionic_damage 0x800b34b0, D-battle.md "Psionic damage"); a confused
+# member can only Fight, half its blows go to a random ally, for about 13 rounds unless Madi
+# or Morfis cures it. DAMAGE counts only their dice, so a confusing caster rated as a weak
+# one. info's threat_conf: a member confused counts CONF_HP of the party's mean max HP (half
+# a member killed, as DEATH_THREAT counts a death), at CONF_LANDS for magic resistance and
+# the screen, times the members the spell reaches (DAMAGE kind: 1, ROW, 6) and its AI row's
+# chance of casting it. Kept out of threat, so the fight ratings (matters, likely_loss) are
+# as they were; counted in danger_of, caster_danger and spell_hp, so caster_order (the
+# fighters' and focus casters' order), the kill worth of damage spells, sleep/paralysis/
+# silence worth and Cortu all rate the confusing group higher.
+CONF_THREAT = True
+CONFUSE = {63: 0.65, 66: 0.65, 72: 0.60, 82: 0.60}     # Sios, Lios, Masios, Lasios
+CONF_HP = 0.5
+CONF_LANDS = 0.75
 DEBUFF_MIN = 0.3         # (fix 3) sleep, silence, paralysis only where a monster's chance of being caught is this
 
 
@@ -225,6 +241,16 @@ def info(g, k):
             threat += d_round
             threat_spell += d_round
             threat_death = d_round
+        threat_conf = 0.0
+        if CONF_THREAT and any(sid in CONFUSE for _, sid in dmg + sts):
+            reach_n = {'one': 1, 'group': ROW, 'all': 6}
+            tot_s = sum(pr for pr, _ in sts) or 1
+            n_conf = (p_dmg * sum(pr / tot * CONFUSE[sid] * reach_n[DAMAGE[sid][1]]
+                                  for pr, sid in dmg if sid in CONFUSE)
+                      + p[5] * sum(pr / tot_s * CONFUSE[sid] * reach_n[DAMAGE[sid][1]]
+                                   for pr, sid in sts if sid in CONFUSE))
+            hp_m = [g.char(i)['max_hp'] for i in g.party()]
+            threat_conf = n_conf * CONF_LANDS * CONF_HP * (sum(hp_m) / len(hp_m) if hp_m else 0)
         # monster_ai 0x800cffb0: columns 3-4 damage (spell entry 0), 5 status (1), 6 buff
         # (2), 7 heal (3), 8 cure (4); a column it has no spells for falls back to fighting
         has = [any(r[0x8f + sc * 5 + e] != 0xff for sc in range(4)) for e in range(5)]
@@ -242,7 +268,7 @@ def info(g, k):
         p_status = p[5] if sts else 0.0
         spells = {sid for _, sid in dmg + sts} | {src[1] for _, src, _ in dsrc if src[0] == 'spell'}
     else:
-        threat_drain = 0.0
+        threat_drain = threat_conf = 0.0
         dsrc, dcast, fight_p = [], [], 1.0
         sts, p_status, spells = [], 0.0, set()
         threat_spell = 8 * lv if caster else 0
@@ -258,7 +284,7 @@ def info(g, k):
                 flags=struct.unpack_from('<I', r, 0xa8)[0],
                 resist=struct.unpack_from('<H', r, 0xcc)[0],
                 weak=struct.unpack_from('<H', r, 0xce)[0], caster=caster, threat=threat, threat_spell=threat_spell,
-                threat_death=threat_death, threat_drain=threat_drain,
+                threat_death=threat_death, threat_drain=threat_drain, threat_conf=threat_conf,
                 blow=(blow_f, blow_b), death=death, dsrc=dsrc, dcast=dcast, fight_p=fight_p, dis_hp=0.0, dis_hp_spell=0.0,
                 para=para_caster(dsrc, dmg + sts if SPELLS_ON else []),
                 gdmg=any(sid in DAMAGE and DAMAGE[sid][1] != 'one' for _, sid in (dmg if SPELLS_ON else [])),
@@ -546,7 +572,8 @@ def danger_of(m):
     """What one of group m's monsters costs the party a round it stands: its damage threat
     and the actions it takes away (disable(): dis_hp, 0 until it has run); its death
     spells DEATH_EXTRA times again, for the dead member's turns (bossfight)."""
-    return m['threat'] + m.get('dis_hp', 0.0) + DEATH_EXTRA * m.get('threat_death', 0.0)
+    return (m['threat'] + m.get('dis_hp', 0.0) + DEATH_EXTRA * m.get('threat_death', 0.0)
+            + m.get('threat_conf', 0.0))
 
 
 def lands(m, sid):
@@ -660,7 +687,8 @@ def value(g, sid, k, M, clevel, cast_counts, commit=False):
                 worth = 8 * m['level'] * n * (m.get('cast_share', 1.0) if SPELLS_ON else 1.0)
                 # (fix 2) or what its spells do, damage and members put to sleep, for those
                 # rounds; abilities aren't silenced
-                worth = max(worth, (m.get('threat_spell', 0) + m.get('dis_hp_spell', 0)) * n)
+                worth = max(worth, (m.get('threat_spell', 0) + m.get('dis_hp_spell', 0)
+                                    + m.get('threat_conf', 0)) * n)
                 if sil:
                     # (silence) in a special fight: what its spells would cost the party
                     # past the magic screen (spell_hp), recast once it wears off
@@ -731,7 +759,8 @@ def spell_hp(m):
     tot = sum(pr for pr, _ in sts) or 1
     deb = m.get('p_status', 0.0) * sum(pr / tot * DEBUFF_HP[sid] for pr, sid in sts if sid in DEBUFF_HP)
     return (m.get('threat_spell', 0.0) + m.get('dis_hp_spell', 0.0) + deb
-            + DEATH_EXTRA * m.get('threat_death', 0.0) + m.get('threat_drain', 0.0))
+            + DEATH_EXTRA * m.get('threat_death', 0.0) + m.get('threat_drain', 0.0)
+            + m.get('threat_conf', 0.0))
 
 
 def silence_worth(g, m):
@@ -1019,12 +1048,12 @@ def caster_danger(m):
     """Hit points a round one of group m's monsters costs the party by casting: its damage
     and death spells (info threat_spell), the members its sleep, paralysis and silence
     spells and spell abilities take out of the fight (disable() dis_hp_cast; 0 until
-    disable has run on M), and its debuffs (DEBUFF_HP, at its AI row's status-column
-    chance)."""
+    disable has run on M), its debuffs (DEBUFF_HP, at its AI row's status-column
+    chance), and the members it confuses (threat_conf)."""
     sts = m.get('sts', [])
     tot = sum(pr for pr, _ in sts) or 1
     deb = m.get('p_status', 0.0) * sum(pr / tot * DEBUFF_HP[sid] for pr, sid in sts if sid in DEBUFF_HP)
-    return m.get('threat_spell', 0.0) + m.get('dis_hp_cast', 0.0) + deb
+    return m.get('threat_spell', 0.0) + m.get('dis_hp_cast', 0.0) + deb + m.get('threat_conf', 0.0)
 
 
 def is_caster(m):

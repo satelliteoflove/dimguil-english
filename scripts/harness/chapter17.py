@@ -29,10 +29,11 @@ Goals, each proved by RAM or a captured string:
                starts, so the proof is bit 2 and a won fight at (36, 12, 11) in the log
                (back in the maze, nobody fled). encounter_id 0xf can't be run from
                (battle.fleeable). A wipe replays the goal from its start state.
-  train_easy_NN (Chris, 2026-10-17) before the control room, training trips on Area C B3
-               (EASY_AREAS) until every member is TRAIN_UP levels above the level they
-               reached the training at (train_goals' need).
-  train_NN     then trips on B4 (TRAIN_AREAS: its fight squares meet the Greater Demons,
+  train_easy_NN (Chris, 2026-10-17) right after cockpit, before the party first goes
+               into Area E: training trips on Area C B3 (EASY_AREAS) until every member is
+               TRAIN_UP levels above the level they reached the training at (train_goals'
+               need). Comes before area_e in the list below.
+  train_NN     after the bridge, trips on B4 (TRAIN_AREAS: its fight squares meet the Greater Demons,
                level 18, over 25,000 experience each, six at a time and calling more) for
                TRAIN_UP_B4 levels more.
   out          back in town.
@@ -65,7 +66,7 @@ TRAIN_AREAS = (36,)             # Area E B4: the Greater Demons (boss training)
 EASY_AREAS = (29,)
 PUSH_AREAS = EASY_AREAS         # the train-after-running rule trains there too (push_train)
 TRAIN_UP = 2                    # levels every member gains on EASY_AREAS first
-TRAIN_UP_B4 = 2                 # then on B4 (TRAIN_AREAS), from the levels the easy floor left
+TRAIN_UP_B4 = 2                 # then on B4 (TRAIN_AREAS) after the bridge, from the levels then
 TRAIN_MOST = 40                 # training trips at most for each
 tactics.BOSS_AT.add(MEET)       # rated as a story fight whatever FIXED says
 # battle.control_policy for the meeting (Report 6) is off (Chris, 2026-10-17): the bench had
@@ -175,22 +176,30 @@ class Chapter17:
 
         yield from run.recover_goals()
         yield 'cockpit', cockpit
+
+        def stage(areas, up, prefix):
+            # every member `up` levels above where they stand now (the generator runs this
+            # once the previous goal is done, so "now" is the party that reached it)
+            want = {i: g.char(i)['level'] + up for i in (g.party() or town.town_party(g))}
+            run.note('train target', 'control_room', areas,
+                     [(g.char(i)['name'], g.char(i)['level'], w) for i, w in want.items()])
+
+            def need(want=want):
+                here_ = set(g.party() or town.town_party(g))
+                return [i for i, w in want.items() if i in here_ and g.char(i)['level'] < w]
+            return run.train_goals(areas, 0, prefix=prefix, most=TRAIN_MOST, need=need)
+
+        # (Chris, 2026-10-17, c17v5a: 17 deaths between hidden_door and bridge at the old
+        # levels) the easy floor's TRAIN_UP levels come first, from Area X, before the party
+        # first walks into Area E; skipped when the hidden door is already found (a later
+        # start state)
+        if not nav.hidden_found(g, DOOR_P1) and not nav.flag(g, NPC_FLAGS, MEET_BIT):
+            yield from stage(EASY_AREAS, TRAIN_UP, 'train_easy')
         yield 'area_e', area_e
         yield 'hidden_door', hidden_door
         yield 'bridge', bridge
         if not nav.flag(g, NPC_FLAGS, MEET_BIT):
-            # every member `up` levels above where they stand now (the generator runs this
-            # once the previous goal is done, so "now" is the party that reached it): first
-            # TRAIN_UP on the easy floor, then TRAIN_UP_B4 more on B4
-            for areas, up, prefix in ((EASY_AREAS, TRAIN_UP, 'train_easy'),
-                                      (TRAIN_AREAS, TRAIN_UP_B4, 'train')):
-                want = {i: g.char(i)['level'] + up for i in (g.party() or town.town_party(g))}
-                run.note('train target', 'control_room', areas,
-                         [(g.char(i)['name'], g.char(i)['level'], w) for i, w in want.items()])
-
-                def need(want=want):
-                    here_ = set(g.party() or town.town_party(g))
-                    return [i for i, w in want.items() if i in here_ and g.char(i)['level'] < w]
-                yield from run.train_goals(areas, 0, prefix=prefix, most=TRAIN_MOST, need=need)
+            # B4's TRAIN_UP_B4 levels after the bridge, from the levels the party reached it at
+            yield from stage(TRAIN_AREAS, TRAIN_UP_B4, 'train')
         yield 'control_room', control_room
         yield 'out', out

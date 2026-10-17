@@ -146,6 +146,11 @@ def worth(g, ri, it, slot):
     the back row with two daggers)."""
     if it is None:
         return 0
+    if CURE_HOLD and it['sub'] not in (20, 21) and cure_item(g, it['id'] | IDENT):
+        # (Chris, 2026-10-17) a worn cure item goes on its holder and nobody else
+        h = cure_holder(g, it['id'])
+        if h is not None:
+            return CURE_HOLD_WORTH if h == ri else -CURE_HOLD_WORTH
     if slot in (0, 1) and it['cat'] == 0 and back_row(g, ri) and not back_reach(it):
         return 0
     if slot == 0 and it['f04'] & 0x20:
@@ -234,7 +239,7 @@ def better(g, ri, it, slot, cur):
     what lets them fight."""
     if not usable(g, ri, it) or not fits_slot(it, slot):
         return False
-    if slot == 0 and cur is not None and ranged(cur) != ranged(it):
+    if slot == 0 and cur is not None and ranged(cur) != ranged(it) and not held_cure(g, ri, it['id']):
         return False
     if slot == 6 and cur is not None and not cloak(cur):
         return False                # a ring or amulet that's on stays on (choose)
@@ -284,7 +289,9 @@ def choose(g, ri, slot, cands, before, prefer=None):
         it = item(g, w & 0x1ff)
         if not (w & IDENT or before.get(k, 0) & EQUIPPED) or not usable(g, ri, it):
             continue
-        if slot == 0:
+        if cure_elsewhere(g, ri, w):
+            continue                # (Chris, 2026-10-17) its holder wears it (cure_holder)
+        if slot == 0 and not held_cure(g, ri, w & 0x1ff):
             cur = next((item(g, before[j] & 0x1ff) for j in before
                         if before[j] & EQUIPPED and before[j] & MAIN_H), None)
             if cur is not None and ranged(cur) != ranged(it):
@@ -391,6 +398,8 @@ def wants_equip(g, ri):
     usable piece could fill)."""
     on = equipped(g, ri)
     for k, w in pack(g, ri):
+        if w & EQUIPPED and cure_elsewhere(g, ri, w):
+            return True             # a cure item worn that belongs on another member
         if w & EQUIPPED or not w & IDENT:
             continue
         it = item(g, w & 0x1ff)
@@ -977,9 +986,81 @@ def cure_item(g, w):
     return bool(w & IDENT) and bs != 0xff and bs & 0x7f in CURE_SIDS
 
 
+# A second curer (Chris, 2026-10-17, c17v4a: Earth, the only Madi caster, wore the Staff
+# of Curing as a weapon; an Orc Esper's Lasios confused him with Dax and Mercury, nobody
+# could cure, and Dax killed the party). When some member casts Madi or Morfis, a cure item
+# goes to a member who doesn't (cure_holder): a Priest or Bishop first, then the back row.
+# Gear (not a potion or scroll) is only on the battle Use list worn (battle.item_options),
+# so the holder wears it (worth() CURE_HOLD_WORTH; everyone else -CURE_HOLD_WORTH, and
+# choose() never puts it on them), even over a weapon of another kind (held_cure), and
+# battle.cure_item_choice Uses it worn when no Madi or Morfis caster can act this round.
+# With no cure caster in the party the old rule stands (cure_moves: to a Priest or Bishop).
+CURE_HOLD = True
+CURE_HOLD_WORTH = 100
+
+
+def cure_caster(g, ri):
+    """Roster index ri knows Madi or Morfis (whatever its points or status now)."""
+    from harness import battle
+    raw = g.char(ri)['raw']
+    for sid in CURE_SIDS:
+        school, rest = divmod(sid, 21)
+        if sid in battle.known_spells(raw, school, rest // 3 + 1):
+            return True
+    return False
+
+
+def cure_holder(g, i):
+    """The member (roster index) who should carry cure item id i, or None for the old rule:
+    one who can't cast Madi or Morfis, while someone in the party can, standing, able to
+    wear it if it's gear; a Priest or Bishop first, then the back row."""
+    if not CURE_HOLD:
+        return None
+    members = [ri for ri in (g.party() or town.town_party(g)) if ri is not None]
+    casters = {ri for ri in members if cure_caster(g, ri)}
+    if not casters:
+        return None
+    it = item(g, i)
+    worn = it['sub'] not in (20, 21)
+    cands = [ri for ri in members if ri not in casters and g.char(ri)['status'] < 0x20
+             and (not worn or usable(g, ri, it))]
+    if not cands:
+        return None
+    return min(cands, key=lambda ri: (g.char(ri)['cls'] not in HEALER_CLASSES, not back_row(g, ri), ri))
+
+
+def held_cure(g, ri, i):
+    """Item id i is a cure item roster index ri is its holder for."""
+    return CURE_HOLD and cure_item(g, i | IDENT) and cure_holder(g, i) == ri
+
+
+def cure_elsewhere(g, ri, w):
+    """Item word w is an identified cure item whose holder is another member."""
+    if not CURE_HOLD or not cure_item(g, w):
+        return False
+    h = cure_holder(g, w & 0x1ff)
+    return h is not None and h != ri
+
+
 def cure_moves(g):
-    """[(from roster index, pack index, to roster index)]: a cure item that isn't worn, in
-    the pack of someone who isn't a Priest or Bishop, to the one with the most room."""
+    """[(from roster index, pack index, to roster index, swap)]: a cure item that isn't worn
+    to its holder (cure_holder; a full holder trades back what swap_back picks, swap its
+    pack index); with none, in the pack of someone who isn't a Priest or Bishop, to the one
+    with the most room (swap None)."""
+    out = []
+    for ri in g.party():
+        for k, w in pack(g, ri):
+            if w & (EQUIPPED | CURSED) or not cure_item(g, w):
+                continue
+            h = cure_holder(g, w & 0x1ff)
+            if h is None or h == ri:
+                continue
+            sw = swap_back(g, h, w) if len(pack(g, h)) >= 10 else None
+            if len(pack(g, h)) < 10 or sw is not None:
+                out.append((ri, k, h, sw))
+    if out or any(cure_holder(g, w & 0x1ff) is not None for ri in g.party() for k, w in pack(g, ri)
+                  if cure_item(g, w)):
+        return out
     healers = [ri for ri in g.party() if g.char(ri)['cls'] in HEALER_CLASSES
                and g.char(ri)['status'] < 0x20]
     if not healers:
@@ -987,7 +1068,7 @@ def cure_moves(g):
     to = min(healers, key=lambda ri: len(pack(g, ri)))
     if len(pack(g, to)) >= 10:
         return []
-    return [(ri, k, to) for ri in g.party() if ri not in healers
+    return [(ri, k, to, None) for ri in g.party() if ri not in healers
             for k, w in pack(g, ri) if not w & (EQUIPPED | CURSED) and cure_item(g, w)]
 
 
@@ -997,9 +1078,9 @@ def place_cures(g, log=None):
         mv = cure_moves(g)
         if not mv:
             break
-        ri, k, rj = mv[0]
+        ri, k, rj, sw = mv[0]
         slots = g.party_slots()
-        if give(g, slots.index(ri), k, slots.index(rj), log) != 'given':
+        if give(g, slots.index(ri), k, slots.index(rj), log, swap=sw) not in ('given', 'swapped'):
             break
         n += 1
     return n
@@ -1508,7 +1589,11 @@ def camp_loot(g, log=None, on_int=None):
             done += 1
         done += equip_party(g, log, on_int=on_int)
         done += place_potions(g, log)
-        done += place_cures(g, log)
+        moved = place_cures(g, log)
+        done += moved
+        if moved:
+            # a cure item handed to its holder goes on (CURE_HOLD)
+            done += equip_party(g, log, on_int=on_int)
     except Stuck as s:
         if s.what != 'camp interrupted' or on_int is None:
             raise
