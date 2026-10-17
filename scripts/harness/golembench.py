@@ -48,6 +48,9 @@ Arms, by environment (all investigation only, nothing in the game files):
               each front-row member through the camp Equip menu, written into the pack by
               RAM first; FUN_800a2450 ORs every equipped item's slay bits into +0xa8.
 SAVEAT=REL saves each fight's start to rips/harness/REL_ENC.state.
+Progress goes to the monitor's jobs panel through scripts/jobstatus.py: one job per launch
+(JOB_RUN), a worker per process (JOB_PART, e.g. 'b v6b 1-10'), chains done per arm (JOB_ARM),
+a Fire Golem / Shadow Golem / Quetzalcoatl tally and an event per chain.
 DISC= a .cue to run on (default the harness disc; its dimguil/SLPS_026.91 beside it for
 the code lay); TEXT=1 keeps the FIGHTMSG lines.
 """
@@ -58,6 +61,10 @@ from harness.game import Game, OUT, DISC, Stuck
 from harness import battle, tactics, chapters, chapter1, maze, play
 from harness import chapter18
 from harness.fightbench import apply_set, seeds, points, points_lv, sp
+try:
+    from jobstatus import Job
+except ImportError:             # progress reporting is optional
+    Job = None
 
 ALTAR = (2, 11, 11)             # Shrine 2F E11 N12, facing north (square_examine case 0x21)
 RING = 0x142
@@ -72,6 +79,13 @@ CHAIN_MOST = 4
 # EVENTMES 36's last box to the Fire Golem's battle: about 3,000 calm frames (altar_probe,
 # 2026-10-17: Investigate at 0, 36 closed by 1,292, the fight's load from 4,075)
 CHAIN_WAIT = 6000
+FOE = {FIRE: 'FG', SHADOW: 'SG', QUETZ: 'QZ'}
+JOB = [None]                    # the jobstatus Job of a run, if any
+
+
+def job_step(text):
+    if JOB[0]:
+        JOB[0].step(text)
 
 
 def run_obj(g, state, seed, out):
@@ -310,6 +324,9 @@ def bench_one(g, st, seed):
             policy.__name__ = inner.__name__
         if os.environ.get('SAVEAT'):
             g_.save('%s_%d' % (os.environ['SAVEAT'], enc))
+        job_step('%s seed %s: fight %d, %s' % (state_label(st), seed, len(fights) + 1,
+                                               {FIRE: 'Fire Golem', SHADOW: 'Shadow Golem',
+                                                QUETZ: 'Quetzalcoatl'}.get(enc, 'encounter %d' % enc)))
         pre = members(g_)
         p0, pl0 = points(g_), points_lv(g_)
         m0 = len(g_.cap.messages) if g_.cap else 0
@@ -370,6 +387,68 @@ def bench_one(g, st, seed):
                 party=members(g) if g.overlay() not in ('JOUKA', 'HAZURE') else None)
 
 
+def state_label(st):
+    b = os.path.basename(st[:-6] if st.endswith('.state') else st)
+    return b[4:] if b.startswith('pre_') else b
+
+
+def arm_label():
+    """JOB_ARM, or the arm's settings in short (b, OSLO, NOFIS5 ...)."""
+    if os.environ.get('JOB_ARM'):
+        return os.environ['JOB_ARM']
+    keys = ('OSLO', 'STACK', 'NOFIS', 'NOFIS_AWARE', 'FIRE', 'TROLL', 'MORLIS', 'CONFUSE')
+    parts = [k + ('' if os.environ[k] == '1' else os.environ[k]) for k in keys if os.environ.get(k)]
+    if os.environ.get('SET'):
+        parts.append(os.environ['SET'])
+    return '+'.join(parts) or 'plain'
+
+
+def report(x, arm):
+    """A chain's tally and event line: 'arm b v6b seed 7: FG won r16 (4 dead), SG wiped r5'."""
+    j = JOB[0]
+    bits = []
+    for f in x['fights']:
+        name = FOE.get(f['enc'], 'enc %d' % f['enc'])
+        res = 'won' if f['won'] else 'wiped' if f['wiped'] else 'lost'
+        if f['enc'] == QUETZ:
+            j.tally('QZ reached')
+        if f['enc'] in (FIRE, SHADOW) or res == 'won':
+            j.tally('%s %s' % (name, res))
+        n = len(f['deaths'])
+        bits.append('%s %s r%d%s' % (name, res, f['rounds'], ' (%d dead)' % n if n else ''))
+    if x['ring']:
+        j.tally('ring')
+    if x['error']:
+        j.tally('error')
+    text = 'arm %s %s seed %s: %s' % (arm, state_label(x['state']), x['seed'], ', '.join(bits) or 'no fight')
+    if x['error']:
+        text += '; ' + str(x['error'])[:80]
+    j.event(text)
+    j.done_one(dict(state=x['state'], seed=x['seed'], won=x['won'], ring=x['ring'], error=x['error']))
+
+
+def start_job(out, ss, states):
+    if Job is None:
+        return
+    outs = [out]
+    try:
+        o = os.readlink('/proc/self/fd/1')     # the worker's .out, when stdout is a file
+        if o.startswith('/') and os.path.isfile(o):
+            outs.append(o)
+    except OSError:
+        pass
+    status = os.path.join(OUT, 'ch19', 'golembench', 'STATUS.md')
+    arm = arm_label()
+    JOB[0] = Job('golembench', purpose=os.environ.get('JOB_PURPOSE') or
+                 'golem chain: Fire Golem, Shadow Golem, Quetzalcoatl, no camp between',
+                 total=len(ss) * len(states), outputs=outs, arm=arm,
+                 part=os.environ.get('JOB_PART') or '%s %s %s' % (arm, ' '.join(map(state_label, states)),
+                                                                   sys.argv[3]),
+                 agent=os.environ.get('JOB_AGENT') or 'golembench',
+                 status=status if os.path.exists(status) else None,
+                 keys=['FG won', 'FG wiped', 'SG won', 'SG wiped', 'QZ reached'])
+
+
 if __name__ == '__main__':
     apply_set()
     if os.environ.get('NOFIS_AWARE'):
@@ -386,11 +465,17 @@ if __name__ == '__main__':
         prep(g, sys.argv[2], sys.argv[3], int(sys.argv[4]))
     elif sys.argv[1] == 'run':
         out, ss = sys.argv[2], seeds(sys.argv[3])
+        start_job(out, ss, sys.argv[4:])
         for st in sys.argv[4:]:
             for s in ss:
+                job_step('%s seed %s: to the altar' % (state_label(st), s))
                 x = bench_one(g, st, s)
                 with open(out, 'a') as f:
                     f.write(json.dumps(x, default=str) + '\n')
+                if JOB[0]:
+                    report(x, JOB[0].d['arm'])
                 print(json.dumps(dict(state=x['state'], seed=s, ring=x['ring'], won=x['won'],
                                       fights=[(f['enc'], f['won'], f['rounds']) for f in x['fights']],
                                       end=x['end'], error=x['error'])), flush=True)
+        if JOB[0]:
+            JOB[0].finish('%d chains' % JOB[0].d['done'])
