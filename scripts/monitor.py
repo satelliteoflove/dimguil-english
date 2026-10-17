@@ -8,7 +8,8 @@
 Reads only what the harness already writes, so nothing has to be started differently:
   chapter runs   rips/harness/**/NAME.pid, NAME.out (goal lines) and NAME/live.jsonl (events)
   suite rounds   rips/harness/regress/LOCK, results-*.jsonl, rounds.jsonl
-  benches        running fightbench.py processes and the .jsonl they write
+  benches        running fightbench.py processes and the .jsonl they write; each one seen is
+                 kept in rips/monitor/benches.json, so finished benches stay listed
 Samples (CPU, emulators running, suite progress, each run's frames) go to
 rips/monitor/history.jsonl every 10 s, so the graphs keep their history across restarts.
 """
@@ -26,6 +27,7 @@ from rich.text import Text
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 H = os.path.join(ROOT, 'rips', 'harness')
 HIST = os.path.join(ROOT, 'rips', 'monitor', 'history.jsonl')
+BENCHES = os.path.join(ROOT, 'rips', 'monitor', 'benches.json')
 USAGE = os.path.expanduser('~/.claude/state/usage.json')
 BARS = '▁▂▃▄▅▆▇█'
 FPS = 60.0
@@ -231,26 +233,67 @@ def benches():
                 total = (int(b or a) - int(a) + 1) * max(1, len(states))
             except ValueError:
                 total = 0
-            won = dead = n = 0
-            try:
-                for line in open(path):
-                    try:
-                        r = json.loads(line)
-                    except ValueError:
-                        continue
-                    n += 1
-                    won += bool(r.get('won'))
-                    dead += r.get('dead') or 0
-            except OSError:
-                pass
             env = ''
             try:
                 env = p.environ().get('SET', '')
             except psutil.Error:
                 pass
-            out.append(dict(file='/'.join(path.split('/')[-3:]), n=n, total=total, won=won, dead=dead,
-                            since=p.info['create_time'], env=env))
+            out.append(dict(path=path, total=total, since=p.info['create_time'], env=env, pid=p.info['pid']))
     return out
+
+
+ROWS = {}
+
+
+def bench_rows(path):
+    """Every fight line in a bench file, re-read only when the file changes."""
+    try:
+        st = os.stat(path)
+    except OSError:
+        return []
+    key = (st.st_mtime, st.st_size)
+    if ROWS.get(path, (None,))[0] != key:
+        rows = []
+        for line in open(path, errors='replace'):
+            try:
+                r = json.loads(line)
+            except ValueError:
+                continue
+            if isinstance(r, dict):
+                rows.append(r)
+        ROWS[path] = (key, rows)
+    return ROWS[path][1]
+
+
+def dead(r):
+    return max(r.get('dead') or 0, len(r.get('deaths') or []))
+
+
+def outcome(r):
+    if r.get('won'):
+        return 'won'
+    if r.get('wiped'):
+        return 'wiped'
+    if (r.get('fled') or [0])[0]:
+        return 'fled'
+    return 'lost'
+
+
+def tally(rows):
+    out = dict(n=len(rows), won=0, wiped=0, fled=0, lost=0, dead=0, rounds=0, hp=0)
+    for r in rows:
+        out[outcome(r)] += 1
+        out['dead'] += dead(r)
+        out['rounds'] += r.get('rounds') or 0
+        out['hp'] += r.get('hp_lost') or 0
+    return out
+
+
+def counted(names):
+    c = {}
+    for n in names:
+        c[n] = c.get(n, 0) + 1
+    return ', '.join(f'{n}×{k}' if k > 1 else n for n, k in sorted(c.items(), key=lambda x: -x[1]))
 
 
 PROCS = {}
@@ -306,9 +349,14 @@ class Monitor:
         self.prev = {}             # run name -> (wall, frame)
         self.last_save = 0
         self.focus, self.sel, self.page = 'runs', {}, {}
-        self.zoom = self.detail = self.only_running = False
+        self.zoom = self.detail = self.only_running = False   # detail: False, 'run' or 'bench'
         self.detail_off = 0
+        self.fight_sel = self.line_off = 0
         self.bench_list = []
+        try:
+            self.bench_seen = json.load(open(BENCHES))
+        except (OSError, ValueError):
+            self.bench_seen = {}
         self.load_history()
         psutil.cpu_percent(percpu=True)
 
@@ -379,12 +427,41 @@ class Monitor:
         self.cpu_cores = cores
         self.cpu.append(round(sum(cores) / len(cores), 1))
         self.emu_list = emulators()
-        self.bench_list = benches()
+        self.update_benches(benches())
         self.emus.append(len(self.emu_list))
         self.suite_done.append(self.suite.done if lock else None)
         self.lock = lock
         self.save(dict(t=round(now), cpu=self.cpu[-1], emus=self.emus[-1],
                        suite=self.suite_done[-1], speed=speeds))
+
+    def update_benches(self, running):
+        now, live = time.time(), set()
+        for b in running:
+            live.add(b['path'])
+            seen = self.bench_seen.setdefault(b['path'], {})
+            seen.update(total=b['total'], env=b['env'], since=b['since'], pid=b['pid'], ended=None)
+        changed = bool(running)
+        for path, b in self.bench_seen.items():
+            if path not in live and not b.get('ended'):
+                b['ended'], changed = now, True
+        cut = now - 72 * 3600
+        for path in [p for p, b in self.bench_seen.items() if (b.get('ended') or now) < cut]:
+            del self.bench_seen[path]
+        if changed:
+            try:
+                with open(BENCHES + '.new', 'w') as f:
+                    json.dump(self.bench_seen, f)
+                os.replace(BENCHES + '.new', BENCHES)
+            except OSError:
+                pass
+        cut = now - self.hours * 3600
+        out = []
+        for path, b in self.bench_seen.items():
+            if b.get('ended') and b['ended'] < cut:
+                continue
+            rows = bench_rows(path)
+            out.append(dict(b, path=path, file='/'.join(path.split('/')[-3:]), rows=rows, **tally(rows)))
+        self.bench_list = sorted(out, key=lambda b: (bool(b.get('ended')), -(b.get('ended') or b['since'])))
 
     # panels
     def header(self):
@@ -428,6 +505,30 @@ class Monitor:
     def key(self, k):
         """Returns False to quit."""
         page = max(1, self.page.get(self.focus, 5))
+        if self.detail == 'bench':
+            n = len(self.cur_bench()['rows']) if self.cur_bench() else 0
+            if k in ('\x1b', '\r', '\n', 'q', 'LEFT'):
+                self.detail = False
+            elif k in ('UP', 'k', 'WHEELUP'):
+                self.fight_sel -= 1
+            elif k in ('DOWN', 'j', 'WHEELDOWN'):
+                self.fight_sel += 1
+            elif k == 'PGUP':
+                self.fight_sel -= max(1, self.page.get('fights', 5))
+            elif k == 'PGDN':
+                self.fight_sel += max(1, self.page.get('fights', 5))
+            elif k in ('HOME', 'g'):
+                self.fight_sel = 0
+            elif k in ('END', 'G'):
+                self.fight_sel = n - 1
+            elif k == ']':
+                self.line_off += max(1, self.page.get('lines', 10) - 2)
+            elif k == '[':
+                self.line_off = max(0, self.line_off - max(1, self.page.get('lines', 10) - 2))
+            if k not in ('[', ']'):
+                self.line_off = 0
+            self.fight_sel = max(0, min(n - 1, self.fight_sel))
+            return True
         if self.detail:
             if k in ('\x1b', '\r', '\n', 'q', 'LEFT'):
                 self.detail = False
@@ -461,7 +562,9 @@ class Monitor:
         elif k in ('END', 'G'):
             self.move(10 ** 6)
         elif k in ('\r', '\n') and self.focus == 'runs' and self.visible_runs():
-            self.detail, self.detail_off = True, 0
+            self.detail, self.detail_off = 'run', 0
+        elif k in ('\r', '\n') and self.focus == 'benches' and self.bench_list:
+            self.detail, self.fight_sel = 'bench', 0
         elif k == 'z':
             self.zoom = not self.zoom
         elif k == '\x1b':
@@ -619,17 +722,116 @@ class Monitor:
         a, b = self.window(len(bs), sel, height - 5)
         tb = Table(box=box.SIMPLE_HEAD, expand=True, pad_edge=False)
         for c, kw in (('bench output', {'ratio': 3}), ('settings', {'ratio': 2}), ('progress', {'no_wrap': True}),
-                      ('won', {}), ('deaths/fight', {}), ('running', {})):
+                      ('won', {}), ('wiped', {}), ('deaths/fight', {}), ('time', {'no_wrap': True})):
             tb.add_column(c, **kw)
         for i, b in enumerate(bs[a:b], a):
             prog = Text(f"{b['n']}/{b['total']} ")
-            prog.append_text(bar(b['n'] / b['total'] if b['total'] else 0, 12, 'magenta'))
-            tb.add_row(b['file'], b['env'] or '-', prog, f"{b['won']}/{b['n']}",
-                       f"{b['dead'] / b['n']:.2f}" if b['n'] else '-', hms(time.time() - b['since']),
+            prog.append_text(bar(b['n'] / b['total'] if b['total'] else 0, 12, 'magenta' if not b.get('ended')
+                                 else 'grey50'))
+            when = (Text(f"done {ago(b['ended'])}", style='grey50') if b.get('ended')
+                    else Text(hms(time.time() - b['since']), style='magenta'))
+            tb.add_row(b['file'], b['env'] or '-', prog, f"{b['won']}/{b['n']}", str(b['wiped']),
+                       f"{b['dead'] / b['n']:.2f}" if b['n'] else '-', when,
                        style='on grey23' if i == sel and self.focus == 'benches' else None)
         if not bs:
-            tb.add_row('no benches running', '', '', '', '', '')
-        return self.frame('benches', tb, 'fight benches', 'magenta')
+            tb.add_row(f'no benches in the last {self.hours:g} hours', '', '', '', '', '', '')
+        return self.frame('benches', tb, f'fight benches · last {self.hours:g} h', 'magenta')
+
+    def cur_bench(self):
+        bs = self.bench_list
+        return bs[min(self.sel.get('benches', 0), len(bs) - 1)] if bs else None
+
+    def bench_detail_panel(self, height):
+        b = self.cur_bench()
+        if not b:
+            self.detail = False
+            return Panel('')
+        rows, t = b['rows'], tally(b['rows'])
+        n = t['n'] or 1
+        state = f"done {ago(b['ended'])}" if b.get('ended') else f"running {hms(time.time() - b['since'])}"
+        out = [Text(f"{b['file']}   {state}   settings {b['env'] or '-'}   fights {t['n']}/{b['total']}   "
+                    f"won {t['won']}   wiped {t['wiped']}   fled {t['fled']}   other {t['lost']}   "
+                    f"deaths/fight {t['dead'] / n:.2f}   rounds/fight {t['rounds'] / n:.1f}", style='bold')]
+
+        # by state
+        by = {}
+        for r in rows:
+            by.setdefault(r.get('state', '?'), []).append(r)
+        st = Table(box=box.SIMPLE_HEAD, pad_edge=False, expand=True)
+        for c in ('fight state', 'fights', 'won', 'wiped', 'fled', 'deaths/fight', 'rounds', 'hp lost', 'casts'):
+            st.add_column(c, justify='left' if c in ('fight state', 'casts') else 'right',
+                          ratio=2 if c == 'casts' else None, no_wrap=True, overflow='ellipsis')
+        for name, rs in sorted(by.items()):
+            s_ = tally(rs)
+            k = s_['n'] or 1
+            st.add_row(name, str(s_['n']), str(s_['won']), str(s_['wiped']), str(s_['fled']),
+                       f"{s_['dead'] / k:.2f}", f"{s_['rounds'] / k:.1f}", f"{s_['hp'] / k:.0f}",
+                       counted(c[1] for r in rs for c in (r.get('casts') or []) if len(c) > 1))
+        out.append(st)
+
+        # the fight list
+        left = height - 4 - len(by) - 4
+        list_h = max(3, min(len(rows), left // 2 - 2))
+        self.page['fights'] = list_h
+        self.fight_sel = max(0, min(len(rows) - 1, self.fight_sel))
+        a, z = self.window(len(rows), self.fight_sel, list_h)
+        ft = Table(box=box.SIMPLE_HEAD, pad_edge=False, expand=True)
+        for c in ('#', 'fight state', 'seed', 'result', 'rounds', 'dead', 'down', 'hp lost', 'why', 'casts'):
+            ft.add_column(c, justify='right' if c in ('#', 'rounds', 'dead', 'down', 'hp lost') else 'left',
+                          ratio=2 if c == 'casts' else None, no_wrap=True, overflow='ellipsis')
+        color = dict(won='green', wiped='red', fled='yellow', lost='magenta')
+        for i, r in enumerate(rows[a:z], a):
+            o = outcome(r)
+            ft.add_row(str(i + 1), str(r.get('state', '?')), str(r.get('seed', '')), Text(o, style=color[o]),
+                       str(r.get('rounds', '')), str(dead(r)), str(r.get('down', '')),
+                       str(r.get('hp_lost', '')), str(r.get('why') or ''),
+                       counted(c[1] for c in (r.get('casts') or []) if len(c) > 1),
+                       style='on grey23' if i == self.fight_sel else None)
+        out.append(Text(f'fights ({a + 1}-{z} of {len(rows)}), ↑↓ to select:', style='bold'))
+        out.append(ft if rows else Text('  none yet'))
+
+        # the selected fight
+        if rows:
+            r = rows[self.fight_sel]
+            o = outcome(r)
+            out.append(Text(f"fight {self.fight_sel + 1}: {r.get('state')} seed {r.get('seed')}   {o}   "
+                            f"rounds {r.get('rounds')}   policy {r.get('policy') or '-'}   "
+                            f"spell levels spent {r.get('spent_lv') or '-'}", style='bold ' + color[o]))
+            lines = []
+            for who, what, by_ in r.get('deaths') or []:
+                lines.append((f'  died      {who}: {what} from {by_}', 'red'))
+            for run in r.get('runs') or []:
+                lines.append((f"  ran       round {run[0]}, {run[1]}% chance, {run[2] if len(run) > 2 else ''}",
+                              'yellow'))
+            if r.get('fled'):
+                lines.append((f"  run tries {r['fled'][0]} got away, {r['fled'][1]} failed", 'yellow'))
+            if r.get('casts'):
+                lines.append(('  casts     ' + ', '.join(f'{c[0]} {c[1]}' for c in r['casts']), 'cyan'))
+            if r.get('items'):
+                lines.append(('  items     ' + ', '.join(map(str, r['items'])), 'cyan'))
+            sup = [p for p in r.get('support') or [] if isinstance(p, dict)]
+            for p in sup:
+                if p.get('stacks') or p.get('dropped'):
+                    lines.append((f"  support   round {p.get('r')}: stacks {p.get('stacks') or '-'}"
+                                  f"{', dropped ' + str(p['dropped']) if p.get('dropped') else ''}", 'grey70'))
+            if sup and not any(p.get('stacks') or p.get('dropped') for p in sup):
+                lines.append((f"  support   planned rounds {', '.join(str(p.get('r')) for p in sup)}, no stacks",
+                              'grey70'))
+            for line in r.get('text') or []:
+                lines.append(('  text      ' + str(line), 'white'))
+            if not r.get('text'):
+                lines.append(('  (battle text only recorded with TEXT=1)', 'grey50'))
+            room = max(1, height - 4 - (len(by) + 4) - (list_h + 4) - 3)
+            self.page['lines'] = room
+            self.line_off = max(0, min(self.line_off, len(lines) - room))
+            for txt, style in lines[self.line_off:self.line_off + room]:
+                out.append(Text(txt, style=style, no_wrap=True, overflow='ellipsis'))
+            if len(lines) > room:
+                out.append(Text(f'  lines {self.line_off + 1}-{min(len(lines), self.line_off + room)} of '
+                                f'{len(lines)}; [ and ] scroll', style='grey50'))
+        out.append(Text(f"  file: {os.path.relpath(b['path'], ROOT)}", style='grey50'))
+        return Panel(Group(*out), title=f"▶ bench detail · {b['file']}", title_align='left',
+                     box=box.HEAVY, border_style='bold magenta')
 
     def proc_panel(self, height=12):
         ps = sorted(self.emu_list, key=lambda x: (x[1], x[0]))
@@ -647,9 +849,12 @@ class Monitor:
 
     def footer(self):
         t = Text(' ')
-        keys = ([('Esc/Enter', 'back'), ('↑↓ wheel PgUp/PgDn', 'scroll events')] if self.detail else
+        keys = ([('Esc/Enter', 'back'), ('↑↓ j/k wheel', 'select fight'), ('PgUp/PgDn g/G', 'page'),
+                 ('[ ]', 'scroll fight')]
+                if self.detail == 'bench' else
+                [('Esc/Enter', 'back'), ('↑↓ wheel PgUp/PgDn', 'scroll events')] if self.detail else
                 [('Tab/1-4/click', 'panel'), ('↑↓ j/k wheel', 'select'), ('PgUp/PgDn g/G', 'page'),
-                 ('Enter', 'run detail'), ('z', 'zoom'), ('r', 'running only'), ('H', 'hours'), ('q', 'quit')])
+                 ('Enter', 'detail'), ('z', 'zoom'), ('r', 'running only'), ('H', 'hours'), ('q', 'quit')])
         for k, what in keys:
             t.append(f' {k} ', style='bold black on cyan')
             t.append(f' {what}  ')
@@ -660,7 +865,8 @@ class Monitor:
         lay = Layout()
         body = max(10, h - 4 - 1)
         if self.detail:
-            lay.split_column(Layout(self.header(), size=4), Layout(self.detail_panel(body), size=body),
+            p = self.bench_detail_panel(body) if self.detail == 'bench' else self.detail_panel(body)
+            lay.split_column(Layout(self.header(), size=4), Layout(p, size=body),
                              Layout(self.footer(), size=1))
             return lay
         if self.zoom:
