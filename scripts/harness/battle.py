@@ -1055,6 +1055,8 @@ def default_policy(g, m, opts):
         # (support) once the stack lands a front-liner's blows are worth more than 3 x level
         # (crystal_policy's Venus fights after the stack)
         fight_v = max(fight_v, max([tactics.member_melee(g, m, k, M) for k in M] + [0.0]))
+    if sup and FIGHT_REAL_LOW and FIGHT in opts:
+        fight_v = min(fight_v, max([tactics.member_melee(g, m, k, M) for k in M] + [0.0]))
     if sup and sup['stacks'] and STACK_FIRST:
         # (support) the stack is the plan (support_plan's simulation: it takes rounds off
         # killing the group), so a stack cast still needed goes ahead of this member's damage
@@ -1436,6 +1438,9 @@ SPLAN = dict(round=None, by={})     # this round's support chosen so far: slot -
 STACK_V = {}            # (slot, sid, k) -> the AC-stack part of support_value's last rating
 CORTU_SUP_ROUNDS = 5.0  # Cortu's horizon in a support fight at most (test fight: 10 Cortus over 8 rounds)
 FIGHT_REAL = True       # in a support fight a front-liner's Fight is rated at its real melee (member_melee)
+FIGHT_REAL_LOW = False  # (golembench, off) ... and also when that's below 3 x level, both rows: at AC -90
+                        # a swing hits 5% (Venus's Fight 4.8 against Ladalto's 42.9 at the Fire
+                        # Golem, rated 69 and chosen every round)
 STACK_FIRST = True      # a stack cast the plan wants outranks the member's damage and its Fight
 STACK_KEEP = 0.0        # (bench 2) a stack begun stays in the plan while it saves more rounds than this
                         # (STACK_SAVE is for starting one; bench 1: stacks dropped at -12 of -24 when the
