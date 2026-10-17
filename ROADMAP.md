@@ -45,8 +45,9 @@ of the redump set, since the build leaves both audio tracks untouched.
   the five files that held their strings start at the commit that removed them, and
   their names are gone from old READMEs. Remisse's commits and authorship stay. It
   keeps GPL-3.0 and points to the original repo in the README.
-- **The original team's requests (2026-09-26),** all made by Remisse, the only one of the
-  team Chris was in contact with, in reply to his email. Their translation is removed and must not
+- **The original team's requests (2026-09-26),** made by Remisse in reply to Chris's email,
+  speaking for the whole team (the original translator and editor too); Remisse was the
+  only one Chris corresponded with. Their translation is removed and must not
   come back, and they aren't to be credited. Remisse's code stays under the GPL, with the
   notice in `docs/notice.txt` on the repo (README) and on every release page: no LLMs
   were used in Remisse's original code, Remisse had no role in this project, and the
