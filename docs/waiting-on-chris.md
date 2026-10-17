@@ -16,20 +16,17 @@ other work unless it says **blocks**.
    spell. Documented for later (Chris, 2026-10-17); options are to fix it (pass the
    group through unchanged when the caster is a monster) or leave it. Not started.
 
-2. **The Ninja's and Monk's class hit effects never apply** (bugs.md 3.5, found
-   2026-10-17, docs/re/ninja.md). The class bonus (Ninja 11% beheading, Monk 11%
-   knock-out) tests a register the function never loads. Options: fix it, which makes both
-   classes stronger in every fight, or keep the odds as the game plays and add it to the
-   hardcore-mode list. Recommendation: fix it, since the class description promises
-   critical hits and the code plainly meant to give them. Not started.
-
 ## Text
 
 Nothing open.
 
 ## Release
 
-Nothing open.
+3. **Disclose the balance change in the release notes** (Chris, 2026-10-17). The patch
+   now applies the Ninja's 11% beheading and the Monk's 11% knock-out from class, which
+   the original game meant to give but never did (bugs.md 3.5, decisions.md 31). It's
+   the patch's one change to game balance, so the release notes, and probably the
+   README, should say so plainly. Chris writes those; this is a reminder, not a draft.
 
 ## The site (Bartok's Trading Post session)
 

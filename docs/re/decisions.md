@@ -269,3 +269,11 @@ cast sealed group 1 or group 2 whatever was aimed at. Original code. The options
 fixing it (seal every group in the chosen row, as Montino and Morlis do) or leaving it.
 **Decided (Chris, 2026-10-17): fix it.** `asm/bugfix_bacortu_rows.asm`: in a fixed
 battle the party's Bacortu seals each group in the row; ordinary battles are unchanged.
+
+**31. The Ninja's and Monk's class hit effects never apply** (`bugs.md` 3.5,
+`ninja.md`). `battle_derive_stats` gives a Ninja 11% beheading and a Monk 11% knock-out
+of their own, on top of gear, but tests the class in a register it never loads (it holds
+2 or a screen row), so neither ever applied. Original code; fixing it changes balance.
+**Decided (Chris, 2026-10-17): fix it**, "and let's clearly document and disclose it when
+we release, as that is a game balance change." `asm/bugfix_class_hit_effect.asm`; on the
+release notes' disclosure list (waiting-on-chris.md, Release).
