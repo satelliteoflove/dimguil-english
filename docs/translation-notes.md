@@ -107,6 +107,10 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 
 ### Deliberate choices
 
+- **The ornate door's locked message is one line (EVENTMES 33; Chris, 2026-10-17).** It
+  prints in the one-line message bar (`square_examine` case 0x1e), so "is locked." after
+  the line break never showed. Now "The door adorned with beautiful ornaments is
+  locked.", about 265 px of the bar's ~296 (docs/re/lock-test.md), echoing EVENTMES 34.
 - **Fontana's rescue offer keeps its edge (NPC_MES3 153; Chris, 2026-10-17).** お人好し is
   good-natured to the point of being easy to take advantage of, and 悪いようにはしませんから
   is the stock reassurance of someone cutting a deal in his own favor. His party's fee is

@@ -11,9 +11,6 @@ Nothing open.
 
 ## Text
 
-3. **The ornate door's message is cut off** (EVENTMES 33). It prints in a one-line bar,
-   so the second line, "is locked.", never shows. Recommendation: join it into one line
-   (about 265 px, it fits). `docs/re/lock-test.md`.
 4. **Ghost Swarm's trap message** (FIGHTMSG 254). 体力が激減した is "{name}'s strength
    drains away"; 体力 here is HP. Recommendation: "{name}'s HP plummets." or similar.
 5. **"Picking the lock..." runs into the game's dots** (SISETU 526), and **"{name} can't
