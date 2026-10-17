@@ -16,6 +16,7 @@ summarizes each chapter; `docs/code-map.md` is the map of the code and the tools
 | [E-town.md](E-town.md) | The town: coming home, the Temple, the inn and level-ups, Boltac's, the tavern and recruits, the King, the Fortune Teller |
 | [F-edge-save.md](F-edge-save.md) | The Edge of Town, the maze's START menu, status bits, the Training Grounds (creation and class change), the save format |
 | [G-records.md](G-records.md) | Records: the character, party, item and monster layouts, races and classes, EXP, hit points, spells and spell points, level-up stats and aging, class change |
+| [postgame.md](postgame.md) | After the ending: what the ending writes, every reader of the title, what's gated on the title or on the RING OF MEDIUM (the Priestess's Door, the Dragon's Cave), the hidden sound test, and why there's no new game+ |
 | [fallen-parties.md](fallen-parties.md) | Every routine that touches a party left wiped in the maze, with an emulator check |
 | [bugs.md](bugs.md) | Every bug and unreachable string, triaged: fixed, cut-looking, balance-changing, harmless |
 | [description-check.md](description-check.md) | Item, spell, Compendium and help text checked against the records and the code |

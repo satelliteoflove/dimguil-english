@@ -110,9 +110,12 @@ fouled and the town shaken by quakes (SISETU 327, EV 66, EV 68).
     "You who believe in power alone: I have no tale to tell you". **Inferred.**
 13. **After the ending.** The Training Maze (one floor deeper per stone set, eight in
     all; the Priestess's Door on B8F opens only for a body matching the Priestess's,
-    which the RING OF MEDIUM provides) and the Dragon's Cave (opened with the DEMON'S
-    STATUE from Area C'; the Diamond Knight party guards the MAGIC AMULET). Agan hints
-    at the Dragon's Cave (NPC5 112).
+    which the RING OF MEDIUM provides) and the Dragon's Cave (opened by that door,
+    story_flags bit 31; the DEMON'S STATUE from Area C' then brings the Diamond Knight
+    party, who guard the MAGIC AMULET). Agan hints at the Dragon's Cave (NPC5 112).
+    Neither is gated on the ending in code: the Training Maze needs only the Tablet's
+    stones, and the door needs the ring's stats. The ending's title gates smaller
+    things (docs/re/postgame.md). **[code]**
 
 **The hidden story (Inferred, from the pieces listed under "The ship" and "The
 experiments" in the Setups section).** The Shrine is a crashed starship. The ancient
@@ -782,6 +785,9 @@ in the TABLET, it warps you to Area X. So 304/305 is that shortcut; whether the 
 route also uses it is not established.
 
 ### After the ending
+
+Listed here by story order; what the code actually gates on the ending is in
+docs/re/postgame.md.
 
 **S55. The Training Maze.** EV 246-248, 238-241.
 Where: the eight-floor Training Maze from the Edge of Town; each stone set opens one

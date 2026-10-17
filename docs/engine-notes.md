@@ -483,6 +483,22 @@ that misses the encounter-source test below, so wandering fights never get one.
 - **Tavern recruits** come from pools gated by alignment, wipes and progress, matching
   a June 2000 fan tally.
 
+### After the ending (postgame.md)
+
+- **No new game+.** `king_ending` (JOUKA 0x800a52cc) titles every party member (roster
+  +0xc5 bit 0), gives the first member 1,000,000 Gp, disbands the party, sets a
+  game-cleared byte (0x8008c4da) that nothing reads, rolls the credits and goes to the
+  Save screen, then town. Nothing carries into a new game. **[code]**, end state **[emu]**
+  on the Japanese disc.
+- **The title** turns on Otaka (1 in 7,778 per random-event placement), a hidden sound
+  test at the tavern's card table (SELECT, with recruit 10 in the party and Music on),
+  recruit 8, the Fortune Teller's "The End", an MP refill at the King's, Guy's party's
+  title lines and a status emblem. It turns off the Fire Golem altar, the coffin and the
+  mysterious man's scenes for that party. **[code]**
+- **The real post-game** (the Priestess's Door on Training Maze B8, then the Dragon's
+  Cave, story_flags bit 31) needs the RING OF MEDIUM's stats on a level 5, age 18
+  female Elf Priest, not the ending. **[code]**
+
 ### The Edge of Town, the Training Grounds and the save (F-edge-save.md)
 
 - **Creation.** Bonus points are 7-10 (about 95%), 17-20 (4.5%) or 27-30 (0.2%). The
