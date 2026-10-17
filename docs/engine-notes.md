@@ -159,11 +159,15 @@ glance". By subsystem:
     row, starting on the first member), then SISETU 90 for their list. A cross backs
     out and the item stays where it was. **[emu]** (c15v1a-c, 2026-10-15)
 - **The glyph pad's words.** END on the pad (0x800b989c) checks the typed word against
-  seven: at Area X's pedestal words 0-4 (STAFF, LABORATORY, WAREHOUSE, ENERGY and a fifth)
+  seven: at Area X's pedestal words 0-4 (STAFF, LABORATORY, WAREHOUSE, ENERGY, COCKPIT)
   each need a stone in the Tablet (0x800b7248: 4, 6, 0, 7, 3) and set story_flags bits 4,
   5, 6, 7 and 20 (0x800ba32c, EVENTMES 136-140); word 5, DIMGUIL, counts only at Area D's
   altar (area 32) and word 6 only in area 21 (EVENTMES 109). Anything else gets EVENTMES
-  126, or 204 at the altar. **[code]**, chapter 14 (2026-10-15).
+  126, or 204 at the altar. **[code]**, chapter 14 (2026-10-15). COCKPIT is word 4
+  (0x800ef3a4 + 40, read in c16_end's RAM as 02 0e 02 0a 0f 08 13), needs the gold stone
+  (Tablet bit 3) and sets story bit 20, which unseals Area X's middle door east of E12
+  N13 (record 0x2d) and so the lift to Area E. **[code]**, **[emu]** chapter 17
+  (c17v1-v2, 2026-10-16: one try each).
 - **Area A's altar and the gold stone.** The altar is record type 0x5e at B2 E6 N5 (area
   21, game (6, 18)), a square only the post-mimicry map reaches, through the hidden door
   east of E4 N5 (type 3, p1 31). `square_examine` takes it facing north only. With the
@@ -223,6 +227,23 @@ glance". By subsystem:
   - B1 E11 N10 (0x68) starts a one-time scene (talk 0x1a, maze_event_flags bit 7) while
     no member has char_flags bit 0.
   **[code]**, chapter 14 (2026-10-15).
+- **Area E (areas 36-38, B4 to B2).**
+  - The control room is fixed meeting 0x19 (fixed_meet_table 0x8005e6ac), party 3 at B4
+    E12 N12 (12, 11), placed while npc_flags (0x80079754) bit 2 is clear. Its talk (25,
+    MCARD 0x800d97e4, NPC_MES4 45-54) sets bit 2 itself before the fight starts, so bit 2
+    alone doesn't prove a win: a lost fight leaves it set. The fight is encounter 0xf
+    (encounter_source 4) and can't be run from. **[code]**, chapter 17; **[emu]**
+    c17v2a-c (2026-10-16).
+  - EVENTMES 285 (a Guardians line, "Would you not rule every wish, every fate?") isn't
+    on any map record: no square's event points at it, unlike 284, the fifth Guardians in
+    Area D. Either it's reached from code or it's unused. **[data]**, chapter 17
+    (2026-10-16), not yet followed in the code.
+  - Type-2 parties: npc_tokens_per_area (0x8005e654) has 4 type-2 tokens on areas 36, 38
+    and 39 and none on 37 (B3). The worst one met is rated 540 a round (Man in Robe,
+    Ogre Sorcerer, Ogre Daimyo and two more, single monsters of levels 13-15), the next
+    455 (Kel, Blaze, Brain Shaker and three more). Against a level 17-21 party of ~950 HP
+    the harness ran at a 58-63% flee chance and got away 22 times in 39 tries.
+    **[emu]** (c17v1-v2, 2026-10-16).
 
 ### Wipes and bodies (A-maze.md §4-6, D-battle.md, fallen-parties.md)
 

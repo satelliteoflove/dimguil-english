@@ -483,13 +483,24 @@ class Run(chapter1.Run):
             if keep and (dest[0] not in keep or nav.plan(self.g, tuple(dest), keep=keep) is None):
                 keep = None
             return nav.travel(self.g, tuple(dest), self.on_int, lambda g: self.after(), keep=keep)
-        for k in range(HEALER_TRIPS + 1):
+        # (ch17) the HEALER_TRIPS budget is a goal try's, not a go() call's: chapter 17's
+        # control room calls go() again after each door trip, and c17v2a's tries made ten
+        # trips home each, every walk out meeting B4's same fixed fights again
+        key = (getattr(self, '_goal_name', None),
+               sum(1 for x in self.log if len(x) > 1 and x[1] == 'retry'))
+        if WALK_TRIPS_PER_TRY and getattr(self, '_walk_key', None) == key:
+            k0 = min(getattr(self, '_walk_trips', 0), HEALER_TRIPS)
+        else:
+            self._walk_key, k0 = key, 0
+        for k in range(k0, HEALER_TRIPS + 1):
             self._goal_walk = k < HEALER_TRIPS
             self._dest = tuple(dest)
+            self._walk_trips = k
             short = self._goal_walk and self.roamer_short((g_area(self.g), dest[0]))
             if short and self.town_helps():
                 # (agent 16) the roamers' door: short for the type-2 parties on the way
                 self._goal_walk = False
+                self._walk_trips = k + 1
                 self.note('roamer door', short)
                 self.trip_home('short for roamers')
                 self.ensure_maze()
@@ -498,6 +509,7 @@ class Run(chapter1.Run):
                 return nav.travel(self.g, tuple(dest), self.on_int, lambda g: self.after())
             except TurnHome as t:
                 self._goal_walk = False         # the walk home itself doesn't turn
+                self._walk_trips = k + 1
                 self.note('turn home', t.args[0])
                 self.trip_home(t.args[0].split(':')[0])
                 self.ensure_maze()
@@ -516,7 +528,11 @@ class Run(chapter1.Run):
         if not ROAMER_DOOR or not T or not maze.in_maze(g):
             return []
         hp = sum(max(0, g.char(i)['hp']) for i in g.party() if g.char(i)['status'] < 0x20)
-        short = [('hp', hp, TYPE2_ROUNDS * T)] if hp < TYPE2_ROUNDS * T else []
+        # (ch17) never more than TYPE2_HP_SHARE of the party's max HP: Area E's worst party
+        # rates 540 a round, two rounds over the whole party's ~950, so the bar could never
+        # be met and every check would send a full party home
+        need = min(TYPE2_ROUNDS * T, int(TYPE2_HP_SHARE * sum(g.char(i)['max_hp'] for i in g.party())))
+        short = [('hp', hp, need)] if hp < need else []
         if not hp_only:
             short += [x for x in self.boss_short() if x == 'down' or x[0] == 'heals']
         return short
@@ -1613,13 +1629,18 @@ HEALER_HOME = True           # (agent 16) a healer down on the walk out or a goa
 OUT_HOME = True             # (nodead) a member dead, stoned, ashed, lost, paralyzed or poisoned after the cures turns a walk out or a goal walk home
 HOME_RUN_ALL = True         # (nodead) a goal's walk home may run as a training trip's does (Run.homeward_run)
 HEALER_TRIPS = 2             # ... a goal walk goes home and back at most this many times
+WALK_TRIPS_PER_TRY = True    # (ch17) ... counted over a goal try, not each go() call
 ROAMER_DOOR = True           # (agent 16) a goal walk short for the floor's type-2 parties goes home first (Run.roamer_short)
 TYPE2_ROUNDS = 2             # ... the standing HP must cover this many rounds of the worst one's threat
 TYPE2_TOKENS = 0x8005e654    # npc_tokens_per_area: 2 bytes an area, the second the type-2 tokens placed
 # the worst type-2 party's rated threat a round by area (tactics.info at the first command, every
 # chain's logs to 2026-10-14; the parties are the area group's type2_groups, 0x8005a3dc)
 TYPE2_THREAT = dict([(a, 15) for a in (3, 4)] + [(a, 80) for a in (5, 6, 7, 8)] +
-                    [(a, 95) for a in (19, 20, 21, 22)] + [(a, 153) for a in (23, 24, 25, 26, 27)])
+                    [(a, 95) for a in (19, 20, 21, 22)] + [(a, 153) for a in (23, 24, 25, 26, 27)] +
+                    # (ch17) Area E B4-B1: the Man in Robe / Ogre Daimyo party 540, the Kel /
+                    # Blaze party 455 (c17v1-v2 logs, areas 36 and 38; 39 has tokens too, 37 none)
+                    [(a, 540) for a in (36, 37, 38, 39)])
+TYPE2_HP_SHARE = 0.8         # ... the HP bar is at most this share of the party's max HP
 AVOID_FATAL = True           # the walk home keeps off the square of the trip's fatal fixed fight (nav.TRIP_SOFT)
 POINTS_HOME = 0.5           # agent 13 (strategy revision 3): a training trip goes home when points or heals are this low (Run.points_spent)
 POINTS_TRAIN = True         # agent 8: a training trip from the maze goes home first when points are low
