@@ -94,14 +94,38 @@ few minutes, a build) can stay inside one agent.
 
 ## Watching runs
 
-`python3 scripts/monitor.py` is a live terminal view of every chapter run, suite round and
-fight bench, refreshed every 2 seconds (`--once` prints one frame). Keys: Tab, 1-4 or a click
-focuses a panel; arrows, j/k or the mouse wheel select; PgUp/PgDn and g/G page; Enter opens a
-run's detail (every goal, death and retry), or on a bench, every fight with its deaths, run tries,
-casts and battle text ([ and ] scroll a fight); z zooms the panel; r shows running runs only;
-H widens the hours shown; q quits. It reads
-only the files the harness already writes, so runs need nothing special to show up.
-Its samples go to `rips/monitor/history.jsonl`, so the graphs survive a restart.
+`python3 scripts/monitor.py` is a live terminal view of every chapter run, suite round, fight
+bench, job and agent status file, refreshed every 2 seconds (`--once` prints one frame). Its
+panels: 1 chapter runs, 2 suite round, 3 fight benches (fightbench and golembench), 4 jobs, 5
+processes, 6 agent status files. Keys: Tab, 1-6 or a click focuses a panel; arrows, j/k or the
+mouse wheel select; PgUp/PgDn and g/G page; z zooms the panel; r shows running runs only; H
+widens the hours shown; q quits. Enter opens the selected item:
+
+- a run: every goal, death and retry;
+- a bench: every fight with its deaths, run tries, casts and battle text ([ and ] scroll a fight);
+- a job: its workers, done/total per arm, the full tally, the recent events, the outputs and
+  the agent's status file;
+- a process: its command and parent, cwd and worktree, the matching agent status file (task
+  line, latest report heading), the files it has open for writing, and the end of the newest
+  one and of its output;
+- a status file: its last lines.
+
+In a detail view the arrows, wheel, PgUp/PgDn and g/G scroll, and Esc or Enter goes back. The
+monitor reads only files that already exist, so runs need nothing special to show up. Its
+samples go to `rips/monitor/history.jsonl`, so the graphs survive a restart.
+
+**Anything that runs more than a few minutes reports through `scripts/jobstatus.py`,** so
+Chris can see its progress, its tally and what it's doing:
+
+    from jobstatus import Job          # scripts/ on sys.path
+    j = Job('mybench', purpose='what it answers', total=len(cases), outputs=[out])
+    for c in cases: j.step(c); ...; j.tally('won' if won else 'wiped'); j.event(line); j.done_one()
+
+It writes `rips/monitor/jobs/NAME-PID.json` in the main copy (from a worktree too), at most
+once a second, and `j.finish(summary)` marks it done. Parallel workers of one job use the same
+name and set `JOB_PART` (a label for the worker), `JOB_ARM` (for a done/total per arm) and one
+`JOB_RUN` for the whole launch in the environment; the monitor adds them up. A worker that
+died without finishing shows as dead, one alive but silent far past its pace as stale.
 
 ## Status files
 

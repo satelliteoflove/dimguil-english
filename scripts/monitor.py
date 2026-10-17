@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""A live terminal monitor for bot chapter runs, suite rounds and fight benches.
+"""A live terminal monitor for bot chapter runs, suite rounds, fight benches and long jobs.
 
     python3 scripts/monitor.py              # full screen, refreshes every 2 s; Ctrl+C quits
     python3 scripts/monitor.py --once       # print one frame and exit
@@ -10,12 +10,18 @@ Reads only what the harness already writes, so nothing has to be started differe
   suite rounds   rips/harness/regress/LOCK, results-*.jsonl, rounds.jsonl
   benches        running fightbench.py processes and the .jsonl they write; each one seen is
                  kept in rips/monitor/benches.json, so finished benches stay listed
+  jobs           rips/monitor/jobs/*.json, written by anything using scripts/jobstatus.py
+  agents         every rips/agents/*/STATUS.md and rips/harness/**/STATUS.md (main copy and
+                 worktrees) changed in the last 24 hours
+  processes      for any emulator or harness script, Enter shows its worktree, its agent's
+                 status file and the files it has open for writing
 Samples (CPU, emulators running, suite progress, each run's frames) go to
 rips/monitor/history.jsonl every 10 s, so the graphs keep their history across restarts.
 """
 import argparse, glob, json, os, re, statistics, time
 from collections import deque
 import psutil
+import jobstatus
 from rich import box
 from rich.console import Console, Group
 from rich.layout import Layout
@@ -28,6 +34,9 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 H = os.path.join(ROOT, 'rips', 'harness')
 HIST = os.path.join(ROOT, 'rips', 'monitor', 'history.jsonl')
 BENCHES = os.path.join(ROOT, 'rips', 'monitor', 'benches.json')
+MAIN = jobstatus.main_root(ROOT) or ROOT        # the main copy, when this runs from a worktree
+WORKTREES = os.path.join(os.path.dirname(MAIN), 'worktrees')
+JOBS = jobstatus.jobs_dir()
 USAGE = os.path.expanduser('~/.claude/state/usage.json')
 BARS = '▁▂▃▄▅▆▇█'
 FPS = 60.0
@@ -220,11 +229,16 @@ class Suite:
                     self.failed.append(r.get('id', '?'))
 
 
+BENCH_SCRIPTS = ('fightbench.py', 'golembench.py')
+# arm settings a bench takes from the environment, shown in the settings column
+BENCH_ENV = ('OSLO', 'STACK', 'NOFIS', 'NOFIS_AWARE', 'FIRE', 'TROLL', 'MORLIS', 'CONFUSE')
+
+
 def benches():
     out = []
     for p in psutil.process_iter(['pid', 'cmdline', 'cwd', 'create_time']):
         cl = p.info['cmdline'] or []
-        if len(cl) > 4 and any(c.endswith('fightbench.py') for c in cl) and 'run' in cl:
+        if len(cl) > 4 and any(c.endswith(BENCH_SCRIPTS) for c in cl) and 'run' in cl:
             i = cl.index('run')
             path, seeds, states = cl[i + 1], cl[i + 2], cl[i + 3:]
             path = path if os.path.isabs(path) else os.path.join(p.info['cwd'] or ROOT, path)
@@ -235,7 +249,8 @@ def benches():
                 total = 0
             env = ''
             try:
-                env = p.environ().get('SET', '')
+                e = p.environ()
+                env = ' '.join(([e['SET']] if e.get('SET') else []) + [f'{k}={e[k]}' for k in BENCH_ENV if e.get(k)])
             except psutil.Error:
                 pass
             out.append(dict(path=path, total=total, since=p.info['create_time'], env=env, pid=p.info['pid']))
@@ -333,12 +348,12 @@ PROCS = {}
 
 def emulators():
     out = []
-    for p in psutil.process_iter(['pid', 'cmdline', 'create_time', 'memory_info']):
+    for p in psutil.process_iter(['pid', 'cmdline', 'create_time', 'memory_info', 'cwd']):
         cl = ' '.join(p.info['cmdline'] or [])
         if 'python' not in cl or 'monitor.py' in cl:
             continue
         kind = ('chapter' if 'run_chapter' in cl else 'suite' if 'regress.py' in cl or 'spawn_main' in cl
-                else 'bench' if 'fightbench' in cl else None)
+                else 'bench' if any(s in cl for s in BENCH_SCRIPTS) else None)
         if not kind:
             # one-off scripts (an agent's verify or probe) still drive the emulator core
             try:
@@ -346,6 +361,8 @@ def emulators():
                     kind = 'other' if 'mednafen_psx' in f.read() else None
             except OSError:
                 pass
+        if not kind and harness_script(p.info['cmdline'] or [], p.info['cwd']):
+            kind = 'script'
         if not kind:
             continue
         if kind == 'suite' and 'spawn_main' in cl:
@@ -363,8 +380,345 @@ def emulators():
                          '/'.join(c.split('/')[-3:]) if c.startswith('/') else c
                          for c in (p.info['cmdline'] or [])[1:])
         out.append((p.info['pid'], kind, cpu, (p.info['memory_info'].rss if p.info['memory_info'] else 0),
-                    p.info['create_time'], short))
+                    p.info['create_time'], short, p.info['cwd'], p.info['cmdline'] or []))
     return out
+
+
+def harness_script(cmdline, cwd):
+    """A python script of ours that doesn't drive the emulator: one under scripts/harness/,
+    or one under rips/ or a worktree, started from this repo or a worktree."""
+    if not cwd or not (cwd.startswith(MAIN) or cwd.startswith(WORKTREES)):
+        return False
+    for c in cmdline[1:]:
+        if not c.endswith('.py'):
+            continue
+        path = os.path.abspath(os.path.join(cwd, c))
+        if 'scripts/harness/' in path or '/rips/' in path or path.startswith(WORKTREES):
+            return True
+    return False
+
+
+# --- jobs (scripts/jobstatus.py files) -------------------------------------------------
+
+JOBFILES = {}
+
+
+def job_workers():
+    """Every jobstatus file of the last 72 hours, with each worker's state."""
+    now, out = time.time(), []
+    try:
+        names = [n for n in os.listdir(JOBS) if n.endswith('.json')]
+    except OSError:
+        names = []
+    for n in names:
+        path = os.path.join(JOBS, n)
+        try:
+            st = os.stat(path)
+        except OSError:
+            continue
+        if st.st_mtime < now - 72 * 3600:
+            continue
+        key = (st.st_mtime, st.st_size)
+        if JOBFILES.get(path, (None,))[0] != key:
+            try:
+                d = json.load(open(path))
+            except (OSError, ValueError):
+                continue
+            if not isinstance(d, dict) or 'name' not in d:
+                continue
+            JOBFILES[path] = (key, d)
+        w = dict(JOBFILES[path][1], file=path)
+        w['state'] = worker_state(w, now)
+        out.append(w)
+    return out
+
+
+def worker_state(w, now):
+    """finished, running, stale (alive but quiet far longer than its pace), exited (ended
+    without finish) or dead (the process is gone with no word)."""
+    if w.get('finished'):
+        return 'finished'
+    alive = False
+    try:
+        p = psutil.Process(w.get('pid'))
+        alive = p.create_time() <= (w.get('start') or now) + 5 and p.status() != psutil.STATUS_ZOMBIE
+    except (psutil.Error, TypeError, ValueError):
+        pass
+    if alive:
+        upd, done = w.get('updated') or w.get('start') or now, w.get('done') or 0
+        pace = (upd - (w.get('start') or upd)) / done if done else 0
+        return 'stale' if now - upd > max(900, 3 * pace) else 'running'
+    return 'exited' if w.get('exited') else 'dead'
+
+
+def w_end(w):
+    if w['state'] in ('running', 'stale'):
+        return float('inf')
+    return w.get('finished') or w.get('exited') or w.get('updated') or w.get('start') or 0
+
+
+def job_groups(workers):
+    """Workers grouped into jobs: same name and run; with no run given, a worker that
+    starts after every worker so far has ended begins a new job (a later launch)."""
+    by = {}
+    for w in workers:
+        by.setdefault((w['name'], w.get('run') or ''), []).append(w)
+    groups = []
+    for (name, run), ws in by.items():
+        ws.sort(key=lambda w: w.get('start') or 0)
+        clusters, cur, end = [], [], -1.0
+        for w in ws:
+            if cur and not run and (w.get('start') or 0) > end:
+                clusters.append(cur)
+                cur, end = [], -1.0
+            cur.append(w)
+            end = max(end, w_end(w))
+        if cur:
+            clusters.append(cur)
+        groups += [job_sum(name, run, c) for c in clusters]
+    return groups
+
+
+def job_sum(name, run, ws):
+    now = time.time()
+    states = [w['state'] for w in ws]
+    state = ('running' if 'running' in states else 'stale' if 'stale' in states else
+             'finished' if all(s == 'finished' for s in states) else 'dead' if 'dead' in states else 'exited')
+    tally, keys, events, outputs, arms = {}, [], [], [], {}
+    for w in ws:
+        for k, v in (w.get('tally') or {}).items():
+            if isinstance(v, (int, float)):
+                tally[k] = tally.get(k, 0) + v
+        for k in (w.get('keys') or []):
+            if k not in keys:
+                keys.append(k)
+        tag = (w.get('part') or str(w.get('pid'))) if len(ws) > 1 else ''
+        events += [(e[0], tag, e[1]) for e in (w.get('events') or []) if isinstance(e, list) and len(e) > 1]
+        outputs += [p for p in w.get('outputs') or [] if p not in outputs]
+        if w.get('arm'):
+            a = arms.setdefault(w['arm'], [0, 0])
+            a[0] += w.get('done') or 0
+            a[1] += w.get('total') or 0
+    first = lambda k: next((w.get(k) for w in ws if w.get(k)), None)
+    start = min(w.get('start') or now for w in ws)
+    end = None if state in ('running', 'stale') else max(w_end(w) for w in ws)
+    done = sum(w.get('done') or 0 for w in ws)
+    totals = [w.get('total') for w in ws]
+    total = sum(t for t in totals if t) if any(totals) else None
+    el = (end or now) - start
+    rate = done / el * 3600 if el > 0 and done else 0.0          # per hour
+    eta = (total - done) / rate * 3600 if rate and total and end is None and total > done else None
+    return dict(name=name, run=run, workers=ws, state=state, start=start, end=end, done=done, total=total,
+                rate=rate, eta=eta, tally=tally, keys=keys or list(tally), arms=arms,
+                events=sorted(events, key=lambda e: e[0]), outputs=outputs,
+                purpose=first('purpose') or '', agent=first('agent'), worktree=first('worktree'),
+                status=first('status'), summary=[w.get('summary') for w in ws if w.get('summary')],
+                updated=max(w.get('updated') or 0 for w in ws))
+
+
+def rate_text(per_hour):
+    if not per_hour:
+        return '-'
+    return f'{per_hour / 60:.1f}/min' if per_hour >= 120 else f'{per_hour:.1f}/h'
+
+
+def tally_text(j, limit=None):
+    keys = j['keys'][:limit] if limit else j['keys']
+    return '  '.join(f'{k} {j["tally"].get(k, 0):g}' for k in keys)
+
+
+JOB_COLOR = dict(running='green', stale='yellow', finished='cyan', exited='yellow', dead='red')
+JOB_MARK = dict(running='●', stale='◌', finished='✓', exited='■', dead='✗')
+
+
+# --- agent status files ----------------------------------------------------------------
+
+STATUSES = {}
+
+
+def status_info(path):
+    """(task line, latest report heading, mtime) of a STATUS.md, re-read when it changes."""
+    try:
+        mt = os.path.getmtime(path)
+    except OSError:
+        return None
+    if STATUSES.get(path, (None,))[0] != mt:
+        task = title = report = last_h = None
+        more = False                # the task line goes on to the next lines of its paragraph
+        try:
+            for line in open(path, errors='replace'):
+                s = line.strip()
+                if title is None and s.startswith('# '):
+                    title = s[2:]
+                if more:
+                    more = bool(s) and not re.match(r"^(#|[-*] |\w[\w ]{0,20}:|Worktree\b)", s) and len(task) < 300
+                    if more:
+                        task += ' ' + s
+                m = re.match(r'^\**task\**\s*(?:\([^)]*\))?\s*:\s*\**\s*(.*)', s, re.I)
+                if task is None and m:
+                    task, more = m.group(1), True
+                if s.startswith('## '):
+                    last_h = s[3:]
+                    if s[3:].lower().startswith('report'):
+                        report = s[3:]
+        except OSError:
+            return None
+        STATUSES[path] = (mt, dict(task=task or title or '', title=title or '', report=report or last_h or '',
+                                   mtime=mt, path=path))
+    return STATUSES[path][1]
+
+
+def status_name(path):
+    """A short name: agents/NAME, harness/ch19/golembench, or wt NAME: agents/X."""
+    p = os.path.abspath(path)
+    for base, pre in ((os.path.join(MAIN, 'rips'), ''), (WORKTREES, 'wt ')):
+        if p.startswith(base + '/'):
+            rel = os.path.dirname(os.path.relpath(p, base))
+            if pre:
+                wt, _, rest = rel.partition('/')
+                rel = f'{wt}: {rest.replace("rips/", "", 1)}'
+            return pre + rel
+    return os.path.dirname(p)
+
+
+def agent_files(age=24 * 3600):
+    """Every agent STATUS.md changed in the last `age` seconds: rips/agents/*/ and up to
+    three levels under rips/harness/, in the main copy and in each worktree's own rips/."""
+    cut, found = time.time() - age, set()
+    roots = [os.path.join(MAIN, 'rips')] + glob.glob(os.path.join(WORKTREES, '*', 'rips'))
+    for r in roots:
+        found.update(glob.glob(os.path.join(r, 'agents', '*', 'STATUS.md')))
+        h = os.path.join(r, 'harness')
+        if os.path.islink(h) or not os.path.isdir(h):
+            continue
+        for d, dirs, files in os.walk(h):
+            depth = os.path.relpath(d, h).count('/') + (d != h)
+            dirs[:] = [] if depth >= 3 else [x for x in dirs if not x.startswith('snap_') and x not in
+                                             ('regress', 'disc', 'states') and not os.path.islink(os.path.join(d, x))]
+            if 'STATUS.md' in files:
+                found.add(os.path.join(d, 'STATUS.md'))
+    out = []
+    for p in found:
+        i = status_info(p)
+        if i and i['mtime'] >= cut:
+            out.append(dict(i, name=status_name(p)))
+    return sorted(out, key=lambda x: -x['mtime'])
+
+
+def tail_lines(path, n, limit=1 << 16):
+    try:
+        with open(path, 'rb') as f:
+            f.seek(0, 2)
+            size = f.tell()
+            f.seek(max(0, size - limit))
+            data = f.read()
+    except OSError:
+        return []
+    return data.decode('utf-8', 'replace').splitlines()[-n:]
+
+
+def is_text(path):
+    try:
+        with open(path, 'rb') as f:
+            f.seek(0, 2)
+            f.seek(max(0, f.tell() - 4096))
+            data = f.read()
+    except OSError:
+        return False
+    return b'\0' not in data
+
+
+# --- what a process is doing, for the ones that write no job file ----------------------
+
+def worktree_of(path):
+    """(copy root, branch) for a path inside the main copy or a worktree."""
+    root = jobstatus.repo_root(path) if path else None
+    if not root:
+        return None, None
+    branch = None
+    try:
+        g = os.path.join(root, '.git')
+        gitdir = open(g).read().split(':', 1)[1].strip() if os.path.isfile(g) else g
+        head = open(os.path.join(gitdir, 'HEAD')).read().strip()
+        branch = head.split('refs/heads/', 1)[1] if 'refs/heads/' in head else head[:10]
+    except (OSError, IndexError):
+        pass
+    return root, branch
+
+
+def status_for(cwd, cmdlines, root):
+    """The agent status files that belong to a process, best first: a STATUS.md in a folder
+    above any path on its (or its parent's) command line, then rips/agents/WORKTREE/ in the
+    main copy or the worktree, then any in the worktree's rips/agents/."""
+    out = []
+
+    def add(p):
+        p = os.path.abspath(p)
+        if os.path.isfile(p) and p not in out:
+            out.append(p)
+    top = root or cwd or '/'
+    for cl in cmdlines:
+        for c in cl[1:]:
+            if '/' not in c or c.startswith('-'):
+                continue
+            for base in (cwd or ROOT, os.path.join(top, 'rips', 'harness')):
+                d = os.path.dirname(os.path.abspath(os.path.join(base, c)))
+                while d.startswith(top) and len(d) > len(top) and not os.path.basename(d) == 'rips':
+                    if os.path.isfile(os.path.join(d, 'STATUS.md')):
+                        add(os.path.join(d, 'STATUS.md'))
+                        break
+                    d = os.path.dirname(d)
+    if root and root != MAIN:          # the main copy's rips/agents holds every agent's file
+        name = os.path.basename(root)
+        add(os.path.join(MAIN, 'rips', 'agents', name, 'STATUS.md'))
+        add(os.path.join(root, 'rips', 'agents', name, 'STATUS.md'))
+        for p in sorted(glob.glob(os.path.join(root, 'rips', 'agents', '*', 'STATUS.md')),
+                        key=os.path.getmtime, reverse=True):
+            add(p)
+    return out
+
+
+def write_files(pid):
+    """Regular files the process has open for writing, newest first, as (path, size, mtime,
+    is its stdout or stderr)."""
+    out = []
+    try:
+        files = psutil.Process(pid).open_files()
+    except psutil.Error:
+        return out
+    for f in files:
+        if getattr(f, 'mode', 'r') == 'r' or not f.path.startswith('/') or f.path.startswith(('/dev/', '/proc/')):
+            continue
+        try:
+            st = os.stat(f.path)
+        except OSError:
+            continue
+        if not any(f.path == x[0] for x in out):
+            out.append((f.path, st.st_size, st.st_mtime, f.fd in (1, 2)))
+    return sorted(out, key=lambda x: -x[2])
+
+
+def flat(s, n=300):
+    """A command line on one line (an agent's `python3 -c` can hold a whole script)."""
+    s = s.replace('\n', ' ⏎ ')
+    return s if len(s) <= n else s[:n] + '…'
+
+
+def rel(path):
+    """A path as it reads best: inside the main copy (through a worktree's links too) relative
+    to it, else as is."""
+    rp = os.path.realpath(path)
+    for p in (rp, os.path.abspath(path)):
+        if p.startswith(MAIN + '/') or p.startswith(WORKTREES + '/'):
+            return os.path.relpath(p, MAIN)
+    return path
+
+
+def size_text(n):
+    for unit in ('B', 'K', 'M', 'G'):
+        if n < 1024 or unit == 'G':
+            return f'{n:.0f}{unit}' if unit == 'B' else f'{n:.1f}{unit}'
+        n /= 1024
 
 
 # --- the screen ------------------------------------------------------------------------
@@ -384,7 +738,8 @@ class Monitor:
         self.zoom = self.detail = self.only_running = False   # detail: False, 'run' or 'bench'
         self.detail_off = 0
         self.fight_sel = self.line_off = 0
-        self.bench_list = []
+        self.pinned = None         # the job key, process row or status path a detail view shows
+        self.bench_list, self.job_list, self.agent_list, self.agents_at = [], [], [], 0
         try:
             self.bench_seen = json.load(open(BENCHES))
         except (OSError, ValueError):
@@ -460,6 +815,9 @@ class Monitor:
         self.cpu.append(round(sum(cores) / len(cores), 1))
         self.emu_list = emulators()
         self.update_benches(benches())
+        self.update_jobs()
+        if now - self.agents_at >= 20:          # a walk of the status folders; they change slowly
+            self.agent_list, self.agents_at = agent_files(), now
         self.emus.append(len(self.emu_list))
         self.suite_done.append(self.suite.done if lock else None)
         self.lock = lock
@@ -492,8 +850,15 @@ class Monitor:
             if b.get('ended') and b['ended'] < cut:
                 continue
             rows = bench_rows(path)
-            out.append(dict(b, path=path, file='/'.join(path.split('/')[-3:]), rows=rows, **tally(rows)))
+            file = '/'.join(path.split('/')[-3:])
+            out.append(dict(b, path=path, file=file[:-6] if file.endswith('.jsonl') else file, rows=rows,
+                            **tally(rows)))
         self.bench_list = sorted(out, key=lambda b: (bool(b.get('ended')), -(b.get('ended') or b['since'])))
+
+    def update_jobs(self):
+        cut = time.time() - self.hours * 3600
+        js = [j for j in job_groups(job_workers()) if j['end'] is None or j['end'] >= cut]
+        self.job_list = sorted(js, key=lambda j: (j['end'] is not None, -(j['end'] or j['start'])))
 
     # panels
     def header(self):
@@ -516,7 +881,7 @@ class Monitor:
         return Panel(Group(t, cores), box=box.ROUNDED, border_style='cyan')
 
     # --- view state and keys ---
-    PANELS = ['runs', 'suite', 'benches', 'procs']
+    PANELS = ['runs', 'suite', 'benches', 'jobs', 'procs', 'agents']
 
     def visible_runs(self):
         cut = time.time() - self.hours * 3600
@@ -526,8 +891,8 @@ class Monitor:
         return sorted(rows, key=lambda r: (r.state()[0] != 'running', -r.started))
 
     def count(self, panel):
-        return {'runs': len(self.visible_runs()), 'benches': len(self.bench_list),
-                'procs': len(self.emu_list)}.get(panel, 0)
+        return {'runs': len(self.visible_runs()), 'benches': len(self.bench_list), 'jobs': len(self.job_list),
+                'procs': len(self.emu_list), 'agents': len(self.agent_list)}.get(panel, 0)
 
     def move(self, d):
         n = self.count(self.focus)
@@ -572,14 +937,19 @@ class Monitor:
                 self.detail_off += 10
             elif k == 'PGDN':
                 self.detail_off = max(0, self.detail_off - 10)
+            elif k in ('HOME', 'g'):
+                self.detail_off = 10 ** 6       # trimmed to the list by the panel
+            elif k in ('END', 'G'):
+                self.detail_off = 0
             return True
         if k == 'q':
             return False
+        n = len(self.PANELS)
         if k in ('\t', 'RIGHT'):
-            self.focus = self.PANELS[(self.PANELS.index(self.focus) + 1) % 4]
+            self.focus = self.PANELS[(self.PANELS.index(self.focus) + 1) % n]
         elif k in ('BTAB', 'LEFT'):
-            self.focus = self.PANELS[(self.PANELS.index(self.focus) - 1) % 4]
-        elif len(k) == 1 and k in '1234':
+            self.focus = self.PANELS[(self.PANELS.index(self.focus) - 1) % n]
+        elif len(k) == 1 and k in '123456':
             self.focus = self.PANELS[int(k) - 1]
         elif k in ('UP', 'k', 'WHEELUP'):
             self.move(-1)
@@ -597,6 +967,10 @@ class Monitor:
             self.detail, self.detail_off = 'run', 0
         elif k in ('\r', '\n') and self.focus == 'benches' and self.bench_list:
             self.detail, self.fight_sel = 'bench', 0
+        elif k in ('\r', '\n') and self.focus in ('jobs', 'procs', 'agents') and self.count(self.focus):
+            # the item is pinned (by key or pid), so a list that reorders under it can't swap it
+            self.detail, self.detail_off = self.focus[:-1], 0
+            self.pinned = self.selected(self.focus)
         elif k == 'z':
             self.zoom = not self.zoom
         elif k == '\x1b':
@@ -753,7 +1127,8 @@ class Monitor:
         sel = self.sel['benches'] = min(self.sel.get('benches', 0), max(0, len(bs) - 1))
         a, b = self.window(len(bs), sel, height - 5)
         tb = Table(box=box.SIMPLE_HEAD, expand=True, pad_edge=False)
-        for c, kw in (('bench output', {'ratio': 3}), ('settings', {'ratio': 2}), ('progress', {'no_wrap': True}),
+        for c, kw in (('bench output', {'ratio': 3, 'no_wrap': True, 'overflow': 'ellipsis'}),
+                      ('settings', {'ratio': 2, 'no_wrap': True, 'overflow': 'ellipsis'}), ('progress', {'no_wrap': True}),
                       ('won', {}), ('wiped', {}), ('deaths/fight', {}), ('time', {'no_wrap': True})):
             tb.add_column(c, **kw)
         for i, b in enumerate(bs[a:b], a):
@@ -879,8 +1254,266 @@ class Monitor:
         return Panel(Group(*out), title=f"▶ bench detail · {b['file']}", title_align='left',
                      box=box.HEAVY, border_style='bold magenta')
 
+    def proc_rows(self):
+        return sorted(self.emu_list, key=lambda x: (x[1], x[0]))
+
+    def selected(self, panel):
+        """What's selected in a panel, as a key that survives the list changing."""
+        i = self.sel.get(panel, 0)
+        if panel == 'jobs' and self.job_list:
+            j = self.job_list[min(i, len(self.job_list) - 1)]
+            return (j['name'], j['run'], j['start'])
+        if panel == 'procs' and self.emu_list:
+            ps = self.proc_rows()
+            return ps[min(i, len(ps) - 1)]
+        if panel == 'agents' and self.agent_list:
+            return self.agent_list[min(i, len(self.agent_list) - 1)]['path']
+        return None
+
+    def jobs_panel(self, height=12):
+        js = self.job_list
+        per = max(1, (height - 5) // 2)       # a job takes two lines
+        self.page['jobs'] = per
+        sel = self.sel['jobs'] = min(self.sel.get('jobs', 0), max(0, len(js) - 1))
+        a, b = self.window(len(js), sel, per)
+        tb = Table(box=box.SIMPLE_HEAD, expand=True, pad_edge=False)
+        # two lines a job: name over purpose, done/total over rate and eta, state over age
+        for c, kw in (('job', {'ratio': 3}), ('progress', {'no_wrap': True}), ('tally', {'ratio': 4}),
+                      ('state', {'no_wrap': True})):
+            tb.add_column(c, overflow='ellipsis', **kw)
+        for i, j in enumerate(js[a:b], a):
+            name = Text(j['name'], style='bold')
+            name.append('\n' + (j['purpose'] or ' '), style='grey62')
+            name.no_wrap, name.overflow = True, 'ellipsis'
+            keys = j['keys']
+            half = (len(keys) + 1) // 2
+            tl = Text(tally_text(dict(j, keys=keys[:half])) + '\n' + tally_text(dict(j, keys=keys[half:])),
+                      no_wrap=True, overflow='ellipsis')
+            running = j['end'] is None
+            prog = Text(f"{j['done']}/{j['total'] or '?'} ")
+            prog.append_text(bar(j['done'] / j['total'] if j['total'] else 0, 12, 'green' if running else 'grey50'))
+            prog.append(f"\n{rate_text(j['rate'])}" + (f"  eta {hms(j['eta'])}" if j['eta'] else ''), style='grey62')
+            n = len(j['workers'])
+            alive = sum(w['state'] in ('running', 'stale') for w in j['workers'])
+            st = Text(f"{JOB_MARK[j['state']]} {j['state']}", style=JOB_COLOR[j['state']])
+            if n > 1:
+                st.append(f' {alive}/{n}' if running else f' ×{n}', style='grey62')
+            st.append(f"\nup {hms(time.time() - j['start'])}" if running else f"\ndone {ago(j['end'])}",
+                      style='grey62')
+            tb.add_row(name, prog, tl, st, style='on grey23' if i == sel and self.focus == 'jobs' else None)
+        if not js:
+            tb.add_row(f'no jobs in the last {self.hours:g} hours (scripts/jobstatus.py)', '', '', '')
+        return self.frame('jobs', tb, f'jobs · last {self.hours:g} h', 'green')
+
+    def scrolled(self, lines, room):
+        """The `room` lines to show of a list scrolled by detail_off from its end."""
+        self.detail_off = max(0, min(self.detail_off, max(0, len(lines) - room)))
+        a = max(0, len(lines) - room - self.detail_off)
+        return a, lines[a:a + room]
+
+    def job_detail_panel(self, height):
+        j = next((x for x in self.job_list if (x['name'], x['run'], x['start']) == self.pinned), None)
+        if not j:
+            self.detail = False
+            return Panel('')
+        now = time.time()
+        running = j['end'] is None
+        out = []
+        t = Text(f"{j['name']}", style='bold')
+        t.append(f"   {JOB_MARK[j['state']]} {j['state']}", style=JOB_COLOR[j['state']])
+        t.append(f"   started {time.strftime('%H:%M', time.localtime(j['start']))}, "
+                 + (f"running {hms(now - j['start'])}" if running else
+                    f"took {hms(j['end'] - j['start'])}, done {ago(j['end'])}"))
+        if j['run']:
+            t.append(f"   run {j['run']}", style='grey62')
+        out.append(t)
+        if j['purpose']:
+            out.append(Text(j['purpose'], style='grey70'))
+        p = Text(f"  {j['done']}/{j['total'] or '?'}  ")
+        p.append_text(bar(j['done'] / j['total'] if j['total'] else 0, 40, 'green' if running else 'grey50'))
+        p.append(f"   {rate_text(j['rate'])}   eta {hms(j['eta']) if j['eta'] else '-'}   "
+                 f"last update {ago(j['updated'])}")
+        out.append(p)
+        for s in j['summary']:
+            out.append(Text(f'  summary: {s}', style='cyan'))
+
+        # the workers, and the done/total per arm
+        ws = j['workers']
+        wt = Table(box=box.SIMPLE_HEAD, pad_edge=False, expand=True)
+        for c in ('worker', 'pid', 'state', 'done', 'now doing', 'since', 'updated'):
+            wt.add_column(c, no_wrap=True, overflow='ellipsis', ratio=3 if c == 'now doing' else None)
+        for w in ws:
+            stp = w.get('step') or (w.get('summary') or '' if w['state'] == 'finished' else '')
+            wt.add_row(w.get('part') or w['name'], str(w.get('pid')),
+                       Text(f"{JOB_MARK[w['state']]} {w['state']}", style=JOB_COLOR[w['state']]),
+                       f"{w.get('done') or 0}/{w.get('total') or '?'}", str(stp),
+                       hms(now - w['step_since']) if w.get('step_since') and w.get('step') else '',
+                       ago(w['updated']) if w.get('updated') else '')
+        out.append(wt)
+        if j['arms']:
+            arm = Text('  by arm  ')
+            for k, (d, tot) in sorted(j['arms'].items()):
+                arm.append(f'{k} ', style='bold')
+                arm.append(f'{d}/{tot or "?"}   ', style='green' if tot and d >= tot else '')
+            out.append(arm)
+
+        # the full tally, as rows of key value
+        if j['tally']:
+            keys = j['keys'] + [k for k in j['tally'] if k not in j['keys']]
+            tt = Text('  tally   ')
+            for k in keys:
+                tt.append(f'{k} ', style='grey70')
+                tt.append(f"{j['tally'].get(k, 0):g}", style='bold')
+                tt.append('    ')
+            out.append(tt)
+
+        # files
+        tail = []
+        for path in j['outputs']:
+            try:
+                st = os.stat(path)
+                tail.append(Text(f'  output  {rel(path)}   {size_text(st.st_size)}, '
+                                 f'changed {ago(st.st_mtime)}', style='grey62', overflow='ellipsis', no_wrap=True))
+            except OSError:
+                tail.append(Text(f'  output  {rel(path)}   (not written yet)', style='grey50',
+                                 overflow='ellipsis', no_wrap=True))
+        if j['status']:
+            i = status_info(j['status'])
+            tail.append(Text(f"  status  {rel(j['status'])}"
+                             + (f"   {i['report']}   changed {ago(i['mtime'])}" if i else '   (missing)'),
+                             style='grey62', overflow='ellipsis', no_wrap=True))
+        who = '   '.join(x for x in (f"agent {j['agent']}" if j['agent'] else '',
+                                     f"worktree {j['worktree']}" if j['worktree'] else '') if x)
+        if who:
+            tail.append(Text(f'  {who}', style='grey50', overflow='ellipsis', no_wrap=True))
+        tail.append(Text('  job files: ' + ', '.join(os.path.basename(w['file']) for w in ws), style='grey50',
+                         overflow='ellipsis', no_wrap=True))
+
+        # the recent events, newest last, scrollable
+        ev = j['events']
+        room = max(1, height - 2 - len(out) - len(ws) - 4 - 2 - len(tail))
+        a, shown = self.scrolled(ev, room)
+        out.append(Text(f'events, newest last ({a + 1}-{a + len(shown)} of {len(ev)}; '
+                        f'each worker keeps its last {jobstatus.EVENTS}):' if ev else 'events: none yet', style='bold'))
+        for ts, tag, txt in shown:
+            line = Text(f"  {time.strftime('%H:%M:%S', time.localtime(ts))}  ", style='grey62')
+            if tag:
+                line.append(f'[{tag}] ', style='magenta')
+            line.append(txt)
+            line.no_wrap, line.overflow = True, 'ellipsis'
+            out.append(line)
+        out += tail
+        return Panel(Group(*out), title=f"▶ job detail · {j['name']}", title_align='left',
+                     box=box.HEAVY, border_style='bold green')
+
+    def proc_detail_panel(self, height):
+        pid, kind, cpu, rss, ct, short, cwd, cmdline = self.pinned
+        now = time.time()
+        live = next((x for x in self.emu_list if x[0] == pid), None)
+        if live:
+            pid, kind, cpu, rss, ct, short, cwd, cmdline = live
+        out = [Text(f"pid {pid}   {kind}   " + (f"running {hms(now - ct)}   cpu {cpu:.0f}%   mem {rss / 2**20:.0f}M"
+                                                 if live else 'ended'), style='bold' if live else 'bold red')]
+        out.append(Text('  ' + flat(' '.join(cmdline), 600), style='grey70', overflow='fold'))
+        parent = []
+        try:
+            pp = psutil.Process(pid).parent()
+            parent = pp.cmdline() if pp else []
+            if parent:
+                out.append(Text(f'  parent {pp.pid}: ' + flat(' '.join(parent)), style='grey50', no_wrap=True,
+                                overflow='ellipsis'))
+        except psutil.Error:
+            pass
+        root, branch = worktree_of(cwd)
+        out.append(Text(f'  cwd {cwd}', overflow='ellipsis', no_wrap=True))
+        if root:
+            out.append(Text(f"  {'main copy' if root == MAIN else 'worktree'} {root}" +
+                            (f'   branch {branch}' if branch else ''), overflow='ellipsis', no_wrap=True))
+
+        # a job file, if it writes one
+        mine = [j for j in self.job_list if any(w.get('pid') == pid for w in j['workers'])]
+        for j in mine:
+            out.append(Text(f"  job {j['name']}: {j['done']}/{j['total'] or '?'}, {tally_text(j, 6)}"
+                            f"   (Enter on it in the jobs panel)", style='green', overflow='ellipsis', no_wrap=True))
+
+        # the agent's status file
+        sts = status_for(cwd, [cmdline, parent], root)
+        if sts:
+            i = status_info(sts[0])
+            out.append(Text(f'status file {rel(sts[0])}   changed {ago(i["mtime"])}',
+                            style='bold', overflow='ellipsis', no_wrap=True))
+            out.append(Text(f"  task    {i['task']}", overflow='ellipsis', no_wrap=True))
+            out.append(Text(f"  latest  {i['report'] or '-'}", overflow='ellipsis', no_wrap=True))
+            if len(sts) > 1:
+                out.append(Text('  also    ' + ', '.join(rel(p) for p in sts[1:4]),
+                                style='grey50', overflow='ellipsis', no_wrap=True))
+        else:
+            out.append(Text('status file: none found (rips/agents/*/STATUS.md, rips/harness/*/STATUS.md, '
+                            'or one in the worktree)', style='grey50'))
+
+        # files open for writing, and the end of the newest text one
+        wf = write_files(pid) if live else []
+        out.append(Text(f'open for writing ({len(wf)}):' if wf else
+                        'open for writing: none' + ('' if live else ' (process ended)'), style='bold'))
+        for path, size, mt, std in wf[:6]:
+            out.append(Text(f'  {rel(path)}   '
+                            f"{size_text(size)}, changed {ago(mt)}{'   (its output)' if std else ''}",
+                            style='grey70', overflow='ellipsis', no_wrap=True))
+        # the end of the newest text file it writes, and of its output (stdout) if that's another
+        texts = [x for x in wf if 0 < x[1] < 1 << 30 and is_text(x[0])]
+        show = texts[:1] + [x for x in texts[1:] if x[3]][:1]
+        room = max(2, height - 2 - len(out) - 2 * len(show))
+        for k, (path, *_rest) in enumerate(show):
+            lines = tail_lines(path, 200)
+            n = max(1, min(len(lines), room // len(show) if k == 0 else room - room // len(show)))
+            if k == 0:                  # the newest one scrolls
+                a, shown = self.scrolled(lines, n)
+            else:
+                a, shown = max(0, len(lines) - n), lines[-n:]
+            out.append(Text(f'{os.path.basename(path)}, lines {a + 1}-{a + len(shown)} of the last {len(lines)}:',
+                            style='bold'))
+            for line in shown:
+                out.append(Text('  ' + line, no_wrap=True, overflow='ellipsis'))
+        return Panel(Group(*out), title=f'▶ process detail · {pid}', title_align='left',
+                     box=box.HEAVY, border_style='bold blue')
+
+    def agents_panel(self, height=12):
+        ag = self.agent_list
+        self.page['agents'] = max(1, height - 5)
+        sel = self.sel['agents'] = min(self.sel.get('agents', 0), max(0, len(ag) - 1))
+        a, b = self.window(len(ag), sel, height - 5)
+        tb = Table(box=box.SIMPLE_HEAD, expand=True, pad_edge=False)
+        for c, kw in (('status file', {'ratio': 2}), ('task', {'ratio': 4}), ('latest', {'ratio': 3}),
+                      ('changed', {'min_width': 8})):
+            tb.add_column(c, no_wrap=True, overflow='ellipsis', **kw)
+        for i, x in enumerate(ag[a:b], a):
+            fresh = time.time() - x['mtime'] < 3600
+            tb.add_row(Text(x['name'], style='bold' if fresh else ''), x['task'], x['report'],
+                       Text(hms(time.time() - x['mtime']), style='cyan' if fresh else 'grey50'),
+                       style='on grey23' if i == sel and self.focus == 'agents' else None)
+        if not ag:
+            tb.add_row('no status file changed in the last 24 hours', '', '', '')
+        return self.frame('agents', tb, 'agent status files · last 24 h', 'cyan')
+
+    def agent_detail_panel(self, height):
+        path = self.pinned
+        i = status_info(path)
+        if not i:
+            self.detail = False
+            return Panel('')
+        lines = tail_lines(path, 400, 1 << 18)
+        room = max(1, height - 4)
+        a, shown = self.scrolled(lines, room)
+        out = [Text(f"{rel(path)}   changed {ago(i['mtime'])}   "
+                    f"lines {a + 1}-{a + len(shown)} of the last {len(lines)}", style='bold')]
+        for line in shown:
+            st = 'bold cyan' if line.startswith('#') else None
+            out.append(Text(line, style=st, no_wrap=True, overflow='ellipsis'))
+        return Panel(Group(*out), title=f"▶ status file · {status_name(path)}", title_align='left',
+                     box=box.HEAVY, border_style='bold cyan')
+
     def proc_panel(self, height=12):
-        ps = sorted(self.emu_list, key=lambda x: (x[1], x[0]))
+        ps = self.proc_rows()
         self.page['procs'] = max(1, height - 5)
         sel = self.sel['procs'] = min(self.sel.get('procs', 0), max(0, len(ps) - 1))
         a, b = self.window(len(ps), sel, height - 5)
@@ -888,9 +1521,9 @@ class Monitor:
         for c, kw in (('pid', {'min_width': 7}), ('kind', {'min_width': 7}), ('cpu', {'min_width': 5}),
                       ('mem', {'min_width': 5}), ('up', {'min_width': 7}), ('command', {'ratio': 1})):
             tb.add_column(c, no_wrap=True, **kw)
-        for i, (pid, kind, cpu, rss, ct, cl) in enumerate(ps[a:b], a):
+        for i, (pid, kind, cpu, rss, ct, cl, _, _) in enumerate(ps[a:b], a):
             tb.add_row(str(pid), kind, f'{cpu:.0f}%', f'{rss / 2**20:.0f}M', hms(time.time() - ct),
-                       Text(cl, overflow='ellipsis'), style='on grey23' if i == sel and self.focus == 'procs' else None)
+                       Text(flat(cl), overflow='ellipsis'), style='on grey23' if i == sel and self.focus == 'procs' else None)
         return self.frame('procs', tb, 'processes', 'blue')
 
     def footer(self):
@@ -898,8 +1531,10 @@ class Monitor:
         keys = ([('Esc/Enter', 'back'), ('↑↓ j/k wheel', 'select fight'), ('PgUp/PgDn g/G', 'page'),
                  ('[ ]', 'scroll fight')]
                 if self.detail == 'bench' else
-                [('Esc/Enter', 'back'), ('↑↓ wheel PgUp/PgDn', 'scroll events')] if self.detail else
-                [('Tab/1-4/click', 'panel'), ('↑↓ j/k wheel', 'select'), ('PgUp/PgDn g/G', 'page'),
+                [('Esc/Enter', 'back'), ('↑↓ wheel PgUp/PgDn g/G', 'scroll ' + {
+                    'run': 'events', 'job': 'events', 'proc': 'file', 'agent': 'file'}.get(self.detail, ''))]
+                if self.detail else
+                [('Tab/1-6/click', 'panel'), ('↑↓ j/k wheel', 'select'), ('PgUp/PgDn g/G', 'page'),
                  ('Enter', 'detail'), ('z', 'zoom'), ('r', 'running only'), ('H', 'hours'), ('q', 'quit')])
         for k, what in keys:
             t.append(f' {k} ', style='bold black on cyan')
@@ -911,33 +1546,42 @@ class Monitor:
         lay = Layout()
         body = max(10, h - 4 - 1)
         if self.detail:
-            p = self.bench_detail_panel(body) if self.detail == 'bench' else self.detail_panel(body)
+            p = {'bench': self.bench_detail_panel, 'run': self.detail_panel, 'job': self.job_detail_panel,
+                 'proc': self.proc_detail_panel, 'agent': self.agent_detail_panel}[self.detail](body)
+            if not self.detail:         # the item went away
+                return self.render(size)
             lay.split_column(Layout(self.header(), size=4), Layout(p, size=body),
                              Layout(self.footer(), size=1))
             return lay
         if self.zoom:
             p = {'runs': lambda: self.runs_panel(body), 'suite': self.suite_panel,
-                 'benches': lambda: self.bench_panel(body), 'procs': lambda: self.proc_panel(body)}[self.focus]()
+                 'benches': lambda: self.bench_panel(body), 'jobs': lambda: self.jobs_panel(body),
+                 'procs': lambda: self.proc_panel(body), 'agents': lambda: self.agents_panel(body)}[self.focus]()
             lay.split_column(Layout(self.header(), size=4), Layout(p, size=body), Layout(self.footer(), size=1))
             return lay
         suite_h = 8
-        rest = max(6, body - suite_h)
-        runs_h = max(6, rest * 3 // 5)
-        bottom_h = max(5, rest - runs_h)
-        self.regions = (4, 4 + runs_h, 4 + runs_h + suite_h, w // 2)
+        rest = max(12, body - suite_h)
+        # the runs panel takes what its runs need (three lines each), at most half the rest;
+        # below it two rows: benches and jobs, then processes and agents
+        runs_h = max(7, min(rest // 2, 5 + 3 * len(self.visible_runs())))
+        mid_h = max(5, (rest - runs_h) // 2)
+        low_h = max(5, rest - runs_h - mid_h)
+        self.regions = (4, 4 + runs_h, 4 + runs_h + suite_h, 4 + runs_h + suite_h + mid_h, w // 2)
         lay.split_column(Layout(self.header(), size=4), Layout(self.runs_panel(runs_h), size=runs_h),
-                         Layout(self.suite_panel(), size=suite_h), Layout(name='bottom', size=bottom_h),
-                         Layout(self.footer(), size=1))
-        lay['bottom'].split_row(Layout(self.bench_panel(bottom_h)), Layout(self.proc_panel(bottom_h)))
+                         Layout(self.suite_panel(), size=suite_h), Layout(name='mid', size=mid_h),
+                         Layout(name='low', size=low_h), Layout(self.footer(), size=1))
+        lay['mid'].split_row(Layout(self.bench_panel(mid_h)), Layout(self.jobs_panel(mid_h)))
+        lay['low'].split_row(Layout(self.proc_panel(low_h)), Layout(self.agents_panel(low_h)))
         return lay
 
     def click(self, x, y):
         if self.detail or self.zoom or not hasattr(self, 'regions'):
             return
-        top, runs_end, suite_end, mid = self.regions
+        top, runs_end, suite_end, mid_end, half = self.regions
         if y > top:
             self.focus = ('runs' if y <= runs_end else 'suite' if y <= suite_end else
-                          'benches' if x <= mid else 'procs')
+                          ('benches' if x <= half else 'jobs') if y <= mid_end else
+                          'procs' if x <= half else 'agents')
 
 
 KEYS = [('\x1b[A', 'UP'), ('\x1b[B', 'DOWN'), ('\x1b[C', 'RIGHT'), ('\x1b[D', 'LEFT'), ('\x1b[5~', 'PGUP'),
