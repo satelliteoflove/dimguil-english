@@ -127,7 +127,9 @@ about 20 seconds before the game retries it (1.12). Decided since (`docs/re/deci
 now): Zaril's healing, Guy's and Fontana's re-introductions, Cresson's greeting and
 Fontana's chat about Zaril's new party are reopened; the NPC identify service and
 Balbo's party's "heard that already" stay unused; the balance bugs are kept (see
-"hardcore mode" below); and the original's wrong numbers in spell and item descriptions
+"hardcore mode" below), except one: the Ninja's and Monk's class hit effects, which the
+code meant to give and never did, now apply (bugs.md 3.5, fixed 2026-10-17 and to be
+disclosed in the release notes as a balance change); and the original's wrong numbers in spell and item descriptions
 are corrected (`docs/re/description-check.md`). The NPC rescue fees were tested in
 natural play on 2026-10-13 (`docs/re/rescue-test.md`): all three match the code, and the
 test found that a rescued party stayed on offer and could be charged again (bugs.md 1.13),
