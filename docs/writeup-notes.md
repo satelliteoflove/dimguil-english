@@ -923,3 +923,27 @@ save, the game stopped on the town logo over six "Empty" boxes, every time.
 - A harness lesson: the first try on the fixed disc also "froze", but only because that
   card already held a save, so the ending's automatic save stopped at "Overwrite it?" with
   No selected. The ending goal assumes an empty card.
+
+### The vwf.asm review (2026-10-17)
+
+- After the freeze, Chris chose to keep Remisse's `vwf.asm` (536 of its 554 lines are his)
+  rather than rewrite it, and asked for a read-only review first. His rule since then: no
+  change to it without his review and approval. The review (`rips/re/work/vwfreview/NOTES.md`)
+  found no crash or freeze and nothing current text reaches, and ranked seven findings.
+  Chris approved two:
+- **The width lookup had no real bound.** `get_VWF_spacing_in_a0` compared the code with
+  `lui CHARSET_SIZE` (0x00d10000), so every byte passed, and codes 0xd8-0xff read the pad
+  byte and the wrappers' instructions as widths, moving the next glyph up to 112 px left
+  or 40 right. No English string uses those codes. Now `sltiu t4, s0, 0xd8` gives them
+  12 px, as the fit tools assumed. The function is the same length, so nothing after it
+  moved.
+- **The chest screen's title strip was centered on glyphs x 8.** FUN_800d3100, reached
+  only from the chest code, centered one-line titles ("Who will open the chest?", the trap
+  names, "Oops! {trap}!!") on the glyph count; `vwf.asm` had changed the original's x 12
+  to x 8 and ignored the pixel width the measure leaves in t9. It now zeroes t9 through a
+  two-instruction helper at BATTLE 0x800c3300 (dead code after the Bacortu fix's routine,
+  whose area now stops there) and centers on t9, as the battle box does. "Oops! Exploding
+  Box!!" went from margins of 71/107 px to 88/90; every line is within 1-3 px of centered.
+  301 other shots across town, maze, card game and battle were pixel-identical.
+  Sheet: `rips/agents/vwfbound/shots/sheet_before_after.png`.
+- Commit 50a7410, merged in 03c9bcf; suite 344/344 on dd83a8cbf1271bc65e86bba843bbc0b2.
