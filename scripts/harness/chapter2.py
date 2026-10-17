@@ -26,7 +26,8 @@ from harness.game import Stuck
 
 STORY = 0x80079b44
 JADE_MASK = 0x13c
-TRAIN_LEVEL = 9
+TRAIN_LEVEL = 9  # back from 8 (2026-10-14): chapter 1 ends at 7-8, so 8 meant no training here, and the
+#                  parties met B3 at 8 with ~1,000 gold: deaths the temple could not pay for (b1v0, b1v1, b1v3, b1v6)
 TRAIN_AREAS = (3,)          # 3F's corridor and rooms: eight 95% fight squares
 
 

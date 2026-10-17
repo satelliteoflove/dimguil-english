@@ -225,6 +225,19 @@ def _spend_bonus(g, cls):
                 break
 
 
+def _class_bonus(g, cls):
+    """Take the class on the cursor and spend what bonus is left, to "Is this all right?"
+    (90). A class whose minimums use the whole bonus skips the distribution (70 -> 85 ->
+    90 with no press): circles pressed waiting for 80 then ran on through 105 and
+    registered the character (suite round 2026-10-15, party:t4v4/t4v6: a Bishop rolled
+    with exactly its minimums, thrown away and registered all the same)."""
+    ui.press_until(g, 'circle', lambda: g.u8(CS) != 70, 300, 'class')
+    ui.wait_until(g, lambda: g.u8(CS) in (80, 90), 300, 'class (ready)')
+    if g.u8(CS) == 80:
+        _spend_bonus(g, cls)
+        ui.confirm_until(g, lambda: g.u8(CS) == 90, 300, 'distribute')
+
+
 def _create_once(g, name, race, sex, align, cls, retrain, delay):
     """One pass through creation. None if the roll didn't offer cls (the character was
     finished and thrown away), else the registered character's dict."""
@@ -248,9 +261,7 @@ def _create_once(g, name, race, sex, align, cls, retrain, delay):
     offered = class_list(g)
     if want not in offered:
         choose_list(g, 0, len(offered), 'class')
-        ui.confirm_until(g, lambda: g.u8(CS) == 80, 300, 'class')
-        _spend_bonus(g, CLASSES[offered[0]])
-        ui.confirm_until(g, lambda: g.u8(CS) == 90, 300, 'distribute')
+        _class_bonus(g, CLASSES[offered[0]])
         yes_no(g, True, 'is this all right')
         ui.confirm_until(g, lambda: g.u8(CS) == 105, 300, 'all right')
         # cancel is No here (state 'n', 110); moving the list cursor to No and confirming
@@ -267,9 +278,7 @@ def _create_once(g, name, race, sex, align, cls, retrain, delay):
 
     bonus = g.u8(BONUS)
     choose_list(g, offered.index(want), len(offered), 'class')
-    ui.confirm_until(g, lambda: g.u8(CS) == 80, 300, 'class')
-    _spend_bonus(g, cls)
-    ui.confirm_until(g, lambda: g.u8(CS) == 90, 300, 'distribute')
+    _class_bonus(g, cls)
     yes_no(g, True, 'is this all right')
     ui.confirm_until(g, lambda: g.u8(CS) == 105, 300, 'all right')
     yes_no(g, True, 'use this character')
@@ -565,6 +574,29 @@ def pool_gold(g, slot, place='tavern', limit=600):
     return g.char(idx)['gold']
 
 
+DIVIDE_ICON = 3             # the tavern's icons: Form Party, Remove Member, Inspect, Divide Gold,
+                            # Pool Gold, Visit the Tables (SISETU; JOUKA tavern_main camp_state 0x19)
+
+
+def divide_gold(g, limit=600):
+    """Tavern, Divide Gold: the party's gold split evenly (JOUKA FUN_800aa848 calls
+    FUN_800ad8a0, total / members; no member pick, back to the menu after 16 frames).
+    Gold pooled on one member who then dies waits at the temple with them (b1v6c chapter
+    5, 2026-10-14: 824 gold in the party, 18,500 on the dead). Returns the members' gold."""
+    party = town_party(g)
+    if len(party) < 2:
+        return [g.char(i)['gold'] for i in party]
+    if g.u8(TOWN_STATE) != 10 or g.overlay() != 'JOUKA':
+        enter(g, 'tavern')
+    ui.wait_until(g, lambda: facility_ready(g), limit, 'tavern menu')
+    total = sum(g.char(i)['gold'] for i in party)
+    even = lambda: max(g.char(i)['gold'] for i in party) - min(g.char(i)['gold'] for i in party) <= total % len(party) + 1
+    ui.move_cursor(g, FAC_CURSOR, DIVIDE_ICON, 'right', 'left', wrap=7, what='Divide Gold')
+    ui.confirm_until(g, even, limit, 'Divide Gold')
+    ui.wait_until(g, lambda: facility_ready(g), limit, 'after dividing')
+    return [g.char(i)['gold'] for i in party]
+
+
 # --- the temple ---
 #   Heal Character -> "Help whom?" (SISETU 147; grid cursor x 0x80079c59, y 0x80079c5c, 3
 #   per row, the patients in roster order) -> "Who will pay?" (148; the party grid MX/MY)
@@ -651,6 +683,15 @@ def temple_heal(g, patient, payer_slot=0, limit=600):
 
 BUY_CAT, BUY_TYPE, BUY_ITEM, BUY_YN = 0x80079c60, 0x80079c65, 0x80079c64, 0x800795d5
 SELL_ITEM, SELL_YN = 0x80079c60, 0x80079c65
+# A list's prompt isn't always captured again on a second visit (2026-10-14), so the
+# screens are also read from RAM: BOLTAC_SCREEN 0x80079738 is 15 at "What will you do?",
+# 20 Buy, 25 Sell, 30 Uncurse, 35 Identify; SHOP_STATE 0x800797a4 within Buy is 5 the
+# categories, 15 the types, 25 the items, and 5 the item list in Sell
+BOLTAC_SCREEN, SHOP_STATE = 0x80079738, 0x800797a4
+
+
+def _screen(g, scr, st):
+    return g.u8(BOLTAC_SCREEN) == scr and g.u8(SHOP_STATE) == st and _settled(g)
 
 
 def _said(g, since, *ids):
@@ -661,7 +702,8 @@ def _settled(g):
     return g.u8(TOWN_MSG) == 0
 
 
-PROMPTS = {5, 57, 79, 80, 81, 82, 83, 84, 85, 86, 87, 91, 96, 97, 98, 110, 111, 123, 126}
+PROMPTS = {5, 57, 79, 80, 81, 82, 83, 84, 85, 86, 87, 91, 96, 97, 98, 99, 100, 101, 108, 109, 110, 111,
+           123, 126}
 
 
 def _sig(g):
@@ -694,8 +736,8 @@ def boltac_trade(g, slot, limit=600):
 def _at_trade_menu(g):
     """"What will you do?" is up (the last facility line printed) and settled. (0x800797d6
     isn't a screen id here: it holds the trader's pack count.)"""
-    return g.u8(TOWN_STATE) == 20 and _last_sisetu(g, max(0, len(g.cap.messages) - 60)) in (5, 129) \
-        and _settled(g) and g.u8(FAC_SUB) == 10
+    return g.u8(TOWN_STATE) == 20 and _settled(g) and g.u8(FAC_SUB) == 10 and (
+        g.u8(0x80079738) == 15 or _last_sisetu(g, max(0, len(g.cap.messages) - 60)) in (5, 129))
 
 
 def _to_trade_menu(g, limit=600):
@@ -704,9 +746,9 @@ def _to_trade_menu(g, limit=600):
         return
     for _ in range(6):
         n = len(g.cap.messages)
-        ui.press_then_wait(g, 'cross', lambda: _sig(g), lambda: _said(g, n, 5, 80, 81, 82, 87),
+        ui.press_then_wait(g, 'cross', lambda: _sig(g), lambda: _said(g, n, 5, 80, 81, 82, 87, 99, 101) or g.u8(BOLTAC_SCREEN) == 15,
                            limit, 'back a screen')
-        if _said(g, n, 5):
+        if _said(g, n, 5) or g.u8(BOLTAC_SCREEN) == 15:
             ui.wait_until(g, lambda: _settled(g), limit, 'What will you do?')
             return
     raise Stuck('back to What will you do?')
@@ -726,13 +768,13 @@ def boltac_buy(g, slot, cat, typ, item, limit=600):
     gold0, items0 = g.char(idx)['gold'], len(g.char(idx)['items'])
     ui.move_cursor(g, LIST, 0, 'down', 'up', what='Buy')
     n = len(g.cap.messages)
-    _ok(g, lambda: _said(g, n, 80) and _settled(g), limit, 'Buy')
+    _ok(g, lambda: _said(g, n, 80) and _settled(g) or _screen(g, 20, 5), limit, 'Buy')
     ui.move_cursor(g, BUY_CAT, cat, 'down', 'up', what='category')
     n = len(g.cap.messages)
-    _ok(g, lambda: _said(g, n, 81) and _settled(g), limit, 'category')
+    _ok(g, lambda: _said(g, n, 81) and _settled(g) or _screen(g, 20, 15), limit, 'category')
     ui.move_cursor(g, BUY_TYPE, typ, 'down', 'up', what='type')
     n = len(g.cap.messages)
-    _ok(g, lambda: _said(g, n, 82), limit, 'type')
+    _ok(g, lambda: _said(g, n, 82) or _screen(g, 20, 25), limit, 'type')
     ui.move_cursor(g, BUY_ITEM, item, 'down', 'up', what='item')
     n = len(g.cap.messages)
     ENDS = (123, 85, 86, 91, 126, 84, 57)
@@ -776,7 +818,7 @@ def boltac_sell(g, slot, item, limit=600):
     pack0 = g.char(idx)['items']
     ui.move_cursor(g, LIST, 1, 'down', 'up', what='Sell')
     n = len(g.cap.messages)
-    _ok(g, lambda: _said(g, n, 87) and _settled(g), limit, 'Sell')
+    _ok(g, lambda: _said(g, n, 87) and _settled(g) or _screen(g, 25, 5), limit, 'Sell')
     ui.move_cursor(g, SELL_ITEM, item, 'down', 'up', what='item to sell')
     n = len(g.cap.messages)
     _ok(g, lambda: _said(g, n, 111, 98, 96, 97, 110), limit, 'pick item')

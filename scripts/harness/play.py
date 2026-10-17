@@ -18,6 +18,18 @@ TALK = 0x35                   # game_state while an NPC talk runs (MCARD)
 
 YESNO_STATES = (0x3d, 0x42, 0x69)    # sale, rescue, fight-warning yes/no
 QUIET_TALK = 24                      # frames a quiet talk is left to settle before a press
+HEAL_PICK = 0x32                     # the heal offer's "Whom shall I heal?" (C-talk.md §4)
+PICK_COL, PICK_ROW = 0x800796cc, 0x800796cd   # its cursor: party slot = row x 3 + col (talk_cresson 0x800d65c8)
+RAISE_TALKS = 40                     # mode 'raise': Talk presses before giving up (~560 frames each)
+TALKS = [0]
+
+
+def raise_target(g):
+    """The party slot of a dead or ashed member (not lost), or None."""
+    for k, ri in enumerate(g.party_slots()):
+        if ri is not None and g.char(ri)['status'] & 0x180 and not g.char(ri)['status'] & 0x200:
+            return k
+    return None
 
 
 def talk(g, mode='leave', limit=20000):
@@ -29,9 +41,15 @@ def talk(g, mode='leave', limit=20000):
     runs its whole scripted talk in 0xf), so the menu is found by what it does: when
     nothing is printing, tap right; if the menu cursor moves, the icon row (Talk, Fight,
     Leave) is up. A circle there would pick Talk and start another chat (T3: a random
-    meeting with Guy's party chatted for ever)."""
+    meeting with Guy's party chatted for ever).
+
+    mode 'raise' (revision 9, agent 14): Talk instead of Leave while a member is dead or
+    ashed, up to RAISE_TALKS times, and at a heal offer pick that member: an NPC's Kadorto
+    is free and certain (C-talk.md §5; Cleo raised a dead Dax to full HP in the emulator,
+    age and stats unchanged, 2026-10-14). TALKS[0] counts the Talk presses."""
     f0 = g.frame
     presses = 0
+    TALKS[0] = 0
     ts = lambda: g.s16(TALK_STATE) & 0xffff
     talking = lambda: g.u8(maze.GAME_STATE) == TALK
     nmsg = lambda: len(g.cap.messages) if g.cap else 0
@@ -39,8 +57,17 @@ def talk(g, mode='leave', limit=20000):
         if g.frame - f0 > limit:
             raise Stuck('talk too long', ts=hex(ts()))
         t = ts()
+        if t == HEAL_PICK and mode == 'raise' and raise_target(g) is not None:
+            k = raise_target(g)
+            ui.move_cursor(g, PICK_ROW, k // 3, 'down', 'up', wrap=2, what='heal pick row')
+            ui.move_cursor(g, PICK_COL, k % 3, 'right', 'left', wrap=3, what='heal pick column')
+            ui.confirm_until(g, lambda: ts() != t or not talking(), 300, 'heal pick')
+            presses += 1
+            continue
         if t in YESNO_STATES:
-            ui.move_cursor(g, YESNO, 1, 'down', 'up', what='talk yes/no')
+            # mode 'fight' answers Yes to the fight warning (0x69) and No to the rest
+            ui.move_cursor(g, YESNO, 0 if mode == 'fight' and t == 0x69 else 1, 'down', 'up',
+                           what='talk yes/no')
             ui.confirm_until(g, lambda: ts() != t or not talking(), 300, 'answer no')
             presses += 1
             continue
@@ -68,6 +95,13 @@ def talk(g, mode='leave', limit=20000):
             if talking() and g.u8(TALK_MENU_CURSOR) != c0:
                 opts = [k for k in range(3) if g.u8(TALK_MENU) & (1 << k)]
                 want = opts.index(2) if 2 in opts else len(opts) - 1
+                if mode == 'raise' and 0 in opts and TALKS[0] < RAISE_TALKS and raise_target(g) is not None:
+                    want = opts.index(0)
+                    TALKS[0] += 1
+                if mode == 'fight' and 1 in opts:
+                    # a meeting that has to be fought (chapter 8: the Jail Ogre comes as
+                    # "You've met someone!" and Leave walks the party back a square)
+                    want = opts.index(1)
                 ui.move_cursor(g, TALK_MENU_CURSOR, want, 'right', 'left', wrap=len(opts),
                                what='talk menu')
                 t1 = ts()
@@ -110,7 +144,7 @@ DROP_CURSOR = 0x80079c60     # "Drop which item?": the pack position under the c
 DROP_YES = 0x80079c65        # "Really throw it away?": 0 Yes, 1 No (the default)
 
 
-DROP_PROMPTS = (90, 36, 237)
+DROP_PROMPTS = (90, 36, 237, 238)
 
 
 def _drop_prompt_msg(g):
@@ -128,18 +162,51 @@ def _drop_prompt_msg(g):
                 return None
             done.add(j)
             return j, m['idx']
-        if m['file'] not in ('SISETU.OBJ', 'STATUS.OBJ'):
+        # the list's lines: item names (I_NAME_E) and the SISETU marks between them; a
+        # list shown again after a No to 238 prints its names after the 90 too
+        # (file None: a base whose file the capture hasn't confirmed yet, as in a fresh
+        # load of a state)
+        if m['file'] not in ('SISETU.OBJ', 'STATUS.OBJ', 'I_NAME_E.OBJ', None):
             return None
     return None
 
 
-def drop_choice(g):
+def asked_member(g, at):
+    """Roster index of the member whose list "Drop which item?" (message `at`) shows, or
+    None: the last name before it (the party bar's names print after it)."""
+    ms = g.cap.messages if g.cap else []
+    for j in range(at - 1, max(-1, at - 120), -1):
+        m = ms[j]
+        if m['file'] == 'STATUS.OBJ' and m['idx'] == 390:
+            for ri in g.party():
+                if g.char(ri)['name'] == m['text'].strip():
+                    return ri
+            return None
+    return None
+
+
+def drop_choice(g, at=None):
     """The pack position to throw away: the last one that's spare loot (unequipped, an id
-    under 0x100, so not the Tablet, a stone or a story item) in every full pack, since
-    which member the game asks isn't known here."""
+    under 0x100, so not the Tablet, a stone or a story item) in the most full packs, since
+    which member the game asks isn't known here; positions already tried at this prompt
+    (refused as equipped or important) come last. Before, a position that wasn't spare
+    loot in every full pack fell back to 9: n1v0t chapter 11 (2026-10-15) picked Uranus's
+    GOLD HELM there, "This is an important item. Drop it?" No, and the same pick again
+    until "event box too long"."""
     full = [g.char(i)['items'] for i in g.party() if len(g.char(i)['items']) >= 10]
-    ok = lambda k: all(k < len(p) and not p[k] & 0x2000 and (p[k] & 0x1ff) < 0x100 for p in full)
-    return next((k for k in range(9, -1, -1) if ok(k)), 9)
+    tried = g.__dict__.setdefault('_drop_tried', set())
+    if len(tried) >= 10:
+        tried.clear()
+    # the member the game asks: the list shows their sheet, name first (STATUS 390)
+    who = asked_member(g, at) if at is not None else None
+    if who is not None:
+        from harness import gear
+        ok = [k for k, w in gear.pack(g, who) if k not in tried and gear.throwable(g, w)]
+        if ok:
+            return ok[-1]
+    spare = lambda k: sum(k < len(p) and not p[k] & 0x2000 and (p[k] & 0x1ff) < 0x100
+                          for p in full)
+    return max((k for k in range(9, -1, -1) if k not in tried), key=spare)
 
 
 def drop_prompt(g):
@@ -153,7 +220,9 @@ def drop_prompt(g):
     last = ('SISETU.OBJ', p[1]) if p else None
     if last == ('SISETU.OBJ', 90):
         ui.wait_until(g, lambda: g.u8(maze.PRINTER) != 4, 120, 'drop list')
-        ui.move_cursor(g, DROP_CURSOR, drop_choice(g), 'down', 'up', what='drop item')
+        k = drop_choice(g, p[0])
+        g._drop_tried.add(k)
+        ui.move_cursor(g, DROP_CURSOR, k, 'down', 'up', what='drop item')
         n = len(g.cap.messages)
         ui.press_until(g, 'circle', lambda: len(g.cap.messages) > n, 120, 'pick drop item')
         g.step(20)
@@ -165,6 +234,16 @@ def drop_prompt(g):
         ui.press_until(g, 'circle', lambda: len(g.cap.messages) > n or g.u8(DROP_YES) != 0,
                        120, 'throw away')
         g.step(20)
+        g.__dict__.setdefault('_drop_tried', set()).clear()
+        return True
+    if last == ('SISETU.OBJ', 238):
+        # "This is an important item. Drop it?" (cursor on No): No, back to the list,
+        # where drop_choice picks another position
+        g.step(20)
+        ui.move_cursor(g, DROP_YES, 1, 'down', 'up', what='important item no')
+        n = len(g.cap.messages)
+        ui.press_until(g, 'circle', lambda: len(g.cap.messages) > n, 120, 'keep important item')
+        g.step(20)
         return True
     if last == ('SISETU.OBJ', 237):
         # "It's equipped, so it can't be dropped.": back to the list
@@ -172,6 +251,58 @@ def drop_prompt(g):
         g.step(40)
         return True
     return False
+
+
+def drop_pending(g):
+    """True if the latest SISETU line, past the party bar's and the list's lines, is
+    the drop picker's ("Who will drop it?", "Drop which item?" and the rest)."""
+    ms = g.cap.messages if g.cap else []
+    for j in range(len(ms) - 1, max(-1, len(ms) - 60), -1):
+        m = ms[j]
+        if m['file'] == 'SISETU.OBJ':
+            return m['idx'] in (92, 303) + DROP_PROMPTS
+        if m['file'] not in ('STATUS.OBJ', 'I_NAME_E.OBJ', None):
+            return False
+    return False
+
+
+def drop_picker(g, limit=3000):
+    """The drop picker as game_state 3, the camp's state: a story item given by MAZE
+    0x800cbb0c with every pack full sets it straight from a prompt's Yes, no box (c15v1a
+    chapter 15, 2026-10-15: the Demon's Statue after a chest filled the last slot; the
+    camp's cross backed out of "Who will drop it?", the statue stayed in the wreck, and
+    the goal was stuck "after camp" four times). The member is one with something
+    throwable, then drop_prompt throws away spare loot."""
+    f0 = g.frame
+    asked = set()
+    while g.u8(maze.GAME_STATE) == 3 and maze.in_maze(g):
+        if g.frame - f0 > limit:
+            raise Stuck('drop picker', where=g.where())
+        if drop_prompt(g):
+            continue
+        ms = g.cap.messages if g.cap else []
+        j = next((j for j in range(len(ms) - 1, max(-1, len(ms) - 60), -1)
+                  if ms[j]['file'] not in ('STATUS.OBJ', 'I_NAME_E.OBJ', None)), None)
+        if j is not None and j not in asked and ms[j]['file'] == 'SISETU.OBJ' \
+                and ms[j]['idx'] == 303:
+            # "Who will drop it?", the party bar printed after it. The cursor is the camp's
+            # (0x800796cc column, 0x800796cd row) and starts on the first member; pick one
+            # with something throwable (c15v1b: Uranus, all worn gold and the Jade Mask,
+            # refused for 3,000 frames)
+            asked.add(j)
+            g.step(10)
+            from harness import camp, gear
+            slots = g.party_slots()
+            who = next((p for p, ri in enumerate(slots) if ri is not None
+                        and any(gear.throwable(g, w) for _, w in gear.pack(g, ri))), None)
+            if who is not None:
+                camp._pick_member(g, who, 'who drops')
+            n = len(g.cap.messages)
+            ui.press_until(g, 'circle', lambda: len(g.cap.messages) > n
+                           or g.u8(maze.GAME_STATE) != 3, 120, 'who drops')
+            g.step(20)
+            continue
+        g.step(10)
 
 
 def close_box(g, limit=600, react=20):
@@ -274,7 +405,14 @@ def wait_settled(g, limit=1800):
             if maze.calm(g):
                 return 'calm'
             if g.u8(maze.GAME_STATE) == 3:
-                return 'camp'
+                # the drop picker's lines print a frame or two after the state changes
+                for _ in range(30):
+                    if drop_pending(g) or g.u8(maze.GAME_STATE) != 3:
+                        break
+                    g.step()
+                if g.u8(maze.GAME_STATE) != 3:
+                    continue
+                return 'drop' if drop_pending(g) else 'camp'
             if g.u8(maze.GAME_STATE) == PROMPT:
                 return 'prompt'
             if g.u8(maze.GAME_STATE) == 0 and g.u8(maze.MSG) in (2, 3):
@@ -299,6 +437,9 @@ def handle_interrupt(g, policy=Policy, log=None):
             continue
         if what == 'box':
             close_box(g)
+            continue
+        if what == 'drop':
+            drop_picker(g)
             continue
         if what == 'camp':
             from harness import camp

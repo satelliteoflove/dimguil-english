@@ -40,7 +40,15 @@ on 2026-10-10 and 11; the earlier notes below came from translating the game.
   with two small LCGs in the executable (D-battle.md, "Randomness"). The town calls `rand_upto(2)` every frame, so
   waiting a different number of frames before the same button presses changes the next
   roll: that's how the emulator tests checked both sides of a threshold without
-  writing to RAM.
+  writing to RAM. Battle rolls don't follow frame timing: `rand_below` keeps its LCG
+  state at 0x80079a34 (`battle_rng_state`, x * 0x41c64e6d + 0x3039), and a fight
+  started from a save state plays out the same whatever frames are waited first, so
+  the harness's old "seed" (a few frames of waiting) gave the same fight every time.
+  Writing a seeded value to 0x80079a34 after loading the state gives a real spread of
+  fights from one state. The harness benches do this
+  (`rips/agents/chapters/ag16/fight_rng.py`). On the 17 Were Centipedes at Area B
+  (26,8,14) it showed 30 different fights: 6 wipes under the current rules, 9 when
+  running at round 1. It's a write of data, for testing only.
 - **Records.** Twenty characters at 0x8007d708 (0xd0 bytes each), twenty party records
   at 0x8008f8c8 (54 bytes), the party you walk with mirrored at 0x8007e810, 382 item
   records at 0x80052bf2 in the executable, and monster records loaded per battle at
@@ -78,6 +86,143 @@ glance". By subsystem:
   fight squares, signs, doors, pillars...); stepping on a square runs `square_arrive`,
   Investigate runs `square_examine`. Hidden doors are found by a search roll on each
   step. A-maze.md §9-10.
+- **Heal spots.** Event 0x3f is a wall switch ("There's a switch on the wall. Will you
+  press it?", EVENTMES 167) that heals. `square_examine` (0x800bb790) case 0x3f needs
+  the party facing the record's p1, then sets prompt 0xe. On Yes, `maze_prompt_result`
+  (0x800befcc, prompt 0xe at 0x800bf5e8) gives every member whose status has none of
+  0x380 (dead, ashes, lost) full HP, status 0, poison 0 and +0x79 0. Spell points
+  aren't touched and the dead stay dead. There's no cost and no flag, so it works every
+  time. Three squares: Area B B4 E5 N18 facing west, Area E B3 E12 N4 facing north,
+  Dragon B1 E10 N13 facing west. **[code]**, checked in the emulator on B4 (2026-10-15).
+  - The same switch text has other effects on other event types: 0x40 poisons the party
+    (prompt 0xf, poison +50; one sits on B4 at E5 N5 facing south), 0x42 toggles
+    `maze_event_flags` bit p2 (prompt 0x10), and 0x6c refills spell points (prompt 0x1f,
+    which calls a MAZE copy of the spell point recalc, 0x800be8e0). Event 0x50 (Area D's
+    seeping pillars, EVENTMES 210/211) refills spell points with no prompt. A-maze.md
+    "Heal spots" has the squares.
+  - Ghidra's case labels in `maze_prompt_result` are wrong in places: it shows prompt 1
+    sharing the heal and 0x11 sharing the spell refill. The jump table at 0x800a1918
+    sends 1 to the pillar fight (0x800bf018) and 0x11 to a fixed toggle of bit 0x200000.
+- **Area B's west rooms.** B4 and B5 (areas 24 and 23) each have a west part, x 4-9 in
+  game coordinates (not B4's south-west corner: Chris walked to the heal switch at
+  (5, 5) without leaving B4), joined to each other by the stairs at (8, 10) but not to
+  the rest of either floor. The only way in is B3's stairs at (5, 13) down to B4
+  (4, 13), and B3's west side is reached through B2 and B1. So five of B4 and B5's fight squares (B4
+  (5, 9), (5, 15), (8, 12); B5 (7, 8), (7, 15)) are a walk through B3, B2 and B1 from
+  the others. Found from the fan site's map data with the harness's planner
+  (2026-10-15); Chris's own B4/B5 trip from the same state never went there.
+- **Area C's moving floors.** `square_arrive` (0x800ba48c) runs event 0x45 (about 540
+  squares over areas 28-31) by turning the party to face the record's p1 and moving it
+  a square that way, and again on each square it lands on, stairs and chutes included,
+  until a square without one. Event 0x44, the nine turning tiles (p1 0-8), does the
+  same with the facing `table[p1 * 3 + panel[p1]]`, the table at 0x800ef240 (in MAZE.BIN)
+  and the panel's settings at 0x80087a30 (one byte a tile, 0-2). Neither runs while
+  story_flags bit 10 or bit 27 is set (bit 27 is B4's floor switch, below). Followed this
+  way, door C's ride with the walkthrough's settings ends at C-B2 E16 N13 and door B's at
+  E10 N10, as the walkthrough says. **[code]**; the squares are from the site's map
+  files.
+  - The panel (event 0x4e at C-B1 E10 N6, facing west, prompt 0x15) runs as game_state
+    0x10 (frame handler 0x800c8640): 0x80079790 is the switch under the cursor (Right and
+    Left, 0-8 round), 0x80079791 the picture row (Down and Up, 0-2 round); Circle sets
+    the switch to the row, Cross or Start leaves.
+  - The B4 switch (event 0x47 at E8 N12, facing east, prompt 0x11) toggles story_flags
+    bit 21, so a second press undoes it; the silver stone's device (0x46 at E9 N12,
+    facing west) needs bit 21 and the Tablet, and sets the Tablet's stone bit 7. Event
+    0x48 is a second switch the same way, toggling bit 22 (prompt 0x12).
+  - The B4 room past the snake door (EVENTMES 184 on the door at E9 N2): its 28 type 0x4a
+    squares hurt the party on arrival unless story_flags bit 22 is set, and that's the
+    0x48 switch, at E5 N12 facing east, past the Guardians (0x65 at E5 N11, p1 17:
+    EVENTMES 283, encounter 0x24, and the win sets bit 17). The switch that stops the
+    moving floors is event 0x5c at B4 E2 N20, facing west: EVENTMES 197, and its Yes
+    (prompt 0x1b) toggles bit 27, the bit `square_arrive` checks before 0x44 and 0x45.
+    Before Area D, door C's ride reaches the snake door with switches 7-9 on the panel at
+    rows 2, 0, 0 (the walkthrough's mountain, mountain, moon); followed over the site's
+    maps no other setting of the three gets there. **[code]**, chapter 13 (2026-10-15).
+  - The Greater Golem's door (0x4d, C-B2 E11 N10, facing north) starts its fight after
+    EVENTMES 181; the win sets story_flags bit 11 (fight reward 0x800c0748, type 10,
+    EVENTMES 182). The floor load (0x800a8f1c) locks the door's two squares while bits
+    10 and 11 are both clear.
+  - The lift between B2 and B4 at E21 N8 (type 0x4b on both floors) works on Investigate
+    facing west, with no flag and no prompt: FUN_800ce108 sets scene 0x80079878 to 0x1d
+    (run by FUN_800c8038, countdown 0xca) to area 0x1c + 2 from B4 (area 28), else + 0,
+    so each end goes to the other.
+  - The wreck at B4 E21 N6 has type 0x49 records on three sides (E21 N5, E20 N6, E21 N7,
+    p1 0, 1, 2: the facing each wants, so towards the wreck). Before mimicry mode ends
+    (story bit 10) it prints EVENTMES 185 only. After, with no member carrying item 0x13a
+    (the Demon's Statue; party_lacks_item 0x800b73e0 looks for the id with bit 0x4000),
+    EVENTMES 186 and prompt 0x13: Yes prints 187 and gives 0x13a (0x800cbb0c: the first
+    free pack slot in party order, flagged 0x4000, else game_state 3, the drop picker);
+    No prints 188 and the statue stays for another visit. **[code]**, chapter 15
+    (2026-10-15). The drop picker comes straight from the prompt's Yes, with no box:
+    SISETU 92 and 303 ("Your pack is full. Who will drop it?") two frames after game_state
+    turns 3, the member chosen with the camp's cursor (0x800796cc column, 0x800796cd
+    row, starting on the first member), then SISETU 90 for their list. A cross backs
+    out and the item stays where it was. **[emu]** (c15v1a-c, 2026-10-15)
+- **The glyph pad's words.** END on the pad (0x800b989c) checks the typed word against
+  seven: at Area X's pedestal words 0-4 (STAFF, LABORATORY, WAREHOUSE, ENERGY and a fifth)
+  each need a stone in the Tablet (0x800b7248: 4, 6, 0, 7, 3) and set story_flags bits 4,
+  5, 6, 7 and 20 (0x800ba32c, EVENTMES 136-140); word 5, DIMGUIL, counts only at Area D's
+  altar (area 32) and word 6 only in area 21 (EVENTMES 109). Anything else gets EVENTMES
+  126, or 204 at the altar. **[code]**, chapter 14 (2026-10-15).
+- **Area A's altar and the gold stone.** The altar is record type 0x5e at B2 E6 N5 (area
+  21, game (6, 18)), a square only the post-mimicry map reaches, through the hidden door
+  east of E4 N5 (type 3, p1 31). `square_examine` takes it facing north only. With the
+  Tablet and no stone 3 in it (0x800b7248 reads the Tablet's item_state bits: 0 when the
+  bit is set, -1 when not, -2 without a Tablet) it prints EVENTMES 108 and the dispatcher's
+  case 0x1d opens the glyph pad (0x800b957c); otherwise EVENTMES 103 alone. On the pad,
+  word 6 (0x800ef3a4 + 60: GAME) counts only in area 21: EVENTMES 109, then 110 (case
+  0x26), then case 0x27 starts fight type 0x13 with reward type 0xd. Any other word gets
+  EVENTMES 104. The win runs FUN_800b7310(3), setting the gold stone (bit 3, the eighth),
+  and EVENTMES 111. **[code]**, chapter 16 (2026-10-15).
+  The fight is five Crystal Men in one group, not one. They nullify many spells, cast
+  Mogato and Labadi, and their eye beams and hand rays reach the back row. Like Mother's
+  fight it starts with FIXED (0x80079bde) at 0, so nothing in battle RAM marks it as a
+  story fight. **[emu]** (c16v1a-b, 2026-10-15: a level 17-21 party killed none of them
+  in 12 rounds and wiped).
+- **Area D (areas 32-34).**
+  - The altar (0x2c in area 32, B3 E11 N19, facing south) works only while story bits 10
+    and 23 are clear: EVENTMES 199 and a yes/no (prompt 0x16); with the Tablet, EVENTMES
+    203 and 201 and the pad. DIMGUIL brings EVENTMES 205 and Mother's fight (dispatcher
+    0x800c1070 case 0x1c, fight 0xd); the win is reward type 0xb, story bit 23. With bit
+    23 set (or during the wall's scene, 0x80079878 = 0x1b) and bit 10 clear, the floor
+    load clears every wall of (11, 5), the altar's south side, the only way on.
+  - The fifth Guardians are 0x65 with p1 18 at B3 E10 N9: EVENTMES 284, and the win sets
+    story bit 18.
+  - Locked doors (type 2: p1 the bit in 0x800795fc that unlocks it, p2 the lock's
+    difficulty, p3 the side) open the locked-door menu on Investigate (game_state 8,
+    0x800ae1c8): a member from the party picker, then Pick the lock, Calnova or leave
+    (cursor 0x8007b716). The pick succeeds 70% of the time when (level x 5, +25 for a
+    Thief or Ninja, +10 for classes 7-8, + the sixth stat) / 10 reaches p2, else 15%,
+    less 0x8007e838, which each failure raises by 10 (to 50 at most) and each step
+    lowers by 1. Calnova needs the
+    seventh-level alchemist spell known and a point, and works 95% of the time unless
+    spells are sealed. The roll reads the character at roster index 0x80079791, which
+    the menu's first step sets to 1, not the member picked (0x800798d1, used only for the
+    status check): probably a bug, not yet checked in the emulator. B2's two locked
+    doors by the ladder (E13 N12 south, p1 6; E12 N13 west, p1 5) both have p2 8.
+  - Spell sealing: any step onto a square whose square_flags bit 31 is set puts
+    nomagic_steps at 232, and each step takes one off (maze_step_hp 0x800c5570), so it's
+    about 232 steps, not the 1000 the fan FAQ gives. Area D has 54, 32 and 49 such
+    squares on B3, B2 and B1: the rooms around the seeping pillars.
+  - The small door (0x51 at B1 E10 N12, facing north) needs bit 10 clear and the Gold
+    Gauntlets in the party: EVENTMES 222, then (dispatcher case 0x1f) the one able member
+    goes, or the party picker asks who (game_state 0x11; cursor x 0x8007b6f0 = -99, 1 or
+    101 for the column, y 0x8007b6f2 = 0x48 front row or 0x62 back). Prompt 0x18 checks
+    that member wears all four gold pieces (0x800b7508: items 0x13d-0x140 with the
+    equipped bit). If so: story bit 10, the MONS003.STR movie, EVENTMES 224 and 237;
+    if not, EVENTMES 225 or 226 and they're ashes (status 0x100, HP 0, a death counted).
+    After the pick, the prompt's outcome waits about 1,200 frames with the maze calm and
+    the prompt still pending (0x80079907 = 0x18) before EVENTMES 224. **[emu]**
+  - Mimicry mode's end (bit 10) swaps the maps of areas 18-34 for second files; the
+    harness reads the site's data/maps/dim/mimicry/ from then on.
+  - The floor load's wall and lock changes (0x800a8f1c) run from the map load
+    (0x800a9268) only when 0x80079878 is 0 or 0x1b, so not when the party arrives by a
+    lift (17), and again after every camp (MAIN 0x80019428 through maze_exit_code 0xfc).
+    Back down Area D's lift after Mother, the altar's south wall at (11, 5) is still up
+    until the party camps or fights; a camp brings it down. **[emu]** (c14v3, 2026-10-15)
+  - B1 E11 N10 (0x68) starts a one-time scene (talk 0x1a, maze_event_flags bit 7) while
+    no member has char_flags bit 0.
+  **[code]**, chapter 14 (2026-10-15).
 
 ### Wipes and bodies (A-maze.md §4-6, D-battle.md, fallen-parties.md)
 
@@ -113,6 +258,14 @@ glance". By subsystem:
 - **Healing** is free, from two healers per party chosen 50/50, and what they can cure
   grows with their party's story stage; most roll a 20% "out of magic" first. An NPC's
   Kadorto never fails: no roll, no fee, no VIT loss, no aging, and it works on ashes.
+  Checked in the emulator on 2026-10-14 (rips/agents/chapters/cleo/): Cleo raised a dead
+  Dax to full HP, age and stats unchanged. The offer came on the 18th Talk of one meeting
+  and the 11th of another; picked a frame earlier, the first one was her 20% "no healing
+  magic", which is rolled after the pick. The
+  pick's cursor is 0x800796cc (column) and 0x800796cd (row), party slot = row × 3 +
+  column. Cresson's party's Underground B3 meeting is at RAM (8, 17) (fixed_meet_table
+  0x8005e6ac, id 0x16); its token is spent once met, until the party next arrives on B3,
+  and the talk starts some frames after the step onto the square.
 - **Sales** are sets of three items at one price (5 to 20,000 G), chosen by
   `progress_bits`; some of the items are cursed.
 - **The rescue.** Guy's, Balbo's and Fontana's parties offer it; Cresson's and Zaril's
@@ -307,6 +460,31 @@ that misses the encounter-source test below, so wandering fights never get one.
 - **The save** is one file of two blocks: a header and a 0x2400-byte image whose layout
   is fully mapped (`scripts/re/savefile.py` decodes it). Nothing in saving, loading or
   resuming touches characters left in the maze.
+- **Creation costs nothing.** A new character starts with 100 gold (`training_create`
+  0x800af5d8 sets `new_char.gold = 100`); a Fighter also brings a Long Sword and Leather
+  Armor, worn. Going to the Training Grounds empties the party: everyone waits in the
+  tavern (emulator, 2026-10-14, the harness mule).
+- **Out of the party, a character keeps everything.** The tavern's Remove Member
+  (`tavern_remove_member` JOUKA 0x800aa0a4, state 0x19) writes only the party record
+  (0x8007e812 slot = 0xff, then the parties table); it never touches the roster
+  (0x8007d708, 0xd0 a record, pack words at +0x20). A spare character can hold items.
+- **Give at the Edge of Town** (Prepare > Inspect > Items > Give, `edge_give_item`
+  HAZURE 0x800b3c6c) shows both packs side by side and moves items either way; it won't
+  open for a character with an empty pack. Its regeneration bookkeeping reads the wrong
+  pack slot: after a give it takes the given item's regen from slot `0x80079c60` (the
+  Inspect menu's cursor, 1 here) instead of the list row `0x80079c6b`, and a swap reads
+  slot `0x80079c65` (the Items menu's cursor, 2). The code was copied from the camp's
+  Give, where `0x80079c60` is the list row. Only items with a regen value (Item +0x21)
+  are affected; not yet seen in play.
+- **Equip at the Edge of Town** (Prepare > Inspect > Items > Equip, `equip_menu` HAZURE
+  0x800afa9c) runs the camp's equip prompts on the same fields: slot `0x80079b7a`,
+  prompt `0x80079562`, state `0x8007956c` (5, 10, then 15 at each slot's prompt, 20, and
+  110 then 0 at the end), candidates at `0x800905e0`. Only the cursor differs: the
+  Edge's list row `0x80079c6b` instead of camp's `0x80079c60` (0 for none, k for
+  candidate k - 1, in both). The Edge's own state `0x800796e1`
+  stays at 45 throughout. Cross backs out one screen a press: the Give lists, "to
+  whom?", Items, the member's menu, then "Inspect whom?" (45 -> 35 -> 25), so one visit
+  can serve several members (emulator, 2026-10-15, the harness backups).
 
 ### Records (G-records.md)
 
@@ -772,6 +950,15 @@ patches in `asm/`.
   sets a flag. The result indexes I_NAME_E.OBJ, whose strings 427-938 were never
   localised in the English-mode file: 428-557 mirror the item list, 558+ are natural
   attacks (claws, fangs, stinger). The verb indexes FIGHTMSG.OBJ.
+- An attack whose noun is 0x100 or more is an ability, not a blow: `monster_attack_roll`
+  (0x800aaed0) casts the spell in its +6 byte the way an item is used, with the verb byte
+  as the message ("tries to lull a strange dance", FIGHTMSG 214 through
+  `battle_message_build`'s mode 5). Because it goes through the item path, silence
+  doesn't stop it. The Nightmare's and the Merry Puppet's attack 2 is [19, 1, 46, ...]:
+  the dance is Katino. `monster_melee` (0x800aaa04) picks attack 1 on rand(100) > 68 when
+  it's usable, else attack 0, so a fighting Nightmare dances about a third of the time
+  on top of its 45% Katino column. (Agent 9, 2026-10-14, from the n1v1 chapter 8 fight:
+  92 Katino casts and dances in 19 rounds.)
 - In a battle, the current group's monster record is at 0x801b0680 (in
   rips/states/battle_wriggle.state).
 - **Which template an attack prints** is fixed by its noun (code read 2026-10-15).

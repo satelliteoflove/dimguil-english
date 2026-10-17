@@ -85,9 +85,12 @@ def _pick_member(g, slot, what):
     ui.move_cursor(g, MX, slot % 3, 'right', 'left', what=what + ' col')
 
 
-def cast(g, caster, school, level, index, target=None):
+def cast(g, caster, school, level, index, target=None, done=None):
     """Cast from camp: party slot `caster`, realm/level, the spell's place in the level's
-    list, on party slot `target` (if it asks). Returns the camp messages printed."""
+    list, on party slot `target` (if it asks). done: for a spell with no target, a check that it took;
+    the cast stops pressing there (a no-target spell goes back to the level's list, state
+    10, and each further press cast it again: Maporfic spent every Priest level 4 point,
+    n1v3l c9_end 9 -> 0, agent 13). Returns the camp messages printed."""
     open_camp(g)
     n = len(g.cap.messages) if g.cap else 0
     ui.move_cursor(g, ICON, 0, 'right', 'left', what='camp icon')
@@ -100,7 +103,10 @@ def cast(g, caster, school, level, index, target=None):
     ui.move_cursor(g, LEVEL, level - 1, 'right', 'left', what='level')
     ui.confirm_until(g, lambda: g.u8(SPELL_STATE) == 10, 300, 'level')
     ui.move_cursor(g, SLOT, index, 'down', 'up', what='spell')
-    ui.confirm_until(g, lambda: g.u8(SPELL_STATE) != 10, 300, 'spell')
+    ui.confirm_until(g, lambda: g.u8(SPELL_STATE) != 10 or done is not None and done(), 300, 'spell')
+    if done is not None:
+        ui.wait_until(g, done, 300, 'spell took')
+        return [(m['file'], m['idx'], m['text']) for m in g.cap.messages[n:]] if g.cap else []
     # the state passes through others before "Cast it on whom?" (30) comes up: wait for a
     # settled one, or the target pick is skipped and the confirm lands on the default
     # slot (T3, 2026-10-12: it landed on an empty slot and the cast never happened)

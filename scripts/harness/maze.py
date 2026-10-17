@@ -257,6 +257,17 @@ def face(g, d):
         except Stuck:
             if wait_cd(g):
                 continue
+            if not calm(g):
+                # a scene or fade started under the press: the stairs' change of floor
+                # (scene 6, ~200 frames) right after the step onto them looked calm for a
+                # frame (b1v1e chapter 7, 2026-10-14: "turn" at B3 (9, 11) going up to
+                # B2); a floor's fade-in (c10b, Area B B2 (17, 13)). Wait it out; if it
+                # moved the party, the caller plans again
+                a = (g.u8(AREA),) + g.pos()
+                ui.wait_until(g, lambda: calm(g) or interrupted(g), 1500, 'scene under a turn')
+                if (g.u8(AREA),) + g.pos() != a or interrupted(g):
+                    return False
+                continue
             if calm(g) and not nudged:
                 # after the stream parts on B2 (7, 11) the screen stays black and turns do
                 # nothing until the party steps forward (f1v0 chapter 4, 2026-10-13); wait,
@@ -340,7 +351,7 @@ def step(g, d):
 
 
 def walk_to(g, tx, ty, on_interrupt=None, limit_moves=400, avoid=(), closed=(), soft=(),
-            stop_area=False):
+            stop_area=False, carry=()):
     """Walk to (tx, ty) on this floor by BFS over RAM's walls. on_interrupt(g) handles
     whatever stops the walk (a battle, a talk, an event); it returns True to carry on.
     Without it, an interruption raises Stuck. A locked door, or one that won't open, is
@@ -348,6 +359,8 @@ def walk_to(g, tx, ty, on_interrupt=None, limit_moves=400, avoid=(), closed=(), 
     that move the party, nav.py); `soft` ones only when there's no other way.
     stop_area: return as soon as the party is on another floor (a stair or chute was
     the target, or the walk fell through one).
+    carry: squares whose moving floor carries the party off (Area C, nav.carry): return
+    once a step lands on one, or the party ends up anywhere but where it stepped.
     Returns a dict: moves, frames, interruptions, blocked."""
     f0 = g.frame
     area0 = g.u8(AREA)
@@ -403,6 +416,9 @@ def walk_to(g, tx, ty, on_interrupt=None, limit_moves=400, avoid=(), closed=(), 
         d = p[0]
         r = step(g, d)
         moves += 1
+        if carry and (g.pos() in carry or g.pos() not in ((x, y), (x + DIRV[d][0], y + DIRV[d][1]))):
+            return dict(moves=moves, frames=g.frame - f0, interruptions=inter, blocked=sorted(blocked),
+                        area=g.u8(AREA), carried=True)
         if r == 'moved':
             continue
         if r == 'interrupted':

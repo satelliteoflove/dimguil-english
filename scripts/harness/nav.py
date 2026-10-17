@@ -49,13 +49,23 @@ LINKS = [
     dict(at=(6, 19, 19), face=0, step=True, to=(6, 19, 18), need=0x143, what='moon door'),
 ]
 # Area A's ladders (square_examine 0x09): B3 (area 20) and B4 (19), the same square on
-# both, facing west; and B3's E12-E13 N20 pair facing north, down only (the walkthrough's
-# way to the LABORATORY mural)
+# both, facing west; and B3's E12-E13 N20 pair facing north (the walkthrough's way to the
+# LABORATORY mural), with B4's ladder up beneath it
 for _xy in ((10, 3), (10, 4), (10, 19), (10, 20)):
     LINKS.append(dict(at=(20,) + _xy, face=3, step=False, to=(19,) + _xy, what='ladder down'))
     LINKS.append(dict(at=(19,) + _xy, face=3, step=False, to=(20,) + _xy, what='ladder up'))
 for _xy in ((12, 3), (13, 3)):
     LINKS.append(dict(at=(20,) + _xy, face=0, step=False, to=(19,) + _xy, what='ladder down'))
+    # and B4's end, facing north too (site event 57, type 9 with p1 0: EVENTMES 220, the
+    # ladder up): the only way back from the mural room (q9r1 chapter 9, 2026-10-14: "no
+    # route" from (17, 3))
+    LINKS.append(dict(at=(19,) + _xy, face=0, step=False, to=(20,) + _xy, what='ladder up'))
+# Area C's lift between B2 and B4 at E21 N8 (21, 15) (record type 0x4b, square_examine
+# 0x800bb790): Investigate facing west, and FUN_800ce108 starts scene 0x1d to area 0x1c
+# + (2 from B4, else 0), so B2 (30) goes down to B4 (28) and B4 back up. No flag, no
+# prompt.
+LINKS.append(dict(at=(30, 21, 15), face=3, step=False, to=(28, 21, 15), what='C lift down'))
+LINKS.append(dict(at=(28, 21, 15), face=3, step=False, to=(30, 21, 15), what='C lift up'))
 # Transfers the site doesn't decode: area -> {(x, y): (area, x, y)}. The jewel lift's
 # B3 end (event 0xc with p3 = 4, square_arrive) takes the party up on arrival; its
 # params give the destination in game coordinates (x 12, y 11, area 4).
@@ -63,7 +73,8 @@ EXTRA_TRANSFERS = {6: {(12, 11): (4, 11, 11)}}
 # The lift rides (0x80079878 = 9 down, 10 up; countdown at 0x8008a000) pass through the
 # floors between, with the area byte changing on the way: up from B3 it reads 1, 2, 3,
 # then 4, and the party ends at 4F (11, 11) about 1,050 frames after stepping on.
-RIDES = (9, 10, 15)         # 15: the lift to Area X (B3 E15 N12, ~500 frames)
+RIDES = (9, 10, 15, 0x1d)   # 15: the lift to Area X (B3 E15 N12, ~500 frames); 0x1d: Area
+                            # C's B2-B4 lift (FUN_800ce108, run by FUN_800c8038)
 SCENE, SCENE_COUNT = 0x80079878, 0x8008a000
 # Sides the site doesn't decode as sealed: area -> {(x, y, side): [(addr, bit), ...]}.
 # The stream on B2 west of E7 N12 (record type 0x24 at (7, 11)) lets nobody across until
@@ -76,26 +87,173 @@ SCENE, SCENE_COUNT = 0x80079878, 0x8008a000
 EXTRA_SHUT = {6: {(5, 11, 0), (5, 11, 2), (5, 10, 2), (5, 12, 0),
                  (19, 19, 0), (19, 18, 2)}}     # the moon door: a LINK, not a side
 NPC_FLAGS = 0x80079754
-EXTRA_SEALED = {7: {(7, 11, 3): [(NPC_FLAGS, 28)], (6, 11, 1): [(NPC_FLAGS, 28)]}}
+DOOR_BITS = 0x800795fc       # locked doors' unlocked bits (door records' p1)
+EXTRA_SEALED = {7: {(7, 11, 3): [(NPC_FLAGS, 28)], (6, 11, 1): [(NPC_FLAGS, 28)]},
+                # B3's ice pillars between x 19 and 20, rows 2-4 (site events 53/54/58,
+                # "A pillar of ice towers before you."): shut until the freezer melts
+                # (npc_flags bit 29, chapter 3). The site and RAM's wall map call them
+                # open; training planned through them into the freezer's pocket and got
+                # "no path" at (20, 4) (b1v1b, b1v6 chapter 3, 2026-10-14)
+                6: {(x, y, d): [(NPC_FLAGS, 29)] for y in (2, 3, 4)
+                    for x, d in ((19, 1), (20, 3))},
+                # Area B B5's vault door, west of E7 N11 (7, 12): locked (square_flags bit
+                # 25, put back at every floor load, MAZE 0x800a8f1c) until the three-ring
+                # dial opens it, story_flags bit 26 (chapter 10)
+                23: {(7, 12, 3): [(0x80079b44, 26)], (6, 12, 1): [(0x80079b44, 26)]},
+                # Area A B1's crested doors, locked at each floor load the same way: the
+                # red one west of E11 N11 (11, 12) until story bit 9 (the altar lit red),
+                # the green one east of E15 N11 (15, 12) until bit 8 (lit green; red
+                # clears it). The site's map shows neither lock (chapter 11)
+                22: {(11, 12, 3): [(0x80079b44, 9)], (10, 12, 1): [(0x80079b44, 9)],
+                     (15, 12, 1): [(0x80079b44, 8)], (16, 12, 3): [(0x80079b44, 8)]},
+                # Area C B2's Greater Golem door, north of E11 N10 (11, 13): locked at each
+                # floor load (squares (11, 13) and (11, 12)) while story bits 10 and 11 are
+                # both clear; the Golem's fight sets 11 (MAZE 0x800c0748, chapter 12)
+                30: {(11, 13, 0): [(0x80079b44, 11)], (11, 12, 2): [(0x80079b44, 11)]},
+                # Area D B2's two locked doors beside the ladder from B3 (door records,
+                # square_examine type 2): south of E13 N12 (13, 11), the way to the ladder
+                # up at (13, 13), and west of E12 N13 (12, 10). Each opens when its bit
+                # (p1: 6, 5) of 0x800795fc is set, by a picked lock or Calnova (the
+                # locked-door menu, MAZE 0x800ae1c8; chapter 14)
+                33: {(13, 11, 2): [(DOOR_BITS, 6)], (13, 12, 0): [(DOOR_BITS, 6)],
+                     (12, 10, 3): [(DOOR_BITS, 5)], (11, 10, 1): [(DOOR_BITS, 5)]}}
 # Sides that close once a flag is set: area -> {(x, y, side): (addr, bit)}. B2's passage
 # between E13 N12 and E14 N12 shuts when the winding machine runs (story_flags bit 2):
 # the wall it hauls up on B3 comes down here (walkthrough 05-moon-door; f1v3f 2026-10-13
 # went up and down B1-B2's stairs 40 times, the site's map calling it open).
 STORY_FLAGS = 0x80079b44
 EXTRA_SHUT_AFTER = {7: {(13, 11, 1): (STORY_FLAGS, 2), (14, 11, 3): (STORY_FLAGS, 2)}}
+# Sides the site draws as walls that open once a flag is set: area -> {(x, y, side): (addr,
+# bit)}. Area D B3's altar room: the floor load (MAZE 0x800a8f1c) clears every wall of
+# (11, 5), south of the altar, once Mother is beaten (story_flags bit 23, fight reward
+# 0x800c0748 type 0xb) and until mimicry mode ends (bit 10): the only way on to the CORE
+# door and the ladder up (chapter 14).
+EXTRA_OPEN_AFTER = {32: {(11, 5, 2): (STORY_FLAGS, 23)}}
+
+# Area C's moving floors (square_arrive 0x45, MAZE 0x800ba48c): stepping on turns the
+# party to the record's p1 and moves it a square that way, again on each square it's
+# carried onto, stairs and chutes included, until a square without one. The turning
+# tiles (0x44, nine of them, p1 0-8) do the same with the facing the switch panel set:
+# TILE_DIRS[p1 * 3 + PANEL[p1]] (MAZE 0x800ef240; the panel, chapter 12). Neither runs
+# while story_flags bit 10 or 27 is set. Followed this way, door C's ride ends at
+# C-B2 E16 N13 and door B's at E10 N10 with the walkthrough's settings, as it says.
+BELTS = (0x44, 0x45)
+TILE_DIRS = (0, 1, 2, 1, 3, 0, 1, 2, 3, 2, 0, 3, 2, 3, 1, 2, 1, 3, 0, 3, 2, 2, 1, 0, 3, 2, 1)
+PANEL = 0x80087a30
+
+# Arrive squares that stop mattering once a flag is set, and ones that hurt until then
+# (chapter 13, Area C B4): a Guardians' fixed fight (0x65) runs only while story_flags bit
+# p1 is clear (the win sets it), and the room past the snake door's 0x4a squares burn the
+# party only while bit 22 (the device at E5 N12) is clear. c13v3 (2026-10-15), after the
+# Guardians: on to the device at (5, 11), whose only ways in are the Guardians' square and
+# the burning floor, both soft avoids, so walk_to fell back to its shortest way, over
+# (8, 16) into the burn's white-out scene: "close maze box" six times.
+QUIET_AFTER = {0x65: lambda p: (STORY_FLAGS, p[0]), 0x4a: lambda p: (STORY_FLAGS, 22)}
+HURTS = {0x4a}
+
+
+def quiet(g, F, xy):
+    """True if the arrive square xy does nothing now (its flag set)."""
+    fl = F.get('quiet_after', {}).get(xy)
+    return bool(fl) and g is not None and flag(g, *fl)
+
+
+def hurts(g, F, xy):
+    return xy in F.get('hurts', ()) and not quiet(g, F, xy)
+
+
+def belts_on(g):
+    return g is None or not (flag(g, STORY_FLAGS, 10) or flag(g, STORY_FLAGS, 27))
+
+
+def belt_dir(g, F, xy):
+    """The way the moving floor at xy carries the party, or None."""
+    b = F.get('belts', {}).get(xy)
+    if b is None or not belts_on(g):
+        return None
+    t, p1 = b
+    if t == 0x45:
+        return p1 & 3
+    k = g.u8(PANEL + p1) if g is not None else 0
+    return TILE_DIRS[p1 * 3 + (k if k < 3 else 0)]
+
+
+def carry(g, node, most=300):
+    """Where the moving floors leave a party that steps onto node = (area, x, y), and how
+    many squares it's carried; None if they go round in a circle."""
+    area, x, y = node
+    seen = set()
+    n = 0
+    while n < most:
+        F = floor(area)
+        if F is None:
+            return None
+        if n and (x, y) in F['transfers']:
+            area, x, y = F['transfers'][(x, y)]
+            n += 1
+            continue
+        d = belt_dir(g, F, (x, y))
+        if d is None or F['walls'][(x, y)][d] in (1, 3):
+            return (area, x, y), n
+        if (area, x, y, d) in seen:
+            return None
+        seen.add((area, x, y, d))
+        x, y = x + maze.DIRV[d][0], y + maze.DIRV[d][1]
+        n += 1
+    return None
+
+
+def on_belt(g):
+    F = floor(g.u8(maze.AREA))
+    return bool(F) and belt_dir(g, F, g.pos()) is not None
+
+
+def wait_carry(g, limit=6000):
+    """After a step onto a moving floor: wait until the floors have set the party down
+    (still a while, off them), or something interrupts."""
+    f0 = g.frame
+    last, still = None, 0
+    while g.frame - f0 < limit:
+        if maze.in_maze(g) and maze.interrupted(g) and g.u8(maze.GAME_STATE) != 0:
+            return
+        here = (g.u8(maze.AREA),) + g.pos()
+        if here == last and maze.calm(g):
+            still += 1
+        else:
+            still = 0
+        last = here
+        if still >= (240 if on_belt(g) else 30):
+            return
+        g.step()
+
 
 _floor = {}
+# Mimicry mode's end (story_flags bit 10, the crystal behind Area D B1's small door; MAZE
+# maze_prompt_result 0x800befcc prompt 0x18) swaps the maps of Area X and Areas A to D
+# (18-34) for second files, the site's data/maps/dim/mimicry/. floor() reads those once
+# the bit is set; sync() follows the bit (plan, travel and avoid_squares call it). The
+# EXTRA_* tables were made on the first maps and apply to them only (chapter 14).
+MIMICRY = os.path.join(SITE, 'mimicry')
+_post = False
+
+
+def sync(g):
+    global _post
+    if g is not None:
+        _post = flag(g, STORY_FLAGS, 10)
 
 
 def floor(area):
     """The site's data for one floor, digested: walls[x][y][d] (0 open, 1 wall, 2 door,
     3 hidden door), transfers {(x, y): (area, x, y)}, arrive squares, voids, secret and
-    sealed sides."""
-    if area in _floor:
-        return _floor[area]
-    p = os.path.join(SITE, 'f%02d.json' % area)
+    sealed sides, no-magic squares."""
+    post = _post and os.path.exists(os.path.join(MIMICRY, 'f%02d.json' % area))
+    key = (area, post)
+    if key in _floor:
+        return _floor[key]
+    p = os.path.join(MIMICRY if post else SITE, 'f%02d.json' % area)
     if not os.path.exists(p):
-        _floor[area] = None
+        _floor[key] = None
         return None
     d = json.load(open(p))
     W = d['walls']
@@ -104,9 +262,14 @@ def floor(area):
         for x in range(24):
             walls[(x, 23 - N)] = [int(W[s][N][x]) for s in 'nesw']
     transfers, arrive, voids, secret, sealed, fights = {}, set(), set(), {}, {}, set()
+    circles, switches, belts = {}, {}, {}
+    quiet_after, hurt = {}, set()
     for e in d['events']:
         t = e['raw']['type']
         sq = [(x, 23 - N) for x, N in e.get('squares', [])]
+        if t in BELTS:
+            for s in sq:
+                belts[s] = (t, e['raw']['params'][0])
         if t in TRANSFER_KINDS and e.get('to') and e['to'].get('floor', -1) >= 0:
             to = (e['to']['floor'], e['to']['x'], 23 - e['to']['y'])
             for s in sq:
@@ -115,26 +278,48 @@ def floor(area):
             arrive.update(sq)
         if t == 0x14:
             fights.update(sq)
+        if t in QUIET_AFTER:
+            for s in sq:
+                quiet_after[s] = QUIET_AFTER[t](e['raw']['params'])
+        if t in HURTS:
+            hurt.update(sq)
         if e['kind'] == 'void':
             voids.update(sq)
         if t == 3:
             p1, p3 = e['raw']['params'][0], e['raw']['params'][2]
             for s in sq:
                 secret[(s[0], s[1], p3)] = p1
+        if t == 0x41 and e.get('to') and e['to'].get('floor', -1) >= 0:
+            to = (e['to']['floor'], e['to']['x'], 23 - e['to']['y'])
+            for s in sq:
+                circles[s] = (e['raw']['params'][0], to)
+        if t == 0x42:
+            for s in sq:
+                switches[e['raw']['params'][1]] = (s[0], s[1], e['raw']['params'][0])
         if t in SEALED and e.get('until_flag'):
             fl = [(int(f['at'], 16), f['bit']) for f in e['until_flag']]
             for s in sq:
                 for side in e.get('sides', []):
                     sealed[(s[0], s[1], DIRS[side])] = fl
-    transfers.update(EXTRA_TRANSFERS.get(area, {}))
-    sealed.update(EXTRA_SEALED.get(area, {}))
-    shut = set(EXTRA_SHUT.get(area, ()))
+    extra = (lambda t, dflt: t.get(area, dflt)) if not post else (lambda t, dflt: dflt)
+    transfers.update(extra(EXTRA_TRANSFERS, {}))
+    sealed.update(extra(EXTRA_SEALED, {}))
+    shut = set(extra(EXTRA_SHUT, ()))
     closed = {(x, 23 - r) for r, row in enumerate(d.get('no_entry', [])) for x, c in enumerate(row)
               if c == 'f'}
-    _floor[area] = dict(walls=walls, transfers=transfers, arrive=arrive, voids=voids,
-                        secret=secret, sealed=sealed, closed=closed, fights=fights, shut=shut,
-                        shut_after=dict(EXTRA_SHUT_AFTER.get(area, {})))
-    return _floor[area]
+    # square_flags bit 31: stepping there seals the party's spells for 232 steps (MAZE
+    # maze_step_hp 0x800c5570, nomagic_steps); Area D's pillar rooms. Kept off like an
+    # arrive square, unless they're the way (chapter 14: Mother and the Guardians with
+    # no spells would be a wipe)
+    nomagic = {(x, 23 - r) for r, row in enumerate(d.get('raw_flags', []))
+               for x in range(len(row) // 8) if int(row[8 * x:8 * x + 8], 16) & 0x80000000}
+    _floor[key] = dict(walls=walls, transfers=transfers, arrive=arrive, voids=voids,
+                       secret=secret, sealed=sealed, closed=closed, fights=fights, shut=shut,
+                       circles={xy: c for xy, c in circles.items() if c[0] in switches},
+                       switches=switches, belts=belts, quiet_after=quiet_after, hurts=hurt,
+                       shut_after=dict(extra(EXTRA_SHUT_AFTER, {})),
+                       open_after=dict(extra(EXTRA_OPEN_AFTER, {})), nomagic=nomagic)
+    return _floor[key]
 
 
 def flag(g, addr, bit):
@@ -153,6 +338,9 @@ def side_state(g, F, x, y, d, wm=None):
         w = maze.side(wm, x, y, d)
     else:
         w = F['walls'][(x, y)][d]
+    opened = F.get('open_after', {}).get((x, y, d))
+    if w == 1 and opened and flag(g, *opened):
+        w = 0
     if w == 1 or (x, y, d) in F['shut']:
         return 'shut'
     after = F.get('shut_after', {}).get((x, y, d))
@@ -179,10 +367,20 @@ def side_open(g, F, x, y, d, wm=None):
 FIND_COST = 12
 
 
-def plan(g, dest, start=None, items=None):
+def cost(g, dest, start=None):
+    """plan's cost from start (default: here) to dest, about one a step; None if no way."""
+    out = []
+    if plan(g, tuple(dest), start, out=out) is None:
+        return None
+    return out[0] if out else 0
+
+
+def plan(g, dest, start=None, items=None, out=None, keep=None):
     """Cheapest way from start (default: here) to dest = (area, x, y). Returns a list of
     legs: ('walk', area, x, y) to reach a square on the same floor (a transfer square
-    included), ('link', link) for an Investigate join. None if no way is known."""
+    included), ('link', link) for an Investigate join. None if no way is known.
+    keep: floors the way doesn't leave once it's on one of them (a training trip's)."""
+    sync(g)
     if start is None:
         start = (g.u8(maze.AREA),) + g.pos()
     if items is None:
@@ -210,11 +408,19 @@ def plan(g, dest, start=None, items=None):
         # "no route" from the Grounds to anywhere on B3 past it)
         placed = node == start or prev.get(node, (None, ('step',)))[1][0] in ('link', 'jump')
         if not placed and (x, y) in F['transfers']:
-            nxt.append((F['transfers'][(x, y)], 1, ('jump',)))
+            to = F['transfers'][(x, y)]
+            # a landing on a moving floor rides on (Area C B2's stairs at E10 N9 land on
+            # B3's belt: n1v0u chapter 12, 2026-10-15, "no route" home from the Golem's
+            # door six times)
+            cr = carry(g, to) if belt_dir(g, floor(to[0]) or {}, to[1:]) is not None else None
+            nxt.append((cr[0] if cr else to, 1 + (cr[1] // 2 if cr else 0), ('jump',)))
         else:
             for L in LINKS:
                 if L['at'] == node and (L.get('need') is None or L['need'] in items):
                     nxt.append((L['to'], 3, ('link', L)))
+            for L in circle_links(area):
+                if L['switch'] == node:
+                    nxt.append((L['to'], 8, ('link', L)))
             for d in range(4):
                 st = side_state(g, F, x, y, d, wm_here if area == here_area else None)
                 if st == 'shut':
@@ -224,14 +430,26 @@ def plan(g, dest, start=None, items=None):
                         or (nx, ny) in F['voids']:
                     continue
                 cost = 1
+                if st != 'hidden' and (area, nx, ny) != dest \
+                        and belt_dir(g, F, (nx, ny)) is not None:
+                    cr = carry(g, (area, nx, ny))
+                    if cr:
+                        nxt.append((cr[0], 2 + cr[1] // 2, ('carry', (area, nx, ny))))
+                    continue
                 if (nx, ny) in F['arrive'] and (nx, ny) not in F['transfers'] \
-                        and (area, nx, ny) != dest:
+                        and (area, nx, ny) != dest and not quiet(g, F, (nx, ny)):
+                    if hurts(g, F, (nx, ny)):
+                        continue
+                    cost = 40
+                elif (nx, ny) in F['nomagic'] and (area, nx, ny) != dest:
                     cost = 40
                 if st == 'hidden':
                     nxt.append(((area, nx, ny), cost + FIND_COST, ('find', (x, y, d))))
                 else:
                     nxt.append(((area, nx, ny), cost, ('step',)))
         for n2, cost, how in nxt:
+            if keep and area in keep and n2[0] not in keep:
+                continue
             c2 = c + cost
             if c2 < dist.get(n2, 1e9):
                 dist[n2] = c2
@@ -239,6 +457,8 @@ def plan(g, dest, start=None, items=None):
                 heapq.heappush(q, (c2, n2))
     if dest not in prev and dest != start:
         return None
+    if out is not None:
+        out.append(dist.get(dest, 0))
     # walk back and cut into legs
     path = []
     n = dest
@@ -248,13 +468,23 @@ def plan(g, dest, start=None, items=None):
         n = p
     path.reverse()
     legs = []
+    cut = False
     for p, how, n in path:
+        if how[0] == 'carry':
+            # the walk ends on the moving floor; the ride is the end of the leg
+            n, how = how[1], ('step',)
+            cut_next = True
+        else:
+            cut_next = False
         if how[0] == 'step':
-            if legs and legs[-1][0] == 'walk' and legs[-1][1] == n[0]:
+            if legs and legs[-1][0] == 'walk' and legs[-1][1] == n[0] and not cut:
                 legs[-1] = ('walk',) + n
             else:
                 legs.append(('walk',) + n)
-        elif how[0] == 'link':
+            cut = cut_next
+            continue
+        cut = False
+        if how[0] == 'link':
             legs.append(('link', how[1]))
         elif how[0] == 'find':
             # walk to the side's square, find the door; the plan is made again after
@@ -266,13 +496,38 @@ def plan(g, dest, start=None, items=None):
 
 def avoid_squares(g, area, target):
     """Squares to keep off on this floor: transfers, voids and other event squares,
-    except the target."""
+    except the target (no-magic squares soft)."""
+    sync(g)
     F = floor(area)
     if not F:
         return set(), set()
     hard = (set(F['transfers']) | F['voids']) - {target}
-    soft = F['arrive'] - set(F['transfers']) - {target}
+    if belts_on(g):
+        hard |= set(F.get('belts', {})) - {target}
+    for sq, fl in EXTRA_AVOID_AFTER.get(area, {}).items():
+        if flag(g, *fl) and sq != target:
+            hard.add(sq)
+    hard |= {sq for sq in F.get('hurts', ()) if sq != target and hurts(g, F, sq)}
+    for sq, (bit, _) in F.get('circles', {}).items():
+        if flag(g, MAZE_EVENTS, bit) and sq != target:
+            hard.add(sq)
+    soft = (F['arrive'] | F['nomagic'] | TRIP_SOFT.get(area, set())) - hard - {target}
+    soft = {sq for sq in soft if not quiet(g, F, sq)}
     return hard, soft
+
+
+# squares the walk home keeps off when another path exists, by area: a training trip's fixed
+# fight that killed a member (chapters.Run.trip_home; n1v3j c9 train_02, 2026-10-14: the
+# walk home crossed Area B's (15, 16) again, met the same kind of party and was wiped)
+TRIP_SOFT = {}
+
+
+# squares that become transfers once a flag is set, kept off hard from then on: Area A
+# B1's chute at E17 N11 (17, 12) drops to the Ogre's pen on B4 while story bit 25 (the
+# switch) is set (square_arrive 0x3b). The site draws it as an ordinary arrive event, so
+# it was only a soft avoid, and b1v3c's trip home before the Ogre (points low) walked
+# over it into the pen, which has no way out: 6 "no path" (2026-10-14)
+EXTRA_AVOID_AFTER = {22: {(17, 12): (0x80079b44, 25)}}
 
 
 def hidden_blocked(g, area):
@@ -295,9 +550,62 @@ def hidden_blocked(g, area):
     return out
 
 
+# Magic circles (square_arrive 0x41, params bit, 0 up / 1 down) move the party while
+# maze_event_flags (0x80079b48) bit p1 is set; the switch with p2 = that bit (square_examine
+# 0x42, facing p1, EVENTMES 167 yes/no) toggles it, and every bit is cleared on each maze
+# entry from town (main 0x800114d8). Area B's circles (walkthrough 10-red-stone; chapter 10
+# research 2026-10-14). A press while the bit is on turns the circle off, so the bit is
+# read first.
+MAZE_EVENTS = 0x80079b48
+_circle_links = {}
+
+
+def circle_links(area):
+    key = (area, _post)
+    if key not in _circle_links:
+        F = floor(area)
+        out = []
+        for (cx, cy), (bit, to) in (F or {}).get('circles', {}).items():
+            sx, sy, face = F['switches'][bit]
+            out.append(dict(kind='circle', switch=(area, sx, sy), face=face, bit=bit,
+                            at=(area, cx, cy), to=to, what='circle %d' % bit))
+        _circle_links[key] = out
+    return _circle_links[key]
+
+
+def do_circle(g, L, on_int, after):
+    from harness import chapter1
+    a, sx, sy = L['switch']
+    walk_floor(g, sx, sy, on_int)
+    if (g.u8(maze.AREA),) + g.pos() != L['switch']:
+        return
+    # up to 3 presses: right after a fight on the switch square the START press can be
+    # eaten (MAZE game_state 1 while the screen comes back; investigate returns False and
+    # no prompt opens: n1v6k c9 train_01, 2026-10-14), so the bit is read again and the
+    # press repeated
+    for _ in range(3):
+        if flag(g, MAZE_EVENTS, L['bit']):
+            break
+        if not maze.face(g, L['face']):
+            after(g)
+            maze.face(g, L['face'])
+        chapter1.investigate(g)
+        after(g)
+    if not flag(g, MAZE_EVENTS, L['bit']):
+        raise Stuck('switch left the circle dark', at=L['switch'], bit=L['bit'])
+    try:
+        walk_floor(g, L['at'][1], L['at'][2], on_int)
+    except Stuck:
+        if g.u8(maze.AREA) == a:
+            raise
+    after(g)
+
+
 def do_link(g, L, on_int, after):
     """Walk to a link's square, face, Investigate, let the event run, step if it says."""
     from harness import chapter1
+    if L.get('kind') == 'circle':
+        return do_circle(g, L, on_int, after)
     a, x, y = L['at']
     walk_floor(g, x, y, on_int)
     if not maze.face(g, L['face']):
@@ -336,37 +644,60 @@ def find_door(g, leg, on_int, after):
 def walk_floor(g, x, y, on_int):
     area = g.u8(maze.AREA)
     hard, soft = avoid_squares(g, area, (x, y))
+    carried = set(F_belts(g, area))
     return maze.walk_to(g, x, y, on_int, avoid=hidden_blocked(g, area), closed=hard,
-                        soft=soft, stop_area=True)
+                        soft=soft, stop_area=True, carry=carried)
 
 
-def travel(g, dest, on_int, after=None, max_legs=40):
+def F_belts(g, area):
+    F = floor(area)
+    return set(F.get('belts', {})) if F and belts_on(g) else set()
+
+
+def travel(g, dest, on_int, after=None, max_legs=40, keep=None):
     """Walk to dest = (area, x, y) across floors. on_int handles interruptions (battles,
-    talks, boxes); after(g) runs an Investigate's event to calm. Returns legs taken."""
+    talks, boxes); after(g) runs an Investigate's event to calm; keep as plan's. Returns
+    legs taken."""
     from harness import chapter1
     if after is None:
         log = []
         after = lambda g: chapter1.after_event(g, log)
     legs = 0
+    sync(g)
     while legs < max_legs:
         ride(g)
+        if F_belts(g, g.u8(maze.AREA)) or on_belt(g):
+            wait_carry(g)
+            ride(g)
         here = (g.u8(maze.AREA),) + g.pos()
         if here == tuple(dest):
             return legs
-        p = plan(g, tuple(dest))
+        reload_walls(g)
+        p = plan(g, tuple(dest), keep=keep)
         if not p:
             for _ in range(15):
                 g.step(8)
                 if g.u8(SCENE) in RIDES:
                     break
             ride(g)
+            # still on a transfer square: a ladder can take longer than that to move the
+            # party (c14v3t, 2026-10-15: Area D B1's ladder down after the crystal, "no
+            # route" from (34, 13, 13) six times, the party on B2 when the state was saved)
+            F0 = floor(g.u8(maze.AREA))
+            if F0 and g.pos() in F0['transfers']:
+                a0 = (g.u8(maze.AREA),) + g.pos()
+                for _ in range(75):
+                    if (g.u8(maze.AREA),) + g.pos() != a0:
+                        break
+                    g.step(8)
+                ride(g)
             here = (g.u8(maze.AREA),) + g.pos()
             if here == tuple(dest):
                 return legs
-            p = plan(g, tuple(dest))
+            p = plan(g, tuple(dest), keep=keep)
         if not p and step_off(g, on_int):
             here = (g.u8(maze.AREA),) + g.pos()
-            p = plan(g, tuple(dest))
+            p = plan(g, tuple(dest), keep=keep)
         if not p:
             raise Stuck('no route', at=here, dest=dest)
         leg = p[0]
@@ -380,6 +711,33 @@ def travel(g, dest, on_int, after=None, max_legs=40):
         _, area, x, y = leg
         walk_floor(g, x, y, on_int)
     raise Stuck('travel too long', dest=dest)
+
+
+def reload_walls(g):
+    """A camp when RAM still draws shut a side EXTRA_OPEN_AFTER has opened. The floor load
+    that changes the walls (MAZE 0x800a8f1c) runs from the map load only when 0x80079878 is
+    0 or 0x1b, so not on a lift's arrival (17), and after every camp (MAIN 0x80019428,
+    maze_exit_code 0xfc). c14v3 (2026-10-15): back from town by Area D's lift after Mother,
+    B3's altar wall at (11, 5) was still up, and walk_to found "no path" six times; a camp
+    took it down."""
+    F = floor(g.u8(maze.AREA))
+    if not F or not F.get('open_after') or not maze.in_maze(g):
+        return False
+    wm = maze.wallmap(g)
+    if not any(flag(g, *fl) and maze.side(wm, x, y, d) == 1
+               for (x, y, d), fl in F['open_after'].items()):
+        return False
+    from harness import camp
+    if not maze.calm(g) and not maze.settle(g):
+        return False
+    try:
+        camp.open_camp(g)
+        g.step(30)
+        camp.close_camp(g)
+    except Stuck:
+        return False        # a fight or a talk instead: the walk's interrupt handling runs it
+    g.step(60)
+    return True
 
 
 def step_off(g, on_int):

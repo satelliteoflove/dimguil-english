@@ -347,7 +347,10 @@ using each, are in `rips/re/work/A/encounters.txt`.
 The group file is then loaded from table 1, index id + 0x2c.
 
 Group ids are monster group records (D's subject). Type-2 groups (340 and up) are
-probably the human enemy parties **[inf]**.
+probably the human enemy parties **[inf]**. In the harness (2026-10-15, chapter 9 and
+10 trips on Area B) every human party met there came with `encounter_id` 0xfffe, on the
+fixed 3x2 grid (0x80079bde = 1), one member a group (monster ids 351-463), and could be
+fled: `party_flee_roll` only needs 0xffff or 0xfffe. **[emu]**
 
 <a id="npc-parties"></a>
 ## 8. NPC parties in the maze
@@ -486,6 +489,49 @@ There are three routines:
   | 5 | 84 / 85 | the winding drum; flips story_flags bit 2 each time |
 
   **[code]**
+
+<a id="heal-spots"></a>
+### Heal spots
+
+Event 0x3f is a wall switch that heals the party. Investigate facing the record's p1,
+and "There's a switch on the wall. Will you press it?" (EVENTMES 167) asks for prompt 0xe.
+On Yes, `maze_prompt_result` (prompt 0xe at 0x800bf5e8) goes over the six party slots
+and, for each member whose status has none of 0x380 (dead, ashes, lost), sets HP to
+max HP, status to 0, poison (+0x78) to 0 and +0x79 to 0. So it cures poison, paralysis,
+stone, sleep, fear and the rest, but doesn't raise the dead, and it doesn't touch spell
+points. Nothing is paid and no flag is set, so it works every time. **[code]**
+
+Checked in the emulator on 2026-10-15 (`rips/harness/healspots/confirm/`): on B4 at
+E5 N18 facing west, a party at 40% HP with one member poisoned, one paralyzed and one
+dead came out at full HP with the poison and paralysis gone, the dead member still dead
+and the spell points unchanged. Facing south on the same square printed nothing, and a
+second press healed again. **[emu]**
+
+| Area | Floor | Square (site) | RAM (x, y) | Face |
+|---|---|---|---|---|
+| 24 | Area B B4 | E5 N18 | (5, 5) | west (p1 3) |
+| 37 | Area E B3 | E12 N4 | (12, 19) | north (p1 0) |
+| 42 | Dragon's Cave B1 | E10 N13 | (10, 10) | west (p1 3) |
+
+The same switch text belongs to other event types, so the text alone doesn't say what a
+switch does:
+
+| Type | Prompt | On Yes | Squares |
+|---|---|---|---|
+| 0x40 | 0xf | poisons every member who isn't dead (status bit 4, poison +50, at most 0x7f) | B4 E5 N5 facing south |
+| 0x42 | 0x10 | toggles `maze_event_flags` bit p2 (EVENTMES 306/307) | B3 E5 N8 and E5 N15, B2 E5 N8, E5 N15 and E16 N12, B1 E17 N14 |
+| 0x6c | 0x1f | refills spell points (MAZE's copy of the recalc, 0x800be8e0) | Area E B3 E7 N11 facing east, Dragon's Cave B1 E13 N10 facing south |
+
+Event 0x50, Area D's seeping pillars (EVENTMES 210/211, "A light touch of the water seems
+to restore your magic"), refills spell points too, with no prompt, on 54 squares across
+Area D B3-B1 (areas 32-34). **[code]**; the squares are from the site's map files.
+
+Ghidra's labels for `maze_prompt_result` are wrong in places: its C shows prompt 1 sharing
+the heal and prompt 0x11 sharing the spell refill. The jump table (0x800a1918, indexed by
+prompt - 1) sends 1 to the pillar fight at 0x800bf018 and 0x11 to a fixed toggle of
+`maze_event_flags` bit 0x200000 at 0x800bf8d4.
+
+The harness uses the heal spots on training trips (`chapters.HEAL_SPOTS`, `Run.spot_heal`).
 
 `rips/re/work/A/event_calls.txt` lists every EVENTMES string MAZE prints with a
 constant, by routine and case. That's 115 strings. The rest go through variables, so
