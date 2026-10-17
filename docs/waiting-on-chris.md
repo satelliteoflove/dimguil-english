@@ -18,11 +18,6 @@ Nothing open.
 
 ## Release
 
-7. **Who asked for the notice?** ROADMAP files `docs/notice.txt` under the original
-   team's requests; a comment in `scripts/mkrelease.py` says "Remisse asked for this on
-   the repo and on every release page", and the notice's content (no LLMs in Remisse's
-   code, Remisse had no role) reads like Remisse's request. Remisse, the original team,
-   or each for different parts?
 8. **v0.8.0 and the harness gate.** ROADMAP still plans v0.8.0 (repo public, tag
    pushed) as soon as the readme, changelog and title are written. Since 2026-10-12 the
    harness runs are the gate for going public. Does v0.8.0 wait for the harness to reach
