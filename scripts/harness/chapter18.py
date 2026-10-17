@@ -47,14 +47,12 @@ Found in the smoke runs (2026-10-17, ch18/smoke1, try_end1-3, try_cof1, ending_p
   begins on arrival and those down get no title (the game's rule, town_main's arrival step).
 - The audience: SISETU 360, then 322 in pages (0x80079a3e), the movie (about 4,100 frames),
   the credit roll (about 15,000), START, the Save screen saves by itself, then town state 1.
-- Post-ending lock (a patch bug, for the coordinator): king_ending's CdPlay call (MAIN
-  0x800393f0(1, {3, 0}, 0), its writes at 0x800394b4 and 0x800394e0) stores into libcd's
-  statics at 0x80060f9c-0x80060fa3, which asm/vwf.asm's .area 0x80060e97-0x80060fe7 took for
-  the centering wrappers. The JOUKA wrapper's lw ra / j 0x800dbe58 become 3, 0; the next
-  centered town text falls into the MAZE wrapper, jumps to 0x800a1fa8 in JOUKA's data, and
-  the CPU takes a Reserved Instruction exception at 0x800a2004 (kernel TCB: cause 0x28, ra
-  0x80060f9c), the kernel's unresolved-exception loop at 0x5d0. king_ending logs the two
-  words and whether the bar came back; the goal's proofs are all in before it.
+- Post-ending lock (a patch bug, fixed 2026-10-17 in asm/vwf_lut.inc): king_ending's DsPlay
+  call (MAIN 0x800393f0) wrote into libds's play list at 0x80060f9c, where asm/vwf.asm had
+  put the centering wrappers, and the next centered town text crashed (Reserved
+  Instruction at 0x800a2004). docs/engine-notes.md has the story. The original Japanese
+  disc goes from the save to the logo over an empty party, then the bar after circle;
+  this goal's end check (town bar) is that.
 
 Goals, each proved by RAM or a captured string:
   lift_z      the party in area 43 (maze.AREA).
@@ -94,8 +92,8 @@ ENDING_STATE = 45
 ENDING_MOST = 40000             # frames for the audience, the movie and the credits
 CREDITS_MOST = 24000            # the roll alone (ending_probe: about 15,000 after a 4,100-frame movie)
 SAVE_MOST = 6000                # frames for the save screen and the logo afterwards
-WRAP_WORDS = 0x80060f9c         # asm/vwf.asm centering_JOUKA_wrapper + 0x10: lw ra, 0(sp); j 0x800dbe58
-WRAP_OK = ['8fbf0000', '08036f96']
+SAVE_SCREEN = 0x32              # game_state: the Save screen (MCARD)
+OVERWRITE_WAIT = 300            # frames on it before "Overwrite it?" gets Yes
 # a failed coffin try trains here first (boss_training, after BOSS_WIPES): Area E B4, the
 # floor chapter 17 trained these parties on (Greater Demons, level 18). Area Z itself has no
 # fights but the coffin (f43.json: no fight records, no roamers).
@@ -225,26 +223,33 @@ def king_ending(run, from_town=False):
     # next_place 0xf8: the Save screen (MCARD, game_state 0x32) saves to the card by itself
     # ("Checking the memory card...", "Saving...": ending_probe, 2026-10-17), then town
     # state 1 shows the logo over an empty party and waits for circle (town_main gate on pad
-    # 0x20). No presses during the save; circle after it until the bar has the input.
+    # 0x20). No presses during the save; circle after it until the bar has the input. A card
+    # that already holds a save stops the screen at "Overwrite it?" with No selected: still
+    # there after OVERWRITE_WAIT frames, up and circle once (vwffix endingrun, 2026-10-17).
+    # The Japanese disc goes through the same states to the same bar (vwffix stage D).
     end = g.frame + SAVE_MOST
+    in_save, seen['overwrite'] = None, False
     while g.frame < end and not town.in_town_bar(g):
         st = (g.overlay(), g.u8(maze.GAME_STATE), g.u8(TOWN_STATE))
         if st != last:
             seen['states'].append((g.frame,) + st)
             last = st
+        if st[0] == 'MCARD' and st[1] == SAVE_SCREEN:
+            in_save = g.frame if in_save is None else in_save
+            if not seen['overwrite'] and g.frame - in_save >= OVERWRITE_WAIT:
+                g.tap('up'); g.step(20); g.tap('circle')
+                seen['overwrite'] = True
         if g.overlay() == 'JOUKA' and g.u8(TOWN_STATE) in (1, 2, 3, 4):
             g.tap('circle')
         g.step(20)
     seen['town_bar'] = town.in_town_bar(g)
     seen['end'] = (g.frame, g.overlay(), g.u8(maze.GAME_STATE), g.u8(TOWN_STATE))
-    # (2026-10-17) the patch's JOUKA centering wrapper in MAIN (asm/vwf.asm, 0x80060f8c) as
-    # the credits leave it: king_ending's CdPlay call writes 3, 0 over 0x80060f9c-0x80060fa3
-    # (its lw ra / j LAB_JOUKA_800dbe58), and the next centered town text crashes (STATUS)
-    seen['wrapper'] = ['%08x' % g.u32(WRAP_WORDS + 4 * i) for i in range(2)]
-    seen['locked'] = not seen['town_bar'] and seen['wrapper'] != WRAP_OK
+    # (2026-10-17) before the VWF move (asm/vwf_lut.inc) the credits' DsPlay overwrote the
+    # JOUKA centering wrapper and the next centered town text crashed here
+    seen['locked'] = not seen['town_bar']
     if not seen['town_bar']:
-        print('c18 ending: no town bar %d frames after the save (wrapper words %s): the '
-              'post-ending lock' % (SAVE_MOST, seen['wrapper']), flush=True)
+        print('c18 ending: no town bar %d frames after the save (end %s)'
+              % (SAVE_MOST, seen['end'],), flush=True)
     return seen
 
 
