@@ -24,7 +24,9 @@ copy (default: this one). CHAPTER=N imports chapterN first (its BOSS_AT and POLI
 registrations); TEXT=1 keeps each fight's FIGHTMSG lines in the output.
 
 goalfight: a chapter goal run from a goal state, stopped at its first boss or story
-fight, whose start is saved to OUTREL (goalfight STATE OUTREL SEED CHAPTER GOAL).
+fight, whose start is saved to OUTREL (goalfight STATE OUTREL SEED CHAPTER GOAL). With
+TYPE2=N it saves the start of each type-2 party fight instead (encounter id 0xfffe, the
+roamer tokens) as OUTREL_NN, fights them out, and stops after N.
 """
 import json, os, struct, sys, random
 H = os.environ.get('HARNESS', os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
@@ -248,9 +250,23 @@ def goalfight(g, state, outrel, seed, chapter, goal):
     r.full_points = chapters.load_points(g, base)
     fns = dict(chapters.CHAPTERS[chapter]().goals(r))
     orig = battle.fight
+    t2 = int(os.environ.get('TYPE2') or 0)
+    n = [0]
 
     def fight(g_, *a, **k):
         tactics.STORY[0] = None
+        if t2:
+            if g_.u16(battle.ENCOUNTER_ID) == 0xfffe:
+                n[0] += 1
+                g_.save('%s_%02d' % (outrel, n[0]))
+                print('saved %s_%02d at' % (outrel, n[0]), (g_.u8(0x8007e844),) + tuple(g_.pos()), flush=True)
+                res = orig(g_, *a, **k)
+                print('  fought: rounds %d ran %d fled %s dead %s' % (res['rounds'], res['ran'], res['fled'],
+                                                                     res['dead_end']), flush=True)
+                if n[0] >= t2:
+                    raise _AtFight()
+                return res
+            return orig(g_, *a, **k)
         if tactics.story_fight(g_):
             g_.save(outrel)
             raise _AtFight()

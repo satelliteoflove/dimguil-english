@@ -311,6 +311,18 @@ LOSS_RUN = True             # Chris, 2026-10-14: run from a likely loss, round 1
 LOSS_FLEE_ABOVE = 25        # Chris, 2026-10-14: a likely loss runs at a flee chance above this
 LOSS_EVERY_ROUND = True     # Chris, 2026-10-14: re-rate a likely loss every round, from the HP of
                             # the members who can still act ("try it out and see if it helps")
+FIGHT_AFTER_FAILED_RUN = False  # Chris, 2026-10-16 (to test): after one failed run the fight is
+                                # fought out with no more runs, and counts as a likely loss for
+                                # the support plan (each failed run hands the monsters a round)
+
+
+def run_failed(g):
+    """Whether a run has failed in this fight: FIGHTMSG 206 since its start (_flee_msgs), or,
+    with no message capture, a run chosen in an earlier round of a fight still going."""
+    f = _flee_msgs(g, FIGHT_INFO.get('msg0', 0))
+    if f is not None:
+        return f[1] > 0
+    return any(r[0] < ROUND for r in FIGHT_INFO.get('runs', []))
 
 
 def _kill(x, hp):
@@ -737,7 +749,14 @@ def default_policy(g, m, opts):
             FIGHT_INFO['first']['party_max'] = sum(g.char(rk)['max_hp'] for rk in ids0 if rk is not None)
     if ROUND > RUN_AFTER and RUN in opts and fleeable(g):
         return ('run',)
-    if not FLEE_RULE and RUN_WHEN_LOSING and RUN in opts and fleeable(g) and losing(g):
+    # (failrun) after a failed run, fight it out (FIGHT_AFTER_FAILED_RUN): no more runs from a
+    # likely loss or a costly walk fight, and the fight gets the likely loss's support plan,
+    # heals and items. RUN_AFTER, the stuck-fight valve above, stays.
+    no_run = FIGHT_AFTER_FAILED_RUN and run_failed(g)
+    if no_run and not FIGHT_INFO.get('likely_loss'):
+        FIGHT_INFO['likely_loss'] = dict(failed_run=True, round=ROUND)
+    can_run = RUN in opts and not no_run
+    if not FLEE_RULE and RUN_WHEN_LOSING and can_run and fleeable(g) and losing(g):
         return ('run',)
     tactics.plan_reset(ROUND)
     ids = party_ids(g)
@@ -782,7 +801,7 @@ def default_policy(g, m, opts):
         # 2026-10-14: re-rated every round, not reflex running, only fights rated as lost).
         # flee_chance is 0 where a run can't work (fixed fights, alarms).
         FIGHT_INFO['loss_checked'] = ROUND
-        if RUN in opts:
+        if can_run:
             act_hp = sum(max(h, 0) for h, st in (member_state(g, k) for k, rk in enumerate(ids)
                                                  if rk is not None) if st < 8)
             ll = likely_loss(g, M, act_hp)
@@ -793,7 +812,7 @@ def default_policy(g, m, opts):
                 if ch > LOSS_FLEE_ABOVE:
                     FIGHT_INFO.setdefault('runs', []).append((ROUND, ch, 'likely loss'))
                     return ('run',)
-    if FLEE_RULE and RUN_OK and RUN in opts:
+    if FLEE_RULE and RUN_OK and can_run:
         # run only where it saves something (on the way to the grinding spot, or home with
         # the casters spent), from a costly fight, at FLEE_MIN or better; the losing state
         # heals and fights (Chris, 2026-10-14)
@@ -2306,6 +2325,7 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
     SPLAN.update(round=None, by={})
     STACK_V.clear()
     msg0 = len(g.cap.messages) if g.cap else 0
+    FIGHT_INFO['msg0'] = msg0
     # (nodead) who started the fight dead, stoned, ashed, lost, paralyzed or poisoned
     # (Chris, 2026-10-15: the party shouldn't carry on with them; harness/nodead.py)
     out_start = [[g.char(ri)['name'], g.char(ri)['status'] & OUT_BITS] for ri in g.party()
