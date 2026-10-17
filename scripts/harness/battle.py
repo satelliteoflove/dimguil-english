@@ -747,6 +747,7 @@ def default_policy(g, m, opts):
             lost0 = tactics.disable(g, M0, members(g))
             FIGHT_INFO['first'] = tactics.matters_detail(g, M0, hp0, lv0[len(lv0) // 2] if lv0 else None, P0, lost0)
             FIGHT_INFO['first']['party_max'] = sum(g.char(rk)['max_hp'] for rk in ids0 if rk is not None)
+    tactics.SPECIAL[0] = False
     if ROUND > RUN_AFTER and RUN in opts and fleeable(g):
         return ('run',)
     # (failrun) after a failed run, fight it out (FIGHT_AFTER_FAILED_RUN): no more runs from a
@@ -860,6 +861,8 @@ def default_policy(g, m, opts):
     sup = support_plan(g, M) if special else None
     if sup and sup['quick']:
         sup = None
+    # (silence) Montino and Bacortu valued by the spell damage they stop (tactics, "Silencing")
+    sil = tactics.SPECIAL[0] = bool(special and tactics.SILENCE_PLAN and tactics.SPELLS_ON)
     # heal: (d) a member who couldn't survive another hit of the worst monster that
     # reaches them, or anyone below 40%; the cheapest heal that lifts them clear of it,
     # else the strongest there is
@@ -971,10 +974,21 @@ def default_policy(g, m, opts):
                     (finish if capped else cands).append((v, ('spell', sid, sch, lv, c[3], ('group', k)), (sid, k), lv))
         elif casters_boss and sid == tactics.CORTU and tactics.CORTU_SCREEN:
             v = (tactics.cortu_value(g, M, me['level'], min(CORTU_SUP_ROUNDS, max(tactics.CORTU_ROUNDS, sup['horizon'])),
-                                     drain=True) if sup
-                 else tactics.cortu_value(g, M, me['level']))
+                                     drain=True, planned=sil) if sup
+                 else tactics.cortu_value(g, M, me['level'], drain=sil, planned=sil))
             if v > 0 and M:
                 cands.append((v, ('spell', sid, sch, lv, c[3], ('group', min(M))), (sid, None), lv))
+        elif sil and sid == tactics.BACORTU:
+            seen_ = set()
+            for k in M:
+                t_ = tactics.seal_group(g, k)       # a fixed battle: group 1 or 2 (tactics)
+                if t_ in seen_:
+                    continue
+                seen_.add(t_)
+                v = tactics.seal_value(g, t_, M, me['level'],
+                                       min(CORTU_SUP_ROUNDS, max(tactics.SEAL_ROUNDS, sup['horizon'])) if sup else None)
+                if v > 0:
+                    cands.append((v, ('spell', sid, sch, lv, c[3], ('group', k)), (sid, k), lv))
         elif special and sid in SUPPORT_SIDS:
             if sup:
                 sup_ok[sid] = c         # (support) valued in support_cands; none in a quick win
@@ -1020,6 +1034,15 @@ def default_policy(g, m, opts):
         # Dilto's 2 (bench 1's max(v, other) tied them, and Dilto came first)
         cands = [(max(v, other) + v / 100 if STACK_V.get((m, key[0], key[1]), 0) > 0 else v, act, key, lv)
                  for v, act, key, lv in cands]
+    if sil and tactics.SILENCE_FIRST:
+        # (silence, test) most of the danger in one or two groups' spells: Montino there
+        # goes ahead of this member's other turns (a finisher still wins: focus_pick)
+        tg = tactics.silence_targets(g, M)
+        if tg and any(key[0] == tactics.SILENCE and key[1] in tg for _, _, key, _ in cands):
+            other = max([c_[0] for c_ in cands if c_[2][0] != tactics.SILENCE] + [fight_v]) + 1
+            cands = [(max(v, other) + v / 100 if key[0] == tactics.SILENCE and key[1] in tg else v, act, key, lv)
+                     for v, act, key, lv in cands]
+            FIGHT_INFO.setdefault('sil_first', []).append((ROUND, m, tg))
     if ITEMS_IN_BATTLE and USE in opts and M:
         best_own = max([c_[0] for c_ in cands] + [fight_v])
         it_act = item_choice(g, ri, me, M, big, best_own)
@@ -1081,6 +1104,8 @@ def default_policy(g, m, opts):
                 tactics.focus_commit(g, key[0], key[1], M, me['level'])
             if key[0] == tactics.CORTU and tactics.CORTU_SCREEN:
                 tactics.cortu_commit(g, me['level'])
+            if key[0] == tactics.BACORTU and key[1] in M:
+                tactics.seal_commit(g, tactics.seal_group(g, key[1]), M, me['level'])
             if sup and key[0] in SUPPORT_SIDS:
                 support_commit(m, key[0], key[1], g, M)
             return act

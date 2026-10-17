@@ -7,7 +7,14 @@ other work unless it says **blocks**.
 
 ## Game code
 
-Nothing open.
+1. **The party's Bacortu in fixed battles seals the wrong group.** The group pick in a
+   fixed battle stores a row (1 front, 2 back) as the target, and `spell_bacortu`
+   (0x800c9e2c) uses it as a group number, so the cast seals group 1 or group 2 whatever
+   was aimed at (D-battle.md "Healing and buffs"; harness ch17 report 5). Story fights and
+   the type-2 parties are fixed battles, which is where a player would reach for it.
+   Options: fix it (seal every group in the chosen row, as Montino and Morlis do through
+   `spell_group_range`), or leave it. Recommendation: fix it, since the description
+   promises one enemy group and the cast lands on another. Not started.
 
 ## Text
 

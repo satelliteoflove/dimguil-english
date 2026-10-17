@@ -572,12 +572,12 @@ def targets(g, k, kind, M):
 # this round's casts already chosen (battle.default_policy): group -> {monster: expected
 # damage} and group -> chance it's already disabled, so a second caster doesn't spend a
 # point on what the first one's spell will likely finish (reset each round)
-PLAN = dict(round=None, dmg={}, dis={}, screen=None)
+PLAN = dict(round=None, dmg={}, dis={}, screen=None, seal={})
 
 
 def plan_reset(rnd):
     if PLAN['round'] != rnd:
-        PLAN.update(round=rnd, dmg={}, dis={}, screen=None)
+        PLAN.update(round=rnd, dmg={}, dis={}, screen=None, seal={})
     focus_reset(rnd)
 
 
@@ -647,7 +647,8 @@ def value(g, sid, k, M, clevel, cast_counts, commit=False):
                 mons = [x for x in m['mons'] if x[2] < 0x20]
                 worth = danger_of(m) * 2
             else:                               # Montino: only casters, twice a group
-                if not m['caster'] or cast_counts.get((SILENCE, t), 0) >= 2:
+                sil = SILENCE_PLAN and SPECIAL[0] and SPELLS_ON
+                if not m['caster'] or not sil and cast_counts.get((SILENCE, t), 0) >= 2:
                     continue
                 base = 16 if m['weak'] & 0x800 else 50
                 mons = m['mons']
@@ -660,6 +661,10 @@ def value(g, sid, k, M, clevel, cast_counts, commit=False):
                 # (fix 2) or what its spells do, damage and members put to sleep, for those
                 # rounds; abilities aren't silenced
                 worth = max(worth, (m.get('threat_spell', 0) + m.get('dis_hp_spell', 0)) * n)
+                if sil:
+                    # (silence) in a special fight: what its spells would cost the party
+                    # past the magic screen (spell_hp), recast once it wears off
+                    worth = max(8 * m['level'] * n * m.get('cast_share', 1.0), silence_worth(g, m) * n)
                 mons = [x for x in mons if x[0] not in m.get('silenced', ())]
             p = lands(m, sid) * (1 - save_adj(base, m['level'], clevel))
             if p < DEBUFF_MIN:
@@ -675,6 +680,129 @@ def value(g, sid, k, M, clevel, cast_counts, commit=False):
                 PLAN['dis'][t] = 1 - (1 - PLAN['dis'].get(t, 0)) * (1 - p)
         return v
     return 0.0
+
+
+# Silencing in the support plan (Chris, 2026-10-16: against caster-heavy parties; ch17
+# report 5, from Area E's type-2 parties, 455-540 a round, nearly all of it spells). In a
+# special fight (battle.default_policy's 'special': a story or boss fight, or a likely
+# loss; SPECIAL) silencing a group is worth the part of the party's expected damage that
+# comes from its spells, for as long as the silence holds, at the chance it lands:
+#   - spell_hp: one monster's spells a round, everything silence or a seal stops: damage
+#     and death (info threat_spell), death counted again as casting_danger counts it, the
+#     members its sleep and silence spells take out (disable dis_hp_spell; abilities are
+#     never silenced), its debuffs (DEBUFF_HP) and Labadi (threat_drain), cut by the
+#     party's magic screen with this round's Cortus counted (the share that wouldn't land
+#     anyway; Cortu's own value already takes silenced monsters out, and in a special fight
+#     the ones this round's casts are likely to silence, put to sleep or paralyze too);
+#   - Montino (value()): each monster it catches (school resistance, magic screen, save
+#     50) times spell_hp times silence_rounds, recast once it wears off (no two-a-group cap
+#     in a special fight);
+#   - Bacortu (seal_value, Mage 5): each cast adds the caster's level to the target group's
+#     sealing level s (battle_groups +6, up to 255; spell_bacortu 0x800c9e2c, with no
+#     resistance check: spell_dispatch calls it straight), and a sealed monster's spell is
+#     lost when rand(8191) < s x (its level + s + 1) (cast_spell 0x800abcc0, D-battle.md
+#     "Casting"); s of 3 or more drops 1-3 a round. One level-17 cast at a level-13 monster
+#     stops 6% of its spells, four about 70%, so a cast is valued as its share of the best
+#     stack of up to SEAL_STACK casts over SEAL_ROUNDS rounds, as the AC stack is shared
+#     over its points. In a fixed battle the pick stores a row (1 front, 2 back) as the
+#     target, and spell_bacortu uses it as a group number with no row expansion, so the
+#     party's Bacortu seals group 1 or 2 whatever group was aimed at (seal_group; seen in
+#     ch17/ffr/silence/seal_trace.py: aimed at a back-row Ogre Sorcerer, it sealed group 2).
+# SILENCE_FIRST (test): with most of the danger (SILENCE_FIRST_SHARE) in one or two groups'
+# spells, Montino at those groups goes ahead of the member's other turns but a finisher.
+# Bench (ch17 report 5, four Area E type-2 starts x seeds 1-20, flag off and on): no change
+# in wins, escapes or wipes (on: 19 / 42 / 19 both), Montino 10 -> 13 casts; SILENCE_FIRST
+# 19 / 42 / 19 with 114 deaths against 112. Their groups are single monsters, a Cortu
+# outweighs a Montino there, and a silencer dies in the free round after the failed run in
+# 18 of 38 fights. Off until a fight shows it helps (groups of several casters).
+SILENCE_PLAN = False
+SPECIAL = [False]           # battle.default_policy: this decision is in a special fight
+SILENCE_FIRST = False
+SILENCE_FIRST_SHARE = 0.6
+BACORTU = 14
+SEAL_ROUNDS = 3
+SEAL_STACK = 4
+
+
+def spell_hp(m):
+    """Hit points a round one of group m's monsters costs the party by its spells, everything
+    silence or a seal would stop (see above), before the magic screen."""
+    sts = m.get('sts', [])
+    tot = sum(pr for pr, _ in sts) or 1
+    deb = m.get('p_status', 0.0) * sum(pr / tot * DEBUFF_HP[sid] for pr, sid in sts if sid in DEBUFF_HP)
+    return (m.get('threat_spell', 0.0) + m.get('dis_hp_spell', 0.0) + deb
+            + DEATH_EXTRA * m.get('threat_death', 0.0) + m.get('threat_drain', 0.0))
+
+
+def silence_worth(g, m):
+    """spell_hp past the party's magic screen (this round's Cortus counted)."""
+    return spell_hp(m) * (1 - min(SCREEN_CAP, screen_now(g)) / 100)
+
+
+def silence_targets(g, M):
+    """(SILENCE_FIRST) The one or two groups whose spells carry SILENCE_FIRST_SHARE or more
+    of the danger present (danger_of plus Labadi, monsters that can cast now), or []."""
+    tot = sum((danger_of(m) + m.get('threat_drain', 0.0)) * len(m['mons']) for m in M.values())
+    sh = []
+    for k, m in M.items():
+        act = [j for j, _, st in m['mons'] if st < 8 and j not in m.get('silenced', ())]
+        if act and m['caster']:
+            sh.append((spell_hp(m) * len(act), k))
+    sh.sort(reverse=True)
+    for n in (1, 2):
+        if tot > 0 and sum(x for x, _ in sh[:n]) >= SILENCE_FIRST_SHARE * tot:
+            return [k for _, k in sh[:n]]
+    return []
+
+
+def p_sealed(s, mlevel):
+    """The chance a monster of level mlevel loses a spell to sealing level s (cast_spell)."""
+    return min(1.0, s * (mlevel + s + 1) / 8191) if s > 0 else 0.0
+
+
+def seal_after(s, r):
+    """Sealing level s after r rounds of counters_tick (3 or more: 1-3 off, else 1)."""
+    for _ in range(r):
+        s = max(0, s - (2 if s >= 3 else 1))
+    return s
+
+
+FRONT_N, BACK_N = 0x800796d3, 0x8007967c     # fixed battle: groups in the front and back rows (s8; pick.py)
+
+
+def seal_group(g, k):
+    """The group the party's Bacortu aimed at group k seals (see above): k in a random
+    battle; in a fixed one the row's number, 2 for the back row while both stand, else 1."""
+    if not g.u8(FIXED):
+        return k
+    front = struct.unpack('<b', g.e.read(FRONT_N, 1))[0]
+    back = struct.unpack('<b', g.e.read(BACK_N, 1))[0]
+    return 2 if front > 0 and back >= 1 and k > front else 1
+
+
+def seal_value(g, k, M, clevel, rounds=None):
+    """(silence) Bacortu on group k (the group it seals: seal_group) now, in hit points
+    (see above), after this round's casts planned (PLAN seal)."""
+    if k not in M:
+        return 0.0
+    m = M[k]
+    act = [j for j, _, st in m['mons'] if st < 8 and j not in m.get('silenced', ())]
+    if not act or not m['caster']:
+        return 0.0
+    s0 = min(255, g.u8(GROUPS + k * 8 + 6) + PLAN['seal'].get(k, 0.0))
+    add = clevel
+    R = int(round(rounds if rounds else SEAL_ROUNDS))
+    base = [p_sealed(seal_after(s0, r), m['level']) for r in range(R)]
+    best = 0.0
+    for n in range(1, SEAL_STACK + 1):
+        s1 = min(255, s0 + n * add)
+        gain = sum(p_sealed(seal_after(s1, r), m['level']) - b for r, b in enumerate(base))
+        best = max(best, gain / n)
+    return best * silence_worth(g, m) * len(act)
+
+
+def seal_commit(g, k, M, clevel):
+    PLAN['seal'][k] = PLAN['seal'].get(k, 0.0) + clevel
 
 
 def support_value(g, sid, M, cast_counts, party_alive):
@@ -1060,28 +1188,30 @@ def screen_now(g):
     return g.u8(PARTY_SCREEN) if s is None else s
 
 
-def casting_danger(M, drain=False):
+def casting_danger(M, drain=False, planned=False):
     """Hit points a round the monsters' spells cost the party, from the monsters that can
     cast now (not asleep, paralyzed or silenced): caster_danger each, with its death
     spells' part counted 1 + DEATH_EXTRA times: a member killed loses their turns for the
-    rest of the fight as well as their hit points."""
+    rest of the fight as well as their hit points. planned: (silence) less the share this
+    round's casts are likely to silence, put to sleep or paralyze (PLAN dis)."""
     t = 0.0
-    for m in M.values():
+    for k, m in M.items():
         act = [j for j, _, st in m['mons'] if st < 8 and j not in m.get('silenced', ())]
         t += (caster_danger(m) + DEATH_EXTRA * m.get('threat_death', 0.0)
-              + (m.get('threat_drain', 0.0) if drain else 0.0)) * len(act)
+              + (m.get('threat_drain', 0.0) if drain else 0.0)) * len(act) * (
+                  1 - PLAN['dis'].get(k, 0.0) if planned else 1.0)
     return t
 
 
-def cortu_value(g, M, clevel, rounds=None, drain=False):
+def cortu_value(g, M, clevel, rounds=None, drain=False, planned=False):
     """rounds: the rounds the screen is counted over (CORTU_ROUNDS; battle's support plan
     passes the fight's expected length, since the screen lasts the fight); drain: Labadi
-    counts (casting_danger)."""
+    counts (casting_danger); planned: this round's disabling casts count (casting_danger)."""
     s = screen_now(g)
     gain = min(SCREEN_CAP, 0.75 * s + 2 * clevel) - s
     if gain <= 0:
         return 0.0
-    return gain / 100 * casting_danger(M, drain) * (CORTU_ROUNDS if rounds is None else rounds)
+    return gain / 100 * casting_danger(M, drain, planned) * (CORTU_ROUNDS if rounds is None else rounds)
 
 
 def melee_in(g, M, pmod=None, mapo=None):

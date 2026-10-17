@@ -504,7 +504,14 @@ of level 8 or below that isn't undead") is exactly right.
   `target_member` for the party), Porfic +4 the caster,
   Ponti +1, Bamatu +3 the caster's side, Dilto -2 a group, Morlis -4 a group. **[code]**
 - Cortu: the caster's side's magic screen becomes 3/4 of what it was + 2 × caster level,
-  up to 90. Bacortu: the target side's sealing level + caster level, up to 255.
+  up to 90. Bacortu: the target side's sealing level + caster level, up to 255, with no
+  resistance check (`spell_bacortu` 0x800c9e2c, called straight from `spell_dispatch`).
+  In a fixed battle the party's group pick stores a row (1 front, 2 back) as
+  `target_group`, and `spell_bacortu` uses it as a group number without
+  `spell_group_range`, so the party's Bacortu seals group 1 or group 2 whatever it was
+  aimed at (seen in the harness: aimed at a back-row Ogre Sorcerer, it sealed group 2,
+  an Ogre). A sealing level of 60 on two level-13 casters lost 13 of their 23 spells,
+  against 54% from the formula. **[code]** **[run]**
   Breath halves the party's screen. **[code]**
 - Badumas: each of the target group's attacks loses a damage die, up to 4 times. **[code]**
 - Oslo / Maoslo: for a monster, +2 / +4 damage bonus on each of its attacks; for the

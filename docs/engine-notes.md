@@ -522,6 +522,9 @@ that misses the encounter-source test below, so wandering fights never get one.
 - `docs/re/description-check.md`: item, spell, Compendium and help text checked against
   the records and the code (18 spell ranges in the original are wrong).
 - `docs/re/decisions.md`: the open questions and Chris's decision on each (all decided).
+- Bacortu in fixed battles (2026-10-17, harness ch17 report 5): the party's cast seals
+  group 1 or 2, the row number the pick stores, not the group aimed at; and it has no
+  resistance check. D-battle.md "Healing and buffs"; on `docs/waiting-on-chris.md`.
 
 ## Notes the translation depends on
 
