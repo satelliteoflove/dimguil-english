@@ -235,7 +235,8 @@ def disc_fix_words():
 # the table and wrappers at their new home, and catalog_vwf.asm's `la VWF_LUT` words. The
 # overlays a state loads afterwards jump to the new home, so every state case needs these.
 # Code only: the old home (0x80060e97) is libds's play state now and is left alone.
-MAIN_CODE = [(0x800159b8, 0x80015b04), (0x80073c34, 0x80073c3c), (0x80073cc4, 0x80073cd0)]
+# 0x80073c3c-0x80073c47: the width lookup's bound (2026-10-17, vwf review finding 1).
+MAIN_CODE = [(0x800159b8, 0x80015b04), (0x80073c34, 0x80073c48), (0x80073cc4, 0x80073cd0)]
 
 
 def disc_main_code():

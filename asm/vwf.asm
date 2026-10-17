@@ -231,9 +231,9 @@ BATTLE_CENTERING_SPACING equ 0x6
         .db    9,    5, 3, 3, 5,   11,  7,    7, 15,  3,   11,    15,    11, 3, 3, 11,  8,  9,  8,  7, 5, 1, 11, 2, 5, 11, 2, 3,   5, 3,  12,  2,  9, 11, 11, 12,  5
         //  ma, me, wa, we, mo, mi
         .db 12, 12, 12, 12, 12, 11
-        // get_VWF_spacing_in_a0 doesn't stop at 0xd8 (CHARSET_SIZE is used with lui), so
-        // codes past the table read the bytes after it. This pad byte and VWF_LUT_AT's
-        // alignment keep those what they were at 0x80060e97 (a 0, then the wrappers).
+        // The pad byte keeps the wrappers' alignment as it was at 0x80060e97. Before
+        // 2026-10-17 get_VWF_spacing_in_a0 didn't stop at 0xd8 and read this byte and the
+        // wrappers as widths for codes past the table; it stops there now.
         .db 0
         .align
 
@@ -448,8 +448,15 @@ BATTLE_CENTERING_SPACING equ 0x6
     .endfunc
     .func get_VWF_spacing_in_a0
         la      t2, VWF_LUT
-        lui     t4, CHARSET_SIZE
-        ble     s0, t4, @@is_VWF
+        // (2026-10-17, Chris approved) The table runs to 0xd7 (mi). This compared with
+        // lui CHARSET_SIZE (0x00d10000), so every byte passed, and codes past the table
+        // read the pad byte and the wrappers' code as widths (up to 112 px left or 40
+        // right). Now they get DEFAULT_SPACING, as the fit tools assume. No text uses
+        // them today (rips/re/work/vwfreview finding 1). Same length as before, so
+        // nothing after it moves.
+        sltiu   t4, s0, 0xd8
+        bnez    t4, @@is_VWF
+        nop
         nop
         jr	    ra
         ori     a0, zero, DEFAULT_SPACING
@@ -547,8 +554,25 @@ BATTLE_CENTERING_SPACING equ 0x6
     .org 0x800d21ec
         li      t9, 0
 
+    // FUN_800d3100 centers a single line (callers in FUN_800d25cc). The game centered on
+    // glyphs x 12; this first made it glyphs x 8, ignoring the pixel width the measure
+    // leaves in t9 (centering_BATTLE_wrapper_common). (2026-10-17, Chris approved) It now
+    // zeroes t9 on the way into the measure and centers on t9, as the battle box does
+    // (0x800d2150-0x800d21ec). The delay slot at 0x800d3114 is voicing_marks.asm's.
+    .org 0x800d3110
+        jal     battle_measure_from_zero
     .org 0x800d3120
-        move    v1, v0
-        ;sra     v1, v0, 0x1
+        move    v1, t9              ; the line's width in pixels
+        nop                         ; was addu v1, v1, v0
+    .org 0x800d312c
+        sll     v1, v1, 0x10        ; was sll 0x12 (x 4); with sra 0x10, sign-extend
+    // In the dead FUN_800c3188, after bugfix_bacortu_rows.asm's routine (0x800c31a4-
+    // 0x800c325b); nothing in BATTLE or MAIN reaches this function.
+    .org 0x800c3300
+    .area 8
+    battle_measure_from_zero:
+        j       0x80022024          ; the line measure (MAIN)
+        move    t9, zero
+    .endarea
 .close
 
