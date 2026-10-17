@@ -82,6 +82,8 @@ FIXED = 0x80079bde          # 1 in a fixed battle (up to 6 groups on a 3x2 grid)
 # (04-lake-machine.json): at the Guardians "Kill the mage first" (Madalto over the whole
 # party for up to 64), and the priest's Badi kills a character outright.
 CASTER_FIRST = True         # fighters' blows on a lone para/group-damage caster first (choose_group)
+AIM_LAST = set()            # (ch17) monster ids aimed at only once nothing else is offered (a fight policy sets it; fight() clears it)
+CURE_KEEP = {}              # (ch17) roster index -> {(school, level): points} only cures and heals spend (a fight policy sets it)
 KILL_FIRST = {366: 0, 358: 1,       # Arch Mage, Arch Priest (Underground B2 E7 N22)
               454: 0, 438: 1,       # the same pair at Area A B1 E16 N11
               455: 0, 439: 1}       # and at Area B B1 E9 N11, chapter 10's Guardians (n1v0o: their
@@ -157,6 +159,9 @@ def choose_group(g, offered, prefer=None, spread=False):
         return None
     if len(alive) > 1 and _vary():
         return _vrng.choice(alive)
+    if isinstance(prefer, tuple):
+        # (ch17) a fight-specific policy's order of groups for a Fight: the first offered
+        prefer = next((p for p in prefer if p in alive), None)
     if prefer in alive:
         return prefer               # a spell's or Dispel's chosen group (tactics.py)
     rank = {}
@@ -183,7 +188,8 @@ def choose_group(g, offered, prefer=None, spread=False):
                 continue
             if (m.get('para') or m.get('gdmg')) and len(m['mons']) == 1:
                 lone.add(k)
-    return min(alive, key=lambda k: (kr.get(k, KILL_FIRST.get(group_id(g, k), 9)), rank.get(k, 99), k not in lone, k != prefer,
+    return min(alive, key=lambda k: (group_id(g, k) in AIM_LAST, kr.get(k, KILL_FIRST.get(group_id(g, k), 9)),
+                                     rank.get(k, 99), k not in lone, k != prefer,
                                      -g.u8(GROUPS + k * 8 + 5) if spread else 0, k))
 
 
@@ -961,6 +967,9 @@ def default_policy(g, m, opts):
                 capped = True
         elif CHEAPEST and lv >= KEEP_LEVEL and not boss:
             continue                    # (c) levels 6-7 wait for bosses and bad fights
+        ck = CURE_KEEP.get(ri, {}).get((sch, lv), 0)
+        if ck and rec[0x5c + sch * 7 + lv - 1] <= ck:
+            continue                    # (ch17) the Madi/Dialko points a fight policy keeps
         keep = BOSS_KEEP.get(ri, {}).get((sch, lv), 0)
         if keep and why != 'story' and not bad and rec[0x5c + sch * 7 + lv - 1] <= keep:
             continue                    # the boss's points (BOSS_KEEP)
@@ -1263,6 +1272,98 @@ def crystal_policy(g, m, opts):
     if FIGHT in opts:
         return ('fight',)
     return default_policy(g, m, opts)
+
+
+# (chapter 17) Cleo's party in Area E B4's control room, fixed meeting 0x19 at (36, 12, 11)
+# (Chris, 2026-10-17, from data/walkthrough/dim/17-area-e.json and data/monsters/dim; ids,
+# levels and resistances read from the fight's records, ch17/cr/cr_a): the front row an Arch
+# Fighter (423), an Arch Lord (475, Bakadi) and an Arch Ninja (478, alchemist clouds), whose
+# blows knock out and decapitate; the back row Cleo (495, level 32, every school resisted 50%,
+# immune to every status), the Arch Bishop (387, mage and priest 85%, immune to fire, cold and
+# Tiltowait; Tiltowait, Bakadi, Bacortu) and Bergamot (496, mage and alchemist only 10%;
+# Bakadi). The walkthrough: stack Cortu in round 1 from everyone who can cast it, a screen item
+# (Amulet of Screens, Scroll of Screen: Cortu as an item) for anyone who can't; magic at
+# Bergamot, weapons at the Arch Bishop, Cleo last; Madi and Dialko ready for the knocked out.
+# Everything else (the support plan's AC and barrier, heals, cures, items) is default_policy's:
+# the fight is a story fight on a BOSS_AT square, so it gets the support plan.
+CR_CLEO, CR_BERGAMOT, CR_BISHOP = 495, 496, 387
+CR_CORTU_FIRST = True   # round 1: every member who can cast Cortu does; the rest use a Cortu item if they have one
+CR_AIM = True           # damage spells at Bergamot, Fights at the Arch Bishop, Cleo last for both
+CR_KEEP_CURE = 1        # a member who knows Dialko or Madi keeps this many points at their levels for cures
+
+
+def _cr_spell(g, m, ri, c, target):
+    CAST[c[0]] = CAST.get(c[0], 0) + 1
+    return ('spell', c[0], c[1], c[2], c[3], target)
+
+
+def control_policy(g, m, opts):
+    """Cleo's party in the control room (chapter 17): see CR_CORTU_FIRST and the notes above.
+    Round 1's Cortu stack and the aim are this policy's; every other choice is
+    default_policy's, with the Madi/Dialko points kept (CURE_KEEP)."""
+    ids = party_ids(g)
+    ri = ids[m]
+    me = g.char(ri)
+    M = {k: tactics.info(g, k) for k in tactics.groups(g)}
+    M = {k: v for k, v in M.items() if v['mons']}
+    if not M:
+        return default_policy(g, m, opts)
+    cr = FIGHT_INFO.setdefault('cr', dict(round0=ROUND, cortu=[], items=[], noitem=[], aim=[]))
+    by_mon = {}
+    for k in sorted(M):
+        by_mon.setdefault(M[k]['id'], k)
+    cleo, berg, bish = by_mon.get(CR_CLEO), by_mon.get(CR_BERGAMOT), by_mon.get(CR_BISHOP)
+    if CR_AIM:
+        AIM_LAST.clear()
+        if len(M) > 1:
+            AIM_LAST.add(CR_CLEO)
+    if CR_CORTU_FIRST and ROUND == cr['round0']:
+        cast = castable(g, ri) if SPELL in opts else []
+        c = next((c_ for c_ in cast if c_[0] == tactics.CORTU), None)
+        if c:
+            tactics.plan_reset(ROUND)
+            tactics.cortu_commit(g, me['level'])
+            cr['cortu'].append(me['name'])
+            return _cr_spell(g, m, ri, c, ('group', min(M)))
+        if USE in opts:
+            it = next((x for x in item_options(g, ri) if x['sid'] == tactics.CORTU), None)
+            if it:
+                tactics.plan_reset(ROUND)
+                tactics.cortu_commit(g, me['level'])
+                cr['items'].append((me['name'], it['id']))
+                return ('use', it['idx'], it['sid'], it['id'], ('group', min(M)))
+        cr['noitem'].append(me['name'])
+    keep = {}
+    for sid, lv in ((tactics.DIALKO, 3), (tactics.MADI, 6)):
+        if CR_KEEP_CURE and sid in known_spells(me['raw'], 1, lv):
+            keep[(1, lv)] = CR_KEEP_CURE
+    if keep:
+        CURE_KEEP[ri] = keep
+    try:
+        act = default_policy(g, m, opts)
+    finally:
+        CURE_KEEP.pop(ri, None)
+    if not CR_AIM:
+        return act
+    if act[0] == 'fight' and len(act) == 1:
+        order = tuple(k for k in (bish, berg) if k is not None)
+        return ('fight', ('group', order)) if order else act
+    if act[0] == 'spell' and act[-1][0] == 'group' and (act[1] in tactics.DAMAGE or act[1] in tactics.DEATH):
+        sid, k = act[1], act[-1][1]
+        if (tactics.DAMAGE.get(sid) or (0, tactics.DEATH.get(sid, ('one',))[0]))[1] == 'all':
+            return act
+        to = None
+        if berg is not None and k != berg and tactics.value(g, sid, berg, M, me['level'], CAST) > 0:
+            to = berg
+        elif berg is None and k == cleo:
+            vals = [(tactics.value(g, sid, k2, M, me['level'], CAST), k2) for k2 in M if k2 != cleo]
+            vals = [x for x in vals if x[0] > 0]
+            if vals:
+                to = max(vals)[1]
+        if to is not None:
+            cr['aim'].append((ROUND, me['name'], sid, M[k]['id'], M[to]['id']))
+            return act[:-1] + (('group', to),)
+    return act
 
 
 # (support) Buffs and debuffs in the fights that need them (Chris, 2026-10-16: they can
@@ -1775,7 +1876,8 @@ def command_member(g, policy, log):
                 ui.move_cursor(g, PGRID_X, slot % 3, 'right', 'left', what='target col')
     # a target step: an enemy group pick is aimed (aim); anything else (a member) takes
     # what's selected. Stop at the next member or the overview.
-    prefer = act[-1][1] if act[0] in ('spell', 'dispel', 'use') and act[-1][0] == 'group' else None
+    prefer = (act[-1][1] if act[0] in ('spell', 'dispel', 'use', 'fight') and len(act) > 1
+              and isinstance(act[-1], tuple) and act[-1][0] == 'group' else None)
     end = g.frame + 600
     while in_battle(g) and g.u8(PHASE) == CMD_PHASE and g.u8(MEMBER) == m \
             and g.u8(SCREEN) not in WAITING:
@@ -2345,6 +2447,9 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
     for k_ in [k_ for k_ in FIGHT_INFO if isinstance(k_, tuple) and k_[0] == 'long'] + ['long', 'focus']:
         FIGHT_INFO.pop(k_, None)
     FIGHT_INFO.pop('cm', None)
+    FIGHT_INFO.pop('cr', None)
+    AIM_LAST.clear()
+    CURE_KEEP.clear()
     for k_ in [k_ for k_ in FIGHT_INFO if isinstance(k_, tuple) and k_[0] == 'support'] + ['support', 'stacked']:
         FIGHT_INFO.pop(k_, None)
     SPLAN.update(round=None, by={})
@@ -2443,7 +2548,7 @@ def fight(g, policy=default_policy, chest_mode='leave', limit=60000):
                 break
             g.step()
     return dict(rounds=rounds, frames=g.frame - f0, actions=log, ovl=g.overlay(), chest=chest_result,
-                where=where, story=tactics.STORY[0], policy=policy.__name__, cm=FIGHT_INFO.get('cm'),
+                where=where, story=tactics.STORY[0], policy=policy.__name__, cm=FIGHT_INFO.get('cm'), cr=FIGHT_INFO.get('cr'),
                 support=FIGHT_INFO.get('support'),
                 matters=FIGHT_INFO['matters'], casts=list(FIGHT_INFO['casts']),
                 ran=sum(1 for a in log if a[1] == 'run'),
