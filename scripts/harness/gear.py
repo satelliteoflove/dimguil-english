@@ -995,7 +995,9 @@ def cure_item(g, w):
 # choose() never puts it on them), even over a weapon of another kind (held_cure), and
 # battle.cure_item_choice Uses it worn when no Madi or Morfis caster can act this round.
 # With no cure caster in the party the old rule stands (cure_moves: to a Priest or Bishop).
-CURE_HOLD = True
+# Off (Chris, 2026-10-17): the holder (Eve) gave up her Bullwhip and Shield of Defense, AC
+# -7 to -3, and that trade isn't worth it.
+CURE_HOLD = False
 CURE_HOLD_WORTH = 100
 
 
