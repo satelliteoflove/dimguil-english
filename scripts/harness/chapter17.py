@@ -29,10 +29,12 @@ Goals, each proved by RAM or a captured string:
                starts, so the proof is bit 2 and a won fight at (36, 12, 11) in the log
                (back in the maze, nobody fled). encounter_id 0xf can't be run from
                (battle.fleeable). A wipe replays the goal from its start state.
-  train_NN     (Chris, 2026-10-17) before the control room, training trips on B4 (TRAIN_AREAS:
-               its fight squares meet the Greater Demons, level 18, over 25,000 experience
-               each, six at a time and calling more) until every member is TRAIN_UP levels
-               above the level they reached the training at (train_goals' need).
+  train_easy_NN (Chris, 2026-10-17) before the control room, training trips on Area C B3
+               (EASY_AREAS) until every member is TRAIN_UP levels above the level they
+               reached the training at (train_goals' need).
+  train_NN     then trips on B4 (TRAIN_AREAS: its fight squares meet the Greater Demons,
+               level 18, over 25,000 experience each, six at a time and calling more) for
+               TRAIN_UP_B4 levels more.
   out          back in town.
 Not done: B3's magic switch past the hidden door east of E2 N11 (a detour), B2's
 transporter at E11 N7 (record 0x1a), and the lift on to Area Z.
@@ -50,11 +52,28 @@ BRIDGE = (36, 12, 17)           # E12 N6, the door marked BRIDGE on its north si
 BEFORE = (36, 12, 12)           # E12 N11, a square short of the meeting
 MEET = (36, 12, 11)             # E12 N12, Cleo, Bergamot and the last Guardians
 MEET_BIT = 2                    # npc_flags: set by talk 25 as the fight starts
-TRAIN_AREAS = (36,)             # Area E B4: the Greater Demons (boss training, push training too)
-TRAIN_UP = 2                    # levels every member gains on B4 before the control room
-TRAIN_MOST = 40                 # training trips at most for it
+TRAIN_AREAS = (36,)             # Area E B4: the Greater Demons (boss training)
+# (Chris, 2026-10-17, c17v4) the first TRAIN_UP levels come on an easier floor, away from
+# Area E's roaming caster parties: Area C B3 (area 29, chapter 15's Area C). Its room and
+# roaming tables have no spellcasters (Were Amoeba, Blob, Dark Kong, Shocitnal) and its
+# roaming parties (P4, P5: Blade Master, Fay, Ixtah, a level-11 Mad Psionic with Lios and
+# Masios) have no Tiltowait, Lasios or Galtomas. Area D's floors pay more (D B3 about
+# 27,500 a room fight by the site's spawn data, C B3 16,000) but Area D's roaming party P6
+# is Area E's P7 two levels down (Kel with Tiltowait, a Mad Psionic with Lasios and
+# Galtomas): chapter 14's runs had 0.75 deaths a fight on D B3, nearly a quarter to a
+# confused ally. C B3's runs: 0.26. Area A B3/B2 (chapter 16's floors) pay 6,000.
+EASY_AREAS = (29,)
+PUSH_AREAS = EASY_AREAS         # the train-after-running rule trains there too (push_train)
+TRAIN_UP = 2                    # levels every member gains on EASY_AREAS first
+TRAIN_UP_B4 = 2                 # then on B4 (TRAIN_AREAS), from the levels the easy floor left
+TRAIN_MOST = 40                 # training trips at most for each
 tactics.BOSS_AT.add(MEET)       # rated as a story fight whatever FIXED says
-battle.POLICY_AT[MEET] = battle.control_policy     # its own policy (Chris, 2026-10-17)
+# battle.control_policy for the meeting (Report 6) is off (Chris, 2026-10-17): the bench had
+# it at 12/36 won against the default with the support plan's 15/29, Arch Bishop kills 11 ->
+# 44. The code stays; CR_POLICY = True registers it again.
+CR_POLICY = False
+if CR_POLICY:
+    battle.POLICY_AT[MEET] = battle.control_policy
 
 
 def here(g):
@@ -160,15 +179,18 @@ class Chapter17:
         yield 'hidden_door', hidden_door
         yield 'bridge', bridge
         if not nav.flag(g, NPC_FLAGS, MEET_BIT):
-            # every member TRAIN_UP levels above where they stand now (the generator runs
-            # this once the bridge goal is done, so "now" is the party that reached it)
-            want = {i: g.char(i)['level'] + TRAIN_UP for i in (g.party() or town.town_party(g))}
-            run.note('train target', 'control_room', TRAIN_AREAS,
-                     [(g.char(i)['name'], g.char(i)['level'], w) for i, w in want.items()])
+            # every member `up` levels above where they stand now (the generator runs this
+            # once the previous goal is done, so "now" is the party that reached it): first
+            # TRAIN_UP on the easy floor, then TRAIN_UP_B4 more on B4
+            for areas, up, prefix in ((EASY_AREAS, TRAIN_UP, 'train_easy'),
+                                      (TRAIN_AREAS, TRAIN_UP_B4, 'train')):
+                want = {i: g.char(i)['level'] + up for i in (g.party() or town.town_party(g))}
+                run.note('train target', 'control_room', areas,
+                         [(g.char(i)['name'], g.char(i)['level'], w) for i, w in want.items()])
 
-            def need():
-                here_ = set(g.party() or town.town_party(g))
-                return [i for i, w in want.items() if i in here_ and g.char(i)['level'] < w]
-            yield from run.train_goals(TRAIN_AREAS, 0, most=TRAIN_MOST, need=need)
+                def need(want=want):
+                    here_ = set(g.party() or town.town_party(g))
+                    return [i for i, w in want.items() if i in here_ and g.char(i)['level'] < w]
+                yield from run.train_goals(areas, 0, prefix=prefix, most=TRAIN_MOST, need=need)
         yield 'control_room', control_room
         yield 'out', out

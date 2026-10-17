@@ -981,12 +981,13 @@ class Run(chapter1.Run):
         return None
 
     def push_train(self, why):
-        """(ch17) Home, then training trips on the chapter's training floors (TRAIN_AREAS, or
-        the last chapter's that had some) until the party's median level is PUSH_TRAIN_LEVELS
-        higher (12 trips at most, as boss_training); then the goal goes on."""
+        """(ch17) Home, then training trips on the chapter's push floors (PUSH_AREAS: chapter
+        17's easier floor, Chris 2026-10-17), else its training floors (TRAIN_AREAS), else
+        the last chapter's that had some, until the party's median level is
+        PUSH_TRAIN_LEVELS higher (12 trips at most, as boss_training); then the goal goes on."""
         import sys
         mod = sys.modules.get('harness.chapter%d' % self.chapter)
-        areas = getattr(mod, 'TRAIN_AREAS', None) or self.gold_areas()
+        areas = getattr(mod, 'PUSH_AREAS', None) or getattr(mod, 'TRAIN_AREAS', None) or self.gold_areas()
         lv0 = self.party_level()
         want = lv0 + PUSH_TRAIN_LEVELS
         self.note('push train', dict(goal=getattr(self, '_goal_name', None), why=why, areas=tuple(areas),
