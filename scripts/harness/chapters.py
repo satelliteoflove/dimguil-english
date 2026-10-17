@@ -362,6 +362,11 @@ class Run(chapter1.Run):
                 self._fatal = getattr(self, '_fatal', set()) | {tuple(f['where'])}
         if getattr(self, '_homeward', False) and self.fights() > n:
             battle.RUN_OK = self.homeward_run()
+        if PUSH_TRAIN and self.fights() > n and self.push_run_note() and getattr(self, '_pushing', False) \
+                and g.overlay() not in ('JOUKA', 'HAZURE', 'BATTLE'):
+            due = self.push_due()
+            if due and due.startswith('push runs'):
+                raise TurnHome(due)
         if HP_HEAL and tactics.TRAINING and self.fights() > n and not getattr(self, '_topping', False) \
                 and g.overlay() not in ('JOUKA', 'HAZURE', 'BATTLE'):
             # Chris's HP lines after every training fight, the walk home included
@@ -483,26 +488,50 @@ class Run(chapter1.Run):
             if keep and (dest[0] not in keep or nav.plan(self.g, tuple(dest), keep=keep) is None):
                 keep = None
             return nav.travel(self.g, tuple(dest), self.on_int, lambda g: self.after(), keep=keep)
-        for k in range(HEALER_TRIPS + 1):
+        # (ch17) the HEALER_TRIPS budget is a goal try's, not a go() call's: chapter 17's
+        # control room calls go() again after each door trip, and c17v2a's tries made ten
+        # trips home each, every walk out meeting B4's same fixed fights again
+        key = (getattr(self, '_goal_name', None),
+               sum(1 for x in self.log if len(x) > 1 and x[1] == 'retry'))
+        if WALK_TRIPS_PER_TRY and getattr(self, '_walk_key', None) == key:
+            k0 = min(getattr(self, '_walk_trips', 0), HEALER_TRIPS)
+        else:
+            self._walk_key, k0 = key, 0
+        k = k0
+        while k <= HEALER_TRIPS:
+            due = PUSH_TRAIN and self.push_due()
+            if due:
+                # (ch17) train after running or a wipe: no walk trip spent on it
+                self.push_train(due)
+                self.ensure_maze()
+                continue
             self._goal_walk = k < HEALER_TRIPS
             self._dest = tuple(dest)
+            self._walk_trips = k
             short = self._goal_walk and self.roamer_short((g_area(self.g), dest[0]))
             if short and self.town_helps():
                 # (agent 16) the roamers' door: short for the type-2 parties on the way
                 self._goal_walk = False
+                self._walk_trips = k + 1
                 self.note('roamer door', short)
                 self.trip_home('short for roamers')
                 self.ensure_maze()
+                k += 1
                 continue
+            self._pushing = True
             try:
                 return nav.travel(self.g, tuple(dest), self.on_int, lambda g: self.after())
             except TurnHome as t:
-                self._goal_walk = False         # the walk home itself doesn't turn
+                self._goal_walk = self._pushing = False     # the walk home itself doesn't turn
                 self.note('turn home', t.args[0])
                 self.trip_home(t.args[0].split(':')[0])
                 self.ensure_maze()
+                if t.args[0].startswith('push runs'):
+                    continue                    # push_due trains next; not a walk trip
+                k += 1
+                self._walk_trips = k
             finally:
-                self._goal_walk = False
+                self._goal_walk = self._pushing = False
 
     def roamer_short(self, areas, hp_only=False):
         """What the party lacks for the type-2 parties (roamer tokens, A-maze.md "Tokens")
@@ -516,7 +545,11 @@ class Run(chapter1.Run):
         if not ROAMER_DOOR or not T or not maze.in_maze(g):
             return []
         hp = sum(max(0, g.char(i)['hp']) for i in g.party() if g.char(i)['status'] < 0x20)
-        short = [('hp', hp, TYPE2_ROUNDS * T)] if hp < TYPE2_ROUNDS * T else []
+        # (ch17) never more than TYPE2_HP_SHARE of the party's max HP: Area E's worst party
+        # rates 540 a round, two rounds over the whole party's ~950, so the bar could never
+        # be met and every check would send a full party home
+        need = min(TYPE2_ROUNDS * T, int(TYPE2_HP_SHARE * sum(g.char(i)['max_hp'] for i in g.party())))
+        short = [('hp', hp, need)] if hp < need else []
         if not hp_only:
             short += [x for x in self.boss_short() if x == 'down' or x[0] == 'heals']
         return short
@@ -669,6 +702,7 @@ class Run(chapter1.Run):
             self.full_points[i] = list(g.char(i)['raw'][0x5c:0x78])
         self._trip_f0 = self.fights()
         self.note('trip home', [(g.char(i)['name'], g.char(i)['level']) for i in town.town_party(g)])
+        self._trip_l0 = len(self.log)
 
     def points_low(self, share=None):
         """Casters whose spell points at levels 3-7 are under `share` of what they had
@@ -898,6 +932,78 @@ class Run(chapter1.Run):
                 break
             self.train(areas)
         self.ensure_maze()
+
+    def _trip_since(self):
+        """Log index where this trip began: the last trip home, retry (a reload) or push
+        training, whichever is latest."""
+        l0 = max(getattr(self, '_trip_l0', 0), self._ch_l0)
+        for i in range(len(self.log) - 1, l0 - 1, -1):
+            x = self.log[i]
+            if len(x) > 1 and x[1] in ('retry', 'push train'):
+                return i + 1
+        return l0
+
+    def push_run_note(self):
+        """(ch17) After a fight: if the party ran from it as a likely loss while pushing toward
+        a goal (not training, a gold trip or a walk home), a 'push run' note with the floor
+        and how many such fights this trip has had there. True when it wrote one."""
+        if tactics.TRAINING or getattr(self, '_homeward', False) or getattr(self, '_gold', False):
+            return False
+        f = next((x[2] for x in reversed(self.log) if len(x) > 2 and x[1] == 'fought'), None)
+        if not f or not any(len(r) > 2 and r[2] == 'likely loss' for r in f.get('runs') or []):
+            return False
+        area = (f.get('where') or (None,))[0]
+        l0 = self._trip_since()
+        n = 1 + sum(1 for x in self.log[l0:] if len(x) > 2 and x[1] == 'push run' and x[2].get('area') == area)
+        self.note('push run', dict(area=area, where=f.get('where'), n=n, goal=getattr(self, '_goal_name', None),
+                                   fled=f.get('fled'), runs=f.get('runs')))
+        return True
+
+    def push_due(self):
+        """(ch17) Why the party should stop pushing and train first, or None: more than
+        PUSH_RUNS 'push run' fights on one floor this trip, or a wipe in this goal since its
+        last push training; at most PUSH_TRAIN_MOST push trainings a goal."""
+        name = getattr(self, '_goal_name', None)
+        if not name or str(name).startswith(('train', 'recover')):
+            return None
+        mine = [i for i in range(self._ch_l0, len(self.log)) if len(self.log[i]) > 2
+                and self.log[i][1] == 'push train' and self.log[i][2].get('goal') == name]
+        if len(mine) >= PUSH_TRAIN_MOST:
+            return None
+        l0 = self._trip_since()
+        per = collections.Counter(x[2].get('area') for x in self.log[l0:] if len(x) > 2 and x[1] == 'push run')
+        over = [(a, c) for a, c in per.items() if c > PUSH_RUNS]
+        if over:
+            return 'push runs: area %s, %d fights run from' % over[0]
+        w0 = mine[-1] if mine else self._ch_l0
+        if any(len(x) > 3 and x[1] == 'retry' and x[2] == name and x[3] == 'wiped' for x in self.log[w0:]):
+            return 'push wipe: %s' % name
+        return None
+
+    def push_train(self, why):
+        """(ch17) Home, then training trips on the chapter's push floors (PUSH_AREAS: chapter
+        17's easier floor, Chris 2026-10-17), else its training floors (TRAIN_AREAS), else
+        the last chapter's that had some, until the party's median level is
+        PUSH_TRAIN_LEVELS higher (12 trips at most, as boss_training); then the goal goes on."""
+        import sys
+        mod = sys.modules.get('harness.chapter%d' % self.chapter)
+        areas = getattr(mod, 'PUSH_AREAS', None) or getattr(mod, 'TRAIN_AREAS', None) or self.gold_areas()
+        lv0 = self.party_level()
+        want = lv0 + PUSH_TRAIN_LEVELS
+        self.note('push train', dict(goal=getattr(self, '_goal_name', None), why=why, areas=tuple(areas),
+                                     level=lv0, want=want, levels=self.levels()))
+        print('c%d %s: %s, training to %d' % (self.chapter, getattr(self, '_goal_name', None), why, want),
+              flush=True)
+        if self.g.overlay() not in ('JOUKA', 'HAZURE'):
+            self.trip_home(why.split(':')[0])
+        trips = 0
+        for _ in range(12):
+            if self.party_level() >= want:
+                break
+            self.train(areas)
+            trips += 1
+        self.note('push train done', dict(goal=getattr(self, '_goal_name', None), trips=trips,
+                                          level=self.party_level(), levels=self.levels()))
 
     def heal(self, frac=None):
         """Heal to frac (READY_HP) from camp, where the party stands."""
@@ -1531,11 +1637,11 @@ class Run(chapter1.Run):
         self._floors[tuple(base)] = i
         self.note('next floor', lad[i], lost)
 
-    def train_goals(self, areas, level, prefix='train', most=40):
+    def train_goals(self, areas, level, prefix='train', most=40, need=None):
         """(name, fn) training trips, yielded lazily while min level < level (a
-        chapter's goals() can `yield from` this)."""
+        chapter's goals() can `yield from` this), or while need() is true when given."""
         k = gk = 0
-        while k < most and self.party_level() < level:
+        while k < most and (need() if need else self.party_level() < level):
             if self.temple_short() and gk < GOLD_MOST:
                 # a member waits at the temple and the gold won't raise them: trips on
                 # the last chapter's floors for gold first, each its own goal so the gold
@@ -1613,13 +1719,26 @@ HEALER_HOME = True           # (agent 16) a healer down on the walk out or a goa
 OUT_HOME = True             # (nodead) a member dead, stoned, ashed, lost, paralyzed or poisoned after the cures turns a walk out or a goal walk home
 HOME_RUN_ALL = True         # (nodead) a goal's walk home may run as a training trip's does (Run.homeward_run)
 HEALER_TRIPS = 2             # ... a goal walk goes home and back at most this many times
+WALK_TRIPS_PER_TRY = True    # (ch17) ... counted over a goal try, not each go() call
 ROAMER_DOOR = True           # (agent 16) a goal walk short for the floor's type-2 parties goes home first (Run.roamer_short)
 TYPE2_ROUNDS = 2             # ... the standing HP must cover this many rounds of the worst one's threat
 TYPE2_TOKENS = 0x8005e654    # npc_tokens_per_area: 2 bytes an area, the second the type-2 tokens placed
 # the worst type-2 party's rated threat a round by area (tactics.info at the first command, every
 # chain's logs to 2026-10-14; the parties are the area group's type2_groups, 0x8005a3dc)
 TYPE2_THREAT = dict([(a, 15) for a in (3, 4)] + [(a, 80) for a in (5, 6, 7, 8)] +
-                    [(a, 95) for a in (19, 20, 21, 22)] + [(a, 153) for a in (23, 24, 25, 26, 27)])
+                    [(a, 95) for a in (19, 20, 21, 22)] + [(a, 153) for a in (23, 24, 25, 26, 27)] +
+                    # (ch17) Area E B4-B1: the Man in Robe / Ogre Daimyo party 540, the Kel /
+                    # Blaze party 455 (c17v1-v2 logs, areas 36 and 38; 39 has tokens too, 37 none)
+                    [(a, 540) for a in (36, 37, 38, 39)])
+TYPE2_HP_SHARE = 0.8         # ... the HP bar is at most this share of the party's max HP
+# (ch17, Chris 2026-10-17) train after running: more than PUSH_RUNS fights on one floor in one
+# trip that the bot ran from as likely losses while pushing toward a goal (not training, not a
+# walk home; the FLEE_RULE runs of a walk out are 'threat'/'many', not 'likely loss'), or a
+# wipe in a goal, sends the party to train before it goes on (Run.push_due, Run.push_train)
+PUSH_TRAIN = True
+PUSH_RUNS = 3                # ... likely-loss runs on one floor in one trip before it trains
+PUSH_TRAIN_LEVELS = 1        # ... levels (the party's median) each such training adds
+PUSH_TRAIN_MOST = 3          # ... times at most per goal
 AVOID_FATAL = True           # the walk home keeps off the square of the trip's fatal fixed fight (nav.TRIP_SOFT)
 POINTS_HOME = 0.5           # agent 13 (strategy revision 3): a training trip goes home when points or heals are this low (Run.points_spent)
 POINTS_TRAIN = True         # agent 8: a training trip from the maze goes home first when points are low
@@ -1711,7 +1830,7 @@ class Chapter1:
         return out
 
 
-from harness import chapter2, chapter3, chapter4, chapter5, chapter6, chapter7, chapter8, chapter9, chapter10, chapter11, chapter12, chapter13, chapter14, chapter15, chapter16  # noqa: E402,F401  (register the chapters)
+from harness import chapter2, chapter3, chapter4, chapter5, chapter6, chapter7, chapter8, chapter9, chapter10, chapter11, chapter12, chapter13, chapter14, chapter15, chapter16, chapter17  # noqa: E402,F401  (register the chapters)
 
 
 def points_path(g, name):
