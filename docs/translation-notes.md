@@ -111,6 +111,15 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 
 ### Deliberate choices
 
+- **Four tavern recruits have English names: KOROCHI, METALHED, YURI, JEERA (Chris,
+  2026-10-17).** The game's twenty built-in recruits are named in capital romaji, except
+  recruits 1, 15, 17 and 19, which kept kana that showed as Japanese in the English
+  patch: コロヒチ (ko-ro-hi-chi), メタルヘッド ("metalhead"), ユーリー (Yuri), ジーラ
+  (jī-ra). A name holds at most 8 letters, so "metalhead" is METALHED, and Chris picked
+  KOROCHI for the first. They're in two places that must match, since a recruit whose
+  name is already in the roster isn't offered: the tavern's table (asm/recruit_names.asm)
+  and each recruit's own record (binary/7nn.DAT.names.json). Found by the sound test
+  check (rips/agents/soundtest).
 - **"Picking the lock" and "Searching" carry no dots of their own (SISETU 526, 441;
   Chris, 2026-10-17).** The game animates a row of dots after each, spaced for the
   Japanese (鍵開け挑戦中, 調査中, no dots), so ours doubled up and the first animated dots
