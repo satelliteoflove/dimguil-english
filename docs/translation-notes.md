@@ -107,6 +107,14 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 
 ### Deliberate choices
 
+- **Fontana's rescue offer keeps its edge (NPC_MES3 153; Chris, 2026-10-17).** お人好し is
+  good-natured to the point of being easy to take advantage of, and 悪いようにはしませんから
+  is the stock reassurance of someone cutting a deal in his own favor. His party's fee is
+  half the gold and every other item, which the offer never mentions. "You're a
+  soft-hearted bunch, too... We'll take good care of them" read as pure kindness; now
+  "You're too nice for your own good. / Well, I suppose we are too. / Don't worry, we'll
+  treat you right." Like the Japanese, it lands in hindsight, once the party sees what
+  was taken. それでは is "Until next time." (Chris's wording).
 - **Attack verb 9 is "bashes" (FIGHTMSG 9, を 打ち降ろした; Chris, 2026-10-12).** The
   battle line is "{attacker} {verb} {target} with {weapon}.", and the Japanese verb takes
   the weapon as its object, so "brings down on" read oddly ("Cy brings down on Giant
