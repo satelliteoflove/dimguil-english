@@ -95,7 +95,10 @@ few minutes, a build) can stay inside one agent.
 ## Watching runs
 
 `python3 scripts/monitor.py` is a live terminal view of every chapter run, suite round and
-fight bench, refreshed every 2 seconds (Ctrl+C quits; `--once` prints one frame). It reads
+fight bench, refreshed every 2 seconds (`--once` prints one frame). Keys: Tab, 1-4 or a click
+focuses a panel; arrows, j/k or the mouse wheel select; PgUp/PgDn and g/G page; Enter opens a
+run's detail (every goal, death and retry); z zooms the panel; r shows running runs only;
+H widens the hours shown; q quits. It reads
 only the files the harness already writes, so runs need nothing special to show up.
 Its samples go to `rips/monitor/history.jsonl`, so the graphs survive a restart.
 
