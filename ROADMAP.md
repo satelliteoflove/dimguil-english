@@ -18,7 +18,9 @@ fixing glaring and game-breaking bugs and cleaning up rough translations. v0.8.0
 condition, that the text removed at the original team's request be translated again,
 was met on 2026-10-03. As of 2026-10-10 v0.8.0 isn't tagged yet and the repo is still
 private. Left to do: the release readme, the changelog entry and the release title
-(Chris writes these), then make the repo public and push the tag. There's no
+(Chris writes these), then make the repo public and push the tag. It also waits for the
+harness bot to play through to the ending (Chris, 2026-10-17), the gate for going public
+set on 2026-10-12. There's no
 announcement, and the README says not to play it until 0.9.0. Further 0.8.x releases
 follow as fixes land.
 
@@ -45,7 +47,9 @@ of the redump set, since the build leaves both audio tracks untouched.
   the five files that held their strings start at the commit that removed them, and
   their names are gone from old READMEs. Remisse's commits and authorship stay. It
   keeps GPL-3.0 and points to the original repo in the README.
-- **The original team's requests (2026-09-26).** Their translation is removed and must not
+- **The original team's requests (2026-09-26),** made by Remisse in reply to Chris's email,
+  speaking for the whole team (the original translator and editor too); Remisse was the
+  only one Chris corresponded with. Their translation is removed and must not
   come back, and they aren't to be credited. Remisse's code stays under the GPL, with the
   notice in `docs/notice.txt` on the repo (README) and on every release page: no LLMs
   were used in Remisse's original code, Remisse had no role in this project, and the

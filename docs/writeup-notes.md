@@ -860,3 +860,25 @@ then nothing, for good.
   meeting with the talk overlay loaded. A rolling state every 30 frames, with the
   buttons recorded since, worked, but only once the replay stopped adding the one idle
   frame that loading a state normally runs.
+
+**The seal that landed on the wrong monster (2026-10-17, bugs.md 1.16).** Found by the
+harness while it was learning to use silencing spells in chapter 17: the Bishop aimed
+Bacortu at an Ogre Sorcerer in the back row, and the game sealed the Ogre in front of it.
+- Cause: in set fights (story fights and the roaming parties) a group spell picks a whole
+  row, and the pick is stored as 1 or 2. Every other group spell turns that into the row's
+  groups before it does anything. Bacortu's code skipped that step and read the 1 or 2 as
+  a group number, so it always sealed group 1 or group 2. The message reads the same
+  either way, so a player had no way to tell.
+- The fix sends Bacortu through the same row step as the others, then seals each group in
+  the row. Ordinary fights call the original code untouched. It points the spell's entry
+  in the handler table at a 46-word routine, placed in the leftover space of the dead
+  routine the spell-sound fix had already borrowed from. 47 words in BATTLE.BIN.
+- One check the other spells don't make: who's casting. A monster's spell that bounces
+  back off Banoka targets the monster's own group by number, not a row, so only the
+  party's cast is expanded. (The other row spells don't check this; that's left alone.)
+- Checked on the built disc with states made on it, no RAM written: aimed at the back row
+  of the roaming party, both Ogre Sorcerers were sealed, and one of them lost a Cortu to
+  "But spells are sealed." that round; aimed at the front row, the three front groups.
+  The suite's old disc on the same fight sealed the Ogre. In ordinary fights only the
+  group aimed at was sealed, and the seal stayed with its monster when the groups were
+  renumbered.

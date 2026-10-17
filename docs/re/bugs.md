@@ -1,8 +1,8 @@
 # Bugs in the original game, and content no code reaches
 
 Every bug and every unreachable string the phase-2 analysts found (`docs/re/*.md`), two
-from the fallen-party audit (`docs/re/fallen-parties.md`), three from the harness runs
-(1.11, 1.12, 1.15), one from the rescue test (1.13) and one from the lock test (1.14). Each was re-read in the code from the
+from the fallen-party audit (`docs/re/fallen-parties.md`), four from the harness runs
+(1.11, 1.12, 1.15, 1.16), one from the rescue test (1.13) and one from the lock test (1.14). Each was re-read in the code from the
 original disc (`rips/clean`, decompiled at 585c983) and confirmed or refuted. Addresses
 are RAM; MCARD, JOUKA and MAZE load at 0x800a1000.
 
@@ -18,7 +18,7 @@ him first. So each entry is in one of three groups:
 
 | Group | Count |
 |---|---|
-| 1. Clear bugs | 16, all fixed (2.8, the pit soft lock, moved here; fixed in 5ff86d2 and kept) |
+| 1. Clear bugs | 17, all fixed (2.8, the pit soft lock, moved here; fixed in 5ff86d2 and kept) |
 | 2. Cut or unclear, ask | 6, all decided (2.2-2.5 reopened, 2.1 and 2.6 left unused) |
 | 3. Balance, ask | 3, all decided (kept as the original; decisions.md 8-10) |
 | Not bugs, or harmless | 9 (2.7 and 3.4 moved here after the follow-ups) |
@@ -464,6 +464,68 @@ each of the 130 the same inputs gave the same spell loads and casts up to the fr
 stop routine ran at every load, and the battle played to its end. The same five hunts,
 rerun on the new disc with their seeds, went past the frames where the published disc
 froze and on for 1,189 casts without a freeze. Tools in `scripts/re/spellsound/`.
+
+### 1.16 The party's Bacortu in a fixed battle seals group 1 or 2, not the row aimed at
+
+From the harness runs (chapter 17 report 5, 2026-10-17): the Bishop's Bacortu, aimed at a
+back-row Ogre Sorcerer in a type-2 party fight, raised the sealing level of group 2, an
+Ogre in the front row, and the two Ogre Sorcerers kept casting. [run]
+
+Bacortu is a one-group spell (`spell_flags_table` 0x800d5874, spell 14 = 0x8441: bit
+0x40), like Montino, Morlis and Madalto. In a fixed battle (0x80079bde = 1: story fights
+and the type-2 roaming parties) the group pick for those spells picks a row, not a group:
+`FUN_800cf0dc` calls the grid picker 0x800cf258 in row mode (party_commands state 0x34 for
+spells, 0x54 for items, with flag 0x40), which returns 1 for the front row and 2 for the
+back, and party_commands stores that as the member's target (combatant +0xb). `cast_spell`
+(0x800abcc0) loads it into `target_group` (0x800796ac). The other group spells' handlers
+then call `spell_group_range` (0x800c999c), which turns the row into its first group (in
+`target_group`) and returns its last, and loop over the row (`spell_madalto` 0x800c9e7c,
+`spell_montino` 0x800adbc4, `spell_morlis` 0x800acb94). `spell_bacortu` (0x800c9e2c) has
+no such step: it adds the caster's level (0x80079b4e) to `battle_groups[target_group]`'s
+sealing level (0x8008c486 + group × 8, up to 255). So the row number was used as a group
+number, and the cast sealed group 1 or group 2 whatever was aimed at. The message is the
+same either way, so a player couldn't tell. [code]
+
+Original code: all of the above was read from the Rev 1 disc's BATTLE.BIN (`rips/clean`),
+and no patch before this one touched the picker, `cast_spell` or the handlers. Chris decided on 2026-10-17 to fix it as Montino and Morlis work: in a
+fixed battle Bacortu seals every group in the chosen row (decisions.md 30).
+
+Fix: spell 14's entry in `spell_handlers` (0x800d838c + 14 × 4, was 0x800c9e2c) points at
+a new 46-word routine at 0x800c31a4, in the dead FUN_800c3188 after the spell-sound fix's
+`spell_sound_stop` (1.15; the rest of that routine is still unreached: no jal, j or
+pointer word into it in BATTLE or MAIN). In a fixed battle, when the party (group 0) or its
+summons (group 7) cast it at a monster row, it calls `spell_group_range` and then the
+original `spell_bacortu` once for each group in the row, stepping `target_group` as
+`spell_madalto` does. Each group gets the caster's full level, and there's still no
+resistance check. Anything else calls the original `spell_bacortu` once, as before: every
+ordinary battle, a monster's cast at the party (target 0) or the summons (7), and a cast
+Banoka turned back on its caster's own group. The caster test is the one check Madalto's
+handler doesn't have: a monster's bounced spell targets its own group (`cast_spell` sets
+`target_group` = `actor_group`), a real group number and not a row. `spell_bacortu` itself
+is unchanged. 47 words, BATTLE.BIN only. `asm/bugfix_bacortu_rows.asm`.
+
+Checked on the built disc (md5 bc88211da46e184d081a84fea0a29315, against the suite's
+8f785cdedcc9a62637738ba1f483bd73), with no RAM written. Fresh fight-start states were made
+on the new disc (`scripts/re/bacortu/mkfights.py`: chapter 17's goal run from c17v2b's
+goal_02_area_e, seed 2, saving each fight's start; each fight loads BATTLE.BIN from the
+disc in, and BATTLE's code in RAM matched the new build word for word, the new table entry
+and routine included). Eve (Bishop, level 17) casts Bacortu on round 1 and everyone else
+parries (`scripts/re/bacortu/verify.py`); sealing levels are read at the next command
+phase, after a round's decay of 1-3:
+- Type-2 party (front row Man in Armor 382, Ogre 437, Ogre Daimyo 467; back row two Ogre
+  Sorcerers 452). Aimed at the back row: groups 4 and 5 sealed (16 and 15), the front row
+  untouched, and "Ogre Sorcerer casts Cortu." was followed by "But spells are sealed." the
+  same round. Aimed at the front row: groups 1, 2 and 3 sealed, the back row untouched.
+  Seeds 1 and 3-8 aimed at the back row: in the six where Eve lived to cast (seed 1 had
+  her killed first), groups 4 and 5 were sealed every time (14-16).
+- The same fight on the suite's disc, from ch17's t2s2_01 (old code in RAM), aimed at the
+  back row: group 2 (the Ogre) sealed, as in the report.
+- Ordinary battles (0x80079bde = 0): four groups (Wooden Puppets, Blaze, Venom, Strange
+  Figures), aimed at group 2 and then group 4; three groups (two of Vampires, then one),
+  aimed at group 3 and then group 1. Each time only the group aimed at was sealed. In the
+  four-group fight the Strange Figures advanced at the round's end and the groups were
+  renumbered, and the seal moved with its monster (Blaze, sealed as group 2, was group 3
+  after).
 
 ## Group 2: looks cut, or the intent isn't clear
 

@@ -7,25 +7,22 @@ other work unless it says **blocks**.
 
 ## Game code
 
-Nothing open.
+1. **A monster's Banoka-bounced row spell hits a whole row** (found 2026-10-17 with the
+   Bacortu fix, bugs.md 1.16; engine-notes "Bacortu in fixed battles"). When Banoka
+   bounces a monster's Madalto, Montino, Morlis or another row spell back at it, the
+   target is the monster's own group number. In a fixed battle `spell_group_range` reads
+   that number as a row, so group 1 hits the whole front row and any other group the
+   whole back row. Rare: it needs the party's Banoka, a fixed battle and a monster row
+   spell. Documented for later (Chris, 2026-10-17); options are to fix it (pass the
+   group through unchanged when the caster is a monster) or leave it. Not started.
 
 ## Text
 
-6. **Balbo's maze-encounter register** (NPC_MES2 142). It has "doin'", "'em" and "ya"
-   where the leaders' stiff register keeps the g's on. Chris rebroke 142 himself, so this
-   may already be settled. Recommendation: confirm it's intended.
+Nothing open.
 
 ## Release
 
-7. **Who asked for the notice?** ROADMAP files `docs/notice.txt` under the original
-   team's requests; a comment in `scripts/mkrelease.py` says "Remisse asked for this on
-   the repo and on every release page", and the notice's content (no LLMs in Remisse's
-   code, Remisse had no role) reads like Remisse's request. Remisse, the original team,
-   or each for different parts?
-8. **v0.8.0 and the harness gate.** ROADMAP still plans v0.8.0 (repo public, tag
-   pushed) as soon as the readme, changelog and title are written. Since 2026-10-12 the
-   harness runs are the gate for going public. Does v0.8.0 wait for the harness to reach
-   the ending, or go out as the beta it is?
+Nothing open.
 
 ## The site (Bartok's Trading Post session)
 

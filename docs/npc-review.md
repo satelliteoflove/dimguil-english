@@ -73,7 +73,9 @@ on it: the characters' relationships to each other shape their lines as much as 
 own voices do. Scene 3 (Balbo's progress reports) was applied the same day: 15 strings,
 the 'Man in armor' copies included. The stiff register turned out to be shared with
 Fontana's maze encounters, so the English keeps Balbo's words but makes him
-businesslike (see "The leaders' maze-encounter voice" in `translation-notes.md`).
+businesslike (see "The leaders' maze-encounter voice" in `translation-notes.md`; settled
+2026-10-17: the shift is a production seam shared by all three leaders, and each keeps
+their own voice, a little more formal in business).
 Chris's edits: 87 keeps "seems off" and is split over three pages, and 142 is rebroken.
 Scene 4 (goodbyes when one of yours is dead) was applied the same night: Alba's 37 is
 now a plea, Gaura's 43 a hope, and Artemisia's 44 is "I hope we can see each other
