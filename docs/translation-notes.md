@@ -275,6 +275,23 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   clipped ("Sorry, but this is a strategy meeting. Don't interrupt."). 2:264-265 also
   lost a sneer the old English had added ("beyond the likes of you"); the Japanese is a
   warning.
+  **Settled 2026-10-17 (Chris): each character keeps their own voice, a little more
+  formal when doing business.** A wider check found all three leaders, Guy included,
+  drop into the same stiff register in the same two kinds of line, and only there: the
+  story progress reports at puzzle spots, and the talk menu's shared service offers
+  (rescue, refusal, item sale), which are one template across the three parties (Guy
+  1:163, Balbo 2:142 and Fontana 3:151 open with nearly the same sentence; so do the
+  sale offers 1:167, 2:146, 3:155). Fontana, a shy 13-year-old (僕, です), talks like
+  an adult man at 3:278 (知らないか? …悩んでいるんだ), and the seams show inside single
+  lines (2:263 has 俺達 and then 君たち…たまえ; 2:142 opens with 我々 and is back to 俺達
+  and からな by 144-145). No in-story reason covers that, so it reads as a production
+  seam (generic party-leader text, flavored per character unevenly), not
+  characterization, and carrying it into English would only reproduce the seam.
+  So: Balbo stays Balbo, Fontana stays Fontana, Guy stays Guy. Business lines can tighten
+  up (fuller sentences, fewer tics) but don't switch to a different person's register.
+  Balbo's body-collection offer (2:142-145) stands as Chris left it on 2026-10-10.
+  Don't reopen this per line; a new case only needs checking that the speaker still
+  sounds like themselves.
 - **Artemisia's "see each other again" (2:44 and 3:25).** また会いましょうね is an
   ordinary friendly parting, and her next line is "Oh gosh, what am I even saying?"
   The Japanese joke is that she hears her own warmth as too forward. "Let's meet

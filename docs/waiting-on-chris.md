@@ -13,10 +13,8 @@ Nothing open.
 
 5. **"Picking the lock..." runs into the game's dots** (SISETU 526), and **"{name} can't
    act." sits off center** (SISETU 525, x computed for the Japanese). Both are small
-   code or text fixes. Recommendation: fix both.
-6. **Balbo's maze-encounter register** (NPC_MES2 142). It has "doin'", "'em" and "ya"
-   where the leaders' stiff register keeps the g's on. Chris rebroke 142 himself, so this
-   may already be settled. Recommendation: confirm it's intended.
+   code or text fixes. **Decided 2026-10-17:** both lose their own dots (9337727), and
+   the x formula for 525 gets patched; in progress, comes off once verified and merged.
 
 ## Release
 
