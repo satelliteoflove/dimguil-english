@@ -4,7 +4,6 @@
 # Expects rips/clean/dimguil (+ rips/clean/dimguil.xml, with forced LBAs) from:
 #   dumpsxiso -l -x rips/clean/dimguil -s rips/clean/dimguil.xml "<Rev 1>.cue"
 # Needs: Python 3 with Pillow, armips and mkpsxiso on PATH (or ARMIPS / MKPSXISO set).
-# ENCODER=kotlin runs Remisse's original jar instead of scripts/texttool.py (needs a JRE 21+).
 #
 # Steps:
 #   1. dump the JP script from the clean files into rips/stage/out/dumps
@@ -23,14 +22,8 @@ ARMIPS=${ARMIPS:-armips}
 MKPSXISO=${MKPSXISO:-mkpsxiso}
 
 [ -d rips/clean/dimguil ] || { echo "missing rips/clean/dimguil (see header)"; exit 1; }
-# The text tool: dump and encode-all, run from rips/stage.
-if [ "${ENCODER:-python}" = kotlin ]; then
-  JAR=build/libs/dimguil-english-1.0-SNAPSHOT.jar
-  [ -f "$JAR" ] || ./gradlew -q jar
-  texttool() { java -jar "$ROOT/$JAR" "$@"; }
-else
-  texttool() { python3 "$ROOT/scripts/texttool.py" "$@"; }
-fi
+# The text tool (dump, encode-all) runs from rips/stage.
+texttool() { python3 "$ROOT/scripts/texttool.py" "$@"; }
 
 # fresh staging + dirty trees
 rm -rf "$ROOT/rips/stage" "$ROOT/rips/dirty" "$ROOT/rips/iso"

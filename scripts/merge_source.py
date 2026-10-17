@@ -7,7 +7,7 @@ import json, re, sys
 
 
 def load(path):
-    """json.load that tolerates // and /* */ comments (the Kotlin side allows them)."""
+    """json.load that tolerates // and /* */ comments (texttool.py allows them too)."""
     src = open(path, encoding='utf-8').read()
     tok = re.compile(r'"(?:\\.|[^"\\])*"|//[^\n]*|/\*.*?\*/', re.S)
     return json.loads(tok.sub(lambda m: m.group(0) if m.group(0)[0] == '"' else '', src))

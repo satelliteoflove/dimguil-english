@@ -1,6 +1,6 @@
 # Building the patched image
 
-You need Linux (or something close to it), a JRE 21+, Python 3 with Pillow,
+You need Linux (or something close to it), Python 3 with Pillow,
 [armips](https://github.com/Kingcom/armips) and
 [mkpsxiso](https://github.com/Lameguy64/mkpsxiso) (which includes dumpsxiso). The
 last two are easiest built from source.
@@ -114,8 +114,9 @@ The tools:
   patches to non-text data (NPC party names).
 - `asm/` has the armips patches: Remisse's VWF hacks in `vwf.asm`, and the rest built
   on top of them.
-- `src/` is Remisse's Kotlin dumper and encoder. `sections.json` tells it where the
-  text sits in each file, and `tables/` has the character tables.
+- `scripts/texttool.py` is the dumper and encoder, a Python port of Remisse's Kotlin
+  tool. `sections.json` tells it where the text sits in each file, and `tables/` has the
+  character tables.
 - `graphics/` has the edited font sheet and the item catalog's panel background.
 - `scripts/` has the build, a headless emulator harness built on the Beetle PSX
   libretro core (`emu.py`), and the checkers and viewers used while translating.

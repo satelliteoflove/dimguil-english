@@ -19,12 +19,9 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/**'
-      - 'build.gradle.kts'
-      - 'settings.gradle.kts'
-      - 'gradle/**'
-      - 'src/**'
       - 'scripts/build.sh'
       - 'scripts/merge_source.py'
+      - 'scripts/texttool.py'
       - 'scripts/tim.py'
       - 'scripts/relocate.py'
       - 'scripts/mkrelease.py'
@@ -45,11 +42,6 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
-
-      - uses: actions/setup-java@v6
-        with:
-          distribution: temurin
-          java-version: '21'
 
       - name: Packages
         run: sudo apt-get update && sudo apt-get install -y xdelta3 python3-pil
