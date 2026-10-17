@@ -231,23 +231,44 @@ def disc_fix_words():
     return got if got == DSPACKET_WORDS else None
 
 
+# MAIN code a state made before the VWF move (2026-10-17, asm/vwf_lut.inc) doesn't hold:
+# the table and wrappers at their new home, and catalog_vwf.asm's `la VWF_LUT` words. The
+# overlays a state loads afterwards jump to the new home, so every state case needs these.
+# Code only: the old home (0x80060e97) is libds's play state now and is left alone.
+MAIN_CODE = [(0x800159b8, 0x80015b04), (0x80073c34, 0x80073c3c), (0x80073cc4, 0x80073cd0)]
+
+
+def disc_main_code():
+    """[(address, bytes)] for MAIN_CODE as the disc under test's SLPS holds it, or []."""
+    import struct
+    try:
+        d = open(SLPS, 'rb').read()
+    except OSError:
+        return []
+    t_addr = struct.unpack_from('<I', d, 0x18)[0]
+    return [(a, d[a - t_addr + 0x800:b - t_addr + 0x800]) for a, b in MAIN_CODE]
+
+
 def overlay_main():
-    """From now on in this (case) process, every Game.load lays the disc's fix words over
-    MAIN. Returns True if the disc holds them."""
+    """From now on in this (case) process, every Game.load lays the disc's fix words and
+    MAIN_CODE over MAIN. Returns True if the disc holds the fix words."""
     import struct
     from harness import game
     words = disc_fix_words()
-    if not words or getattr(game.Game, '_overlaid', False):
+    code = disc_main_code()
+    if getattr(game.Game, '_overlaid', False):
         return bool(words)
     load = game.Game.load
 
     def load_fixed(self, name):
         load(self, name)
-        for a, w in sorted(words.items()):
+        for a, w in sorted((words or {}).items()):
             self.e.write(a, struct.pack('<I', w))
+        for a, b in code:
+            self.e.write(a, b)
     game.Game.load = load_fixed
     game.Game._overlaid = True
-    return True
+    return bool(words)
 
 
 def run_cdrace(case):
