@@ -265,11 +265,43 @@ def bench_rows(path):
     return ROWS[path][1]
 
 
+def chain(r):
+    """The fights of a chain row (a bench that plays several fights in a row, like the
+    golem route), or None for an ordinary one-fight row."""
+    f = r.get('fights')
+    return [x for x in f if isinstance(x, dict)] if isinstance(f, list) else None
+
+
 def dead(r):
+    c = chain(r)
+    if c is not None:
+        return sum(dead(x) for x in c)
     return max(r.get('dead') or 0, len(r.get('deaths') or []))
 
 
+def death_text(d):
+    """A bench death record as one line: (who, what, by) from fightbench, or anything
+    else a bench writes (longer tuples, dicts), so a new shape can't crash the view."""
+    if isinstance(d, dict):
+        who = d.get('who') or d.get('name') or '?'
+        what = d.get('what') or d.get('how') or d.get('fell') or ''
+        by_ = d.get('by')
+        rest = {k: v for k, v in d.items() if k not in ('who', 'name', 'what', 'how', 'fell', 'by')}
+        return f"{who}: {what}" + (f" from {by_}" if by_ else '') + (f"  {rest}" if rest else '')
+    if isinstance(d, (list, tuple)):
+        if len(d) >= 3:
+            extra = ', '.join(map(str, d[3:]))
+            return f"{d[0]}: {d[1]} from {d[2]}" + (f"  ({extra})" if extra else '')
+        return ': '.join(map(str, d))
+    return str(d)
+
+
 def outcome(r):
+    c = chain(r)
+    if c is not None:       # won only if every fight in the chain was won and it ended clean
+        if c and all(x.get('won') for x in c) and not r.get('error') and r.get('ring', True) is not False:
+            return 'won'
+        return 'wiped' if any(x.get('wiped') for x in c) else 'lost'
     if r.get('won'):
         return 'won'
     if r.get('wiped'):
@@ -284,7 +316,7 @@ def tally(rows):
     for r in rows:
         out[outcome(r)] += 1
         out['dead'] += dead(r)
-        out['rounds'] += r.get('rounds') or 0
+        out['rounds'] += r.get('rounds') or sum(x.get('rounds') or 0 for x in chain(r) or [])
         out['hp'] += r.get('hp_lost') or 0
     return out
 
@@ -795,11 +827,25 @@ class Monitor:
             r = rows[self.fight_sel]
             o = outcome(r)
             out.append(Text(f"fight {self.fight_sel + 1}: {r.get('state')} seed {r.get('seed')}   {o}   "
-                            f"rounds {r.get('rounds')}   policy {r.get('policy') or '-'}   "
+                            f"rounds {r.get('rounds') or sum(x.get('rounds') or 0 for x in chain(r) or []) or '-'}   policy {r.get('policy') or '-'}   "
                             f"spell levels spent {r.get('spent_lv') or '-'}", style='bold ' + color[o]))
             lines = []
-            for who, what, by_ in r.get('deaths') or []:
-                lines.append((f'  died      {who}: {what} from {by_}', 'red'))
+            for k, x in enumerate(chain(r) or [], 1):
+                xo = 'won' if x.get('won') else 'wiped' if x.get('wiped') else 'lost'
+                lines.append((f"  fight {k}   enc {x.get('enc')} at {x.get('where')}   {xo}   rounds "
+                              f"{x.get('rounds')}   deaths {dead(x)}   spell levels {x.get('spent_lv') or '-'}",
+                              color[xo]))
+                for d in x.get('deaths') or []:
+                    lines.append((f'    died    {death_text(d)}', 'red'))
+                if x.get('drained'):
+                    lines.append(('    drained ' + ', '.join(map(str, x['drained'])), 'red'))
+                if x.get('casts'):
+                    lines.append(('    casts   ' + ', '.join(f'{c[0]} {c[1]}' if isinstance(c, (list, tuple))
+                                                           and len(c) > 1 else str(c) for c in x['casts']), 'cyan'))
+            if chain(r) is not None and r.get('error'):
+                lines.append((f"  error     {r['error']}", 'red'))
+            for d in r.get('deaths') or []:
+                lines.append((f'  died      {death_text(d)}', 'red'))
             for run in r.get('runs') or []:
                 lines.append((f"  ran       round {run[0]}, {run[1]}% chance, {run[2] if len(run) > 2 else ''}",
                               'yellow'))

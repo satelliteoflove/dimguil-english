@@ -994,6 +994,12 @@ Question for Chris: fixing it (load the class into $s3) gives every Ninja 11% mo
 beheading and every Monk 11% more knock-out, armed or not. Fix it, or keep the odds as
 the game plays? Found 2026-10-17 (docs/re/ninja.md).
 
+**Decided (Chris, 2026-10-17): fix it, and disclose it clearly at release as a balance
+change** (decisions.md 31). `asm/bugfix_class_hit_effect.asm` reads the class from the
+character's work copy, as the same function does at 0x800a1a1c. A bare-handed Ninja's
+beheading goes from 20% to 31% a hand; armed, the gear's chances plus 11. The same for
+a Monk's knock-out.
+
 A related oddity, harmless as far as seen: for a monster target, the resistance bytes for
 effects it isn't immune to are never set; they read 0 in all 16 checks. [code] [emu]
 

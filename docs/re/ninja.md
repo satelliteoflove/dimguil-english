@@ -17,6 +17,9 @@ $s3 probe used button presses only.
 - **Bare-handed Ninja: 20% decapitation, flat.** Level doesn't scale it. With weapons the
   20% goes away and only the gear's chances count.
 - **The class's own 11% is dead code** (a register bug, below). The Monk's 11% knock-out too.
+  **Fixed in the patch (Chris, 2026-10-17; bugs.md 3.5, asm/bugfix_class_hit_effect.asm),
+  a disclosed balance change:** the odds below are the original game's; with the fix a
+  bare-handed Ninja's beheading is 31% a hand and an armed one's the gear's chances + 11.
 - **Ninja is Evil-only at creation and class change, but a Thief who uses the THIEVES
   DAGGER becomes a Ninja and keeps his alignment**, so a Neutral Ninja is possible. [code]
 - **Good and Evil can't share a party; Neutral mixes with either.** [code]
