@@ -1,7 +1,7 @@
 # Decisions from the code analysis
 
 These are the open questions that came out of the code analysis (2026-10-11), each with a
-recommendation. The evidence for each is in the doc named beside it. All sixteen clear
+recommendation. The evidence for each is in the doc named beside it. All seventeen clear
 bugs are fixed (`bugs.md`, group 1), and every item below has been decided.
 
 ## Content that looks cut
@@ -259,3 +259,13 @@ stops the previous sound before each of battle's three loads into those buffers,
 BATTLE.BIN only.
 **Decided (Chris, 2026-10-13): fix it** ("go ahead and implement the spell-sound fix").
 `asm/bugfix_spell_sound_reload.asm`.
+
+## From the harness runs (2026-10-17)
+
+**30. The party's Bacortu in a fixed battle seals the wrong group** (`bugs.md` 1.16). In
+story fights and the type-2 roaming parties, a group spell's pick stores a row (1 front,
+2 back), and `spell_bacortu` used it as a group number without `spell_group_range`, so the
+cast sealed group 1 or group 2 whatever was aimed at. Original code. The options were
+fixing it (seal every group in the chosen row, as Montino and Morlis do) or leaving it.
+**Decided (Chris, 2026-10-17): fix it.** `asm/bugfix_bacortu_rows.asm`: in a fixed
+battle the party's Bacortu seals each group in the row; ordinary battles are unchanged.

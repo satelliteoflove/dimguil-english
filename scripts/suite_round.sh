@@ -26,7 +26,7 @@ if [ "$MD5" != "$OLD" ]; then
   if [ ! -e "$D/$PREV" ]; then
     mkdir -p "$D/$PREV/dimguil"
     cp "$D/dimguil-en.bin" "$D/dimguil-en.cue" "$D/BUILD.txt" "$D/$PREV/"
-    cp "$D"/dimguil/* "$D/$PREV/dimguil/"
+    cp -r "$D"/dimguil/. "$D/$PREV/dimguil/"
   fi
   cp "$BUILD/dimguil-en.bin" "$D/dimguil-en.bin.tmp" && mv "$D/dimguil-en.bin.tmp" "$D/dimguil-en.bin"
   cp "$BUILD/dimguil-en.cue" "$D/dimguil-en.cue"
