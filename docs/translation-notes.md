@@ -107,6 +107,10 @@ The preferred fix is a close-to-literal reading, fitted to the box.
 
 ### Deliberate choices
 
+- **"Picking the lock" and "Searching" carry no dots of their own (SISETU 526, 441;
+  Chris, 2026-10-17).** The game animates a row of dots after each, spaced for the
+  Japanese (鍵開け挑戦中, 調査中, no dots), so ours doubled up and the first animated dots
+  landed on "lock..." (docs/re/lock-test.md problem 3). The animation supplies them now.
 - **Ghost Swarm's trap message names HP (FIGHTMSG 254; Chris, 2026-10-17).** 体力が激減した
   is HP dropping sharply; the trap leaves every standing member with 2 to 10 HP and
   touches no stat (docs/re/lock-test.md). "{name}'s strength drains away." read as the
