@@ -1,0 +1,356 @@
+EVENTMES.BIN.json 0:0
+  JP: '目の前には,巨大な壁画が描かれている。\n何を意味しているのであろうか?\n中央に描かれているのは,何であろうか?{ff26}\rおや?右下には見知らぬ古代文字が刻まれていた。\n \n]{ff30}4{ff35}D{ff35}I{ff35}M{ff35}G{ff35}U{ff35}I{ff35}L{ff30}0['
+  EN: 'A huge mural covers the wall before you.\nWhat could it mean? And what is that\npainted in the middle?{ff26}\rOh? Unfamiliar ancient letters are carved\nin the lower right:\n]{ff30}4{ancient_d}{ancient_i}{ancient_m}{ancient_g}{ancient_u}{ancient_i}{ancient_l}{ff30}0['
+
+EVENTMES.BIN.json 0:11
+  JP: '神殿の前には堅く閉ざされた扉があり,\n太陽の紋章が描かれている。{ff26}\r紋章には見知らぬ古代文字が刻まれていた。\n]{ff30}5{ff35}S{ff35}U{ff35}N{ff30}0[\nそして,扉の中央には四角い穴が開いている。{ff26}'
+  EN: 'Before the Shrine stands a sealed door\nbearing the crest of the sun.{ff26}\rUnfamiliar ancient letters are carved into the crest:\n]{ff30}5{ancient_s}{ancient_u}{ancient_n}{ff30}0[\nIn the middle of the door is a square hole.{ff26}'
+
+EVENTMES.BIN.json 0:18
+  JP: '扉の看板に見知らぬ古代文字が刻まれていた。\n \n]{ff30}5{ff35}S{ff35}T{ff35}A{ff35}R{ff30}0['
+  EN: 'Unfamiliar ancient letters are carved on\nthe plaque on the door:\n]{ff30}5{ancient_s}{ancient_t}{ancient_a}{ancient_r}{ff30}0['
+
+EVENTMES.BIN.json 0:22
+  JP: '壁画には,船に乗り神殿に向かう人々が\n描かれている。{ff26}\r右下には見知らぬ古代文字が刻まれていた。\n \n]{ff30}5{ff35}S{ff35}H{ff35}I{ff35}P{ff30}0['
+  EN: 'The mural shows people aboard a ship,\nsailing toward the Shrine.{ff26}\rUnfamiliar ancient letters are carved in\nthe lower right:\n]{ff30}5{ancient_s}{ancient_h}{ancient_i}{ancient_p}{ff30}0['
+
+EVENTMES.BIN.json 0:23
+  JP: '目の前には巨大な壁画が描かれている。\n巨大な人物が,まるで死神のように描かれている。{ff26}\r右下には見知らぬ古代文字が刻まれていた。\n \n]{ff30}5{ff35}D{ff35}E{ff35}A{ff35}T{ff35}H{ff30}0['
+  EN: 'A huge mural covers the wall before you.\nA giant figure is drawn like Death itself.{ff26}\rUnfamiliar ancient letters are carved in\nthe lower right:\n]{ff30}5{ancient_d}{ancient_e}{ancient_a}{ancient_t}{ancient_h}{ff30}0['
+
+EVENTMES.BIN.json 0:35
+  JP: '祭壇の上には四角いモノリスが立っていた。\nこれが巫女に関係する物であろうか?{ff26}\rふと下の方に目をやると,床には血文字で\n「{ff30}1さわるな!{ff30}0」\nと書かれていた。忠告を無視して触りますか?'
+  EN: 'A square monolith stands on the altar.\nCould this be something connected to the Priestess?{ff26}\rGlancing down, you see\n"{ff30}1DON\'T TOUCH!{ff30}0" written in blood on the floor.\nWill you ignore the warning and touch it?'
+
+EVENTMES.BIN.json 0:56
+  JP: '扉には見知らぬ古代文字が刻まれていた。\n \n]{ff30}5{ff35}E{ff35}N{ff35}T{ff35}E{ff35}R{ff30}0['
+  EN: 'Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_e}{ancient_n}{ancient_t}{ancient_e}{ancient_r}{ff30}0['
+
+EVENTMES.BIN.json 0:57
+  JP: '扉には見知らぬ古代文字が刻まれていた。\n \n]{ff30}5{ff35}E{ff35}X{ff35}I{ff35}T{ff30}0['
+  EN: 'Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_e}{ancient_x}{ancient_i}{ancient_t}{ff30}0['
+
+EVENTMES.BIN.json 0:58
+  JP: '扉には見知らぬ古代文字が刻まれていた。\n \n]{ff30}5{ff35}C{ff35}O{ff35}M{ff35}P{ff35}U{ff35}T{ff35}E{ff35}R{ff30}0['
+  EN: 'Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_c}{ancient_o}{ancient_m}{ancient_p}{ancient_u}{ancient_t}{ancient_e}{ancient_r}{ff30}0['
+
+EVENTMES.BIN.json 0:59
+  JP: ' \n祭壇の上には奇妙な彫像が立っていた。{ff26}\rふと下方に目をやると,床には血文字で\n「{ff30}1さわるな!{ff30}0」\nと書かれていた。忠告を無視してさわりますか?'
+  EN: ' \nA strange statue stands on the altar.{ff26}\rGlancing down, you see\n"{ff30}1DON\'T TOUCH!{ff30}0" written in blood on the floor.\nWill you ignore the warning and touch it?'
+
+EVENTMES.BIN.json 0:73
+  JP: '墓標には文字が刻まれていた。\n「{ff30}6歴戦の勇者ここに眠る。{ff18}{ff30}0」'
+  EN: 'Words are carved on the grave marker:\n"{ff30}6Here lies {ff18}, a hero of many battles.{ff30}0"'
+
+EVENTMES.BIN.json 0:74
+  JP: ' \n壁画には支配者が描かれている。{ff26}\r右下には見知らぬ古代文字が刻まれている。\n \n]{ff30}5{ff35}K{ff35}I{ff35}N{ff35}G{ff30}0['
+  EN: ' \nThe mural shows a ruler.{ff26}\rUnfamiliar ancient letters are carved in\nthe lower right:\n]{ff30}5{ancient_k}{ancient_i}{ancient_n}{ancient_g}{ff30}0['
+
+EVENTMES.BIN.json 0:76
+  JP: '扉には見知らぬ古代文字が刻まれていた。\n \n]{ff30}5{ff35}L{ff35}I{ff35}B{ff35}R{ff35}A{ff35}R{ff35}Y{ff30}0['
+  EN: 'Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_l}{ancient_i}{ancient_b}{ancient_r}{ancient_a}{ancient_r}{ancient_y}{ff30}0['
+
+EVENTMES.BIN.json 0:79
+  JP: '扉には見知らぬ古代文字が刻まれていた。\n \n]{ff30}5{ff35}F{ff35}R{ff35}E{ff35}E{ff35}Z{ff35}E{ff35}R{ff30}0['
+  EN: 'Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_f}{ancient_r}{ancient_e}{ancient_e}{ancient_z}{ancient_e}{ancient_r}{ff30}0['
+
+EVENTMES.BIN.json 0:80
+  JP: '月の紋章の描かれた扉だ。\n扉の中央には四角い穴が開いている。{ff26}\r紋章には見知らぬ古代文字が刻まれていた。\n \n]{ff30}5{ff35}M{ff35}O{ff35}O{ff35}N{ff30}0[{ff26}\r持っていた「太陽の石板」を当てはめてみると,\n \n・・・・・・扉は静かに開き始めた。'
+  EN: 'This door bears the crest of the moon.\nIn the middle of the door is a square hole.{ff26}\rUnfamiliar ancient letters are carved into\nthe crest:\n]{ff30}5{ancient_m}{ancient_o}{ancient_o}{ancient_n}{ff30}0[{ff26}\rYou fit the TABLET OF THE SUN into the hole,\n \n......and the door slowly begins to open.'
+
+EVENTMES.BIN.json 0:81
+  JP: '月の紋章の描かれた扉だ。\n扉の中央には四角い穴が開いている。{ff26} \n紋章には見知らぬ古代文字が刻まれていた。\n]{ff30}5{ff35}M{ff35}O{ff35}O{ff35}N{ff30}0[{ff26}\r何か必要なのであろうか?\n色々試してみたが,この扉はびくともしなかった。'
+  EN: "This door bears the crest of the moon.\nIn the middle of the door is a square hole.{ff26}\nUnfamiliar ancient letters are carved into the crest:\n]{ff30}5{ancient_m}{ancient_o}{ancient_o}{ancient_n}{ff30}0[{ff26}\rCould something be needed? You try everything\nyou can think of, but the door won't budge."
+
+EVENTMES.BIN.json 0:86
+  JP: '扉には見知らぬ古代文字が刻まれていた。\n \n]{ff30}5{ff35}C{ff35}O{ff35}R{ff35}E{ff30}0['
+  EN: 'Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_c}{ancient_o}{ancient_r}{ancient_e}{ff30}0['
+
+EVENTMES.BIN.json 0:92
+  JP: '扉には見知らぬ古代文字が刻まれていた。\n \n]{ff30}5{ff35}F{ff35}E{ff35}M{ff35}A{ff35}L{ff35}E{ff30}0['
+  EN: 'Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_f}{ancient_e}{ancient_m}{ancient_a}{ancient_l}{ancient_e}{ff30}0['
+
+EVENTMES.BIN.json 0:93
+  JP: '扉には見知らぬ古代文字が刻まれていた。\n \n]{ff30}5{ff35}M{ff35}A{ff35}L{ff35}E{ff30}0['
+  EN: 'Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_m}{ancient_a}{ancient_l}{ancient_e}{ff30}0['
+
+EVENTMES.BIN.json 0:107
+  JP: '壁画に多くの管を巻きつけた者が描かれている。\n何かの実験している様子であろうか?{ff26}\r右隅に見知らぬ古代文字が刻まれていた。\n \n]{ff30}4{ff35}L{ff35}A{ff35}B{ff35}O{ff35}R{ff35}A{ff35}T{ff35}O{ff35}R{ff35}Y{ff30}0['
+  EN: 'The mural shows someone wrapped in many tubes.\nIs it some sort of experiment?{ff26}\rUnfamiliar ancient letters are carved in\nthe right corner:\n]{ff30}4{ancient_l}{ancient_a}{ancient_b}{ancient_o}{ancient_r}{ancient_a}{ancient_t}{ancient_o}{ancient_r}{ancient_y}{ff30}0['
+
+EVENTMES.BIN.json 0:109
+  JP: '思いつくままに文字を入力してみた。{ff26}'
+  EN: 'You type in whatever comes to mind.{ff26}'
+
+EVENTMES.BIN.json 0:127
+  JP: '壁には見知らぬ古代文字が刻まれていた。\n \n]{ff30}5{ff35}C{ff35}O{ff35}L{ff35}D{ff35}S{ff35}L{ff35}E{ff35}E{ff35}P{ff30}0['
+  EN: 'Unfamiliar ancient letters are carved on\nthe wall:\n]{ff30}5{ancient_c}{ancient_o}{ancient_l}{ancient_d}{ancient_s}{ancient_l}{ancient_e}{ancient_e}{ancient_p}{ff30}0['
+
+EVENTMES.BIN.json 0:130
+  JP: '扉には最近書かれた文字が刻まれている。\n「この先危険,完全装備を忘れるな。」'
+  EN: 'Words have recently been carved on the door:\n"Danger ahead. Don\'t forget full protective gear!"'
+
+EVENTMES.BIN.json 0:131
+  JP: '扉には見知らぬ古代文字が刻まれていた。\n \n]{ff30}5{ff35}T{ff35}R{ff35}A{ff35}N{ff35}S{ff35}P{ff35}O{ff35}R{ff35}T{ff35}E{ff35}R{ff30}0['
+  EN: 'Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_t}{ancient_r}{ancient_a}{ancient_n}{ancient_s}{ancient_p}{ancient_o}{ancient_r}{ancient_t}{ancient_e}{ancient_r}{ff30}0['
+
+EVENTMES.BIN.json 0:132
+  JP: '壁画には人々が描かれている。\nそして,見知らぬ古代文字が刻まれていた。\n]{ff30}5{ff35}P{ff35}E{ff35}O{ff35}P{ff35}L{ff35}E{ff30}0['
+  EN: 'The mural shows people, and unfamiliar\nancient letters are carved on it:\n]{ff30}5{ancient_p}{ancient_e}{ancient_o}{ancient_p}{ancient_l}{ancient_e}{ff30}0['
+
+EVENTMES.BIN.json 0:136
+  JP: '不思議なことに台座の中の文字が光り出した。\n]{ff30}4{ff35}A{ff30}0[\n何か大事な物に反応したらしい。'
+  EN: 'Strangely, a letter on the pedestal lights up:\n]{ff30}4{ancient_a}{ff30}0[\nIt seems to have responded to something important.'
+
+EVENTMES.BIN.json 0:137
+  JP: '不思議なことに台座の中の文字が光り出した。\n]{ff30}4{ff35}B{ff30}0[\n何か大事な物に反応したらしい。'
+  EN: 'Strangely, a letter on the pedestal lights up:\n]{ff30}4{ancient_b}{ff30}0[\nIt seems to have responded to something important.'
+
+EVENTMES.BIN.json 0:138
+  JP: '不思議なことに台座の中の文字が光り出した。\n]{ff30}4{ff35}C{ff30}0[\n何か大事な物に反応したらしい。'
+  EN: 'Strangely, a letter on the pedestal lights up:\n]{ff30}4{ancient_c}{ff30}0[\nIt seems to have responded to something important.'
+
+EVENTMES.BIN.json 0:139
+  JP: '不思議なことに台座の中の文字が光り出した。\n]{ff30}4{ff35}D{ff30}0[\n何か大事な物に反応したらしい。'
+  EN: 'Strangely, a letter on the pedestal lights up:\n]{ff30}4{ancient_d}{ff30}0[\nIt seems to have responded to something important.'
+
+EVENTMES.BIN.json 0:140
+  JP: '不思議なことに台座の中の文字が光り出した。\n]{ff30}4{ff35}E{ff30}0[\n何か大事な物に反応したらしい。'
+  EN: 'Strangely, a letter on the pedestal lights up:\n]{ff30}4{ancient_e}{ff30}0[\nIt seems to have responded to something important.'
+
+EVENTMES.BIN.json 0:141
+  JP: ' 扉には見知らぬ古代文字が刻まれていた。\n]{ff30}4{ff35}A{ff30}0[{ff26}'
+  EN: 'Unfamiliar ancient letters are carved on\nthe door: ]{ff30}4{ancient_a}{ff30}0[{ff26}'
+
+EVENTMES.BIN.json 0:142
+  JP: ' 扉には見知らぬ古代文字が刻まれていた。\n]{ff30}4{ff35}B{ff30}0[{ff26}'
+  EN: 'Unfamiliar ancient letters are carved on\nthe door: ]{ff30}4{ancient_b}{ff30}0[{ff26}'
+
+EVENTMES.BIN.json 0:143
+  JP: ' 扉には見知らぬ古代文字が刻まれていた。\n]{ff30}4{ff35}C{ff30}0[{ff26}'
+  EN: 'Unfamiliar ancient letters are carved on\nthe door: ]{ff30}4{ancient_c}{ff30}0[{ff26}'
+
+EVENTMES.BIN.json 0:144
+  JP: ' 扉には見知らぬ古代文字が刻まれていた。\n]{ff30}4{ff35}D{ff30}0[{ff26}'
+  EN: 'Unfamiliar ancient letters are carved on\nthe door: ]{ff30}4{ancient_d}{ff30}0[{ff26}'
+
+EVENTMES.BIN.json 0:145
+  JP: ' 扉には見知らぬ古代文字が刻まれていた。\n]{ff30}4{ff35}E{ff30}0[{ff26}'
+  EN: 'Unfamiliar ancient letters are carved on\nthe door: ]{ff30}4{ancient_e}{ff30}0[{ff26}'
+
+EVENTMES.BIN.json 0:146
+  JP: ' 扉には見知らぬ古代文字が刻まれていた。\n]{ff30}5{ff35}A{ff30}0[{ff26}'
+  EN: 'Unfamiliar ancient letters are carved on\nthe door: ]{ff30}5{ancient_a}{ff30}0[{ff26}'
+
+EVENTMES.BIN.json 0:147
+  JP: ' 扉には見知らぬ古代文字が刻まれていた。\n]{ff30}5{ff35}B{ff30}0[{ff26}'
+  EN: 'Unfamiliar ancient letters are carved on\nthe door: ]{ff30}5{ancient_b}{ff30}0[{ff26}'
+
+EVENTMES.BIN.json 0:148
+  JP: ' 扉には見知らぬ古代文字が刻まれていた。\n]{ff30}5{ff35}C{ff30}0[{ff26}'
+  EN: 'Unfamiliar ancient letters are carved on\nthe door: ]{ff30}5{ancient_c}{ff30}0[{ff26}'
+
+EVENTMES.BIN.json 0:154
+  JP: '扉には見知らぬ古代文字が刻まれていた。\n \n]{ff30}5{ff35}T{ff35}R{ff35}A{ff35}P{ff30}0['
+  EN: 'Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_t}{ancient_r}{ancient_a}{ancient_p}{ff30}0['
+
+EVENTMES.BIN.json 0:155
+  JP: '壁画には人々が描かれている。\nそして,見知らぬ古代文字が刻まれていた。\n]{ff30}5{ff35}P{ff35}E{ff35}O{ff35}P{ff35}L{ff35}E{ff30}0['
+  EN: 'The mural shows people, and unfamiliar\nancient letters are carved on it:\n]{ff30}5{ancient_p}{ancient_e}{ancient_o}{ancient_p}{ancient_l}{ancient_e}{ff30}0['
+
+EVENTMES.BIN.json 0:156
+  JP: '扉には見知らぬ古代文字が刻まれていた。\n \n]{ff30}4{ff35}L{ff35}A{ff35}B{ff35}O{ff35}R{ff35}A{ff35}T{ff35}O{ff35}R{ff35}Y{ff30}0['
+  EN: 'Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}4{ancient_l}{ancient_a}{ancient_b}{ancient_o}{ancient_r}{ancient_a}{ancient_t}{ancient_o}{ancient_r}{ancient_y}{ff30}0['
+
+EVENTMES.BIN.json 0:157
+  JP: '壁画には人々が描かれている。\nそして,見知らぬ古代文字が刻まれていた。\n]{ff30}5{ff35}P{ff35}E{ff35}O{ff35}P{ff35}L{ff35}E{ff30}0['
+  EN: 'The mural shows people, and unfamiliar\nancient letters are carved on it:\n]{ff30}5{ancient_p}{ancient_e}{ancient_o}{ancient_p}{ancient_l}{ancient_e}{ff30}0['
+
+EVENTMES.BIN.json 0:166
+  JP: '巨大な柱には最近書かれた文字が刻まれている。\n \n「右足用」'
+  EN: "Words have recently been carved on the\nhuge pillar:\n'For the right foot'"
+
+EVENTMES.BIN.json 0:168
+  JP: '巨大な柱には最近書かれた文字が刻まれている。\n \n「左足用」'
+  EN: "Words have recently been carved on the\nhuge pillar:\n'For the left foot'"
+
+EVENTMES.BIN.json 0:170
+  JP: '壁には見知らぬ古代文字が刻まれていた。\n]{ff30}5{ff35}D{ff35}A{ff35}N{ff35}G{ff35}E{ff35}R{ff30}0['
+  EN: 'Unfamiliar ancient letters are carved on\nthe wall:\n]{ff30}5{ancient_d}{ancient_a}{ancient_n}{ancient_g}{ancient_e}{ancient_r}{ff30}0['
+
+EVENTMES.BIN.json 0:171
+  JP: '奇妙な彫像には見知らぬ古代文字が刻まれていた。\n \n]{ff30}5{ff35}S{ff35}H{ff35}U{ff35}T{ff35}T{ff35}L{ff35}E{ff30}0['
+  EN: 'Unfamiliar ancient letters are carved on\nthe strange statue:\n]{ff30}5{ancient_s}{ancient_h}{ancient_u}{ancient_t}{ancient_t}{ancient_l}{ancient_e}{ff30}0['
+
+EVENTMES.BIN.json 0:172
+  JP: '巨大な箱には見知らぬ古代文字が刻まれていた。\n \n]{ff30}5{ff35}C{ff35}O{ff35}N{ff35}T{ff35}A{ff35}I{ff35}N{ff35}E{ff35}R{ff30}0['
+  EN: 'Unfamiliar ancient letters are carved on\na huge box:\n]{ff30}5{ancient_c}{ancient_o}{ancient_n}{ancient_t}{ancient_a}{ancient_i}{ancient_n}{ancient_e}{ancient_r}{ff30}0['
+
+EVENTMES.BIN.json 0:173
+  JP: '床には見知らぬ古代文字が刻まれていた。\n \n]{ff30}5{ff35}T{ff35}R{ff35}A{ff35}S{ff35}H{ff30}0['
+  EN: 'Unfamiliar ancient letters are carved on\nthe floor:\n]{ff30}5{ancient_t}{ancient_r}{ancient_a}{ancient_s}{ancient_h}{ff30}0['
+
+EVENTMES.BIN.json 0:178
+  JP: '石柱の頭部には最近書かれた文字と,\n見知らぬ古代文字が刻まれていた。{ff26}\r]{ff30}4{ff35}W{ff35}A{ff35}R{ff35}E{ff35}H{ff35}O{ff35}U{ff35}S{ff35}E{ff30}0[\n祭壇へ移動せよ'
+  EN: "Words have recently been carved on the pillar's\nhead, along with unfamiliar ancient letters.{ff26}\r]{ff30}4{ancient_w}{ancient_a}{ancient_r}{ancient_e}{ancient_h}{ancient_o}{ancient_u}{ancient_s}{ancient_e}{ff30}0[\nGo to the altar"
+
+EVENTMES.BIN.json 0:179
+  JP: '石柱の頭部には最近書かれた文字と,\n見知らぬ古代文字が刻まれていた。{ff26}\r]{ff30}4{ff35}W{ff35}A{ff35}R{ff35}E{ff35}H{ff35}O{ff35}U{ff35}S{ff35}E{ff30}0[\n祭壇へ移動せよ'
+  EN: "Words have recently been carved on the pillar's\nhead, along with unfamiliar ancient letters.{ff26}\r]{ff30}4{ancient_w}{ancient_a}{ancient_r}{ancient_e}{ancient_h}{ancient_o}{ancient_u}{ancient_s}{ancient_e}{ff30}0[\nGo to the altar"
+
+EVENTMES.BIN.json 0:180
+  JP: '扉には文字が書かれていた。\n「この先,神聖なる祭壇の為,立入り禁止」\n不思議な事に扉の鍵が外れた音がした。'
+  EN: 'Words are written on the door:\n"Holy altar beyond. Keep out."\nStrangely, you hear the lock click open.'
+
+EVENTMES.BIN.json 0:181
+  JP: '扉には文字が書かれていた。\n「この先,神聖なる祭壇の為,立入り禁止」{ff26}\r忠告を無視するつもりはなかったが,\n扉に触れるとロックが外れる音がした。\nそして,扉は静かに開きだした。'
+  EN: 'Words are written on the door:\n"Holy altar beyond. Keep out."{ff26}\rYou don\'t mean to ignore the warning,\nbut at your touch the lock clicks open,\nand the door quietly swings open.'
+
+EVENTMES.BIN.json 0:186
+  JP: '何かの乗り物の残骸であろうか?\n屑鉄なのか,中に入ろうとしても扉が見当たらない。{ff26}\r側面に見知らぬ古代文字が刻まれている。\n]{ff30}5{ff35}S{ff35}H{ff35}U{ff35}T{ff35}T{ff35}L{ff35}E{ff30}0[{ff26}\r機械のチューブの部分に,何やら石像が\nはまっている。抜いてみますか?'
+  EN: "Could this be the wreck of some vehicle?\nIt may just be scrap. You look for a way in,\nbut there's no door to be found.{ff26}\rUnfamiliar ancient letters are carved on\nits side: ]{ff30}5{ancient_s}{ancient_h}{ancient_u}{ancient_t}{ancient_t}{ancient_l}{ancient_e}{ff30}0[{ff26}\rA stone statue is lodged in one of the\nmachine's tubes. Will you pull it out?"
+
+EVENTMES.BIN.json 0:189
+  JP: '壁画は崩され何が描かれているのか解らない。\nしかし,かすかに見知らぬ古代文字が読み取れた。\n]{ff30}5{ff35}R{ff35}E{ff35}S{ff35}T{ff30}0['
+  EN: 'The mural is too damaged to make out,\nbut faint unfamiliar ancient letters remain:\n]{ff30}5{ancient_r}{ancient_e}{ancient_s}{ancient_t}{ff30}0['
+
+EVENTMES.BIN.json 0:190
+  JP: '扉には最近書かれた文字が刻まれていた。\n \n「お*と*こ*の*ゆ*め*ぞ*の」'
+  EN: 'Words have recently been carved on the door:\n \n"~MEN\'S DREAMLAND~"'
+
+EVENTMES.BIN.json 0:192
+  JP: '扉には最近書かれた文字が刻まれていた。\n \n「お*ん*な*の*ゆ*め*ぞ*の」'
+  EN: 'Words have recently been carved on the door:\n \n"~WOMEN\'S DREAMLAND~"'
+
+EVENTMES.BIN.json 0:198
+  JP: '壁画には見知らぬ古代文字が刻まれていた。\n \n]{ff30}4{ff35}E{ff35}N{ff35}E{ff35}R{ff35}G{ff35}Y{ff30}0['
+  EN: 'Unfamiliar ancient letters are carved on\nthe mural:\n]{ff30}4{ancient_e}{ancient_n}{ancient_e}{ancient_r}{ancient_g}{ancient_y}{ff30}0['
+
+EVENTMES.BIN.json 0:213
+  JP: '扉には見知らぬ古代文字が刻まれていた。\n \n ]{ff30}5{ff35}H{ff35}E{ff35}A{ff35}L{ff30}0[{ff26}'
+  EN: 'Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_h}{ancient_e}{ancient_a}{ancient_l}{ff30}0[{ff26}'
+
+EVENTMES.BIN.json 0:214
+  JP: '扉には見知らぬ古代文字が刻まれていた。\n \n ]{ff30}5{ff35}G{ff35}A{ff35}S{ff30}0[{ff26}'
+  EN: 'Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_g}{ancient_a}{ancient_s}{ff30}0[{ff26}'
+
+EVENTMES.BIN.json 0:215
+  JP: '壁画は崩され何が描かれているのか解らない。\nしかし,かすかに見知らぬ古代文字が読み取れた。\n]{ff30}5{ff35}M{ff35}E{ff35}A{ff35}T{ff35}I{ff35}N{ff35}G{ff30}0['
+  EN: 'The mural is too damaged to make out,\nbut faint unfamiliar ancient letters remain:\n]{ff30}5{ancient_m}{ancient_e}{ancient_e}{ancient_t}{ancient_i}{ancient_n}{ancient_g}{ff30}0['
+
+EVENTMES.BIN.json 0:216
+  JP: '壁画は崩され何が描かれているのか解らない。\nしかし,かすかに見知らぬ古代文字が読み取れた。\n]{ff30}5{ff35}R{ff35}E{ff35}V{ff35}I{ff35}V{ff35}A{ff35}L{ff30}0['
+  EN: 'The mural is too damaged to make out,\nbut faint unfamiliar ancient letters remain:\n]{ff30}5{ancient_r}{ancient_e}{ancient_v}{ancient_i}{ancient_v}{ancient_a}{ancient_l}{ff30}0['
+
+EVENTMES.BIN.json 0:217
+  JP: '壁画は崩され何が描かれているのか解らない。\nしかし,かすかに見知らぬ古代文字が読み取れた。\n]{ff30}5{ff35}J{ff35}U{ff35}N{ff35}K{ff30}0['
+  EN: 'The mural is too damaged to make out,\nbut faint unfamiliar ancient letters remain:\n]{ff30}5{ancient_j}{ancient_u}{ancient_n}{ancient_k}{ff30}0['
+
+EVENTMES.BIN.json 0:240
+  JP: '扉には見知らぬ古代文字と数字が刻まれている。\n{ff30}4]{ff35}S{ff35}T{ff35}R[ 5 ]{ff35}I{ff35}N{ff35}T[18\n{ff30}4]{ff35}P{ff35}I{ff35}E[18 ]{ff35}V{ff35}I{ff35}T[ 5{ff26}\r{ff30}4]{ff35}A{ff35}G{ff35}I[ 5 ]{ff35}L{ff35}U{ff35}C[18\n{ff30}4]{ff35}L{ff35}V{ff35}L[ 5 ]{ff35}A{ff35}G{ff35}E[18\n{ff30}4]{ff35}S{ff35}E{ff35}X[   ]{ff35}F{ff35}E{ff35}M{ff35}A{ff35}L{ff35}E[{ff26}\r{ff30}4]{ff35}R{ff35}A{ff35}C{ff35}E[  ]{ff35}E{ff35}L{ff35}F[\n{ff30}4]{ff35}C{ff35}L{ff35}A{ff35}S{ff35}S[ ]{ff35}P{ff35}R{ff35}I{ff35}E{ff35}S{ff35}T[{ff30}0\n最後に現代の言葉で]巫女の扉[と書かれている。{ff26}\r誰かの体に合わせて扉が作られているようだ。\n誰か試してみますか?'
+  EN: "Unfamiliar ancient letters and numbers mark the door:\n{ff30}4]{ancient_s}{ancient_t}{ancient_r}[ 5 ]{ancient_i}{ancient_n}{ancient_t}[18\n{ff30}4]{ancient_p}{ancient_i}{ancient_e}[18 ]{ancient_v}{ancient_i}{ancient_t}[ 5{ff26}\r{ff30}4]{ancient_a}{ancient_g}{ancient_i}[ 5 ]{ancient_l}{ancient_u}{ancient_c}[18\n{ff30}4]{ancient_l}{ancient_v}{ancient_l}[ 5 ]{ancient_a}{ancient_g}{ancient_e}[18\n{ff30}4]{ancient_s}{ancient_e}{ancient_x}[   ]{ancient_f}{ancient_e}{ancient_m}{ancient_a}{ancient_l}{ancient_e}[{ff26}\r{ff30}4]{ancient_r}{ancient_a}{ancient_c}{ancient_e}[  ]{ancient_e}{ancient_l}{ancient_f}[\n{ff30}4]{ancient_c}{ancient_l}{ancient_a}{ancient_s}{ancient_s}[ ]{ancient_p}{ancient_r}{ancient_i}{ancient_e}{ancient_s}{ancient_t}[{ff30}0\nAnd last, in modern letters: ]Priestess's Door[{ff26}\rThe door seems made to fit someone's body.\nWill someone try it?"
+
+EVENTMES.BIN.json 0:241
+  JP: '扉には見知らぬ古代文字と数字が刻まれている。\n{ff30}4]{ff35}S{ff35}T{ff35}R[ 5 ]{ff35}I{ff35}N{ff35}T[18\n{ff30}4]{ff35}P{ff35}I{ff35}E[18 ]{ff35}V{ff35}I{ff35}T[ 5{ff26}\r{ff30}4]{ff35}A{ff35}G{ff35}I[ 5 ]{ff35}L{ff35}U{ff35}C[18\n{ff30}4]{ff35}L{ff35}V{ff35}L[ 5 ]{ff35}A{ff35}G{ff35}E[18\n{ff30}4]{ff35}S{ff35}E{ff35}X[   ]{ff35}F{ff35}E{ff35}M{ff35}A{ff35}L{ff35}E[{ff26}\r{ff30}4]{ff35}R{ff35}A{ff35}C{ff35}E[  ]{ff35}E{ff35}L{ff35}F[\n{ff30}4]{ff35}C{ff35}L{ff35}A{ff35}S{ff35}S[ ]{ff35}P{ff35}R{ff35}I{ff35}E{ff35}S{ff35}T[{ff30}0\n最後に現代の言葉で]巫女の扉[と書かれている。{ff26}\r厳重な扉に見えるが,ロックは外れているようだ。'
+  EN: "Unfamiliar ancient letters and numbers mark the door:\n{ff30}4]{ancient_s}{ancient_t}{ancient_r}[ 5 ]{ancient_i}{ancient_n}{ancient_t}[18\n{ff30}4]{ancient_p}{ancient_i}{ancient_e}[18 ]{ancient_v}{ancient_i}{ancient_t}[ 5{ff26}\r{ff30}4]{ancient_a}{ancient_g}{ancient_i}[ 5 ]{ancient_l}{ancient_u}{ancient_c}[18\n{ff30}4]{ancient_l}{ancient_v}{ancient_l}[ 5 ]{ancient_a}{ancient_g}{ancient_e}[18\n{ff30}4]{ancient_s}{ancient_e}{ancient_x}[   ]{ancient_f}{ancient_e}{ancient_m}{ancient_a}{ancient_l}{ancient_e}[{ff26}\r{ff30}4]{ancient_r}{ancient_a}{ancient_c}{ancient_e}[  ]{ancient_e}{ancient_l}{ancient_f}[\n{ff30}4]{ancient_c}{ancient_l}{ancient_a}{ancient_s}{ancient_s}[ ]{ancient_p}{ancient_r}{ancient_i}{ancient_e}{ancient_s}{ancient_t}[{ff30}0\nAnd last, in modern letters: ]Priestess's Door[{ff26}\rThe door looks heavily secured, but it\nseems to be unlocked."
+
+EVENTMES.BIN.json 0:243
+  JP: '壁画には見知らぬ古代文字が刻まれていた。\n \n]{ff30}4{ff35}C{ff35}O{ff35}C{ff35}K{ff35}P{ff35}I{ff35}T{ff30}0[{ff26}'
+  EN: 'Unfamiliar ancient letters are carved on\nthe mural:\n]{ff30}4{ancient_c}{ancient_o}{ancient_c}{ancient_k}{ancient_p}{ancient_i}{ancient_t}{ff30}0[{ff26}'
+
+EVENTMES.BIN.json 0:244
+  JP: '扉には見知らぬ古代文字が刻まれていた。\n \n]{ff30}5{ff35}C{ff35}O{ff35}N{ff35}T{ff35}R{ff35}O{ff35}L{ff30}0[{ff26}'
+  EN: 'Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_c}{ancient_o}{ancient_n}{ancient_t}{ancient_r}{ancient_o}{ancient_l}{ff30}0[{ff26}'
+
+EVENTMES.BIN.json 0:245
+  JP: '扉には見知らぬ古代文字が刻まれていた。\n \n]{ff30}5{ff35}B{ff35}R{ff35}I{ff35}D{ff35}G{ff35}E{ff30}0[{ff26}'
+  EN: 'Unfamiliar ancient letters are carved on\nthe door:\n]{ff30}5{ancient_b}{ancient_r}{ancient_i}{ancient_d}{ancient_g}{ancient_e}{ff30}0[{ff26}'
+
+EVENTMES.BIN.json 0:268
+  JP: '小さな彫像の台座に四角い穴が開いている。\n穴の底には,白く輝く石が張りついている。{ff26}\rそばには見知らぬ古代文字が刻まれていた。\n \n]{ff30}4{ff35}S{ff35}T{ff35}A{ff35}F{ff35}F{ff30}0[{ff26}\r持っていた「太陽の石板」を当てはめると,\n \n・・・「太陽の石板」に白の石が組み込まれた。'
+  EN: "There's a square hole in the pedestal of\na small statue. A shining white stone is\nstuck fast to the bottom.{ff26}\rUnfamiliar ancient letters are carved beside it:\n \n]{ff30}4{ancient_s}{ancient_t}{ancient_a}{ancient_f}{ancient_f}{ff30}0[{ff26}\rYou fit in the TABLET OF THE SUN.\n \n...The white stone is now set into it."
+
+EVENTMES.BIN.json 0:269
+  JP: '小さな彫像の台座に四角い穴が開いている。\n穴には,白く輝く石が張りついている。{ff26}\rそばには見知らぬ古代文字が刻まれていた。\n \n]{ff30}4{ff35}S{ff35}T{ff35}A{ff35}F{ff35}F{ff30}0[{ff26}\rしかし,四角い穴に収めるような物は持っていない。\n \n「{ff30}2何か忘れてはいないだろうか?{ff30}0」'
+  EN: 'There\'s a square hole in the pedestal of\na small statue. A shining white stone is\nstuck fast inside.{ff26}\rUnfamiliar ancient letters are carved beside it:\n \n]{ff30}4{ancient_s}{ancient_t}{ancient_a}{ancient_f}{ancient_f}{ff30}0[{ff26}\rBut you have nothing that would fit the square hole.\n \n"{ff30}2Aren\'t we forgetting something?{ff30}0"'
+
+EVENTMES.BIN.json 0:270
+  JP: '小さな彫像の台座に四角い穴が開いている。\n穴には,白く輝く石が張りついている。{ff26}\rそばには見知らぬ古代文字が刻まれていた。\n \n]{ff30}4{ff35}S{ff35}T{ff35}A{ff35}F{ff35}F{ff30}0['
+  EN: "There's a square hole in the pedestal of\na small statue. A shining white stone is\nstuck fast inside.{ff26}\rUnfamiliar ancient letters are carved beside it:\n \n]{ff30}4{ancient_s}{ancient_t}{ancient_a}{ancient_f}{ancient_f}{ff30}0["
+
+FIGHTMSG.OBJ.json 0:297
+  JP: '木黙目勿戻の前には,巨大な壁画が描かれている。\n中央に描かれているのは,何であろうか?{ff26}\rおや?,右下には見慣れぬ文字で\n]{ff30}5{ff35}D{ff35}I{ff35}M{ff35}G{ff35}U{ff35}I{ff35}L{ff30}0[\nと書かれていた。{ff26}'
+  EN: 'Before you, a huge mural covers the wall.\nWhat could the center show?{ff26}\rOh? In the lower right, in strange letters,\n]{ff30}5{ancient_d}{ancient_i}{ancient_m}{ancient_g}{ancient_u}{ancient_i}{ancient_l}{ff30}0[\nis written.{ff26}'
+
+MESSAGE.DAT.json 0:14
+  JP: '10文字の言霊を入力したまえ。'
+  EN: 'Enter the 10-letter password.'
+
+M_CATALG.DAT.json 4:0
+  JP: '胸に刻まれた文字は,\nゴーレムの術を施し\nた証。これは鉱石を\n集めて作られたゴー\nレムだ。ゴーレムと\nいうのは無生物であ\nるため,痛みに対す\nる恐怖心がなく怯む\nという事を知らない。\n戦う相手としては,\n少々やりにくい。'
+  EN: "The runes carved on\nits chest mark the\ngolem-maker's art.\nThis Stone Golem\nwas built from\ngathered ore. Being\nlifeless, a golem has\nno fear of pain and\nnever flinches. A\nrather awkward foe\nto fight."
+
+NPC_MES1.OBJ.json 0:289
+  JP: 'ガイ\n「たしか,もっと上のフロアで訳の分からぬ\n 古代文字の文字列を見た覚えがある。\n\r あの祭壇の場所か?\n それが答えなのか?'
+  EN: 'Guy\n"I\'m sure I saw a string of baffling ancient\n glyphs somewhere on a higher floor.\n\r That altar room?\n Is that the answer?"'
+
+NPC_MES3.OBJ.json 0:68
+  JP: 'フォンタナ\n「{ff12}さん達も\n ここへ来てしまったのですね・・・。\n\r この彫像には太陽の石板を\n 収める穴がありました。\n\r どのような影響があるのかわかりませんが,\n この古代文字が何かの鍵のような\n 気がします。'
+  EN: 'Fontana\n"So you\'ve ended up here too,\n {ff12}...\n\r This statue had a slot for\n the Tablet of the Sun.\n\r I can\'t tell what it might do, but\n I have a feeling these ancient glyphs\n are some kind of key."'
+
+NPC_MES3.OBJ.json 0:71
+  JP: 'アルテミシア\n「さっき見た小さな石板に,\n この古代文字と同じ物が。\n\r そうだ,何か関連性がありそうだね。\n すみません,先を急がせていただきます。\n また,お会いしましょう。'
+  EN: 'Artemisia\n"That little tablet we saw earlier had\n the same glyphs as these!\n\r Yes, they must be connected somehow.\n Excuse us, but we\'ll be hurrying on ahead.\n Let\'s meet again."'
+
+NPC_MES4.OBJ.json 0:11
+  JP: 'ベルガモット\n「何も知恵を使わずとも,\n 感覚で理解できればいいではないか。\n\r 実は,わしも古代文字はさっぱり理解できて\n ないのじゃよ。\n なんとなく,ほどよくが一番じゃ。'
+  EN: 'Bergamot\n"No need to go usin\' yer head. If ye can\n get the hang of it by feel, where\'s the harm?\n\r Truth be told, I can\'t make head nor tail\n of these ancient glyphs meself.\n Just muddle along, that\'s the ticket."'
+
+NPC_MES4.OBJ.json 0:31
+  JP: 'クレソン\n「私たちが調査している古代文字が,\n 全て揃っているのではないでしょうか。'
+  EN: 'Cresson\n"Could it hold every one of the ancient\n glyphs we\'ve been studying?"'
+
+NPC_MES4.OBJ.json 0:33
+  JP: 'ベルガモット\n「26個の古代文字がこのように揃っていれば,\n 研究も進むというものだ。'
+  EN: 'Bergamot\n"With all 26 ancient glyphs laid out like\n this, our research is bound to progress."'
+
+NPC_MES4.OBJ.json 0:37
+  JP: 'ローブを着た男\n「私たちが調査している古代文字が,\n 全て揃っているのではないでしょうか。'
+  EN: 'Robed man\n"Could it hold every one of the ancient\n glyphs we\'ve been studying?"'
+
+NPC_MES4.OBJ.json 0:39
+  JP: '年老いた男\n「26個の古代文字がこのように揃っていれば,\n 研究も進むというものだ。'
+  EN: 'Old man\n"With all 26 ancient glyphs laid out like\n this, our research is bound to progress."'
+
+NPC_MES4.OBJ.json 0:50
+  JP: 'クレオ\n「もう,お分かりでしょう?\n あなた方がお探しの巫女をさらったのも,\n\r 神殿の祭壇にモンスターを潜ませたのも,\n 古代文字を配置したのも,すべてあなたたちが\n 邪教徒と呼んでいる私たちがやったことです。\n\r そうすることが,\n 我らが神の望みだったからです・・・。'
+  EN: 'Cleo\n"Surely you\'ve worked it out by now?\n We are the ones who took your Priestess.\n\r We hid the monsters at the Shrine\'s altar,\n and we laid out the ancient glyphs.\n All of it was us, the ones you call heretics.\n\r For that was what\n our god desired..."'
+
+NPC_MES4.OBJ.json 0:84
+  JP: 'クレソン\n「古代文字の事ですか?\n\r そうですね。\n 私たちの結果と照らし合わせてみますか?\n\r どうやらあなたたちとの適合率は{ff11}0%でしょうか。'
+  EN: 'Cresson\n"The ancient glyphs, is it?\n\r Let me see.\n Shall we compare them with our results?\n\r Hmm... it looks like your results\n match {ff11}0% of ours."'
+
+NPC_MES4.OBJ.json 0:85
+  JP: 'クレソン\n「古代文字の事ですか?\n\r そうですね。\n 私たちの結果と照らし合わせてみますか?\n\r おやおや,\n あなたたちとの適合率は100%ですね。\n\r 私たちの研究は正しいことが証明されました。\n ありがとうございます。'
+  EN: 'Cresson\n"The ancient glyphs, is it?\n\r Let me see.\n Shall we compare them with our results?\n\r Oh, my!\n You match us 100%.\n\r That proves our research was right.\n Thank you so very much."'
+
+NPC_MES4.OBJ.json 0:127
+  JP: 'ベルガモット\n「わしか? わしゃあ古代語とか魔方陣とか,\n ようするに文字についてが専門じゃ。'
+  EN: 'Bergamot\n"Me? Ancient tongues, magic circles...\n writin\', in short. That\'s my field."'
+
+SISETU.OBJ.json 0:183
+  JP: '名前の文字数は,8文字まで,\nSELECTボタンで平仮名,\nカタカナ,英字を切り替え可能。'
+  EN: 'Names can be up to 8 letters.\nSELECT switches between hiragana,\nkatakana and English letters.'
+
+SISETU.OBJ.json 0:411
+  JP: '古代文字の解析'
+  EN: 'Decipher Ancient Script'
+
+SISETU.OBJ.json 0:630
+  JP: '頭の中に,\n次のような文字が,浮かんできた。'
+  EN: 'Words like these\ncame into your mind.'
+
+SISETU.OBJ.json 0:670
+  JP: '古代文字を選んで下さい。'
+  EN: 'Choose an ancient letter.'
+
