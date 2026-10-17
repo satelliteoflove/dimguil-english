@@ -91,6 +91,7 @@ class Run:
         self.boss_fights, self.boss_wins = 0, 0
         self.party, self.levels, self.where, self.last, self.goal_now = [], [], None, '', ''
         self.death_frames, self.result = [], None
+        self.recent = deque(maxlen=3)      # the last three deaths and retries, newest last
         try:
             self.pid = int(open(pidfile).read().split()[0])
         except (OSError, ValueError, IndexError):
@@ -124,6 +125,7 @@ class Run:
                 self.deaths += 1
                 self.death_frames.append(f)
                 self.last = f"{d.get('who')} {d.get('fell')} ({d.get('by')}, {d.get('what')})"
+                self.recent.append(self.last)
                 self.goal_now = d.get('goal') or self.goal_now
             elif kind == 'temple':
                 self.temple += 1
@@ -131,6 +133,7 @@ class Run:
                 self.retries += 1
                 self.goal_now = rest[0] if rest else self.goal_now
                 self.last = f'retry {rest[0]}: {rest[1]}' if len(rest) > 1 else 'retry'
+                self.recent.append(self.last)
             elif kind in ('gate heal', 'home heal', 'hp heal') and rest and isinstance(rest[-1], list) \
                     and rest[-1] and isinstance(rest[-1][0], list) and len(rest[-1][0]) == 3:
                 self.party = rest[-1]
@@ -392,8 +395,8 @@ class Monitor:
         for col, kw in (('run', {}), ('state', {}), ('wall', {'justify': 'right'}), ('game', {'justify': 'right'}),
                         ('speed', {}), ('goals done', {'ratio': 2}), ('fights', {'justify': 'right'}),
                         ('boss', {'justify': 'right'}), ('deaths', {'justify': 'right'}),
-                        ('temple', {'justify': 'right'}), ('deaths over game time', {}), ('levels', {}),
-                        ('last', {'ratio': 2})):
+                        ('temple', {'justify': 'right'}), ('death times', {}), ('levels', {}),
+                        ('last events', {'ratio': 4, 'min_width': 44})):
             tb.add_column(col, **kw)
         rows = sorted(self.runs.values(), key=lambda r: (r.state()[0] != 'running', -r.started))
         for r in rows[:14]:
@@ -414,9 +417,9 @@ class Monitor:
                 bins[min(15, int(f / max(r.frame, 1) * 16))] += 1
             dg = Text(spark(bins, 16, 0, max(3, max(bins))) if r.deaths else '', style='red')
             lv = ' '.join(str(l) for _, l in r.levels[:6]) or '-'
-            last = r.last
+            last = '\n'.join(r.recent)
             if st == 'failed' and r.result:
-                last = f"{r.result.get('error')} {(r.result.get('info') or {}).get('goal', '')}"
+                last = f"{r.result.get('error')} {(r.result.get('info') or {}).get('goal', '')}\n" + last
             tb.add_row(Text(f'{r.chapter}/{r.name}'), Text(f'{mark} {st}', style=color), wall,
                        hms(r.frame / FPS), speed, goals, str(r.fights),
                        f'{r.boss_wins}/{r.boss_fights}' if r.boss_fights else '-',
