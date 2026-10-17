@@ -64,7 +64,8 @@ def won_here(run, l0):
         if len(x) > 2 and x[1] == 'fought' and isinstance(x[2], dict) \
                 and tuple(x[2].get('where') or ()) == MEET:
             r = x[2]
-            if r.get('ovl') not in ('JOUKA', 'HAZURE') and not r.get('fled'):
+            # fled is (escaped, failed) run counts, so (0, 0) is a tuple, and truthy
+            if r.get('ovl') not in ('JOUKA', 'HAZURE') and not (r.get('fled') or (0,))[0]:
                 return True
     return False
 
