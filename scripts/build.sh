@@ -3,7 +3,8 @@
 #
 # Expects rips/clean/dimguil (+ rips/clean/dimguil.xml, with forced LBAs) from:
 #   dumpsxiso -l -x rips/clean/dimguil -s rips/clean/dimguil.xml "<Rev 1>.cue"
-# Needs: JRE 21+, armips and mkpsxiso on PATH (or ARMIPS / MKPSXISO set).
+# Needs: Python 3 with Pillow, armips and mkpsxiso on PATH (or ARMIPS / MKPSXISO set).
+# ENCODER=kotlin runs Remisse's original jar instead of scripts/texttool.py (needs a JRE 21+).
 #
 # Steps:
 #   1. dump the JP script from the clean files into rips/stage/out/dumps
@@ -20,10 +21,16 @@ cd "$(dirname "$0")/.."
 ROOT=$(pwd)
 ARMIPS=${ARMIPS:-armips}
 MKPSXISO=${MKPSXISO:-mkpsxiso}
-JAR=build/libs/dimguil-english-1.0-SNAPSHOT.jar
 
 [ -d rips/clean/dimguil ] || { echo "missing rips/clean/dimguil (see header)"; exit 1; }
-[ -f "$JAR" ] || ./gradlew -q jar
+# The text tool: dump and encode-all, run from rips/stage.
+if [ "${ENCODER:-python}" = kotlin ]; then
+  JAR=build/libs/dimguil-english-1.0-SNAPSHOT.jar
+  [ -f "$JAR" ] || ./gradlew -q jar
+  texttool() { java -jar "$ROOT/$JAR" "$@"; }
+else
+  texttool() { python3 "$ROOT/scripts/texttool.py" "$@"; }
+fi
 
 # fresh staging + dirty trees
 rm -rf "$ROOT/rips/stage" "$ROOT/rips/dirty" "$ROOT/rips/iso"
@@ -34,7 +41,7 @@ ln -s ../../binary rips/stage/binary
 ln -s .. rips/stage/rips
 
 echo "== dump + merge"
-(cd rips/stage && java -jar "$ROOT/$JAR" dump > /dev/null)
+(cd rips/stage && texttool dump > /dev/null)
 for t in translations/*.json; do
   f=$(basename "$t")
   python3 scripts/merge_source.py "rips/stage/out/dumps/$f" "$t" "rips/stage/translations/$f"
@@ -45,7 +52,7 @@ python3 scripts/tim.py import rips/clean/dimguil/DATA00/SYSCG.BIN 0x400 graphics
   rips/dirty/dimguil/DATA00/SYSCG.BIN
 
 echo "== encode"
-enc=$(cd rips/stage && java -jar "$ROOT/$JAR" encode-all 2>&1)
+enc=$(cd rips/stage && texttool encode-all 2>&1)
 echo "$enc" | grep -E "exceeded|ERROR" || true
 # An encoder ERROR means a whole file was left untranslated; never let that through.
 if echo "$enc" | grep -q "ERROR"; then echo "build: encoder error, stopping" >&2; exit 1; fi
