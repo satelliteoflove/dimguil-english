@@ -735,6 +735,11 @@ patches in `asm/`.
 - A save state made before this fix keeps the old MAIN, while the overlays reload from
   the disc and jump to the new address: such a state crashes at its first centered line.
   Test it from power-on or a state made on a fixed disc.
+- Review follow-ups (2026-10-17, Chris approved): the width lookup now stops at the
+  table's end (codes 0xd8-0xff get 12 px; before, they read the wrappers as widths), and
+  BATTLE's FUN_800d3100, the chest screen's centered title strip, centers on the measured
+  pixel width in t9 instead of glyphs x 8 (helper at 0x800c3300). Writeup-notes "The
+  vwf.asm review".
 
 ### Text printer
 
