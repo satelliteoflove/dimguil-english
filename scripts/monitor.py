@@ -265,6 +265,13 @@ def emulators():
         kind = ('chapter' if 'run_chapter' in cl else 'suite' if 'regress.py' in cl or 'spawn_main' in cl
                 else 'bench' if 'fightbench' in cl else None)
         if not kind:
+            # one-off scripts (an agent's verify or probe) still drive the emulator core
+            try:
+                with open('/proc/%d/maps' % p.info['pid']) as f:
+                    kind = 'other' if 'mednafen_psx' in f.read() else None
+            except OSError:
+                pass
+        if not kind:
             continue
         if kind == 'suite' and 'spawn_main' in cl:
             try:
