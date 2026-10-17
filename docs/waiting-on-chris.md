@@ -7,7 +7,14 @@ other work unless it says **blocks**.
 
 ## Game code
 
-Nothing open.
+1. **A monster's Banoka-bounced row spell hits a whole row** (found 2026-10-17 with the
+   Bacortu fix, bugs.md 1.16; engine-notes "Bacortu in fixed battles"). When Banoka
+   bounces a monster's Madalto, Montino, Morlis or another row spell back at it, the
+   target is the monster's own group number. In a fixed battle `spell_group_range` reads
+   that number as a row, so group 1 hits the whole front row and any other group the
+   whole back row. Rare: it needs the party's Banoka, a fixed battle and a monster row
+   spell. Documented for later (Chris, 2026-10-17); options are to fix it (pass the
+   group through unchanged when the caster is a monster) or leave it. Not started.
 
 ## Text
 
