@@ -87,6 +87,10 @@ see all of it.
 
 - **Inn and Temple lines off center (2026-10-13).** "Not enough gold." sat 9 px left (x fixed for the
   Japanese, `asm/inn_gold_message.asm`); the Temple's chant 10 px (`asm/temple_layout.asm`).
+- **"{name} can't act." off center (SISETU 525; Chris, 2026-10-17).** The locked-door
+  menu placed it for twelve-pixel Japanese glyphs, 48-63 px left of the bar's middle in
+  English; the x is now computed for the English widths (`asm/cant_act_centering.asm`,
+  docs/re/lock-test.md problem 4).
 
 ### Machine-written habits (the Q1 sweep)
 

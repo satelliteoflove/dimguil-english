@@ -692,6 +692,18 @@ patches in `asm/`.
   redone if a word changes. The Inn's "To the next level, you need N more exp." under
   100 exp is one line at fixed x 28 and 124 (0x800c7c30), left aligned like the
   original; at 100 or more it's two centered lines (2026-10-13).
+- The maze's message bar (y 0xa2, printed with FUN_8001d368) centers on x 160; in the
+  emulator's shots the game's x shows 14 px further right, and the bar spans 14-334
+  there. "{name} can't act." (SISETU 525), from the locked-door menu (MAZE FUN_800ae1c8,
+  state 2) when the picked member has status & 0x3e0, was placed by fixed-width
+  arithmetic: the name loop (0x800ae3f8-0x800ae47c) sets s2 to the index of the 0x40 in
+  the name's 0xff 0x40 terminator (name length + 1), and x = (320 - 12 × (s2 + 10)) / 2
+  (0x800ae480-0x800ae498), the Japanese line in 12 px glyphs. The English sat 48-63 px
+  left. `asm/cant_act_centering.asm` makes it x = 136 - 5 × s2 / 2, for name letters of
+  about 5 px (VWF_LUT + 1: lowercase 4-8, mostly 5-6; capitals 7-10) and " can't act."
+  at 49 px; mixed-case names of 1-8 letters land within 2.5 px of 160 (measured: -1.8 to
+  +0.8 for Jo, Lu, Kai, Earth, Mercury). The first replaced word is the loop branch's
+  delay slot and still writes only v1, which the loop reloads (2026-10-17).
 - The NPC talk runs with MCARD.BIN at 0x800a1000, not MAZE.BIN.
 - The dungeon NPC box is 288 px by 3 lines, pages split by `\n\r`.
 - The battle box wraps at 24 glyph codes per line. Messages are expanded by 0x8001dfc0

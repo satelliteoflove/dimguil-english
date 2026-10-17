@@ -369,16 +369,16 @@ Doors (SISETU unless marked):
 | String | Japanese | English | Seen | Verdict |
 |---|---|---|---|---|
 | 527 | 扉はロックされている。 | The door is locked. | walking into any locked side | fine, centered |
-| 430, 441 | 調査 / 調査中 | Investigate / Searching... | every Investigate | see problem 3 |
+| 430, 441 | 調査 / 調査中 | Investigate / Searching... | every Investigate | see problem 3 (fixed: "Searching") |
 | 516 | 扉に鍵がかかっています。 | The door is locked. | B3, B4 | fine, centered |
 | EVENTMES 33 | 美しい装飾品で飾られた扉には,鍵がかけられている。 | The door adorned with beautiful ornaments\nis locked. | 1F | **cut off**, problem 1 |
 | EVENTMES 34 | (3 spaces) 美しい装飾品で飾られた扉があります。 | There is a door adorned with beautiful ornaments. | 1F, after it opens | fits, just |
 | 518 | 誰が鍵を外しますか? | Who will pick the lock? | all three | fine |
 | 522-524 | 力ずくで鍵を外す / 呪文で鍵を外す / 鍵開けを諦める | Force the lock / Unlock with a spell / Give up | all three | fine; cursor on the right line |
-| 526 | 鍵開け挑戦中 | Picking the lock... | all three | overlaps the dot animation, problem 3 |
+| 526 | 鍵開け挑戦中 | Picking the lock... | all three | overlaps the dot animation, problem 3 (fixed: "Picking the lock") |
 | 520, 521 | * 成功! * / * 失敗! * | * Success! * / * Failed! * | all three | fine, centered |
 | 517 | 呪文を覚えていません。 | You don't know the spell. | 1F | fine |
-| 525 | {name}は,行動できません。 | {name} can't act. | B4 | off center, problem 4 |
+| 525 | {name}は,行動できません。 | {name} can't act. | B4 | off center, problem 4 (fixed) |
 | 519 | 呪文ポイントが足りません。 | Not enough spell points. | no (nobody has Calnova) | reads fine |
 | EVENTMES 10, 11, 12, 80 | | (sealed doors) | 3F, Grounds, B3 | fine; 10-12 and 80 were reviewed with the events |
 
@@ -419,14 +419,14 @@ Chests (FIGHTMSG):
    Ghost Swarm sets every standing member's HP to 1-10 and touches no stat. "Strength"
    reads as the Strength stat, the same 力 slip description-check.md found in three item
    descriptions. Something like "{name}'s HP plummets." would say what happens.
-3. **"Picking the lock..." runs into its own dots.** After 526 the game draws a row of
+3. **"Picking the lock..." runs into its own dots.** *Fixed (below).* After 526 the game draws a row of
    dots, spaced for the Japanese 鍵開け挑戦中 (6 glyphs, no dots of its own). The English
    line is longer, so the first animated dots land on the end of "lock..." and one shows
    as a stray mark under it (`locks/crop_picking.png`, from `b3_t_picking_12.png`). "Picking
    the lock" without the full stops, or something shorter, would leave the dots to the
    animation. "Searching..." (441, 調査中) has the same doubled dots but is short enough
    that they don't collide.
-4. **"{name} can't act." is left of center.** The x is computed for the Japanese:
+4. **"{name} can't act." is left of center.** *Fixed (below).* The x is computed for the Japanese:
    (320 - 12 × (name length + 10)) / 2 at 0x800ae480-0x800ae498 (`FUN_800ae1c8` state 2),
    so the shorter English sits well left of the bar's middle ("Kai can't act." is
    centered about 50 pixels left) (`b4_stuck_k0_t3.png`).
@@ -436,6 +436,43 @@ Chests (FIGHTMSG):
    trap 0, prints its name and does nothing. The Japanese says the same nonsense
    (おっと! 罠は かかっていない!!). It's the original's quirk (`FUN_800c697c` returns -1 without
    checking for a trap); the full stop was already taken out (translation-notes).
+
+### Problems 3 and 4, fixed (2026-10-17)
+
+Checked on the built disc `f8417983f0650ce97bd6316192e637a2` (main 9337727 plus
+`asm/cant_act_centering.asm`), against the same build without it
+(`02bd6222fab1fef26e323386cb9ce56e`). Both doors were reached in play from the old
+chest states (`runC_chest00`, B3, Venus standing, the other five dead; `runD_chest00`,
+B4, Earth, Jo and Kai dead), then saved with the maze's Save and Suspend. A text file
+stays in RAM from the disc it was read from, as code does, so the first shots from those
+states still showed the old "Picking the lock..." from RAM. The shots below are from a
+power-on of each disc with that card: Load Data, Edge of Town, Resume Adventure, then
+Investigate at the door and pick each dead member, then Venus and Force the lock.
+Button presses only. Scripts, cards, states and shots: `rips/agents/actfix/` (not
+tracked; `work/actshots.py`, `work/suspend.py`).
+
+- **3.** 526 is "Picking the lock" and 441 "Searching" (commit 9337727). The game's
+  first dot lands 4 px after the "k" of "lock" (ink to 127, dot at 132; then a dot every
+  12 px), so the line reads "Picking the lock . . ." with nothing touching
+  (`shots/sheet_after_b3_pick.png`, `shots/dots_zoom.png`, against `locks/crop_picking.png`).
+  "Picking lock" isn't needed. The first dot after "Searching" sits closer, one blank
+  pixel after the "g" (ink to 94, dot at 96), and reads like a full stop before the row;
+  no overlap (`shots/sheet_after_b3_search.png`).
+- **4.** The line's x is now 136 - 5 × (name length + 1) / 2 (MAZE 0x800ae480-0x800ae494,
+  `asm/cant_act_centering.asm`): 5 px a letter plus a capital, plus " can't act." (49
+  px), centered on 160. Logged at the draw call (0x800ae4ac, a0) and measured on the
+  shots (the shots run 14 px right of the game's x; the bar is 14-334 there, middle
+  174):
+
+  | Name | x before | ink middle before | x after | ink middle after |
+  |---|---|---|---|---|
+  | Jo | 82 | 125.2 (-48.8) | 129 | 172.2 (-1.8) |
+  | Lu | 82 | 126.2 (-47.8) | 129 | 173.2 (-0.8) |
+  | Kai | 76 | 122.2 (-51.8) | 126 | 172.2 (-1.8) |
+  | Earth | 64 | 116.2 (-57.8) | 121 | 173.2 (-0.8) |
+  | Mercury | 52 | 110.8 (-63.2) | 116 | 174.8 (+0.8) |
+
+  The B4 door gave the same numbers for Earth, Jo and Kai. `shots/sheet_cantact_before_after.png`.
 
 ## Other findings
 
