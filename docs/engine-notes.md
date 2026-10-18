@@ -345,6 +345,12 @@ glance". By subsystem:
   being resisted. The Alchemist's damage spells
   are three-round clouds. Battle heals: Dios 2-8, Dial 2-16, Dialma 3-24, Diomas 3-6,
   Madial 17-68 per member.
+- **Psionic confusion** (docs/re/psionic.md). Sios, Lios, Masios and Lasios roll the
+  Psionic resistance twice (damage, then confusion) and then a save of 100 - p (p 65 or
+  60, halved for a resister); no immunity and no level term. A confused monster stays
+  confused for the rest of the fight and spends 72% of its actions on a random group (with
+  one group, itself); the other 28% it acts normally, breath included. Against the golems
+  a cast lands about 5% (Fire Golem) and 8% (Shadow Golem) of the time.
 - **Surprise and fleeing.** 19% the party surprises the monsters, else 15.4% the
   monsters surprise the party. The party flees on 80 (+5 × the level ratio when
   stronger) minus 2 × the area's danger level; fixed battles can't be fled.
