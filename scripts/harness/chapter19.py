@@ -175,7 +175,9 @@ def want_party(run, names):
     if g.overlay() == 'HAZURE':
         town.to_town_bar(g)
     ok = [i for i in ids if g.char(i)['status'] == 0]
-    if set(town.town_party(g)) == set(ok):
+    if town.town_party(g) == ok:
+        # the order too: the same members left in ring_on's order put the Priestess in the
+        # front row for the door trip (c19v1c, 2026-10-17)
         return
     town.to_town_bar(g)
     clear_party(g)
@@ -352,6 +354,10 @@ def tm_trip(run, L):
             break
         c = g.char(L)
         if c['status'] != 0 or c['hp'] < c['max_hp'] * 0.5:
+            break
+        if c['exp'] >= L5_EXP:
+            # enough for level 5: more only brings her nearer level 6's 7,326, where a
+            # single inn stay would spoil the door (c19v1b, 2026-10-17: 8,432 after one trip)
             break
         if any(g.char(i)['status'] >= 0x20 for i in g.party()):
             break
