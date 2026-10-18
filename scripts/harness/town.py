@@ -361,6 +361,16 @@ def tavern_candidates(g):
     return out
 
 
+BENCH = set()               # roster indices never taken in as standbys (chapter 19: the titled
+                            # main party and the Priestess, out of the ring party's way)
+
+
+def standbys(g):
+    """tavern_candidates without the BENCH: who fill_party, raised_back, tablet_back and
+    the backups may bring into the party."""
+    return [i for i in tavern_candidates(g) if i not in BENCH]
+
+
 def form_party(g, members, limit=900):
     """Add roster indices to the party at the tavern, in order. Raises Stuck if the
     tavern refuses one (alignment) or the grid holds someone else."""

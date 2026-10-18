@@ -1281,7 +1281,7 @@ def mixes(g, ri, members):
 def backups(g, members):
     """The standbys a town visit can hand items to: alive, in the tavern, not the Mule,
     their alignment mixing with the party's; the lowest level first."""
-    out = [i for i in town.tavern_candidates(g) if g.name(i) != MULE_NAME and mixes(g, i, members)]
+    out = [i for i in town.standbys(g) if g.name(i) != MULE_NAME and mixes(g, i, members)]
     return sorted(out, key=lambda i: (g.char(i)['level'], i))
 
 
