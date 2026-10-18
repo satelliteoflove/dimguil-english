@@ -293,7 +293,10 @@ def drop_picker(g, limit=3000):
             g.step(10)
             from harness import camp, gear
             slots = g.party_slots()
+            # a standing member: the cursor wouldn't go to a dead one (c19v3c, 2026-10-18:
+            # Venus dead in slot 1, "who drops row" stuck after the coffin's ring)
             who = next((p for p, ri in enumerate(slots) if ri is not None
+                        and g.char(ri)['status'] < 0x20
                         and any(gear.throwable(g, w) for _, w in gear.pack(g, ri))), None)
             if who is not None:
                 camp._pick_member(g, who, 'who drops')
