@@ -476,6 +476,11 @@ function renderChoice() {
     b.setAttribute('aria-pressed', String(!!d && !d.auto && d.choice === b.dataset.c));
     if (b.dataset.c === 'faithful') b.disabled = !needsDecision(ln);
   });
+  $('#choice-hint').hidden = needsDecision(ln);
+  const last = S.focus >= lines().length - 1;
+  $('#insp-next').textContent = last ? 'Finish' : 'Next';
+  $('#insp-next').setAttribute('aria-label', last ? 'Finish the scene' : 'Next line');
+  $('#insp-prev').disabled = S.focus === 0;
   $('#line-note').value = (S.decisions[ln.ref] && S.decisions[ln.ref].note) || '';
   const editing = d && d.choice === 'edited';
   $('#editor').hidden = !editing;
@@ -746,7 +751,14 @@ async function main() {
   $('#nav-toggle').addEventListener('click', () => setNav(!document.body.classList.contains('nav-open')));
   $('#insp-close').addEventListener('click', () => setInsp(false));
   $('#insp-prev').addEventListener('click', () => { focusLine(S.focus - 1, { scroll: false }); $('#inspector').scrollTop = 0; });
-  $('#insp-next').addEventListener('click', () => { focusLine(S.focus + 1, { scroll: false }); $('#inspector').scrollTop = 0; });
+  $('#insp-next').addEventListener('click', () => {
+    if (S.focus < lines().length - 1) { focusLine(S.focus + 1, { scroll: false }); $('#inspector').scrollTop = 0; return; }
+    const open = lines().findIndex(l => !decisionOf(l));
+    if (open >= 0) { focusLine(open, { scroll: false }); $('#inspector').scrollTop = 0; return; }  // something still to decide
+    setInsp(false);
+    if (!$('#apply-open').disabled) openApply();
+    else $('#applybar').scrollIntoView({ block: 'end' });
+  });
 
   const h = new URLSearchParams(location.hash.slice(1));
   const id = h.get('s') || (S.scenes.find(s => s.status === 'open') || S.scenes[0] || {}).id;
