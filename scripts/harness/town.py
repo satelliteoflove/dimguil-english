@@ -527,7 +527,11 @@ def inn_stay(g, slot, room='Stables', weeks=None, gather=False, limit=600):
     ui.move_cursor(g, FAC_CURSOR, 0, 'right', 'left', wrap=4, what='Stay')
     ui.confirm_until(g, lambda: g.u8(FAC_SUB) == 10 and g.u8(FAC_PANEL) == 1, limit, 'Stay')
     _pick_party_member(g, slot, 'who will stay')
-    room_ready = lambda: g.u8(ROOM_LEVEL) == 1 and g.u8(FAC_PANEL) == 0 and g.u8(TOWN_MSG) == 0
+    # a titled member's status line draws the title's emblem, and FAC_PANEL reads 1 on the
+    # room list from then on (ch19 devB, 2026-10-17: Uranus stuck at "Which room?")
+    titled = bool(g.char(idx)['raw'][0xc5] & 1)
+    room_ready = lambda: (g.u8(ROOM_LEVEL) == 1 and (g.u8(FAC_PANEL) == 0 or titled and g.u8(FAC_PANEL) == 1)
+                          and g.u8(TOWN_MSG) == 0)
     ui.confirm_until(g, lambda: g.u8(ROOM_LEVEL) == 1 and g.u8(FAC_PANEL) == 0, limit, 'pick member')
     ui.wait_until(g, room_ready, limit, 'room list')
     ui.move_cursor(g, LIST, ROOMS.index(room), 'down', 'up', what='room')
