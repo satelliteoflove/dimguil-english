@@ -279,8 +279,10 @@ description-check.md.)
    none it acts normally. The golem fights are ordinary fights with one group
    (0x80079bde 0, 0x800798b8 1, read in the golem bench), so a confused golem spends 72%
    of its turns hitting itself. **[code, emu]** A monster group's targets
-   (`monster_target_random` 0x800d0754) are party members only, never a summoned
-   group. **[code]**
+   (`monster_target_random` 0x800d0754) are party members only, but its Fight action
+   goes to the summoned group instead 1 time in 4 while that group has a member standing
+   (`battle_special_action` 0x800a8980: 0x8008c4bd > 0 and rand(4) == 2, then
+   `monster_melee(7)`). **[code]** More on confusion in psionic.md.
 2. Otherwise it rolls rand(100) against its AI row (table 0x800d89e0, 13 columns,
    the row is +0x88): the columns are fight a random reachable member, fight the
    reachable member with the least HP, defend, damage spell (single), damage spell
@@ -492,7 +494,9 @@ targets), Masios 8d2 and 60%, Lasios 8d9 and 60%. **[code]** There's no immunity
 monster that resists confusion (+0xcc bit 8, both golems) is only harder to confuse
 (p halved), never immune. Against the Fire Golem (Psionic 60) a Sios lands about 5% of
 the time (39% x 39% x 32%), the Shadow Golem about 7%; after five Nofis about 28%.
-**[code]** Monsters don't recover from confusion in `monster_upkeep`.
+**[code]** Monsters don't recover from confusion in `monster_upkeep`. The full roll,
+the duration and spell points are in psionic.md (2026-10-17): the resistance is rolled a
+second time inside `status_spell`, which the line above folds into "39% x 39%".
 
 ### Status spells and saving throws
 

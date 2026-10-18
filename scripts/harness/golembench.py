@@ -47,6 +47,16 @@ Arms, by environment (all investigation only, nothing in the game files):
   TROLL=1     a TROLLKIN RING (slay 0x104000; the golems' class bits 0x4000, giants) on
               each front-row member through the camp Equip menu, written into the pack by
               RAM first; FUN_800a2450 ORs every equipped item's slay bits into +0xa8.
+  PSIONIC=1   the Bishop becomes a Neutral Psionic of the same level before the Investigate
+              (make_psionic, RAM; docs/re/psionic.md): class 10, alignment Neutral, stats
+              raised to the class minimums, Psionic spells only (every level with points),
+              spell points as spell_points_recalc 0x800b9540 gives them, max HP scaled from
+              the Bishop's hit die to the Psionic's, and gear a Psionic can't wear taken off
+              (then the camp Equip menu). In the chain's fights, while the monster isn't
+              confused, the Psionic casts the confusion spell that lands best (Lios, Sios,
+              Masios, Lasios: psionic_damage 0x800b34b0); otherwise the normal policy. Each
+              fight records obs['psi']: the casts commanded, the rounds the monster was
+              confused at command input, the Psionic's spell points at the start and end.
 SAVEAT=REL saves each fight's start to rips/harness/REL_ENC.state.
 Progress goes to the monitor's jobs panel through scripts/jobstatus.py: one job per launch
 (JOB_RUN), a worker per process (JOB_PART, e.g. 'b v6b 1-10'), chains done per arm (JOB_ARM),
@@ -244,6 +254,90 @@ def fire_gear(g, log, troll=False):
     return done
 
 
+PSI_CLASS, BISHOP = 10, 11
+PSI_MIN = (10, 14, 0, 14, 0, 10)    # class_min_stats 0x8005e22c, Psionic: Str, IQ, Pie, Vit, Agi, Luc
+NEUTRAL = 1                         # Roster +0x0a bits 6-7
+# confusion spells in the order they land against a monster that resists confusion (+0xcc
+# bit 8, halves p): Lios and Sios save at 100 - 65/2 = 68, Masios and Lasios at 100 - 60/2 =
+# 70 (spell_lios 0x800af924, spell_sios 0x800ca5d0, spell_masios 0x800aff00, spell_lasios
+# 0x800b06f8). Lios first: the rest of its level (Diafic, Calko) isn't castable in battle.
+PSI_ORDER = (66, 63, 72, 82)
+PSI = {}
+
+
+def vit_bonus(v):
+    """hp_die_roll 0x800ba5b0's Vitality term."""
+    return -1 if v <= 3 else 0 if v <= 5 else 1 if v <= 15 else 1 + v - 15
+
+
+def make_psionic(g, log):
+    """The party's Bishop becomes a Neutral Psionic of the same level, by RAM (a measurement,
+    not play): the fields the game reads for a caster (G-records.md, E-town.md):
+      +0x0b class 10 (sex bit kept); +0x0a alignment Neutral (a Psionic may be Neutral or Evil)
+      +0x13.. stats raised to the class minimums where below
+      +0x4c spells known: the Psionic school only, all three spells of every spell level
+            that has points at this level (a level-22+ Psionic has had 9 or more learning
+            rolls at each level, (IQ+Vit)/2 out of 30 each, levelup_learn_spells 0x800b9090)
+      +0x5c spell points: spell_points_recalc 0x800b9540, rule (Psionic, 0, 2): spell
+            level j (0-6) gets max(known count, L - 2j) up to 9; other schools 0
+      +0x46/+0x4a HP scaled by the class's mean roll a level: Psionic 1 + 1..3, Bishop
+            2 + 1..4, both + the Vitality term (hp_dice JOUKA 0x800a138c)
+      gear a Psionic or a Neutral can't wear (item +0x1c class bit 10, +4 alignment bit)
+            taken off, then the camp Equip menu picks from the pack
+    The derived block (+0x7e..+0xbf: saves, AC, resistances) is rebuilt at each fight's
+    start from class and gear (battle_derive_stats 0x800a1830), so it follows."""
+    from harness import gear, camp
+    from harness.game import ROSTER, ROSTER_LEN
+    slots = g.party_slots()
+    hit = [(p, r) for p, r in enumerate(slots) if r is not None and g.char(r)['cls'] == BISHOP]
+    if not hit:
+        return None
+    pos, ri = hit[0]
+    c = g.char(ri)
+    raw = bytearray(c['raw'])
+    lv = c['level']
+    before = dict(cls=c['cls'], align=c['align'], stats=c['stats'], hp=c['hp'], max_hp=c['max_hp'],
+                  sp=c['sp'], known=raw[0x4c:0x5c].hex())
+    raw[0x0b] = (raw[0x0b] & 0x80) | PSI_CLASS
+    raw[0x0a] = (raw[0x0a] & 0x3f) | (NEUTRAL << 6)
+    for i, mn in enumerate(PSI_MIN):
+        raw[0x13 + i] = max(raw[0x13 + i], mn)
+    known = bytearray(16)
+    sp = bytearray(28)
+    for j in range(7):
+        n = lv - 2 * j
+        if n < 1:
+            break
+        known[12 + j // 2] |= 7 << (4 * (j % 2))
+        sp[21 + j] = min(9, max(4, n))
+    raw[0x4c:0x5c] = known
+    raw[0x5c:0x78] = sp
+    vb = vit_bonus(raw[0x16])
+    ratio = (3 + vb) / (4.5 + vb)
+    mx = max(1, round(c['max_hp'] * ratio))
+    struct.pack_into('<h', raw, 0x4a, mx)
+    struct.pack_into('<h', raw, 0x46, min(mx, max(0, round(c['hp'] * ratio))))
+    off = []
+    for k in range(10):
+        w = struct.unpack_from('<H', raw, 0x20 + 2 * k)[0]
+        if w == 0xffff or not w & gear.EQUIPPED or w & gear.CURSED:
+            continue
+        it = gear.item(g, w & 0x1ff)
+        if not it['classes'] & (1 << PSI_CLASS) or not it['f04'] & (1 << NEUTRAL):
+            struct.pack_into('<H', raw, 0x20 + 2 * k, w & ~(gear.EQUIPPED | gear.MAIN_H | gear.SUB_H))
+            off.append(gear.name(w & 0x1ff))
+    g.e.write(ROSTER + ri * ROSTER_LEN, bytes(raw))
+    ch = gear.equip(g, pos, log)
+    if camp.in_camp(g):
+        camp.close_camp(g)
+    c = g.char(ri)
+    PSI.update(ri=ri, name=c['name'])
+    return dict(name=c['name'], pos=pos, level=lv, before=before, after=dict(
+        cls=c['cls'], align=c['align'], stats=c['stats'], hp=c['hp'], max_hp=c['max_hp'], sp=c['sp'],
+        known=c['raw'][0x4c:0x5c].hex(), ac=struct.unpack_from('<b', c['raw'], 0x86)[0]),
+        took_off=off, equip=ch)
+
+
 def ring_held(g):
     return any(any(it & 0x1ff == RING for it in g.char(i)['items']) for i in g.party())
 
@@ -261,6 +355,10 @@ def bench_one(g, st, seed):
     nofis = int(os.environ.get('NOFIS') or 0)
     NOFIS_N[0] = nofis
     gear_log = []
+    PSI.clear()
+    psionic = make_psionic(g, gear_log) if os.environ.get('PSIONIC') else None
+    if psionic is not None:
+        print('psionic', psionic, flush=True)
     fire = fire_gear(g, gear_log) if os.environ.get('FIRE') else None
     if fire is not None:
         print('fire gear', fire, flush=True)
@@ -281,7 +379,11 @@ def bench_one(g, st, seed):
         seen = []
         obs = dict(fixed=set(), ngroups=set(), mod_min=0, morlis=0, dilto=0, confused_set=0)
         mplan = dict(round=None, d=0)
-        if nofis or morlis or confuse:
+        psi = None
+        if PSI:
+            psi = obs['psi'] = dict(cmds=[], conf_rounds=[], seen_rounds=[], status=[],
+                                    sp0=g_.char(PSI['ri'])['sp'][3])
+        if nofis or morlis or confuse or psi is not None:
             if battle.FIGHT_POLICIES and policy is battle.default_policy and where in battle.POLICY_AT:
                 policy = battle.POLICY_AT[where]
             inner = policy
@@ -303,6 +405,22 @@ def bench_one(g, st, seed):
                             if v < 0x80 and not v & 2:
                                 g2.e.write(a, struct.pack('<H', v | 2))
                                 obs['confused_set'] += 1
+                if psi is not None and ks:
+                    k = min(ks)
+                    mons = tactics.info(g2, k)['mons']
+                    conf = any(st & 2 for _, _, st in mons)
+                    if battle.ROUND not in psi['seen_rounds']:
+                        psi['seen_rounds'].append(battle.ROUND)
+                        psi['status'].append([st for _, _, st in mons])
+                        if conf:
+                            psi['conf_rounds'].append(battle.ROUND)
+                    if not conf and battle.party_ids(g2)[m] == PSI['ri'] and battle.SPELL in opts:
+                        by_id = {c[0]: c for c in battle.castable(g2, PSI['ri'])}
+                        for sid in PSI_ORDER:
+                            if sid in by_id:
+                                c = by_id[sid]
+                                psi['cmds'].append((battle.ROUND, sid))
+                                return ('spell', sid, c[1], c[2], c[3], ('group', k))
                 if morlis and ks and battle.SPELL in opts:
                     k = min(ks)
                     mods = battle._cm_mods(g2, k)
@@ -331,6 +449,8 @@ def bench_one(g, st, seed):
         p0, pl0 = points(g_), points_lv(g_)
         m0 = len(g_.cap.messages) if g_.cap else 0
         res = orig(g_, policy, chest_mode, **k)
+        if psi is not None:
+            psi['sp1'] = g_.char(PSI['ri'])['sp'][3]
         post = members(g_)
         wiped = all(m['hp'] <= 0 or m['status'] >= 0x20 for m in post)
         won = res['ovl'] == 'MAZE' and not wiped and not (res['fled'] or (0, 0))[0]
@@ -381,7 +501,8 @@ def bench_one(g, st, seed):
     return dict(state=st, seed=seed, arm=dict(oslo=bool(os.environ.get('OSLO')), stack=stack,
                                               set=os.environ.get('SET', ''), nofis=nofis,
                                               aware=bool(os.environ.get('NOFIS_AWARE')), fire=fire,
-                                              troll=troll, morlis=morlis, confuse=confuse),
+                                              troll=troll, morlis=morlis, confuse=confuse,
+                                              psionic=psionic),
                 ring=ring, end=here(g) if g.overlay() not in ('JOUKA', 'HAZURE') else g.overlay(),
                 fights=fights, won=sum(f['won'] for f in fights), events=evs, error=err,
                 party=members(g) if g.overlay() not in ('JOUKA', 'HAZURE') else None)
@@ -396,7 +517,7 @@ def arm_label():
     """JOB_ARM, or the arm's settings in short (b, OSLO, NOFIS5 ...)."""
     if os.environ.get('JOB_ARM'):
         return os.environ['JOB_ARM']
-    keys = ('OSLO', 'STACK', 'NOFIS', 'NOFIS_AWARE', 'FIRE', 'TROLL', 'MORLIS', 'CONFUSE')
+    keys = ('OSLO', 'STACK', 'NOFIS', 'NOFIS_AWARE', 'FIRE', 'TROLL', 'MORLIS', 'CONFUSE', 'PSIONIC')
     parts = [k + ('' if os.environ[k] == '1' else os.environ[k]) for k in keys if os.environ.get(k)]
     if os.environ.get('SET'):
         parts.append(os.environ['SET'])
