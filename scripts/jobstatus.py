@@ -11,6 +11,7 @@
         j.tally('FG won')                          # counters, summed across workers
         j.event(f'seed {seed}: FG won r16')        # a line in the recent-events list
         j.done_one({'seed': seed, 'won': 1})       # one unit of `total` finished
+        j.section('now', ['party: ...', 'where: ...'])  # named text blocks, replaced each call
     j.finish('12/20 won')
 
 Each process writes its own rips/monitor/jobs/NAME-PID.json in the main copy (found from a
@@ -18,7 +19,9 @@ worktree through git's commondir), atomically, at most about once a second, plus
 finish and at exit. Several workers of one job use the same NAME (and, for a launch that
 should stay apart from an earlier one of the same name, the same `run`, or JOB_RUN in the
 environment); the monitor sums them. `part` labels a worker ('n5 v6b 1-10') and `arm`
-groups workers for a done/total per arm. No dependencies beyond the standard library.
+groups workers for a done/total per arm. Sections are a worker's own live view (a chain's
+current chapter, party and place, a table of times): the job detail shows each worker's
+sections in full, under the worker's part. No dependencies beyond the standard library.
 
 Environment, read when the argument isn't given: JOB_AGENT (agent), JOB_RUN (run),
 JOB_PART (part), JOB_ARM (arm), JOB_STATUS (the agent's STATUS.md), JOBSTATUS_DIR (where
@@ -95,7 +98,8 @@ class Job:
             pid=os.getpid(), start=time.time(), updated=None, total=total, done=0,
             step=None, step_since=None, tally={}, keys=list(keys) if keys else None, events=[],
             done_times=[], last_result=None,
-            outputs=[os.path.abspath(p) for p in outputs], finished=None, summary=None, exited=None)
+            outputs=[os.path.abspath(p) for p in outputs], finished=None, summary=None, exited=None,
+            sections={})
         safe = re.sub(r'[^A-Za-z0-9_.-]+', '_', name)[:60]
         self.dir = jobs_dir()
         self.path = os.path.join(self.dir, f'{safe}-{os.getpid()}.json')
@@ -125,6 +129,15 @@ class Job:
     def event(self, text):
         with self.lock:
             self.d['events'] = (self.d['events'] + [[round(time.time(), 1), str(text)]])[-EVENTS:]
+        self._write()
+
+    def section(self, title, lines):
+        """Replace the text block `title` (a list of lines; None drops it)."""
+        with self.lock:
+            if lines is None:
+                self.d['sections'].pop(title, None)
+            else:
+                self.d['sections'][title] = [str(x) for x in lines]
         self._write()
 
     def set_total(self, total):
