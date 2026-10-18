@@ -190,19 +190,22 @@ def yes_no(g, yes, what='yes/no'):
 
 
 def create_character(g, name, race, sex, align, cls, retrain=None, reroll_limit=400,
-                     reroll_delay=lambda k: 3 + (k * 7) % 23):
+                     reroll_delay=lambda k: 3 + (k * 7) % 23, accept=None):
     """Training Grounds -> Create Character, start to finish. race/sex/align/cls by name
     ('Human', 'M'/'F', 'Good', 'Fighter'). If the class isn't offered, finish the
     character as something else and answer No to "Use this character?" (it's thrown
     away), then start again, as a player rerolls: the class screen has no way back to
     the roll (T4, 2026-10-12: cross and every other button do nothing there). Waits
     reroll_delay(k) frames before each roll so they differ. retrain: True/False at
-    "Retrain?", None = Yes only when asked. Returns a dict: roster index, bonus,
-    rerolls, retrained, frames."""
+    "Retrain?", None = Yes only when asked. accept(g, new_char_bytes, bonus), when given,
+    runs at "Use this character?" with the finished work record (new_char, age at +0x10):
+    None throws the character away and rolls again, anything else is the answer to
+    "Retrain?" (chapter 19's Priestess: 18, or 15 and retrained). Returns a dict: roster
+    index, bonus, rerolls, retrained, frames."""
     f0 = g.frame
     rerolls = 0
     while True:
-        r = _create_once(g, name, race, sex, align, cls, retrain, reroll_delay(rerolls))
+        r = _create_once(g, name, race, sex, align, cls, retrain, reroll_delay(rerolls), accept)
         if r is not None:
             r.update(rerolls=rerolls, frames=g.frame - f0)
             return r
@@ -238,7 +241,7 @@ def _class_bonus(g, cls):
         ui.confirm_until(g, lambda: g.u8(CS) == 90, 300, 'distribute')
 
 
-def _create_once(g, name, race, sex, align, cls, retrain, delay):
+def _create_once(g, name, race, sex, align, cls, retrain, delay, accept=None):
     """One pass through creation. None if the roll didn't offer cls (the character was
     finished and thrown away), else the registered character's dict."""
     if g.overlay() != 'JOUKA' or g.u8(TOWN_STATE) != 30:
@@ -264,23 +267,18 @@ def _create_once(g, name, race, sex, align, cls, retrain, delay):
         _class_bonus(g, CLASSES[offered[0]])
         yes_no(g, True, 'is this all right')
         ui.confirm_until(g, lambda: g.u8(CS) == 105, 300, 'all right')
-        # cancel is No here (state 'n', 110); moving the list cursor to No and confirming
-        # registered the character anyway (state 's', 115) in the Bishop reroll test
-        ui.cancel_until(g, lambda: g.u8(CS) != 105, 300, 'throw away')
-        if g.u8(CS) == 115:
-            raise Stuck('throw away took Yes')
-        ui.press_until(g, 'circle', lambda: g.u8(CS) == 0 and facility_ready(g), 1200,
-                       'back to the Training Grounds')
-        g.step(30)
-        if g.u8(ROSTER_COUNT) != count0:
-            raise Stuck('thrown-away character registered', count=g.u8(ROSTER_COUNT))
-        return None
+        return _throw_away(g, count0)
 
     bonus = g.u8(BONUS)
     choose_list(g, offered.index(want), len(offered), 'class')
     _class_bonus(g, cls)
     yes_no(g, True, 'is this all right')
     ui.confirm_until(g, lambda: g.u8(CS) == 105, 300, 'all right')
+    if accept is not None:
+        verdict = accept(g, g.e.read(NEW_CHAR, 0xd0), bonus)
+        if verdict is None:
+            return _throw_away(g, count0)
+        retrain = verdict
     yes_no(g, True, 'use this character')
     retrained = False
     asked = False
@@ -301,6 +299,21 @@ def _create_once(g, name, race, sex, align, cls, retrain, delay):
         ui.confirm_until(g, lambda: g.u8(CS) != cs or g.u8(CS) == 0, 600, 'creation end')
     ui.wait_until(g, lambda: g.u8(ROSTER_COUNT) == count0 + 1, 120, 'registered')
     return dict(index=count0, name=name, cls=cls, bonus=bonus, retrained=retrained)
+
+
+def _throw_away(g, count0):
+    """At "Use this character?" (state 105): No, so nothing is registered. Returns None."""
+    # cancel is No here (state 'n', 110); moving the list cursor to No and confirming
+    # registered the character anyway (state 's', 115) in the Bishop reroll test
+    ui.cancel_until(g, lambda: g.u8(CS) != 105, 300, 'throw away')
+    if g.u8(CS) == 115:
+        raise Stuck('throw away took Yes')
+    ui.press_until(g, 'circle', lambda: g.u8(CS) == 0 and facility_ready(g), 1200,
+                   'back to the Training Grounds')
+    g.step(30)
+    if g.u8(ROSTER_COUNT) != count0:
+        raise Stuck('thrown-away character registered', count=g.u8(ROSTER_COUNT))
+    return None
 
 
 def _is_retrain_prompt(g, since):
@@ -346,6 +359,16 @@ def tavern_candidates(g):
         if c == 0xff and i not in party and status == 0:
             out.append(i)
     return out
+
+
+BENCH = set()               # roster indices never taken in as standbys (chapter 19: the titled
+                            # main party and the Priestess, out of the ring party's way)
+
+
+def standbys(g):
+    """tavern_candidates without the BENCH: who fill_party, raised_back, tablet_back and
+    the backups may bring into the party."""
+    return [i for i in tavern_candidates(g) if i not in BENCH]
 
 
 def form_party(g, members, limit=900):
@@ -404,6 +427,18 @@ EDGE_ICON = 0x80079c58      # its icon row: 0 Begin Adventure, 1 Go to the Train
                             # 6 Change Settings, 7 Back to Town (dev/edge_captions.png)
 
 
+def edge_icon(g, k):
+    """The Edge of Town's icon position for entry k of the eight above: once story_flags
+    bit 31 is set (the Priestess's Door) Dragon's Cave is the third icon and the entries
+    from Resume on move one right (F-edge-save.md "The menu"; ch19 proof18 and probe p11,
+    2026-10-17: icon 3 was Resume and 7 Change Settings, "Back to Town" stuck)."""
+    return k + 1 if k >= 2 and g.u32(0x80079b44) & 0x80000000 else k
+
+
+def edge_icons(g):
+    return 9 if g.u32(0x80079b44) & 0x80000000 else 8
+
+
 def remove_member(g, pos, limit=600):
     """Tavern, Remove Member (icon 1, "Who will leave the party?", the party grid MX/MY):
     take party position `pos` out; they wait in the tavern. Each press removes the member
@@ -417,7 +452,15 @@ def remove_member(g, pos, limit=600):
     g.step(20)
     _pick_party_member(g, pos, 'leaver')
     ui.press_until(g, 'circle', lambda: town_slots(g)[pos] is None, limit, 'remove member')
-    ui.cancel_until(g, lambda: facility_ready(g), limit, 'back to the tavern menu')
+    if not town_party(g):
+        # the last member out: the screen may close by itself, and a cross landing after
+        # that left the tavern for the bar and the Edge of Town (ch19 outfit, 2026-10-17)
+        for _ in range(60):
+            if facility_ready(g) and g.u8(TOWN_STATE) == 10:
+                break
+            g.step()
+    if not (facility_ready(g) and g.u8(TOWN_STATE) == 10):
+        ui.cancel_until(g, lambda: facility_ready(g), limit, 'back to the tavern menu')
     return town_party(g)
 
 
@@ -496,7 +539,11 @@ def inn_stay(g, slot, room='Stables', weeks=None, gather=False, limit=600):
     ui.move_cursor(g, FAC_CURSOR, 0, 'right', 'left', wrap=4, what='Stay')
     ui.confirm_until(g, lambda: g.u8(FAC_SUB) == 10 and g.u8(FAC_PANEL) == 1, limit, 'Stay')
     _pick_party_member(g, slot, 'who will stay')
-    room_ready = lambda: g.u8(ROOM_LEVEL) == 1 and g.u8(FAC_PANEL) == 0 and g.u8(TOWN_MSG) == 0
+    # a titled member's status line draws the title's emblem, and FAC_PANEL reads 1 on the
+    # room list from then on (ch19 devB, 2026-10-17: Uranus stuck at "Which room?")
+    titled = bool(g.char(idx)['raw'][0xc5] & 1)
+    room_ready = lambda: (g.u8(ROOM_LEVEL) == 1 and (g.u8(FAC_PANEL) == 0 or titled and g.u8(FAC_PANEL) == 1)
+                          and g.u8(TOWN_MSG) == 0)
     ui.confirm_until(g, lambda: g.u8(ROOM_LEVEL) == 1 and g.u8(FAC_PANEL) == 0, limit, 'pick member')
     ui.wait_until(g, room_ready, limit, 'room list')
     ui.move_cursor(g, LIST, ROOMS.index(room), 'down', 'up', what='room')

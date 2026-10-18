@@ -1830,7 +1830,7 @@ class Chapter1:
         return out
 
 
-from harness import chapter2, chapter3, chapter4, chapter5, chapter6, chapter7, chapter8, chapter9, chapter10, chapter11, chapter12, chapter13, chapter14, chapter15, chapter16, chapter17, chapter18  # noqa: E402,F401  (register the chapters)
+from harness import chapter2, chapter3, chapter4, chapter5, chapter6, chapter7, chapter8, chapter9, chapter10, chapter11, chapter12, chapter13, chapter14, chapter15, chapter16, chapter17, chapter18, chapter19  # noqa: E402,F401  (register the chapters)
 
 
 def points_path(g, name):

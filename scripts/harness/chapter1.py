@@ -1187,7 +1187,7 @@ def raised_back(g, log):
         here = [p for p, ri in enumerate(slots) if ri is not None]
         if len(here) < 6:
             return
-        cands = [i for i in town.tavern_candidates(g)
+        cands = [i for i in town.standbys(g)
                  if i not in tried and g.char(i)['status'] == 0]
         if not cands:
             return
@@ -1238,7 +1238,7 @@ def tablet_back(g, log):
     30 recover trips followed)."""
     if TABLET in party_items(g):
         return
-    holder = next((i for i in town.tavern_candidates(g)
+    holder = next((i for i in town.standbys(g)
                    if any((it & 0xfff) == TABLET for it in g.char(i)['items'])), None)
     if holder is None:
         return
@@ -1293,7 +1293,7 @@ def fill_party(g, log, size=6):
     goal with five members)."""
     tried = set()
     while len(town.town_party(g)) < size:
-        cand = [i for i in town.tavern_candidates(g) if i not in tried and g.name(i) != gear.MULE_NAME]
+        cand = [i for i in town.standbys(g) if i not in tried and g.name(i) != gear.MULE_NAME]
         if not cand:
             break
         ri = max(cand, key=lambda i: (g.char(i)['level'], -i))

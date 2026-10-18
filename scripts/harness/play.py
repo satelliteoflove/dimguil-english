@@ -293,10 +293,21 @@ def drop_picker(g, limit=3000):
             g.step(10)
             from harness import camp, gear
             slots = g.party_slots()
+            # a standing member: the cursor wouldn't go to a dead one (c19v3c, 2026-10-18:
+            # Venus dead in slot 1, "who drops row" stuck after the coffin's ring)
             who = next((p for p, ri in enumerate(slots) if ri is not None
+                        and g.char(ri)['status'] < 0x20
                         and any(gear.throwable(g, w) for _, w in gear.pack(g, ri))), None)
+            if any(m['file'] == 'SISETU.OBJ' and m['idx'] in DROP_PROMPTS for m in g.cap.messages[j + 1:]):
+                # the member was already picked (the cursor's) and the list is up: an
+                # earlier press went through (proof18d, 2026-10-18: "Drop which item?" for
+                # Mercury while the row cursor was moved for Venus, "who drops row" x6)
+                continue
             if who is not None:
-                camp._pick_member(g, who, 'who drops')
+                try:
+                    camp._pick_member(g, who, 'who drops')
+                except Stuck:
+                    continue
             n = len(g.cap.messages)
             ui.press_until(g, 'circle', lambda: len(g.cap.messages) > n
                            or g.u8(maze.GAME_STATE) != 3, 120, 'who drops')
