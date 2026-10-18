@@ -1,21 +1,28 @@
-"""Walkthrough chapter 19, the ending, by the walkthrough's method (2026-10-17).
+"""Walkthrough chapter 19, the ending's ring kept from the King for the Priestess's Door
+(2026-10-17). Runs after chapter 17 and before chapter 18: the chain is 17, 19, 18.
 
-Plan: rips/harness/ch19/STATUS.md (its later sections: Chris's changes, the walkthrough's
-method, the ring party, D1 settled: the story route). Source: data/walkthrough/dim/
-19-ending.json, docs/re/postgame.md, docs/re/F-edge-save.md (creation), docs/re/ninja.md
-(THIEVES DAGGER), and the code: JOUKA training_create 0x800af5d8, tavern_main 0x800a79d4
-(its R2 shortcut), tavern_inspect 0x800aa444 with FUN_800cbddc (the status screen's menu),
-equip_menu 0x800ccc94, inn_stay 0x800c5e34 with FUN_800c8b10 (one level a stay, when the EXP
-is there), town_main 0x800a2198, king_ending 0x800a52cc, MAIN FUN_800124a8 (the soft reset).
+Plan: rips/harness/ch19/STATUS.md, section "Quicker path (Chris, 2026-10-17)": no new
+party; the main party, still untitled after chapter 17, wins a ring at the coffin, the
+soft reset keeps it, and the ring makes the Priestess, who opens the Priestess's Door on
+Training Maze B8 (story_flags bit 31). The main party ends in town untitled and without a
+ring, so chapter 18 runs unchanged afterwards: the coffin is repeatable for such a party
+(docs/re/postgame.md section 3).
 
-From chapter 18's end (the main party titled, in town), a new untitled party wins a second
-RING OF MEDIUM at the coffin, and the ring makes a level-5, age-18 female Elf Priest into
-the Priestess without the King taking it.
+Source: data/walkthrough/dim/19-ending.json and 20-training-maze.json, data/maps/dim/f09,
+f15, f16, f42.json, docs/re/postgame.md, docs/re/F-edge-save.md (creation), and the code:
+JOUKA training_create 0x800af5d8, tavern_main 0x800a79d4 (its R2 shortcut), tavern_inspect
+0x800aa444 with FUN_800cbddc (the status screen's menu), equip_menu 0x800ccc94, inn_stay
+0x800c5e34 with FUN_800c8b10 (one level a stay, when the EXP is there), town_main 0x800a2198,
+king_ending 0x800a52cc, MAIN FUN_800124a8 (the soft reset), MAZE square_examine 0x800bb790
+(case 7 the Training Maze lift, case 0x59 the door), FUN_800b2e8c (the lift's floor menu),
+FUN_800ac798 (the door's member picker), maze_prompt_result 0x800befcc case 0x19.
 
-What the probes found (rips/harness/ch19/probe, 2026-10-17, ch18's states):
+What the probes found (rips/harness/ch19/probe, 2026-10-17, ch18's states and dev run devA):
 - Creation: new_char (0x8008ff10) already holds the age at "Use this character?" (state
   105), so the age is rolled for: 18 is kept with Retrain declined, 15 with a bonus under
   10 is kept and retrained (+3 years, level 4); anything else is thrown away (p1).
+- The Training Maze: the Edge of Town's icon 1 puts the party in camp on B1 (area 9) at
+  E12 N9 (12, 14); triangle there goes back to town (p5), so maze.ENTRANCE[9].
 - The soft reset: MAIN FUN_800124a8 resets when the held pad word is 0x90f (L2 R2 L1 R1
   SELECT START) and START is new. Held during the audience (town_state 45), the title's
   Continue comes back to the town bar with the ring in the holder's pack, nobody titled
@@ -30,38 +37,32 @@ What the probes found (rips/harness/ch19/probe, 2026-10-17, ch18's states):
   first) Yes on the ring set her six stats to 5/18/18/5/5/18 (p4). R2 at the tavern menu
   goes to Boltac's (town_state 20) without the town bar; Uncurse took 50,000 Gp from the
   trader and the ring was gone; the town bar after that started no audience.
-- THIEVES DAGGER (Chris's watch-out): its effect 0x25 (become a Ninja) runs only through
-  equip_menu's state 0x7d, after Yes at that same prompt (decomp lines 307-342, 392, 644);
-  gear._equip_prompts answers No (cross) for everything but `unleash`, so the Thief can
-  wield it and stays a Thief. The class is checked after outfit and logged.
-- The Training Maze: the Edge of Town's icon 1 puts the party in camp on B1 (area 9) at
-  E12 N9 (12, 14); triangle there goes back to town (p5), so maze.ENTRANCE[9].
+- The lift (B1 E9 N11, (9, 12), facing east, case 7): SISETU 443, then game_state 4 with
+  the floor index in 0x80079797 (0 = B1 .. 6 = B7, area = index + 9; right/left move it,
+  as far as the Tablet's stones allow, FUN_800b7248 bits 3, 7, 0, 1, 5, 2), circle rides
+  (scene 0xb, about 330 frames) to the same square on that floor (p7, p8). B7's stairs at
+  E10 N12 (10, 11) lead to B8 (10, 10); nav plans them.
+- The door (B8 E10 N11, (16, 10, 12), facing west, case 0x59): EVENTMES 240 (the glyphs,
+  the old script for the profile) and "Will someone try it?", then the member picker
+  (game_state 0x11, FUN_800ac798: row in 0x8007b6f2, 0x48 front 0x62 back, column in
+  0x8007b6f0 at -99, 1, 101; up/down and left/right move it, circle picks; the slot goes to
+  0x8007e808). Her slot gave EVENTMES 239 and story bit 31, and the party went on through
+  the opened wall onto the lift behind it to Dragon's Cave B1 (area 42) at (11, 12) (p8,
+  p9). Triangle at Dragon's Cave B1 E12 N12 (12, 11) goes to town (p10).
 
 Goals, each proved by RAM or a captured string:
-  create       the five new records: the Priestess Luna (+0x0a & 0x3f == 1 Elf, +0x0b ==
-               0x82 female Priest, +0x10 == 18), the Monk Pluto, the Priest Ceres, the
-               Psionic Io (Neutral), the Thief Puck (Hobbit, Neutral).
-  outfit       spares moved by tavern Give from the main party, Mars and the Mule (the
-               Tablet to Io, Eve's WAND OF MYSTERY to Io, the GOLD GAUNTLETS and BOOTS to
-               the Mule, a THIEVES DAGGER and the ROBINSWORD to Puck, an ANKH to Pluto,
-               Latumofis potions), then the gold divided over Uranus, Eve and four of the
-               ring party. Proof: each item in its receiver's pack, Puck still a Thief.
-               Mars is the mule from here (gear.MULE_NAME).
-  train_esc_NN escort trips (Uranus and Earth with the Mule, Pluto, Puck and Io) on the
-               Underground (ESC_AREAS) until the trainees' median level is ESC_LEVEL.
-  train_NN     the ring party alone (Jupiter, the Mule, Pluto | Puck, Ceres, Io), its floor
-               by its median level (LADDER), until RING_LEVEL. Everyone else is on
-               town.BENCH (never taken in as a standby).
-  priestess_NN Training Maze B1 trips with Uranus, Dax and Venus as escorts (no Priest, so
-               no camp Kadorto can age her); in town she stays at the Stables one night at a
-               time only while a night raises her level, never past 5 (tm_town).
+  create       the Priestess Luna: +0x0a & 0x3f == 1 (Elf), +0x0b == 0x82 (female
+               Priest), +0x10 == 18.
+  priestess_NN Training Maze B1 trips with three of the main party as escorts (no Priest,
+               so no camp Kadorto can age her); in town she stays at the Stables one night
+               at a time only while a night raises her level, never past 5 (tm_town).
   priestess_l5 her level 5, EXP 4,396 or more, age 18, Elf female Priest, waiting in the
-               tavern.
+               tavern; the main party formed again.
   lift_z, the_man, coffin
-               chapter 18's goals with the ring party (no titled member).
+               chapter 18's goals with the main party (untitled after chapter 17).
   reset        the ring carried into town: the audience begins (town_state 45, SISETU 360
                captured), the soft reset at camp_state 5, Continue; proof: the ring in a
-               ring-party pack in town, nobody of the ring party titled, the story flags
+               main-party pack in town, nobody of the main party titled, the story flags
                unchanged. A holder down on arrival brings no audience (town_main moves the
                dead out first), so then there's nothing to reset: noted, and the temple
                raises the holder into the tavern.
@@ -69,41 +70,31 @@ Goals, each proved by RAM or a captured string:
                equipped with Yes at "Unleash", the gold pooled on her, R2 to Boltac's and
                Uncurse; proof: her stats 5/18/18/5/5/18, level 5, age 18, the ring in no
                pack, no title, 50,000 Gp paid.
+  tm_b1        the door party (the main party less its lowest-level member without the
+               Tablet, and the Priestess) on Training Maze B1 (area 9), with the Tablet and
+               all six stones (its item_state) in the party.
+  tm_lift      B7 (area 15) by the lift.
+  tm_b8        B8 (area 16) at the door square, the Priestess standing.
+  door         story_flags bit 31, EVENTMES 239 captured, 0x8007e808 her slot.
+  home         back in town (through Dragon's Cave B1's exit), the Priestess out, the main
+               party formed again: untitled, no ring anywhere, level 5 for her still.
 """
 import os, struct
 
-from harness import chapter1, chapter18, chapters, gear, maze, nav, town, ui
+from harness import chapter1, chapter3, chapter18, chapters, gear, maze, nav, town, ui
 from harness.game import Stuck
 
 RING = 0x142
 TABLET = 0x143
 STORY = 0x80079b44
+DOOR_BIT = 31
 TOWN_STATE = 0x80079b18
 CAMP_STATE = 0x80079669
 
-# --- the people ---
-# (name, race, sex, alignment, class); the Priestess is rolled for her age (priestess_age)
 PRIESTESS = ('Luna', 'Elf', 'F', 'Good', 'Priest')
-NEW = [('Pluto', 'Gnome', 'M', 'Neutral', 'Monk'),       # 12 bonus points over Gnome's base
-       ('Ceres', 'Dwarf', 'M', 'Good', 'Priest'),        # 3 points; Dwarf VIT 12
-       ('Io', 'Mook', 'M', 'Neutral', 'Psionic'),        # 10 points: Neutral or Evil only
-       ('Puck', 'Hobbit', 'M', 'Neutral', 'Thief')]      # 1 point; no Good Thief exists
-RING_PARTY = ['Jupiter', 'Mule', 'Pluto', 'Puck', 'Ceres', 'Io']   # front three, back three
-ESCORT_PARTY = ['Uranus', 'Mule', 'Pluto', 'Puck', 'Io', 'Earth']
-TRAINEES = ['Mule', 'Pluto', 'Puck', 'Io']
-TM_PARTY = ['Uranus', 'Dax', 'Venus', 'Luna']
-NEW_MULE = 'Mars'
-
-# --- training ---
-ESC_AREAS = (6, 7)              # Underground B2, B3 (chapters 3-4's floors)
-ESC_LEVEL = 8                   # the trainees' median level the escorts stay for
-ESC_MOST = 30
-# the ring party's floor by its median level: chapters 3-17's floors in their order
-LADDER = [(11, (6, 7)), (14, (20, 19)), (17, (24, 23)), (20, (29,)), (99, (36,))]
-RING_LEVEL = 23                 # the ring party's median level before the coffin
-RING_MOST = 120
-TRAIN_AREAS = (36,)             # boss_training at the coffin (Area E B4, as chapter 18)
-PUSH_AREAS = (29,)              # the train-after-running rule: Area C B3
+MAIN_LEVEL = 15                 # the main party: every roster member at this level or more
+                                # (the spares, Jupiter, Mars, Fen and the Mule, are 1-10)
+ESCORTS = 3                     # main-party members with her in the Training Maze
 
 # --- the Priestess ---
 TM_AREA = 9                     # Training Maze B1
@@ -127,26 +118,20 @@ GIVE_STATE = 0x80079569         # 5 "Give an item to whom?" (target 0x80079948),
 GIVE_TARGET = 0x80079948
 LIST_CUR = 0x80079c60
 
-# outfit, in order (dev run devB, 2026-10-17: the Mule's and Jupiter's packs were full, so
-# the gives to them failed): ('sell', item, holder) at Boltac's (the cursed kinds the plan
-# sends there), then (item, receiver, givers), the giver being the first of `givers` (None:
-# any spare outside the ring party, OUTFIT_GIVERS) holding one unequipped. Mars, the new
-# mule, takes the Mule's spares (the plan's section 4)
-SCREWY_SHIELD, EPEE_DISMAY, MACE_MISFORTUNE = 0xa9, 0x14, 0x1b
-LATUMOFIS, DIAL = 0xf3, 0xfa
-OUTFIT = [('sell', SCREWY_SHIELD, 'Mule'),       # (the EPEE OF DISMAY, unidentified, Boltac refuses)
-          (TABLET, 'Io', None), (0x6c, 'Io', None),            # Tablet, WAND OF MYSTERY
-          (0x44, 'Puck', None), (0x63, 'Puck', None),          # THIEVES DAGGER, ROBINSWORD
-          (0xb1, 'Puck', None),                                # FEAT GLOVES (c18v2c's Mars)
-          (DIAL, 'Ceres', ['Mars']),
-          (0x115, 'Pluto', ['Mule']),                          # ANKH OF POWER
-          (0xf8, 'Mars', ['Mule']), (0xf8, 'Mars', ['Mule']),  # ANGEL FLUTE x2
-          (0x13e, 'Mule', None), (0x13f, 'Mule', None),        # GOLD GAUNTLETS, GOLD BOOTS
-          (LATUMOFIS, 'Pluto', None), (LATUMOFIS, 'Ceres', None),
-          (LATUMOFIS, 'Io', None), (LATUMOFIS, 'Puck', None)]
-OUTFIT_GIVERS = ['Uranus', 'Earth', 'Eve', 'Mars', 'Dax', 'Venus', 'Mercury', 'Fen']
-GOLD_PARTY = ['Uranus', 'Eve', 'Jupiter', 'Mule', 'Pluto', 'Io']
-DIVIDE_ICON = 3
+# --- the door ---
+TM_LIFT = (9, 9, 12)            # B1 E9 N11, facing east
+LIFT_FACE = 1
+LIFT_FLOOR = 0x80079797         # the floor menu's index (talk_party): area = index + 9
+B7 = 15
+B8 = 16
+DOOR = (16, 10, 12)             # B8 E10 N11, facing west
+DOOR_FACE = 3
+PICK_ROW, PICK_COL = 0x8007b6f2, 0x8007b6f0
+PICKED = 0x8007e808
+DC_B1 = 42
+ALL_STONES = 0xff               # the Tablet's item_state with every stone set (chapter 16 on)
+
+TM_PARTY = []                   # set by the priestess goals: the escorts and her
 
 
 def here(g):
@@ -168,11 +153,6 @@ def titled(g, i):
 def holders(g, item=RING):
     """Roster indices (anyone, in the party or not) with `item` in their pack."""
     return [i for i in range(g.roster_count()) if any(it & 0x1ff == item for it in g.char(i)['items'])]
-
-
-def median_level(g, names):
-    lv = sorted(g.char(idx(g, n))['level'] for n in names if idx(g, n) is not None)
-    return lv[len(lv) // 2] if lv else 0
 
 
 # --- the tavern ---
@@ -402,157 +382,71 @@ def soft_reset(g, limit=6000):
     ui.wait_until(g, lambda: town.in_town_bar(g), limit, 'town after Continue')
 
 
+
 @chapters.chapter
 class Chapter19:
     n = 19
-    title = 'The ending: a second ring for the Priestess'
+    title = "The ending's ring kept for the Priestess's Door"
 
     def goals(self, run):
         g = run.g
-        gear.MULE_NAME = NEW_MULE           # the Mule fights in the ring party now
         memo = {}
         job = make_job(run)
-        dev_overrides()
 
-        def ring_ids():
-            return [idx(g, n) for n in RING_PARTY]
+        def main_ids():
+            if 'main' not in memo:
+                memo['main'] = [g.name(i) for i in range(g.roster_count())
+                                if g.char(i)['level'] >= MAIN_LEVEL and g.name(i) != PRIESTESS[0]]
+                run.note('main party', memo['main'])
+            return [idx(g, n) for n in memo['main']]
+
+        def main_names():
+            main_ids()
+            return memo['main']
+
+        def escorts():
+            ids = sorted(main_ids(), key=lambda i: (g.char(i)['cls'] not in chapter1.MELEE,
+                                                    -g.char(i)['max_hp']))
+            return [g.name(i) for i in ids[:ESCORTS]]
+
+        def door_party():
+            ids = main_ids()
+            tab = holders(g, TABLET)
+            drop = min((i for i in ids if i not in tab), key=lambda i: (g.char(i)['level'], -i))
+            # the three with the most HP in front, the rest and her behind (formed in order)
+            rest = sorted((i for i in ids if i != drop), key=lambda i: -g.char(i)['max_hp'])
+            return [g.name(i) for i in rest] + [PRIESTESS[0]]
 
         def create():
-            names = [PRIESTESS[0]] + [x[0] for x in NEW]
-            if all(idx(g, n) is not None for n in names):
+            if idx(g, PRIESTESS[0]) is not None:
                 return proved_create()
             if g.overlay() not in ('JOUKA', 'HAZURE'):
                 run.trip_home('create')
+            main_ids()
             town.to_town_bar(g)
-            if town.town_party(g):
-                clear_party(g)
-                town.to_town_bar(g)
-            for spec in [PRIESTESS] + NEW:
-                if idx(g, spec[0]) is not None:
-                    continue
-                kw = dict(accept=priestess_age) if spec is PRIESTESS else dict(retrain=False)
-                r = town.create_character(g, *spec, **kw)
-                town.to_town_bar(g)
-                c = g.char(r['index'])
-                run.note('created', dict(r, age=c['age'], level=c['level'], stats=c['stats'],
-                                         hp=c['max_hp']))
-                print('c19 created %s: %s, age %d, level %d, %d rerolls' % (
-                    spec[0], spec[4], c['age'], c['level'], r['rerolls']), flush=True)
+            r = town.create_character(g, *PRIESTESS, accept=priestess_age)
+            town.to_town_bar(g)
+            c = g.char(r['index'])
+            run.note('created', dict(r, age=c['age'], level=c['level'], stats=c['stats'], hp=c['max_hp'],
+                                     exp=c['exp']))
+            print('c19 created %s: age %d, level %d, %d rerolls, retrained %s' % (
+                PRIESTESS[0], c['age'], c['level'], r['rerolls'], r['retrained']), flush=True)
             return proved_create()
 
         def proved_create():
-            out = True
-            for name, race, sex, al, cls in [PRIESTESS] + NEW:
-                i = idx(g, name)
-                c = g.char(i) if i is not None else None
-                if c is None or town.CLASSES[c['cls']] != cls or town.RACES[c['race']] != race \
-                        or town.ALIGN[c['align']] != al or c['female'] != (sex == 'F'):
-                    run.note('create: wrong record', name, c and (c['race'], c['cls'], c['align']))
-                    out = False
             L = idx(g, PRIESTESS[0])
             raw = g.char(L)['raw']
-            if raw[0x0a] & 0x3f != 1 or raw[0x0b] != 0x82 or raw[0x10] != 18:
+            ok = raw[0x0a] & 0x3f == 1 and raw[0x0b] == 0x82 and raw[0x10] == 18
+            if not ok:
                 run.note('create: the Priestess', hex(raw[0x0a]), hex(raw[0x0b]), raw[0x10])
-                out = False
-            return out
-
-        def outfit():
-            if g.overlay() not in ('JOUKA', 'HAZURE'):
-                return outfit_done()
-            town.to_town_bar(g)
-            ring = ring_ids()
-            for step in OUTFIT:
-                if step[0] == 'sell':
-                    _, item, who = step
-                    ri = idx(g, who)
-                    k = next((k for k, w in gear.pack(g, ri) if w & 0x1ff == item), None)
-                    if k is None:
-                        continue
-                    clear_party(g)
-                    town.form_party(g, [ri])
-                    try:
-                        r = town.boltac_sell(g, 0, k)
-                        run.log.append((g.frame, 'outfit sell', who, gear.name(item), r['outcome']))
-                    except Stuck as e:
-                        run.note('outfit sell stuck', who, gear.name(item), e.what)
-                    town.to_town_bar(g)
-                    continue
-                item, to, givers = step
-                ri = idx(g, to)
-                if outfit_has(item, to, givers):
-                    continue
-                cands = [idx(g, n) for n in (givers or OUTFIT_GIVERS)]
-                giver = next((i for i in cands if i is not None and i != ri and i not in
-                              (ring if givers is None else ()) and any(
-                                  w & 0x1ff == item and not w & gear.EQUIPPED for _, w in gear.pack(g, i))), None)
-                if giver is None:
-                    run.note('outfit: nobody has', gear.name(item), 'for', to)
-                    continue
-                clear_party(g)
-                town.form_party(g, [giver, ri])
-                ok = tavern_give(g, 0, item, 1)
-                run.log.append((g.frame, 'outfit give', g.name(giver), gear.name(item), to, ok))
-                town.to_town_bar(g)
-            if any(g.char(idx(g, n))['gold'] < 1000 for n in GOLD_PARTY if idx(g, n) in ring):
-                clear_party(g)
-                town.form_party(g, [idx(g, n) for n in GOLD_PARTY])
-                g0 = {n: g.char(idx(g, n))['gold'] for n in GOLD_PARTY}
-                town.pool_gold(g, 0, 'tavern')
-                town.divide_gold(g)
-                town.to_town_bar(g)
-                run.note('outfit gold', {n: (g0[n], g.char(idx(g, n))['gold']) for n in GOLD_PARTY})
-            clear_party(g)
-            town.to_town_bar(g)
-            return outfit_done()
-
-        def outfit_has(item, to, givers=None):
-            """A step is done when the receiver holds one; a step from named givers (the
-            Mule's spares to Mars) when no giver has one left unequipped."""
-            if givers:
-                return not any(w & 0x1ff == item and not w & gear.EQUIPPED
-                               for n in givers for _, w in gear.pack(g, idx(g, n)))
-            return any(w & 0x1ff == item for _, w in gear.pack(g, idx(g, to)))
-
-        def outfit_done():
-            puck = g.char(idx(g, 'Puck'))
-            if town.CLASSES[puck['cls']] != 'Thief':
-                run.note('outfit: Puck is a', town.CLASSES[puck['cls']])
-                return False
-            if not any(i in ring_ids() for i in holders(g, TABLET)):
-                run.note('outfit: the Tablet is not with the ring party', holders(g, TABLET))
-                return False
-            missing = [(gear.name(st[0]), st[1]) for st in OUTFIT if st[0] != 'sell' and not outfit_has(*st)]
-            if missing:
-                run.note('outfit: missing', missing)
-            return True
-
-        def stage_party(names):
-            def fit():
-                if g.overlay() in ('JOUKA', 'HAZURE'):
-                    want_party(run, names)
-                else:
-                    ids = [idx(g, n) for n in names]
-                    if any(i not in ids for i in g.party()):
-                        run.trip_home('party change')
-                        want_party(run, names)
-                    else:
-                        want_party(run, names)  # the bench
-            return fit
-
-        def escort_trip():
-            stage_party(ESCORT_PARTY)()
-            return run.train(ESC_AREAS)
-
-        def ring_trip():
-            stage_party(RING_PARTY)()
-            lv = median_level(g, RING_PARTY)
-            areas = next(a for top, a in LADDER if lv < top)
-            return run.train(areas)
+            return ok
 
         def priestess_trip():
+            global TM_PARTY
             L = idx(g, PRIESTESS[0])
             if g.overlay() not in ('JOUKA', 'HAZURE'):
                 run.trip_home('priestess')
+            TM_PARTY = escorts() + [PRIESTESS[0]]
             return tm_trip(run, L)
 
         def priestess_l5():
@@ -567,11 +461,11 @@ class Chapter19:
                                        days=raw[0x12], status=c['status'], stats=c['stats']))
             if not ok:
                 return False
-            want_party(run, RING_PARTY)
+            want_party(run, main_names())
             return L not in town.town_party(g)
 
         def reset():
-            if memo.get('reset') and g.overlay() == 'JOUKA' and not any(titled(g, i) for i in ring_ids()):
+            if memo.get('reset') and g.overlay() == 'JOUKA' and not any(titled(g, i) for i in main_ids()):
                 return proved_reset()
             if g.overlay() in ('JOUKA', 'HAZURE'):
                 return proved_reset() if holders(g) else False
@@ -655,7 +549,7 @@ class Chapter19:
 
         def proved_reset():
             hs = holders(g)
-            ring = ring_ids()
+            ring = main_ids()
             ok = g.overlay() == 'JOUKA' and bool(hs) and any(h in ring for h in hs) \
                 and not any(titled(g, i) for i in ring) and g.u8(TOWN_STATE) != chapter18.ENDING_STATE
             if memo.get('story') is not None and g.u32(STORY) != memo['story']:
@@ -680,9 +574,9 @@ class Chapter19:
             town.to_town_bar(g)
             if g.u8(TOWN_STATE) == chapter18.ENDING_STATE:
                 return False
-            # the holder, the Priestess and the ring party's purses, formed in the tavern;
+            # the holder, the Priestess and the main party's purses, formed in the tavern;
             # nobody goes out to the bar with the ring
-            others = [i for i in ring_ids() if i != h and g.char(i)['status'] == 0][:4]
+            others = [i for i in main_ids() if i != h and g.char(i)['status'] == 0][:4]
             clear_party(g)
             town.form_party(g, [h, L] + others)
             gold0 = sum(g.char(i)['gold'] for i in town.town_party(g))
@@ -703,6 +597,9 @@ class Chapter19:
             town.to_town_bar(g)
             memo['fee'] = gold0 - sum(g.char(i)['gold'] for i in town.town_party(g))
             run.note('ring_on uncurse', out, memo['fee'])
+            # the gold back on the purses (it was pooled on her for the fee)
+            town.divide_gold(g)
+            town.to_town_bar(g)
             return proved_ring()
 
         def proved_ring():
@@ -711,7 +608,7 @@ class Chapter19:
             raw = c['raw']
             ok = (c['stats'] == [5, 18, 18, 5, 5, 18] and c['level'] == PRIESTESS_LEVEL and raw[0x10] == 18
                   and raw[0x0a] & 0x3f == 1 and raw[0x0b] == 0x82 and not holders(g)
-                  and not titled(g, L) and not any(titled(g, i) for i in ring_ids())
+                  and not titled(g, L) and not any(titled(g, i) for i in main_ids())
                   and g.u8(TOWN_STATE) != chapter18.ENDING_STATE)
             if memo.get('fee') is not None and memo['fee'] < UNCURSE_FEE:
                 run.note('ring_on: fee short', memo['fee'])
@@ -723,21 +620,144 @@ class Chapter19:
 
         def ch18_goal(name, fns):
             def run_it():
-                want_party(run, RING_PARTY)     # in the maze: the bench only
+                want_party(run, main_names())       # in the maze: the bench only
                 return fns[name]()
             return run_it
 
+        # --- the door ---
+
+        def her_standing():
+            c = g.char(idx(g, PRIESTESS[0]))
+            return c['status'] == 0 and c['hp'] > 0
+
+        def tm_b1():
+            if g.overlay() not in ('JOUKA', 'HAZURE') and g.u8(maze.AREA) in range(9, 17) \
+                    and idx(g, PRIESTESS[0]) in g.party():
+                return proved_tablet()
+            if g.overlay() not in ('JOUKA', 'HAZURE'):
+                return False
+            names = door_party()
+            want_party(run, names)
+            run.note('door party', names)
+            town.to_town_bar(g)
+            enter_tm(g)
+            return g.u8(maze.AREA) == TM_AREA and proved_tablet()
+
+        def proved_tablet():
+            st = chapter3.tablet_stones(g)
+            ok = run.has_tablet() and st == ALL_STONES
+            run.note('tablet', dict(holder=[g.name(i) for i in holders(g, TABLET)], stones=st, ok=ok))
+            return ok
+
+        def tm_lift():
+            if g.u8(maze.AREA) in (B7, B8):
+                return her_standing()
+            if g.u8(maze.AREA) != TM_AREA:
+                return False
+            nav.travel(g, TM_LIFT, run.on_int, lambda g: run.after())
+            if not maze.face(g, LIFT_FACE):
+                run.after()
+                maze.face(g, LIFT_FACE)
+            n = len(g.cap.messages) if g.cap else 0
+            chapter1.investigate(g)
+            ui.wait_until(g, lambda: g.u8(maze.GAME_STATE) == 4, 900, 'lift menu')
+            ui.move_cursor(g, LIFT_FLOOR, B7 - 9, 'right', 'left', what='lift floor')
+            ui.press_until(g, 'circle', lambda: g.u8(maze.GAME_STATE) != 4, 120, 'ride')
+            ui.wait_until(g, lambda: g.u8(maze.AREA) == B7 and maze.calm(g), 3000, 'ride to B7')
+            run.note('lift', dict(said=said(g, n, 'SISETU.OBJ', (443,)), at=here(g)))
+            return g.u8(maze.AREA) == B7 and her_standing()
+
+        def tm_b8():
+            if here(g) == DOOR:
+                return her_standing()
+            if g.u8(maze.AREA) not in (B7, B8):
+                return False
+            nav.travel(g, DOOR, run.on_int, lambda g: run.after())
+            if not maze.calm(g):
+                run.after()
+            return here(g) == DOOR and her_standing()
+
+        def door():
+            if nav.flag(g, STORY, DOOR_BIT):
+                return True
+            if here(g) != DOOR or not her_standing():
+                return False
+            L = idx(g, PRIESTESS[0])
+            slot = g.party_slots().index(L)
+            if not maze.face(g, DOOR_FACE):
+                run.after()
+                maze.face(g, DOOR_FACE)
+            n = len(g.cap.messages) if g.cap else 0
+            chapter1.investigate(g)
+            # the box (EVENTMES 240), "Will someone try it?" (Yes, the cursor's first), then
+            # the member picker
+            end = g.frame + 6000
+            k = 0
+            while g.u8(maze.GAME_STATE) != 0x11:
+                if g.frame > end:
+                    raise Stuck('door picker', gs=g.u8(maze.GAME_STATE))
+                k += 1
+                if g.u8(maze.GAME_STATE) == 6:
+                    ui.move_cursor(g, 0x8007e800, 0, 'up', 'down', what='try it: yes')
+                    g.tap('circle')
+                    g.step(10)
+                    continue
+                if k % 30 == 0 and not maze.calm(g):
+                    g.tap('circle')
+                if maze.calm(g) and k > 600:
+                    run.note('door: no picker', said(g, n, 'EVENTMES.BIN', (240,)))
+                    return False
+                g.step()
+            ui.press_until(g, 'down' if slot >= 3 else 'up',
+                           lambda: g.u8(PICK_ROW) == (0x62 if slot >= 3 else 0x48), 200, 'picker row')
+            want = (-99, 1, 101)[slot % 3]
+            ui.press_until(g, 'right', lambda: g.s16(PICK_COL) == want, 300, 'picker column')
+            ui.press_until(g, 'circle', lambda: g.u8(maze.GAME_STATE) != 0x11, 120, 'pick her')
+            picked = g.u8(PICKED)
+            run.after()
+            ok = nav.flag(g, STORY, DOOR_BIT) and picked == slot and said(g, n, 'EVENTMES.BIN', (239,))
+            run.note('door', dict(picked=picked, slot=slot, bit31=nav.flag(g, STORY, DOOR_BIT),
+                                  k240=said(g, n, 'EVENTMES.BIN', (240,)), k239=said(g, n, 'EVENTMES.BIN', (239,)),
+                                  at=here(g)))
+            print('c19 door: bit 31 %s, picked %d (her slot %d), at %s' % (
+                nav.flag(g, STORY, DOOR_BIT), picked, slot, here(g)), flush=True)
+            return ok
+
+        def home():
+            if g.overlay() not in ('JOUKA', 'HAZURE'):
+                if not maze.calm(g):
+                    run.after()
+                if g.u8(maze.AREA) not in (DC_B1, TM_AREA):
+                    nav.travel(g, (DC_B1,) + maze.ENTRANCE[DC_B1], run.on_int, lambda g: run.after())
+                maze.to_town(g, run.on_int)
+            town.to_town_bar(g)
+            # anyone down comes back from the temple before the main party forms again
+            pats = [ri for ri in town.temple_patients(g) if ri in main_ids() + [idx(g, PRIESTESS[0])]]
+            for ri in pats:
+                first = next((k for k, x in enumerate(town.town_slots(g)) if x is not None), None)
+                if first is None:
+                    break
+                try:
+                    town.pool_gold(g, first, 'tavern')
+                    town.to_town_bar(g)
+                    run.log.append((g.frame, 'temple', ri, town.temple_heal(g, ri, first)))
+                except Stuck as s:
+                    run.note('temple stuck', g.name(ri), s.what)
+                town.to_town_bar(g)
+            want_party(run, main_names())
+            town.to_town_bar(g)
+            L = idx(g, PRIESTESS[0])
+            c = g.char(L)
+            ok = (g.overlay() == 'JOUKA' and nav.flag(g, STORY, DOOR_BIT) and not holders(g)
+                  and not any(titled(g, i) for i in main_ids() + [L])
+                  and set(town.town_party(g)) == {i for i in main_ids() if g.char(i)['status'] == 0}
+                  and c['level'] == PRIESTESS_LEVEL)
+            run.note('home', dict(ok=ok, party=[g.name(i) for i in town.town_party(g)],
+                                  her=dict(level=c['level'], age=c['raw'][0x10], status=c['status'],
+                                           stats=c['stats'])))
+            return ok
+
         yield from jobbed(job, [('create', create)])
-        if not os.environ.get('CH19_SKIP_OUTFIT'):
-            yield from jobbed(job, [('outfit', outfit)])
-        n = 0
-        while n < ESC_MOST and median_level(g, TRAINEES) < ESC_LEVEL:
-            n += 1
-            yield from jobbed(job, [('train_esc_%02d' % n, escort_trip)])
-        n = 0
-        while n < RING_MOST and median_level(g, RING_PARTY) < RING_LEVEL:
-            n += 1
-            yield from jobbed(job, [('train_%02d' % n, ring_trip)])
         n = 0
         while n < TM_MOST and g.char(idx(g, PRIESTESS[0]))['level'] < PRIESTESS_LEVEL:
             n += 1
@@ -745,19 +765,9 @@ class Chapter19:
         yield from jobbed(job, [('priestess_l5', priestess_l5)])
         fns = dict(x for x in chapter18.Chapter18().goals(run) if x[0] in ('lift_z', 'the_man', 'coffin'))
         yield from jobbed(job, [(k, ch18_goal(k, fns)) for k in ('lift_z', 'the_man', 'coffin')])
-        yield from jobbed(job, [('reset', reset), ('ring_on', ring_on)])
-        job.finish('ring_on reached')
-
-
-def dev_overrides():
-    """Development runs only (none of these is set for a real run): CH19_ESC_LEVEL,
-    CH19_RING_LEVEL, CH19_RING_PARTY (comma-separated names), CH19_SKIP_OUTFIT."""
-    global ESC_LEVEL, RING_LEVEL, RING_PARTY
-    e = os.environ
-    ESC_LEVEL = int(e.get('CH19_ESC_LEVEL', ESC_LEVEL))
-    RING_LEVEL = int(e.get('CH19_RING_LEVEL', RING_LEVEL))
-    if e.get('CH19_RING_PARTY'):
-        RING_PARTY = e['CH19_RING_PARTY'].split(',')
+        yield from jobbed(job, [('reset', reset), ('ring_on', ring_on), ('tm_b1', tm_b1),
+                                ('tm_lift', tm_lift), ('tm_b8', tm_b8), ('door', door), ('home', home)])
+        job.finish('home reached')
 
 
 def make_job(run):
@@ -766,7 +776,7 @@ def make_job(run):
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
     from jobstatus import Job
     name = os.path.basename(run.out.rstrip('/'))
-    return Job('ch19', purpose='chapter 19: ring party, Priestess, coffin, reset, ring', part=name,
+    return Job('ch19', purpose='chapter 19: Priestess, coffin, reset, ring, the door', part=name,
                run=os.environ.get('JOB_RUN') or name, agent='ch19',
                outputs=[os.path.join(chapter1.OUT, run.out, 'live.jsonl')])
 

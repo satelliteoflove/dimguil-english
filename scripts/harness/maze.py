@@ -447,6 +447,8 @@ def walk_to(g, tx, ty, on_interrupt=None, limit_moves=400, avoid=(), closed=(), 
 ENTRANCE = {0: (10, 22),     # the Grounds' entry square: triangle there goes back to town
             9: (12, 14)}     # Training Maze B1 E12 N9, where the Edge of Town's icon 1 lands
                              # (chapter 19 probe p5_tm, 2026-10-17): triangle there too
+ENTRANCE[42] = (12, 11)      # Dragon's Cave B1 E12 N12, beside the lift up (site type 26, as
+                             # the Training Maze's): triangle goes to town (ch19 probe p10)
 
 
 def to_town(g, on_interrupt=None, limit=1200):
