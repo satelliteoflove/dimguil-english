@@ -48,6 +48,11 @@ fail_p = os.path.join(d, 'failures.jsonl')
 chain = json.load(open(chain_p)) if (a.resume and os.path.exists(chain_p)) else dict(
     chain=a.chain, seed=a.seed, variant=a.variant, disc=a.disc, chapters={}, started=time.time())
 chain['code'] = ROOT
+if a.resume:
+    # a resumed chain keeps the record of what stopped it
+    if chain.get('stopped_at'):
+        chain.setdefault('resumed', []).append(dict(at=time.time(), stopped_at=chain.pop('stopped_at'), code=ROOT))
+    chain.pop('finished', None)
 
 job = Job('fullrun', purpose='release gate: power-on to the ending on the shipping disc',
           total=last - first + 1, outputs=[chain_p, fail_p], part='chain %s v%d' % (a.chain, a.variant),
@@ -123,10 +128,13 @@ for n in range(first, last + 1):
         src = rec['end']
         job.done_one({'chapter': n, 'skipped': True})
         continue
+    earlier = (rec or {}).get('tries', []) + (rec or {}).get('earlier_tries', [])
     rec = chain['chapters'][str(n)] = dict(tries=[], passed=False, start=src)
+    if earlier:
+        rec['earlier_tries'] = earlier          # a resumed chapter's tries before the resume
     for k in range(a.retries + 1):
         seed = a.seed + 10 * n + k
-        name = '%s/c%02d_try%d' % (base, n, k)
+        name = '%s/c%02d_try%d' % (base, n, k + len(rec.get('earlier_tries', [])))
         cmd = [sys.executable, os.path.join(HERE, 'run_chapter.py'), '../' + name,
                '--chapters', str(n), '--seed', str(seed), '--variant', str(a.variant),
                '--disc', a.disc, '--no-cases', '--shots', base + '/shots']

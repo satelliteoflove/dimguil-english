@@ -85,33 +85,41 @@ def pedestal_word(run, word, bit):
     `bit` is set (STAFF: 4, door A; LABORATORY: 5, door B). False when the pad never
     comes up (no Tablet)."""
     g = run.g
-    for _ in range(3):
-        run.go((18, 11, 11))
-        if not maze.face(g, 2):
-            run.after()
-        if (g.u8(maze.AREA),) + g.pos() == (18, 11, 11) and g.u8(maze.FACE) == 2:
-            break
-    chapter1.investigate(g)
-    # press through the pedestal's boxes up to the pad, no further: a press on the pad
-    # types a letter
-    end = g.frame + 3000
-    quiet = 0
-    while g.u8(maze.GAME_STATE) != PAD_STATE:
-        if g.frame > end:
-            raise Stuck('glyph pad', where=g.where())
-        quiet = quiet + 1 if maze.calm(g) else 0
-        if quiet > 40:
-            # calm 800 frames and no pad (no Tablet?). "Searching..." alone takes ~340
-            # frames before the pedestal's box comes up
-            return False
-        if maze.calm(g):
-            g.step(20)
-            continue
-        g.tap('circle')
-        for _ in range(20):
-            if g.u8(maze.GAME_STATE) == PAD_STATE:
+    for attempt in range(2):
+        for _ in range(3):
+            run.go((18, 11, 11))
+            if not maze.face(g, 2):
+                run.after()
+            if (g.u8(maze.AREA),) + g.pos() == (18, 11, 11) and g.u8(maze.FACE) == 2:
                 break
-            g.step()
+        chapter1.investigate(g)
+        # press through the pedestal's boxes up to the pad, no further: a press on the pad
+        # types a letter
+        end = g.frame + 3000
+        quiet = 0
+        while g.u8(maze.GAME_STATE) != PAD_STATE:
+            if g.frame > end:
+                raise Stuck('glyph pad', where=g.where())
+            quiet = quiet + 1 if maze.calm(g) else 0
+            if quiet > 40:
+                # calm 800 frames and no pad (no Tablet?). "Searching..." alone takes ~340
+                # frames before the pedestal's box comes up
+                break
+            if maze.calm(g):
+                g.step(20)
+                continue
+            g.tap('circle')
+            for _ in range(20):
+                if g.u8(maze.GAME_STATE) == PAD_STATE:
+                    break
+                g.step()
+        if g.u8(maze.GAME_STATE) == PAD_STATE:
+            break
+        # Cleo's party can be met on the way in: their scene at the pedestal takes the
+        # Investigate, and the pad needs another (full run chain c, chapter 6)
+        run.note('pedestal: no pad', attempt, g.where())
+    else:
+        return False
     pad_type(g, word)
     run.after()
     return nav.flag(g, STORY, bit)
