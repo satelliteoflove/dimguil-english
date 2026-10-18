@@ -1220,7 +1220,10 @@ class Monitor:
             for f in r.death_frames:
                 bins[min(15, int(f / max(r.frame, 1) * 16))] += 1
             dg = Text(spark(bins, 16, 0, max(3, max(bins))) if r.deaths else '', style='red')
-            lv = ' '.join(str(l) for _, l in r.levels[:6]) or '-'
+            # now.json's party first: a run that hasn't passed a goal yet has no goal-line levels
+            now_party = (r.now or {}).get('party') or []
+            lv = (' '.join(str(c[3]) for c in now_party[:6]) if now_party else
+                  ' '.join(str(l) for _, l in r.levels[:6])) or '-'
             last = '\n'.join(r.recent)
             if st == 'failed' and r.result:
                 last = f"{r.result.get('error')} {(r.result.get('info') or {}).get('goal', '')}\n" + last
