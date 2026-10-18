@@ -770,6 +770,15 @@ class Chapter19:
             raise_main()
             want_party(run, main_names())
             town.to_town_bar(g)
+            # the town visit a chapter ends on (temple, Stables for the points, Cots for the
+            # raised at 1 HP, Boltac's), as chapter 17's end state had it: chapter 18 from a
+            # chapter 19 end without it walked into Area Z spent and wiped six times on Area E
+            # B4 going home for points (proof18b, 2026-10-18). She's on the bench, out of it
+            chapter1.reorder_party(g, run.log)
+            chapter1.town_upkeep(g, run.log)
+            for i in town.town_party(g):
+                run.full_points[i] = list(g.char(i)['raw'][0x5c:0x78])
+            town.to_town_bar(g)
             L = idx(g, PRIESTESS[0])
             c = g.char(L)
             ok = (g.overlay() == 'JOUKA' and nav.flag(g, STORY, DOOR_BIT) and not holders(g)
