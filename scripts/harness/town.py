@@ -427,6 +427,18 @@ EDGE_ICON = 0x80079c58      # its icon row: 0 Begin Adventure, 1 Go to the Train
                             # 6 Change Settings, 7 Back to Town (dev/edge_captions.png)
 
 
+def edge_icon(g, k):
+    """The Edge of Town's icon position for entry k of the eight above: once story_flags
+    bit 31 is set (the Priestess's Door) Dragon's Cave is the third icon and the entries
+    from Resume on move one right (F-edge-save.md "The menu"; ch19 proof18 and probe p11,
+    2026-10-17: icon 3 was Resume and 7 Change Settings, "Back to Town" stuck)."""
+    return k + 1 if k >= 2 and g.u32(0x80079b44) & 0x80000000 else k
+
+
+def edge_icons(g):
+    return 9 if g.u32(0x80079b44) & 0x80000000 else 8
+
+
 def remove_member(g, pos, limit=600):
     """Tavern, Remove Member (icon 1, "Who will leave the party?", the party grid MX/MY):
     take party position `pos` out; they wait in the tavern. Each press removes the member

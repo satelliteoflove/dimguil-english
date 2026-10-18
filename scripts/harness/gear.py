@@ -777,7 +777,7 @@ def edge_identify(g, log=None):
     town.enter(g, 'edge')
     ui.wait_until(g, lambda: g.u8(town.FAC_SUB) == 5 or g.u8(town.EDGE_CURSOR) == 0, 300, 'edge menu')
     ui.move_cursor(g, town.EDGE_CURSOR, 0, 'down', 'up', what='edge row')
-    ui.move_cursor(g, town.EDGE_ICON, 3, 'right', 'left', what='Prepare icon')
+    ui.move_cursor(g, town.EDGE_ICON, town.edge_icon(g, 3), 'right', 'left', what='Prepare icon')
     _edge_press(g, lambda: g.u8(EDGE_STATE) == 25, 'Prepare > Inspect')
     g.step(8)
     ui.move_cursor(g, EDGE_GY, pos // 3, 'down', 'up', what='inspect row')
@@ -829,7 +829,8 @@ def edge_leave(g, limit=900):
         g.step(20)
     if g.overlay() == 'HAZURE':
         ui.move_cursor(g, town.EDGE_CURSOR, 0, 'down', 'up', what='edge row')
-        ui.move_cursor(g, town.EDGE_ICON, 7, 'right', 'left', wrap=8, what='Back to Town icon')
+        ui.move_cursor(g, town.EDGE_ICON, town.edge_icon(g, 7), 'right', 'left', wrap=town.edge_icons(g),
+                       what='Back to Town icon')
         ui.confirm_until(g, lambda: g.overlay() == 'JOUKA', limit, 'Back to Town')
     town.to_town_bar(g)
 
@@ -1478,7 +1479,7 @@ def _edge_items(g, pos):
         town.enter(g, 'edge')
         ui.wait_until(g, lambda: g.u8(town.FAC_SUB) == 5 or g.u8(town.EDGE_CURSOR) == 0, 300, 'edge menu')
         ui.move_cursor(g, town.EDGE_CURSOR, 0, 'down', 'up', what='edge row')
-        ui.move_cursor(g, town.EDGE_ICON, 3, 'right', 'left', what='Prepare icon')
+        ui.move_cursor(g, town.EDGE_ICON, town.edge_icon(g, 3), 'right', 'left', what='Prepare icon')
         _edge_press(g, lambda: g.u8(EDGE_STATE) == 25, 'Prepare > Inspect')
         g.step(8)
     ui.move_cursor(g, EDGE_GY, pos // 3, 'down', 'up', what='inspect row')
