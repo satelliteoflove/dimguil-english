@@ -301,6 +301,20 @@ dialog h2 { font-size: var(--step-2); margin-bottom: 0.6rem; }
   .jp { font-size: 1.2rem; }
   .tip { display: none; }
   dialog { padding: 1rem; }
+  #apply-dialog[open] {
+    width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh; margin: 0;
+    border: 0; border-radius: 0; padding: 0;
+  }
+  #apply-dialog form { display: flex; flex-direction: column; height: 100%; }
+  #apply-dialog h2 { padding: 1rem 1rem 0; }
+  #apply-summary { margin: 0 1rem 0.6rem; }
+  #apply-dialog .changes { flex: 1; max-height: none; margin: 0; padding: 0.4rem 1rem 0.4rem 2.2rem; border-top: 1px solid var(--rule); }
+  .changes li { margin-bottom: 1.1rem; }
+  #apply-dialog .line-note, #apply-dialog .hint, #apply-error { margin-left: 1rem; margin-right: 1rem; }
+  #apply-dialog .line-note { border-top: 1px solid var(--rule); padding-top: 0.6rem; }
+  #scene-note { min-height: 3.2rem; }
+  #apply-dialog .dialog-actions { margin: 0; padding: 0.7rem 1rem calc(0.7rem + env(safe-area-inset-bottom)); background: var(--paper); border-top: 1px solid var(--rule); }
+  #apply-dialog .dialog-actions button { flex: 1; padding: 0.7rem 1rem; }
 }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
 
