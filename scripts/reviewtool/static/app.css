@@ -114,6 +114,10 @@ h1, h2, h3 { font-weight: 700; line-height: 1.2; margin: 0; }
 .state .quiet { color: var(--ink-faint); font-style: italic; font-size: 0.78rem; }
 .state .chosen.quiet { color: var(--ok); }
 
+.boxes { display: grid; gap: 0.35rem; max-width: 30rem; }
+.boxes canvas { width: 100%; height: auto; image-rendering: pixelated; image-rendering: crisp-edges; display: block; border-radius: 3px; }
+.boxes .fit { margin: 0; }
+
 /* Compare mode: four readings stacked per line */
 .cmp { display: grid; grid-template-columns: 5.2rem 1fr; gap: 0.15rem 0.8rem; align-items: baseline; }
 .cmp .lab { font-size: var(--step--1); color: var(--ink-faint); text-align: right; }

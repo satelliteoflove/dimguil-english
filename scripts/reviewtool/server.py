@@ -404,6 +404,7 @@ def scene_list():
         s = read_json(os.path.join(SCENES, name))
         d = read_json(os.path.join(DECISIONS, name), {})
         out.append({'id': s['id'], 'file': s['file'], 'number': s.get('number'), 'title': s['title'],
+                    'kind': s.get('kind', 'scene'),
                     'priority': s.get('priority'), 'order': s.get('order', 999),
                     'status': d.get('status', 'open'), 'lines': len(s['lines'])})
     return sorted(out, key=lambda s: (s['order'], s['file'], s['number'] or 0))
@@ -418,6 +419,9 @@ def scene(sid):
         line['jp'] = SOURCES[n][i]
         line['current'] = current(line['ref'])
         line['copies'] = copies_of(line['ref'])
+        if s.get('kind') == 'readthrough':   # nothing proposed: Chris reads the lines as they are
+            line['faithful'] = line['current']
+            line.setdefault('literal', '')
     s['decision'] = read_json(os.path.join(DECISIONS, f'{sid}.json'))
     qs = read_json(QUESTIONS, [])
     s['questions'] = [q for q in qs if q.get('scene') == sid]

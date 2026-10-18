@@ -117,6 +117,7 @@ function setChoice(i, choice, { advance = true } = {}) {
   if (choice === 'edited' && !prev.edited) S.decisions[ln.ref].edited = ln.faithful;
   saveDraft();
   if (S.mode === 'compare') rerenderKeepingFocus(); else renderLineState(i);
+  if (S.mode === 'boxes') renderBoxes();
   renderApplyBar();
   if (choice === 'edited') { renderInspector(); openEditor(); return; }
   if (advance) {
@@ -141,7 +142,7 @@ function renderSceneList() {
     return `<section class="party"><h2>${shape(lead)} ${esc(party.name)}</h2><ol>${list.map(sc => `
       <li><button type="button" class="scene-link" data-id="${esc(sc.id)}" ${S.scene && S.scene.id === sc.id ? 'aria-current="true"' : ''}>
         <span class="num">${sc.number ?? ''}</span><span>${esc(sc.title)}</span>
-        <span class="meta">${sc.priority ? esc(sc.priority) + ' priority' : ''}${sc.status !== 'open' ? ` <span class="${sc.status === 'committed' ? 'done' : ''}">${STATUS[sc.status] || sc.status}</span>` : ''}</span>
+        <span class="meta">${sc.kind === 'readthrough' ? `read-through, ${sc.lines} lines` : sc.priority ? esc(sc.priority) + ' priority' : ''}${sc.status !== 'open' ? ` <span class="${sc.status === 'committed' ? 'done' : ''}">${STATUS[sc.status] || sc.status}</span>` : ''}</span>
       </button></li>`).join('')}</ol></section>`;
   }).join('') || '<p class="hint" style="padding:0 1.2rem">No scenes prepared yet.</p>';
   $$('.scene-link').forEach(b => b.addEventListener('click', () => { setNav(false); openScene(b.dataset.id); }));
@@ -166,7 +167,13 @@ function setInsp(open) {
 async function openScene(id, { line = 0, mode } = {}) {
   S.scene = await api(`/api/scene?id=${encodeURIComponent(id)}`);
   S.decisions = JSON.parse(localStorage.getItem(draftKey()) || '{}');
-  S.mode = mode || localStorage.getItem('dimguil-review:mode') || 'literal';
+  const reading = S.scene.kind === 'readthrough';
+  $$('.readings button').forEach(b => {
+    b.hidden = reading ? ['literal', 'faithful'].includes(b.dataset.mode) : b.dataset.mode === 'boxes';
+  });
+  S.mode = mode || (reading ? 'boxes' : localStorage.getItem('dimguil-review:mode') || 'literal');
+  if (reading && ['literal', 'faithful'].includes(S.mode)) S.mode = 'boxes';
+  if (!reading && S.mode === 'boxes') S.mode = 'literal';
   S.word = null; S.hoverPick = null; S.previewPick = null;
   $('#empty').hidden = true; $('#scene').hidden = false;
   const sc = S.scene;
@@ -193,7 +200,7 @@ function sourcesHtml(list) {
 
 function setMode(mode, { keepFocus } = {}) {
   S.mode = mode;
-  localStorage.setItem('dimguil-review:mode', mode);
+  if (!(S.scene && S.scene.kind === 'readthrough')) localStorage.setItem('dimguil-review:mode', mode);
   $$('.readings button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.mode === mode)));
   renderScript();
   if (!keepFocus) focusLine(S.focus, { scroll: false });
@@ -226,6 +233,22 @@ function renderScript() {
     });
   });
   lines().forEach((_, i) => renderLineState(i));
+  if (S.mode === 'boxes') renderBoxes();
+}
+
+async function renderBoxes() {
+  const scene = S.scene;
+  for (const [i, ln] of lines().entries()) {
+    const d = S.decisions[ln.ref];
+    const text = d && d.choice === 'edited' && d.edited ? d.edited : ln.current;
+    const f = await fitFor(ln.ref, text);
+    const el = $(`#boxes-${i}`);
+    if (S.scene !== scene || S.mode !== 'boxes' || !el) return;
+    el.innerHTML = '';
+    f.pages.forEach((page, k) => el.append(drawPage(page, f.width, Math.max(f.lines, f.source_lines[k] || 0))));
+    const bad = fitMessages(f).filter(m => !m.includes('class="ok"'));
+    if (bad.length) el.insertAdjacentHTML('beforeend', `<ul class="fit">${bad.join('')}</ul>`);
+  }
 }
 
 function silentOr(text) {
@@ -235,6 +258,7 @@ function silentOr(text) {
 function saidHtml(ln, i) {
   const jp = jpBody(ln.jp).pages.map(p => p.map(esc).join('<br>')).join('<span class="pagebreak"></span>');
   if (S.mode === 'jp') return `<div class="jp" lang="ja">${jp}</div>`;
+  if (S.mode === 'boxes') return `<div class="boxes" id="boxes-${i}"></div>`;
   if (S.mode === 'literal') return `<div>${silentOr(ln.literal)}</div>`;
   if (S.mode === 'current') return `<div>${silentOr(readable(ln.current))}</div>`;
   if (S.mode === 'faithful') return `<div>${silentOr(readable(ln.faithful))}</div>`;
@@ -247,8 +271,8 @@ function saidHtml(ln, i) {
   const edited = S.decisions[ln.ref] && S.decisions[ln.ref].edited;
   return `<div class="cmp">
     <span class="lab">Japanese</span><div class="jp" lang="ja">${jp}</div>
-    <span class="lab">Literal</span><div class="literal">${silentOr(ln.literal)}</div>
-    ${same ? `<span class="lab">Current</span><div>${silentOr(cur)} <span class="same-note">Faithful is the same; no change proposed.</span></div>` : `
+    ${ln.literal ? `<span class="lab">Literal</span><div class="literal">${silentOr(ln.literal)}</div>` : ''}
+    ${same ? `<span class="lab">Current</span><div>${silentOr(cur)}${S.scene.kind === 'readthrough' ? '' : ' <span class="same-note">Faithful is the same; no change proposed.</span>'}</div>` : `
     <span class="lab">Current</span><div class="opt pickable${picked('current')}" data-pick="current" title="Keep current (c)">${dc}</div>
     <span class="lab">Faithful</span><div class="opt pickable${picked('faithful')}" data-pick="faithful" title="Use faithful (f)">${df}</div>`}
     ${edited ? `<span class="lab">Edited</span><div class="opt pickable${picked('edited')}" data-pick="edited">${esc(readable(edited))}</div>` : ''}
@@ -476,7 +500,9 @@ function renderChoice() {
     b.setAttribute('aria-pressed', String(!!d && !d.auto && d.choice === b.dataset.c));
     if (b.dataset.c === 'faithful') b.disabled = !needsDecision(ln);
   });
-  $('#choice-hint').hidden = needsDecision(ln);
+  const reading = S.scene.kind === 'readthrough';
+  $('#choice-hint').hidden = reading || needsDecision(ln);
+  $('#read-hint').hidden = !reading;
   const last = S.focus >= lines().length - 1;
   $('#insp-next').textContent = last ? 'Finish' : 'Next';
   $('#insp-next').setAttribute('aria-label', last ? 'Finish the scene' : 'Next line');
@@ -505,6 +531,7 @@ function onEdit() {
 }
 function refreshCompareLine() {
   if (S.mode === 'compare') rerenderKeepingFocus();
+  else if (S.mode === 'boxes') renderBoxes();
 }
 function rerenderKeepingFocus() {
   const stage = $('#stage'), top = stage.scrollTop;

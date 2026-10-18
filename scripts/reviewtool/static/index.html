@@ -37,6 +37,7 @@
       </header>
 
       <div class="readings" role="tablist" aria-label="Reading">
+        <button role="tab" data-mode="boxes" hidden>In the game</button>
         <button role="tab" data-mode="jp"><kbd>1</kbd> Japanese</button>
         <button role="tab" data-mode="literal"><kbd>2</kbd> Literal</button>
         <button role="tab" data-mode="current"><kbd>3</kbd> Current</button>
@@ -92,6 +93,7 @@
           <button type="button" data-c="edited"><kbd>e</kbd> Edit</button>
         </div>
         <p class="hint" id="choice-hint" hidden>No change is proposed for this line. It's here for context; edit it only if you want to.</p>
+        <p class="hint" id="read-hint" hidden>Nothing is proposed: the reviewers read this against the Japanese and found it right. Edit it, or leave a note, if something's off.</p>
         <div class="editor" id="editor" hidden>
           <p class="hint">One box line per line; a blank line starts a new page. The name and the opening quote are added for you.</p>
           <textarea id="edit-text" rows="7" spellcheck="true" lang="en"></textarea>

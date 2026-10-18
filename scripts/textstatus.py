@@ -19,7 +19,8 @@ The NPC scenes come from the items under "Remaining scenes" in docs/npc-review.m
 unticked ones are open, ticked ones reviewed, so ticking a scene there is what marks it
 reviewed. A scene's indices are taken from the parenthesis after its title, up to the
 first ';'. Lines applied one at a time with Chris (rips/review/approved.json, on the
-build machine) count as reviewed too.
+build machine) and every line of a scene or read-through applied in the review tool
+(rips/review/decisions/) count as reviewed too.
 """
 import json, os, re, sys
 from collections import Counter, defaultdict
@@ -75,11 +76,23 @@ def scenes():
 
 
 def approved():
-    """{(file, index)} applied one at a time with Chris, if the review folder is here."""
+    """{(file, index)} reviewed with Chris outside the scene list, if the review folder is
+    here: lines applied one at a time (approved.json), and every line of a scene or
+    read-through applied in the review tool (decisions/*.json)."""
+    def key(ref):
+        n, i = ref.split(':')
+        return f'NPC_MES{n}.OBJ', int(i)
+    out = set()
     p = os.path.join(ROOT, 'rips/review/approved.json')
-    if not os.path.exists(p):
-        return set()
-    return {(f'NPC_MES{k.split(":")[0]}.OBJ', int(k.split(':')[1])) for k in json.load(open(p))}
+    if os.path.exists(p):
+        out |= {key(k) for k in json.load(open(p))}
+    d = os.path.join(ROOT, 'rips/review/decisions')
+    for name in sorted(os.listdir(d)) if os.path.isdir(d) else []:
+        if name.endswith('.json'):
+            dec = json.load(open(os.path.join(d, name), encoding='utf-8'))
+            out |= {key(ln['ref']) for ln in dec.get('lines', [])}
+            out |= {key(r) for ln in dec.get('lines', []) for r in ln.get('copies', [])}
+    return out
 
 
 def table():
@@ -95,7 +108,7 @@ def table():
         if (f, i) in EXTRA_REVIEWED:
             return 'reviewed', EXTRA_REVIEWED[(f, i)] + ' (done)'
         if (f, i) in done:
-            return 'reviewed', 'applied with Chris (rips/review/approved.json)'
+            return 'reviewed', 'reviewed with Chris in the review tool'
         if (f, i) in EXTRA_OPEN:
             return 'open', EXTRA_OPEN[(f, i)]
         return DEFAULTS.get(f, ('unknown', 'not a tracked file'))
