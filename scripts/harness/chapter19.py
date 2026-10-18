@@ -127,14 +127,24 @@ GIVE_STATE = 0x80079569         # 5 "Give an item to whom?" (target 0x80079948),
 GIVE_TARGET = 0x80079948
 LIST_CUR = 0x80079c60
 
-# outfit: (item id, receiver); the giver is whoever outside the ring party holds one (the
-# spares: Uranus, Earth, Eve, Mars, Dax, Venus, Mercury, Fen) or the Mule itself for Pluto
-OUTFIT = [(TABLET, 'Io'), (0x6c, 'Io'),                     # Tablet, WAND OF MYSTERY
-          (0x13e, 'Mule'), (0x13f, 'Mule'),                 # GOLD GAUNTLETS, GOLD BOOTS
-          (0x44, 'Puck'), (0x63, 'Puck'), (0xb1, 'Puck'),   # THIEVES DAGGER, ROBINSWORD, FEAT GLOVES
-          (0x115, 'Pluto'),                                 # ANKH OF POWER (from the Mule)
-          (0xf3, 'Pluto'), (0xf3, 'Ceres'), (0xf3, 'Jupiter'), (0xf3, 'Io')]   # Latumofis
-OUTFIT_GIVERS = ['Uranus', 'Earth', 'Eve', 'Mars', 'Dax', 'Venus', 'Mercury', 'Fen', 'Mule']
+# outfit, in order (dev run devB, 2026-10-17: the Mule's and Jupiter's packs were full, so
+# the gives to them failed): ('sell', item, holder) at Boltac's (the cursed kinds the plan
+# sends there), then (item, receiver, givers), the giver being the first of `givers` (None:
+# any spare outside the ring party, OUTFIT_GIVERS) holding one unequipped. Mars, the new
+# mule, takes the Mule's spares (the plan's section 4)
+SCREWY_SHIELD, EPEE_DISMAY, MACE_MISFORTUNE = 0xa9, 0x14, 0x1b
+LATUMOFIS, DIAL = 0xf3, 0xfa
+OUTFIT = [('sell', SCREWY_SHIELD, 'Mule'),       # (the EPEE OF DISMAY, unidentified, Boltac refuses)
+          (TABLET, 'Io', None), (0x6c, 'Io', None),            # Tablet, WAND OF MYSTERY
+          (0x44, 'Puck', None), (0x63, 'Puck', None),          # THIEVES DAGGER, ROBINSWORD
+          (0xb1, 'Puck', None),                                # FEAT GLOVES (c18v2c's Mars)
+          (DIAL, 'Ceres', ['Mars']),
+          (0x115, 'Pluto', ['Mule']),                          # ANKH OF POWER
+          (0xf8, 'Mars', ['Mule']), (0xf8, 'Mars', ['Mule']),  # ANGEL FLUTE x2
+          (0x13e, 'Mule', None), (0x13f, 'Mule', None),        # GOLD GAUNTLETS, GOLD BOOTS
+          (LATUMOFIS, 'Pluto', None), (LATUMOFIS, 'Ceres', None),
+          (LATUMOFIS, 'Io', None), (LATUMOFIS, 'Puck', None)]
+OUTFIT_GIVERS = ['Uranus', 'Earth', 'Eve', 'Mars', 'Dax', 'Venus', 'Mercury', 'Fen']
 GOLD_PARTY = ['Uranus', 'Eve', 'Jupiter', 'Mule', 'Pluto', 'Io']
 DIVIDE_ICON = 3
 
@@ -451,13 +461,30 @@ class Chapter19:
                 return outfit_done()
             town.to_town_bar(g)
             ring = ring_ids()
-            for item, to in OUTFIT:
-                ri = idx(g, to)
-                if outfit_has(item, to):
+            for step in OUTFIT:
+                if step[0] == 'sell':
+                    _, item, who = step
+                    ri = idx(g, who)
+                    k = next((k for k, w in gear.pack(g, ri) if w & 0x1ff == item), None)
+                    if k is None:
+                        continue
+                    clear_party(g)
+                    town.form_party(g, [ri])
+                    try:
+                        r = town.boltac_sell(g, 0, k)
+                        run.log.append((g.frame, 'outfit sell', who, gear.name(item), r['outcome']))
+                    except Stuck as e:
+                        run.note('outfit sell stuck', who, gear.name(item), e.what)
+                    town.to_town_bar(g)
                     continue
-                giver = next((idx(g, n) for n in OUTFIT_GIVERS if idx(g, n) is not None and idx(g, n) != ri
-                              and any(w & 0x1ff == item and not w & gear.EQUIPPED
-                                      for _, w in gear.pack(g, idx(g, n)))), None)
+                item, to, givers = step
+                ri = idx(g, to)
+                if outfit_has(item, to, givers):
+                    continue
+                cands = [idx(g, n) for n in (givers or OUTFIT_GIVERS)]
+                giver = next((i for i in cands if i is not None and i != ri and i not in
+                              (ring if givers is None else ()) and any(
+                                  w & 0x1ff == item and not w & gear.EQUIPPED for _, w in gear.pack(g, i))), None)
                 if giver is None:
                     run.note('outfit: nobody has', gear.name(item), 'for', to)
                     continue
@@ -478,10 +505,13 @@ class Chapter19:
             town.to_town_bar(g)
             return outfit_done()
 
-        def outfit_has(item, to):
-            ri = idx(g, to)
-            want = sum(1 for it, t in OUTFIT if it == item and t == to)
-            return sum(1 for _, w in gear.pack(g, ri) if w & 0x1ff == item) >= min(want, 1)
+        def outfit_has(item, to, givers=None):
+            """A step is done when the receiver holds one; a step from named givers (the
+            Mule's spares to Mars) when no giver has one left unequipped."""
+            if givers:
+                return not any(w & 0x1ff == item and not w & gear.EQUIPPED
+                               for n in givers for _, w in gear.pack(g, idx(g, n)))
+            return any(w & 0x1ff == item for _, w in gear.pack(g, idx(g, to)))
 
         def outfit_done():
             puck = g.char(idx(g, 'Puck'))
@@ -491,7 +521,7 @@ class Chapter19:
             if not any(i in ring_ids() for i in holders(g, TABLET)):
                 run.note('outfit: the Tablet is not with the ring party', holders(g, TABLET))
                 return False
-            missing = [(gear.name(it), to) for it, to in OUTFIT if not outfit_has(it, to)]
+            missing = [(gear.name(st[0]), st[1]) for st in OUTFIT if st[0] != 'sell' and not outfit_has(*st)]
             if missing:
                 run.note('outfit: missing', missing)
             return True

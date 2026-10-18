@@ -440,7 +440,15 @@ def remove_member(g, pos, limit=600):
     g.step(20)
     _pick_party_member(g, pos, 'leaver')
     ui.press_until(g, 'circle', lambda: town_slots(g)[pos] is None, limit, 'remove member')
-    ui.cancel_until(g, lambda: facility_ready(g), limit, 'back to the tavern menu')
+    if not town_party(g):
+        # the last member out: the screen may close by itself, and a cross landing after
+        # that left the tavern for the bar and the Edge of Town (ch19 outfit, 2026-10-17)
+        for _ in range(60):
+            if facility_ready(g) and g.u8(TOWN_STATE) == 10:
+                break
+            g.step()
+    if not (facility_ready(g) and g.u8(TOWN_STATE) == 10):
+        ui.cancel_until(g, lambda: facility_ready(g), limit, 'back to the tavern menu')
     return town_party(g)
 
 
