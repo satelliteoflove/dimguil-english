@@ -121,7 +121,7 @@ def where_text(w):
         w = (w.get('area'), w.get('x'), w.get('y'), w.get('ovl'), w.get('town'))
     area, x, y, ovl, town = (tuple(w) + (None,) * 5)[:5]
     if ovl == 'JOUKA' or (area == 255 and town not in (None, 255)):
-        return 'town' + (f', {TOWN_PLACE.get(town, town)}' if town not in (None, 255) else '')
+        return 'town' + (f', {TOWN_PLACE[town]}' if town in TOWN_PLACE else '')
     if ovl == 'MCARD' and area in (None, 255):
         return 'the title screen'
     name = AREA_NAMES.get(area, f'area {area}')
