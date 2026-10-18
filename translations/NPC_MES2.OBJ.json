@@ -431,7 +431,7 @@
                 {
                     "length": 54,
                     "source": "NA",
-                    "translation": "Artemisia\n\"How odd, {ff12}.\n Nobody knows your age? ...What a mystery.\"",
+                    "translation": "Artemisia\n\"How curious, {ff12}.\n Your age is unknown? ...What a mystery.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -791,7 +791,7 @@
                 {
                     "length": 94,
                     "source": "NA",
-                    "translation": "Rosea\n\"Revival at the Temple has better odds...\n Are you sure you want me to do it here?\"\n\r         {ff30}2Kadorto{ff30}0",
+                    "translation": "Rosea\n\"Revival at the Temple has better odds...\n But if you're sure, I'll do it here.\"\n\r         {ff30}2Kadorto{ff30}0",
                     "addStringTerminator": true
                 },
                 {
@@ -1049,7 +1049,7 @@
                 {
                     "length": 46,
                     "source": "NA",
-                    "translation": "Artemisia\n\"............\n Nothing much happened, really.\"",
+                    "translation": "Artemisia\n\"............\n There's not much to tell, really.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1205,7 +1205,7 @@
                 {
                     "length": 26,
                     "source": "NA",
-                    "translation": "Gaura\n\"Scary man. Was grumbling.\"",
+                    "translation": "Gaura\n\"Scary man. Told us off.\"",
                     "addStringTerminator": true
                 },
                 {
