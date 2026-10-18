@@ -3,7 +3,8 @@
 
     rips/venv/bin/python scripts/reviewtool/server.py [--port 8777]
 
-Then open http://localhost:8777 (Firefox first). Binds to localhost only.
+Then open http://localhost:8777 (Firefox first). Binds to localhost only, unless
+--host ADDR is given (--host 0.0.0.0 to use it from a phone on the home network).
 
 What it reads:
   - scenes: rips/review/scenes/*.json, written by Claude per scene (the literal and
@@ -552,7 +553,8 @@ class Handler(BaseHTTPRequestHandler):
 
 def main():
     port = int(sys.argv[sys.argv.index('--port') + 1]) if '--port' in sys.argv else 8777
-    srv = ThreadingHTTPServer(('127.0.0.1', port), Handler)
+    host = sys.argv[sys.argv.index('--host') + 1] if '--host' in sys.argv else '127.0.0.1'
+    srv = ThreadingHTTPServer((host, port), Handler)
     print(f'review tool on http://localhost:{port}  (splitter: {"on" if TAGGER else "off"}, '
           f'dictionary: {"on" if DB else "off; run mkdict.py"})')
     srv.serve_forever()
