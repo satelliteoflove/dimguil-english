@@ -630,17 +630,46 @@ class Chapter19:
             c = g.char(idx(g, PRIESTESS[0]))
             return c['status'] == 0 and c['hp'] > 0
 
+        def raise_main():
+            """The temple raises main-party members (and her) who came home dead (devD,
+            2026-10-17: Eve, the Tablet's holder, and Venus died at the coffin), paid by the
+            first member of the party as it stands, its gold pooled there first."""
+            town.to_town_bar(g)
+            want = main_ids() + [idx(g, PRIESTESS[0])]
+            for _ in range(3):
+                pats = [ri for ri in town.temple_patients(g) if ri in want]
+                if not pats:
+                    return
+                if not town.town_party(g):
+                    want_party(run, main_names())
+                first = next((k for k, x in enumerate(town.town_slots(g)) if x is not None), None)
+                if first is None:
+                    return
+                try:
+                    town.pool_gold(g, first, 'tavern')
+                except Stuck as s:
+                    run.note('pool stuck', s.what)
+                town.to_town_bar(g)
+                for ri in pats:
+                    try:
+                        run.log.append((g.frame, 'temple', ri, town.temple_heal(g, ri, first)))
+                    except Stuck as s:
+                        run.note('temple stuck', g.name(ri), s.what)
+                    town.to_town_bar(g)
+
         def tm_b1():
             if g.overlay() not in ('JOUKA', 'HAZURE') and g.u8(maze.AREA) in range(9, 17) \
                     and idx(g, PRIESTESS[0]) in g.party():
                 return proved_tablet()
             if g.overlay() not in ('JOUKA', 'HAZURE'):
                 return False
+            raise_main()
             names = door_party()
             want_party(run, names)
             run.note('door party', names)
             town.to_town_bar(g)
             enter_tm(g)
+            chapter1.heal_in_camp(g, run.log, frac=0.95, on_int=run.on_int)
             return g.u8(maze.AREA) == TM_AREA and proved_tablet()
 
         def proved_tablet():
@@ -732,18 +761,7 @@ class Chapter19:
                 maze.to_town(g, run.on_int)
             town.to_town_bar(g)
             # anyone down comes back from the temple before the main party forms again
-            pats = [ri for ri in town.temple_patients(g) if ri in main_ids() + [idx(g, PRIESTESS[0])]]
-            for ri in pats:
-                first = next((k for k, x in enumerate(town.town_slots(g)) if x is not None), None)
-                if first is None:
-                    break
-                try:
-                    town.pool_gold(g, first, 'tavern')
-                    town.to_town_bar(g)
-                    run.log.append((g.frame, 'temple', ri, town.temple_heal(g, ri, first)))
-                except Stuck as s:
-                    run.note('temple stuck', g.name(ri), s.what)
-                town.to_town_bar(g)
+            raise_main()
             want_party(run, main_names())
             town.to_town_bar(g)
             L = idx(g, PRIESTESS[0])
