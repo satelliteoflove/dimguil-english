@@ -163,7 +163,7 @@ class Run:
             p = psutil.Process(self.pid)
             if 'run_chapter' in ' '.join(p.cmdline()):
                 return p
-        except (psutil.Error, TypeError):
+        except (psutil.Error, OSError, TypeError):
             pass
         return None
 
@@ -234,9 +234,20 @@ BENCH_SCRIPTS = ('fightbench.py', 'golembench.py')
 BENCH_ENV = ('OSLO', 'STACK', 'NOFIS', 'NOFIS_AWARE', 'FIRE', 'TROLL', 'MORLIS', 'CONFUSE')
 
 
+def procs(attrs):
+    """psutil.process_iter, skipping processes that exit while being read: psutil 7 lets
+    FileNotFoundError from /proc/PID/cwd through instead of NoSuchProcess."""
+    for p in psutil.process_iter():
+        try:
+            p.info = p.as_dict(attrs)
+        except (psutil.Error, OSError):
+            continue
+        yield p
+
+
 def benches():
     out = []
-    for p in psutil.process_iter(['pid', 'cmdline', 'cwd', 'create_time']):
+    for p in procs(['pid', 'cmdline', 'cwd', 'create_time']):
         cl = p.info['cmdline'] or []
         if len(cl) > 4 and any(c.endswith(BENCH_SCRIPTS) for c in cl) and 'run' in cl:
             i = cl.index('run')
@@ -251,7 +262,7 @@ def benches():
             try:
                 e = p.environ()
                 env = ' '.join(([e['SET']] if e.get('SET') else []) + [f'{k}={e[k]}' for k in BENCH_ENV if e.get(k)])
-            except psutil.Error:
+            except (psutil.Error, OSError):
                 pass
             out.append(dict(path=path, total=total, since=p.info['create_time'], env=env, pid=p.info['pid']))
     return out
@@ -348,7 +359,7 @@ PROCS = {}
 
 def emulators():
     out = []
-    for p in psutil.process_iter(['pid', 'cmdline', 'create_time', 'memory_info', 'cwd']):
+    for p in procs(['pid', 'cmdline', 'create_time', 'memory_info', 'cwd']):
         cl = ' '.join(p.info['cmdline'] or [])
         if 'python' not in cl or 'monitor.py' in cl:
             continue
@@ -369,12 +380,12 @@ def emulators():
             try:
                 if 'regress' not in ' '.join(p.parent().cmdline()):
                     continue
-            except psutil.Error:
+            except (psutil.Error, OSError):
                 continue
         q = PROCS.setdefault(p.info['pid'], p)
         try:
             cpu = q.cpu_percent(None)
-        except psutil.Error:
+        except (psutil.Error, OSError):
             cpu = 0.0
         short = ' '.join(os.path.basename(c) if c.endswith('.py') else
                          '/'.join(c.split('/')[-3:]) if c.startswith('/') else c
@@ -442,7 +453,7 @@ def worker_state(w, now):
     try:
         p = psutil.Process(w.get('pid'))
         alive = p.create_time() <= (w.get('start') or now) + 5 and p.status() != psutil.STATUS_ZOMBIE
-    except (psutil.Error, TypeError, ValueError):
+    except (psutil.Error, OSError, TypeError, ValueError):
         pass
     if alive:
         upd, done = w.get('updated') or w.get('start') or now, w.get('done') or 0
@@ -684,7 +695,7 @@ def write_files(pid):
     out = []
     try:
         files = psutil.Process(pid).open_files()
-    except psutil.Error:
+    except (psutil.Error, OSError):
         return out
     for f in files:
         if getattr(f, 'mode', 'r') == 'r' or not f.path.startswith('/') or f.path.startswith(('/dev/', '/proc/')):
@@ -1422,7 +1433,7 @@ class Monitor:
             if parent:
                 out.append(Text(f'  parent {pp.pid}: ' + flat(' '.join(parent)), style='grey50', no_wrap=True,
                                 overflow='ellipsis'))
-        except psutil.Error:
+        except (psutil.Error, OSError):
             pass
         root, branch = worktree_of(cwd)
         out.append(Text(f'  cwd {cwd}', overflow='ellipsis', no_wrap=True))
