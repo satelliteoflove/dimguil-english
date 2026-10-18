@@ -331,10 +331,15 @@ def equip(g, slot_pos, log=None, none=False, prefer=None):
     return chosen
 
 
-def _equip_prompts(g, ri, before, running, none=False, cursor=EQ_CURSOR, prefer=None):
+EQ_ASKING = 0x80079a2c       # equip_menu: the pack index whose special power state 0x78 asks about
+
+
+def _equip_prompts(g, ri, before, running, none=False, cursor=EQ_CURSOR, prefer=None, unleash=()):
     """Answer equip_menu's slot prompts (MAZE 0x800daa1c, HAZURE 0x800afa9c: the same
     fields but the cursor, camp's 0x80079c60 and the Edge's 0x80079c6b, each 0 for none
-    and k for candidate k - 1) while running() holds."""
+    and k for candidate k - 1) while running() holds. "Unleash its special power?" (state
+    0x78, Yes/No on 0x80079c60, No first) gets No, except for the item ids in `unleash`
+    (chapter 19: the RING OF MEDIUM on the Priestess, JOUKA equip_menu 0x800ccc94)."""
     chosen = {}
     end = g.frame + 3000
     while running():
@@ -354,6 +359,13 @@ def _equip_prompts(g, ri, before, running, none=False, cursor=EQ_CURSOR, prefer=
                            or not running(), 120, 'equip pick')
             continue
         if g.u8(EQ_STATE) == 0x78:
+            k = g.u8(EQ_ASKING)
+            w = struct.unpack_from('<H', g.char(ri)['raw'], 0x20 + 2 * k)[0] if k < 10 else 0xffff
+            if unleash and (w & 0x1ff) in unleash:
+                ui.move_cursor(g, EQ_CURSOR, 0, 'up', 'down', what='unleash Yes')
+                ui.press_until(g, 'circle', lambda: g.u8(EQ_STATE) != 0x78, 120, 'unleash')
+                chosen.setdefault('unleashed', []).append(w & 0x1ff)
+                continue
             ui.press_until(g, 'cross', lambda: g.u8(EQ_STATE) != 0x78, 120, 'no special power')
             continue
         if g.u8(CAMP_MSG) and g.u8(EQ_PROMPT) == 0:

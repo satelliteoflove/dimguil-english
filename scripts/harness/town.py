@@ -190,19 +190,22 @@ def yes_no(g, yes, what='yes/no'):
 
 
 def create_character(g, name, race, sex, align, cls, retrain=None, reroll_limit=400,
-                     reroll_delay=lambda k: 3 + (k * 7) % 23):
+                     reroll_delay=lambda k: 3 + (k * 7) % 23, accept=None):
     """Training Grounds -> Create Character, start to finish. race/sex/align/cls by name
     ('Human', 'M'/'F', 'Good', 'Fighter'). If the class isn't offered, finish the
     character as something else and answer No to "Use this character?" (it's thrown
     away), then start again, as a player rerolls: the class screen has no way back to
     the roll (T4, 2026-10-12: cross and every other button do nothing there). Waits
     reroll_delay(k) frames before each roll so they differ. retrain: True/False at
-    "Retrain?", None = Yes only when asked. Returns a dict: roster index, bonus,
-    rerolls, retrained, frames."""
+    "Retrain?", None = Yes only when asked. accept(g, new_char_bytes, bonus), when given,
+    runs at "Use this character?" with the finished work record (new_char, age at +0x10):
+    None throws the character away and rolls again, anything else is the answer to
+    "Retrain?" (chapter 19's Priestess: 18, or 15 and retrained). Returns a dict: roster
+    index, bonus, rerolls, retrained, frames."""
     f0 = g.frame
     rerolls = 0
     while True:
-        r = _create_once(g, name, race, sex, align, cls, retrain, reroll_delay(rerolls))
+        r = _create_once(g, name, race, sex, align, cls, retrain, reroll_delay(rerolls), accept)
         if r is not None:
             r.update(rerolls=rerolls, frames=g.frame - f0)
             return r
@@ -238,7 +241,7 @@ def _class_bonus(g, cls):
         ui.confirm_until(g, lambda: g.u8(CS) == 90, 300, 'distribute')
 
 
-def _create_once(g, name, race, sex, align, cls, retrain, delay):
+def _create_once(g, name, race, sex, align, cls, retrain, delay, accept=None):
     """One pass through creation. None if the roll didn't offer cls (the character was
     finished and thrown away), else the registered character's dict."""
     if g.overlay() != 'JOUKA' or g.u8(TOWN_STATE) != 30:
@@ -264,23 +267,18 @@ def _create_once(g, name, race, sex, align, cls, retrain, delay):
         _class_bonus(g, CLASSES[offered[0]])
         yes_no(g, True, 'is this all right')
         ui.confirm_until(g, lambda: g.u8(CS) == 105, 300, 'all right')
-        # cancel is No here (state 'n', 110); moving the list cursor to No and confirming
-        # registered the character anyway (state 's', 115) in the Bishop reroll test
-        ui.cancel_until(g, lambda: g.u8(CS) != 105, 300, 'throw away')
-        if g.u8(CS) == 115:
-            raise Stuck('throw away took Yes')
-        ui.press_until(g, 'circle', lambda: g.u8(CS) == 0 and facility_ready(g), 1200,
-                       'back to the Training Grounds')
-        g.step(30)
-        if g.u8(ROSTER_COUNT) != count0:
-            raise Stuck('thrown-away character registered', count=g.u8(ROSTER_COUNT))
-        return None
+        return _throw_away(g, count0)
 
     bonus = g.u8(BONUS)
     choose_list(g, offered.index(want), len(offered), 'class')
     _class_bonus(g, cls)
     yes_no(g, True, 'is this all right')
     ui.confirm_until(g, lambda: g.u8(CS) == 105, 300, 'all right')
+    if accept is not None:
+        verdict = accept(g, g.e.read(NEW_CHAR, 0xd0), bonus)
+        if verdict is None:
+            return _throw_away(g, count0)
+        retrain = verdict
     yes_no(g, True, 'use this character')
     retrained = False
     asked = False
@@ -301,6 +299,21 @@ def _create_once(g, name, race, sex, align, cls, retrain, delay):
         ui.confirm_until(g, lambda: g.u8(CS) != cs or g.u8(CS) == 0, 600, 'creation end')
     ui.wait_until(g, lambda: g.u8(ROSTER_COUNT) == count0 + 1, 120, 'registered')
     return dict(index=count0, name=name, cls=cls, bonus=bonus, retrained=retrained)
+
+
+def _throw_away(g, count0):
+    """At "Use this character?" (state 105): No, so nothing is registered. Returns None."""
+    # cancel is No here (state 'n', 110); moving the list cursor to No and confirming
+    # registered the character anyway (state 's', 115) in the Bishop reroll test
+    ui.cancel_until(g, lambda: g.u8(CS) != 105, 300, 'throw away')
+    if g.u8(CS) == 115:
+        raise Stuck('throw away took Yes')
+    ui.press_until(g, 'circle', lambda: g.u8(CS) == 0 and facility_ready(g), 1200,
+                   'back to the Training Grounds')
+    g.step(30)
+    if g.u8(ROSTER_COUNT) != count0:
+        raise Stuck('thrown-away character registered', count=g.u8(ROSTER_COUNT))
+    return None
 
 
 def _is_retrain_prompt(g, since):
