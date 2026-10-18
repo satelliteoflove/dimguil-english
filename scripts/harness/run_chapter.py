@@ -23,6 +23,10 @@ and the fights roll on battle_rng_state (0x80079a34, docs/engine-notes.md "Rando
 which the state keeps. --battle-rng writes a value from --seed there after loading (as
 fightbench does), so runs from one state with different seeds get different fights.
 
+Every 5 s of wall time the run writes NAME/now.json (RAM reads only): the current goal,
+where the party is, and each member's roster index, name, class, level, HP, max HP and
+status, for the monitor's run and chain views.
+
 --disc runs on another disc image (its dimguil/BATTLE.BIN beside it) instead of
 rips/harness/disc/. --no-main-code skips laying the disc's MAIN_CODE over a --from state:
 for states made on that same disc (the full run, scripts/harness/fullrun.py).
@@ -30,7 +34,7 @@ for states made on that same disc (the full run, scripts/harness/fullrun.py).
 import argparse, json, os, random, struct, sys, time, traceback
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 from harness.game import Game, OUT, DISC
-from harness import chapters, regress
+from harness import chapters, regress, town
 
 # the live case list is the suite runner's alone (docs/agent-workflow.md)
 regress.CASES = os.path.join(regress.REG, 'pending', 'chapters.jsonl')
@@ -115,6 +119,44 @@ if a.src:
     print('points known for', sorted(r.full_points))
     # the chapter's log and pull-backs, saved beside goal states (agent 14)
     r.resume_memory = chapters.load_memory(g, a.src)
+
+
+NOW = os.path.join(d, 'now.json')
+_now = dict(goal=None, t=0.0)
+
+
+def now_tick():
+    """now.json: what the run is doing and the party as RAM has it. Reads only."""
+    t = time.time()
+    if t - _now['t'] < 5:
+        return
+    _now['t'] = t
+    try:
+        party = []
+        for i in g.party() or town.town_party(g):
+            c = g.char(i)
+            cls = town.CLASSES[c['cls']] if c['cls'] < len(town.CLASSES) else str(c['cls'])
+            party.append([i, c['name'], cls, c['level'], c['hp'], c['max_hp'], c['status']])
+        x = dict(t=round(t, 1), frame=g.frame, chapter=getattr(r, 'chapter', None), goal=_now['goal'],
+                 where=g.where(), party=party)
+        with open(NOW + '.new', 'w') as f:
+            json.dump(x, f)
+        os.replace(NOW + '.new', NOW)
+    except Exception:
+        pass
+
+
+_goal = r.goal
+
+
+def goal_named(name, fn):
+    # the goal now, for now.json; the goal itself runs unchanged
+    _now['goal'], _now['t'] = name, 0.0
+    return _goal(name, fn)
+
+
+r.goal = goal_named
+g.t.ticks.append(now_tick)
 
 
 class Stopped(Exception):

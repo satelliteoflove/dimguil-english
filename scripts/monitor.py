@@ -92,14 +92,41 @@ class Tail:
 TOWN_PLACE = {10: 'tavern', 15: 'inn', 20: "Boltac's", 25: 'temple', 30: 'training grounds', 40: 'edge of town'}
 
 
+# the game's map indexes (cur_area), docs/re/A-maze.md
+AREA_NAMES = {0: 'the Grounds', 17: 'area 17', 18: 'Area X', 35: 'area 35', 43: 'Area Z'}
+for _base, _name, _floors in ((1, 'Shrine', ['1F', '2F', '3F', '4F']), (5, 'Underground', ['B4', 'B3', 'B2', 'B1']),
+                              (9, 'Training Maze', ['B%d' % k for k in range(1, 9)]),
+                              (19, 'Area A', ['B4', 'B3', 'B2', 'B1']), (23, 'Area B', ['B5', 'B4', 'B3', 'B2', 'B1']),
+                              (28, 'Area C', ['B4', 'B3', 'B2', 'B1']), (32, 'Area D', ['B3', 'B2', 'B1']),
+                              (36, 'Area E', ['B4', 'B3', 'B2', 'B1'])):
+    for _k, _f in enumerate(_floors):
+        AREA_NAMES[_base + _k] = f'{_name} {_f}'
+for _k in range(3):
+    AREA_NAMES[40 + _k] = f"Dragon's Cave (map {40 + _k})"
+STATUS_NAMES = [(0x200, 'lost'), (0x100, 'ashes'), (0x80, 'dead'), (0x40, 'stoned'), (0x20, 'paralyzed'),
+                (0x10, 'K.O.'), (8, 'asleep'), (4, 'poisoned'), (2, 'confused'), (1, 'afraid')]
+
+
+def status_text(st):
+    """The highest set status bit, as the game's status line shows it (G-records.md)."""
+    return next((n for b, n in STATUS_NAMES if (st or 0) & b), 'OK')
+
+
 def where_text(w):
-    """A live.jsonl position (area, x, y, overlay, town) as a few words."""
+    """A position (area, x, y, overlay, town), or a Game.where() dict, as a place name and
+    the fan sites' E/N coordinates (N = 23 - y)."""
     if not w:
         return '?'
+    if isinstance(w, dict):
+        w = (w.get('area'), w.get('x'), w.get('y'), w.get('ovl'), w.get('town'))
     area, x, y, ovl, town = (tuple(w) + (None,) * 5)[:5]
     if ovl == 'JOUKA' or (area == 255 and town not in (None, 255)):
         return 'town' + (f', {TOWN_PLACE.get(town, town)}' if town not in (None, 255) else '')
-    return f'area {area} ({x}, {y})' + (' in battle' if ovl == 'BATTLE' else '')
+    if ovl == 'MCARD' and area in (None, 255):
+        return 'the title screen'
+    name = AREA_NAMES.get(area, f'area {area}')
+    at = f' E{x} N{23 - y}' if isinstance(x, int) and isinstance(y, int) and y <= 23 else ''
+    return name + at + (', in battle' if ovl == 'BATTLE' else '')
 
 
 def event_style(txt):
@@ -140,13 +167,46 @@ class Run:
         self.down = {}                     # name: how they fell, until a raise or a heal shows them up
         self.wipes, self.raises = 0, 0
         self.names = []                    # the party in order, from the last reorder
+        self.now = None                    # NAME/now.json: run_chapter's goal, place and party from RAM
+        self.now_mtime = 0
+        self.roster = {}                   # roster index: name, from now.json
+        self.story_since_goal = 0
         try:
             self.pid = int(open(pidfile).read().split()[0])
         except (OSError, ValueError, IndexError):
             self.pid = None
         self.started = os.path.getmtime(pidfile)
 
+    def read_now(self):
+        p = os.path.join(self.dir, 'now.json')
+        try:
+            m = os.path.getmtime(p)
+            if m == self.now_mtime:
+                return
+            x = json.load(open(p))
+        except (OSError, ValueError):
+            return
+        self.now_mtime = m
+        party = x.get('party') or []
+        if not isinstance(party, list) or not all(isinstance(c, list) and len(c) >= 7 for c in party):
+            return
+        ups = []
+        for i, name, cls, lv, hp, mhp, st in (c[:7] for c in party):
+            self.roster[i] = name
+            if name in self.levels_seen and lv > self.levels_seen[name]:
+                ups.append(f'{name} to level {lv}')
+            self.levels_seen[name] = max(lv, self.levels_seen.get(name, 0))
+        if ups:
+            self.events.append((x.get('frame') or self.frame, 'level up: ' + ', '.join(ups)))
+        self.now = x
+        if x.get('goal'):
+            self.goal_now = x['goal']
+        if x.get('where'):
+            w = x['where']
+            self.where = (w.get('area'), w.get('x'), w.get('y'), w.get('ovl'), w.get('town'))
+
     def update(self):
+        self.read_now()
         # live.jsonl first, so a goal line read in the same pass gets the frame it ended on
         for line in self.live.new():
             try:
@@ -159,8 +219,14 @@ class Run:
                 self.fights += 1
                 if d.get('story'):
                     self.boss_fights += 1
+                    self.story_since_goal += 1
                     if d.get('hp_end'):
                         self.boss_wins += 1
+                    w = d.get('where') or []
+                    by = sorted(set(re.findall(r"'by': '([^']+)'", str(d.get('deaths') or ''))))
+                    self.events.append((f, f"story fight at {where_text(tuple(w[:3]))}: {d.get('rounds')} rounds"
+                                           + (f", deaths to {', '.join(by)}" if by else ', no deaths')
+                                           + (f", {len(d.get('dead_end'))} dead at the end" if d.get('dead_end') else '')))
             elif kind == 'death' and isinstance(d, dict):
                 self.deaths += 1
                 self.death_frames.append(f)
@@ -175,11 +241,13 @@ class Run:
             elif kind == 'temple':
                 self.temple += 1
                 x = rest[1] if len(rest) > 1 and isinstance(rest[1], dict) else {}
-                if x.get('outcome') and x.get('outcome') != 'alive':
-                    self.events.append((f, f"temple: roster {rest[0]} came out {x['outcome']}"))
+                who = self.roster.get(rest[0], f'roster {rest[0]}') if rest else '?'
+                if x.get('outcome') in ('ashes', 'lost'):
+                    self.events.append((f, f"temple: {who} came out {x['outcome']}"))
                 elif x.get('outcome') == 'alive':
                     self.raises += 1
-                    self.events.append((f, f'temple: roster {rest[0]} raised'))
+                    self.down.pop(who, None)
+                    self.events.append((f, f'temple: {who} raised'))
             elif kind in ('raised back', 'raised after standby') and len(rest) > 1:
                 who = rest[1] if kind == 'raised back' else rest[0]
                 self.down.pop(who, None)
@@ -227,8 +295,10 @@ class Run:
                     self.levels = list(zip(self.names, lv))
                     for n_, l_ in self.levels:
                         self.levels_seen[n_] = max(l_, self.levels_seen.get(n_, 0))
+                story = ', story fight' if self.story_since_goal else ''
+                self.story_since_goal = 0
                 self.events.append((self.frame, f"goal {m.group(2)} passed" + (f' on try {t}' if t > 1 else '')
-                                    + f" ({hms(float(m.group(4)))} wall)"))
+                                    + f" ({hms(float(m.group(4)))} wall{story})"))
                 continue
             m = self.STUCK.match(line)
             if m:
@@ -243,10 +313,15 @@ class Run:
         """Start from where an earlier run of the same party left off (the previous chapter
         of a chain), until this run's own events say otherwise."""
         self.names, self.levels, self.party = list(prev.names), list(prev.levels), list(prev.party)
+        self.roster, self.now = dict(prev.roster), prev.now
         self.levels_seen, self.down, self.where = dict(prev.levels_seen), dict(prev.down), prev.where
 
     def party_text(self):
-        """Names, levels, HP (as of the last heal) and who is down."""
+        """Names, classes, levels, HP and status from now.json; without it, names, levels,
+        HP as of the last heal and who is down, from the events."""
+        if self.now and self.now.get('party'):
+            return ', '.join(f'{n_} {cls} L{lv} {hp}/{mhp}' + ('' if not st else f' {status_text(st)}')
+                             for _, n_, cls, lv, hp, mhp, st in (c[:7] for c in self.now['party']))
         lv = dict(self.levels)
         hp = {n_: (h, m) for n_, h, m in self.party}
         names = [n_ for n_, _ in self.levels] or list(hp)
