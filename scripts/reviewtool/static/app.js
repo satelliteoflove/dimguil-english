@@ -144,7 +144,21 @@ function renderSceneList() {
         <span class="meta">${sc.priority ? esc(sc.priority) + ' priority' : ''}${sc.status !== 'open' ? ` <span class="${sc.status === 'committed' ? 'done' : ''}">${STATUS[sc.status] || sc.status}</span>` : ''}</span>
       </button></li>`).join('')}</ol></section>`;
   }).join('') || '<p class="hint" style="padding:0 1.2rem">No scenes prepared yet.</p>';
-  $$('.scene-link').forEach(b => b.addEventListener('click', () => openScene(b.dataset.id)));
+  $$('.scene-link').forEach(b => b.addEventListener('click', () => { setNav(false); openScene(b.dataset.id); }));
+}
+
+// --- phone layout: the scene list and the line details open over the script ------------
+
+const phone = matchMedia('(max-width: 760px)');
+function setNav(open) {
+  document.body.classList.toggle('nav-open', open);
+  $('#nav-toggle').setAttribute('aria-expanded', String(open));
+  $('#nav-toggle').textContent = open ? 'Close' : 'Scenes';
+}
+function setInsp(open) {
+  document.body.classList.toggle('insp-open', open);
+  if (open) $('#inspector').scrollTop = 0;
+  else { const el = $(`#script .line[data-i="${S.focus}"]`); if (el) el.scrollIntoView({ block: 'center' }); }
 }
 
 // --- opening a scene -------------------------------------------------------------------
@@ -159,6 +173,7 @@ async function openScene(id, { line = 0, mode } = {}) {
   const party = Object.values(S.cast.parties).find(p => p.file === sc.file);
   $('#scene-file').innerHTML = `${shape(S.cast.people.find(p => S.cast.parties[p.party] === party))} ${esc(party ? party.name : '')}, NPC_MES${sc.file}${sc.number ? `, flagged scene ${sc.number}` : ''}${sc.priority ? `, ${esc(sc.priority)} priority` : ''}`;
   $('#scene-title').textContent = sc.title;
+  $('#mobile-title').textContent = sc.title;
   $('#scene-where').textContent = sc.where || '';
   $('#scene-summary').textContent = sc.summary || '';
   $('#scene-assembled').textContent = sc.assembled || '';
@@ -203,6 +218,7 @@ function renderScript() {
       const opt = e.target.closest('.opt.pickable');
       if (opt) { setChoice(i, opt.dataset.pick, { advance: true }); return; }
       if (S.focus !== i) focusLine(i, { scroll: false });
+      if (phone.matches) setInsp(true);
     });
     $$('.opt.pickable', el).forEach(o => {
       o.addEventListener('mouseenter', () => { if (S.focus === i) { S.hoverPick = o.dataset.pick; renderPreview(); } });
@@ -668,6 +684,7 @@ document.addEventListener('keydown', e => {
   const typing = e.target.closest('textarea, input');
   if (e.key === 'Escape') {
     if (typing) { e.target.blur(); return; }
+    if (document.body.classList.contains('insp-open') && !S.word) { setInsp(false); return; }
     if (S.word) { S.word = null; renderWordPanel(); $$('#insp-jp .w').forEach(el => el.classList.remove('sel')); }
     return;
   }
@@ -726,6 +743,10 @@ async function main() {
   $('#apply-confirm').addEventListener('click', confirmApply);
   $('#ask-send').addEventListener('click', sendQuestion);
   $('#help-open').addEventListener('click', () => $('#help').showModal());
+  $('#nav-toggle').addEventListener('click', () => setNav(!document.body.classList.contains('nav-open')));
+  $('#insp-close').addEventListener('click', () => setInsp(false));
+  $('#insp-prev').addEventListener('click', () => { focusLine(S.focus - 1, { scroll: false }); $('#inspector').scrollTop = 0; });
+  $('#insp-next').addEventListener('click', () => { focusLine(S.focus + 1, { scroll: false }); $('#inspector').scrollTop = 0; });
 
   const h = new URLSearchParams(location.hash.slice(1));
   const id = h.get('s') || (S.scenes.find(s => s.status === 'open') || S.scenes[0] || {}).id;

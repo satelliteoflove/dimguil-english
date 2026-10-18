@@ -8,7 +8,11 @@
 </head>
 <body>
 <div class="desk">
-  <nav class="scenes" aria-label="Scenes">
+  <header class="mobilebar">
+    <button type="button" id="nav-toggle" aria-expanded="false" aria-controls="scenes">Scenes</button>
+    <span id="mobile-title"></span>
+  </header>
+  <nav class="scenes" id="scenes" aria-label="Scenes">
     <header class="brand">
       <h1>Dimguil review</h1>
       <p class="brand-sub">NPC scenes</p>
@@ -55,6 +59,11 @@
   </main>
 
   <aside class="inspector" id="inspector" aria-label="Line details">
+    <div class="insp-bar">
+      <button type="button" id="insp-close">Back to the scene</button>
+      <span><button type="button" id="insp-prev" aria-label="Previous line">Previous</button>
+        <button type="button" id="insp-next" aria-label="Next line">Next</button></span>
+    </div>
     <div id="insp-empty" class="insp-empty"><p>Select a line to see its Japanese, word notes and how it looks in the game.</p></div>
     <div id="insp" hidden>
       <header class="insp-head">

@@ -252,6 +252,54 @@ dialog h2 { font-size: var(--step-2); margin-bottom: 0.6rem; }
   .inspector { grid-column: 1 / -1; border-left: 0; border-top: 1px solid var(--rule); }
   .desk { height: auto; }
 }
+/* Phone ---------------------------------------------------------------------------- */
+.mobilebar, .insp-bar { display: none; }
+@media (max-width: 760px) {
+  html { font-size: 17px; }
+  :root { --bar: 3rem; }
+  .desk { display: block; height: auto; }
+  body.nav-open, body.insp-open { overflow: hidden; }
+  .mobilebar {
+    display: flex; align-items: center; gap: 0.8rem; position: sticky; top: 0; z-index: 15;
+    height: var(--bar); padding: 0 0.8rem; background: var(--paper); border-bottom: 1px solid var(--rule);
+  }
+  .mobilebar button, .insp-bar button { border: 1px solid var(--rule); background: var(--sheet); border-radius: 4px; padding: 0.35rem 0.8rem; cursor: pointer; }
+  #mobile-title { font-style: italic; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .scenes {
+    display: none; position: fixed; top: var(--bar); left: 0; right: 0; bottom: 0; z-index: 14;
+    background: var(--paper); border-right: 0; padding-top: 0.4rem;
+  }
+  body.nav-open .scenes { display: flex; }
+  .brand, .scenes-foot { display: none; }
+  .scene-link { padding: 0.6rem 1rem; }
+  .stage { padding: 1.2rem 1rem 0; overflow: visible; }
+  .scene-head h2 { font-size: var(--step-2); }
+  .readings { top: var(--bar); flex-wrap: nowrap; overflow-x: auto; padding-top: 0.2rem; }
+  .readings button { white-space: nowrap; padding: 0.6rem 0.6rem; }
+  kbd { display: none; }
+  .line { grid-template-columns: 1fr; padding: 0.7rem 0.4rem 0.7rem 0.6rem; }
+  .who { text-align: left; }
+  .who .name { justify-content: flex-start; }
+  .who .ctx { margin-bottom: 0.3rem; }
+  .cmp { grid-template-columns: 1fr; gap: 0; }
+  .cmp .lab { text-align: left; margin-top: 0.55rem; }
+  .cmp .opt { margin-left: 0; padding: 0.4rem 0.5rem; }
+  .applybar { margin: 1.5rem -1rem 0; flex-wrap: wrap; gap: 0.6rem; }
+  .inspector {
+    display: none; position: fixed; inset: 0; z-index: 30; background: var(--paper);
+    border: 0; padding: 0 1rem 3rem; overflow-y: auto;
+  }
+  body.insp-open .inspector { display: block; }
+  .insp-bar {
+    display: flex; justify-content: space-between; gap: 0.5rem; position: sticky; top: 0; z-index: 2;
+    background: var(--paper); padding: 0.6rem 0; margin-bottom: 0.6rem; border-bottom: 1px solid var(--rule);
+  }
+  .choice button { padding: 0.55rem 0.9rem; }
+  .seg button { padding: 0.35rem 0.7rem; }
+  .jp { font-size: 1.2rem; }
+  .tip { display: none; }
+  dialog { padding: 1rem; }
+}
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
 
 .tip {
