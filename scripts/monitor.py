@@ -118,7 +118,7 @@ def event_style(txt):
 class Run:
     """One chapter run: NAME.pid, NAME.out and NAME/live.jsonl. Also usable outside the
     monitor (scripts/harness/fullrun.py watches its chapter runs through it)."""
-    GOAL = re.compile(r'^goal (\S+) (\S+): (\d+) frames, ([\d.]+) s, (\d+) tries')
+    GOAL = re.compile(r'^goal (\S+) (\S+): (\d+) frames, ([\d.]+) s, (\d+) tries(?:, levels \[([\d, ]*)\])?')
     STUCK = re.compile(r'^stuck (\S+) (\S+) try (\d+): (.*)')
 
     def __init__(self, pidfile):
@@ -139,6 +139,7 @@ class Run:
         self.levels_seen = {}              # name: last level seen, for the level-ups
         self.down = {}                     # name: how they fell, until a raise or a heal shows them up
         self.wipes, self.raises = 0, 0
+        self.names = []                    # the party in order, from the last reorder
         try:
             self.pid = int(open(pidfile).read().split()[0])
         except (OSError, ValueError, IndexError):
@@ -208,6 +209,8 @@ class Run:
                     self.events.append((f, 'level up: ' + ', '.join(ups)))
                 if kind == 'ending: party':
                     self.events.append((f, 'the ending: ' + ' '.join(map(str, rest[1:5]))))
+            elif kind == 'reorder' and len(rest) > 1 and isinstance(rest[1], list):
+                self.names = rest[1]
             elif kind == 'stuck' or kind == 'blocked':
                 self.events.append((f, f"{kind} {' '.join(map(str, rest))[:120]}"))
             if isinstance(d, dict) and 'area' in d:
@@ -219,6 +222,11 @@ class Run:
             if m:
                 self.goals.append((m.group(2), int(m.group(5)), float(m.group(4))))
                 t = int(m.group(5))
+                lv = [int(x) for x in (m.group(6) or '').split(',') if x.strip()]
+                if self.names and len(lv) == len(self.names):     # levels() is in party order
+                    self.levels = list(zip(self.names, lv))
+                    for n_, l_ in self.levels:
+                        self.levels_seen[n_] = max(l_, self.levels_seen.get(n_, 0))
                 self.events.append((self.frame, f"goal {m.group(2)} passed" + (f' on try {t}' if t > 1 else '')
                                     + f" ({hms(float(m.group(4)))} wall)"))
                 continue
@@ -230,6 +238,12 @@ class Run:
                     self.result = json.loads(line)
                 except ValueError:
                     pass
+
+    def carry(self, prev):
+        """Start from where an earlier run of the same party left off (the previous chapter
+        of a chain), until this run's own events say otherwise."""
+        self.names, self.levels, self.party = list(prev.names), list(prev.levels), list(prev.party)
+        self.levels_seen, self.down, self.where = dict(prev.levels_seen), dict(prev.down), prev.where
 
     def party_text(self):
         """Names, levels, HP (as of the last heal) and who is down."""

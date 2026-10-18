@@ -51,7 +51,7 @@ chain['code'] = ROOT
 
 job = Job('fullrun', purpose='release gate: power-on to the ending on the shipping disc',
           total=last - first + 1, outputs=[chain_p, fail_p], part='chain %s v%d' % (a.chain, a.variant),
-          arm=a.chain, status=a.status, keys=['passed', 'retried', 'failed'])
+          arm=a.chain, status=a.status, worktree=ROOT, keys=['passed', 'retried', 'failed'])
 
 child = [None]
 LAST = last
@@ -110,6 +110,7 @@ def log_fail(x):
 signal.signal(signal.SIGTERM, _term)
 
 src = None
+prev_run = None          # the last passed try's monitor.Run: its party and levels carry over
 if first > 1:
     prev = chain['chapters'].get(str(first - 1))
     if not prev or not prev.get('passed'):
@@ -140,6 +141,9 @@ for n in range(first, last + 1):
             open(pidf, 'w').write('%d\n' % child[0].pid)
             rec['tries'].append(dict(try_=k, seed=seed, run=name, running=True))
             r, seen = monitor.Run(pidf), 0
+            if prev_run is not None:
+                r.carry(prev_run)
+            save()
             while True:
                 try:
                     rc = child[0].wait(timeout=5)
@@ -175,6 +179,7 @@ for n in range(first, last + 1):
         rec['tries'].append(t)
         if ok:
             rec.update(passed=True, end=end, wall=wall, frames=t['frames'])
+            prev_run = r
             save()
             job.tally('passed')
             job.event('chapter %d passed on try %d, %s' % (n, k, monitor.hms(wall)))
