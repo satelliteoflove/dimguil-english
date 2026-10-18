@@ -6,7 +6,8 @@
     python3 scripts/monitor.py --hours 24   # list runs started in the last 24 hours (default 12)
 
 Reads only what the harness already writes, so nothing has to be started differently:
-  chapter runs   rips/harness/**/NAME.pid, NAME.out (goal lines) and NAME/live.jsonl (events)
+  chapter runs   rips/harness/**/NAME.pid, NAME.out (goal lines) and NAME/live.jsonl (events);
+                 a run is labelled by its path under rips/harness (fullrun/a/c07_try1)
   suite rounds   rips/harness/regress/LOCK, results-*.jsonl, rounds.jsonl
   benches        running fightbench.py processes and the .jsonl they write; each one seen is
                  kept in rips/monitor/benches.json, so finished benches stay listed
@@ -88,38 +89,125 @@ class Tail:
         return data[:end].decode('utf-8', 'replace').splitlines()
 
 
+TOWN_PLACE = {10: 'tavern', 15: 'inn', 20: "Boltac's", 25: 'temple', 30: 'training grounds', 40: 'edge of town'}
+
+
+# the game's map indexes (cur_area), docs/re/A-maze.md
+AREA_NAMES = {0: 'the Grounds', 17: 'area 17', 18: 'Area X', 35: 'area 35', 43: 'Area Z'}
+for _base, _name, _floors in ((1, 'Shrine', ['1F', '2F', '3F', '4F']), (5, 'Underground', ['B4', 'B3', 'B2', 'B1']),
+                              (9, 'Training Maze', ['B%d' % k for k in range(1, 9)]),
+                              (19, 'Area A', ['B4', 'B3', 'B2', 'B1']), (23, 'Area B', ['B5', 'B4', 'B3', 'B2', 'B1']),
+                              (28, 'Area C', ['B4', 'B3', 'B2', 'B1']), (32, 'Area D', ['B3', 'B2', 'B1']),
+                              (36, 'Area E', ['B4', 'B3', 'B2', 'B1'])):
+    for _k, _f in enumerate(_floors):
+        AREA_NAMES[_base + _k] = f'{_name} {_f}'
+for _k in range(3):
+    AREA_NAMES[40 + _k] = f"Dragon's Cave (map {40 + _k})"
+STATUS_NAMES = [(0x200, 'lost'), (0x100, 'ashes'), (0x80, 'dead'), (0x40, 'stoned'), (0x20, 'paralyzed'),
+                (0x10, 'K.O.'), (8, 'asleep'), (4, 'poisoned'), (2, 'confused'), (1, 'afraid')]
+
+
+def status_text(st):
+    """The highest set status bit, as the game's status line shows it (G-records.md)."""
+    return next((n for b, n in STATUS_NAMES if (st or 0) & b), 'OK')
+
+
+def where_text(w):
+    """A position (area, x, y, overlay, town), or a Game.where() dict, as a place name and
+    the fan sites' E/N coordinates (N = 23 - y)."""
+    if not w:
+        return '?'
+    if isinstance(w, dict):
+        w = (w.get('area'), w.get('x'), w.get('y'), w.get('ovl'), w.get('town'))
+    area, x, y, ovl, town = (tuple(w) + (None,) * 5)[:5]
+    if ovl == 'JOUKA' or (area == 255 and town not in (None, 255)):
+        return 'town' + (f', {TOWN_PLACE[town]}' if town in TOWN_PLACE else '')
+    if ovl == 'MCARD' and area in (None, 255):
+        return 'the title screen'
+    name = AREA_NAMES.get(area, f'area {area}')
+    at = f' E{x} N{23 - y}' if isinstance(x, int) and isinstance(y, int) and y <= 23 else ''
+    return name + at + (', in battle' if ovl == 'BATTLE' else '')
+
+
+def event_style(txt):
+    """The color of a run or chain event line: goals cyan, raises and level-ups green,
+    deaths and failures red, the rest (retries) yellow."""
+    if any(w in txt for w in ('dies', 'stone', 'decapitated', 'ashes', 'lost', 'wiped', 'stuck', 'failed',
+                              'blocked', 'came out')):
+        return 'red'
+    if txt.startswith(('goal ', 'the ending', 'chapter ')) or ' passed' in txt:
+        return 'cyan'
+    if txt.startswith(('level up', 'temple')) or 'raised' in txt:
+        return 'green'
+    return 'yellow'
+
+
 class Run:
-    """One chapter run: NAME.pid, NAME.out and NAME/live.jsonl."""
-    GOAL = re.compile(r'^goal (\S+) (\S+): (\d+) frames, ([\d.]+) s, (\d+) tries')
+    """One chapter run: NAME.pid, NAME.out and NAME/live.jsonl. Also usable outside the
+    monitor (scripts/harness/fullrun.py watches its chapter runs through it)."""
+    GOAL = re.compile(r'^goal (\S+) (\S+): (\d+) frames, ([\d.]+) s, (\d+) tries(?:, levels \[([\d, ]*)\])?')
+    STUCK = re.compile(r'^stuck (\S+) (\S+) try (\d+): (.*)')
 
     def __init__(self, pidfile):
         self.pidfile = pidfile
         self.dir = pidfile[:-4]
         self.name = os.path.basename(self.dir)
         self.chapter = os.path.basename(os.path.dirname(pidfile))
+        # the path under rips/harness names it: chapters/n1v6v, ch18/c18v2b, fullrun/a/c07_try1
+        rel_ = os.path.relpath(self.dir, H)
+        self.label = rel_ if not rel_.startswith('..') else f'{self.chapter}/{self.name}'
         self.out, self.live = Tail(self.dir + '.out'), Tail(os.path.join(self.dir, 'live.jsonl'))
         self.goals, self.frame, self.fights, self.deaths, self.temple, self.retries = [], 0, 0, 0, 0, 0
         self.boss_fights, self.boss_wins = 0, 0
         self.party, self.levels, self.where, self.last, self.goal_now = [], [], None, '', ''
         self.death_frames, self.result = [], None
         self.recent = deque(maxlen=3)      # the last three deaths and retries, newest last
-        self.events = []                   # (frame, text) of every death and retry, for the detail view
+        self.events = []                   # (frame, text) of every goal, death, retry, raise, level-up
+        self.levels_seen = {}              # name: last level seen, for the level-ups
+        self.down = {}                     # name: how they fell, until a raise or a heal shows them up
+        self.wipes, self.raises = 0, 0
+        self.names = []                    # the party in order, from the last reorder
+        self.now = None                    # NAME/now.json: run_chapter's goal, place and party from RAM
+        self.now_mtime = 0
+        self.roster = {}                   # roster index: name, from now.json
+        self.story_since_goal = 0
         try:
             self.pid = int(open(pidfile).read().split()[0])
         except (OSError, ValueError, IndexError):
             self.pid = None
         self.started = os.path.getmtime(pidfile)
 
+    def read_now(self):
+        p = os.path.join(self.dir, 'now.json')
+        try:
+            m = os.path.getmtime(p)
+            if m == self.now_mtime:
+                return
+            x = json.load(open(p))
+        except (OSError, ValueError):
+            return
+        self.now_mtime = m
+        party = x.get('party') or []
+        if not isinstance(party, list) or not all(isinstance(c, list) and len(c) >= 7 for c in party):
+            return
+        ups = []
+        for i, name, cls, lv, hp, mhp, st in (c[:7] for c in party):
+            self.roster[i] = name
+            if name in self.levels_seen and lv > self.levels_seen[name]:
+                ups.append(f'{name} to level {lv}')
+            self.levels_seen[name] = max(lv, self.levels_seen.get(name, 0))
+        if ups:
+            self.events.append((x.get('frame') or self.frame, 'level up: ' + ', '.join(ups)))
+        self.now = x
+        if x.get('goal'):
+            self.goal_now = x['goal']
+        if x.get('where'):
+            w = x['where']
+            self.where = (w.get('area'), w.get('x'), w.get('y'), w.get('ovl'), w.get('town'))
+
     def update(self):
-        for line in self.out.new():
-            m = self.GOAL.match(line)
-            if m:
-                self.goals.append((m.group(2), int(m.group(5)), float(m.group(4))))
-            elif line.startswith('{') and '"stuck"' in line:
-                try:
-                    self.result = json.loads(line)
-                except ValueError:
-                    pass
+        self.read_now()
+        # live.jsonl first, so a goal line read in the same pass gets the frame it ended on
         for line in self.live.new():
             try:
                 f, kind, *rest = json.loads(line)
@@ -131,8 +219,14 @@ class Run:
                 self.fights += 1
                 if d.get('story'):
                     self.boss_fights += 1
+                    self.story_since_goal += 1
                     if d.get('hp_end'):
                         self.boss_wins += 1
+                    w = d.get('where') or []
+                    by = sorted(set(re.findall(r"'by': '([^']+)'", str(d.get('deaths') or ''))))
+                    self.events.append((f, f"story fight at {where_text(tuple(w[:3]))}: {d.get('rounds')} rounds"
+                                           + (f", deaths to {', '.join(by)}" if by else ', no deaths')
+                                           + (f", {len(d.get('dead_end'))} dead at the end" if d.get('dead_end') else '')))
             elif kind == 'death' and isinstance(d, dict):
                 self.deaths += 1
                 self.death_frames.append(f)
@@ -142,21 +236,105 @@ class Run:
                 w = d.get('where') or []
                 self.events.append((f, f"{self.last}  at area {w[0] if w else '?'} {w[1:] if w else ''}"
                                        f"  [{d.get('goal', '')}]"))
+                if d.get('who'):
+                    self.down[d['who']] = d.get('fell') or 'down'
             elif kind == 'temple':
                 self.temple += 1
+                x = rest[1] if len(rest) > 1 and isinstance(rest[1], dict) else {}
+                who = self.roster.get(rest[0], f'roster {rest[0]}') if rest else '?'
+                if x.get('outcome') in ('ashes', 'lost'):
+                    self.events.append((f, f"temple: {who} came out {x['outcome']}"))
+                elif x.get('outcome') == 'alive':
+                    self.raises += 1
+                    self.down.pop(who, None)
+                    self.events.append((f, f'temple: {who} raised'))
+            elif kind in ('raised back', 'raised after standby') and len(rest) > 1:
+                who = rest[1] if kind == 'raised back' else rest[0]
+                self.down.pop(who, None)
             elif kind == 'retry':
                 self.retries += 1
                 self.goal_now = rest[0] if rest else self.goal_now
                 self.last = f'retry {rest[0]}: {rest[1]}' if len(rest) > 1 else 'retry'
+                if len(rest) > 1 and rest[1] == 'wiped':
+                    self.wipes += 1
+                    self.last = f'wiped on {rest[0]}, retry'
                 self.recent.append(self.last)
                 self.events.append((f, self.last))
             elif kind in ('gate heal', 'home heal', 'hp heal') and rest and isinstance(rest[-1], list) \
                     and rest[-1] and isinstance(rest[-1][0], list) and len(rest[-1][0]) == 3:
                 self.party = rest[-1]
-            elif kind == 'trip home' and isinstance(d, list):
+                for n_, hp, _ in self.party:
+                    if hp and n_ in self.down:
+                        self.down.pop(n_)
+            elif kind in ('trip home', 'ending: party') and isinstance(d, list):
                 self.levels = d
+                ups = []
+                for n_, lv in d:
+                    if n_ in self.levels_seen and lv > self.levels_seen[n_]:
+                        ups.append(f'{n_} {self.levels_seen[n_]}→{lv}')
+                    self.levels_seen[n_] = lv
+                if ups:
+                    self.events.append((f, 'level up: ' + ', '.join(ups)))
+                if kind == 'ending: party':
+                    self.events.append((f, 'the ending: ' + ' '.join(map(str, rest[1:5]))))
+            elif kind == 'reorder' and len(rest) > 1 and isinstance(rest[1], list):
+                self.names = rest[1]
+            elif kind == 'stuck' or kind == 'blocked':
+                self.events.append((f, f"{kind} {' '.join(map(str, rest))[:120]}"))
             if isinstance(d, dict) and 'area' in d:
-                self.where = (d['area'], d.get('x'), d.get('y'), d.get('ovl'))
+                self.where = (d['area'], d.get('x'), d.get('y'), d.get('ovl'), d.get('town'))
+            if isinstance(d, dict) and d.get('goal') and kind != 'death':
+                self.goal_now = d['goal']
+        for line in self.out.new():
+            m = self.GOAL.match(line)
+            if m:
+                self.goals.append((m.group(2), int(m.group(5)), float(m.group(4))))
+                t = int(m.group(5))
+                lv = [int(x) for x in (m.group(6) or '').split(',') if x.strip()]
+                if self.names and len(lv) == len(self.names):     # levels() is in party order
+                    self.levels = list(zip(self.names, lv))
+                    for n_, l_ in self.levels:
+                        self.levels_seen[n_] = max(l_, self.levels_seen.get(n_, 0))
+                story = ', story fight' if self.story_since_goal else ''
+                self.story_since_goal = 0
+                self.events.append((self.frame, f"goal {m.group(2)} passed" + (f' on try {t}' if t > 1 else '')
+                                    + f" ({hms(float(m.group(4)))} wall{story})"))
+                continue
+            m = self.STUCK.match(line)
+            if m:
+                self.events.append((self.frame, f'stuck {m.group(2)} try {m.group(3)}: {m.group(4)[:120]}'))
+            elif line.startswith('{') and '"stuck"' in line:
+                try:
+                    self.result = json.loads(line)
+                except ValueError:
+                    pass
+
+    def carry(self, prev):
+        """Start from where an earlier run of the same party left off (the previous chapter
+        of a chain), until this run's own events say otherwise."""
+        self.names, self.levels, self.party = list(prev.names), list(prev.levels), list(prev.party)
+        self.roster, self.now = dict(prev.roster), prev.now
+        self.levels_seen, self.down, self.where = dict(prev.levels_seen), dict(prev.down), prev.where
+
+    def party_text(self):
+        """Names, classes, levels, HP and status from now.json; without it, names, levels,
+        HP as of the last heal and who is down, from the events."""
+        if self.now and self.now.get('party'):
+            return ', '.join(f'{n_} {cls} L{lv} {hp}/{mhp}' + ('' if not st else f' {status_text(st)}')
+                             for _, n_, cls, lv, hp, mhp, st in (c[:7] for c in self.now['party']))
+        lv = dict(self.levels)
+        hp = {n_: (h, m) for n_, h, m in self.party}
+        names = [n_ for n_, _ in self.levels] or list(hp)
+        out = []
+        for n_ in names:
+            t = f'{n_} L{lv[n_]}' if n_ in lv else n_
+            if n_ in hp:
+                t += f' {hp[n_][0]}/{hp[n_][1]}'
+            if n_ in self.down:
+                t += f' ({self.down[n_]})'
+            out.append(t)
+        out += [f'{n_} ({how})' for n_, how in self.down.items() if n_ not in names]
+        return ', '.join(out) or '-'
 
     def proc(self):
         try:
@@ -809,16 +987,16 @@ class Monitor:
             r.update()
             st, _ = r.state()
             if st == 'running':
-                w0, f0 = self.prev.get(r.name, (now, r.frame))
+                w0, f0 = self.prev.get(r.label, (now, r.frame))
                 if now > w0 and r.frame >= f0:
                     x = (r.frame - f0) / FPS / (now - w0)
                     if now - w0 >= 8:
-                        self.speed.setdefault(r.name, deque(maxlen=300)).append(round(x, 2))
-                        speeds[r.name] = round(x, 2)
-                        self.prev[r.name] = (now, r.frame)
+                        self.speed.setdefault(r.label, deque(maxlen=300)).append(round(x, 2))
+                        speeds[r.label] = round(x, 2)
+                        self.prev[r.label] = (now, r.frame)
                 else:
-                    self.prev[r.name] = (now, r.frame)
-                self.prev.setdefault(r.name, (now, r.frame))
+                    self.prev[r.label] = (now, r.frame)
+                self.prev.setdefault(r.label, (now, r.frame))
         lock = self.suite.running()
         self.suite.update(lock)
         cores = psutil.cpu_percent(percpu=True)
@@ -1027,7 +1205,7 @@ class Monitor:
             mark = {'running': '●', 'done': '✓', 'failed': '✗', 'stopped': '■'}[st]
             wall = hms(time.time() - since) if since else hms(os.path.getmtime(r.out.path) - r.started) \
                 if os.path.exists(r.out.path) else '-'
-            sp = self.speed.get(r.name) or []
+            sp = self.speed.get(r.label) or []
             speed = Text(spark(sp, 12, 0, None), style='magenta')
             if st == 'running' and sp:
                 speed.append(f' {sp[-1]:.1f}x')
@@ -1046,7 +1224,7 @@ class Monitor:
             last = '\n'.join(r.recent)
             if st == 'failed' and r.result:
                 last = f"{r.result.get('error')} {(r.result.get('info') or {}).get('goal', '')}\n" + last
-            tb.add_row(Text(f'{r.chapter}/{r.name}'), Text(f'{mark} {st}', style=color), wall,
+            tb.add_row(Text(r.label), Text(f'{mark} {st}', style=color), wall,
                        hms(r.frame / FPS), speed, goals, str(r.fights),
                        f'{r.boss_wins}/{r.boss_fights}' if r.boss_fights else '-',
                        Text(str(r.deaths), style='red' if r.deaths else ''), str(r.temple), dg, lv,
@@ -1064,13 +1242,13 @@ class Monitor:
             return Panel('')
         r = rows[min(self.sel['runs'], len(rows) - 1)]
         st, since = r.state()
-        out = [Text(f'{r.chapter}/{r.name}   {st}   game {hms(r.frame / FPS)}   pid {r.pid}   '
+        out = [Text(f'{r.label}   {st}   game {hms(r.frame / FPS)}   pid {r.pid}   '
                     f'fights {r.fights}   deaths {r.deaths}   temple {r.temple}   retries {r.retries}', style='bold')]
         if r.result and r.result.get('error'):
             out.append(Text(f"result: {r.result.get('error')}  {json.dumps(r.result.get('info'))[:150]}",
                             style='red'))
-        lv = '  '.join(f'{n} {l}' for n, l in r.levels) or '-'
-        out.append(Text(f'party levels: {lv}'))
+        out.append(Text(f'party: {r.party_text()}'))
+        out.append(Text(f'where: {where_text(r.where)}' + (f'   goal now: {r.goal_now}' if r.goal_now else '')))
         gt = Table(box=box.SIMPLE_HEAD, pad_edge=False)
         for c in ('goal', 'tries', 'wall'):
             gt.add_column(c, justify='left' if c == 'goal' else 'right')
@@ -1081,17 +1259,16 @@ class Monitor:
         size = max(1, height - 12 - len(r.goals))
         self.detail_off = max(0, min(self.detail_off, max(0, len(ev) - size)))
         a = max(0, len(ev) - size - self.detail_off)
-        out.append(Text(f'deaths and retries, newest last ({a + 1}-{min(len(ev), a + size)} of {len(ev)}):',
+        out.append(Text(f'events, newest last ({a + 1}-{min(len(ev), a + size)} of {len(ev)}):',
                         style='bold'))
         for f, txt in ev[a:a + size]:
-            bad = any(w in txt for w in ('dies', 'stone', 'decapitated', 'ashes', 'lost'))
-            out.append(Text(f'  {hms(f / FPS):>8}  {txt}', style='red' if bad else 'yellow',
+            out.append(Text(f'  {hms(f / FPS):>8}  {txt}', style=event_style(txt),
                             overflow='ellipsis', no_wrap=True))
         if not ev:
             out.append(Text('  none'))
         rel = os.path.relpath(r.dir, ROOT)
         out.append(Text(f'  files: {rel}.out   {rel}/live.jsonl', style='grey50'))
-        return Panel(Group(*out), title=f'▶ run detail · {r.chapter}/{r.name}', title_align='left',
+        return Panel(Group(*out), title=f'▶ run detail · {r.label}', title_align='left',
                      box=box.HEAVY, border_style='bold green')
 
     def suite_panel(self):
@@ -1378,6 +1555,19 @@ class Monitor:
                 tt.append('    ')
             out.append(tt)
 
+        # each worker's sections (jobstatus Job.section): a chain's live view
+        secs = []
+        for w in ws:
+            for title, lines in (w.get('sections') or {}).items():
+                if not isinstance(lines, list):
+                    continue
+                head = f"{w.get('part')} · {title}" if len(ws) > 1 and w.get('part') else title
+                secs.append(Text(f'  {head}', style='bold magenta'))
+                for x in lines:
+                    secs.append(Text(f'    {x}', style=event_style(str(x)) if str(x).startswith('  ') else None,
+                                     overflow='ellipsis', no_wrap=True))
+        out += secs
+
         # files
         tail = []
         for path in j['outputs']:
@@ -1402,7 +1592,7 @@ class Monitor:
 
         # the recent events, newest last, scrollable
         ev = j['events']
-        room = max(1, height - 2 - len(out) - len(ws) - 4 - 2 - len(tail))
+        room = max(3, height - 2 - len(out) - len(ws) - 4 - 2 - len(tail))
         a, shown = self.scrolled(ev, room)
         out.append(Text(f'events, newest last ({a + 1}-{a + len(shown)} of {len(ev)}; '
                         f'each worker keeps its last {jobstatus.EVENTS}):' if ev else 'events: none yet', style='bold'))

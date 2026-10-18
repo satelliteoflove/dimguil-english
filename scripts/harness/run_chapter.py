@@ -3,7 +3,7 @@
 
     python3 scripts/harness/run_chapter.py NAME --chapters 1-3 [--seed N] [--variant K]
                                            [--from STATE] [--screens DIR] [--no-cases]
-                                           [--battle-rng]
+                                           [--battle-rng] [--disc CUE] [--no-main-code]
 
 Chapter 1 starts from power-on unless --from is given; a later first chapter needs
 --from (the previous chapter's end state, e.g. chapters/c1v0/c1_end). Outputs go to
@@ -22,11 +22,19 @@ From a state, --seed changes nothing: it only times the boot and the character r
 and the fights roll on battle_rng_state (0x80079a34, docs/engine-notes.md "Randomness"),
 which the state keeps. --battle-rng writes a value from --seed there after loading (as
 fightbench does), so runs from one state with different seeds get different fights.
+
+Every 5 s of wall time the run writes NAME/now.json (RAM reads only): the current goal,
+where the party is, and each member's roster index, name, class, level, HP, max HP and
+status, for the monitor's run and chain views.
+
+--disc runs on another disc image (its dimguil/BATTLE.BIN beside it) instead of
+rips/harness/disc/. --no-main-code skips laying the disc's MAIN_CODE over a --from state:
+for states made on that same disc (the full run, scripts/harness/fullrun.py).
 """
 import argparse, json, os, random, struct, sys, time, traceback
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 from harness.game import Game, OUT, DISC
-from harness import chapters, regress
+from harness import chapters, regress, town
 
 # the live case list is the suite runner's alone (docs/agent-workflow.md)
 regress.CASES = os.path.join(regress.REG, 'pending', 'chapters.jsonl')
@@ -51,6 +59,9 @@ ap.add_argument('--battle-rng', action='store_true',
                 help='with --from: seed battle_rng_state from --seed after loading')
 ap.add_argument('--no-cases', action='store_true',
                 help="don't add stuck states to the regression suite (dev runs, old-disc states)")
+ap.add_argument('--disc', default=DISC, help='the disc image (cue) to run, default the harness disc')
+ap.add_argument('--no-main-code', action='store_true',
+                help="with --from: don't lay the disc's MAIN_CODE over the state")
 ap.add_argument('--shots', default='chapters/shots',
                 help='where the per-string shots go, under rips/harness (a dev run keeps its own)')
 a = ap.parse_args()
@@ -62,13 +73,13 @@ if first > 1 and not a.src:
 out = 'chapters/' + a.name
 d = os.path.join(OUT, out)
 os.makedirs(d, exist_ok=True)
-g = Game(capture=True, shots_dir=os.path.join(OUT, a.shots))
+g = Game(disc=a.disc, capture=True, shots_dir=os.path.join(OUT, a.shots))
 scr = None
 if a.screens:
     from harness.screens import Screens
     scr = Screens(g, a.screens)
 battle_code = dict(match=0, differ=0, first_differ=None)
-_bin = open(os.path.join(os.path.dirname(DISC), 'dimguil', 'BATTLE.BIN'), 'rb').read()
+_bin = open(os.path.join(os.path.dirname(a.disc), 'dimguil', 'BATTLE.BIN'), 'rb').read()
 _want = [int.from_bytes(_bin[w - 0x800a1000:w - 0x800a1000 + 4], 'little') for w in FIX_WORDS]
 _in_battle = [0]
 
@@ -96,7 +107,7 @@ if a.src:
     g.load(a.src)
     # a state made before the VWF move keeps the old MAIN while the overlays it loads jump to
     # the new home (regress.MAIN_CODE): lay the disc's code over it, as suite cases do
-    for adr, code in regress.disc_main_code():
+    for adr, code in ([] if a.no_main_code else regress.disc_main_code()):
         g.e.write(adr, code)
     if a.battle_rng:
         g.e.write(0x80079a34, struct.pack('<I', random.Random(a.seed).getrandbits(32)))
@@ -108,6 +119,44 @@ if a.src:
     print('points known for', sorted(r.full_points))
     # the chapter's log and pull-backs, saved beside goal states (agent 14)
     r.resume_memory = chapters.load_memory(g, a.src)
+
+
+NOW = os.path.join(d, 'now.json')
+_now = dict(goal=None, t=0.0)
+
+
+def now_tick():
+    """now.json: what the run is doing and the party as RAM has it. Reads only."""
+    t = time.time()
+    if t - _now['t'] < 5:
+        return
+    _now['t'] = t
+    try:
+        party = []
+        for i in g.party() or town.town_party(g):
+            c = g.char(i)
+            cls = town.CLASSES[c['cls']] if c['cls'] < len(town.CLASSES) else str(c['cls'])
+            party.append([i, c['name'], cls, c['level'], c['hp'], c['max_hp'], c['status']])
+        x = dict(t=round(t, 1), frame=g.frame, chapter=getattr(r, 'chapter', None), goal=_now['goal'],
+                 where=g.where(), party=party)
+        with open(NOW + '.new', 'w') as f:
+            json.dump(x, f)
+        os.replace(NOW + '.new', NOW)
+    except Exception:
+        pass
+
+
+_goal = r.goal
+
+
+def goal_named(name, fn):
+    # the goal now, for now.json; the goal itself runs unchanged
+    _now['goal'], _now['t'] = name, 0.0
+    return _goal(name, fn)
+
+
+r.goal = goal_named
+g.t.ticks.append(now_tick)
 
 
 class Stopped(Exception):
@@ -151,6 +200,8 @@ except Exception as e:
 res['ok'] = ok
 res['from'] = a.src
 res['battle_rng'] = bool(a.src and a.battle_rng)
+res['disc'] = a.disc
+res['main_code_laid'] = bool(a.src and not a.no_main_code)
 res['chapters_asked'] = [first, last]
 res['wall'] = round(time.time() - t0, 1)
 res['total_frames'] = g.frame
