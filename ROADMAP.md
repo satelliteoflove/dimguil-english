@@ -42,7 +42,8 @@ of the redump set, since the build leaves both audio tracks untouched.
 ## Still to do around releases
 
 - **Project identity.** Done 2026-10-03: the project is dimguil-english, in a repo of its
-  own (satelliteoflove/dimguil-english, private until v0.8.0) instead of a GitHub fork.
+  own (satelliteoflove/dimguil-english, private until 2026-10-19, when Chris opened it to show friends
+  ahead of any announcement) instead of a GitHub fork.
   Its history was filtered so the original team's translation never appears in it:
   the five files that held their strings start at the commit that removed them, and
   their names are gone from old READMEs. Remisse's commits and authorship stay. It
@@ -65,6 +66,12 @@ of the redump set, since the build leaves both audio tracks untouched.
   front). It also covers deliberate non-fixes players might ask about, such as the wipe's
   one-character item loss. The source list is `docs/re/bugs.md` and the "Game bug fixes"
   section of `docs/translation-notes.md`. The wording is Chris's.
+- **Backstage docs before the forums.** The repo went public before any announcement, with
+  the planning notes still in `docs/`: `announcement-outline.md` and
+  `release-notes-outline.md` (where and how to announce, venue rules, what to say), and
+  working notes such as `playthrough-review-plan.md`. Fine for now (Chris, 2026-10-19);
+  move them out of the repo, or rewrite them as public docs, before the release goes
+  on the forums. The README is an interim one, to be rewritten for the announced release.
 - **romhacking.net.** Submit the release package.
 
 ## Work streams

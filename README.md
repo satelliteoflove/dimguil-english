@@ -28,18 +28,19 @@ resolved numerous issues with cutoffs, strange glyph placements, and other such 
 
 Still, this is a beta, at best. Every line of text that could be reached through a known
 code path is in English, including the card game (which is kinda cool; you should check it
-out!). The game can, theoretically, be played through to the end. However, that has not
-been rigorously tested yet. I am currently playing through the game myself, and that will
-help to uncover and resolve most of the worst bugs and translation issues. However, that
-is only one playthrough, so a few things will likely slip past. I would suggest that
-players looking for a "ready to play" experience wait until the v0.9.0 release, which
-will drop when all of the fixes from my own playthrough are committed.
+out!). The game can be played through to the end: a test bot has played the current build
+from a new party all the way to the ending three times, and it didn't run into anything a
+person would get stuck on. A bot doesn't read the text or notice when something looks off,
+though, so I'm starting a playthrough of my own next. That will help to uncover and resolve
+most of the worst bugs and translation issues. However, that is only one playthrough, so a
+few things will likely slip past. I would suggest that players looking for a "ready to
+play" experience wait until the v0.9.0 release, which will drop when all of the fixes from
+my own playthrough are committed.
 
 The story text has been reviewed scene by scene, and the NPC dialogue review is in
 progress. The item and monster descriptions have had one check for machine-translation
-habits. The menus and combat messages generally look good from my limited testing but have not
-had extensive testing or review yet. Expect some rough
-spots. There be dragons.
+habits. The menus and combat messages generally look good from my limited testing but have
+not had extensive testing or review yet. Expect some rough spots. There be dragons.
 
 Saves on the memory card have so far carried over from one version of the patch to the
 next. I make no promises that will always be the case. Save states do not carry from
@@ -56,9 +57,11 @@ files. Track 1 should have the MD5 `9eeb5c508abb23c0e3538108b7755890`. The origi
 pressing has the same serial number and barcode, but the patch won't apply to it, and
 the checksum is the most reliable way to tell them apart.
 
-Download the patch from the Releases page and apply it to the Track 1 .bin with any
-xdelta patcher: Delta Patcher, xdelta UI, xdelta3 or Rom Patcher JS. The audio tracks
-and the .cue stay as they are. The readme.txt in the download has the details.
+There isn't a release up yet; v0.8.0 should be along shortly. Once it's there, download
+the patch from the Releases page and apply it to the Track 1 .bin with any xdelta
+patcher: Delta Patcher, xdelta UI, xdelta3 or Rom Patcher JS. The audio tracks and the
+.cue stay as they are. The readme.txt in the download has the details. Until then, you
+can build the patched disc yourself (see below).
 
 The patched game is English only. The original's settings can switch names and status
 text to Japanese, but the English font took the place of the kana, so those switches are
