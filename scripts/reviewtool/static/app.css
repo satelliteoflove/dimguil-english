@@ -262,12 +262,13 @@ dialog h2 { font-size: var(--step-2); margin-bottom: 0.6rem; }
 @media (max-width: 760px) {
   html { font-size: 17px; }
   :root { --bar: 3rem; }
-  .desk { display: block; height: auto; }
+  .desk { display: block; height: auto; padding-top: var(--bar); }
   /* The page behind an overlay must not scroll: phones scroll the root element, not body,
      and hand a finished scroll on to the page underneath unless told not to. */
   html:has(body.nav-open), html:has(body.insp-open), body.nav-open, body.insp-open { overflow: hidden; }
   .mobilebar {
-    display: flex; align-items: center; gap: 0.8rem; position: sticky; top: 0; z-index: 15;
+    /* fixed, not sticky: Safari drops a sticky bar once the page behind an overlay is locked */
+    display: flex; align-items: center; gap: 0.8rem; position: fixed; top: 0; left: 0; right: 0; z-index: 15;
     height: var(--bar); padding: 0 0.8rem; background: var(--paper); border-bottom: 1px solid var(--rule);
   }
   .mobilebar button, .insp-bar button { border: 1px solid var(--rule); background: var(--sheet); border-radius: 4px; padding: 0.35rem 0.8rem; cursor: pointer; }
