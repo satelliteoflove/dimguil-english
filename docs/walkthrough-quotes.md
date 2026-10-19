@@ -60,7 +60,7 @@ with the chapter and the string's new wording, to carry over to the site.
 | Balbo | NPC_MES2 85 | Sorry, but this is a strategy meeting. Don't interrupt. |
 | Fontana | NPC_MES3 68 | I have a feeling these ancient glyphs are some kind of key. |
 | Artemisia | NPC_MES3 71 | That little tablet we saw earlier had the same glyphs as these! |
-| Bergamot | NPC_MES4 33 | With all 26 ancient glyphs laid out like this, our research is bound to get on. |
+| Bergamot | NPC_MES4 33 | With all 26 ancient glyphs laid out like this, our research is bound to progress. |
 | Cresson | NPC_MES4 34 | We'll leave the rest to you. |
 
 ## 7. Area A: the green stone
@@ -201,7 +201,7 @@ with the chapter and the string's new wording, to carry over to the site.
 | Fritillaria | NPC_MES1 254 | When I fail, they hit me. |
 | Alstron | NPC_MES1 62 | could you do something about that smell of the stables? |
 | Alstron | NPC_MES1 64 | You thieving scum! Where the hell'd you get all that money?! |
-| Lychee | NPC_MES1 68 | I think their name was 'Item' or something. |
+| Lychee | NPC_MES1 68 | I think their name was 'Mule' or something. |
 | Guy | NPC_MES1 165 | We'll just help ourselves to our fee. |
 | Gaura | NPC_MES2 100 | Uuu, mmm, everyone, scary. |
 | Reiran | NPC_MES2 105 | Shall I lop your head off for you? |

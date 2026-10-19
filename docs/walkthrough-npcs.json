@@ -1637,13 +1637,13 @@
           ],
           "strings": "NPC_MES1 60, 68, 75",
           "placement": "Generic: lines keyed to joke character names (A, Item, Richguy).",
-          "blurb": "The party has lines for some joke character names. Lychee saw one of yours at the tavern drinking all alone: \"I think their name was 'Item' or something.\"",
+          "blurb": "The party has lines for some joke character names. Lychee saw one of yours at the tavern drinking all alone: \"I think their name was 'Mule' or something.\"",
           "quotes": [
             {
               "file": "NPC_MES1",
               "idx": 68,
               "speaker": "Lychee",
-              "text": "I think their name was 'Item' or something."
+              "text": "I think their name was 'Mule' or something."
             }
           ],
           "flags": "The exact trigger (a name in your party or in the tavern) isn't established.",

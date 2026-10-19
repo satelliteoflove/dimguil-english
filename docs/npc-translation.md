@@ -97,7 +97,7 @@ reader should know who is talking with the speaker line covered. Give each chara
 English voice that does the same job as their Japanese one, and keep it the same in
 every file. Jokes stay jokes: the Japanese pokes fun at players who name characters
 "あ", "アイテム" or "かねもち"; carry those over as names a player might really type
-("A", "Item", "Richguy").
+("A", "Mule", "Richguy"; the item-holding character is "Mule" because that is the English players' word for it).
 
 What marks each one in the Japanese, and what that becomes in English:
 

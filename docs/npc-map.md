@@ -161,11 +161,11 @@ conditions aren't decoded). Linaria 46-52 (met at the tavern, a mixed Good-and-E
 party, all-male or all-female); Alstron 53-64 (a new face in the lineup 56-57, a
 character he drank with 58, a beautiful young lady 59, a character named 'A' 60, buying
 out the shop 61, young and strong but smelling of the stables 62, "thieving scum, where
-did you get that money" 64); Lychee 65-72 ('Item' drinking alone at the tavern 68, old
+did you get that money" 64); Lychee 65-72 ('Mule' drinking alone at the tavern 68, old
 characters 70-71, a name too embarrassing to say 72); Lilia 73-77 ('Richguy' 75);
 Fritillaria 78-79 (kill count "murder squad", a character who keeps dying); Guy 113-114
 (new face, the tavern).
-Links: the joke names ('A', 'Item', 'Richguy', 'Appraiser' 2:50) are tavern
+Links: the joke names ('A', 'Mule', 'Richguy', 'Appraiser' 2:50) are tavern
 characters; 1:74 = 3:47, 1:78-79 = 5:16-17 (flagged 5-3).
 
 **1.6 The Jail Ogre rescue (80-85, 104).** Flagged F (done).
@@ -893,7 +893,7 @@ Cephala's verdict (3:253: AC -2, "lost for a reason").
 **Felpurr.** Rosea is half Felpurr (2:205, 239-240) and tagged "cat-eared woman"; Cephala
 notices your meowing cat-people (3:55).
 
-**Tavern joke names.** 'A' (1:60), 'Item' (1:68), 'Richguy' (1:75, 3:48), 'Appraiser'
+**Tavern joke names.** 'A' (1:60), 'Mule' (1:68), 'Richguy' (1:75, 3:48), 'Appraiser'
 (2:50), and the too-embarrassing name (1:72, 2:56).
 
 **Cards.** Alstron found a "card" (1:259); Reiran: the Card Master's complete set (2:60,
