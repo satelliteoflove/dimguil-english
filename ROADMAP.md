@@ -241,6 +241,16 @@ Once 1.0 is out and any early bug reports are dealt with, the repo mostly goes q
 - The disc token can be left to expire. The private disc repo only matters if another
   release is ever needed, and that would need a new token too.
 
+## Maybe later: fuller lines in the text boxes
+
+Chris, 2026-10-19, as polish: the English keeps the Japanese layout of a sentence or
+clause per line. Japanese glyphs are 12 px, so those lines nearly fill the 288 px dungeon
+box; the English letters average 5-6 px, so the same lines use about half of it (Guy's
+"the leader here is me. The hero." is about 170 px). Letting lines run fuller would also
+cut pages and button presses. It's a rewrap of thousands of strings, reviewed ones
+included, so it would be done by a tool that rewraps and fit-checks every page, after the
+NPC review, keeping the deliberate layouts (the oracle's balanced pairs, for one).
+
 ## Maybe later: corner-bracket cursor
 
 Chris, 2026-10-13: the menu cursor stays the original's orange box, but he liked the
