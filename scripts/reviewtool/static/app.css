@@ -263,7 +263,9 @@ dialog h2 { font-size: var(--step-2); margin-bottom: 0.6rem; }
   html { font-size: 17px; }
   :root { --bar: 3rem; }
   .desk { display: block; height: auto; }
-  body.nav-open, body.insp-open { overflow: hidden; }
+  /* The page behind an overlay must not scroll: phones scroll the root element, not body,
+     and hand a finished scroll on to the page underneath unless told not to. */
+  html:has(body.nav-open), html:has(body.insp-open), body.nav-open, body.insp-open { overflow: hidden; }
   .mobilebar {
     display: flex; align-items: center; gap: 0.8rem; position: sticky; top: 0; z-index: 15;
     height: var(--bar); padding: 0 0.8rem; background: var(--paper); border-bottom: 1px solid var(--rule);
@@ -273,7 +275,7 @@ dialog h2 { font-size: var(--step-2); margin-bottom: 0.6rem; }
   #mobile-title { font-style: italic; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .scenes {
     display: none; position: fixed; top: var(--bar); left: 0; right: 0; bottom: 0; z-index: 14;
-    background: var(--paper); border-right: 0; padding-top: 0.4rem;
+    background: var(--paper); border-right: 0; padding-top: 0.4rem; overscroll-behavior: contain;
   }
   body.nav-open .scenes { display: flex; }
   .brand, .scenes-foot { display: none; }
@@ -292,8 +294,9 @@ dialog h2 { font-size: var(--step-2); margin-bottom: 0.6rem; }
   .cmp .opt { margin-left: 0; padding: 0.4rem 0.5rem; }
   .applybar { margin: 1.5rem -1rem 0; flex-wrap: wrap; gap: 0.6rem; }
   .inspector {
-    display: none; position: fixed; inset: 0; z-index: 30; background: var(--paper);
-    border: 0; padding: 0 1rem 3rem; overflow-y: auto;
+    display: none; position: fixed; top: 0; left: 0; right: 0; height: 100dvh; z-index: 30;
+    background: var(--paper); border: 0; padding: 0 1rem 3rem; overflow-y: auto;
+    overscroll-behavior: contain;
   }
   body.insp-open .inspector { display: block; }
   .insp-bar {
