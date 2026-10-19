@@ -407,7 +407,8 @@ def scene_list():
                     'kind': s.get('kind', 'scene'),
                     'priority': s.get('priority'), 'order': s.get('order', 999),
                     'status': d.get('status', 'open'), 'lines': len(s['lines'])})
-    return sorted(out, key=lambda s: (s['order'], s['file'], s['number'] or 0))
+    # each party's scenes, then its read-throughs, in the order the parties are met
+    return sorted(out, key=lambda s: (s['file'], s['kind'] == 'readthrough', s['order'], s['number'] or 0))
 
 
 def scene(sid):

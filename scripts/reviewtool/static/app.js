@@ -155,6 +155,7 @@ function setNav(open) {
   document.body.classList.toggle('nav-open', open);
   $('#nav-toggle').setAttribute('aria-expanded', String(open));
   $('#nav-toggle').textContent = open ? 'Close' : 'Scenes';
+  localStorage.setItem('dimguil-review:nav', open ? '1' : '');   // a refresh keeps the list open
 }
 function setInsp(open) {
   document.body.classList.toggle('insp-open', open);
@@ -793,6 +794,7 @@ async function main() {
   const h = new URLSearchParams(localStorage.getItem('dimguil-review:place') || location.hash.slice(1));
   const id = (S.scenes.some(s => s.id === h.get('s')) && h.get('s')) || (S.scenes.find(s => s.status === 'open') || S.scenes[0] || {}).id;
   if (id) await openScene(id, { line: +(h.get('l') || 0), mode: h.get('m') || undefined });
+  if (phone.matches && localStorage.getItem('dimguil-review:nav')) setNav(true);
 }
 
 window.__review = S; // for testing from the console
