@@ -304,7 +304,9 @@ function focusLine(i, { scroll = true } = {}) {
 
 function updateHash() {
   if (!S.scene) return;
-  history.replaceState(null, '', `#s=${encodeURIComponent(S.scene.id)}&l=${S.focus}&m=${S.mode}`);
+  const h = `s=${encodeURIComponent(S.scene.id)}&l=${S.focus}&m=${S.mode}`;
+  history.replaceState(null, '', '#' + h);
+  localStorage.setItem('dimguil-review:place', h);   // some phone browsers reload an older address
 }
 
 function renderApplyBar() {
@@ -787,8 +789,9 @@ async function main() {
     else $('#applybar').scrollIntoView({ block: 'end' });
   });
 
-  const h = new URLSearchParams(location.hash.slice(1));
-  const id = h.get('s') || (S.scenes.find(s => s.status === 'open') || S.scenes[0] || {}).id;
+  // Where you left off wins over the address, which a phone can bring back stale.
+  const h = new URLSearchParams(localStorage.getItem('dimguil-review:place') || location.hash.slice(1));
+  const id = (S.scenes.some(s => s.id === h.get('s')) && h.get('s')) || (S.scenes.find(s => s.status === 'open') || S.scenes[0] || {}).id;
   if (id) await openScene(id, { line: +(h.get('l') || 0), mode: h.get('m') || undefined });
 }
 
