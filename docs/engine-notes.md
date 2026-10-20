@@ -846,6 +846,17 @@ patches in `asm/`.
   delay slot and still writes only v1, which the loop reloads (2026-10-17).
 - The NPC talk runs with MCARD.BIN at 0x800a1000, not MAZE.BIN.
 - The dungeon NPC box is 288 px by 3 lines, pages split by `\n\r`.
+- Class tests that mask the wrong bits (2026-10-19). The greetings test a member's class
+  with `andi 0x80` (the female bit) and compare the result to a class number, which can
+  never match. Reiran's young-Ninja greeting (2:64 / 3:66, "Is that a Thieves Dagger?")
+  can never show: the 10-19-year-old Ninja test (class 0xc) is at MCARD 0x800cdb14 and
+  its name copy at 0x800cde74 (Balbo's variant 0x800cda60), and 0x800d3718 / 0x800d3a78
+  (Fontana's variant 0x800d3664); `andi 0x7f` at all four would open it. Zaril's Ninja
+  count (0x800d40d0 in 0x800d3fd4) has the same slip, but that function ends by
+  overwriting talk_str_a with a random 33-35 anyway, so 36-38 also need the missing
+  returns. Guy's party (0x800bec78 in 0x800be88c) tests for a Thief the same way, but a
+  correct `& 0x7f` loop after it sets the same flag for the opposite case (no Thief), so
+  that one is harmless and fixing it alone would break the flag.
 - The battle box wraps at 24 glyph codes per line. Messages are expanded by 0x8001dfc0
   into 0x8008b400; only the battle call (BATTLE.BIN 0x800d1e20) turns wrapping on. The
   original moves an inserted name that won't fit to the next line, but breaks plain text
