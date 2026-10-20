@@ -849,7 +849,8 @@ patches in `asm/`.
 - Class tests that mask the wrong bits (2026-10-19). The greetings test a member's class
   with `andi 0x80` (the female bit) and compare the result to a class number, which can
   never match. Reiran's young-Ninja greeting (2:64 / 3:66, "Is that a Thieves Dagger?")
-  can never show: the 10-19-year-old Ninja test (class 0xc) is at MCARD 0x800cdb14 and
+  can never show: the Ninja-under-20 test (class 0xc, age 10-19; new characters start at
+  15-20 by `training_create`, age = 15 + rand_upto(5), so 15-19 in play) is at MCARD 0x800cdb14 and
   its name copy at 0x800cde74 (Balbo's variant 0x800cda60), and 0x800d3718 / 0x800d3a78
   (Fontana's variant 0x800d3664); `andi 0x7f` at all four would open it. Zaril's Ninja
   count (0x800d40d0 in 0x800d3fd4) has the same slip, but that function ends by
