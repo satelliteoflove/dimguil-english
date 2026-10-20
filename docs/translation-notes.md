@@ -658,6 +658,9 @@ Reopened content (each one goes in the release notes too):
   In her 1-in-4 pick (Loktofeit or the Ruby Slippers, a lost character and a young man
   together) 56 without a rude name falls to 54, her Loktofeit warning (bugs.md 1.18,
   `asm/bugfix_rosea_greeting.asm`).
+  2:57 itself was reworded (Chris, 2026-10-20): "I could fall for you" read as romance.
+  惚れてしまいます, from a refined healer to a party she admires (方々), is being charmed,
+  not a confession, so it's now "I'm quite taken with you all."
 - **Lychee's "too embarrassing to say" line** (NPC_MES1 72) never played: her name check
   read the list's bytes signed, so no name ever matched, and the line copied no name.
   Chris, 2026-10-19: fix it, this line only. A member with a name from the list now gets
