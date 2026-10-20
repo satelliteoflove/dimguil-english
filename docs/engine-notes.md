@@ -852,12 +852,38 @@ patches in `asm/`.
   can never show: the Ninja-under-20 test (class 0xc, age 10-19; new characters start at
   15-20 by `training_create`, age = 15 + rand_upto(5), so 15-19 in play) is at MCARD 0x800cdb14 and
   its name copy at 0x800cde74 (Balbo's variant 0x800cda60), and 0x800d3718 / 0x800d3a78
-  (Fontana's variant 0x800d3664); `andi 0x7f` at all four would open it. Zaril's Ninja
+  (Fontana's variant 0x800d3664); `andi 0x7f` at all four opens it. The mask hid a second
+  bug: the name copy is only on one of each picker's two paths. With `story_flags` bit
+  28 set (only the card game's code sets it, CMAIN 0x800ab574 / CMENU 0x800b7ee8), the
+  line is a 50% pick and the name is copied into 0x80089ac0 for {ff12}. With it clear,
+  the usual case, the line is picked every time Reiran speaks and nothing is copied, so
+  {ff12} showed whatever the buffer last held: the last party member (the status panel,
+  0x800ad89c, draws each name through it) or, at Fontana's, the first member (copied by
+  0x800d3bd8, the helper for the greeting's other line). So bit 28 decides the odds, not whether the line shows. That path now
+  jumps into the other path's "set the line, copy the name" code (0x800cdf74 →
+  0x800cddf0, 0x800d3b78 → 0x800d39f4). Both fixes: `asm/bugfix_reiran_ninja_greeting.asm`,
+  bugs.md 1.17. Zaril's Ninja
   count (0x800d40d0 in 0x800d3fd4) has the same slip, but that function ends by
   overwriting talk_str_a with a random 33-35 anyway, so 36-38 also need the missing
   returns. Guy's party (0x800bec78 in 0x800be88c) tests for a Thief the same way, but a
   correct `& 0x7f` loop after it sets the same flag for the opposite case (no Thief), so
   that one is harmless and fixing it alone would break the flag.
+- The "too embarrassing to say" greetings are a dirty-name filter (2026-10-19). Guy's
+  party's picker (MCARD 0x800be88c) compares each member's name with twelve entries at
+  0x800a1eb0 (10 bytes each, game encoding, hiragana and katakana pairs): ちんこ, ちんぽ,
+  まんこ, きんたま and the slurs かたておち and きちがい. A match picks Lychee's 1:72 ("too
+  embarrassing to say... {name}, eek!"). The Japanese list can't match a name typed on
+  the patch's Latin grid, so in English play it fires only for kana names.
+- Rosea's picker (0x800cd600) was built the same way but the name check was never
+  written. Machine code: a3 = someone knows Loktofeit (+0x5a bit 1) or carries item 0x11e
+  (Ruby Slippers); t1 = a lost character; t2 = a man aged 16-25 (age-16 < 10, +0x0b bit 7
+  clear). Without a3: t1 gives 2:55 (lost, with the name), else the test at 0x800cd9ec
+  compares a0 with s0, both always 1 (a0 is loaded with 1 in the delay slot at
+  0x800cd7a4), so 2:56 (the embarrassing name) always plays. 2:57 for a young man
+  (0x800cda08) and the plain 2:52 "Good day" / 2:53 "Hello" coin flip (0x800cda20) are
+  unreachable; Ghidra drops them as dead blocks. 2:56 also never copies a name, so
+  {ff12} shows whatever the name buffer last held. With a3, t1 and t2 together the
+  greeting is a 1-in-4 pick of 54-57, which is the only way 57 shows; a3 alone gives 54.
 - The battle box wraps at 24 glyph codes per line. Messages are expanded by 0x8001dfc0
   into 0x8008b400; only the battle call (BATTLE.BIN 0x800d1e20) turns wrapping on. The
   original moves an inserted name that won't fit to the next line, but breaks plain text
