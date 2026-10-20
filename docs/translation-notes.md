@@ -129,6 +129,12 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   Capitalized: DICK (ちんこ), COCK (ちんぽ), CUNT (まんこ), SHIT (かたておち; Chris chose a
   crude name over an equivalent for this one), RETARD (きちがい), BALLS (きんたま). The
   whole name has to match, so "Dickens" and "dick" don't (asm/naughty_names.asm).
+- **Alstron's 'A' (1:60, Chris, 2026-10-19).** His line about a grave bearing that very
+  name, and his 100 G, went to a member named あ, the hiragana grid's first letter. The
+  English line says 'A', and the check now looks for A (asm/joke_names.asm). The other
+  tavern joke names ('Mule', 'Richguy', 'Appraiser') can't be switched yet: their checks
+  never matched even in Japanese, and two of the English names don't fit them (bugs.md
+  2.9).
 - **"Picking the lock" and "Searching" carry no dots of their own (SISETU 526, 441;
   Chris, 2026-10-17).** The game animates a row of dots after each, spaced for the
   Japanese (鍵開け挑戦中, 調査中, no dots), so ours doubled up and the first animated dots
