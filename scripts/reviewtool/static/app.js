@@ -185,6 +185,7 @@ async function openScene(id, { line = 0, mode } = {}) {
   $('#scene-where').textContent = sc.where || '';
   $('#scene-summary').textContent = sc.summary || '';
   $('#scene-assembled').textContent = sc.assembled || '';
+  $('#scene-notes').hidden = !(sc.notes || []).length;   // read-throughs and small scenes have none
   $('#scene-notes-body').innerHTML = (sc.notes || []).map(n => `<div class="note"><h4>${esc(n.title)}</h4><p>${esc(n.text)}</p>${sourcesHtml(n.sources)}</div>`).join('');
   renderSceneList();
   setMode(S.mode, { keepFocus: true });
