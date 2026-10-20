@@ -383,7 +383,7 @@
                 {
                     "length": 58,
                     "source": "NA",
-                    "translation": "Reiran\n\"The Card Master at the tavern was delighted.\n I hear you collected the complete set.\"",
+                    "translation": "Reiran\n\"The Card Master at the tavern is, like,\n totally thrilled. I heard you got the whole set!\"",
                     "addStringTerminator": true
                 },
                 {
@@ -401,13 +401,13 @@
                 {
                     "length": 56,
                     "source": "NA",
-                    "translation": "Reiran\n\"You old folks really shouldn't overdo it.\n There's no such thing as a fountain of youth.\"",
+                    "translation": "Reiran\n\"You old-timers should, like, take it easy.\n It's not like there's a fountain of youth or whatever.\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 55,
                     "source": "NA",
-                    "translation": "Reiran\n\"A Thieves Dagger, is it? {ff12},\n a Ninja at your age? How marvelous.\"",
+                    "translation": "Reiran\n\"Whoa, is that a Thieves Dagger?\n {ff12},\n\r you're a Ninja already? At your age?\n That's, like, so cool.\"",
                     "addStringTerminator": true
                 },
                 {
