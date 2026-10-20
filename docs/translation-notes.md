@@ -122,8 +122,8 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   check (rips/agents/soundtest).
 - **The naughty-name list is English (Chris, 2026-10-19).** The original has a
   naughty-name filter: a party member named one of twelve rude words gets a greeting
-  where the character is too embarrassed to say it (Rosea's 2:56; Lychee's 1:72 too, once
-  her check works, bugs.md 2.9). Their embarrassment is the joke. The Japanese list is
+  where the character is too embarrassed to say it (Rosea's 2:56 and Lychee's 1:72, both of
+  which only work since this patch's fixes, bugs.md 1.18 and 2.9). Their embarrassment is the joke. The Japanese list is
   six words, each in hiragana and katakana, which no name typed on our Latin grid can
   match, so it's translated, each word in its Japanese word's slot, ALL CAPS and
   Capitalized: DICK (ちんこ), COCK (ちんぽ), CUNT (まんこ), SHIT (かたておち; Chris chose a
@@ -658,6 +658,11 @@ Reopened content (each one goes in the release notes too):
   In her 1-in-4 pick (Loktofeit or the Ruby Slippers, a lost character and a young man
   together) 56 without a rude name falls to 54, her Loktofeit warning (bugs.md 1.18,
   `asm/bugfix_rosea_greeting.asm`).
+- **Lychee's "too embarrassing to say" line** (NPC_MES1 72) never played: her name check
+  read the list's bytes signed, so no name ever matched, and the line copied no name.
+  Chris, 2026-10-19: fix it, this line only. A member with a name from the list now gets
+  it, named ("Dick... eek!") (bugs.md 2.9, `asm/bugfix_lychee_name_filter.asm`). Her
+  'Mule' line and the other tavern names are still open.
 
 Decided and left as the original had it (each one goes in the release notes, per
 ROADMAP.md "Game changes up front"):

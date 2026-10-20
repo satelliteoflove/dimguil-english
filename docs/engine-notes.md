@@ -881,8 +881,14 @@ patches in `asm/`.
   buffer last held (the last member). The list is now English (`asm/naughty_names.asm`,
   DICK/Dick, COCK/Cock, CUNT/Cunt, SHIT/Shit, RETARD/Retard, BALLS/Balls in the Japanese
   words' slots, as typed on the Latin grid: one code per letter, A-Z 0x0b-0x24, a-z
-  0x25-0x3e, then 0xff 0x40; lengths count the terminator). Lychee's side is left as
-  the original had it (bugs.md 2.9).
+  0x25-0x3e, then 0xff 0x40; lengths count the terminator). Lychee's check is fixed
+  (`asm/bugfix_lychee_name_filter.asm`, bugs.md 2.9): `lbu` at 0x800becfc; the load
+  delay slot after it stores the member's record offset (t2) at sp+0x16, a spare pair in
+  local_a8, and a match leaves the member loop (0x800bed4c → 0x800bed88), so it keeps the
+  matching member's. Where 1:72 is picked (0x800bf048, 0x800bf108) the name is copied to
+  0x80089ac0 by an 11-word routine over the unreferenced save-rename at 0x800ab384. The
+  'Mule' load (0x800bebc8) is unchanged. Only one {ff12} buffer: Guy's 1:114 in the same
+  greeting shows the same name, as Alstron's copied lines already could.
 - The tavern joke names use the same kind of compare (bugs.md 2.9). Lychee's 1:68
   'Mule' (8 bytes at 0x800a1ea8, アイテムもち), Lilia's 1:75 / 3:48 'Richguy' (6 bytes at
   0x800a1f34 and 0x800a694c, かねもち) and Alba's 2:50 'Appraiser' (6 bytes at

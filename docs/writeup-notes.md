@@ -1022,3 +1022,11 @@ save, the game stopped on the town logo over six "Empty" boxes, every time.
 - The English list is f8acdf0 and Alstron's 'A' defd101; the Rosea fix is the commit
   that adds this entry. Suite 342/344 on 31f8ba7134135e21ba65670f8bb02903, the two known
   chapter-5 snake cases.
+- Chris then approved Lychee's side, 1:72 only (2026-10-19). One load made unsigned
+  fixes the compare; 'Mule' uses a separate load, left alone. For the name, the loop's
+  load delay slot (a nop) now stores each member's record offset in two spare stack
+  bytes, a match ends the loop so the matching member's offset stays, and the two places
+  that pick 1:72 leave through an 11-word copy placed over a dead save-rename routine.
+  On the built disc "Dick" and "RETARD" got 1:72 naming them on 12 of 12 of Lychee's
+  turns; "Dickens", "dick", ちんこ and a plain party got her usual lines.
+  Suite 342/344 on 817a156dbdd249c5c8ea016556948603, the two known snake cases.

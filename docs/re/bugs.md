@@ -20,7 +20,7 @@ him first. So each entry is in one of three groups:
 | Group | Count |
 |---|---|
 | 1. Clear bugs | 19, all fixed (2.8, the pit soft lock, moved here; fixed in 5ff86d2 and kept) |
-| 2. Cut or unclear, ask | 7: 6 decided (2.2-2.5 reopened, 2.1 and 2.6 left unused), 2.9 open |
+| 2. Cut or unclear, ask | 7: 6 decided (2.2-2.5 reopened, 2.1 and 2.6 left unused), 2.9 partly (1:72 fixed) |
 | 3. Balance, ask | 3, all decided (kept as the original; decisions.md 8-10) |
 | Not bugs, or harmless | 9 (2.7 and 3.4 moved here after the follow-ups) |
 
@@ -1003,6 +1003,28 @@ can hold (8). Alstron's 'A' (1:60, あ) uses three byte tests and works; it's lo
 Questions for Chris: fix Lychee's two loads (two words, `lb` → `lbu`) so her 1:72 and
 1:68 work, and copy the matched name for 1:72? Make the tavern checks look at the
 tavern characters? What should Lilia's and Alba's names be, given the widths?
+
+**1:72 fixed** (Chris, 2026-10-19: Lychee's naughty-name check only; 1:68 and the tavern
+checks stay open). `asm/bugfix_lychee_name_filter.asm`: the list load at 0x800becfc is
+`lbu`; its load delay slot (0x800bed00, a nop) stores the member's record offset at
+sp+0x16, two spare bytes of `local_a8`, and a match leaves the member loop (0x800bed4c
+jumps to 0x800bed88 instead of the next member; the rest of that loop only tests
+`class_sex & 0x80 == 3`, never true), so sp+0x16 holds the first matching member. The
+two places that pick 1:72 (the 1-in-4 roll, 0x800bf048, and the plain branch,
+0x800bf108) leave through an 11-word copy of that member's name into 0x80089ac0, over
+an unreferenced routine at 0x800ab384 (it renames a memory card save from SLPS_01146; no
+jal, j, pointer or address load reaches it). The 'Mule' load at 0x800bebc8 is untouched,
+so 1:68 is as it was. The 1-in-4 roll needs 'Mule' (local_a8[0]), so in practice 1:72
+comes from the plain branch. One limit stays: there's one {ff12} buffer, so if Guy's
+own line in the same greeting is 1:114 ("if it isn't {ff12}"), it shows the same name;
+Alstron's copied lines (1:58, 1:59) already share it the same way. [code]
+
+Emulator, on the built disc (md5 817a156dbdd249c5c8ea016556948603;
+`rips/re/work/P3-bugs/rosea/guy_test.py`, output in `lychee/`, 40 RNG trials, Lychee's
+turns 12): "Dick" and "RETARD" got 1:72 on 12 of 12, naming them; "Dickens", "dick" and
+ちんこ got her usual 1:65-67 (2, 3 and 7 turns), as did a party with no rude name. 1:68
+didn't come up for a party member named Mule, a tavern character named Mule or a member
+named アイテムもち, as before. [emu] Sheet: `rosea/lychee_sheet.png`.
 
 ## Group 3: fixes that would change how the game plays
 
