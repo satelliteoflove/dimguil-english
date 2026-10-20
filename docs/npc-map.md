@@ -89,7 +89,10 @@ Roster:
 
 **Balbo's party** (NPC_MES2). Balbo, dwarf, Evil Lord; Alba, Ranger, the "wolfish man";
 Rosea, Bishop, half Felpurr ("cat-eared woman"); Reiran, Faerie Ninja; Gaura, the shaggy
-Mage who wants to be a Samurai. Later Artemisia, Valkyrie. Balbo and Alba rescued Rosea
+Mage who wants to be a Samurai, almost certainly a Mook: the text never says, but the NPC
+battle records keep racial resistances (Balbo poison, Alba cold), Gaura's resists cold,
+and the Mook is the one shaggy race of the three that do; his portrait (DATA06/NPC_09.BIN,
+8bpp, CLUT first) is a big grey-furred figure in a hooded robe with a wooden staff. Later Artemisia, Valkyrie. Balbo and Alba rescued Rosea
 long ago (2:228). Alba lost his comrades in another dungeon (2:231). Roster:
 - N5, level 6: first met at Shrine 3F E11 N6, the two-switch door (2:72-81); until
   Fontana's party splits.
