@@ -128,9 +128,20 @@ function setChoice(i, choice, { advance = true } = {}) {
 
 // --- scene list ------------------------------------------------------------------------
 
+document.addEventListener('change', e => {
+  if (e.target.id !== 'hide-done') return;
+  localStorage.setItem('dimguil-review:hide-done', e.target.checked ? '1' : '');
+  renderSceneList();
+});
+
 function renderSceneList() {
+  const hide = !!localStorage.getItem('dimguil-review:hide-done');
+  const left = S.scenes.filter(sc => sc.status === 'open').length;
+  $('#hide-done').checked = hide;
+  $('#scene-count').textContent = `${left} of ${S.scenes.length} to review`;
   const byFile = new Map();
   for (const sc of S.scenes) {
+    if (hide && sc.status !== 'open' && !(S.scene && S.scene.id === sc.id)) continue;
     if (!byFile.has(sc.file)) byFile.set(sc.file, []);
     byFile.get(sc.file).push(sc);
   }
@@ -140,11 +151,11 @@ function renderSceneList() {
     const [pid, party] = partyOf(f) || ['others', { name: `NPC_MES${f}`, shape: 'diamond' }];
     const lead = S.cast.people.find(p => p.party === pid);
     return `<section class="party"><h2>${shape(lead)} ${esc(party.name)}</h2><ol>${list.map(sc => `
-      <li><button type="button" class="scene-link" data-id="${esc(sc.id)}" ${S.scene && S.scene.id === sc.id ? 'aria-current="true"' : ''}>
+      <li><button type="button" class="scene-link${sc.status === 'open' ? ' todo' : ' reviewed'}" data-id="${esc(sc.id)}" ${S.scene && S.scene.id === sc.id ? 'aria-current="true"' : ''}>
         <span class="num">${sc.number ?? ''}</span><span>${esc(sc.title)}</span>
-        <span class="meta">${sc.kind === 'readthrough' ? `read-through, ${sc.lines} lines` : sc.priority ? esc(sc.priority) + ' priority' : ''}${sc.status !== 'open' ? ` <span class="${sc.status === 'committed' ? 'done' : ''}">${STATUS[sc.status] || sc.status}</span>` : ''}</span>
+        <span class="meta">${sc.kind === 'readthrough' ? `read-through, ${sc.lines} lines` : sc.priority ? esc(sc.priority) + ' priority' : ''}${sc.status !== 'open' ? ` <span class="${sc.status === 'committed' ? 'done' : ''}">${STATUS[sc.status] || sc.status}</span>` : ' <span class="to-review">To review</span>'}</span>
       </button></li>`).join('')}</ol></section>`;
-  }).join('') || '<p class="hint" style="padding:0 1.2rem">No scenes prepared yet.</p>';
+  }).join('') || `<p class="hint" style="padding:0 1.2rem">${S.scenes.length ? 'Nothing left to review.' : 'No scenes prepared yet.'}</p>`;
   $$('.scene-link').forEach(b => b.addEventListener('click', () => { setNav(false); openScene(b.dataset.id); }));
 }
 
