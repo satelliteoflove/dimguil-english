@@ -947,3 +947,43 @@ save, the game stopped on the town logo over six "Empty" boxes, every time.
   301 other shots across town, maze, card game and battle were pixel-identical.
   Sheet: `rips/agents/vwfbound/shots/sheet_before_after.png`.
 - Commit 50a7410, merged in 03c9bcf; suite 344/344 on dd83a8cbf1271bc65e86bba843bbc0b2.
+
+### Reiran's young Ninja: one bug hiding another (2026-10-19)
+
+- Reiran has a greeting for a party with a Ninja under 20: "Is that a Thieves Dagger?
+  {name}, a Ninja at your age? How marvelous." (2:64, 3:66). No code ever showed it. The
+  picker (Balbo's party 0x800cda60, Fontana's 0x800d3664) tests each member's class with
+  `andi 0x80`, which keeps the female bit, and compares the result with 0xc, the Ninja
+  class. 0 or 0x80 is never 0xc. Found reading the greeting code for class tests; the
+  class is the low seven bits.
+- The first fix was the obvious one, `andi 0x7f` at the four tests (the flag and the name
+  copy, in each copy of the picker). The emulator test was set up to show the line with
+  the Ninja's name, and it showed the line with someone else's name: "Is that a Thieves
+  Dagger? Earth," where Earth was the party's Priest. At Fontana's it was "Uranus", the
+  Fighter.
+- Cause: the picker has two paths, split on `story_flags` bit 28, which only the card
+  game sets (probably the Card Master's complete set, since that's Reiran's line on that
+  path). On the bit-28 path the line is a 50% roll and the Ninja's name is copied into the
+  {ff12} buffer. On the other path, the one nearly every player is on, the line is picked
+  every time and nothing is copied, so {ff12} printed whatever the buffer last held. The
+  status panel draws each member's name through that buffer, so it was the last member;
+  at Fontana's, the helper that picks the greeting's other line (0x800d3bd8) sometimes
+  copies the first member's name, so sometimes that.
+  The first bug kept the second from ever being seen.
+- Fix: two words per picker. The no-copy path now jumps into the copy path's code, which
+  sets the same line and expression and copies the name. 8 words in all, MCARD only.
+- Numbers (40 RNG trials per case, party Uranus Fighter 25, Venus Ninja 17, Jupiter 45,
+  Earth Priest 31):
+  - Original: 0 of 44 Reiran turns gave the line, with bit 28 clear or set.
+  - Class fix alone: every turn with bit 28 clear gave the line, never with Venus's name.
+  - Both fixes: bit 28 clear, Balbo 8 of 8 and Fontana 14 of 14 named Venus; bit 28 set,
+    5 of 8 and 10 of 14, all naming Venus. A party with no Ninja got Reiran's usual lines.
+  - Sheets (test setups, not for public use): `rips/re/work/P3-bugs/reiran/round1/sheet.png`
+    (wrong names), `round2/sheet.png` (fixed).
+- A side lesson from the suite check: to rule the fix out of two suite failures I patched
+  the four words back into a copy of the disc image, and the copy ran differently from
+  the first minute. The patched sectors' EDC/ECC were stale, which is the likely cause.
+  With them recomputed (`reiran/fix_edc.py`), both discs played the
+  same 40,583 captured strings and failed the same way, so the failures weren't the fix's.
+- Suite on the disc with both fixes (md5 9157ee57ffd75ca3ede42f086115c485): 342/344, the same
+  two chapter-5 snake cases as on the first build, which predate the fix.

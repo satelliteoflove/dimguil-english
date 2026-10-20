@@ -2,7 +2,8 @@
 
 Every bug and every unreachable string the phase-2 analysts found (`docs/re/*.md`), two
 from the fallen-party audit (`docs/re/fallen-parties.md`), four from the harness runs
-(1.11, 1.12, 1.15, 1.16), one from the rescue test (1.13) and one from the lock test (1.14). Each was re-read in the code from the
+(1.11, 1.12, 1.15, 1.16), one from the rescue test (1.13), one from the lock test (1.14)
+and one from a later read of the greeting code (1.17). Each was re-read in the code from the
 original disc (`rips/clean`, decompiled at 585c983) and confirmed or refuted. Addresses
 are RAM; MCARD, JOUKA and MAZE load at 0x800a1000.
 
@@ -18,7 +19,7 @@ him first. So each entry is in one of three groups:
 
 | Group | Count |
 |---|---|
-| 1. Clear bugs | 17, all fixed (2.8, the pit soft lock, moved here; fixed in 5ff86d2 and kept) |
+| 1. Clear bugs | 18, all fixed (2.8, the pit soft lock, moved here; fixed in 5ff86d2 and kept) |
 | 2. Cut or unclear, ask | 6, all decided (2.2-2.5 reopened, 2.1 and 2.6 left unused) |
 | 3. Balance, ask | 3, all decided (kept as the original; decisions.md 8-10) |
 | Not bugs, or harmless | 9 (2.7 and 3.4 moved here after the follow-ups) |
@@ -532,6 +533,61 @@ phase, after a round's decay of 1-3:
   four-group fight the Strange Figures advanced at the round's end and the groups were
   renumbered, and the seal moved with its monster (Blaze, sealed as group 2, was group 3
   after).
+
+### 1.17 Reiran's young-Ninja greeting never shows, and its name copy is on one path only (NPC_MES2 64, NPC_MES3 66)
+
+Found reading the greeting code (2026-10-19). Reiran's greeting picker, one copy for
+Balbo's party (0x800cda60, called from `greet_balbo` when `talk_speaker` is 3) and one for
+Fontana's (0x800d3664, from `greet_fontana` when it's 2), sets four party flags: all
+young boys, all young girls, all aged 40-59, and a Ninja aged 10-19 (`s1`). The Ninja
+flag picks 2:64 / 3:66, "Is that a Thieves Dagger? {ff12}, a Ninja at your age? How
+marvelous.", with expression 3, and should copy that member's name into 0x80089ac0 for
+{ff12}. [code, disassembly]
+
+Two bugs, the first hiding the second:
+- **The class test masks the wrong bits.** The flag test (0x800cdb14 / 0x800d3718) and the
+  name copy's test (0x800cde74 / 0x800d3a78) read `class_sex` (+0x0b) with `andi 0x80`,
+  the female bit, and compare with 0xc, the Ninja class. 0 or 0x80 never equals 0xc, so
+  the line never showed. The class is bits 0-6 (`training_create`, Guy's party's Thief
+  loop use `& 0x7f`). Characters start at age 15-20, so a Ninja aged 15-19 qualifies. [code]
+- **The name copy is on one path only.** The picker branches on `story_flags` bit 28
+  (0x10000000), which only the card game's code sets (CMAIN 0x800ab574, CMENU
+  0x800b7ee8). With it set, Reiran's default line is 2:60, about the Card Master's
+  complete set, so the flag is probably that [inf]. Bit 28 set: a
+  party with any of the four traits gets a 50% roll between 2:60 and the trait's line, and
+  the young-Ninja branch copies the name (0x800cddf0-0x800cded0). Bit 28 clear, the usual
+  case: the trait's line every time, and the young-Ninja branch (0x800cdf6c-0x800cdf80)
+  sets the line and expression with no name copy. {ff12} then shows whatever the buffer
+  last held: the status panel (0x800ad89c) draws each member's name through it, so the
+  last member, or at Fontana's the first member, which the helper for the greeting's
+  other line (0x800d3bd8) sometimes copies. [code, emu] So
+  bit 28 decides the odds, not whether the line shows.
+
+Fix, Chris's decision 2026-10-19 (the second part after the test found it): `andi 0x7f`
+at the four tests, and the bit-28-clear branch jumps into the other branch's code, which
+sets the same line and expression and copies the name (0x800cdf74 `j 0x800cddf0`,
+0x800cdf78 `move a0, zero`; Fontana's 0x800d3b78 `j 0x800d39f4`, 0x800d3b7c `move a0,
+zero`). 8 words, MCARD.BIN only. `asm/bugfix_reiran_ninja_greeting.asm`.
+
+**Tested in the emulator** (`rips/re/work/P3-bugs/reiran/reiran_test.py`). RAM-write setup
+as in 2.4: from `npc_talkmode.state`, the built MCARD and file tables laid in, the talk
+switched to Balbo's party (handler 1: stage 1, every member has seen Balbo and been
+introduced, slot alignments Evil and Neutral to match Evil Balbo) or Fontana's (handler 2:
+stage 3, introduced), 0x80089ac0 primed with a marker, and the RNG state varied over 40
+trials. A breakpoint on the picker counts Reiran's turns. Party: Uranus (male Fighter,
+25), Venus (female Ninja, 17), Jupiter (female, 45), Earth (male Priest, 31). [emu]
+- Original words (from `rips/clean`): never 2:64 / 3:66. Balbo 8 of 8 Reiran turns gave
+  2:58 / 2:59 (bit 28 clear) or 2:60 (set); Fontana 14 of 14 gave 3:60 / 3:61 or 3:62.
+- The class fix alone (the first build): 2:64 / 3:66 on every turn with bit 28 clear, but
+  naming Earth (Balbo) and Uranus or Earth (Fontana), never Venus. With bit 28 set it
+  named Venus.
+- Both fixes, bit 28 clear: Balbo 8 of 8 turns 2:64 naming Venus, Fontana 14 of 14 3:66
+  naming Venus. Bit 28 set: Balbo 5 of 8 2:64 (3 were 2:60), Fontana 10 of 14 3:66 (4
+  were 3:62), each naming Venus.
+- No Ninja in the party: Reiran's usual lines, the same as the original (2:58 / 2:59, 2:60;
+  3:60 / 3:61, 3:62).
+Contact sheets: `round2/sheet.png` (both fixes), `round1/sheet.png` (the class fix alone,
+with the wrong names). Not public shots.
 
 ## Group 2: looks cut, or the intent isn't clear
 

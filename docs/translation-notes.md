@@ -625,6 +625,15 @@ Reopened content (each one goes in the release notes too):
   topic in his stage-3 roll, so each of the other eight goes from 1/8 to 1/9 there;
   stages 1 and 2 are unchanged (7c99607). 3:198, Artemisia's line about Zaril, isn't in
   the block and stays unused.
+- **Reiran's young-Ninja greeting** (NPC_MES2 64, NPC_MES3 66, "Is that a Thieves
+  Dagger? {name}, a Ninja at your age?") never played: the Ninja test masked the female
+  bit instead of the class. Fixing that showed a second bug: on the usual path (story
+  flag 28 clear, which only the card game sets) the line didn't copy the Ninja's name, so
+  it named the last party member, or at Fontana's the first. Chris, 2026-10-19: fix both.
+  Reiran now greets a Ninja aged 15-19 by name each time she gives the party's greeting,
+  or half the time once flag 28 is set. A party that's all young men, all young women or
+  all 40-59 still gets that line instead (bugs.md 1.17,
+  `asm/bugfix_reiran_ninja_greeting.asm`).
 
 Decided and left as the original had it (each one goes in the release notes, per
 ROADMAP.md "Game changes up front"):

@@ -859,15 +859,15 @@ patches in `asm/`.
   the usual case, the line is picked every time Reiran speaks and nothing is copied, so
   {ff12} showed whatever the buffer last held: the last party member (the status panel,
   0x800ad89c, draws each name through it) or, at Fontana's, the first member (copied by
-  0x800d3bd8, the helper for the greeting's other line). So bit 28 decides the odds, not whether the line shows. That path now
-  jumps into the other path's "set the line, copy the name" code (0x800cdf74 →
-  0x800cddf0, 0x800d3b78 → 0x800d39f4). Both fixes: `asm/bugfix_reiran_ninja_greeting.asm`,
-  bugs.md 1.17. Zaril's Ninja
-  count (0x800d40d0 in 0x800d3fd4) has the same slip, but that function ends by
-  overwriting talk_str_a with a random 33-35 anyway, so 36-38 also need the missing
-  returns. Guy's party (0x800bec78 in 0x800be88c) tests for a Thief the same way, but a
-  correct `& 0x7f` loop after it sets the same flag for the opposite case (no Thief), so
-  that one is harmless and fixing it alone would break the flag.
+  0x800d3bd8, the helper for the greeting's other line). So bit 28 decides the odds,
+  not whether the line shows. That path now jumps into the other path's "set the line,
+  copy the name" code (0x800cdf74 → 0x800cddf0, 0x800d3b78 → 0x800d39f4). Both fixes:
+  `asm/bugfix_reiran_ninja_greeting.asm`, bugs.md 1.17. Zaril's Ninja count (0x800d40d0
+  in 0x800d3fd4) has the same slip, but that function ends by overwriting talk_str_a
+  with a random 33-35 anyway, so 36-38 also need the missing returns. Guy's party
+  (0x800bec78 in 0x800be88c) tests for a Thief the same way, but a correct `& 0x7f` loop
+  after it sets the same flag for the opposite case (no Thief), so that one is harmless
+  and fixing it alone would break the flag.
 - The "too embarrassing to say" greetings are a dirty-name filter (2026-10-19). Guy's
   party's picker (MCARD 0x800be88c) compares each member's name with twelve entries at
   0x800a1eb0 (10 bytes each, game encoding, hiragana and katakana pairs): ちんこ, ちんぽ,
