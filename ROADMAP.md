@@ -142,6 +142,14 @@ natural play on 2026-10-13 (`docs/re/rescue-test.md`): all three match the code,
 test found that a rescued party stayed on offer and could be charged again (bugs.md 1.13),
 now fixed: the Yes frees the party's record.
 
+Open, waiting on Chris (`bugs.md` 2.9): the tavern joke-name greetings can't play, in
+the original either. Lilia's 'Richguy' (1:75, 3:48), Alba's 'Appraiser' (2:50) and
+Lychee's 'Mule' (1:68) compare names with a signed load, test the first few roster
+characters instead of the ones waiting at the tavern, and Alba's loop also counts the
+wrong length. The English names need choosing too, since 'Richguy' and 'Appraiser' don't
+fit their compares. Lychee's rude-name line (1:72), which had the same signed load, was
+fixed 2026-10-20.
+
 ### Quality passes (to reach 0.9)
 
 1. NPC dialogue cultural review (NPC_MES1-5). In progress; tracked in
