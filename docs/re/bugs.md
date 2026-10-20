@@ -3,7 +3,7 @@
 Every bug and every unreachable string the phase-2 analysts found (`docs/re/*.md`), two
 from the fallen-party audit (`docs/re/fallen-parties.md`), four from the harness runs
 (1.11, 1.12, 1.15, 1.16), one from the rescue test (1.13), one from the lock test (1.14)
-and one from a later read of the greeting code (1.17). Each was re-read in the code from the
+and two from a later read of the greeting code (1.17, 1.18, and 2.9). Each was re-read in the code from the
 original disc (`rips/clean`, decompiled at 585c983) and confirmed or refuted. Addresses
 are RAM; MCARD, JOUKA and MAZE load at 0x800a1000.
 
@@ -19,8 +19,8 @@ him first. So each entry is in one of three groups:
 
 | Group | Count |
 |---|---|
-| 1. Clear bugs | 18, all fixed (2.8, the pit soft lock, moved here; fixed in 5ff86d2 and kept) |
-| 2. Cut or unclear, ask | 6, all decided (2.2-2.5 reopened, 2.1 and 2.6 left unused) |
+| 1. Clear bugs | 19, all fixed (2.8, the pit soft lock, moved here; fixed in 5ff86d2 and kept) |
+| 2. Cut or unclear, ask | 7: 6 decided (2.2-2.5 reopened, 2.1 and 2.6 left unused), 2.9 open |
 | 3. Balance, ask | 3, all decided (kept as the original; decisions.md 8-10) |
 | Not bugs, or harmless | 9 (2.7 and 3.4 moved here after the follow-ups) |
 
@@ -589,6 +589,47 @@ trials. A breakpoint on the picker counts Reiran's turns. Party: Uranus (male Fi
 Contact sheets: `round2/sheet.png` (both fixes), `round1/sheet.png` (the class fix alone,
 with the wrong names). Not public shots.
 
+### 1.18 Rosea's greeting: the name check was never written (NPC_MES2 52-53, 56-57)
+
+Found reading the greeting code (2026-10-19, engine-notes "Class tests that mask the wrong
+bits"). Rosea's picker (Balbo's party, MCARD 0x800cd600, `greet_balbo` speaker 2) sets
+three flags: a3, someone knows Loktofeit (+0x5a bit 1) or carries the Ruby Slippers (item
+0x11e); t2, a man aged 16-25; t1, a lost character in the list at 0x80096720. It was
+built like Guy's party's picker (0x800be88c), which also checks names against a list of
+rude words, but Rosea's name check is missing: where it would be tested (0x800cd9ec) a0
+is compared with s0, both always 1. [code, disassembly]
+- Without a3: a lost character gives 2:55 (with the name); everyone else gets 2:56, "Oh
+  dear, must I really talk with you? Whoever gave you that name? ... {ff12}... There. I
+  said it.", with no name copied, so {ff12} was the last party member (the status panel
+  draws names through the buffer). 2:57 for a young man and 2:52 / 2:53 (a coin flip)
+  never played. [code, emu]
+- With a3, t1 and t2: a 1-in-4 pick of 54-57, its 56 also with no name. a3 otherwise:
+  2:54. [code]
+
+Fix, Chris's decision 2026-10-19 (the design in outline; the 54 fallback was proposed in
+the fix): the check is written, against Guy's list (0x800a1eb0, twelve 10-byte entries,
+lengths at 0x800a1f28), so one list serves both; it compares whole names, terminator
+included, as unsigned bytes. Without a3: lost → 2:55; a rude name → 2:56 with that
+member's name; a man aged 16-25 → 2:57; else 2:52 or 2:53. In the a3/t1/t2 pick, case
+2 gives 2:56 with the name when there's a rude name and 2:54 when there isn't: 54 is the
+line every other a3 party gets, and 55 and 57 keep their 1-in-4. The random pick's
+lost-name case had its own copy of the no-a3 path's 52-word "copy the lost name, 2:55"
+code; it jumps there now and the new code (49 words) sits in the 50 freed
+(0x800cd7f4-0x800cd8bb). `asm/bugfix_rosea_greeting.asm`. The list itself is now
+English (`asm/naughty_names.asm`, translation-notes).
+
+**Tested in the emulator** (`rips/re/work/P3-bugs/rosea/rosea_test.py`, output in
+`runs/`): RAM-write setup as in 1.17, Balbo's party at stage 1, introduced, 40 RNG trials
+per case, Rosea's turns counted by a breakpoint (7 per 40). Party Uranus, a renamed
+member 1, Jupiter, Earth; nobody a man aged 16-25 unless the case says so. [emu]
+- Original code, a plain party, a young man, or "Dick": 2:56 on 7 of 7 turns, naming Earth.
+- Fix: "Dick" and "RETARD" 2:56 on 7 of 7, naming them; "Dickens", "dick" and ちんこ (the
+  old list's first word, as kana bytes) 2:52 / 2:53, both seen (3 and 4); a man aged 20
+  2:57 on 7 of 7; a lost character (Mars) 2:55 naming Mars; Loktofeit 2:54.
+- a3, t1 and t2 with "Dick": 54 ×1, 55 ×2, 56 (naming Dick) ×2, 57 ×2. The same turns
+  without a rude name: 54 ×3, 55 ×2, 57 ×2, never 56.
+Contact sheet: `rosea/sheet.png`. Not public shots.
+
 ## Group 2: looks cut, or the intent isn't clear
 
 ### 2.1 The identify service
@@ -923,6 +964,45 @@ Chris kept the fix (2026-10-11): Guy still rescues every party that knows him, a
 only fills the case the developers left empty. In practice that needs a party made
 entirely of characters who never met Guy, such as fresh recruits sent to rescue a wiped
 party, so a steady single party never meets it.
+
+### 2.9 Guy's, Lilia's and Alba's name checks can't match (NPC_MES1 68, 72, 75; NPC_MES2 50; NPC_MES3 48)
+
+Found 2026-10-19 while localizing the joke names and the naughty-name list. Several
+greetings test for a name: Lychee's 1:72 (a rude name in the party, the list at
+0x800a1eb0) and 1:68 ('Mule', アイテムもち, 8 bytes at 0x800a1ea8) in Guy's party's picker
+0x800be88c; Lilia's 'Richguy' (かねもち, 6 bytes; 1:75 in 0x800bf3b8, list at 0x800a1f34;
+3:48 in 0x800d47ec, at 0x800a694c); Alba's 'Appraiser' (かんてい, 6 bytes at 0x800a4f50, in
+0x800cd104). None of them can ever match, in the original either: [code, disassembly]
+- **Signed compare.** Each loop loads the name with `lbu` and the list (copied to the
+  stack) with `lb`: Lychee 0x800becf8 / 0x800becfc and 0x800bebc4 / 0x800bebc8, Lilia
+  0x800bf5d4 / 0x800bf5d8 and 0x800d4a0c / 0x800d4a10, Alba 0x800cd3d8 / 0x800cd3dc.
+  Every entry includes the 0xff terminator, which loads as -1 against 255, and some kana
+  codes are 0x80 or more too.
+- **Wrong characters.** 'Mule', 'Richguy' and 'Appraiser' are meant for a character at the
+  tavern, in no party (`rescue_candidates`, 0x8008d300, built just before), but each loop
+  compares `roster[k]` for k below the candidate count, not `roster[rescue_candidates[k]]`.
+  So it tests the first few roster characters, usually party members.
+- **Alba** counts 6 bytes and then tests the count against 8 (0x800cd40c), so hers can't
+  match even unsigned.
+- **Lychee's 1:72 copies no name**, so {ff12} shows whatever the buffer last held.
+
+Emulator (`rips/re/work/P3-bugs/rosea/guy_test.py`, output in `guy/`; Guy's party,
+introduced, 40 RNG trials, a breakpoint on each picker): on the original code a member named
+ちんこ never got 1:72 (Lychee 12 turns: 65-67), nor did アイテムもち get 1:68. With `lb`
+made `lbu` at the two Lychee loads (RAM only): "Dick" and "RETARD" got 1:72 on 12 of 12
+turns ("Earth... eek!", the wrong name), "Dickens" and "dick" didn't; with Mule also in
+the 8-byte slot, a party member named Mule got 1:68 on 12 of 12, and the tavern character
+named Mule (roster 4, the one the line is about) never did. [emu]
+
+The English names don't all fit: 'Mule' fits the 8-byte compare (4 letters, 0xff, 0x40,
+and two bytes after them, zero in every stored name seen so far; there's one slot, so
+MULE can't also match); 'Richguy' needs 9 bytes against 6; 'Appraiser' is 9 letters, more than a name
+can hold (8). Alstron's 'A' (1:60, あ) uses three byte tests and works; it's localized
+(`asm/joke_names.asm`).
+
+Questions for Chris: fix Lychee's two loads (two words, `lb` → `lbu`) so her 1:72 and
+1:68 work, and copy the matched name for 1:72? Make the tavern checks look at the
+tavern characters? What should Lilia's and Alba's names be, given the widths?
 
 ## Group 3: fixes that would change how the game plays
 

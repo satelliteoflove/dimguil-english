@@ -987,3 +987,38 @@ save, the game stopped on the town logo over six "Empty" boxes, every time.
   same 40,583 captured strings and failed the same way, so the failures weren't the fix's.
 - Suite on the disc with both fixes (md5 9157ee57ffd75ca3ede42f086115c485): 342/344, the same
   two chapter-5 snake cases as on the first build, which predate the fix.
+- Commit 143ca10.
+
+### Rosea's missing name check, and a filter that never worked (2026-10-19)
+
+- Rosea's greeting picker has flags for Loktofeit, a lost character and a young man, and
+  a test where a rude-name check should be. The test compares two registers that are
+  both always 1. So without Loktofeit nearly every party got her "too embarrassing to
+  say" line, naming whoever the name buffer last held, and three of her lines never
+  played. The model was Guy's party's picker, where Lychee has the same joke with a list
+  of twelve rude words (six, in hiragana and katakana).
+- Writing Rosea's check meant reusing Lychee's list, and testing Lychee's side turned up
+  that hers never worked either: the loop loads the name's bytes unsigned and the list's
+  signed, so the 0xff that ends every entry is -1 on one side and 255 on the other. The
+  same slip is in every name check of that kind: Lychee's 'Mule', Lilia's 'Richguy' (in
+  two pickers) and Alba's 'Appraiser'. Those also look at the wrong characters (the first
+  few in the roster, not the ones at the tavern), and Alba's tests for 8 matched bytes
+  after comparing 6. Only Alstron's 'A', written as three separate byte tests, works.
+- Rosea's fix: the check is written, unsigned, against Lychee's list, and her line now
+  copies the name it found. The space came from her own function: one branch had a
+  52-word copy of code another branch already had, so it jumps there and the new code
+  fills the 50 freed words.
+- The list is now English, Chris's words in the Japanese words' slots, and Alstron's
+  check looks for 'A'. Lychee's side and the tavern checks are questions for Chris
+  (bugs.md 2.9).
+- Numbers (40 RNG trials per case, about 7 Rosea turns and 12 Lychee turns each):
+  - Original: Rosea's 2:56 on every turn for a plain party, a young man or "Dick". A
+    member named ちんこ never got Lychee's line.
+  - Fixed: "Dick" and "RETARD" 2:56 naming them on 7 of 7; "Dickens", "dick" and ちんこ
+    "Hello" or "Good day"; a young man 2:57 on 7 of 7.
+  - Lychee, with her two loads made unsigned in RAM only: "Dick" and "RETARD" 1:72 on
+    12 of 12, but naming Earth, since her line copies no name either.
+  - Sheets (test setups, not for public use): `rips/re/work/P3-bugs/rosea/sheet.png`.
+- The English list is f8acdf0 and Alstron's 'A' defd101; the Rosea fix is the commit
+  that adds this entry. Suite 342/344 on 31f8ba7134135e21ba65670f8bb02903, the two known
+  chapter-5 snake cases.

@@ -872,10 +872,29 @@ patches in `asm/`.
   party's picker (MCARD 0x800be88c) compares each member's name with twelve entries at
   0x800a1eb0 (10 bytes each, game encoding, hiragana and katakana pairs): ちんこ, ちんぽ,
   まんこ, きんたま and the slurs かたておち and きちがい. A match picks Lychee's 1:72 ("too
-  embarrassing to say... {name}, eek!"). The Japanese list can't match a name typed on
-  the patch's Latin grid, so in English play it fires only for kana names.
+  embarrassing to say... {name}, eek!"). It never fires, in the original either: the
+  loop loads the name with `lbu` and the list with `lb` (0x800becf8 / 0x800becfc), so
+  any list byte from 0x80 up, the 0xff terminator in every entry included, compares as
+  -1 against 255. Checked in the emulator: a member named ちんこ never got 1:72 on the
+  original code; with `lbu` at 0x800becfc (RAM only) "Dick" and "RETARD" got it on 12
+  of 12 of Lychee's turns. The line also copies no name, so {ff12} shows whatever the
+  buffer last held (the last member). The list is now English (`asm/naughty_names.asm`,
+  DICK/Dick, COCK/Cock, CUNT/Cunt, SHIT/Shit, RETARD/Retard, BALLS/Balls in the Japanese
+  words' slots, as typed on the Latin grid: one code per letter, A-Z 0x0b-0x24, a-z
+  0x25-0x3e, then 0xff 0x40; lengths count the terminator). Lychee's side is left as
+  the original had it (bugs.md 2.9).
+- The tavern joke names use the same kind of compare (bugs.md 2.9). Lychee's 1:68
+  'Mule' (8 bytes at 0x800a1ea8, アイテムもち), Lilia's 1:75 / 3:48 'Richguy' (6 bytes at
+  0x800a1f34 and 0x800a694c, かねもち) and Alba's 2:50 'Appraiser' (6 bytes at
+  0x800a4f50, かんてい) all load the list signed, so none can match. They're meant for a
+  character at the tavern, in no party (`rescue_candidates`, 0x8008d300), but compare
+  `roster[k]` for k below the candidate count, so the first few roster characters
+  instead. Alba's loop counts 6 bytes and then tests for 8, so hers can't match even
+  unsigned. Alstron's 1:60 'A' (あ, plus 100 G) is three byte tests in his picker
+  (0x800bdc08) and works: name[0] == 0x40, name[1] == 0xff, name[2] == name[0]. It now
+  tests 0x0b, 0xff, 0x40 for 'A' (`asm/joke_names.asm`).
 - Rosea's picker (0x800cd600) was built the same way but the name check was never
-  written. Machine code: a3 = someone knows Loktofeit (+0x5a bit 1) or carries item 0x11e
+  written (fixed, bugs.md 1.18; the old behavior below). Machine code: a3 = someone knows Loktofeit (+0x5a bit 1) or carries item 0x11e
   (Ruby Slippers); t1 = a lost character; t2 = a man aged 16-25 (age-16 < 10, +0x0b bit 7
   clear). Without a3: t1 gives 2:55 (lost, with the name), else the test at 0x800cd9ec
   compares a0 with s0, both always 1 (a0 is loaded with 1 in the delay slot at
@@ -884,6 +903,11 @@ patches in `asm/`.
   unreachable; Ghidra drops them as dead blocks. 2:56 also never copies a name, so
   {ff12} shows whatever the name buffer last held. With a3, t1 and t2 together the
   greeting is a 1-in-4 pick of 54-57, which is the only way 57 shows; a3 alone gives 54.
+  The fix (`asm/bugfix_rosea_greeting.asm`) writes the check, comparing unsigned, with
+  Guy's list, and copies the matching member's name for 2:56. In the 54-57 pick, 56
+  without a rude name gives 54. Space: the random pick's lost-character case had its own
+  52-word copy of the no-a3 path's "copy the lost name, 2:55" code; it jumps there now,
+  and the new code fills the 50 freed words (0x800cd7f4-0x800cd8bb).
 - The battle box wraps at 24 glyph codes per line. Messages are expanded by 0x8001dfc0
   into 0x8008b400; only the battle call (BATTLE.BIN 0x800d1e20) turns wrapping on. The
   original moves an inserted name that won't fit to the next line, but breaks plain text

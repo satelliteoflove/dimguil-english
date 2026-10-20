@@ -649,6 +649,15 @@ Reopened content (each one goes in the release notes too):
   or half the time once flag 28 is set. A party that's all young men, all young women or
   all 40-59 still gets that line instead (bugs.md 1.17,
   `asm/bugfix_reiran_ninja_greeting.asm`).
+- **Rosea's greetings** (NPC_MES2 52, 53, 56, 57): her name check was never written, so
+  every party that hadn't lost anyone got 2:56, "Whoever gave you that name?... {name}...
+  There. I said it.", naming the last party member, and "Hello", "Good day" and "I could
+  fall for you" (a young man) never played. Chris, 2026-10-19: write the check, with the
+  same rude-name list as Lychee's. Now 2:56 plays only for a member with one of those
+  names, and names them; a man aged 16-25 gets 2:57; anyone else "Hello" or "Good day".
+  In her 1-in-4 pick (Loktofeit or the Ruby Slippers, a lost character and a young man
+  together) 56 without a rude name falls to 54, her Loktofeit warning (bugs.md 1.18,
+  `asm/bugfix_rosea_greeting.asm`).
 
 Decided and left as the original had it (each one goes in the release notes, per
 ROADMAP.md "Game changes up front"):
