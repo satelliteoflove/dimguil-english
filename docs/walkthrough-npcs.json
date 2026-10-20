@@ -1051,13 +1051,13 @@
           ],
           "strings": "NPC_MES2 264-265",
           "placement": "Game: the treasure behind a door that turned Alba to ash is the small door and crystal in Area D (event map S47, which links 264-265); harano has it on B1F, the step that releases mimicry mode.",
-          "blurb": "Balbo's party got to the small door before you, and it went badly. Balbo warns you off: \"The treasure up ahead? You lot won't get your hands on it, I'm warning ya.\" Alba went in and turned to ash the moment he came out, so they're off to the Temple to have him revived.",
+          "blurb": "Balbo's party got to the small door before you, and it went badly. Balbo warns you off: \"The treasure up ahead? You won't get your hands on it, I'm warning ya.\" Alba went in and turned to ash the moment he came out, so they're off to the Temple to have him revived.",
           "quotes": [
             {
               "file": "NPC_MES2",
               "idx": 264,
               "speaker": "Balbo",
-              "text": "The treasure up ahead? You lot won't get your hands on it, I'm warning ya."
+              "text": "The treasure up ahead? You won't get your hands on it, I'm warning ya."
             },
             {
               "file": "NPC_MES2",
@@ -1729,7 +1729,7 @@
           ],
           "strings": "NPC_MES2 142-145",
           "placement": "Anytime: the body-collection service, offered when your dead are left in the maze.",
-          "blurb": "If you've left bodies in the maze, Balbo offers to haul them to the Temple, though \"Us Evil types ain't fond of doin' good deeds.\" Say yes and he admits what caught his eye: \"Besides, that lot had some mighty fine gear on 'em.\"",
+          "blurb": "If you've left bodies in the maze, Balbo offers to haul them to the Temple, though \"Us Evil types ain't fond of doin' good deeds.\" Say yes and he admits what caught his eye: \"Besides, those guys had some mighty fine gear on 'em.\"",
           "quotes": [
             {
               "file": "NPC_MES2",
@@ -1741,7 +1741,7 @@
               "file": "NPC_MES2",
               "idx": 144,
               "speaker": "Balbo",
-              "text": "Besides, that lot had some mighty fine gear on 'em."
+              "text": "Besides, those guys had some mighty fine gear on 'em."
             }
           ],
           "flags": "Reviewed in scene 5 (2026-10-10).",
@@ -2320,13 +2320,13 @@
           ],
           "strings": "NPC_MES2 263",
           "placement": "Unknown: \"this area\" has a room with a statue of a giant face, and Balbo means to hurry and tell the scholars. Which area isn't established. Area Z's face-like relief on the coffin (harano area-z x10y10) is a candidate, but Balbo still trusting the scholars suggests a time before chapter 17's reveal.",
-          "blurb": "Balbo has found a room with a statue of a giant face and is hurrying off to tell the scholars. He leaves the examining to you: \"You lot go on ahead and look it over.\"",
+          "blurb": "Balbo has found a room with a statue of a giant face and is hurrying off to tell the scholars. He leaves the examining to you: \"You guys go on ahead and look it over.\"",
           "quotes": [
             {
               "file": "NPC_MES2",
               "idx": 263,
               "speaker": "Balbo",
-              "text": "You lot go on ahead and look it over."
+              "text": "You guys go on ahead and look it over."
             }
           ],
           "flags": "Balbo's progress reports (81-89, 142, 261-265) were reviewed as scene 3 in docs/npc-review.md: the Japanese shifts to a stiff, superior register here (Fontana's party does the same in its maze encounters), and the English keeps Balbo's own words but makes him businesslike and a little lordly.",

@@ -134,7 +134,7 @@ with the chapter and the string's new wording, to carry over to the site.
 |---|---|---|
 | Guy | NPC_MES1 289 | a string of baffling ancient glyphs somewhere on a higher floor |
 | Lychee | NPC_MES1 102 | It wasn't Lychee! I only kicked a teeny little rock, that's all! |
-| Balbo | NPC_MES2 264 | The treasure up ahead? You lot won't get your hands on it, I'm warning ya. |
+| Balbo | NPC_MES2 264 | The treasure up ahead? You won't get your hands on it, I'm warning ya. |
 | Balbo | NPC_MES2 264 | Alba went in a while back, and the second he came out, he turned to ashes. |
 | Fontana | NPC_MES3 278 | I'm sure it isn't the god Kadorto. |
 | Fontana | NPC_MES3 73 | Looks like we teleported into a new maze. |
@@ -208,7 +208,7 @@ with the chapter and the string's new wording, to carry over to the site.
 | Balbo | NPC_MES2 92 | Oh, what terrible things I have done! |
 | Balbo | NPC_MES2 93 | right back to my old ways |
 | Balbo | NPC_MES2 142 | Us Evil types ain't fond of doin' good deeds |
-| Balbo | NPC_MES2 144 | Besides, that lot had some mighty fine gear on 'em. |
+| Balbo | NPC_MES2 144 | Besides, those guys had some mighty fine gear on 'em. |
 | Balbo | NPC_MES2 226 | Not that there's anyplace to swim down here. |
 | Reiran | NPC_MES2 235 | Lately I'm, like, totally hooked on setting off teleporter traps on purpose. |
 | Balbo | NPC_MES2 231 | but the guy's too damn gloomy for his own good. |
@@ -253,7 +253,7 @@ with the chapter and the string's new wording, to carry over to the site.
 | Lychee | NPC_MES1 96 | I didn't wanna kill the cute little Magical Rabbit. |
 | Guy | NPC_MES1 257 | We need to scout someone from another party. |
 | Alstron | NPC_MES1 120 | the ever-handy Thief, Fritillaria. |
-| Balbo | NPC_MES2 263 | You lot go on ahead and look it over. |
+| Balbo | NPC_MES2 263 | You guys go on ahead and look it over. |
 | Young samurai | NPC_MES3 74 | We're still green, but we're looking for her as well. |
 | Cresson | NPC_MES4 113 | P-please stop. I don't know anything. I never met any heretics. |
 | Cresson | NPC_MES4 143 | but... where do they really go...... |

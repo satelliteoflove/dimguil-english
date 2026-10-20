@@ -875,7 +875,7 @@
                 {
                     "length": 52,
                     "source": "NA",
-                    "translation": "\"Besides, that lot had some mighty fine gear on 'em.\n Finders keepers, right? No need to thank us. So long.\"",
+                    "translation": "\"Besides, those guys had some mighty fine gear on 'em.\n Finders keepers, right? No need to thank us. So long.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1145,7 +1145,7 @@
                 {
                     "length": 69,
                     "source": "NA",
-                    "translation": "Balbo\n\"That lot know all kinds of stuff\n about this Shrine,\n\r but they won't tell ya squat.\"",
+                    "translation": "Balbo\n\"Those guys know all kinds of stuff\n about this Shrine,\n\r but they won't tell ya squat.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1589,13 +1589,13 @@
                 {
                     "length": 99,
                     "source": "NA",
-                    "translation": "Balbo\n\"One of the rooms here has a statue of a giant face.\n We'll hurry and tell them scholars.\n\r You lot go on ahead and look it over.\"",
+                    "translation": "Balbo\n\"One of the rooms here has a statue of a giant face.\n We'll hurry and tell them scholars.\n\r You guys go on ahead and look it over.\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 203,
                     "source": "NA",
-                    "translation": "Balbo\n\"Oh, {ff12}, is it?\n\r The treasure up ahead? You lot won't\n get your hands on it, I'm warning ya.\n\r Alba went in a while back, and the second\n he came out, he turned to ashes.\n\r Looks like there's one nasty trap\n waiting in there.\n\r We're taking Alba back to the Temple\n to be revived, then we'll talk over\n what to do next.\"",
+                    "translation": "Balbo\n\"Oh, {ff12}, is it?\n\r The treasure up ahead?\n You won't get your hands on it,\n I'm warning ya.\n\r Alba went in a while back,\n and the second he came out,\n he turned to ashes.\n\r Looks like there's one nasty trap\n waiting in there.\n\r We're taking Alba back to the Temple\n to be revived, then we'll talk over\n what to do next.\"",
                     "addStringTerminator": true
                 },
                 {
