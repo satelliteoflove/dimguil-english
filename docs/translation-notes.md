@@ -120,6 +120,15 @@ The preferred fix is a close-to-literal reading, fitted to the box.
   name is already in the roster isn't offered: the tavern's table (asm/recruit_names.asm)
   and each recruit's own record (binary/7nn.DAT.names.json). Found by the sound test
   check (rips/agents/soundtest).
+- **The naughty-name list is English (Chris, 2026-10-19).** The original has a
+  naughty-name filter: a party member named one of twelve rude words gets a greeting
+  where the character is too embarrassed to say it (Rosea's 2:56; Lychee's 1:72 too, once
+  her check works, bugs.md 2.9). Their embarrassment is the joke. The Japanese list is
+  six words, each in hiragana and katakana, which no name typed on our Latin grid can
+  match, so it's translated, each word in its Japanese word's slot, ALL CAPS and
+  Capitalized: DICK (ちんこ), COCK (ちんぽ), CUNT (まんこ), SHIT (かたておち; Chris chose a
+  crude name over an equivalent for this one), RETARD (きちがい), BALLS (きんたま). The
+  whole name has to match, so "Dickens" and "dick" don't (asm/naughty_names.asm).
 - **"Picking the lock" and "Searching" carry no dots of their own (SISETU 526, 441;
   Chris, 2026-10-17).** The game animates a row of dots after each, spaced for the
   Japanese (鍵開け挑戦中, 調査中, no dots), so ours doubled up and the first animated dots
