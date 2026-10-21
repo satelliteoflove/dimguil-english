@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """The translation review tool: a local web app for reviewing NPC scenes with Chris.
 
-    rips/venv/bin/python scripts/reviewtool/server.py [--port 8777]
+    rips/venv/bin/python scripts/reviewtool/server.py [--port 8777] [--host ADDR] [--root DIR]
 
 Then open http://localhost:8777 (Firefox first). Binds to localhost only, unless
 --host ADDR is given (--host 0.0.0.0 to use it from a phone on the home network).
+--root DIR reads and writes the data of another copy of the repo (its translations/,
+rips/ and docs/), so a worktree's server can run on the main copy's scenes.
 
 What it reads:
   - scenes: rips/review/scenes/*.json, written by Claude per scene (the literal and
@@ -23,6 +25,43 @@ What it writes, only when Chris applies a scene:
   - rips/review/decisions/<scene>.json: each line's choice, the text before and after,
     and Chris's note. Claude commits from that (one commit per scene) and marks it.
 Questions Chris asks in the tool go to rips/review/questions.json for Claude to answer.
+Each is {id, scene, ref, about, question, asked_at, answer}; Claude fills in answer (blank
+lines between paragraphs) and answered_at. A paragraph that is a whole box, a speaker's
+name on its own line and then the speech in quotes, gets a "Put this in the editor"
+button; so does each string in an optional "suggest" (a string or a list). The page
+polls for answers. A line shows the questions on its ref and on its copies.
+
+The line page shows one block per line. A scene line can carry, besides ref and context
+(the few words beside the speaker's name):
+  literal     "Literally": a close English reading
+  faithful    the proposed box text; a line has a proposal when it differs from current
+  why         under the proposal, why it differs ("No change." is not shown)
+  notes       "What's going on": [{title?, text, sources?: [{label, url?}]}]; Japanese in
+              the text is set in mincho by itself
+  plays       "When it plays": when and where the game shows the line
+  related     "Elsewhere": [{ref, note}], lines worded to match that aren't copies
+              (copies, the same Japanese, are found by the server)
+  words       older word notes, [{jp, reading, sense, register, confidence, sources}];
+              without a gloss they go on the automatic word groups that contain them
+  gloss       the interlinear gloss by hand: a list of pages, each a list of words
+              {jp, rd?, en?, tone?, trap?, entry?}, in order. jp is the word as written,
+              particles and endings included ("悪の"); rd its reading, over the kanji;
+              en the short English under it. tone: true underlines a word that carries
+              the speaker's voice; trap: true stars a sense that's easy to get wrong.
+              Punctuation is its own item ({"jp": "。"}) and the page keeps it with the
+              word before. {ff12} (the name) is written as is. The jp of each page,
+              joined, must be that page's Japanese (line breaks and the opening 「 left
+              out); if it isn't, the page falls back to the automatic gloss and says so.
+              A single page can be given as a flat list of words.
+  entries     what clicking a word opens: {key: {head, label?, lookup?, senses?, here?,
+              note?}}, named by a word's entry (or given inline as entry: {...}). head
+              is the headword, label the line after it ("みをかためる, verb"); senses a
+              list of short glosses, or lookup names a word whose first JMdict senses
+              to use instead; here the index of the sense that applies; note the
+              explanation under them.
+A line without a gloss gets one made here (gloss()): the splitter's words grouped with
+their particles and endings, readings from the splitter, the first JMdict sense under
+each, and the dictionary entries looked up on hover and click.
 
 Needs fugashi and unidic-lite for the word splitter (rips/venv has them); without
 them the Japanese still shows, just not split into words.
@@ -32,8 +71,11 @@ from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
-sys.path.insert(0, os.path.join(ROOT, 'scripts'))
+CODE_ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
+# --root DIR reads and writes another copy's data (translations/, rips/, docs/), so a
+# worktree's server can work on the main copy's scenes and decisions.
+ROOT = os.path.abspath(sys.argv[sys.argv.index('--root') + 1]) if '--root' in sys.argv else CODE_ROOT
+sys.path.insert(0, os.path.join(CODE_ROOT, 'scripts'))
 import descfit, npcfit, npcquotes  # noqa: E402
 from reviewpage import load as load_commented  # noqa: E402  (some translation files have comments)
 
@@ -41,6 +83,7 @@ SCENES = os.path.join(ROOT, 'rips/review/scenes')
 DECISIONS = os.path.join(ROOT, 'rips/review/decisions')
 QUESTIONS = os.path.join(ROOT, 'rips/review/questions.json')
 FONT = os.path.join(ROOT, 'rips/review/font')
+FACES = os.path.join(ROOT, 'rips/review/faces')
 DICT = os.path.join(ROOT, 'rips/dict/dict.sqlite')
 STATIC = os.path.join(HERE, 'static')
 NPC_FILES = range(1, 6)
@@ -74,11 +117,17 @@ def body(text):
     return text[k:] if k > 0 else text
 
 
+def flat(text):
+    """text without its page and line breaks, so copies broken differently still match
+    (5:8 and 3:22 break their pages in different places)."""
+    return re.sub(r'\s+', '', text)
+
+
 SOURCES = {n: load_src(n) for n in NPC_FILES}
-COPIES = {}  # Japanese body -> every ref that has it, whoever the speaker
+COPIES = {}  # Japanese body, breaks removed -> every ref that has it, whoever the speaker
 for _n in NPC_FILES:
     for _i, _s in enumerate(SOURCES[_n]):
-        COPIES.setdefault(body(_s), []).append(f'{_n}:{_i}')
+        COPIES.setdefault(flat(body(_s)), []).append(f'{_n}:{_i}')
 
 
 def person(ref):
@@ -93,9 +142,9 @@ def copies_of(ref):
     """Refs with the same Japanese, or the same lines from the same person under another tag."""
     n, i = parse_ref(ref)
     out = []
-    for r in COPIES[body(SOURCES[n][i])]:
+    for r in COPIES[flat(body(SOURCES[n][i]))]:
         m, j = parse_ref(r)
-        if r != ref and (SOURCES[m][j] == SOURCES[n][i] or (person(r) and person(r) == person(ref))):
+        if r != ref and (flat(SOURCES[m][j]) == flat(SOURCES[n][i]) or (person(r) and person(r) == person(ref))):
             out.append(r)
     return out
 
@@ -279,7 +328,8 @@ def tokens(text):
         f = w.feature
         words.append({'s': w.surface, 'lemma': getattr(f, 'lemma', None) or w.surface,
                       'reading': kata2hira(getattr(f, 'kana', None) or ''),
-                      'pos': getattr(f, 'pos1', '') or '', 'form': getattr(f, 'cForm', '') or '',
+                      'pos': getattr(f, 'pos1', '') or '', 'pos2': getattr(f, 'pos2', '') or '',
+                      'form': getattr(f, 'cForm', '') or '',
                       'white': w.white_space})
     for k, w in enumerate(words):
         best = None
@@ -296,6 +346,28 @@ def tokens(text):
         if best and best[0] in ROLE_BY:
             w['role'] = best[0]
     return words
+
+
+def jmdict_only(q, lemma=None):
+    """lookup()'s JMdict and Wiktionary parts, without the slow example search."""
+    out = {'jmdict': [], 'wiktionary': []}
+    if not DB:
+        return out
+    with LOCK:
+        for f in dict.fromkeys(x for x in (q, lemma) if x):
+            rows = DB.execute('select e.kanji, e.sense, e.rank, f.kind from form f join entry e on e.id = f.id where f.form=?', (f,)).fetchall()
+            for k, sn, rank, kind in sorted(rows, key=lambda r: r[2]):
+                kanji, senses = json.loads(k), json.loads(sn)
+                if kind == 'r' and kanji and not any('uk' in x['misc'] for x in senses):
+                    continue
+                out['jmdict'].append({'senses': senses})
+            if out['jmdict']:
+                break
+        if not out['jmdict']:
+            for f in dict.fromkeys(x for x in (q, lemma) if x):
+                for (data,) in DB.execute("select w.data from wikt_form f join wikt w on w.id = f.id where f.form=? and (f.kind='w' or w.word=f.form) limit 2", (f,)):
+                    out['wiktionary'].append(json.loads(data))
+    return out
 
 
 def lookup(q, lemma=None):
@@ -337,6 +409,192 @@ def lookup(q, lemma=None):
             'select jp, en from example where jp like ? order by length(jp) limit 6', (f'%{key}%',))]
     role = ROLE_BY.get(q) or ROLE_BY.get(lemma or '')
     out['role'] = role
+    return out
+
+
+# --- the interlinear gloss -----------------------------------------------------------
+
+PUNCT = set('。,、?!:・「」“”『』()?!,.')
+TRAIL = set('~ー〜')   # stretch marks stay inside the word they stretch (う~)
+ATTACH = ('助詞', '助動詞', '接尾辞')
+PARTICLES = {'を': '(object)', 'は': '(topic)', 'が': '(subject)', 'に': 'to', 'で': 'at, with', 'の': "'s, of",
+             'と': 'and, with', 'も': 'also', 'か': '(question)', 'ね': 'right?', 'よ': '(emphasis)', 'ぞ': '(emphasis)',
+             'へ': 'toward', 'から': 'from, because', 'まで': 'until', 'な': '(emphasis)', 'さ': '(emphasis)'}
+CONTROL = re.compile(r'\{ff12\}|\{ff11\}0|\{ff30\}.|\{ff[0-9a-f]{2}\}\r?')
+_GLOSS_CACHE = {}
+
+
+def jp_pages(src):
+    """The Japanese a line shows, page by page, without the speaker's name, the opening
+    bracket or the line breaks within a page."""
+    m = re.match(r'[^\n「]*\n(?=「)', src)
+    text = src[m.end():] if m else src
+    pages = []
+    for k, pg in enumerate(npcfit.pages(text)):
+        pg = ''.join(line.strip() for line in pg.split('\n'))
+        pages.append(pg[1:] if k == 0 and pg.startswith('「') else pg)
+    return pages
+
+
+def short_gloss(q, lemma=None):
+    """The first JMdict sense, cut short, for under a word."""
+    r = jmdict_only(q, lemma)
+    for e in r['jmdict']:
+        for sense in e['senses']:
+            if sense['gloss']:
+                g = re.sub(r'\s*\(.*?\)', '', sense['gloss'][0]).strip()
+                return g[:30] or sense['gloss'][0][:30]
+    for w in r['wiktionary']:
+        for sense in w.get('senses', []):
+            if sense.get('glosses'):
+                return sense['glosses'][0][:30]
+    return ''
+
+
+def auto_page(text):
+    """Word groups for one page of Japanese: each content word with the particles and
+    endings that hang on it, punctuation as its own item (the page keeps it with the
+    word before), {ff12} as the name."""
+    groups = []
+    pos = 0
+    pieces = []
+    for m in CONTROL.finditer(text):
+        pieces.append(('text', text[pos:m.start()]))
+        pieces.append(('code', m.group(0)))
+        pos = m.end()
+    pieces.append(('text', text[pos:]))
+    for kind, piece in pieces:
+        if not piece:
+            continue
+        if kind == 'code':
+            if piece == '{ff12}':
+                groups.append({'jp': piece, 'show': '(name)', 'en': "a character's name", 'name': True})
+            elif piece == '{ff11}0':
+                groups.append({'jp': piece, 'show': '(number)', 'en': 'a number', 'name': True})
+            else:
+                groups.append({'jp': piece, 'show': '', 'code': True})
+            continue
+        toks = tokens(piece)
+        if toks and toks[0].get('plain'):
+            groups.append({'jp': piece, 'en': ''})
+            continue
+        # one dictionary word made of several pieces (あの + 人) is one token
+        merged, k = [], 0
+        while k < len(toks):
+            t = toks[k]
+            if t.get('span') and t['span'][1] > 1:
+                merged.append({**t, 's': t['span'][0], 'lemma': t['span'][0],
+                               'reading': t.get('span_reading') or ''.join(x['reading'] for x in toks[k:k + t['span'][1]]),
+                               'merged': True})
+                k += t['span'][1]
+            else:
+                merged.append(t); k += 1
+        cur, prefix, prev = None, False, None
+        for t in merged:
+            surf = t['s']
+            if t['pos'] in ('補助記号', '記号') or not re.search(r'[\w〜~ー]', surf):
+                for ch in surf:
+                    if ch in TRAIL and cur:
+                        cur['jp'] += ch
+                    else:
+                        groups.append({'jp': ch, 'punct': True}); cur = None
+                prev = t
+                continue
+            attach = cur is not None and not prefix and (
+                t['pos'] in ATTACH or (t['pos'] == '形状詞' and t['pos2'] == '助動詞語幹')
+                or (t['pos'] in ('動詞', '形容詞') and t['pos2'] == '非自立可能' and prev is not None
+                    and (prev['pos'] in ('動詞', '助動詞') or (prev['pos'] == '助詞' and prev['pos2'] == '接続助詞'))))
+            if prefix and cur is not None:   # お + 持ち
+                cur['toks'].append(t); cur['jp'] += surf; prefix = False
+            elif attach:
+                cur['toks'].append(t); cur['jp'] += surf
+            else:
+                cur = {'jp': surf, 'toks': [t]}
+                groups.append(cur)
+                prefix = t['pos'] == '接頭辞'
+            prev = t
+    for g in groups:
+        toks = g.pop('toks', None)
+        if not toks:
+            continue
+        head = next((t for t in toks if t['pos'] not in ('接頭辞',) + ATTACH), toks[0])
+        g['q'], g['lemma'] = head['s'], head['lemma']
+        g['pos'] = head['pos']
+        kan = [i for i, t in enumerate(toks) if re.search(r'[一-鿿々]', t['s'])]
+        g['rd'] = ''.join(t['reading'] for t in toks[:kan[-1] + 1]) if kan else ''
+        if head['pos'] in ATTACH:
+            g['en'] = PARTICLES.get(head['s'], '')
+        elif head['pos2'] == '固有名詞':
+            g['en'] = 'name'
+        else:
+            g['en'] = short_gloss(head['s'], head['lemma'])
+        if any(t.get('role') for t in toks):
+            g['role'] = next(t['role'] for t in toks if t.get('role'))
+            g['tone'] = True
+    return groups
+
+
+def resolve_entry(e):
+    """A hand-written entry, with its senses from JMdict when it names a lookup word
+    instead of listing them."""
+    e = dict(e)
+    if 'senses' not in e and e.get('lookup'):
+        r = lookup(e['lookup'])
+        e['senses'] = ['; '.join(sn['gloss'][:3]) for sn in (r['jmdict'][0]['senses'][:3] if r['jmdict'] else [])]
+    return e
+
+
+def gloss(ref, line=None):
+    """The interlinear gloss for ref: the scene's hand annotation if it has one and it
+    covers the Japanese exactly, otherwise word groups made from the splitter and JMdict."""
+    n, i = parse_ref(ref)
+    pages = jp_pages(SOURCES[n][i])
+    line = line or {}
+    out = {'ref': ref, 'pages': None, 'source': 'auto', 'error': None}
+    hand = line.get('gloss')
+    if hand:
+        if hand and isinstance(hand[0], dict):
+            hand = [hand]
+        entries = line.get('entries', {})
+        flat_hand = [''.join(w['jp'] for w in pg) for pg in hand]
+        if [flat(p) for p in flat_hand] != [flat(p) for p in pages]:
+            out['error'] = ("The hand gloss doesn't match the Japanese, so this is the automatic one. "
+                            f"Gloss: {' / '.join(flat_hand)}; Japanese: {' / '.join(pages)}")
+        else:
+            res = []
+            for pg in hand:
+                items = []
+                for w in pg:
+                    w = dict(w)
+                    if not re.search(r'[\w{]', w['jp']) or (w['jp'] in PUNCT):
+                        w['punct'] = True
+                    e = w.get('entry')
+                    if isinstance(e, str):
+                        if e not in entries:
+                            out['error'] = f'entry {e!r} is named but not given'
+                        e = entries.get(e)
+                    if e:
+                        w['entry'] = resolve_entry(e)
+                    if w['jp'] == '{ff12}':
+                        w.setdefault('show', '(name)'); w['name'] = True
+                    w.setdefault('q', (w.get('entry') or {}).get('lookup') or w['jp'])
+                    items.append(w)
+                res.append(items)
+            out['pages'], out['source'] = res, 'hand'
+            return out
+    key = tuple(pages)
+    if key not in _GLOSS_CACHE:
+        _GLOSS_CACHE[key] = [auto_page(p) for p in pages]
+    out['pages'] = json.loads(json.dumps(_GLOSS_CACHE[key]))
+    # the scene's older word notes ("words") go on the groups they cover
+    for w in line.get('words') or []:
+        jp = (w.get('jp') or '').strip('〜~')
+        for pg in out['pages']:
+            for g in pg:
+                if jp and not g.get('punct') and (jp in g['jp'] or (len(g['jp']) > 1 and g['jp'] in jp)):
+                    g.setdefault('notes', []).append({'jp': w.get('jp'), 'sense': w.get('sense'), 'register': w.get('register')})
+                    if w.get('register'):
+                        g['tone'] = True
     return out
 
 
@@ -426,7 +684,25 @@ def scene(sid):
     s['decision'] = read_json(os.path.join(DECISIONS, f'{sid}.json'))
     qs = read_json(QUESTIONS, [])
     s['questions'] = [q for q in qs if q.get('scene') == sid]
+    for line in s['lines']:   # a line's thread: questions on it or on its copies, from any scene
+        refs = [line['ref']] + line['copies']
+        line['questions'] = [q for q in qs if q.get('ref') in refs]
     return s
+
+
+def cast():
+    c = read_json(os.path.join(HERE, 'cast.json'))
+    for p in c['people']:
+        if os.path.exists(os.path.join(FACES, f"{p['id']}.png")):
+            p['face'] = f"/faces/{p['id']}.png"
+    return c
+
+
+def fontpack():
+    """What the page needs to draw the box itself as you type: descfit's encoder tables
+    and the glyph widths (the same ones fit() measures with)."""
+    return {'chars': descfit.CHARS, 'digraphs': descfit.DIGRAPHS, 'lut': list(descfit.LUT),
+            'width': npcfit.WIDTH, 'lines': npcfit.LINES}
 
 
 def apply(body):
@@ -519,8 +795,16 @@ class Handler(BaseHTTPRequestHandler):
                 return self.file(STATIC, u.path[len('/static/'):])
             if u.path.startswith('/font/'):
                 return self.file(FONT, u.path[len('/font/'):])
+            if u.path.startswith('/faces/'):
+                return self.file(FACES, u.path[len('/faces/'):])
+            if u.path == '/api/fontpack':
+                return self.send(200, fontpack())
+            if u.path == '/api/gloss':
+                sc = read_json(os.path.join(SCENES, f"{q.get('scene', '')}.json"), {'lines': []})
+                line = next((ln for ln in sc['lines'] if ln['ref'] == q.get('ref')), None)
+                return self.send(200, gloss(q.get('ref', ''), line))
             if u.path == '/api/state':
-                return self.send(200, {'cast': read_json(os.path.join(HERE, 'cast.json')), 'voices': voices(),
+                return self.send(200, {'cast': cast(), 'voices': voices(),
                                        'scenes': scene_list(), 'splitter': bool(TAGGER), 'dictionary': bool(DB),
                                        'role_sources': ROLE['sources'], 'role_about': ROLE['about']})
             if u.path == '/api/scene':
