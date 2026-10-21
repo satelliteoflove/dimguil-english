@@ -236,8 +236,8 @@ function lineHtml(ln, i) {
         <textarea class="edit" spellcheck="true" lang="en" aria-label="Edit ${esc(ln.ref)}"></textarea>
         <div class="editor-actions">
           <button type="button" data-act="rewrap">Rewrap to fit</button>
-          ${prop ? '<button type="button" data-act="from-faithful">Start again from the proposed line</button>' : ''}
-          <button type="button" data-act="from-current">Start again from the game's line</button>
+          ${prop ? '<button type="button" data-act="from-faithful" title="Throws away what you have typed and refills the editor">Discard my edit, start from the proposed line</button>' : ''}
+          <button type="button" data-act="from-current" title="Throws away what you have typed and refills the editor">Discard my edit, start from the game's line</button>
         </div>
         <div class="boxes live"></div>
         <ul class="fit"></ul>
@@ -303,7 +303,7 @@ function elsewhereHtml(ln) {
   const t = tickedOf(ln);
   return (ln.elsewhere || []).map((e, k) => `<div class="erow" data-k="${k}" tabindex="0" role="button" aria-expanded="false" aria-label="${esc(e.ref)}: show its Japanese and box">
       <div class="ehead"><span class="ewhere">${placeWords(e)}</span> <span class="eref">${esc(e.ref)}</span>
-        <span class="${e.kind === 'copy' ? 'copy' : 'rel'}">${e.kind === 'copy' ? 'Same Japanese' : 'Related, not a copy'}</span></div>
+        <span class="${e.kind === 'copy' ? 'copy' : 'rel'}" title="${e.kind === 'copy' ? 'The Japanese here is word for word the same, so it normally gets the same English' : 'Different Japanese, but close enough that an edit here may want one there'}">${e.kind === 'copy' ? 'Same line in Japanese' : 'Similar line, not the same'}</span></div>
       <div class="ecur">${esc(readable(e.current))}${e.same_now ? '' : ' <span class="differs">differs from this line now</span>'}</div>
       ${e.note ? `<div class="enote">${jpx(e.note)}</div>` : ''}
       <label class="tick"><input type="checkbox" ${t.includes(e.ref) ? 'checked' : ''}> Apply my change here too</label>
