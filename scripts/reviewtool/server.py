@@ -24,6 +24,9 @@ What it writes, only when Chris applies a scene:
     closed (npcquotes.py)
   - rips/review/decisions/<scene>.json: each line's choice, the text before and after,
     and Chris's note. Claude commits from that (one commit per scene) and marks it.
+    A line's "copies" lists the other refs written with it. Since the line page
+    (2026-10-20) these are the ones Chris ticked, and can include a related line from
+    the scene's "related" as well as a same-Japanese copy; the format is unchanged.
 Questions Chris asks in the tool go to rips/review/questions.json for Claude to answer.
 Each is {id, scene, ref, about, question, asked_at, answer}; Claude fills in answer (blank
 lines between paragraphs) and answered_at. A paragraph that is a whole box, a speaker's
@@ -40,7 +43,9 @@ The line page shows one block per line. A scene line can carry, besides ref and 
               the text is set in mincho by itself
   plays       "When it plays": when and where the game shows the line
   related     "Elsewhere": [{ref, note}], lines worded to match that aren't copies
-              (copies, the same Japanese, are found by the server)
+              (copies, the same Japanese, are found by the server). Each copy and
+              related line shows where it plays, its English, and a tick for
+              "Apply my change here too": copies start ticked, related lines not.
   words       older word notes, [{jp, reading, sense, register, confidence, sources}];
               without a gloss they go on the automatic word groups that contain them
   gloss       the interlinear gloss by hand: a list of pages, each a list of words
@@ -687,7 +692,66 @@ def scene(sid):
     for line in s['lines']:   # a line's thread: questions on it or on its copies, from any scene
         refs = [line['ref']] + line['copies']
         line['questions'] = [q for q in qs if q.get('ref') in refs]
+    places = scene_places()
+    places['map'] = map_places()
+    for line in s['lines']:
+        line['elsewhere'] = [elsewhere(line, r, 'copy', None, places) for r in line['copies']] + \
+            [elsewhere(line, x['ref'], 'related', x.get('note'), places) for x in line.get('related') or []
+             if x.get('ref') and x['ref'] not in line['copies'] and x['ref'] != line['ref']]
     return s
+
+
+FILE_PARTY = {1: "Guy's party", 2: "Balbo's party", 3: "Fontana's party", 4: 'The scholars', 5: "Zaril's party"}
+
+
+def scene_places():
+    """Every ref a scene has: the first scene (by id) and line index, and its context."""
+    out = {}
+    for name in sorted(os.listdir(SCENES)) if os.path.isdir(SCENES) else []:
+        if name.endswith('.json'):
+            sc = read_json(os.path.join(SCENES, name)) or {'lines': []}
+            for k, ln in enumerate(sc.get('lines', [])):
+                out.setdefault(ln['ref'], {'scene': sc.get('id'), 'title': sc.get('title'), 'index': k,
+                                           'context': ln.get('context')})
+    return out
+
+
+def map_places():
+    """Each ref's section in docs/npc-map.md ("**5.1 Unnamed greetings and farewells
+    (0-7).**"), for lines no scene has."""
+    out = {}
+    try:
+        text = open(os.path.join(ROOT, 'docs/npc-map.md'), encoding='utf-8').read()
+    except FileNotFoundError:
+        return out
+    for m in re.finditer(r'^\*\*([1-5])\.\d+ ([^*]+?) \(([\d, -]+)\)\.\*\*', text, re.M):
+        n, title = int(m.group(1)), m.group(2).strip()
+        for part in m.group(3).split(','):
+            a, _, b = part.strip().partition('-')
+            if a.isdigit():
+                for i in range(int(a), int(b or a) + 1):
+                    out.setdefault(f'{n}:{i}', title)
+    return out
+
+
+def elsewhere(line, ref, kind, note, places):
+    """What the page shows about another line from this one's Elsewhere row."""
+    n, i = parse_ref(ref)
+    cur = current(ref)
+    place = places.get(ref) or {}
+    return {'ref': ref, 'kind': kind, 'note': note, 'file': n, 'party': FILE_PARTY.get(n, f'NPC_MES{n}'),
+            'speaker': cur.split('\n', 1)[0] if '\n' in cur and cur.split('\n', 1)[1].startswith('"') else None,
+            'context': place.get('context') or places.get('map', {}).get(ref), 'scene': place.get('scene'), 'scene_title': place.get('title'),
+            'index': place.get('index'), 'jp': SOURCES[n][i], 'current': cur,
+            'same_now': cur == as_copy(line['current'], ref)}
+
+
+def allowed_copies(sid, ref):
+    """Refs an apply may change along with ref: its copies, and the lines its scene lists
+    as related (when Chris ticks them)."""
+    sc = read_json(os.path.join(SCENES, f'{sid}.json')) or {'lines': []}
+    rel = [x.get('ref') for ln in sc['lines'] if ln['ref'] == ref for x in ln.get('related') or []]
+    return set(copies_of(ref)) | set(r for r in rel if r)
 
 
 def cast():
@@ -712,7 +776,8 @@ def apply(body):
     with LOCK:
         changes, record = {}, []
         for ln in lines:
-            refs = [ln['ref']] + [r for r in ln.get('copies', []) if r in copies_of(ln['ref'])]
+            ok = allowed_copies(sid, ln['ref'])
+            refs = [ln['ref']] + [r for r in ln.get('copies', []) if r in ok and r != ln['ref']]
             before = current(ln['ref'])
             text = before if ln['choice'] == 'current' else ln['text']
             if ln['choice'] != 'current':
@@ -826,8 +891,9 @@ class Handler(BaseHTTPRequestHandler):
         u = urlparse(self.path)
         try:
             body = json.loads(self.rfile.read(int(self.headers.get('Content-Length', 0))) or b'{}')
-            if u.path == '/api/fit':
-                return self.send(200, fit(body['ref'], body['text']))
+            if u.path == '/api/fit':   # as_copy: the text as ref would show it, with ref's own speaker
+                text = as_copy(body['text'], body['ref']) if body.get('as_copy') else body['text']
+                return self.send(200, {**fit(body['ref'], text), 'text': text})
             if u.path == '/api/rewrap':
                 text = rewrap(body['text'])
                 return self.send(200, {'text': text, **fit(body['ref'], text)})

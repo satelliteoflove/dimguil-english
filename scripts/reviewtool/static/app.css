@@ -32,6 +32,7 @@ kbd { font-family: var(--serif); border: 1px solid var(--rule); border-radius: 3
 
 /* Scene list */
 .scenes { padding: 1.6rem 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; display: flex; flex-direction: column; }
+.scenes > * { flex-shrink: 0; }
 .scenes h1 { margin: 0 1.4rem; font-size: var(--step-1); font-style: italic; font-weight: 700; }
 .progress { margin: 1rem 1.4rem 0.4rem; font-size: var(--step--1); color: var(--soft); display: flex; justify-content: space-between; gap: 1rem; }
 .bar { margin: 0 1.4rem 0.8rem; height: 4px; background: var(--rule); border-radius: 2px; }
@@ -130,7 +131,23 @@ body.no-rd .w .rd { visibility: hidden; }
 .else .copy { color: var(--propose); cursor: pointer; }
 .else .copy[aria-pressed="false"] { color: var(--faint); text-decoration: line-through; }
 .else .rel { color: var(--faint); }
-.else .item { display: block; margin-bottom: 0.25rem; }
+.erow { padding: 0.5rem 0.75rem 0.55rem; border: 1px solid var(--rule); border-radius: 6px; margin: 0 0 0.5rem; cursor: pointer; }
+.erow:hover { border-color: var(--faint); }
+.erow[aria-expanded="true"] { background: var(--panel); }
+.ehead { font-size: 0.92rem; }
+.ewhere { color: var(--soft); }
+.eref { color: var(--faint); font-size: 0.8rem; font-variant-numeric: tabular-nums; margin: 0 0.3rem; cursor: help; }
+.ecur { color: var(--text); margin-top: 0.15rem; }
+.differs { color: var(--propose); font-size: 0.8rem; font-style: italic; white-space: nowrap; }
+.enote { color: var(--soft); font-size: 0.9rem; margin-top: 0.15rem; }
+.tick { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.3rem; font-size: 0.85rem; color: var(--soft); cursor: pointer; }
+.tick input { width: 1rem; height: 1rem; margin: 0; accent-color: var(--ok); }
+.edetail { margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px dotted var(--rule); cursor: default; }
+.ejp { margin: 0 0 0.4rem; font-family: var(--mincho); font-size: 1.15rem; color: var(--text); }
+.ecap { margin: 0 0 0.3rem; font-size: var(--step--1); color: var(--faint); font-style: italic; }
+.edetail .use { margin-top: 0.5rem; }
+.peekcard.wide { max-width: 34rem; }
+.peekcard .boxes canvas { width: 350px; }
 
 /* When it plays, diff */
 .plays { margin: 0.6rem 0 0; color: var(--soft); max-width: 52rem; font-size: 0.95rem; }

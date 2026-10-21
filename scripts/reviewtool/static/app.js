@@ -71,6 +71,12 @@ function diffWords(a, b) {
   return out.join(' ').replace(/<\/del> <del>/g, ' ').replace(/<\/ins> <ins>/g, ' ');
 }
 
+// The diff of two speeches, with the quotes around them left out of it.
+function quotedDiff(a, b) {
+  const q = s => /^".*"$/s.test(s);
+  return q(a) && q(b) ? `"${diffWords(a.slice(1, -1), b.slice(1, -1))}"` : diffWords(a, b);
+}
+
 // Japanese inside English prose, set in mincho.
 const JPRUN = /[぀-ヿ一-鿿々〜](?:[぀-ヿ一-鿿々〜,、・]*[぀-ヿ一-鿿々〜])?/g;
 const jpx = s => esc(s).replace(JPRUN, m => `<em class="jpx" lang="ja">${m}</em>`);
@@ -100,7 +106,7 @@ function setChoice(i, choice, { advance = false } = {}) {
   const ln = lines()[i];
   if (choice === 'faithful' && !needsDecision(ln)) return;
   const prev = S.decisions[ln.ref] || {};
-  S.decisions[ln.ref] = { ...prev, choice, copies: prev.copies ?? true };
+  S.decisions[ln.ref] = { ...prev, choice };
   if (choice === 'edited' && !prev.edited) S.decisions[ln.ref].edited = ln.faithful;
   saveDraft();
   renderChoice(i);
@@ -196,7 +202,7 @@ function lineHtml(ln, i) {
   const { tag, who } = speakerFor(ln);
   const color = who ? who.color : '#5a6170';
   const prop = needsDecision(ln);
-  const elsewhere = ln.copies.length || (ln.related || []).length;
+  const elsewhere = (ln.elsewhere || []).length;
   return `<article class="line" id="line-${i}" data-i="${i}" style="--c:${lighten(color)}" tabindex="-1" aria-label="${esc(ln.ref)}, ${esc(tag || 'Narration')}">
     <div class="line-head">
       ${who && who.face ? `<img class="face" src="${esc(who.face)}" alt="">` : '<span class="face none"></span>'}
@@ -220,9 +226,9 @@ function lineHtml(ln, i) {
     <div class="english">
       <div class="versions">
         <div class="version"><h5 id="cur-h-${i}">In the game now</h5><div class="boxes" id="cur-${i}"></div></div>
-        ${prop ? `<div class="version proposed"><h5 id="fai-h-${i}">Proposed${ln.copies.length ? `, for ${esc([ln.ref, ...ln.copies].join(' and ').replace(/ and (?=.* and )/g, ', '))}` : ''}</h5>
+        ${prop ? `<div class="version proposed"><h5 id="fai-h-${i}">${proposedHead(ln)}</h5>
           <div class="boxes" id="fai-${i}"></div>
-          <p class="diff">${diffWords(readable(ln.current), readable(ln.faithful))}</p>
+          <p class="diff">${quotedDiff(readable(ln.current), readable(ln.faithful))}</p>
           ${ln.why && !/^No change\.?$/i.test(ln.why.trim()) ? `<p class="why">${jpx(ln.why)}</p>` : ''}</div>` : ''}
       </div>
       <div class="editor" id="editor-${i}" hidden>
@@ -269,13 +275,99 @@ function goingOn(ln, prop) {
   return parts.length ? `<dt>What's going on</dt><dd class="notes">${parts.join('')}</dd>` : '';
 }
 
+// The other lines an edit can go to: same-Japanese copies (ticked to start with) and the
+// lines the scene lists as related (unticked). decisions[ref].copies is the ticked list;
+// older drafts have true or false there, meaning all the copies or none.
+function tickedOf(ln) {
+  const d = S.decisions[ln.ref] || {};
+  const all = (ln.elsewhere || []).map(e => e.ref);
+  if (Array.isArray(d.copies)) return d.copies.filter(r => all.includes(r));
+  return d.copies === false ? [] : ln.copies.slice();
+}
+function proposedHead(ln) {
+  const t = tickedOf(ln);
+  return 'Proposed' + (t.length ? `, for ${esc([ln.ref, ...t].join(' and ').replace(/ and (?=.* and )/g, ', '))}` : '');
+}
+function pendingChoice(ln) { const d = decisionOf(ln); return d ? d.choice : needsDecision(ln) ? 'faithful' : 'current'; }
+const CHOICE_WORD = { current: "current", faithful: 'proposed', edited: 'edited' };
+
+function lowerFirst(s) {
+  const w = (s || '').split(/[\s']/)[0];
+  return S.cast.people.some(p => p.name === w || p.tags.includes(w)) ? s : s.charAt(0).toLowerCase() + s.slice(1);
+}
+function placeWords(e) {
+  return `${esc(e.party)} (NPC_MES${e.file})${e.speaker ? `, ${esc(e.speaker)}` : ''}${e.context ? `, ${esc(lowerFirst(e.context))}` : ''}`;
+}
+
 function elsewhereHtml(ln) {
-  const d = S.decisions[ln.ref];
-  const on = !d || d.copies !== false;
-  const out = [];
-  if (ln.copies.length) out.push(`<span class="item"><button type="button" class="copy" aria-pressed="${on}" title="Click to ${on ? 'leave the copies as they are' : 'change them with this line'}">${on ? 'Same Japanese, changes with this line' : 'Same Japanese, stays as it is'}</button> ${ln.copies.map(esc).join(', ')}</span>`);
-  for (const r of ln.related || []) out.push(`<span class="item"><span class="rel">Related, not a copy</span> ${esc(r.ref)}${r.note ? `, ${jpx(r.note)}` : ''}</span>`);
-  return out.join('');
+  const t = tickedOf(ln);
+  return (ln.elsewhere || []).map((e, k) => `<div class="erow" data-k="${k}" tabindex="0" role="button" aria-expanded="false" aria-label="${esc(e.ref)}: show its Japanese and box">
+      <div class="ehead"><span class="ewhere">${placeWords(e)}</span> <span class="eref">${esc(e.ref)}</span>
+        <span class="${e.kind === 'copy' ? 'copy' : 'rel'}">${e.kind === 'copy' ? 'Same Japanese' : 'Related, not a copy'}</span></div>
+      <div class="ecur">${esc(readable(e.current))}${e.same_now ? '' : ' <span class="differs">differs from this line now</span>'}</div>
+      ${e.note ? `<div class="enote">${jpx(e.note)}</div>` : ''}
+      <label class="tick"><input type="checkbox" ${t.includes(e.ref) ? 'checked' : ''}> Apply my change here too</label>
+      <div class="edetail" hidden></div>
+    </div>`).join('');
+}
+
+// The other line's Japanese and its box with this line's pending text, as it would show
+// there (with its own speaker's name, the server's as_copy).
+async function elsewhereDetail(ln, e) {
+  const choice = pendingChoice(ln);
+  const f = await fitFor(e.ref, textFor(ln, choice), true);
+  const div = document.createElement('div');
+  div.innerHTML = `<p class="ejp" lang="ja">${esc(jpPlain(e.jp))}</p><p class="ecap">With this line's ${CHOICE_WORD[choice]} text:</p><div class="boxes"></div>`;
+  drawBoxes($('.boxes', div), f);
+  return div;
+}
+async function openDetail(i, row) {
+  const ln = lines()[i], e = ln.elsewhere[+row.dataset.k], box = $('.edetail', row);
+  const div = await elsewhereDetail(ln, e);
+  if (e.scene) div.insertAdjacentHTML('beforeend', `<button type="button" class="use go">Open in its scene${e.scene === S.scene.id ? '' : `: ${esc(e.scene_title)}`}</button>`);
+  box.innerHTML = ''; box.append(div);
+  const go = $('.go', box);
+  if (go) go.addEventListener('click', ev => {
+    ev.stopPropagation();
+    if (e.scene === S.scene.id) focusLine(e.index); else openScene(e.scene, { line: e.index });
+  });
+}
+function refreshDetails(i) {
+  $$(`#else-${i} .erow[aria-expanded="true"]`).forEach(row => openDetail(i, row));
+}
+
+function wireElsewhere(i) {
+  const ln = lines()[i];
+  $$(`#else-${i} .erow`).forEach(row => {
+    const e = ln.elsewhere[+row.dataset.k];
+    const toggle = () => {
+      const open = row.getAttribute('aria-expanded') !== 'true';
+      row.setAttribute('aria-expanded', String(open));
+      $('.edetail', row).hidden = !open;
+      if (open) openDetail(i, row);
+    };
+    row.addEventListener('click', ev => { if (!ev.target.closest('label, input, button')) toggle(); });
+    row.addEventListener('keydown', ev => { if ((ev.key === 'Enter' || ev.key === ' ') && ev.target === row) { ev.preventDefault(); toggle(); } });
+    $('input', row).addEventListener('change', ev => {
+      const t = tickedOf(ln).filter(r => r !== e.ref);
+      if (ev.target.checked) t.push(e.ref);
+      S.decisions[ln.ref] = { ...(S.decisions[ln.ref] || {}), copies: ln.elsewhere.map(x => x.ref).filter(r => t.includes(r)) };
+      saveDraft();
+      const h = $(`#fai-h-${i}`); if (h) h.innerHTML = proposedHead(ln);
+      renderApplyBar();
+    });
+    const ref = $('.eref', row);
+    ref.addEventListener('mouseenter', async () => {
+      if (matchMedia('(hover: none)').matches || row.getAttribute('aria-expanded') === 'true') return;
+      const div = await elsewhereDetail(ln, e);
+      if (!ref.matches(':hover')) return;
+      const p = peek(); p.innerHTML = ''; p.append(div); p.classList.add('wide'); p.hidden = false;
+      const r = ref.getBoundingClientRect();
+      p.style.left = Math.max(scrollX + 8, Math.min(r.left + scrollX, scrollX + innerWidth - p.offsetWidth - 16)) + 'px';
+      p.style.top = (r.bottom + scrollY + 6) + 'px';
+    });
+    ref.addEventListener('mouseleave', () => { hidePeek(); peek().classList.remove('wide'); });
+  });
 }
 
 function wireLine(i) {
@@ -298,7 +390,7 @@ function wireLine(i) {
     } else ta.value = toEditor(b.dataset.act === 'from-faithful' ? ln.faithful : ln.current);
     onEdit(i);
   }));
-  wireLine.copy(i);
+  wireElsewhere(i);
   $('.asking', el).addEventListener('submit', e => { e.preventDefault(); sendQuestion(i); });
   wireThread(i);
   renderChoice(i);
@@ -387,6 +479,7 @@ async function renderLive(i, { quick = false } = {}) {
   if (!f || textFor(ln, 'edited') !== text) return;  // typed on meanwhile, or the server is away
   drawBoxes($('.live', ed), f);
   $('.fit', ed).innerHTML = fitMessages(f).join('');
+  refreshDetails(i);
 }
 
 // --- the interlinear gloss -----------------------------------------------------------------
@@ -502,9 +595,9 @@ async function fillDict(el, w, ref) {
 
 // --- the game box --------------------------------------------------------------------------
 
-async function fitFor(ref, text) {
-  const key = `${ref}\u0000${text}`;
-  if (!S.fits.has(key)) S.fits.set(key, api('/api/fit', { ref, text }).catch(e => { S.fits.delete(key); throw e; }));
+async function fitFor(ref, text, asCopy = false) {
+  const key = `${ref}\u0000${text}\u0000${asCopy}`;
+  if (!S.fits.has(key)) S.fits.set(key, api('/api/fit', { ref, text, as_copy: asCopy }).catch(e => { S.fits.delete(key); throw e; }));
   return S.fits.get(key);
 }
 
@@ -619,7 +712,7 @@ function wireThread(i) {
   $$(`#thread-${i} .use`).forEach(b => b.addEventListener('click', () => {
     const ln = lines()[i];
     const prev = S.decisions[ln.ref] || {};
-    S.decisions[ln.ref] = { ...prev, choice: 'edited', edited: b.dataset.text.trim(), copies: prev.copies ?? true };
+    S.decisions[ln.ref] = { ...prev, choice: 'edited', edited: b.dataset.text.trim() };
     saveDraft();
     renderChoice(i); renderApplyBar(); openEditor(i);
   }));
@@ -726,7 +819,7 @@ function openApply() {
     : 'No lines change. Applying records that the scene was reviewed.';
   $('#apply-list').innerHTML = changed.map(l => {
     const d = decisionOf(l);
-    return `<li><span class="cref">${esc(l.ref)}, ${d.choice === 'edited' ? 'your edit' : 'the proposed line'}${l.copies.length && d.copies !== false ? `, also ${l.copies.map(esc).join(', ')}` : ''}</span><br>
+    return `<li><span class="cref">${esc(l.ref)}, ${d.choice === 'edited' ? 'your edit' : 'the proposed line'}${tickedOf(l).length ? `, also ${tickedOf(l).map(esc).join(', ')}` : ''}</span><br>
       <span class="before">${esc(readable(l.current))}</span><br>${esc(readable(textFor(l, d.choice)))}</li>`;
   }).join('');
   $('#apply-error').hidden = true;
@@ -740,7 +833,7 @@ function applyBody() {
     lines: lines().map(l => {
       const d = decisionOf(l);
       const own = S.decisions[l.ref] || {};
-      return { ref: l.ref, choice: d.choice, text: textFor(l, d.choice), note: own.note || '', copies: own.copies === false ? [] : l.copies };
+      return { ref: l.ref, choice: d.choice, text: textFor(l, d.choice), note: own.note || '', copies: tickedOf(l) };
     }),
   };
 }
@@ -822,6 +915,6 @@ async function main() {
   poll();
 }
 
-S.test = { layoutHere, toEditor, fromEditor, applyBody };  // for the UI checks
+S.test = { layoutHere, toEditor, fromEditor, applyBody, tickedOf };  // for the UI checks
 
 main().catch(e => { document.body.insertAdjacentHTML('afterbegin', `<p class="error" style="padding:1rem">The review tool couldn't start: ${esc(e.message)}</p>`); });
