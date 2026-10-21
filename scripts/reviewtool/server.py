@@ -683,6 +683,8 @@ def scene(sid):
         line['jp'] = SOURCES[n][i]
         line['current'] = current(line['ref'])
         line['copies'] = copies_of(line['ref'])
+        if not line.get('plays'):
+            line['plays_auto'] = auto_plays(line['ref'])
         if s.get('kind') == 'readthrough':   # nothing proposed: Chris reads the lines as they are
             line['faithful'] = line['current']
             line.setdefault('literal', '')
@@ -699,6 +701,68 @@ def scene(sid):
             [elsewhere(line, x['ref'], 'related', x.get('note'), places) for x in line.get('related') or []
              if x.get('ref') and x['ref'] not in line['copies'] and x['ref'] != line['ref']]
     return s
+
+
+ARRAY_WORDS = {'chat': 'Talk', 'greeting': 'Greeting', 'farewell': 'Leaving', 'introductions': 'Introductions',
+               'healing': 'Healing offer', 'sale': 'Sale offer', 'rescue': 'Rescue offer', 'fight': 'Fight'}
+
+
+RUN_TIME = [('farewell', 'When you leave them'),
+            ('introduced greeting', 'A greeting once you know them, picked by who is in your party'),
+            ('greetings by speaker', 'A greeting when you meet them')]
+
+
+def talk_blocks():
+    """ref -> [(block key, note)] and block key -> [refs], from docs/re/C-talk-lines.md
+    (scripts/re/talklines.py), read once. A block key is like "h1 Balbo chat [6]"."""
+    if not hasattr(talk_blocks, 'by_ref'):
+        by_ref, by_block = {}, {}
+        path = os.path.join(CODE_ROOT, 'docs/re/C-talk-lines.md')
+        for row in open(path, encoding='utf-8') if os.path.exists(path) else []:
+            m = re.match(r'\| ([1-5]:\d+) \| .*? \| (.*) \|\s*$', row)
+            if not m:
+                continue
+            for place in m.group(2).split('<br>'):
+                key, _, note = place.partition(':')
+                key = key.strip()
+                if not re.search(r'\[\d+\]$', key):   # picked at run time: say what kind of moment
+                    for word, said in RUN_TIME:
+                        if word in place:
+                            by_ref.setdefault(m.group(1), []).append((None, said))
+                            break
+                    continue
+                by_ref.setdefault(m.group(1), []).append((key, note.strip()))
+                by_block.setdefault(key, []).append(m.group(1))
+        talk_blocks.by_ref, talk_blocks.by_block = by_ref, by_block
+    return talk_blocks.by_ref, talk_blocks.by_block
+
+
+def auto_plays(ref):
+    """'When it plays' from the code map, for lines without a hand-written one: the kind of
+    exchange and the narration line that sets it up ("We asked about other parties.")."""
+    by_ref, by_block = talk_blocks()
+    out, seen = [], set()
+    for key, note in by_ref.get(ref, []):
+        if key is None:
+            if note not in seen:
+                seen.add(note)
+                out.append(note)
+            continue
+        kind = next((w for a, w in ARRAY_WORDS.items() if f' {a} [' in key), None)
+        if not kind:
+            continue
+        narr = [r for r in by_block.get(key, []) if r != ref and '"' not in current(r)
+                and '\n' not in current(r).strip()]
+        said = ''.join(f'"{current(r).strip()}" ({r}), then this line' for r in narr[:1])
+        text = (f'When you Talk: {said}' if kind == 'Talk' else f'{kind}: {said}') if said else kind
+        if 'rerolled' in note:
+            text += '. The original game never played this topic; the patch reopened it (bugs.md 1.8)'
+        elif note and 'run time' not in note:
+            text += f' ({note})'
+        if text not in seen:
+            seen.add(text)
+            out.append(text)
+    return '. '.join(out[:2]) + '.' if out else ''
 
 
 FILE_PARTY = {1: "Guy's party", 2: "Balbo's party", 3: "Fontana's party", 4: 'The scholars', 5: "Zaril's party"}

@@ -211,7 +211,7 @@ function lineHtml(ln, i) {
       <span class="status" id="pill-${i}"></span>
       <span class="ref">${esc(ln.ref)} · NPC_MES${esc(ln.ref.split(':')[0])}</span>
     </div>
-    ${ln.plays ? `<p class="plays"><span>When it plays</span> ${jpx(ln.plays)}</p>` : ''}
+    ${ln.plays || ln.plays_auto ? `<p class="plays${ln.plays ? '' : ' auto'}"><span>When it plays</span> ${jpx(ln.plays || ln.plays_auto)}</p>` : ''}
     <div class="jp" lang="ja" id="jp-${i}"><p class="jp-plain">${esc(jpPlain(ln.jp))}</p></div>
     <dl class="meaning">
       ${ln.literal ? `<dt>Literally</dt><dd class="literal">${jpx(quoteLiteral(ln.literal))}</dd>` : ''}
