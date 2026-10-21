@@ -1,14 +1,17 @@
-// Dimguil translation review: one scene at a time, read whole, then decide line by line.
+// Dimguil translation review: a scene as one block per line (the line page mockup in
+// rips/review/mockup, approved 2026-10-20). Each block has the speaker, the Japanese as an
+// interlinear gloss, what it means, the questions about it, the English in game boxes,
+// and the choice.
 
 const $ = (sel, el = document) => el.querySelector(sel);
 const $$ = (sel, el = document) => [...el.querySelectorAll(sel)];
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
 const S = {
-  cast: null, voices: {}, scenes: [], scene: null, mode: 'literal', focus: 0,
-  decisions: {}, hoverPick: null, previewPick: null, word: null,
-  furigana: true, font: null, tokens: new Map(), lookups: new Map(), fits: new Map(),
+  cast: null, voices: {}, scenes: [], scene: null, focus: 0, decisions: {},
+  font: null, fp: null, fits: new Map(), lookups: new Map(), glosses: [],
 };
+window.__review = S; // for testing from the console
 
 async function api(path, body) {
   const r = await fetch(path, body === undefined ? {} : {
@@ -19,191 +22,162 @@ async function api(path, body) {
   return data;
 }
 
-// --- people and shapes ---------------------------------------------------------------
+// --- people ------------------------------------------------------------------------------
 
-const SHAPES = {
-  circle: c => `<circle cx="7" cy="7" r="5.5" fill="${c}"/>`,
-  square: c => `<rect x="1.5" y="1.5" width="11" height="11" rx="1.5" fill="${c}"/>`,
-  heart: c => `<path d="M7 12.6 1.9 7.4A3.2 3.2 0 0 1 7 3.3a3.2 3.2 0 0 1 5.1 4.1Z" fill="${c}"/>`,
-  book: c => `<path d="M1.5 2.5h4.2c.6 0 1.3.4 1.3 1v9c0-.6-.7-1-1.3-1H1.5Zm11 0H8.3c-.6 0-1.3.4-1.3 1v9c0-.6.7-1 1.3-1h4.2Z" fill="${c}"/>`,
-  diamond: c => `<path d="M7 1 13 7 7 13 1 7Z" fill="${c}"/>`,
-};
-function shape(person, size = 13) {
-  if (!person) return '';
-  const party = S.cast.parties[person.party];
-  return `<svg class="shape" width="${size}" height="${size}" viewBox="0 0 14 14" aria-hidden="true">${SHAPES[party.shape](person.color)}</svg>`;
-}
-function personForTag(tag) {
-  return S.cast.people.find(p => p.tags.includes(tag)) || null;
-}
-function speakerOf(boxText) {
-  const m = /^([^\n"]*)\n"/.exec(boxText || '');
-  return m ? m[1] : null;
-}
+function personForTag(tag) { return S.cast.people.find(p => p.tags.includes(tag)) || null; }
+function speakerOf(boxText) { const m = /^([^\n"]*)\n"/.exec(boxText || ''); return m ? m[1] : null; }
+const lines = () => S.scene ? S.scene.lines : [];
+const reading = () => S.scene && S.scene.kind === 'readthrough';
 
-// --- box text <-> reading and editing --------------------------------------------------
+// --- box text <-> reading and editing ------------------------------------------------------
 
 function splitBox(text) {
-  const m = /^([^\n"]*)\n"/.exec(text || '');
+  const m = /^([^\n"]*)\n(?=")/.exec(text || '');
   const body = m ? text.slice(m[0].length) : (text || '');
-  const pages = body.split('\n\r').map(p => p.split('\n').map(l => l.replace(/^ /, '')));
-  return { name: m ? m[1] : null, pages };
+  return { name: m ? m[1] : null, body, pages: body.split('\n\r').map(p => p.split('\n').map(l => l.replace(/^ /, ''))) };
 }
 function readable(text) {
-  return splitBox(text).pages.map(p => p.join(' ')).join(' ').replace(/\{ff12\}/g, '[name]').replace(/\{ff11\}0/g, '[number]');
+  return splitBox(text).pages.map(p => p.join(' ')).join(' ').replace(/\{ff12\}/g, '[name]').replace(/\{ff11\}0/g, '[number]').replace(/\{ff30\}\w/g, '');
 }
+// The editor shows the box as it reads: the name, then one box line per line, a blank
+// line between pages. The one-space indent of later lines is added back on the way out.
 function toEditor(text) {
-  return splitBox(text).pages.map(p => p.join('\n')).join('\n\n');
+  const b = splitBox(text);
+  return (b.name !== null ? b.name + '\n' : '') + b.pages.map(p => p.join('\n')).join('\n\n');
 }
-function fromEditor(name, ed) {
-  const pages = ed.replace(/\r/g, '').split(/\n[ \t]*\n/).map(p => p.split('\n').map(l => l.trim()).filter(l => l));
-  const parts = pages.filter(p => p.length).map((lines, k) => {
-    const first = (name !== null && k === 0) ? '"' : ' ';
-    return first + lines[0] + lines.slice(1).map(l => '\n ' + l).join('');
-  });
-  return (name !== null ? name + '\n' : '') + parts.join('\n\r');
-}
-function jpBody(src) {
-  const m = /^([^\n「]*)\n(?=「)/.exec(src);
-  const body = m ? src.slice(m[0].length) : src;
-  return { name: m ? m[1] : null, pages: body.split('\n\r').map(p => p.split('\n').map(l => l.replace(/^ /, ''))) };
+function fromEditor(ed, like) {
+  const orig = splitBox(like);
+  let rows = ed.replace(/\r/g, '').split('\n');
+  let name = null;
+  if (orig.name !== null) { name = rows[0].trim(); rows = rows.slice(1); }
+  const pages = rows.join('\n').split(/\n[ \t]*\n/).map(p => p.split('\n').map(l => l.trim()).filter(Boolean)).filter(p => p.length);
+  const lead = orig.body.startsWith(' ') ? ' ' : '';
+  const body = pages.map((ls, k) => ls.map((l, j) => (k === 0 && j === 0 ? lead : ' ') + l).join('\n')).join('\n\r');
+  return (name !== null ? name + '\n' : '') + body;
 }
 
-// Word diff (LCS), for Compare mode.
 function diffWords(a, b) {
-  const x = a.split(/(\s+)/).filter(t => t.trim()), y = b.split(/(\s+)/).filter(t => t.trim());
+  const x = a.split(/\s+/).filter(Boolean), y = b.split(/\s+/).filter(Boolean);
   const n = x.length, m = y.length, L = Array.from({ length: n + 1 }, () => new Int32Array(m + 1));
   for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--)
     L[i][j] = x[i] === y[j] ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1]);
-  const A = [], B = [];
+  const out = [];
   let i = 0, j = 0;
   while (i < n || j < m) {
-    if (i < n && j < m && x[i] === y[j]) { A.push(esc(x[i])); B.push(esc(y[j])); i++; j++; }
-    else if (j < m && (i >= n || L[i][j + 1] >= L[i + 1][j])) { B.push(`<ins>${esc(y[j])}</ins>`); j++; }
-    else { A.push(`<del>${esc(x[i])}</del>`); i++; }
+    if (i < n && j < m && x[i] === y[j]) { out.push(esc(x[i])); i++; j++; }
+    else if (i < n && (j >= m || L[i + 1][j] >= L[i][j + 1])) { out.push(`<del>${esc(x[i])}</del>`); i++; }
+    else { out.push(`<ins>${esc(y[j])}</ins>`); j++; }
   }
-  return [A.join(' '), B.join(' ')];
+  return out.join(' ').replace(/<\/del> <del>/g, ' ').replace(/<\/ins> <ins>/g, ' ');
 }
 
-// --- decisions -------------------------------------------------------------------------
+// Japanese inside English prose, set in mincho.
+const JPRUN = /[぀-ヿ一-鿿々〜](?:[぀-ヿ一-鿿々〜,、・]*[぀-ヿ一-鿿々〜])?/g;
+const jpx = s => esc(s).replace(JPRUN, m => `<em class="jpx" lang="ja">${m}</em>`);
 
-const lines = () => S.scene ? S.scene.lines : [];
+// --- decisions -----------------------------------------------------------------------------
+
 const draftKey = () => `dimguil-review:${S.scene.id}`;
 function needsDecision(ln) { return ln.faithful !== ln.current; }
-function decisionOf(ln) {
-  const d = S.decisions[ln.ref];
-  if (d) return d;
-  return needsDecision(ln) && !alreadyApplied(ln) ? null : { choice: 'current', auto: true };
-}
-// A line decided in an earlier apply of this scene (its text may have been touched since).
 function alreadyApplied(ln) {
   const prior = S.scene && S.scene.decision;
   if (!prior) return false;
   return [prior, ...(prior.earlier || [])].some(rec => (rec.lines || []).some(p => p.ref === ln.ref));
 }
+function decisionOf(ln) {
+  const d = S.decisions[ln.ref];
+  if (d && d.choice) return d;
+  return needsDecision(ln) && !alreadyApplied(ln) ? null : { choice: 'current', auto: true };
+}
 function textFor(ln, choice) {
-  if (choice === 'current') return ln.current;
   if (choice === 'faithful') return ln.faithful;
   if (choice === 'edited') return (S.decisions[ln.ref] && S.decisions[ln.ref].edited) || ln.faithful;
   return ln.current;
 }
-function saveDraft() {
-  localStorage.setItem(draftKey(), JSON.stringify(S.decisions));
-}
-function setChoice(i, choice, { advance = true } = {}) {
+function saveDraft() { localStorage.setItem(draftKey(), JSON.stringify(S.decisions)); }
+
+function setChoice(i, choice, { advance = false } = {}) {
   const ln = lines()[i];
+  if (choice === 'faithful' && !needsDecision(ln)) return;
   const prev = S.decisions[ln.ref] || {};
   S.decisions[ln.ref] = { ...prev, choice, copies: prev.copies ?? true };
   if (choice === 'edited' && !prev.edited) S.decisions[ln.ref].edited = ln.faithful;
   saveDraft();
-  if (S.mode === 'compare') rerenderKeepingFocus(); else renderLineState(i);
-  if (S.mode === 'boxes') renderBoxes();
+  renderChoice(i);
   renderApplyBar();
-  if (choice === 'edited') { renderInspector(); openEditor(); return; }
+  if (choice === 'edited') { openEditor(i); return; }
   if (advance) {
     const next = lines().findIndex((l, k) => k > i && !decisionOf(l));
-    if (next >= 0) focusLine(next); else renderInspector();
-  } else renderInspector();
+    if (next >= 0) focusLine(next);
+  }
 }
 
-// --- scene list ------------------------------------------------------------------------
-
-document.addEventListener('change', e => {
-  if (e.target.id !== 'hide-done') return;
-  localStorage.setItem('dimguil-review:hide-done', e.target.checked ? '1' : '');
-  renderSceneList();
-});
+// --- scene list ----------------------------------------------------------------------------
 
 function renderSceneList() {
   const hide = !!localStorage.getItem('dimguil-review:hide-done');
-  const left = S.scenes.filter(sc => sc.status === 'open').length;
   $('#hide-done').checked = hide;
-  $('#scene-count').textContent = `${left} of ${S.scenes.length} to review`;
+  const done = S.scenes.filter(sc => sc.status !== 'open').length;
+  $('#prog-done').textContent = `${done} of ${S.scenes.length} reviewed`;
+  $('#prog-left').textContent = `${S.scenes.length - done} left`;
+  $('#prog-bar').style.width = `${S.scenes.length ? 100 * done / S.scenes.length : 0}%`;
   const byFile = new Map();
   for (const sc of S.scenes) {
     if (hide && sc.status !== 'open' && !(S.scene && S.scene.id === sc.id)) continue;
     if (!byFile.has(sc.file)) byFile.set(sc.file, []);
     byFile.get(sc.file).push(sc);
   }
-  const partyOf = f => Object.entries(S.cast.parties).find(([, p]) => p.file === f);
+  const partyOf = f => Object.values(S.cast.parties).find(p => p.file === f);
   const STATUS = { applied: 'Applied, waiting for commit', kept: 'Reviewed, no changes', committed: 'Committed' };
-  $('#scene-list').innerHTML = [...byFile.entries()].map(([f, list]) => {
-    const [pid, party] = partyOf(f) || ['others', { name: `NPC_MES${f}`, shape: 'diamond' }];
-    const lead = S.cast.people.find(p => p.party === pid);
-    return `<section class="party"><h2>${shape(lead)} ${esc(party.name)}</h2><ol>${list.map(sc => `
-      <li><button type="button" class="scene-link${sc.status === 'open' ? ' todo' : ' reviewed'}" data-id="${esc(sc.id)}" ${S.scene && S.scene.id === sc.id ? 'aria-current="true"' : ''}>
-        <span class="num">${sc.number ?? ''}</span><span>${esc(sc.title)}</span>
-        <span class="meta">${sc.kind === 'readthrough' ? `read-through, ${sc.lines} lines` : sc.priority ? esc(sc.priority) + ' priority' : ''}${sc.status !== 'open' ? ` <span class="${sc.status === 'committed' ? 'done' : ''}">${STATUS[sc.status] || sc.status}</span>` : ' <span class="to-review">To review</span>'}</span>
-      </button></li>`).join('')}</ol></section>`;
-  }).join('') || `<p class="hint" style="padding:0 1.2rem">${S.scenes.length ? 'Nothing left to review.' : 'No scenes prepared yet.'}</p>`;
+  $('#scene-list').innerHTML = [...byFile.entries()].map(([f, list]) => `
+    <p class="party">${esc((partyOf(f) || { name: `NPC_MES${f}` }).name)}</p>
+    <ol>${list.map(sc => `<li><button type="button" class="scene-link${sc.status === 'open' ? ' todo' : ''}" data-id="${esc(sc.id)}"
+      title="${esc(sc.status === 'open' ? 'To review' : STATUS[sc.status] || sc.status)}${sc.kind === 'readthrough' ? `, ${sc.lines} lines` : ''}"
+      ${S.scene && S.scene.id === sc.id ? 'aria-current="true"' : ''}>${esc(sc.title)}${sc.status === 'applied' ? ' <span class="wait">· applied</span>' : ''}</button></li>`).join('')}</ol>`).join('')
+    || `<p class="none">${S.scenes.length ? 'Nothing left to review.' : 'No scenes prepared yet.'}</p>`;
   $$('.scene-link').forEach(b => b.addEventListener('click', () => { setNav(false); openScene(b.dataset.id); }));
 }
 
-// --- phone layout: the scene list and the line details open over the script ------------
-
-const phone = matchMedia('(max-width: 760px)');
 function setNav(open) {
   document.body.classList.toggle('nav-open', open);
   $('#nav-toggle').setAttribute('aria-expanded', String(open));
   $('#nav-toggle').textContent = open ? 'Close' : 'Scenes';
   localStorage.setItem('dimguil-review:nav', open ? '1' : '');   // a refresh keeps the list open
 }
-function setInsp(open) {
-  document.body.classList.toggle('insp-open', open);
-  if (open) $('#inspector').scrollTop = 0;
-  else { const el = $(`#script .line[data-i="${S.focus}"]`); if (el) el.scrollIntoView({ block: 'center' }); }
-}
 
-// --- opening a scene -------------------------------------------------------------------
+// --- opening a scene -----------------------------------------------------------------------
 
-async function openScene(id, { line = 0, mode } = {}) {
+async function openScene(id, { line = 0, top = null } = {}) {
   S.scene = await api(`/api/scene?id=${encodeURIComponent(id)}`);
   S.decisions = JSON.parse(localStorage.getItem(draftKey()) || '{}');
-  const reading = S.scene.kind === 'readthrough';
-  $$('.readings button').forEach(b => {
-    b.hidden = reading ? ['literal', 'faithful'].includes(b.dataset.mode) : b.dataset.mode === 'boxes';
-  });
-  S.mode = mode || (reading ? 'boxes' : localStorage.getItem('dimguil-review:mode') || 'literal');
-  if (reading && ['literal', 'faithful'].includes(S.mode)) S.mode = 'boxes';
-  if (!reading && S.mode === 'boxes') S.mode = 'literal';
-  S.word = null; S.hoverPick = null; S.previewPick = null;
-  $('#empty').hidden = true; $('#scene').hidden = false;
+  S.glosses = [];
   const sc = S.scene;
+  $('#empty').hidden = true; $('#scene').hidden = false;
   const party = Object.values(S.cast.parties).find(p => p.file === sc.file);
-  $('#scene-file').innerHTML = `${shape(S.cast.people.find(p => S.cast.parties[p.party] === party))} ${esc(party ? party.name : '')}, NPC_MES${sc.file}${sc.number ? `, flagged scene ${sc.number}` : ''}${sc.priority ? `, ${esc(sc.priority)} priority` : ''}`;
+  $('#scene-file').textContent = [party ? party.name : '', `NPC_MES${sc.file}`, sc.priority ? `${sc.priority} priority` : ''].filter(Boolean).join(', ');
   $('#scene-title').textContent = sc.title;
   $('#mobile-title').textContent = sc.title;
-  $('#scene-where').textContent = sc.where || '';
   $('#scene-summary').textContent = sc.summary || '';
-  $('#scene-assembled').textContent = sc.assembled || '';
-  $('#scene-notes').hidden = !(sc.notes || []).length;   // read-throughs and small scenes have none
-  $('#scene-notes-body').innerHTML = (sc.notes || []).map(n => `<div class="note"><h4>${esc(n.title)}</h4><p>${esc(n.text)}</p>${sourcesHtml(n.sources)}</div>`).join('');
+  $('#scene-where').textContent = [sc.where, sc.assembled].filter(Boolean).join(' ');
+  $('#scene-notes').hidden = !(sc.notes || []).length;
+  $('#scene-notes-body').innerHTML = (sc.notes || []).map(n => `<div class="note"><h4>${esc(n.title)}</h4><p>${jpx(n.text)}</p>${sourcesHtml(n.sources)}</div>`).join('');
   renderSceneList();
-  setMode(S.mode, { keepFocus: true });
-  $('#stage').scrollTop = 0;
-  focusLine(Math.min(line, sc.lines.length - 1), { scroll: line > 0 });
+  $('#lines').innerHTML = sc.lines.map(lineHtml).join('');
+  sc.lines.forEach((ln, i) => wireLine(i));
   renderApplyBar();
-  renderQuestions();
+  S.focus = Math.max(0, Math.min(line, sc.lines.length - 1));
+  markFocus();
+  window.scrollTo(0, top !== null ? top : 0);
+  if (line > 0 && top === null) scrollToLine(S.focus, false);
+  // fill in what needs the server; once the lines above the place are drawn (they change
+  // height), go back to it, unless you've scrolled since
+  const fills = sc.lines.map((_, i) => fillLine(i));
+  if (line > 0 && top === null) {
+    const y0 = scrollY;
+    await Promise.all(fills.slice(0, S.focus + 1));
+    if (S.scene === sc && Math.abs(scrollY - y0) < 4) scrollToLine(S.focus, false);
+  }
+  updatePlace();
 }
 
 function sourcesHtml(list) {
@@ -211,246 +185,239 @@ function sourcesHtml(list) {
   return `<ul class="sources">${list.map(s => `<li>${s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>` : esc(s.label)}</li>`).join('')}</ul>`;
 }
 
-function setMode(mode, { keepFocus } = {}) {
-  S.mode = mode;
-  if (!(S.scene && S.scene.kind === 'readthrough')) localStorage.setItem('dimguil-review:mode', mode);
-  $$('.readings button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.mode === mode)));
-  renderScript();
-  if (!keepFocus) focusLine(S.focus, { scroll: false });
-  updateHash();
+// --- one line ------------------------------------------------------------------------------
+
+function speakerFor(ln) {
+  const tag = speakerOf(ln.current) || speakerOf(ln.faithful) || ln.speaker || null;
+  return { tag, who: personForTag(tag) };
 }
 
-// --- the script ------------------------------------------------------------------------
+function lineHtml(ln, i) {
+  const { tag, who } = speakerFor(ln);
+  const color = who ? who.color : '#5a6170';
+  const prop = needsDecision(ln);
+  const elsewhere = ln.copies.length || (ln.related || []).length;
+  return `<article class="line" id="line-${i}" data-i="${i}" style="--c:${lighten(color)}" tabindex="-1" aria-label="${esc(ln.ref)}, ${esc(tag || 'Narration')}">
+    <div class="line-head">
+      ${who && who.face ? `<img class="face" src="${esc(who.face)}" alt="">` : '<span class="face none"></span>'}
+      <span class="who">${esc(tag || 'Narration')}</span>
+      ${ln.context ? `<span class="where">${esc(ln.context)}</span>` : ''}
+      <span class="status" id="pill-${i}"></span>
+      <span class="ref">${esc(ln.ref)} · NPC_MES${esc(ln.ref.split(':')[0])}</span>
+    </div>
+    ${ln.plays ? `<p class="plays"><span>When it plays</span> ${jpx(ln.plays)}</p>` : ''}
+    <div class="jp" lang="ja" id="jp-${i}"><p class="jp-plain">${esc(jpPlain(ln.jp))}</p></div>
+    <dl class="meaning">
+      ${ln.literal ? `<dt>Literally</dt><dd class="literal">${jpx(quoteLiteral(ln.literal))}</dd>` : ''}
+      ${goingOn(ln, prop)}
+      ${elsewhere ? `<dt>Elsewhere</dt><dd class="else" id="else-${i}">${elsewhereHtml(ln)}</dd>` : ''}
+    </dl>
+    <section class="ask" aria-label="Questions about ${esc(ln.ref)}">
+      <h5>Ask Claude</h5>
+      <div class="thread"><div class="items" id="thread-${i}">${threadHtml(ln)}</div>
+        <form class="asking"><input type="text" placeholder="Ask a question about this line" aria-label="Ask a question about ${esc(ln.ref)}"><button>Ask</button></form></div>
+    </section>
+    <div class="english">
+      <div class="versions">
+        <div class="version"><h5 id="cur-h-${i}">In the game now</h5><div class="boxes" id="cur-${i}"></div></div>
+        ${prop ? `<div class="version proposed"><h5 id="fai-h-${i}">Proposed${ln.copies.length ? `, for ${esc([ln.ref, ...ln.copies].join(' and ').replace(/ and (?=.* and )/g, ', '))}` : ''}</h5>
+          <div class="boxes" id="fai-${i}"></div>
+          <p class="diff">${diffWords(readable(ln.current), readable(ln.faithful))}</p>
+          ${ln.why && !/^No change\.?$/i.test(ln.why.trim()) ? `<p class="why">${jpx(ln.why)}</p>` : ''}</div>` : ''}
+      </div>
+      <div class="editor" id="editor-${i}" hidden>
+        <h5>Your edit <span>a new line starts a new line in the box; a blank line starts a new page</span></h5>
+        <textarea class="edit" spellcheck="true" lang="en" aria-label="Edit ${esc(ln.ref)}"></textarea>
+        <div class="editor-actions">
+          <button type="button" data-act="rewrap">Rewrap to fit</button>
+          ${prop ? '<button type="button" data-act="from-faithful">Start again from the proposed line</button>' : ''}
+          <button type="button" data-act="from-current">Start again from the game's line</button>
+        </div>
+        <div class="boxes live"></div>
+        <ul class="fit"></ul>
+      </div>
+      <div class="choice" role="group" aria-label="Your choice for ${esc(ln.ref)}">
+        <h5>Your choice</h5>
+        <div class="opts">
+          <button type="button" class="opt" data-c="current"><kbd>c</kbd> Keep the game's line</button>
+          ${prop ? '<button type="button" class="opt" data-c="faithful"><kbd>f</kbd> Use the proposed line</button>' : ''}
+          <button type="button" class="opt" data-c="edited"><kbd>e</kbd> Edit it</button>
+        </div>
+        <textarea class="note" placeholder="Instructions for this change (optional)" aria-label="Instructions for ${esc(ln.ref)}"></textarea>
+        <p class="hint">Goes with your choice when you apply, like "keep it to one page".</p>
+      </div>
+    </div>
+  </article>`;
+}
 
-function renderScript() {
-  $('#script').innerHTML = lines().map((ln, i) => {
-    const tag = speakerOf(ln.current) || speakerOf(ln.faithful) || ln.speaker;
-    const who = personForTag(tag);
-    const color = who ? who.color : '#4a5260';
-    return `<li class="line" data-i="${i}" style="--who:${color}">
-      <div class="who"><span class="name">${shape(who)}${esc(tag || 'Narration')}</span><span class="ctx">${esc(ln.context || '')}</span></div>
-      <div class="said">${saidHtml(ln, i)}<div class="state" id="state-${i}"></div></div>
-    </li>`;
-  }).join('');
-  $$('#script .line').forEach(el => {
-    const i = +el.dataset.i;
-    el.addEventListener('click', e => {
-      const opt = e.target.closest('.opt.pickable');
-      if (opt) { setChoice(i, opt.dataset.pick, { advance: true }); return; }
-      if (S.focus !== i) focusLine(i, { scroll: false });
-      if (phone.matches) setInsp(true);
-    });
-    $$('.opt.pickable', el).forEach(o => {
-      o.addEventListener('mouseenter', () => { if (S.focus === i) { S.hoverPick = o.dataset.pick; renderPreview(); } });
-      o.addEventListener('mouseleave', () => { if (S.focus === i) { S.hoverPick = null; renderPreview(); } });
-    });
+// Speaker colors are set for a light page; lift the dark ones so they read on the night.
+function lighten(hex) {
+  const n = parseInt(hex.slice(1), 16);
+  const ch = [n >> 16, (n >> 8) & 255, n & 255].map(c => Math.round(c + (255 - c) * 0.38));
+  return '#' + ch.map(c => c.toString(16).padStart(2, '0')).join('');
+}
+
+function jpPlain(src) {
+  const m = /^[^\n「]*\n(?=「)/.exec(src);
+  return (m ? src.slice(m[0].length) : src).replace(/^「/, '').replace(/\n\r?\s*/g, '');
+}
+function quoteLiteral(s) { return /^["“]/.test(s) || /^[.\s…]*$/.test(s) ? s : `"${s}"`; }
+
+function goingOn(ln, prop) {
+  const parts = (ln.notes || []).map(n => `<p>${n.title ? `<strong>${esc(n.title)}.</strong> ` : ''}${jpx(n.text)}</p>${sourcesHtml(n.sources)}`);
+  if (!prop && ln.why && !/^No change\.?$/i.test(ln.why.trim())) parts.push(`<p>${jpx(ln.why)}</p>`);
+  return parts.length ? `<dt>What's going on</dt><dd class="notes">${parts.join('')}</dd>` : '';
+}
+
+function elsewhereHtml(ln) {
+  const d = S.decisions[ln.ref];
+  const on = !d || d.copies !== false;
+  const out = [];
+  if (ln.copies.length) out.push(`<span class="item"><button type="button" class="copy" aria-pressed="${on}" title="Click to ${on ? 'leave the copies as they are' : 'change them with this line'}">${on ? 'Same Japanese, changes with this line' : 'Same Japanese, stays as it is'}</button> ${ln.copies.map(esc).join(', ')}</span>`);
+  for (const r of ln.related || []) out.push(`<span class="item"><span class="rel">Related, not a copy</span> ${esc(r.ref)}${r.note ? `, ${jpx(r.note)}` : ''}</span>`);
+  return out.join('');
+}
+
+function wireLine(i) {
+  const ln = lines()[i], el = $(`#line-${i}`);
+  el.addEventListener('pointerdown', () => { if (S.focus !== i) { S.focus = i; markFocus(); updatePlace(); } });
+  $$('.opt', el).forEach(b => b.addEventListener('click', () => setChoice(i, b.dataset.c)));
+  $('.note', el).value = (S.decisions[ln.ref] && S.decisions[ln.ref].note) || '';
+  $('.note', el).addEventListener('input', e => {
+    const d = decisionOf(ln);
+    S.decisions[ln.ref] = { ...(S.decisions[ln.ref] || { choice: d && !d.auto ? d.choice : null }), note: e.target.value };
+    if (!S.decisions[ln.ref].choice) delete S.decisions[ln.ref].choice;
+    saveDraft();
   });
-  lines().forEach((_, i) => renderLineState(i));
-  if (S.mode === 'boxes') renderBoxes();
+  const ta = $('.edit', el);
+  ta.addEventListener('input', () => onEdit(i));
+  $$('.editor-actions button', el).forEach(b => b.addEventListener('click', async () => {
+    if (b.dataset.act === 'rewrap') {
+      const r = await api('/api/rewrap', { ref: ln.ref, text: textFor(ln, 'edited') });
+      ta.value = toEditor(r.text);
+    } else ta.value = toEditor(b.dataset.act === 'from-faithful' ? ln.faithful : ln.current);
+    onEdit(i);
+  }));
+  wireLine.copy(i);
+  $('.asking', el).addEventListener('submit', e => { e.preventDefault(); sendQuestion(i); });
+  wireThread(i);
+  renderChoice(i);
 }
+wireLine.copy = i => {   // the copy toggle, after a redraw of Elsewhere
+  const ln = lines()[i], b = $(`#else-${i} .copy`);
+  if (b) b.addEventListener('click', () => {
+    const d = S.decisions[ln.ref] || {};
+    S.decisions[ln.ref] = { ...d, copies: d.copies === false };
+    saveDraft();
+    $(`#else-${i}`).innerHTML = elsewhereHtml(ln);
+    wireLine.copy(i);
+  });
+};
 
-async function renderBoxes() {
-  const scene = S.scene;
-  for (const [i, ln] of lines().entries()) {
-    const d = S.decisions[ln.ref];
-    const text = d && d.choice === 'edited' && d.edited ? d.edited : ln.current;
-    const f = await fitFor(ln.ref, text);
-    const el = $(`#boxes-${i}`);
-    if (S.scene !== scene || S.mode !== 'boxes' || !el) return;
-    el.innerHTML = '';
-    f.pages.forEach((page, k) => el.append(drawPage(page, f.width, Math.max(f.lines, f.source_lines[k] || 0))));
-    const bad = fitMessages(f).filter(m => !m.includes('class="ok"'));
-    if (bad.length) el.insertAdjacentHTML('beforeend', `<ul class="fit">${bad.join('')}</ul>`);
+async function fillLine(i) {
+  const ln = lines()[i], sc = S.scene;
+  const versions = [['cur', ln.current]];
+  if (needsDecision(ln)) versions.push(['fai', ln.faithful]);
+  for (const [k, text] of versions) {
+    fitFor(ln.ref, text).catch(() => null).then(f => {
+      if (!f) return;
+      if (S.scene !== sc) return;
+      drawBoxes($(`#${k}-${i}`), f);
+      const h = $(`#${k}-h-${i}`);
+      if (k === 'cur' && f.pages.length > 1) h.textContent = `In the game now, ${f.pages.length} pages`;
+      const bad = fitMessages(f).filter(m => !m.includes('class="ok"'));
+      if (bad.length) $(`#${k}-${i}`).insertAdjacentHTML('afterend', `<ul class="fit bad-fit">${bad.join('')}</ul>`);
+    });
   }
+  const g = await api(`/api/gloss?scene=${encodeURIComponent(sc.id)}&ref=${encodeURIComponent(ln.ref)}`).catch(e => ({ error: e.message, pages: null }));
+  if (S.scene !== sc) return;
+  S.glosses[i] = g;
+  renderGloss(i);
 }
 
-function silentOr(text) {
-  return /^[.\s…]*$/.test(text) ? `<span class="silent">${esc(text)}</span>` : esc(text);
-}
-
-function saidHtml(ln, i) {
-  const jp = jpBody(ln.jp).pages.map(p => p.map(esc).join('<br>')).join('<span class="pagebreak"></span>');
-  if (S.mode === 'jp') return `<div class="jp" lang="ja">${jp}</div>`;
-  if (S.mode === 'boxes') return `<div class="boxes" id="boxes-${i}"></div>`;
-  if (S.mode === 'literal') return `<div>${silentOr(ln.literal)}</div>`;
-  if (S.mode === 'current') return `<div>${silentOr(readable(ln.current))}</div>`;
-  if (S.mode === 'faithful') return `<div>${silentOr(readable(ln.faithful))}</div>`;
-  // compare and decide
-  const d = decisionOf(ln);
-  const cur = readable(ln.current), fai = readable(ln.faithful);
-  const same = cur === fai;
-  const [dc, df] = same ? [esc(cur), esc(fai)] : diffWords(cur, fai);
-  const picked = c => d && !d.auto && d.choice === c ? ' picked' : '';
-  const edited = S.decisions[ln.ref] && S.decisions[ln.ref].edited;
-  return `<div class="cmp">
-    <span class="lab">Japanese</span><div class="jp" lang="ja">${jp}</div>
-    ${ln.literal ? `<span class="lab">Literal</span><div class="literal">${silentOr(ln.literal)}</div>` : ''}
-    ${same ? `<span class="lab">Current</span><div>${silentOr(cur)}${S.scene.kind === 'readthrough' ? '' : ' <span class="same-note">Faithful is the same; no change proposed.</span>'}</div>` : `
-    <span class="lab">Current</span><div class="opt pickable${picked('current')}" data-pick="current" title="Keep current (c)">${dc}</div>
-    <span class="lab">Faithful</span><div class="opt pickable${picked('faithful')}" data-pick="faithful" title="Use faithful (f)">${df}</div>`}
-    ${edited ? `<span class="lab">Edited</span><div class="opt pickable${picked('edited')}" data-pick="edited">${esc(readable(edited))}</div>` : ''}
-    ${ln.why ? `<span class="lab">Why</span><div class="hint" style="margin:0">${esc(ln.why)}</div>` : ''}
-  </div>`;
-}
-
-function renderLineState(i) {
-  const ln = lines()[i], el = $(`#state-${i}`);
+function renderChoice(i) {
+  const ln = lines()[i], el = $(`#line-${i}`);
   if (!el) return;
   const d = decisionOf(ln);
-  const notes = (ln.notes || []).length ? ' Has notes.' : '';
-  if (!needsDecision(ln) && !(S.decisions[ln.ref] && S.decisions[ln.ref].choice === 'edited')) { el.innerHTML = S.mode === 'compare' ? '' : (notes ? `<span>${notes.trim()}</span>` : ''); return; }
-  const label = { current: 'Keeping current', faithful: 'Using faithful', edited: 'Using your edit' };
-  if (S.mode !== 'compare') { el.innerHTML = d ? `<span class="chosen quiet">${label[d.choice]}</span>` : '<span class="quiet">Change proposed</span>'; return; }
-  el.innerHTML = (d ? `<span class="chosen">${label[d.choice]}.</span>` : `<span class="needs">Change proposed.</span>`) + notes;
-}
-
-function focusLine(i, { scroll = true } = {}) {
-  if (!S.scene) return;
-  S.focus = Math.max(0, Math.min(i, lines().length - 1));
-  S.word = null; S.hoverPick = null; S.previewPick = null;
-  $$('#script .line').forEach(el => el.classList.toggle('focused', +el.dataset.i === S.focus));
-  const el = $(`#script .line[data-i="${S.focus}"]`);
-  if (scroll && el) el.scrollIntoView({ block: S.mode === 'compare' ? 'start' : 'center' });
-  renderInspector();
-  updateHash();
-}
-
-function updateHash() {
-  if (!S.scene) return;
-  const h = `s=${encodeURIComponent(S.scene.id)}&l=${S.focus}&m=${S.mode}`;
-  history.replaceState(null, '', '#' + h);
-  localStorage.setItem('dimguil-review:place', h);   // some phone browsers reload an older address
-}
-
-function renderApplyBar() {
-  const ls = lines();
-  const open = ls.filter(l => !decisionOf(l)).length;
-  const changes = ls.filter(l => { const d = decisionOf(l); return d && textFor(l, d.choice) !== l.current; }).length;
-  const prior = S.scene.decision;
-  const nothingNew = !open && !changes && prior;  // already applied, and nothing to add
-  let msg = open ? `${open} proposed ${open === 1 ? 'change needs' : 'changes need'} your decision.`
-    : changes ? `Ready: ${changes} ${changes === 1 ? 'line changes' : 'lines change'}.`
-    : nothingNew ? 'Nothing new to apply.' : 'Ready: no lines change.';
-  if (prior) msg += prior.status === 'committed' ? ` Committed as ${prior.commit || 'a commit'}.` : ` Applied ${prior.applied_at.slice(0, 16).replace('T', ' ')}; Claude commits next.`;
-  $('#apply-status').textContent = msg;
-  $('#apply-open').disabled = open > 0 || !!nothingNew;
-  $('#apply-open').textContent = !open && !changes && !prior ? 'Mark as reviewed' : 'Review and apply';
-}
-
-// --- inspector -------------------------------------------------------------------------
-
-const CONTENT = new Set(['名詞', '代名詞', '動詞', '形容詞', '形状詞', '副詞', '連体詞', '感動詞', '接頭辞']);
-function wordNotesFor(ln, token) {
-  if (!token || (!CONTENT.has(token.pos) && !token.span)) return [];
-  return (ln.words || []).filter(w => w.jp.includes(token.span ? token.span[0] : token.s) || (CONTENT.has(token.pos) && w.jp.includes(token.s)));
-}
-
-async function renderInspector() {
-  const ln = lines()[S.focus];
-  if (!ln) return;
-  $('#insp-empty').hidden = true; $('#insp').hidden = false;
-  const tag = speakerOf(ln.current) || ln.speaker;
-  const who = personForTag(tag);
-  $('#inspector').style.setProperty('--who', who ? who.color : '#1c212a');
-  $('#insp-ref').textContent = ln.context ? `${ln.ref}, ${ln.context}` : ln.ref;
-  $('#insp-speaker').innerHTML = `${shape(who, 16)}<span style="color:${who ? who.color : 'inherit'}">${esc(tag || 'Narration')}</span>`;
-  const voice = who && who.voice ? S.voices[who.voice] : null;
-  $('#voice-sec').hidden = !voice;
-  if (voice) { $('#voice-name').textContent = who.name; $('#voice-text').textContent = voice; }
-
-  // line notes and why
-  const notes = [...(ln.why ? [{ text: ln.why, title: 'Why the faithful version differs' }] : []), ...(ln.notes || [])];
-  $('#line-notes-sec').hidden = !notes.length;
-  $('#line-notes').innerHTML = notes.map(n => `<div class="note">${n.title ? `<h4>${esc(n.title)}</h4>` : ''}<p>${esc(n.text)}</p>${sourcesHtml(n.sources)}</div>`).join('')
-    + (ln.confidence ? `<p class="hint">Claude's confidence in the faithful reading: ${esc(ln.confidence)}.</p>` : '');
-
-  renderChoice();
-  renderCopies();
-  renderPreview();
-  renderWordPanel();
-  await renderJapanese(ln);
-}
-
-async function tokensFor(text) {
-  if (!S.tokens.has(text)) S.tokens.set(text, api(`/api/tokens?text=${encodeURIComponent(text)}`));
-  return S.tokens.get(text);
-}
-
-async function renderJapanese(ln) {
-  const ref = ln.ref;
-  const { pages } = jpBody(ln.jp);
-  const html = [];
-  for (const page of pages) {
-    const ls = [];
-    for (const line of page) {
-      const toks = mergeSpans(await tokensFor(line));
-      ls.push(toks.map((t, k) => tokenHtml(ln, t, `${html.length}-${ls.length}-${k}`)).join(''));
-    }
-    html.push(`<div class="page">${ls.join('<br>')}</div>`);
+  $$('.opt', el).forEach(b => b.setAttribute('aria-pressed', String(!!d && d.choice === b.dataset.c)));
+  const pill = $(`#pill-${i}`);
+  const prop = needsDecision(ln);
+  const label = { current: "Keeping the game's line", faithful: 'Using the proposed line', edited: 'Using your edit' };
+  if (d && d.choice === 'edited') { pill.className = 'status prop'; pill.textContent = label.edited; }
+  else if (!prop) { pill.className = 'status keep'; pill.textContent = 'No change proposed'; }
+  else if (!d || d.auto) { pill.className = 'status prop'; pill.textContent = 'Change proposed'; }
+  else { pill.className = `status ${d.choice === 'current' ? 'keep' : 'prop'}`; pill.textContent = label[d.choice]; }
+  const ed = $(`#editor-${i}`);
+  const editing = !!d && d.choice === 'edited';
+  ed.hidden = !editing;
+  if (editing && document.activeElement !== $('.edit', ed)) {
+    $('.edit', ed).value = toEditor(S.decisions[ln.ref].edited);
+    renderLive(i);
   }
-  if (lines()[S.focus].ref !== ref) return; // moved on meanwhile
-  const box = $('#insp-jp');
-  box.innerHTML = html.join('') + `<p class="legend"><span class="k1">underlined</span>: Claude has a note on it. <span class="k2">orange</span>: a role-language marker. Hover for a gloss, click for everything.</p>`;
-  box.classList.toggle('no-ruby', !S.furigana);
-  $$('.w', box).forEach(el => {
-    el.addEventListener('click', () => selectWord(JSON.parse(el.dataset.t)));
-    el.addEventListener('mouseenter', () => showTip(el));
-    el.addEventListener('mouseleave', hideTip);
+}
+
+function openEditor(i) {
+  const ta = $(`#editor-${i} .edit`);
+  ta.focus({ preventScroll: true });
+  ta.setSelectionRange(ta.value.length, ta.value.length);
+  ta.scrollIntoView({ block: 'nearest' });
+}
+
+const editTimers = {};
+function onEdit(i) {
+  const ln = lines()[i];
+  S.decisions[ln.ref] = { ...(S.decisions[ln.ref] || {}), choice: 'edited', edited: fromEditor($(`#editor-${i} .edit`).value, ln.current) };
+  saveDraft();
+  renderLive(i, { quick: true });
+  clearTimeout(editTimers[i]);
+  editTimers[i] = setTimeout(() => { renderLive(i); renderApplyBar(); renderChoice(i); }, 220);
+}
+
+// The live box: drawn here at once from the font tables, then from the server's /api/fit
+// (the same check apply runs), which also gives the warnings.
+async function renderLive(i, { quick = false } = {}) {
+  const ln = lines()[i], ed = $(`#editor-${i}`);
+  const text = textFor(ln, 'edited');
+  if (quick) {
+    const pages = layoutHere(text);
+    drawBoxes($('.live', ed), { pages, width: S.fp.width, lines: S.fp.lines, source_lines: sourceLines(ln.jp) });
+    return;
+  }
+  const f = await fitFor(ln.ref, text).catch(() => null);
+  if (!f || textFor(ln, 'edited') !== text) return;  // typed on meanwhile, or the server is away
+  drawBoxes($('.live', ed), f);
+  $('.fit', ed).innerHTML = fitMessages(f).join('');
+}
+
+// --- the interlinear gloss -----------------------------------------------------------------
+
+function renderGloss(i) {
+  const g = S.glosses[i], box = $(`#jp-${i}`);
+  if (!g || !g.pages) { box.insertAdjacentHTML('beforeend', `<p class="gloss-error">${esc(g && g.error || 'No gloss.')}</p>`); return; }
+  let k = 0;
+  box.innerHTML = g.pages.map((pg, p) => `<div class="jp-page" data-p="${p}">${pg.map((w, j) => {
+    if (w.code) return '';
+    if (w.punct) return `<span class="w punct"><span class="rd"></span><span class="sf">${esc(w.jp)}</span><span class="gl"></span></span>`;
+    k++;
+    const cls = ['w', w.tone ? 'tone' : '', w.trap ? 'trap' : '', w.name ? 'name' : ''].filter(Boolean).join(' ');
+    return `<button type="button" class="${cls}" data-p="${p}" data-j="${j}" data-k="${k}" aria-expanded="false"><span class="rd">${esc(w.rd || '')}</span><span class="sf">${esc(w.show || w.jp)}</span><span class="gl">${esc(w.en || '')}</span></button>`;
+  }).join('')}</div>`).join('')
+    + (g.error ? `<p class="gloss-error">${esc(g.error)}</p>` : '')
+    + (g.source === 'auto' ? '<p class="auto-note">Words grouped and glossed automatically, from the word splitter and JMdict.</p>' : '');
+  // punctuation stays with the word before it, so a line never starts with 。 or ,
+  $$('.w.punct', box).forEach(pu => {
+    const prev = pu.previousElementSibling;
+    if (!prev) return;
+    const grp = prev.classList.contains('grp') ? prev : prev.closest('.grp') || (() => { const s = document.createElement('span'); s.className = 'grp'; prev.before(s); s.append(prev); return s; })();
+    grp.append(pu);
+  });
+  $$('button.w', box).forEach(b => {
+    const w = g.pages[+b.dataset.p][+b.dataset.j];
+    b.addEventListener('click', () => toggleEntry(i, b, w));
+    b.addEventListener('mouseenter', () => showPeek(i, b, w));
+    b.addEventListener('mouseleave', hidePeek);
   });
 }
-
-// A run of pieces that is one dictionary word (あの + 人, 年 + 若い) shows as one word,
-// with the dictionary's reading rather than the splitter's guess for each piece.
-function mergeSpans(toks) {
-  const out = [];
-  for (let k = 0; k < toks.length; k++) {
-    const t = toks[k];
-    if (t.span && t.span[1] > 1) {
-      out.push({ ...t, s: t.span[0], lemma: t.span[0], reading: t.span_reading || '', merged: true });
-      k += t.span[1] - 1;
-    } else out.push(t);
-  }
-  return out;
-}
-
-function tokenHtml(ln, t, id) {
-  if (t.plain) return esc(t.s);
-  const punct = !/[\p{L}\p{N}]/u.test(t.s);
-  if (punct) return `<span class="punct">${esc(t.s)}</span>`;
-  const noted = wordNotesFor(ln, t).length > 0;
-  const kanji = /[一-鿿々]/.test(t.s);
-  const inner = kanji && t.reading && t.reading !== t.s ? `<ruby>${esc(t.s)}<rt>${esc(t.reading)}</rt></ruby>` : esc(t.s);
-  const sel = S.word && S.word.s === t.s ? ' sel' : '';
-  return `<span class="w${noted ? ' noted' : ''}${t.role ? ' role' : ''}${sel}" data-t="${esc(JSON.stringify(t))}" tabindex="0">${inner}</span>`;
-}
-
-// hover gloss
-let tipEl = null, tipTimer = null;
-function showTip(el) {
-  clearTimeout(tipTimer);
-  tipTimer = setTimeout(async () => {
-    const t = JSON.parse(el.dataset.t);
-    const ln = lines()[S.focus];
-    const notes = wordNotesFor(ln, t);
-    let text;
-    if (notes.length) text = notes[0].sense;
-    else {
-      const r = await lookupWord(t.span ? t.span[0] : t.s, t.lemma);
-      const e = r.jmdict[0];
-      const w = r.wiktionary[0];
-      text = e ? e.senses.slice(0, 2).map(s => s.gloss.slice(0, 3).join('; ')).join(' / ') : w ? w.senses[0].glosses[0] : 'No dictionary entry; click for more.';
-      if (r.role) text = `${r.role.type}. ${text}`;
-    }
-    if (!el.isConnected) return;
-    tipEl = tipEl || Object.assign(document.createElement('div'), { className: 'tip', role: 'tooltip' });
-    tipEl.textContent = text;
-    document.body.append(tipEl);
-    const r = el.getBoundingClientRect();
-    tipEl.style.left = `${Math.min(window.innerWidth - 340, Math.max(8, r.left))}px`;
-    tipEl.style.top = `${r.bottom + 6}px`;
-  }, 180);
-}
-function hideTip() { clearTimeout(tipTimer); if (tipEl) tipEl.remove(); }
 
 async function lookupWord(q, lemma) {
   const key = `${q}|${lemma || ''}`;
@@ -458,172 +425,121 @@ async function lookupWord(q, lemma) {
   return S.lookups.get(key);
 }
 
-function selectWord(t) {
-  S.word = t;
-  $$('#insp-jp .w').forEach(el => el.classList.toggle('sel', JSON.parse(el.dataset.t).s === t.s));
-  renderWordPanel().then(() => {
-    const smooth = !matchMedia('(prefers-reduced-motion: reduce)').matches;
-    $('#word-sec').scrollIntoView({ block: 'start', behavior: smooth ? 'smooth' : 'auto' });
-  });
-}
-
-async function renderWordPanel() {
-  const ln = lines()[S.focus];
-  const body = $('#word-body');
-  $('#word-back').hidden = !S.word;
-  if (!S.word) {
-    $('#word-h').textContent = 'Words in this line';
-    body.innerHTML = (ln.words || []).length ? ln.words.map(wnoteHtml).join('')
-      : '<p class="hint">No word notes for this line. Click any word in the Japanese to look it up.</p>';
-    return;
+// The entry for a word: the scene's hand-written one, or one made from JMdict.
+async function entryFor(w) {
+  if (w.entry) return { ...w.entry, hand: true };
+  if (w.name) return { head: w.show, label: 'name', senses: [], note: w.en };
+  const r = await lookupWord(w.q || w.jp, w.lemma);
+  const e = r.jmdict[0];
+  const notes = (w.notes || []).map(n => (n.register ? `<span class="reg">${esc(n.register)}</span>` : '') + jpx(n.sense || '')).join('<br>');
+  const role = r.role ? `<strong>${esc(r.role.type)}.</strong> ${jpx(r.role.note)}` : '';
+  if (!e) {
+    const wk = r.wiktionary[0];
+    return { head: w.lemma || w.jp, label: wk ? wk.pos : '', senses: wk ? wk.senses.slice(0, 3).map(s => s.glosses.join('; ')) : [], noteHtml: [notes, role].filter(Boolean).join('<br>') };
   }
-  const t = S.word;
-  const q = t.span ? t.span[0] : t.s;
-  $('#word-h').innerHTML = `<span lang="ja" style="font-family:var(--mincho)">${esc(q)}</span>${t.lemma && t.lemma !== q ? ` <span class="hint">from ${esc(t.lemma)}</span>` : ''}`;
-  body.innerHTML = '<p class="hint">Looking up…</p>';
-  const [r, conc] = await Promise.all([lookupWord(q, t.lemma), api(`/api/concordance?q=${encodeURIComponent(q.length > 1 ? q : t.lemma || q)}&ref=${encodeURIComponent(ln.ref)}`)]);
-  if (S.word !== t) return;
+  const head = (e.kanji[0] && e.kanji[0].k) || (e.kana[0] && e.kana[0].r) || w.jp;
+  const kana = e.kanji.length && e.kana[0] ? e.kana[0].r : '';
+  const pos = (e.senses[0].tags || []).filter(t => e.senses[0].pos.includes(t.tag)).map(t => t.text)[0] || '';
+  return { head, label: [kana, pos].filter(Boolean).join(', '), senses: e.senses.slice(0, 5).map(s => s.gloss.slice(0, 3).join('; ')), noteHtml: [notes, role].filter(Boolean).join('<br>') };
+}
+
+function entryHtml(e) {
+  const senses = e.senses || [];
+  const lis = senses.map((s, k) => `<li${k === e.here && senses.length > 1 ? ' class="here"' : ''}>${esc(s)}</li>`).join('');
+  return `<div class="entry"><h4 lang="ja">${esc(e.head)} ${e.label ? `<span>${esc(e.label)}</span>` : ''}</h4>
+    ${lis ? `<ol>${lis}</ol>` : ''}${e.note ? `<p>${jpx(e.note)}</p>` : ''}${e.noteHtml ? `<p>${e.noteHtml}</p>` : ''}`;
+}
+
+const peek = () => $('#peek');
+let peekTimer = null;
+function showPeek(i, b, w) {
+  if (matchMedia('(hover: none)').matches || b.getAttribute('aria-expanded') === 'true') return;
+  clearTimeout(peekTimer);
+  peekTimer = setTimeout(async () => {
+    const e = await entryFor(w);
+    if (!b.matches(':hover')) return;
+    const p = peek();
+    p.innerHTML = entryHtml({ ...e, senses: (e.senses || []).slice(0, 3) }) + '</div><span class="more">Click for the full entry</span>';
+    p.hidden = false;
+    const r = b.getBoundingClientRect();
+    p.style.left = Math.max(scrollX + 8, Math.min(r.left + scrollX, scrollX + innerWidth - p.offsetWidth - 16)) + 'px';
+    p.style.top = (r.bottom + scrollY + 6) + 'px';
+  }, 120);
+}
+function hidePeek() { clearTimeout(peekTimer); peek().hidden = true; }
+
+async function toggleEntry(i, b, w) {
+  hidePeek();
+  const box = $(`#jp-${i}`);
+  const open = b.getAttribute('aria-expanded') === 'true';
+  $$('.w[aria-expanded="true"]', box).forEach(x => x.setAttribute('aria-expanded', 'false'));
+  $$('.entry', box).forEach(x => x.remove());
+  if (open) return;
+  b.setAttribute('aria-expanded', 'true');
+  const e = await entryFor(w);
+  if (b.getAttribute('aria-expanded') !== 'true') return;
+  const page = b.closest('.jp-page');
+  page.insertAdjacentHTML('afterend', entryHtml(e) + `<details><summary>${e.hand ? 'More from the dictionaries' : 'Everything the dictionaries have'}</summary><div class="dict">Looking up…</div></details></div>`);
+  const det = page.nextElementSibling.querySelector('details');
+  det.addEventListener('toggle', () => { if (det.open) fillDict(det.querySelector('.dict'), w, lines()[i].ref); }, { once: true });
+}
+
+async function fillDict(el, w, ref) {
+  const q = (w.entry && w.entry.lookup) || w.q || w.jp;
+  const [r, conc] = await Promise.all([lookupWord(q, w.lemma), api(`/api/concordance?q=${encodeURIComponent(q.length > 1 ? q : w.lemma || q)}&ref=${encodeURIComponent(ref)}`)]);
   const parts = [];
-  const notes = wordNotesFor(ln, t);
-  if (notes.length) parts.push(`<p class="src-label">Claude's note for this scene</p>${notes.map(wnoteHtml).join('')}`);
-  if (r.role) parts.push(`<p class="src-label">Role language</p><div class="role-note"><strong>${esc(r.role.type)}.</strong> ${esc(r.role.note)}</div>`);
-  if (r.wiktionary.length) parts.push(`<p class="src-label">English Wiktionary</p>${r.wiktionary.map(w => `<div class="dict-entry"><span class="forms" lang="ja">${esc(w.word)}</span> <span class="tag">${esc(w.pos)}</span>
-      <ol>${w.senses.map(s => `<li>${s.tags.map(x => `<span class="tag${/archaic|honorific|humble|feminine|masculine|dated|colloquial|slang|literary|derogatory|vulgar|dialect/.test(x) ? ' key' : ''}">${esc(x)}</span>`).join('')}${esc(s.glosses.join('; '))}${s.examples.length ? `<div class="ex"><span class="ja" lang="ja">${esc(s.examples[0].text)}</span><span class="en">${esc(s.examples[0].english || '')}</span></div>` : ''}</li>`).join('')}</ol>
-      ${w.etymology ? `<p class="hint">${esc(w.etymology)}</p>` : ''}</div>`).join('')}`);
-  if (r.jmdict.length) parts.push(`<p class="src-label">JMdict</p>${r.jmdict.slice(0, 4).map(e => `<div class="dict-entry"><span class="forms" lang="ja">${esc([...e.kanji.map(k => k.k), ...e.kana.map(k => k.r)].slice(0, 4).join(', '))}</span>
-      <ol>${e.senses.map(s => `<li>${s.tags.filter(x => !/^(n|v|adj|exp|prt|aux|int|pn|adv|conj|ctr|suf|pref)/.test(x.tag) || /arch|hon|hum|fem|male|dated|col|sl|obs|poet|vulg|derog|yoji|id/.test(x.tag)).map(x => `<span class="tag${/arch|hon|hum|fem|male|dated|col|sl|obs|poet|vulg|derog/.test(x.tag) ? ' key' : ''}" title="${esc(x.text)}">${esc(x.text)}</span>`).join('')}${esc(s.gloss.join('; '))}${s.info.length ? ` <span class="hint">(${esc(s.info.join('; '))})</span>` : ''}</li>`).join('')}</ol></div>`).join('')}`);
-  if (r.kanji.length) parts.push(`<p class="src-label">Kanji</p>${r.kanji.map(k => `<div class="kanji"><span class="lit" lang="ja">${esc(k.lit)}</span><div>${esc(k.meanings.slice(0, 5).join(', '))}<div class="rd" lang="ja">${esc([...k.on, ...k.kun].slice(0, 6).join('、'))}</div></div></div>`).join('')}`);
-  if (conc.hits.length) parts.push(`<p class="src-label">Elsewhere in the game (${conc.total})</p>${conc.hits.map(h => `<div class="ex"><span class="hint">${esc(h.ref)}</span><span class="ja" lang="ja">${esc(h.jp.replace(/\n\r?/g, ' '))}</span><span class="en">${esc(h.en.replace(/\n\r?/g, ' '))}</span></div>`).join('')}`);
-  if (r.examples.length) parts.push(`<p class="src-label">In everyday Japanese (Tatoeba)</p>${r.examples.map(x => `<div class="ex"><span class="ja" lang="ja">${esc(x.jp)}</span><span class="en">${esc(x.en)}</span></div>`).join('')}`);
-  if (!parts.length) parts.push('<p class="hint">Nothing found. Ask Claude below.</p>');
+  if (r.role) parts.push(`<p class="src">Role language</p><p><strong>${esc(r.role.type)}.</strong> ${jpx(r.role.note)}</p>`);
+  if (r.jmdict.length) parts.push(`<p class="src">JMdict</p>${r.jmdict.slice(0, 4).map(e => `<div><span class="forms" lang="ja">${esc([...e.kanji.map(k => k.k), ...e.kana.map(k => k.r)].slice(0, 4).join(', '))}</span>
+    <ol>${e.senses.map(s => `<li>${s.tags.filter(x => /arch|hon|hum|fem|male|dated|col|sl|obs|poet|vulg|derog|uk/.test(x.tag)).map(x => `<span class="tag${/arch|hon|hum|fem|male|dated|col|sl|obs|poet|vulg|derog/.test(x.tag) ? ' key' : ''}" title="${esc(x.text)}">${esc(x.text)}</span>`).join('')}${esc(s.gloss.join('; '))}${s.info.length ? ` (${esc(s.info.join('; '))})` : ''}</li>`).join('')}</ol></div>`).join('')}`);
+  if (r.wiktionary.length) parts.push(`<p class="src">English Wiktionary</p>${r.wiktionary.slice(0, 3).map(x => `<div><span class="forms" lang="ja">${esc(x.word)}</span> <span class="tag">${esc(x.pos)}</span><ol>${x.senses.map(s => `<li>${s.tags.map(t => `<span class="tag">${esc(t)}</span>`).join('')}${esc(s.glosses.join('; '))}</li>`).join('')}</ol></div>`).join('')}`);
+  if (r.kanji.length) parts.push(`<p class="src">Kanji</p>${r.kanji.map(k => `<div class="kanji"><span class="lit" lang="ja">${esc(k.lit)}</span><div>${esc(k.meanings.slice(0, 5).join(', '))}<div lang="ja">${esc([...k.on, ...k.kun].slice(0, 6).join('、'))}</div></div></div>`).join('')}`);
+  if (conc.hits.length) parts.push(`<p class="src">Elsewhere in the game (${conc.total})</p>${conc.hits.map(h => `<div class="ex">${esc(h.ref)} <span class="ja" lang="ja">${esc(h.jp.replace(/\n\r?/g, ' '))}</span>${esc(h.en.replace(/\n\r?/g, ' '))}</div>`).join('')}`);
+  if (r.examples.length) parts.push(`<p class="src">In everyday Japanese (Tatoeba)</p>${r.examples.map(x => `<div class="ex"><span class="ja" lang="ja">${esc(x.jp)}</span>${esc(x.en)}</div>`).join('')}`);
+  if (!parts.length) parts.push('<p>Nothing found. Ask Claude below.</p>');
   parts.push('<p class="credit">Dictionaries: JMdict and KANJIDIC2 (EDRDG, CC BY-SA 4.0); English Wiktionary via kaikki.org (CC BY-SA 4.0); Tatoeba (CC BY 2.0 FR). Role-language notes after Kinsui Satoshi.</p>');
-  body.innerHTML = parts.join('');
-  $('#ask-text').placeholder = `What does ${q} mean here?`;
+  el.innerHTML = parts.join('');
 }
 
-function wnoteHtml(w) {
-  return `<div class="wnote"><div class="head"><span class="jpw" lang="ja">${esc(w.jp)}</span>${w.reading ? `<span class="rd" lang="ja">${esc(w.reading)}</span>` : ''}${w.register ? `<span class="reg">${esc(w.register)}</span>` : ''}${w.confidence && w.confidence !== 'high' ? `<span class="conf">${esc(w.confidence)} confidence</span>` : ''}</div>
-    <p>${esc(w.sense)}</p>${sourcesHtml(w.sources)}</div>`;
-}
-
-// --- choice, editor, copies -------------------------------------------------------------
-
-function renderChoice() {
-  const ln = lines()[S.focus];
-  const d = decisionOf(ln);
-  $$('#choice button').forEach(b => {
-    b.setAttribute('aria-pressed', String(!!d && !d.auto && d.choice === b.dataset.c));
-    if (b.dataset.c === 'faithful') b.disabled = !needsDecision(ln);
-  });
-  const reading = S.scene.kind === 'readthrough';
-  $('#choice-hint').hidden = reading || needsDecision(ln);
-  $('#read-hint').hidden = !reading;
-  const last = S.focus >= lines().length - 1;
-  $('#insp-next').textContent = last ? 'Finish' : 'Next';
-  $('#insp-next').setAttribute('aria-label', last ? 'Finish the scene' : 'Next line');
-  $('#insp-prev').disabled = S.focus === 0;
-  $('#line-note').value = (S.decisions[ln.ref] && S.decisions[ln.ref].note) || '';
-  const editing = d && d.choice === 'edited';
-  $('#editor').hidden = !editing;
-  if (editing) $('#edit-text').value = toEditor(S.decisions[ln.ref].edited);
-}
-
-function openEditor() {
-  $('#editor').hidden = false;
-  const ta = $('#edit-text');
-  ta.focus();
-  ta.setSelectionRange(ta.value.length, ta.value.length);
-}
-
-let editTimer = null;
-function onEdit() {
-  const ln = lines()[S.focus];
-  const name = splitBox(ln.current).name;
-  S.decisions[ln.ref] = { ...(S.decisions[ln.ref] || {}), choice: 'edited', edited: fromEditor(name, $('#edit-text').value) };
-  saveDraft();
-  clearTimeout(editTimer);
-  editTimer = setTimeout(() => { renderPreview(); renderLineState(S.focus); renderApplyBar(); refreshCompareLine(); }, 160);
-}
-function refreshCompareLine() {
-  if (S.mode === 'compare') rerenderKeepingFocus();
-  else if (S.mode === 'boxes') renderBoxes();
-}
-function rerenderKeepingFocus() {
-  const stage = $('#stage'), top = stage.scrollTop;
-  renderScript();
-  $$('#script .line').forEach(e => e.classList.toggle('focused', +e.dataset.i === S.focus));
-  stage.scrollTop = top;
-}
-
-function renderCopies() {
-  const ln = lines()[S.focus];
-  const box = $('#copies');
-  if (!ln.copies.length) { box.innerHTML = ''; return; }
-  const d = S.decisions[ln.ref];
-  const on = !d || d.copies !== false;
-  box.innerHTML = `<label class="copies"><input type="checkbox" id="copies-on" ${on ? 'checked' : ''}> Also change ${ln.copies.map(esc).join(', ')}, which ${ln.copies.length === 1 ? 'has' : 'have'} the same Japanese (each keeps its own speaker name).</label>`;
-  $('#copies-on').addEventListener('change', e => {
-    S.decisions[ln.ref] = { ...(S.decisions[ln.ref] || { choice: null }), copies: e.target.checked };
-    saveDraft();
-  });
-}
-
-// --- the game preview -------------------------------------------------------------------
+// --- the game box --------------------------------------------------------------------------
 
 async function fitFor(ref, text) {
   const key = `${ref}\u0000${text}`;
-  if (!S.fits.has(key)) S.fits.set(key, api('/api/fit', { ref, text }));
+  if (!S.fits.has(key)) S.fits.set(key, api('/api/fit', { ref, text }).catch(e => { S.fits.delete(key); throw e; }));
   return S.fits.get(key);
 }
 
-function previewChoice(ln) {
-  const d = decisionOf(ln);
-  return S.previewPick || S.hoverPick || (d && !d.auto ? d.choice : needsDecision(ln) ? 'faithful' : 'current');
-}
-
-async function renderPreview() {
-  const ln = lines()[S.focus];
-  const pick = previewChoice(ln);
-  const hasEdit = !!(S.decisions[ln.ref] && S.decisions[ln.ref].edited);
-  $$('#preview-pick button').forEach(b => {
-    b.setAttribute('aria-checked', String(b.dataset.v === pick));
-    b.disabled = (b.dataset.v === 'faithful' && !needsDecision(ln)) || (b.dataset.v === 'edited' && !hasEdit);
-  });
-  const text = textFor(ln, pick);
-  const f = await fitFor(ln.ref, text);
-  if (lines()[S.focus] !== ln) return;
-  const well = $('#preview');
-  well.innerHTML = '';
-  f.pages.forEach((page, k) => {
-    const limit = Math.max(f.lines, f.source_lines[k] || 0);
-    well.append(drawPage(page, f.width, limit));
-    if (f.pages.length > 1 || page.some(l => l.placeholder)) {
-      const cap = document.createElement('p');
-      cap.className = 'pagecap';
-      cap.textContent = `Page ${k + 1} of ${f.pages.length}${page.some(l => l.placeholder) ? '. The character name is drawn at its widest.' : ''}`;
-      well.append(cap);
+// descfit.encode and server.layout, here, so the box can be redrawn on every key.
+function encodeHere(text) {
+  const codes = [];
+  for (const word of text.match(/[^ ]* ?|[^ ]+/g) || []) {
+    let i = 0;
+    while (i < word.length) {
+      const pair = word.slice(i, i + 2);
+      if (pair.length === 2 && pair in S.fp.digraphs) { codes.push(S.fp.digraphs[pair]); i += 2; continue; }
+      const c = S.fp.chars[word[i]];
+      if (c === undefined) throw new Error(word[i]);
+      codes.push(c); i += 1;
     }
-  });
-  $('#fit').innerHTML = fitMessages(f).join('');
+  }
+  return codes;
+}
+function layoutHere(text) {
+  return text.split(/\n\r|\{ff40\}\r/).map(pg => pg.split('\n').map(line => {
+    const shown = line.replace(/\{ff12\}/g, 'Mmmmmmmm').replace(/\{ff11\}0/g, '99999').replace(/\{ff30\}\w/g, '').replace(/\{ff[0-9a-f]{2}\}/g, '').replace(/\r/g, '');
+    let codes = [];
+    try { codes = encodeHere(shown).filter(c => c >= 0); } catch (e) { codes = []; }
+    const width = codes.reduce((s, c) => s + (c < S.fp.lut.length ? S.fp.lut[c] + 1 : 12), 0);
+    return { codes, width, placeholder: line.includes('{ff12}') };
+  }));
+}
+function sourceLines(jp) {
+  return jp.split(/\n\r|\{ff40\}\r/).map(p => p.split('\n').length);
 }
 
-function fitMessages(f) {
-  const out = [];
-  f.pages.forEach((page, k) => {
-    const where = f.pages.length > 1 ? `Page ${k + 1}, line` : 'Line';
-    page.forEach((l, j) => {
-      if (l.width > f.width) out.push(`<li class="bad">${where} ${j + 1} is ${l.width - f.width} px too wide (${l.width} of ${f.width}).</li>`);
-    });
-    const limit = Math.max(f.lines, f.source_lines[k] || 0);
-    if (page.length > limit) out.push(`<li class="bad">${f.pages.length > 1 ? `Page ${k + 1}` : 'The page'} has ${page.length} lines; this box takes ${limit}.</li>`);
-  });
-  for (const p of f.problems) {
-    if (/^\d+px: |^page \d+ has/.test(p)) continue;
-    const intended = p.includes('fine if intended');
-    out.push(`<li class="${intended ? 'warn' : 'bad'}">${esc(intended ? p.replace(/ \(fine if intended\)/, '. That\'s fine if intended.').replace(/^(\d+) pages, source has (\d+)/, 'This has $1 pages; the Japanese has $2') : p)}</li>`);
-  }
-  if (!out.length) out.push(`<li class="ok">Fits. The widest line is ${Math.max(...f.pages.flat().map(l => l.width))} of ${f.width} px.</li>`);
-  return out;
+function drawBoxes(el, f) {
+  if (!el) return;
+  el.innerHTML = '';
+  f.pages.forEach((page, k) => el.append(drawPage(page, f.width, Math.max(f.lines, f.source_lines[k] || 0))));
 }
 
 function drawPage(page, width, limit) {
@@ -643,56 +559,201 @@ function drawPage(page, width, limit) {
       x += gl[2];
     }
     if (line.width > width) {
-      g.fillStyle = 'rgba(220, 60, 50, 0.85)';
-      g.fillRect(meta.origin_x + width, y, 1, meta.pitch);
-      g.fillStyle = 'rgba(220, 60, 50, 0.25)';
-      g.fillRect(meta.origin_x + width + 1, y, line.width - width, meta.pitch);
+      g.fillStyle = 'rgba(220, 60, 50, 0.85)'; g.fillRect(meta.origin_x + width, y, 1, meta.pitch);
+      g.fillStyle = 'rgba(220, 60, 50, 0.25)'; g.fillRect(meta.origin_x + width + 1, y, line.width - width, meta.pitch);
     }
-    if (j >= limit) {
-      g.fillStyle = 'rgba(220, 60, 50, 0.3)';
-      g.fillRect(meta.origin_x - 2, y, width + 4, meta.pitch);
-    }
+    if (j >= limit) { g.fillStyle = 'rgba(220, 60, 50, 0.3)'; g.fillRect(meta.origin_x - 2, y, width + 4, meta.pitch); }
   });
   c.setAttribute('role', 'img');
-  c.setAttribute('aria-label', page.length + ' lines in the game text box');
+  c.setAttribute('aria-label', `${page.length} lines in the game text box`);
   return c;
 }
 
-// --- apply -----------------------------------------------------------------------------
+function fitMessages(f) {
+  const out = [];
+  f.pages.forEach((page, k) => {
+    const where = f.pages.length > 1 ? `Page ${k + 1}, line` : 'Line';
+    page.forEach((l, j) => {
+      if (l.width > f.width) out.push(`<li class="bad">${where} ${j + 1} is ${l.width - f.width} px too wide (${l.width} of ${f.width}).</li>`);
+    });
+    const limit = Math.max(f.lines, f.source_lines[k] || 0);
+    if (page.length > limit) out.push(`<li class="bad">${f.pages.length > 1 ? `Page ${k + 1}` : 'The page'} has ${page.length} lines; this box takes ${limit}.</li>`);
+  });
+  for (const p of f.problems || []) {
+    if (/^\d+px: |^page \d+ has \d+ lines/.test(p)) continue;
+    const intended = p.includes('fine if intended');
+    out.push(`<li class="${intended ? 'warn' : 'bad'}">${esc(intended ? p.replace(/ \(fine if intended\)/, ". That's fine if intended.").replace(/^(\d+) pages, source has (\d+)/, 'This has $1 pages; the Japanese has $2') : p)}</li>`);
+  }
+  if (!out.length) out.push(`<li class="ok">Fits. The widest line is ${Math.max(...f.pages.flat().map(l => l.width))} of ${f.width} px.</li>`);
+  return out;
+}
+
+// --- questions -----------------------------------------------------------------------------
+
+const fmtTime = t => {
+  const d = new Date(t.replace(/([+-]\d\d)(\d\d)$/, '$1:$2'));
+  if (isNaN(d)) return t;
+  return `${d.getDate()} ${d.toLocaleString('en-US', { month: 'short' })}, ${d.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit' }).toLowerCase()}`;
+};
+
+function threadHtml(ln) {
+  return (ln.questions || []).map(q => {
+    const about = [q.ref !== ln.ref ? `about ${q.ref}` : '', q.about ? `on ${q.about}` : ''].filter(Boolean).join(', ');
+    const qh = `<p class="q">${about ? `<span class="about">(${esc(about)})</span> ` : ''}${esc(q.question)}</p>`;
+    if (!q.answer) return qh + `<div class="a pending"><span class="when">Waiting for Claude. Asked ${esc(fmtTime(q.asked_at))}.</span></div>`;
+    const paras = q.answer.split(/\n\s*\n/).map(p => {
+      if (isBoxText(p)) return `<p class="try">${esc(p)}</p><button type="button" class="use" data-text="${esc(p)}">Put this in the editor</button>`;
+      return `<p>${jpx(p).replace(/\n/g, '<br>')}</p>`;
+    });
+    for (const s of [].concat(q.suggest || [])) paras.push(`<p class="try">${esc(s)}</p><button type="button" class="use" data-text="${esc(s)}">Put this in the editor</button>`);
+    return qh + `<div class="a">${paras.join('')}<span class="when">${q.answered_at ? `Answered ${esc(fmtTime(q.answered_at))}` : 'Answered'}</span></div>`;
+  }).join('');
+}
+// A paragraph that is a whole box: a speaker's name, then the speech in quotes.
+function isBoxText(p) {
+  const m = /^([^\n"]{1,40})\n"[^]*"$/.exec(p.trim());
+  return !!m && !!personForTag(m[1]);
+}
+
+function wireThread(i) {
+  $$(`#thread-${i} .use`).forEach(b => b.addEventListener('click', () => {
+    const ln = lines()[i];
+    const prev = S.decisions[ln.ref] || {};
+    S.decisions[ln.ref] = { ...prev, choice: 'edited', edited: b.dataset.text.trim(), copies: prev.copies ?? true };
+    saveDraft();
+    renderChoice(i); renderApplyBar(); openEditor(i);
+  }));
+}
+
+async function sendQuestion(i) {
+  const form = $(`#line-${i} .asking`), input = $('input', form);
+  const text = input.value.trim();
+  if (!text) return;
+  const ln = lines()[i];
+  const open = $(`#jp-${i} .w[aria-expanded="true"] .sf`);
+  const q = await api('/api/ask', { scene: S.scene.id, ref: ln.ref, about: open ? open.textContent : '', question: text });
+  ln.questions = [...(ln.questions || []), q];
+  input.value = '';
+  $(`#thread-${i}`).innerHTML = threadHtml(ln);
+  wireThread(i);
+  pollSoon();
+}
+
+// Answers are written into questions.json by Claude in the terminal; look for them every
+// few seconds while one is waiting, and now and then otherwise.
+let pollTimer = null;
+function pollSoon() { clearTimeout(pollTimer); pollTimer = setTimeout(poll, 4000); }
+async function poll() {
+  clearTimeout(pollTimer);
+  const waiting = lines().some(l => (l.questions || []).some(q => !q.answer));
+  pollTimer = setTimeout(poll, waiting ? 5000 : 20000);
+  if (!S.scene || document.hidden) return;
+  const all = await api('/api/questions').catch(() => null);
+  if (!all) return;
+  lines().forEach((ln, i) => {
+    const refs = [ln.ref, ...ln.copies];
+    const mine = all.filter(q => refs.includes(q.ref));
+    if (JSON.stringify(mine) !== JSON.stringify(ln.questions || [])) {
+      ln.questions = mine;
+      $(`#thread-${i}`).innerHTML = threadHtml(ln);
+      wireThread(i);
+    }
+  });
+}
+document.addEventListener('visibilitychange', () => { if (!document.hidden) poll(); });
+
+// --- focus and place -----------------------------------------------------------------------
+
+function markFocus() { $$('#lines .line').forEach(el => el.classList.toggle('focused', +el.dataset.i === S.focus)); }
+function scrollToLine(i, smooth = true) {
+  const el = $(`#line-${i}`);
+  if (!el) return;
+  const bar = matchMedia('(max-width: 900px)').matches ? $('.mobilebar').offsetHeight : 0;
+  const y = el.getBoundingClientRect().top + scrollY - bar - 8;
+  window.scrollTo({ top: y, behavior: smooth && !matchMedia('(prefers-reduced-motion: reduce)').matches ? 'smooth' : 'auto' });
+}
+function focusLine(i) {
+  if (!S.scene) return;
+  S.focus = Math.max(0, Math.min(i, lines().length - 1));
+  markFocus();
+  scrollToLine(S.focus);
+  updatePlace();
+}
+function updatePlace() {
+  if (!S.scene) return;
+  const h = `s=${encodeURIComponent(S.scene.id)}&l=${S.focus}`;
+  history.replaceState(null, '', '#' + h);
+  localStorage.setItem('dimguil-review:place', h);   // some phone browsers reload an older address
+}
+// Scrolling moves the focus to the line in view, so j/k and a refresh carry on from there.
+let scrollTimer = null;
+window.addEventListener('scroll', () => {
+  clearTimeout(scrollTimer);
+  scrollTimer = setTimeout(() => {
+    if (!S.scene) return;
+    const cur = $(`#line-${S.focus}`);
+    const r = cur && cur.getBoundingClientRect();
+    if (!r || r.bottom < innerHeight * 0.25 || r.top > innerHeight * 0.75) {
+      const els = $$('#lines .line');
+      const vis = els.find(el => el.getBoundingClientRect().bottom > innerHeight * 0.3);
+      if (vis) { S.focus = +vis.dataset.i; markFocus(); }
+    }
+    updatePlace();
+  }, 250);
+}, { passive: true });
+
+// --- apply ---------------------------------------------------------------------------------
+
+function renderApplyBar() {
+  const ls = lines();
+  const open = ls.filter(l => !decisionOf(l)).length;
+  const changes = ls.filter(l => { const d = decisionOf(l); return d && textFor(l, d.choice) !== l.current; }).length;
+  const prior = S.scene.decision;
+  const nothingNew = !open && !changes && prior;
+  let msg = open ? `${open} proposed ${open === 1 ? 'change needs' : 'changes need'} your decision.`
+    : changes ? `Ready: ${changes} ${changes === 1 ? 'line changes' : 'lines change'}.`
+    : nothingNew ? 'Nothing new to apply.' : 'Ready: no lines change.';
+  if (prior) msg += prior.status === 'committed' ? ` Committed as ${prior.commit || 'a commit'}.` : ` Applied ${prior.applied_at.slice(0, 16).replace('T', ' ')}; Claude commits next.`;
+  $('#apply-status').textContent = msg;
+  $('#apply-open').disabled = open > 0 || !!nothingNew;
+  $('#apply-open').textContent = !open && !changes && !prior ? 'Mark as reviewed' : 'Review and apply';
+}
 
 function openApply() {
-  const ls = lines();
-  const changed = ls.filter(l => { const d = decisionOf(l); return d && textFor(l, d.choice) !== l.current; });
+  const changed = lines().filter(l => { const d = decisionOf(l); return d && textFor(l, d.choice) !== l.current; });
   $('#apply-summary').textContent = changed.length
     ? `${changed.length} ${changed.length === 1 ? 'line changes' : 'lines change'}. Everything else stays as it is.`
     : 'No lines change. Applying records that the scene was reviewed.';
   $('#apply-list').innerHTML = changed.map(l => {
     const d = decisionOf(l);
-    return `<li><span class="ref">${esc(l.ref)}, ${d.choice === 'edited' ? 'your edit' : 'faithful'}${l.copies.length && d.copies !== false ? `, also ${l.copies.map(esc).join(', ')}` : ''}</span><br>
+    return `<li><span class="cref">${esc(l.ref)}, ${d.choice === 'edited' ? 'your edit' : 'the proposed line'}${l.copies.length && d.copies !== false ? `, also ${l.copies.map(esc).join(', ')}` : ''}</span><br>
       <span class="before">${esc(readable(l.current))}</span><br>${esc(readable(textFor(l, d.choice)))}</li>`;
   }).join('');
   $('#apply-error').hidden = true;
   $('#apply-dialog').showModal();
 }
 
+// The body is the same as before the redesign, so decisions/<scene>.json is unchanged.
+function applyBody() {
+  return {
+    scene: S.scene.id, note: $('#scene-note').value,
+    lines: lines().map(l => {
+      const d = decisionOf(l);
+      const own = S.decisions[l.ref] || {};
+      return { ref: l.ref, choice: d.choice, text: textFor(l, d.choice), note: own.note || '', copies: own.copies === false ? [] : l.copies };
+    }),
+  };
+}
+
 async function confirmApply() {
   const btn = $('#apply-confirm');
   btn.disabled = true;
   try {
-    const body = {
-      scene: S.scene.id, note: $('#scene-note').value,
-      lines: lines().map(l => {
-        const d = decisionOf(l);
-        const own = S.decisions[l.ref] || {};
-        return { ref: l.ref, choice: d.choice, text: textFor(l, d.choice), note: own.note || '', copies: own.copies === false ? [] : l.copies };
-      }),
-    };
-    await api('/api/apply', body);
+    await api('/api/apply', applyBody());
     localStorage.removeItem(draftKey());
     $('#apply-dialog').close();
-    const st = await api('/api/state');
-    S.scenes = st.scenes;
-    await openScene(S.scene.id, { line: S.focus, mode: S.mode });
+    S.scenes = (await api('/api/state')).scenes;
+    await openScene(S.scene.id, { line: S.focus, top: scrollY });
   } catch (e) {
     $('#apply-error').textContent = e.message;
     $('#apply-error').hidden = false;
@@ -701,113 +762,66 @@ async function confirmApply() {
   }
 }
 
-// --- questions -------------------------------------------------------------------------
-
-function renderQuestions() {
-  const qs = (S.scene && S.scene.questions) || [];
-  $('#questions').innerHTML = qs.slice().reverse().map(q => `<li><div class="q">${esc(q.ref || '')}${q.about ? ` (${esc(q.about)})` : ''}: ${esc(q.question)}</div>
-    <div class="a ${q.answer ? '' : 'pending'}">${q.answer ? esc(q.answer) : 'Waiting for Claude.'}</div></li>`).join('');
-}
-async function sendQuestion() {
-  const text = $('#ask-text').value.trim();
-  if (!text) return;
-  const ln = lines()[S.focus];
-  const q = await api('/api/ask', { scene: S.scene.id, ref: ln.ref, about: S.word ? (S.word.span ? S.word.span[0] : S.word.s) : '', question: text });
-  S.scene.questions.push(q);
-  $('#ask-text').value = '';
-  renderQuestions();
-}
-setInterval(async () => {
-  if (!S.scene || document.hidden) return;
-  const all = await api('/api/questions').catch(() => null);
-  if (!all) return;
-  const mine = all.filter(q => q.scene === S.scene.id);
-  if (JSON.stringify(mine) !== JSON.stringify(S.scene.questions)) { S.scene.questions = mine; renderQuestions(); }
-}, 15000);
-
-// --- keyboard --------------------------------------------------------------------------
+// --- keyboard ------------------------------------------------------------------------------
 
 document.addEventListener('keydown', e => {
   const typing = e.target.closest('textarea, input');
+  const help = $('#help');
   if (e.key === 'Escape') {
+    help.hidden = true;
     if (typing) { e.target.blur(); return; }
-    if (document.body.classList.contains('insp-open') && !S.word) { setInsp(false); return; }
-    if (S.word) { S.word = null; renderWordPanel(); $$('#insp-jp .w').forEach(el => el.classList.remove('sel')); }
+    if (document.body.classList.contains('nav-open')) { setNav(false); return; }
+    const open = $(`#jp-${S.focus} .w[aria-expanded="true"]`);
+    if (open) open.click();
     return;
   }
   if (typing || e.ctrlKey || e.metaKey || e.altKey || $('dialog[open]')) return;
-  if (e.key === '?') { $('#help').showModal(); return; }
+  if (e.key === '?') { help.hidden = !help.hidden; return; }
   if (!S.scene) return;
-  const modes = { 1: 'jp', 2: 'literal', 3: 'current', 4: 'faithful', 5: 'compare' };
-  if (modes[e.key]) { setMode(modes[e.key]); e.preventDefault(); return; }
-  if (e.key === 'j' || e.key === 'ArrowDown') { focusLine(S.focus + 1); e.preventDefault(); }
-  else if (e.key === 'k' || e.key === 'ArrowUp') { focusLine(S.focus - 1); e.preventDefault(); }
-  else if (e.key === 'c') setChoice(S.focus, 'current');
-  else if (e.key === 'f' && needsDecision(lines()[S.focus])) setChoice(S.focus, 'faithful');
-  else if (e.key === 'e') { setChoice(S.focus, 'edited'); e.preventDefault(); }
-  else if (e.key === 'r') { S.furigana = !S.furigana; $('#furigana').checked = S.furigana; $('#insp-jp').classList.toggle('no-ruby', !S.furigana); }
+  const i = S.focus, line = $(`#line-${i}`);
+  if (e.key === 'j') focusLine(i + 1);
+  else if (e.key === 'k') focusLine(i - 1);
+  else if (e.key === 'c') setChoice(i, 'current', { advance: true });
+  else if (e.key === 'f') setChoice(i, 'faithful', { advance: true });
+  else if (e.key === 'e') { e.preventDefault(); setChoice(i, 'edited'); }
+  else if (e.key === 'a') { e.preventDefault(); const inp = $('.asking input', line); inp.focus({ preventScroll: true }); inp.scrollIntoView({ block: 'center' }); }
+  else if (/^[1-9]$/.test(e.key)) { const b = $(`#jp-${i} button.w[data-k="${e.key}"]`); if (b) b.click(); }
+  else if (e.key === 'r') { document.body.classList.toggle('no-rd'); localStorage.setItem('dimguil-review:no-rd', document.body.classList.contains('no-rd') ? '1' : ''); }
   else if (e.key === '[' || e.key === ']') {
     const k = S.scenes.findIndex(s => s.id === S.scene.id) + (e.key === ']' ? 1 : -1);
     if (S.scenes[k]) openScene(S.scenes[k].id);
-  }
+  } else return;
+  e.preventDefault();
 });
 
-// --- start -----------------------------------------------------------------------------
+// --- start ---------------------------------------------------------------------------------
 
 function loadImage(src) {
   return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; });
 }
 
 async function main() {
-  const [st, meta, atlas, box] = await Promise.all([
-    api('/api/state'), api('/font/font.json'), loadImage('/font/atlas.png'), loadImage('/font/box.png'),
+  const [st, meta, atlas, box, fp] = await Promise.all([
+    api('/api/state'), api('/font/font.json'), loadImage('/font/atlas.png'), loadImage('/font/box.png'), api('/api/fontpack'),
   ]);
   S.cast = st.cast; S.voices = st.voices; S.scenes = st.scenes;
-  S.font = { meta, atlas, box };
-  $('#splitter-hint').hidden = st.splitter;
+  S.font = { meta, atlas, box }; S.fp = fp;
+  if (localStorage.getItem('dimguil-review:no-rd')) document.body.classList.add('no-rd');
   renderSceneList();
-
-  $$('.readings button').forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
-  $$('#choice button').forEach(b => b.addEventListener('click', () => setChoice(S.focus, b.dataset.c, { advance: b.dataset.c !== 'edited' })));
-  $$('#preview-pick button').forEach(b => b.addEventListener('click', () => { S.previewPick = b.dataset.v; renderPreview(); }));
-  $('#edit-text').addEventListener('input', onEdit);
-  $('#edit-rewrap').addEventListener('click', async () => {
-    const ln = lines()[S.focus];
-    const r = await api('/api/rewrap', { ref: ln.ref, text: S.decisions[ln.ref].edited });
-    $('#edit-text').value = toEditor(r.text); onEdit();
-  });
-  $('#edit-from-faithful').addEventListener('click', () => { $('#edit-text').value = toEditor(lines()[S.focus].faithful); onEdit(); });
-  $('#edit-from-current').addEventListener('click', () => { $('#edit-text').value = toEditor(lines()[S.focus].current); onEdit(); });
-  $('#line-note').addEventListener('input', e => {
-    const ln = lines()[S.focus];
-    S.decisions[ln.ref] = { ...(S.decisions[ln.ref] || { choice: decisionOf(ln) ? decisionOf(ln).choice : null }), note: e.target.value };
-    if (!S.decisions[ln.ref].choice) delete S.decisions[ln.ref].choice;
-    saveDraft();
-  });
-  $('#furigana').addEventListener('change', e => { S.furigana = e.target.checked; $('#insp-jp').classList.toggle('no-ruby', !S.furigana); });
-  $('#word-back').addEventListener('click', () => { S.word = null; renderWordPanel(); $$('#insp-jp .w').forEach(el => el.classList.remove('sel')); });
+  $('#hide-done').addEventListener('change', e => { localStorage.setItem('dimguil-review:hide-done', e.target.checked ? '1' : ''); renderSceneList(); });
   $('#apply-open').addEventListener('click', openApply);
   $('#apply-confirm').addEventListener('click', confirmApply);
-  $('#ask-send').addEventListener('click', sendQuestion);
-  $('#help-open').addEventListener('click', () => $('#help').showModal());
   $('#nav-toggle').addEventListener('click', () => setNav(!document.body.classList.contains('nav-open')));
-  $('#insp-close').addEventListener('click', () => setInsp(false));
-  $('#insp-prev').addEventListener('click', () => { focusLine(S.focus - 1, { scroll: false }); $('#inspector').scrollTop = 0; });
-  $('#insp-next').addEventListener('click', () => {
-    if (S.focus < lines().length - 1) { focusLine(S.focus + 1, { scroll: false }); $('#inspector').scrollTop = 0; return; }
-    const open = lines().findIndex(l => !decisionOf(l));
-    if (open >= 0) { focusLine(open, { scroll: false }); $('#inspector').scrollTop = 0; return; }  // something still to decide
-    setInsp(false);
-    if (!$('#apply-open').disabled) openApply();
-    else $('#applybar').scrollIntoView({ block: 'end' });
-  });
+  $('#help').addEventListener('click', e => { if (e.target.id === 'help') e.target.hidden = true; });
 
   // Where you left off wins over the address, which a phone can bring back stale.
   const h = new URLSearchParams(localStorage.getItem('dimguil-review:place') || location.hash.slice(1));
   const id = (S.scenes.some(s => s.id === h.get('s')) && h.get('s')) || (S.scenes.find(s => s.status === 'open') || S.scenes[0] || {}).id;
-  if (id) await openScene(id, { line: +(h.get('l') || 0), mode: h.get('m') || undefined });
-  if (phone.matches && localStorage.getItem('dimguil-review:nav')) setNav(true);
+  if (id) await openScene(id, { line: +(h.get('l') || 0) });
+  if (matchMedia('(max-width: 900px)').matches && localStorage.getItem('dimguil-review:nav')) setNav(true);
+  poll();
 }
 
-window.__review = S; // for testing from the console
+S.test = { layoutHere, toEditor, fromEditor, applyBody };  // for the UI checks
+
 main().catch(e => { document.body.insertAdjacentHTML('afterbegin', `<p class="error" style="padding:1rem">The review tool couldn't start: ${esc(e.message)}</p>`); });

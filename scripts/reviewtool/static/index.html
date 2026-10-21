@@ -7,148 +7,60 @@
 <link rel="stylesheet" href="/static/app.css">
 </head>
 <body>
-<div class="desk">
-  <header class="mobilebar">
-    <button type="button" id="nav-toggle" aria-expanded="false" aria-controls="scenes">Scenes</button>
-    <span id="mobile-title"></span>
-  </header>
-  <nav class="scenes" id="scenes" aria-label="Scenes">
-    <header class="brand">
+<header class="mobilebar">
+  <button type="button" id="nav-toggle" aria-expanded="false" aria-controls="scenes">Scenes</button>
+  <span id="mobile-title"></span>
+</header>
+<div class="shell">
+  <div class="rail">
+    <nav class="scenes" id="scenes" aria-label="Scenes">
       <h1>Dimguil review</h1>
-      <p class="brand-sub">NPC scenes</p>
-    </header>
-    <div class="list-tools">
-      <span id="scene-count"></span>
-      <label><input type="checkbox" id="hide-done"> Hide reviewed</label>
-    </div>
-    <div id="scene-list"></div>
-    <footer class="scenes-foot">
-      <button type="button" class="linklike" id="help-open">Keyboard shortcuts <kbd>?</kbd></button>
-    </footer>
-  </nav>
+      <div class="progress"><span id="prog-done"></span><span id="prog-left"></span></div>
+      <div class="bar"><i id="prog-bar"></i></div>
+      <label class="hide-done"><input type="checkbox" id="hide-done"> Hide reviewed</label>
+      <div id="scene-list"></div>
+      <aside class="keys" aria-label="Keyboard shortcuts"><span><kbd>j</kbd> <kbd>k</kbd> next, previous</span><span><kbd>c</kbd> <kbd>f</kbd> <kbd>e</kbd> choose</span><span><kbd>a</kbd> ask</span><span><kbd>?</kbd> all keys</span></aside>
+    </nav>
+  </div>
 
-  <main class="stage" id="stage" tabindex="-1">
-    <div class="empty" id="empty">
-      <p>Pick a scene on the left to start reading.</p>
-    </div>
+  <main id="stage">
+    <div class="empty" id="empty"><p>Pick a scene to start reading.</p></div>
     <article id="scene" hidden>
       <header class="scene-head">
         <p class="scene-file" id="scene-file"></p>
         <h2 id="scene-title"></h2>
+        <p id="scene-summary"></p>
         <p class="scene-where" id="scene-where"></p>
-        <p class="scene-summary" id="scene-summary"></p>
-        <p class="scene-assembled" id="scene-assembled"></p>
       </header>
-
-      <div class="readings" role="tablist" aria-label="Reading">
-        <button role="tab" data-mode="boxes" hidden>In the game</button>
-        <button role="tab" data-mode="jp"><kbd>1</kbd> Japanese</button>
-        <button role="tab" data-mode="literal"><kbd>2</kbd> Literal</button>
-        <button role="tab" data-mode="current"><kbd>3</kbd> Current</button>
-        <button role="tab" data-mode="faithful"><kbd>4</kbd> Faithful</button>
-        <button role="tab" data-mode="compare"><kbd>5</kbd> Compare and decide</button>
-      </div>
-
-      <ol class="script" id="script"></ol>
-
+      <div id="lines"></div>
       <section class="scene-notes" id="scene-notes" aria-labelledby="scene-notes-h">
         <h3 id="scene-notes-h">About this scene</h3>
         <div id="scene-notes-body"></div>
       </section>
-
       <div class="applybar" id="applybar">
         <p id="apply-status"></p>
         <button type="button" class="primary" id="apply-open">Review and apply</button>
       </div>
     </article>
   </main>
-
-  <aside class="inspector" id="inspector" aria-label="Line details">
-    <div class="insp-bar">
-      <button type="button" id="insp-close">Back to the scene</button>
-      <span><button type="button" id="insp-prev" aria-label="Previous line">Previous</button>
-        <button type="button" id="insp-next" aria-label="Next line">Next</button></span>
-    </div>
-    <div id="insp-empty" class="insp-empty"><p>Select a line to see its Japanese, word notes and how it looks in the game.</p></div>
-    <div id="insp" hidden>
-      <header class="insp-head">
-        <p class="insp-ref" id="insp-ref"></p>
-        <p class="insp-speaker" id="insp-speaker"></p>
-      </header>
-
-      <section class="insp-sec">
-        <div class="sec-head">
-          <h3>In the game</h3>
-          <div class="seg small" id="preview-pick" role="radiogroup" aria-label="Preview">
-            <button data-v="current" role="radio">Current</button>
-            <button data-v="faithful" role="radio">Faithful</button>
-            <button data-v="edited" role="radio">Edited</button>
-          </div>
-        </div>
-        <div class="well" id="preview"></div>
-        <ul class="fit" id="fit"></ul>
-      </section>
-
-      <section class="insp-sec">
-        <div class="sec-head"><h3>Your choice</h3></div>
-        <div class="choice" id="choice">
-          <button type="button" data-c="current"><kbd>c</kbd> Keep current</button>
-          <button type="button" data-c="faithful"><kbd>f</kbd> Use faithful</button>
-          <button type="button" data-c="edited"><kbd>e</kbd> Edit</button>
-        </div>
-        <p class="hint" id="choice-hint" hidden>No change is proposed for this line. It's here for context; edit it only if you want to.</p>
-        <p class="hint" id="read-hint" hidden>Nothing is proposed: the reviewers read this against the Japanese and found it right. Edit it, or leave a note, if something's off.</p>
-        <div class="editor" id="editor" hidden>
-          <p class="hint">One box line per line; a blank line starts a new page. The name and the opening quote are added for you.</p>
-          <textarea id="edit-text" rows="7" spellcheck="true" lang="en"></textarea>
-          <div class="editor-actions">
-            <button type="button" id="edit-rewrap">Rewrap to fit</button>
-            <button type="button" id="edit-from-faithful">Start from faithful</button>
-            <button type="button" id="edit-from-current">Start from current</button>
-          </div>
-        </div>
-        <label class="line-note">Note for Claude on this line (optional)
-          <textarea id="line-note" rows="2"></textarea></label>
-        <div id="copies"></div>
-      </section>
-
-      <section class="insp-sec">
-        <div class="sec-head">
-          <h3>Japanese</h3>
-          <label class="toggle"><input type="checkbox" id="furigana" checked> readings <kbd>r</kbd></label>
-        </div>
-        <div class="jp" id="insp-jp" lang="ja"></div>
-        <p class="hint" id="splitter-hint" hidden>Word splitting is off: the server can't load fugashi.</p>
-      </section>
-
-      <section class="insp-sec" id="word-sec">
-        <div class="sec-head"><h3 id="word-h">Words in this line</h3>
-          <button type="button" class="linklike" id="word-back" hidden>All words</button></div>
-        <div id="word-body"></div>
-      </section>
-
-      <section class="insp-sec" id="line-notes-sec" hidden>
-        <h3>Notes on this line</h3>
-        <div id="line-notes"></div>
-      </section>
-
-      <section class="insp-sec" id="voice-sec">
-        <details>
-          <summary>Voice sheet: <span id="voice-name"></span></summary>
-          <p id="voice-text"></p>
-        </details>
-      </section>
-
-      <section class="insp-sec" id="ask-sec">
-        <h3>Ask Claude</h3>
-        <p class="hint">Questions go to Claude in the terminal session; answers show up here.</p>
-        <textarea id="ask-text" rows="3" placeholder="What does this mean here? Is this a reference to something?"></textarea>
-        <button type="button" id="ask-send">Send question</button>
-        <ol class="questions" id="questions"></ol>
-      </section>
-    </div>
-  </aside>
 </div>
+
+<div class="peekcard" id="peek" hidden></div>
+
+<div class="help" id="help" hidden role="dialog" aria-label="Keyboard shortcuts"><div>
+  <h3>Keyboard</h3>
+  <dl>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Next or previous line</dd>
+    <dt><kbd>c</kbd></dt><dd>Keep the game's line</dd>
+    <dt><kbd>f</kbd></dt><dd>Use the proposed line</dd>
+    <dt><kbd>e</kbd></dt><dd>Edit it (Esc leaves the editor)</dd>
+    <dt><kbd>a</kbd></dt><dd>Ask Claude about this line</dd>
+    <dt><kbd>1</kbd>-<kbd>9</kbd></dt><dd>Open the nth word's entry</dd>
+    <dt><kbd>r</kbd></dt><dd>Show or hide the readings over the Japanese</dd>
+    <dt><kbd>[</kbd> <kbd>]</kbd></dt><dd>Previous or next scene</dd>
+    <dt><kbd>?</kbd></dt><dd>Show or hide this list</dd>
+  </dl>
+</div></div>
 
 <dialog id="apply-dialog" aria-labelledby="apply-h">
   <form method="dialog">
@@ -163,21 +75,6 @@
       <button value="cancel">Go back</button>
       <button type="button" class="primary" id="apply-confirm">Apply changes</button>
     </div>
-  </form>
-</dialog>
-
-<dialog id="help" aria-labelledby="help-h">
-  <form method="dialog">
-    <h2 id="help-h">Keyboard shortcuts</h2>
-    <dl class="keys">
-      <dt><kbd>1</kbd>–<kbd>5</kbd></dt><dd>Japanese, Literal, Current, Faithful, Compare and decide</dd>
-      <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Next or previous line</dd>
-      <dt><kbd>c</kbd> <kbd>f</kbd> <kbd>e</kbd></dt><dd>Keep current, use faithful, edit</dd>
-      <dt><kbd>r</kbd></dt><dd>Show or hide readings over the Japanese</dd>
-      <dt><kbd>[</kbd> <kbd>]</kbd></dt><dd>Previous or next scene</dd>
-      <dt><kbd>Esc</kbd></dt><dd>Leave the editor or close a word</dd>
-    </dl>
-    <div class="dialog-actions"><button value="close" class="primary">Close</button></div>
   </form>
 </dialog>
 
