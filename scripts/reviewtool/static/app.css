@@ -159,7 +159,10 @@ body.no-rd .w .rd { visibility: hidden; }
 /* Asking Claude about a line */
 .ask { margin: 1.2rem 0 0; max-width: 52rem; display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: 0 1.4rem; }
 .ask > h5 { margin: 0; font-size: 1rem; font-weight: 400; font-style: italic; color: var(--faint); padding-top: 0.15rem; }
-.thread, .thread .items { display: grid; gap: 0.8rem; }
+.thread { display: grid; gap: 0.8rem; }
+.thread .items { display: grid; gap: 0.8rem; align-content: start; max-height: min(22rem, 45vh); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; padding-right: 0.6rem; }
+.thread .items:empty { display: none; }
+.thread .items.long { border: 1px solid var(--rule); border-radius: 6px; padding: 0.7rem 0.8rem; background: var(--panel); }
 .q, .a { margin: 0; }
 .q { color: var(--text); white-space: pre-line; }
 .q::before { content: "You: "; color: var(--faint); font-style: italic; }

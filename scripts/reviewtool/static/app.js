@@ -709,6 +709,11 @@ function isBoxText(p) {
 }
 
 function wireThread(i) {
+  const box = $(`#thread-${i}`);
+  if (box) {   // a long thread scrolls inside its own box; show the newest exchange
+    box.scrollTop = box.scrollHeight;
+    box.classList.toggle('long', box.scrollHeight > box.clientHeight + 2);
+  }
   $$(`#thread-${i} .use`).forEach(b => b.addEventListener('click', () => {
     const ln = lines()[i];
     const prev = S.decisions[ln.ref] || {};
