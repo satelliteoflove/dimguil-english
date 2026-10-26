@@ -65,6 +65,9 @@ See the `NPC dialogue:` commits from 2026-09-25/26. Along the way, Lilia's "scou
 and age lines and her shady-man line were also applied to NPC_MES3, and Guy's party
 turned out to be a Dragon Quest III party (see "Guy's party and Dragon Quest III" in
 `npc-translation.md`).
+On 2026-10-26 Chris asked for the same standard everywhere: Guy's file gets a full
+read-through in the review tool like the others. Its 275 unflagged lines are in
+read1-01 to read1-12 (`mkread.py 1`), and textstatus.py now counts them as not yet read.
 
 Balbo's party (NPC_MES2): scene 1 (Balbo accidentally turns Good) is done. Scene 2
 (Alba's past) was reviewed in the browser tool and applied on 2026-10-05: nine lines

@@ -40,7 +40,8 @@ EXTRA_OPEN = {
 }
 DEFAULTS = {
     'EVENTMES.BIN': ('reviewed', 'event script reviewed scene by scene (finished 2026-10-03)'),
-    'NPC_MES1.OBJ': ('reviewed', "Guy's party finished with Chris (2026-09-26)"),
+    'NPC_MES1.OBJ': ('ai-reviewed', "not flagged; Guy's flagged scenes were finished with Chris "
+                     "(2026-09-26), the rest gets a read-through like the other files"),
     'NPC_MES2.OBJ': ('ai-reviewed', 'not flagged by the NPC reviewers'),
     'NPC_MES3.OBJ': ('ai-reviewed', 'not flagged by the NPC reviewers'),
     'NPC_MES4.OBJ': ('ai-reviewed', 'not flagged by the NPC reviewers'),
