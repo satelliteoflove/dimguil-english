@@ -443,6 +443,15 @@ def jp_pages(src):
     return pages
 
 
+# Where JMdict's first sense misleads under a word (すごい is "amazing" here, not
+# "terrible"): what to show instead, by the group as written, the word, or its lemma.
+try:
+    GLOSS_FIX = {k: v for k, v in json.load(open(os.path.join(HERE, 'glossfix.json'), encoding='utf-8')).items()
+                 if not k.startswith('_')}
+except FileNotFoundError:
+    GLOSS_FIX = {}
+
+
 def short_gloss(q, lemma=None):
     """The first JMdict sense, cut short, for under a word."""
     r = jmdict_only(q, lemma)
@@ -535,6 +544,10 @@ def auto_page(text):
             g['en'] = 'name'
         else:
             g['en'] = short_gloss(head['s'], head['lemma'])
+        fix = GLOSS_FIX.get(g['jp']) or next((GLOSS_FIX[w] for w in (head['s'], head['lemma'])
+                                              if len(w) > 1 and w in GLOSS_FIX), None)   # や alone, not the particle
+        if fix:
+            g['en'] = fix
         if any(t.get('role') for t in toks):
             g['role'] = next(t['role'] for t in toks if t.get('role'))
             g['tone'] = True

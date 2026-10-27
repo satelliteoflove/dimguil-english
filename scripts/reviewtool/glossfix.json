@@ -1,0 +1,13 @@
+{
+ "_about": "Short English shown under a word in the automatic gloss, where JMdict's first sense misleads. Keyed by the word group as written, the word, or its lemma. Read by server.py at start. A one-character key matches only a group that is that character alone.",
+ "すごい": "amazing",
+ "スゴイ": "amazing",
+ "すげぇ": "amazing",
+ "おいら": "I (boyish)",
+ "オイラ": "I (boyish)",
+ "ヤァ": "hey",
+ "や": "hey",
+ "ヨォッ": "yo",
+ "来たのかい": "came, did you?",
+ "侍": "samurai"
+}
