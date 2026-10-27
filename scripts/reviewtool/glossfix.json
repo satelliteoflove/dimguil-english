@@ -9,7 +9,22 @@
  "あなたがたも": "you too (polite)",
  "あまり": "(not) much",
  "ありました": "there was",
- "あれ": "huh?",
+ "あれ": {
+  "en": "huh?",
+  "only": [
+   "1:134",
+   "1:138",
+   "2:208",
+   "3:72",
+   "3:73",
+   "3:94",
+   "3:98",
+   "3:109",
+   "3:194",
+   "3:223",
+   "3:225"
+  ]
+ },
  "あんまり": "too much, not very",
  "いいぞ": "is fine",
  "いいでしょー": "isn't it great?",
@@ -25,7 +40,7 @@
  "いらない": "don't need",
  "いらないと": "don't need",
  "いられない": "can't stay",
- "いる": "be (there)",
+ "いる": "be (there); be -ing",
  "いるかって": "(why) I'm (here)?",
  "いるから": "there is, so",
  "いると": "there are",
@@ -49,12 +64,12 @@
  "おじょうちゃんたち": "little misses (teasing)",
  "おじ様に": "older gentleman",
  "おつかれさん": "good work, you must be tired",
- "おれ": "I (rough, male)",
+ "おれ": "I (casual, male)",
  "お元気でしたか": "have you been well?",
  "お先に失礼": "excuse us, (we'll go) first",
  "お嬢さんたち": "young ladies",
  "お嬢ちゃんたち": "little ladies",
- "お帰りですか": "going home",
+ "お帰りですか": "leaving? (polite)",
  "お帰りですね": "going home",
  "お役に": "of use",
  "お方": "person (polite)",
@@ -80,7 +95,12 @@
  "さっぱり": "(not) at all",
  "されちゃったんです": "got (registered)",
  "さんじゃないですか": "aren't you ...-san?",
- "し": "(stammer)",
+ "し": {
+  "en": "(stammer)",
+  "only": [
+   "3:148"
+  ]
+ },
  "しちゃったじゃないですか": "(I) went and did, didn't I",
  "しっかり": "steady, sensible",
  "してあげましょう": "(I'll) do for you",
@@ -99,55 +119,112 @@
  "せよ": "do it (archaic command)",
  "せんでくれ": "don't (do)",
  "そいつだな": "that one, huh (rough)",
- "そうだ": "oh, that's right",
- "そうね": "yes, true",
+ "そうだ": {
+  "en": "oh, that's right",
+  "only": [
+   "3:71",
+   "4:108"
+  ]
+ },
+ "そうね": {
+  "en": "yes, true",
+  "only": [
+   "3:81"
+  ]
+ },
  "そこで": "there",
  "そなたのような": "(one) like you (archaic)",
  "そのうち": "of them",
  "それは": "that",
  "それを": "that",
  "ただの": "just a",
- "たちゃ": "we (たちは)",
+ "たちゃ": "plural + topic (たちは)",
  "たちゃなんか": "we (rough), kinda",
  "たてそうに": "able to (be of use)",
  "たてぬ": "can't (be), stiff",
- "ため": "for, in order to",
+ "ため": {
+  "en": "for, in order to",
+  "only": [
+   "4:151",
+   "5:112"
+  ]
+ },
  "ついてなんですよ": "about, you see",
  "てらに": "(がてら) while at it",
- "で": "so",
+ "で": {
+  "en": "so",
+  "only": [
+   "1:109",
+   "4:71"
+  ]
+ },
  "できたの": "was formed",
  "できたのだが": "managed to, but",
  "できたようだ": "managed, it seems",
  "できたようだね": "managed, it seems",
  "できたわ": "done",
- "では": "well then; in",
+ "では": "well then",
  "でも": "but; even",
- "とか": "or so",
+ "とか": "something like, or so",
  "ところです": "(was) in the middle of",
  "ところを": "(at) a moment (when)",
- "とって": "(to) us",
- "どうした": "what's up?",
- "どうだい": "how about it?",
- "どうも": "hi, um (filler)",
+ "とって": "to, for (にとって)",
+ "どうした": "what happened?; what's up?",
+ "どうだい": "how's it going?; how about it?",
+ "どうも": {
+  "en": "hi, um (filler)",
+  "only": [
+   "3:7",
+   "3:51",
+   "3:52"
+  ]
+ },
  "どうやら": "it seems",
  "どおりでした": "just as",
  "なされていますな": "you are wearing (polite)",
- "なっ": "(emphatic ending)",
+ "なっ": {
+  "en": "(emphatic ending)",
+  "only": [
+   "1:33",
+   "1:35",
+   "1:39",
+   "5:12"
+  ]
+ },
  "なりたいんだ": "want to become",
  "なりましたか": "did that do?",
  "なりましてねぇ": "has come to be, you see",
  "なりませんか": "won't you become",
- "なんだ": "what?, huh",
- "なんだか": "kind of",
+ "なんだ": {
+  "en": "what?, huh",
+  "only": [
+   "2:265",
+   "5:48"
+  ]
+ },
+ "なんだか": "somehow; kind of",
  "なんだよー": "what is it",
- "なんでも": "apparently",
+ "なんでも": {
+  "en": "apparently",
+  "only": [
+   "3:181",
+   "3:221",
+   "4:111"
+  ]
+ },
  "なーに": "what (are you...)",
  "ねぇねぇねぇ": "hey hey hey",
- "は": "huh?",
- "はぁ": "huh?",
+ "は": {
+  "en": "huh?",
+  "only": [
+   "3:177",
+   "5:92"
+  ]
+ },
+ "はぁ": "huh, uh-huh",
  "はしでも": "a bridge (橋) or something",
  "はやく": "quickly",
- "ふぅ": "hmm (ふぅん)",
+ "ふぅ": "hmm",
  "ふりを": "pretending",
  "ほざいてた": "was spouting off",
  "ぼうやたち": "sonny boys (teasing)",
@@ -171,7 +248,7 @@
  "よけいだよ": "uncalled for",
  "よしてくれるか": "would you quit",
  "よそうぜ": "let's not",
- "よろしく": "nice to meet you",
+ "よろしく": "nice to meet you; regards",
  "よろしくおねがいします": "please be good to us",
  "よろしくな": "nice to meet you",
  "りかと": "Rikaton (her garbled spell)",
@@ -181,7 +258,14 @@
  "わたし": "I",
  "わっ": "whoa",
  "わるー": "bad (creepy)",
- "ん": "hm?",
+ "ん": {
+  "en": "hm?",
+  "only": [
+   "1:48",
+   "4:75",
+   "4:124"
+  ]
+ },
  "アルス": "Al(stron), name",
  "アルマ": "-alma (Dialma)",
  "イって": "-y (Guy), quoting",
@@ -195,20 +279,26 @@
  "ウラが": "-ra (Gaura)",
  "エッチ": "naughty, you perv",
  "オイラ": "I (boyish)",
- "オレ": "I (rough, male)",
- "カドルト": "Kadorto (spell)",
- "ガ": "Gu- (Guy)",
+ "オレ": "I (casual, male)",
+ "カドルト": "Kadorto",
+ "ガ": {
+  "en": "Gu- (Guy)",
+  "only": [
+   "1:115",
+   "1:128"
+  ]
+ },
  "ガイラルディア": "Gaillardia",
  "ガラにも": "out of character (柄)",
  "クレソン": "Cresson",
  "グレーター": "Greater",
  "ゴミ": "garbage",
- "ゴメン": "sorry (ゴメンナサイ)",
+ "ゴメン": "sorry",
  "ゴメーン": "sorryyy",
  "サムライの": "samurai",
  "シケてんな": "stingy, lousy",
  "シブくてよかったわぁ": "cool and mature, nice",
- "ジジイ": "old geezer (rude)",
+ "ジジイ": "old geezer (slang)",
  "ジロっと": "with a glare",
  "スゴイ": "amazing",
  "ティルト": "Tilto-",
@@ -231,9 +321,28 @@
  "ベルガモット": "Bergamot",
  "ベーナモちゃんを": "Magical Rabbit (monster)",
  "ポーターの": "-porter",
- "マディ": "Madi (spell)",
+ "マディ": {
+  "en": "Madi (spell)",
+  "only": [
+   "1:157",
+   "1:161",
+   "2:129",
+   "2:134",
+   "3:137",
+   "3:143",
+   "4:66",
+   "4:69",
+   "4:73",
+   "4:76"
+  ]
+ },
  "マネは": "acting (like)",
- "モン": "(pouty ending)",
+ "モン": {
+  "en": "(pouty ending)",
+  "only": [
+   "1:186"
+  ]
+ },
  "モン同士": "folks alike (者同士)",
  "ヤ": "hey",
  "ヤな": "nasty (嫌な)",
@@ -246,7 +355,7 @@
  "ライチ": "Lychee (her name)",
  "ラツモフィス": "Latumofis (spell)",
  "ラン": "-ran (name)",
- "リル": "(Zaril's name)",
+ "リル": "-ril (Zaril)",
  "リルに": "-ril (Zaril)",
  "レイ": "Rei- (name)",
  "ロゼ": "Rose- (name)",
@@ -257,7 +366,7 @@
  "ロードと": "Lord (class)",
  "ワシ": "I (old man)",
  "一人前に": "full-fledged",
- "一応": "technically, at least",
+ "一応": "for what it's worth",
  "上に": "on top of",
  "不思議そうな": "puzzled",
  "不思議ですね": "how curious",
@@ -265,7 +374,7 @@
  "不祥ですか": "unknown? (不詳, miswritten)",
  "乱暴で": "rough",
  "二世は": "the Second",
- "人が": "people",
+ "人が": "someone, person",
  "人たちみたいね": "people, it seems",
  "人でした": "was a person",
  "人でしたよ": "person",
@@ -275,7 +384,15 @@
  "人は": "person",
  "人も": "person",
  "人を": "people",
- "今日は": "today",
+ "今日は": {
+  "en": "today",
+  "only": [
+   "1:292",
+   "5:15",
+   "4:2",
+   "4:29"
+  ]
+ },
  "他の": "other",
  "以外と": "surprisingly (sic, for 意外と)",
  "仲間はずれ": "left out",
@@ -297,7 +414,7 @@
  "元気で": "doing well",
  "元気でな": "take care",
  "兄弟": "brother (one of us)",
- "先に": "ahead",
+ "先に": "ahead; first",
  "先の": "ahead; earlier",
  "先を": "ahead",
  "入れた": "got (手に入れた)",
@@ -315,7 +432,7 @@
  "占い師": "fortune teller",
  "参りましたね": "well, that's a fix",
  "収穫も": "haul (findings)",
- "受け": "receiving",
+ "受け": "receive, accept",
  "受けた": "took (a hit)",
  "古代語とか": "ancient languages",
  "同志": "fellow (ones)",
@@ -364,7 +481,7 @@
  "得意だぜ": "good at",
  "得意なんだよ": "better at",
  "得意も": "strong point",
- "忠告": "warning",
+ "忠告": "warning, advice",
  "性格": "alignment",
  "悪そうですね": "look unwell",
  "情けない": "pathetic",
@@ -379,10 +496,21 @@
  "持てません": "can't carry",
  "放つ": "giving off",
  "新米": "greenhorn",
- "方が": "people (polite)",
+ "方が": {
+  "en": "people (polite)",
+  "only": [
+   "1:74",
+   "3:47",
+   "1:116",
+   "2:50",
+   "2:55",
+   "3:132",
+   "4:60"
+  ]
+ },
  "方ですか": "people (polite)?",
  "方ですね": "a person (polite)",
- "方は": "as for (the exploring)",
+ "方は": "as for",
  "時に": "when",
  "暑苦しかったわ": "stifling, too intense",
  "書庫": "archive",
@@ -478,7 +606,16 @@
  "頭の": "head",
  "首はねちゃうからね": "I'll lop your head off",
  "魔方陣とか": "magic circles",
- "魔法使い": "Mage",
+ "魔法使い": {
+  "en": "Mage",
+  "only": [
+   "1:118",
+   "1:131",
+   "1:137",
+   "2:106",
+   "2:112"
+  ]
+ },
  "魔法使いと": "mages",
  "魔道師": "wizard"
 }
