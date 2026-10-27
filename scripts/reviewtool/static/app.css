@@ -92,6 +92,8 @@ main { padding: 2.4rem clamp(1.5rem, 4vw, 4rem) 0; max-width: 70rem; min-width: 
 .w.punct { cursor: default; min-width: 0; padding-left: 0; padding-right: 0; }
 .w.punct:hover { border-color: transparent; }
 .w.tone .sf { text-decoration: underline 2px var(--c); text-underline-offset: 6px; }
+.w.fixed .gl { text-decoration: underline dotted 1px; text-underline-offset: 3px; }
+.fixed-note { color: var(--propose); font-size: 0.85em; }
 .w.trap .gl::after { content: " *"; color: var(--propose); font-style: normal; }
 body.no-rd .w .rd { visibility: hidden; }
 .jp-plain { margin: 0; padding: 0.4rem 0 0.9rem; font-family: var(--mincho); font-size: 1.4rem; color: var(--soft); }

@@ -529,11 +529,12 @@ function renderGloss(i) {
     if (w.code) return '';
     if (w.punct) return `<span class="w punct"><span class="rd"></span><span class="sf">${esc(w.jp)}</span><span class="gl"></span></span>`;
     k++;
-    const cls = ['w', w.tone ? 'tone' : '', w.trap ? 'trap' : '', w.name ? 'name' : ''].filter(Boolean).join(' ');
+    const cls = ['w', w.tone ? 'tone' : '', w.trap ? 'trap' : '', w.name ? 'name' : '', w.fixed ? 'fixed' : ''].filter(Boolean).join(' ');
     return `<button type="button" class="${cls}" data-p="${p}" data-j="${j}" data-k="${k}" aria-expanded="false"><span class="rd">${esc(w.rd || '')}</span><span class="sf">${esc(w.show || w.jp)}</span><span class="gl">${esc(w.en || '')}</span></button>`;
   }).join('')}</div>`).join('')
     + (g.error ? `<p class="gloss-error">${esc(g.error)}</p>` : '')
-    + (g.source === 'auto' ? '<p class="auto-note">Words grouped and glossed automatically, from the word splitter and JMdict.</p>' : '');
+    + (g.source === 'auto' ? `<p class="auto-note">Words grouped and glossed automatically, from the word splitter and JMdict.${
+      g.pages.some(pg => pg.some(w => w.fixed)) ? ' A dotted underline marks a gloss corrected by hand; hover or click it for the dictionary\'s own.' : ''}</p>` : '');
   // punctuation stays with the word before it, so a line never starts with 。 or ,
   $$('.w.punct', box).forEach(pu => {
     const prev = pu.previousElementSibling;
@@ -556,7 +557,13 @@ async function lookupWord(q, lemma) {
 }
 
 // The entry for a word: the scene's hand-written one, or one made from JMdict.
+// A corrected gloss (glossfix.json) says so in its entry, with the dictionary's own first sense.
+const fixedNote = w => w.fixed ? `<span class="fixed-note">Gloss corrected by hand: "${esc(w.en)}". The dictionary's first sense is "${esc(w.dict_en || 'none')}".</span>` : '';
 async function entryFor(w) {
+  const e = await entryFor.raw(w);
+  return w.fixed ? { ...e, noteHtml: [fixedNote(w), e.noteHtml].filter(Boolean).join('<br>') } : e;
+}
+entryFor.raw = async function (w) {
   if (w.entry) return { ...w.entry, hand: true };
   if (w.name) return { head: w.show, label: 'name', senses: [], note: w.en };
   const r = await lookupWord(w.q || w.jp, w.lemma);
@@ -571,7 +578,7 @@ async function entryFor(w) {
   const kana = e.kanji.length && e.kana[0] ? e.kana[0].r : '';
   const pos = (e.senses[0].tags || []).filter(t => e.senses[0].pos.includes(t.tag)).map(t => t.text)[0] || '';
   return { head, label: [kana, pos].filter(Boolean).join(', '), senses: e.senses.slice(0, 5).map(s => s.gloss.slice(0, 3).join('; ')), noteHtml: [notes, role].filter(Boolean).join('<br>') };
-}
+};
 
 function entryHtml(e) {
   const senses = e.senses || [];

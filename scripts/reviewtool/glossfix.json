@@ -1,5 +1,5 @@
 {
- "_about": "Short English shown under a word in the automatic gloss, where JMdict's first sense misleads. Keyed by the word group as written, the word, or its lemma. Read by server.py at start. A one-character key matches only a group that is that character alone.",
+ "_about": "Short English shown under a word in the automatic gloss, where JMdict's first sense misleads. Keyed by the word group as written, the word, or its lemma. A plain string applies on every line where the key appears, so it must be a single word's meaning that holds everywhere: no notes about one line's situation. A fix right only on some lines is {\"en\": ..., \"only\": [refs]} (copies follow, since they share the Japanese). A one-character key matches only a group that is that character alone. The tool marks a corrected gloss with a dotted underline. Read by server.py at start.",
  "ああ": "ah",
  "あいかわらずみたいねぇ": "same as ever, it seems",
  "あだになる": "backfire",

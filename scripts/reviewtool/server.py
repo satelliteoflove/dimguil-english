@@ -445,11 +445,39 @@ def jp_pages(src):
 
 # Where JMdict's first sense misleads under a word (すごい is "amazing" here, not
 # "terrible"): what to show instead, by the group as written, the word, or its lemma.
-try:
-    GLOSS_FIX = {k: v for k, v in json.load(open(os.path.join(HERE, 'glossfix.json'), encoding='utf-8')).items()
-                 if not k.startswith('_')}
-except FileNotFoundError:
-    GLOSS_FIX = {}
+# A plain string applies on every line, so it must hold everywhere; {"en", "only": [refs]}
+# applies only on those lines (and their copies, which share the Japanese).
+def load_gloss_fixes():
+    try:
+        raw = json.load(open(os.path.join(HERE, 'glossfix.json'), encoding='utf-8'))
+    except FileNotFoundError:
+        return {}, {}
+    everywhere, scoped = {}, {}
+    for k, v in raw.items():
+        if k.startswith('_'):
+            continue
+        if isinstance(v, str):
+            everywhere[k] = v
+        else:
+            pages = set()
+            for r in v['only']:
+                n, i = parse_ref(r)
+                pages |= {flat(pg) for pg in jp_pages(SOURCES[n][i])}
+            scoped[k] = (v['en'], pages)
+    return everywhere, scoped
+
+
+GLOSS_FIX, GLOSS_FIX_SCOPED = load_gloss_fixes()
+
+
+def gloss_fix(keys, page):
+    """The corrected gloss for a group on this page of Japanese, or None."""
+    for k in keys:
+        if k in GLOSS_FIX:
+            return GLOSS_FIX[k]
+        if k in GLOSS_FIX_SCOPED and flat(page) in GLOSS_FIX_SCOPED[k][1]:
+            return GLOSS_FIX_SCOPED[k][0]
+    return None
 
 
 def short_gloss(q, lemma=None):
@@ -544,10 +572,9 @@ def auto_page(text):
             g['en'] = 'name'
         else:
             g['en'] = short_gloss(head['s'], head['lemma'])
-        fix = GLOSS_FIX.get(g['jp']) or next((GLOSS_FIX[w] for w in (head['s'], head['lemma'])
-                                              if len(w) > 1 and w in GLOSS_FIX), None)   # や alone, not the particle
-        if fix:
-            g['en'] = fix
+        fix = gloss_fix([g['jp']] + [w for w in (head['s'], head['lemma']) if len(w) > 1], text)   # や alone, not the particle
+        if fix and fix != g['en']:
+            g['dict_en'], g['en'], g['fixed'] = g['en'], fix, True
         if any(t.get('role') for t in toks):
             g['role'] = next(t['role'] for t in toks if t.get('role'))
             g['tone'] = True
@@ -758,8 +785,10 @@ def scene_list():
                     'kind': s.get('kind', 'scene'),
                     'priority': s.get('priority'), 'order': s.get('order', 999),
                     'status': status, 'lines': len(s['lines']), 'left': left})
-    # each party's scenes, then its read-throughs, in the order the parties are met
-    return sorted(out, key=lambda s: (s['file'], s['kind'] == 'readthrough', s['order'], s['number'] or 0))
+    # within a party: voice scenes (each character's parts together), then scenes, then read-throughs
+    rank = {'voice': 0, 'readthrough': 2}
+    return sorted(out, key=lambda s: (s['file'], rank.get(s['kind'], 1), s['id'] if s['kind'] == 'voice' else '',
+                                      s['order'], s['number'] or 0))
 
 
 def scene(sid):
