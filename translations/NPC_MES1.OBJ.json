@@ -761,7 +761,7 @@
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Alstron\n\"Sure. We'll leave it at that.\"",
+                    "translation": "Alstron\n\"Well, we'll leave it at that.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -923,13 +923,13 @@
                 {
                     "length": 95,
                     "source": "NA",
-                    "translation": "Alstron\n\"It would seem some of you are\n rather low on health.\n\r If my humble services will do, I shall heal you.\n Now, whom shall I tend to?\"",
+                    "translation": "Alstron\n\"It would seem some of you are rather low on health.\n If my humble services will do, I shall heal you.\n\r Now, whom shall I tend to?\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "Alstron\n\"That one seems quite all right, I'd say.\"",
+                    "translation": "Alstron\n\"That one seems quite all right.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -965,13 +965,13 @@
                 {
                     "length": 44,
                     "source": "NA",
-                    "translation": "Alstron\n\"Hmm...... I'm out of magic, I'm afraid.\n Terribly sorry.\"",
+                    "translation": "Alstron\n\"Hmm...... I'm out of magic, I'm afraid. Terribly sorry.\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 84,
                     "source": "NA",
-                    "translation": "Alstron\n\"Let's see, let me have a look.\"\n\r        {ff30}2Dialma{ff30}0\n\"It's only first aid, mind you.\"",
+                    "translation": "Alstron\n\"Let's have a look, shall we.\"\n\r        {ff30}2Dialma{ff30}0\n\"It's only first aid, mind you.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -983,7 +983,7 @@
                 {
                     "length": 60,
                     "source": "NA",
-                    "translation": "Alstron\n\"I see. So my help is not required.\n Well, kindness does sometimes backfire.\"",
+                    "translation": "Alstron\n\"I see. So my help is not required.\n Well, you can lead a horse to water, as they say.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1241,7 +1241,7 @@
                 {
                     "length": 154,
                     "source": "NA",
-                    "translation": "Alstron\n\"Well, I was once what you'd all call\n 'Evil' myself, so I can hardly talk,\n\r but we met a party led by an odd sort,\n an Evil-aligned Lord.\n\r Still, I don't think he was\n rotten to the core.\"",
+                    "translation": "Alstron\n\"Well, I was once what you'd all call\n 'Evil' myself, so I can hardly talk,\n\r but we met a party led by an odd sort,\n an Evil-aligned Lord.\n\r Still, I had the feeling he wasn't\n a bad man at heart.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1331,7 +1331,7 @@
                 {
                     "length": 77,
                     "source": "NA",
-                    "translation": "Alstron\n\"Could it be............\n\r No, I shouldn't speculate.\n Please, forget I said anything.\"",
+                    "translation": "Alstron\n\"I wonder if............\n No, it's unwise to speak on mere guesses.\n\r Please, pay me no mind.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1367,7 +1367,7 @@
                 {
                     "length": 38,
                     "source": "NA",
-                    "translation": "Alstron\n\"......\n My, my. So such things do happen.\"",
+                    "translation": "Alstron\n\"......\n Oh? So that sort of thing happens, does it?\"",
                     "addStringTerminator": true
                 },
                 {

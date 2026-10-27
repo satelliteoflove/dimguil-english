@@ -37,7 +37,9 @@ the genteel characters (Alba, Alstron, Rosea), not to Balbo's crew. *Check:*
 **L4a. Genteel isn't stuffy.** Even Alstron, the most mannered speaker, went from "as
 regards {name}" to "as for {name}" (1:43), and from "that smell of the stables" to
 "smelling like the stables" (1:62): polite, in words an American still says. His おや?
-became "Oh?", not "Oh my?" (1:56, 1:57; 1:4 kept "Oh my?" as a greeting).
+became "Oh?", not "Oh my?" (1:56, 1:57, and 1:4 too, 778ff35). Tag-on hedges go:
+"That one seems quite all right, I'd say" lost the "I'd say" (1:153), and his "Sure" became
+"Well" (1:125).
 *Check:* `as regards`.
 
 **L5. Match the register to the speaker, both ways.** Polite speakers can go more formal
@@ -99,3 +101,8 @@ A line that ends on "to", "a", "an", "the" or "of" reads badly in the box. *Chec
 **L15. Series spellings and capitals.** Faerie, not fairy (the race, as in Wizardry VI
 and VII). Class names are capitalized: Samurai, Mage, Bishop.
 *Check:* `fairy`, lower-case class names in speech.
+
+**L16. Fill the line before breaking it.** Chris joined lines that were broken short
+when the next words fit: "It would seem some of you are rather low on health." (1:152)
+and "I'm out of magic, I'm afraid. Terribly sorry." (1:159) each became one line. Break
+where the box runs out or where a pause belongs, not earlier.

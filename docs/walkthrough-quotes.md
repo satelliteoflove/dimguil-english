@@ -196,7 +196,7 @@ with the chapter and the string's new wording, to carry over to the site.
 | Who | String | Quote |
 |---|---|---|
 | Guy | NPC_MES1 115 | the hero from far across the sea! |
-| Alstron | NPC_MES1 125 | Sure. We'll leave it at that. |
+| Alstron | NPC_MES1 125 | Well, we'll leave it at that. |
 | Linaria | NPC_MES1 258 | Hey, do you think monsters taste good? |
 | Fritillaria | NPC_MES1 254 | When I fail, they hit me. |
 | Alstron | NPC_MES1 62 | could you do something about smelling like the stables? |
