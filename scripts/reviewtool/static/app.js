@@ -126,10 +126,11 @@ function setChoice(i, choice, { advance = false } = {}) {
 function renderSceneList() {
   const hide = !!localStorage.getItem('dimguil-review:hide-done');
   $('#hide-done').checked = hide;
-  const done = S.scenes.filter(sc => sc.status !== 'open').length;
-  $('#prog-done').textContent = `${done} of ${S.scenes.length} reviewed`;
-  $('#prog-left').textContent = `${S.scenes.length - done} left`;
-  $('#prog-bar').style.width = `${S.scenes.length ? 100 * done / S.scenes.length : 0}%`;
+  // progress in lines read, not scenes: a scene whose lines moved to a voice scene isn't read
+  const pr = S.progress || { read: 0, total: 0 };
+  $('#prog-done').textContent = `${pr.read} of ${pr.total} lines read`;
+  $('#prog-left').textContent = `${pr.total - pr.read} left`;
+  $('#prog-bar').style.width = `${pr.total ? 100 * pr.read / pr.total : 0}%`;
   const byFile = new Map();
   for (const sc of S.scenes) {
     if (hide && sc.status !== 'open' && !(S.scene && S.scene.id === sc.id)) continue;
@@ -138,13 +139,13 @@ function renderSceneList() {
   }
   const partyOf = f => Object.values(S.cast.parties).find(p => p.file === f);
   const STATUS = { applied: 'Applied, waiting for commit', kept: 'Reviewed, no changes', committed: 'Committed',
-    covered: 'Every line was read in other scenes' };
+    covered: 'Every line was read in other scenes', moved: 'Its lines are in voice scenes, read them there' };
   const count = sc => sc.status !== 'open' ? '' : sc.left < sc.lines ? `, ${sc.left} of ${sc.lines} lines to read` : sc.kind === 'readthrough' ? `, ${sc.lines} lines` : '';
   $('#scene-list').innerHTML = [...byFile.entries()].map(([f, list]) => `
     <p class="party">${esc((partyOf(f) || { name: `NPC_MES${f}` }).name)}</p>
     <ol>${list.map(sc => `<li><button type="button" class="scene-link${sc.status === 'open' ? ' todo' : ''}" data-id="${esc(sc.id)}"
       title="${esc(sc.status === 'open' ? 'To review' : STATUS[sc.status] || sc.status)}${count(sc)}"
-      ${S.scene && S.scene.id === sc.id ? 'aria-current="true"' : ''}>${esc(sc.title)}${sc.status === 'applied' ? ' <span class="wait">· applied</span>' : ''}</button></li>`).join('')}</ol>`).join('')
+      ${S.scene && S.scene.id === sc.id ? 'aria-current="true"' : ''}>${esc(sc.title)}${sc.status === 'applied' ? ' <span class="wait">· applied</span>' : sc.status === 'moved' ? ' <span class="wait">· in voice scenes</span>' : ''}</button></li>`).join('')}</ol>`).join('')
     || `<p class="none">${S.scenes.length ? 'Nothing left to review.' : 'No scenes prepared yet.'}</p>`;
   $$('.scene-link').forEach(b => b.addEventListener('click', () => { setNav(false); openScene(b.dataset.id); }));
 }
@@ -905,7 +906,7 @@ async function confirmApply() {
     await api('/api/apply', applyBody());
     localStorage.removeItem(draftKey());
     $('#apply-dialog').close();
-    S.scenes = (await api('/api/state')).scenes;
+    ({ scenes: S.scenes, progress: S.progress } = await api('/api/state'));
     await openScene(S.scene.id, { line: S.focus, top: scrollY });
   } catch (e) {
     $('#apply-error').textContent = e.message;
@@ -957,7 +958,7 @@ async function main() {
   const [st, meta, atlas, box, fp] = await Promise.all([
     api('/api/state'), api('/font/font.json'), loadImage('/font/atlas.png'), loadImage('/font/box.png'), api('/api/fontpack'),
   ]);
-  S.cast = st.cast; S.voices = st.voices; S.scenes = st.scenes;
+  S.cast = st.cast; S.voices = st.voices; S.scenes = st.scenes; S.progress = st.progress;
   S.font = { meta, atlas, box }; S.fp = fp;
   if (localStorage.getItem('dimguil-review:no-rd')) document.body.classList.add('no-rd');
   renderSceneList();

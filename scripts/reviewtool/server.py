@@ -771,16 +771,28 @@ def settled(sid, scenes, index=None):
     return out
 
 
+def progress():
+    """Lines read of all the NPC lines, by textstatus.py's count (decisions in this tool,
+    and Guy's flagged scenes), for the bar over the scene list."""
+    import textstatus
+    status = textstatus.table()
+    total = sum(len(SOURCES[n]) for n in NPC_FILES)
+    read = sum(1 for n in NPC_FILES for i in range(len(SOURCES[n]))
+               if status(f'NPC_MES{n}.OBJ', i)[0] == 'reviewed')
+    return {'read': read, 'total': total}
+
+
 def scene_list():
     out = []
     scenes = all_scenes()
     index = review_index(scenes)
     for sid, s in scenes.items():
         d = read_json(os.path.join(DECISIONS, f'{sid}.json'), {})
-        left = sum(1 for x in settled(sid, scenes, index) if not x)
+        where = settled(sid, scenes, index)
+        left = sum(1 for x in where if not x)
         status = d.get('status', 'open')
-        if status == 'open' and not left:
-            status = 'covered'   # every line was read in other scenes
+        if status == 'open' and not left:   # nothing to read here: every line was read
+            status = 'moved' if any(x['pending'] for x in where) else 'covered'   # or waits in a voice scene
         out.append({'id': s['id'], 'file': s['file'], 'number': s.get('number'), 'title': s['title'],
                     'kind': s.get('kind', 'scene'),
                     'priority': s.get('priority'), 'order': s.get('order', 999),
@@ -1079,7 +1091,7 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send(200, gloss(q.get('ref', ''), line))
             if u.path == '/api/state':
                 return self.send(200, {'cast': cast(), 'voices': voices(),
-                                       'scenes': scene_list(), 'splitter': bool(TAGGER), 'dictionary': bool(DB),
+                                       'scenes': scene_list(), 'progress': progress(), 'splitter': bool(TAGGER), 'dictionary': bool(DB),
                                        'role_sources': ROLE['sources'], 'role_about': ROLE['about']})
             if u.path == '/api/scene':
                 s = scene(q.get('id', ''))
