@@ -179,3 +179,43 @@ NPC_MES5 (Zaril, Fritillaria, Gaura)
     いただけるところから,いただきますから ("we'll take what we can, from where we
     can") on yes. The current "We'll just help ourselves to our fee" is close; check
     that "as a favor to you" in 163 lands as the setup.
+
+## Voice scenes (from 2026-10-26)
+
+Chris asked for one standard everywhere and for less repeated reading, so every
+character now has a voice scene (`scripts/reviewtool/mkvoice.py`, specs in
+`rips/agents/voice-*/`): all their lines in all five files, a voice brief, and fixes
+proposed from `docs/review-lessons.md`. The topic scenes collapse lines a voice scene
+covers. Calls the voice scenes leave to Chris, each noted in its scene:
+
+- Bergamot's dialect: the current English is folksy, part Irish and British ("ye",
+  "meself"); 31 proposals make him a plain, grumpy American old man. One call decides
+  them all. Also ジジイ: "old geezer" proposed (still open: "old coot").
+- Fritillaria in Guy's party talks cowed and polite; the proposals keep that but drop
+  the robot-like "I am sorry" for a kid's contractions.
+- Fontana's speaker tag, "Young samurai" or "Little samurai" (a voice scene can't
+  change a speaker line).
+- Zaril's 同輩 (3:38, 5:25), now "comrade": "You're all my age, huh?" proposed, which
+  assumes he's a teenager.
+- Rosea's ハーフ (2:205): "half-bloods" has a slur's history in American English;
+  "people of mixed blood" proposed.
+- Cresson's party greetings (4:14-21) keep a grander register than his timid voice.
+- Still open from before: Kiku / Kiki / Kiku-chan; Fritillaria's ザリルさん ("Zaril" or
+  "Mister Zaril"); the tavern joke names (bugs.md 2.9).
+
+Code questions the agents raised, not yet checked in the code or emulator:
+
+- Zaril's greetings 3:36-38 and 5:20-25 may never play (the greeting function always
+  ends by picking 33-35, and its Ninja test can't match).
+- 4:12 checks for party members named マルグダ and アラビク, which the English name grid
+  can't type; it may need the Latin switch 'A' got (asm/joke_names.asm). 4:17 is listed
+  as not found in C-talk-lines.md.
+- Artemisia's 2:258-259 ("I love hunting down lost magic") play after "We told them
+  everything we knew" in Balbo's file; their copies in Fontana's file play after
+  "something personal", where they fit.
+- C-talk-lines.md puts Rosea's identify line 2:136 in Balbo's rescue block [4], though
+  the identify service was never written (bugs.md 2.1).
+- Linaria's voice-sheet entry says "tomboyish", but her endings (わ, わよ, かしら) are
+  ordinary feminine ones; Alstron's entry misses the lines where his manners drop (1:58,
+  1:63, 1:64, 1:161); Fritillaria's says one confession line is stiff, but all his talk
+  lines in Guy's party are. Update the sheet as Chris settles each voice.
