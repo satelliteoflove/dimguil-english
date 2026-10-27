@@ -103,13 +103,13 @@ def table():
     def status(f, i):
         if (f, i) in CHECK:
             return 'check', CHECK[(f, i)]
+        if (f, i) in done:   # a decision in the review tool settles it, ticked in the list or not
+            return 'reviewed', 'reviewed with Chris in the review tool'
         if (f, i) in sc:
             ticked, label = sc[(f, i)]
             return ('reviewed', label + ' (done)') if ticked else ('open', label)
         if (f, i) in EXTRA_REVIEWED:
             return 'reviewed', EXTRA_REVIEWED[(f, i)] + ' (done)'
-        if (f, i) in done:
-            return 'reviewed', 'reviewed with Chris in the review tool'
         if (f, i) in EXTRA_OPEN:
             return 'open', EXTRA_OPEN[(f, i)]
         return DEFAULTS.get(f, ('unknown', 'not a tracked file'))

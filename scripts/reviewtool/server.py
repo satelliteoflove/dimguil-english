@@ -847,6 +847,9 @@ def auto_plays(ref):
         text = (f'When you Talk: {said}' if kind == 'Talk' else f'{kind}: {said}') if said else kind
         if 'rerolled' in note:
             text += '. The original game never played this topic; the patch reopened it (bugs.md 1.8)'
+        elif '(shifted' in note:   # Cephala's healing blocks, one off in the original (34cd45c)
+            text += ('. The original game played this one case off, for the next situation along; '
+                     'the patch fixed that, so it plays where its words say')
         elif note and 'run time' not in note:
             text += f' ({note})'
         if text not in seen:

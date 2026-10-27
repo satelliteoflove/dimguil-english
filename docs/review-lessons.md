@@ -24,7 +24,8 @@ political or military to Americans; Balbo's 2:231 became "companions" (Chris: "h
 certain connotation with American audiences"). *Check:* `comrade`.
 
 **L3. Nothing coy or creepy in how people address each other.** Reiran's お嬢さんたち /
-ぼうやたち went from "girlies" / "little boys" to "ladies" / "boys" (2:61, 2:62). A tease
+ぼうやたち went from "girlies" / "little boys" to "girls" / "boys" (2:61, 2:62; "ladies"
+first, then "girls", the natural word from one teenager to others, ac5addf). A tease
 should read as a tease, not as something off. *Check:* `girlies`, `little boys`,
 `little girls`, `missy`.
 

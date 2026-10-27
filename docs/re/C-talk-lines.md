@@ -48,7 +48,7 @@ Arrays:
 | 1:15 | Artemisia "Hello." | h0 Guy greeting [12]<br>h0 Guy greeting [20]<br>h6 scene: Guy's party and Lychee, then the seal explanation (block by stage) [12]<br>h6 scene: Guy's party and Lychee, then the seal explanation (block by stage) [20]<br>greet_guy (talk_str_a): member greetings, random speaker (run time) |
 | 1:16 | Guy "Hey! We meet again!" | Guy variant 0x800bd4a4 (talk_str_b): greeting (run time) |
 | 1:17 | Guy "Hey there! You guys doing all right?" | Guy variant 0x800bd4a4 (talk_str_b): greeting (run time) |
-| 1:18 | Guy "What is it?" | h0 Guy greeting [31]<br>h0 Guy greeting [32]<br>h0 Guy greeting [33]<br>h0 Guy greeting [34]<br>h0 Guy greeting [37]: Fritillaria introduces herself<br>h0 Guy greeting [38]: never picked<br>h0 Guy greeting [39]: never picked<br>h6 scene: Guy's party and Lychee, then the seal explanation (block by stage) [31]<br>h6 scene: Guy's party and Lychee, then the seal explanation (block by stage) [32]<br>h6 scene: Guy's party and Lychee, then the seal explanation (block by stage) [33]<br>h6 scene: Guy's party and Lychee, then the seal explanation (block by stage) [34]<br>h6 scene: Guy's party and Lychee, then the seal explanation (block by stage) [37]<br>h6 scene: Guy's party and Lychee, then the seal explanation (block by stage) [38]<br>h6 scene: Guy's party and Lychee, then the seal explanation (block by stage) [39] |
+| 1:18 | Guy "What is it?" | h0 Guy greeting [31]<br>h0 Guy greeting [32]<br>h0 Guy greeting [33]<br>h0 Guy greeting [34]<br>h0 Guy greeting [37]: Fritillaria introduces himself<br>h0 Guy greeting [38]: never picked<br>h0 Guy greeting [39]: never picked<br>h6 scene: Guy's party and Lychee, then the seal explanation (block by stage) [31]<br>h6 scene: Guy's party and Lychee, then the seal explanation (block by stage) [32]<br>h6 scene: Guy's party and Lychee, then the seal explanation (block by stage) [33]<br>h6 scene: Guy's party and Lychee, then the seal explanation (block by stage) [34]<br>h6 scene: Guy's party and Lychee, then the seal explanation (block by stage) [37]<br>h6 scene: Guy's party and Lychee, then the seal explanation (block by stage) [38]<br>h6 scene: Guy's party and Lychee, then the seal explanation (block by stage) [39] |
 | 1:19 | Guy ".................." | h0 Guy greeting [35]<br>h0 Guy greeting [36]<br>h0 Guy greeting [40]: Lilia introduces herself<br>h0 Guy greeting [41]: never picked<br>h0 Guy greeting [42]: never picked<br>h6 scene: Guy's party and Lychee, then the seal explanation (block by stage) [35]<br>h6 scene: Guy's party and Lychee, then the seal explanation (block by stage) [36]<br>h6 scene: Guy's party and Lychee, then the seal explanation (block by stage) [40]<br>h6 scene: Guy's party and Lychee, then the seal explanation (block by stage) [41]<br>h6 scene: Guy's party and Lychee, then the seal explanation (block by stage) [42]<br>greet_guy (talk_str_a): member greetings, random speaker (run time) |
 | 1:20 | Linaria "Yeah? What's up?" | greet_guy (talk_str_a): member greetings, random speaker (run time)<br>greet_guy (talk_str_b): greetings (run time) |
 | 1:21 | Alstron "Yes?" | greet_guy (talk_str_a): member greetings, random speaker (run time)<br>greet_guy (talk_str_b): greetings (run time) |
@@ -170,7 +170,7 @@ Arrays:
 | 1:137 | Lychee "I'm Lychee, and I'm a Mage!" | **not found** |
 | 1:138 | Lychee "Huh? Did I tell you already?" | **not found** |
 | 1:139 | Lychee "Ehehe, Lychee forgot too!" | **not found** |
-| 1:140 | Fritillaria "I'm Fritillaria, just a small-time Thief. Nice ... | h0 Guy greeting [37]: Fritillaria introduces herself<br>h6 scene: Guy's party and Lychee, then the seal explanation (block by stage) [37] |
+| 1:140 | Fritillaria "I'm Fritillaria, just a small-time Thief. Nice ... | h0 Guy greeting [37]: Fritillaria introduces himself<br>h6 scene: Guy's party and Lychee, then the seal explanation (block by stage) [37] |
 | 1:141 | Lilia "Heard of me? I'm Liliaceus. But you can call me Lilia... | h0 Guy greeting [40]: Lilia introduces herself<br>h6 scene: Guy's party and Lychee, then the seal explanation (block by stage) [40] |
 | 1:142 | Guy "Looks like some of you are running on empty. I can heal... | h0 Guy healing [0] |
 | 1:143 | Guy "That one doesn't look like they need it." | h0 Guy healing [1]: healthy |
@@ -488,7 +488,7 @@ Arrays:
 | 2:132 | Rosea "Oh my, how awful!" {ff30}2Dial{ff30}0 "Will that do f... | h1 Balbo healing [20]: stage 1 HP |
 | 2:133 | Rosea "Oh my, how awful!" {ff30}2Dialma{ff30}0 "Will that do... | h1 Balbo healing [21]: stage 2 HP |
 | 2:134 | Rosea "Oh my, how awful!" {ff30}2Madi{ff30}0 "There, all bet... | **not found** |
-| 2:135 | Rosea "I see... Do take care." | h1 Balbo healing [22]: stage 3 HP (bug: 2:135 with Madi; 2:134 meant)<br>h1 Balbo healing [23]: cancelled |
+| 2:135 | Rosea "I see... Do take care." | h1 Balbo healing [22]: stage 3 HP in the original game (bug: 2:135 with Madi; 2:134 meant; the patch plays 2:134 there, 54596b4)<br>h1 Balbo healing [23]: cancelled |
 | 2:136 | Rosea "That person doesn't seem to have any unidentified ite... | h1 Balbo rescue [4] |
 | 2:137 | Rosea "Identify an item? Sorry in advance if I fail. Anyway,... | **not found** |
 | 2:138 | Rosea "Oh, you don't want me to? I see... you don't trust me... | **not found** |

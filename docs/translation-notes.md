@@ -573,7 +573,7 @@ The full triage is `docs/re/bugs.md`; each fix is its own `asm/bugfix_*.asm`.
 - **The pit scene** now plays its middle block, the rescuer's voice and "Looks like help
   has arrived" (3:95-96, 99-100) (5b565b9).
 - **Fritillaria's "walkin' corpse"** (5:17) tested kills instead of deaths, named the
-  wrong member, and never showed when both of her lines applied (fc6158f).
+  wrong member, and never showed when both of his lines applied (fc6158f).
 - **Cresson's speech after the control room** (4:24-29) was skipped by any party that
   had finished the Decipher table, because both used the same flag (3e36a06).
 - **Chat topics** with low block numbers were always rerolled: Guy's area topics
