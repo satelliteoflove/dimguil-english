@@ -24,6 +24,8 @@ What it writes, only when Chris applies a scene:
     closed (npcquotes.py)
   - rips/review/decisions/<scene>.json: each line's choice, the text before and after,
     and Chris's note. Claude commits from that (one commit per scene) and marks it.
+    A kept line's "carried" lists the ticked copies that already read the same: they
+    count as read too, and later scenes show them collapsed (settled()).
     A line's "copies" lists the other refs written with it. Since the line page
     (2026-10-20) these are the ones Chris ticked, and can include a related line from
     the scene's "related" as well as a same-Japanese copy; the format is unchanged.
@@ -659,34 +661,109 @@ def read_json(path, default=None):
         return default
 
 
+def all_scenes():
+    """{id: scene} for every prepared scene."""
+    out = {}
+    for name in sorted(os.listdir(SCENES)) if os.path.isdir(SCENES) else []:
+        if name.endswith('.json'):
+            s = read_json(os.path.join(SCENES, name))
+            if s:
+                out[s['id']] = s
+    return out
+
+
+def review_index(scenes):
+    """Where each ref has been read: {ref: (scene id, the ref it was read as)} from every
+    decision (its lines, the copies written with them, and the copies carried along
+    unchanged), and {ref: scene id} for the lines of voice scenes not yet applied."""
+    done, voice = {}, {}
+    for name in sorted(os.listdir(DECISIONS)) if os.path.isdir(DECISIONS) else []:
+        d = read_json(os.path.join(DECISIONS, name)) if name.endswith('.json') else None
+        for rec in [d, *d.get('earlier', [])] if d else []:
+            for ln in rec.get('lines', []):
+                done.setdefault(ln['ref'], (d['scene'], ln['ref']))
+                for r in ln.get('copies', []) + ln.get('carried', []):
+                    done.setdefault(r, (d['scene'], ln['ref']))
+    for sid, s in scenes.items():
+        if s.get('kind') == 'voice' and not os.path.exists(os.path.join(DECISIONS, f'{sid}.json')):
+            for ln in s['lines']:
+                voice.setdefault(ln['ref'], sid)
+    return done, voice
+
+
+def settled(sid, scenes, index=None):
+    """For each line of scene sid, None if Chris reads it here, or where he reads it
+    instead: {scene, title, index, as, pending, here}. A line is read elsewhere when
+    another scene's decision has it, or has a copy of it (same Japanese, same speaker)
+    whose English is the same; when a voice scene still to come has it (pending); or
+    when it's a copy of a line above it in this scene (here), whose choice covers it."""
+    done, voice = index or review_index(scenes)
+    s = scenes[sid]
+    own = read_json(os.path.join(DECISIONS, f'{sid}.json'))
+    own_refs = {ln['ref'] for rec in ([own, *own.get('earlier', [])] if own else []) for ln in rec.get('lines', [])}
+    cur = {}
+    def now(r):
+        if r not in cur:
+            cur[r] = current(r)
+        return cur[r]
+    def where(other, as_ref, **kw):
+        lines_ = scenes.get(other, {}).get('lines', [])
+        k = next((j for j, x in enumerate(lines_) if x['ref'] == as_ref), 0)
+        return {'scene': other, 'title': scenes.get(other, {}).get('title', other), 'index': k,
+                'as': as_ref, 'pending': False, 'here': False, **kw}
+    out, above = [], {}
+    for k, ln in enumerate(s['lines']):
+        ref, res = ln['ref'], None
+        if ref not in own_refs:
+            copies = copies_of(ref)
+            if ref in done and done[ref][0] != sid:
+                res = where(done[ref][0], done[ref][1])
+            for c in copies:
+                if not res and c in done and done[c][0] != sid and now(ref) == as_copy(now(c), ref):
+                    res = where(done[c][0], c)
+            if not res and voice.get(ref, sid) != sid:
+                res = where(voice[ref], ref, pending=True)
+            for c in copies:
+                if not res and c in above and now(ref) == as_copy(now(c), ref):
+                    res = where(sid, c, here=True)
+        out.append(res)
+        above.setdefault(ref, k)
+    return out
+
+
 def scene_list():
     out = []
-    for name in sorted(os.listdir(SCENES)) if os.path.isdir(SCENES) else []:
-        if not name.endswith('.json'):
-            continue
-        s = read_json(os.path.join(SCENES, name))
-        d = read_json(os.path.join(DECISIONS, name), {})
+    scenes = all_scenes()
+    index = review_index(scenes)
+    for sid, s in scenes.items():
+        d = read_json(os.path.join(DECISIONS, f'{sid}.json'), {})
+        left = sum(1 for x in settled(sid, scenes, index) if not x)
+        status = d.get('status', 'open')
+        if status == 'open' and not left:
+            status = 'covered'   # every line was read in other scenes
         out.append({'id': s['id'], 'file': s['file'], 'number': s.get('number'), 'title': s['title'],
                     'kind': s.get('kind', 'scene'),
                     'priority': s.get('priority'), 'order': s.get('order', 999),
-                    'status': d.get('status', 'open'), 'lines': len(s['lines'])})
+                    'status': status, 'lines': len(s['lines']), 'left': left})
     # each party's scenes, then its read-throughs, in the order the parties are met
     return sorted(out, key=lambda s: (s['file'], s['kind'] == 'readthrough', s['order'], s['number'] or 0))
 
 
 def scene(sid):
-    s = read_json(os.path.join(SCENES, f'{sid}.json'))
+    scenes = all_scenes()
+    s = scenes.get(sid)
     if not s:
         return None
-    for line in s['lines']:
+    for line, where in zip(s['lines'], settled(sid, scenes)):
+        line['done_in'] = where
         n, i = parse_ref(line['ref'])
         line['jp'] = SOURCES[n][i]
         line['current'] = current(line['ref'])
         line['copies'] = copies_of(line['ref'])
         if not line.get('plays'):
             line['plays_auto'] = auto_plays(line['ref'])
-        if s.get('kind') == 'readthrough':   # nothing proposed: Chris reads the lines as they are
-            line['faithful'] = line['current']
+        if s.get('kind') == 'readthrough':   # Chris reads the lines as they are, unless a
+            line.setdefault('faithful', line['current'])   # lesson proposes a fix (lessons.py)
             line.setdefault('literal', '')
     s['decision'] = read_json(os.path.join(DECISIONS, f'{sid}.json'))
     qs = read_json(QUESTIONS, [])
@@ -854,8 +931,11 @@ def apply(body):
                 f = fit(r, changes.get(r, text))
                 if not f['ok']:
                     raise ValueError(f"{r} doesn't fit: {'; '.join(f['hard'])}")
-            record.append({'ref': ln['ref'], 'choice': ln['choice'], 'before': before, 'after': text,
-                           'copies': refs[1:] if text != before else [], 'note': ln.get('note', '')})
+            rec = {'ref': ln['ref'], 'choice': ln['choice'], 'before': before, 'after': text,
+                   'copies': refs[1:] if text != before else [], 'note': ln.get('note', '')}
+            if text == before:   # ticked copies that already read the same were read with it
+                rec['carried'] = [r for r in refs[1:] if current(r) == as_copy(text, r)]
+            record.append(rec)
         prior = read_json(os.path.join(DECISIONS, f'{sid}.json'))
         if prior and not changes:
             return prior  # nothing new; keep the earlier record (and its commit)

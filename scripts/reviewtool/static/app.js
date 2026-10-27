@@ -85,12 +85,15 @@ const jpx = s => esc(s).replace(JPRUN, m => `<em class="jpx" lang="ja">${m}</em>
 
 const draftKey = () => `dimguil-review:${S.scene.id}`;
 function needsDecision(ln) { return ln.faithful !== ln.current; }
+// A line read in another scene (or a copy of one above) shows as one row, unless opened.
+function collapsed(ln) { return !!ln.done_in && !S.opened[ln.ref]; }
 function alreadyApplied(ln) {
   const prior = S.scene && S.scene.decision;
   if (!prior) return false;
   return [prior, ...(prior.earlier || [])].some(rec => (rec.lines || []).some(p => p.ref === ln.ref));
 }
 function decisionOf(ln) {
+  if (collapsed(ln)) return { choice: 'current', auto: true };
   const d = S.decisions[ln.ref];
   if (d && d.choice) return d;
   return needsDecision(ln) && !alreadyApplied(ln) ? null : { choice: 'current', auto: true };
@@ -104,7 +107,7 @@ function saveDraft() { localStorage.setItem(draftKey(), JSON.stringify(S.decisio
 
 function setChoice(i, choice, { advance = false } = {}) {
   const ln = lines()[i];
-  if (choice === 'faithful' && !needsDecision(ln)) return;
+  if (collapsed(ln) || (choice === 'faithful' && !needsDecision(ln))) return;
   const prev = S.decisions[ln.ref] || {};
   S.decisions[ln.ref] = { ...prev, choice };
   if (choice === 'edited' && !prev.edited) S.decisions[ln.ref].edited = ln.faithful;
@@ -134,11 +137,13 @@ function renderSceneList() {
     byFile.get(sc.file).push(sc);
   }
   const partyOf = f => Object.values(S.cast.parties).find(p => p.file === f);
-  const STATUS = { applied: 'Applied, waiting for commit', kept: 'Reviewed, no changes', committed: 'Committed' };
+  const STATUS = { applied: 'Applied, waiting for commit', kept: 'Reviewed, no changes', committed: 'Committed',
+    covered: 'Every line was read in other scenes' };
+  const count = sc => sc.status !== 'open' ? '' : sc.left < sc.lines ? `, ${sc.left} of ${sc.lines} lines to read` : sc.kind === 'readthrough' ? `, ${sc.lines} lines` : '';
   $('#scene-list').innerHTML = [...byFile.entries()].map(([f, list]) => `
     <p class="party">${esc((partyOf(f) || { name: `NPC_MES${f}` }).name)}</p>
     <ol>${list.map(sc => `<li><button type="button" class="scene-link${sc.status === 'open' ? ' todo' : ''}" data-id="${esc(sc.id)}"
-      title="${esc(sc.status === 'open' ? 'To review' : STATUS[sc.status] || sc.status)}${sc.kind === 'readthrough' ? `, ${sc.lines} lines` : ''}"
+      title="${esc(sc.status === 'open' ? 'To review' : STATUS[sc.status] || sc.status)}${count(sc)}"
       ${S.scene && S.scene.id === sc.id ? 'aria-current="true"' : ''}>${esc(sc.title)}${sc.status === 'applied' ? ' <span class="wait">· applied</span>' : ''}</button></li>`).join('')}</ol>`).join('')
     || `<p class="none">${S.scenes.length ? 'Nothing left to review.' : 'No scenes prepared yet.'}</p>`;
   $$('.scene-link').forEach(b => b.addEventListener('click', () => { setNav(false); openScene(b.dataset.id); }));
@@ -156,6 +161,7 @@ function setNav(open) {
 async function openScene(id, { line = 0, top = null } = {}) {
   S.scene = await api(`/api/scene?id=${encodeURIComponent(id)}`);
   S.decisions = JSON.parse(localStorage.getItem(draftKey()) || '{}');
+  S.opened = {};
   S.glosses = [];
   const sc = S.scene;
   $('#empty').hidden = true; $('#scene').hidden = false;
@@ -198,7 +204,27 @@ function speakerFor(ln) {
   return { tag, who: personForTag(tag) };
 }
 
+function doneHtml(ln, i) {
+  const { tag, who } = speakerFor(ln);
+  const d = ln.done_in;
+  const link = `<button type="button" class="linkish" data-act="goto">${esc(d.here ? d.as : d.title)}</button>`;
+  const why = d.here ? `The same line as ${link} above, so your choice there covers this one.`
+    : d.pending ? `You'll read this in ${link}.`
+    : `Read in ${link}${d.as !== ln.ref ? `, as ${esc(d.as)}` : ''}.`;
+  return `<article class="line done-elsewhere" id="line-${i}" data-i="${i}" style="--c:${lighten(who ? who.color : '#5a6170')}" tabindex="-1" aria-label="${esc(ln.ref)}, ${esc(tag || 'Narration')}, read elsewhere">
+    <div class="line-head">
+      ${who && who.face ? `<img class="face" src="${esc(who.face)}" alt="">` : '<span class="face none"></span>'}
+      <span class="who">${esc(tag || 'Narration')}</span>
+      ${ln.context ? `<span class="where">${esc(ln.context)}</span>` : ''}
+      <span class="ref">${esc(ln.ref)} · NPC_MES${esc(ln.ref.split(':')[0])}</span>
+    </div>
+    <p class="done-text">${esc(readable(ln.current))}</p>
+    <p class="done-why">${why} <button type="button" class="linkish" data-act="open">Read it here anyway</button></p>
+  </article>`;
+}
+
 function lineHtml(ln, i) {
+  if (collapsed(ln)) return doneHtml(ln, i);
   const { tag, who } = speakerFor(ln);
   const color = who ? who.color : '#5a6170';
   const prop = needsDecision(ln);
@@ -373,6 +399,16 @@ function wireElsewhere(i) {
 function wireLine(i) {
   const ln = lines()[i], el = $(`#line-${i}`);
   el.addEventListener('pointerdown', () => { if (S.focus !== i) { S.focus = i; markFocus(); updatePlace(); } });
+  if (collapsed(ln)) {
+    $('[data-act="goto"]', el).addEventListener('click', () => ln.done_in.here ? focusLine(ln.done_in.index)
+      : openScene(ln.done_in.scene, { line: ln.done_in.index }));
+    $('[data-act="open"]', el).addEventListener('click', () => {
+      S.opened[ln.ref] = true;
+      el.outerHTML = lineHtml(ln, i);
+      wireLine(i); fillLine(i); markFocus(); renderApplyBar();
+    });
+    return;
+  }
   $$('.opt', el).forEach(b => b.addEventListener('click', () => setChoice(i, b.dataset.c)));
   $('.note', el).value = (S.decisions[ln.ref] && S.decisions[ln.ref].note) || '';
   $('.note', el).addEventListener('input', e => {
@@ -408,6 +444,7 @@ wireLine.copy = i => {   // the copy toggle, after a redraw of Elsewhere
 
 async function fillLine(i) {
   const ln = lines()[i], sc = S.scene;
+  if (collapsed(ln)) return;
   const versions = [['cur', ln.current]];
   if (needsDecision(ln)) versions.push(['fai', ln.faithful]);
   for (const [k, text] of versions) {
@@ -751,7 +788,7 @@ async function poll() {
   lines().forEach((ln, i) => {
     const refs = [ln.ref, ...ln.copies];
     const mine = all.filter(q => refs.includes(q.ref));
-    if (JSON.stringify(mine) !== JSON.stringify(ln.questions || [])) {
+    if (JSON.stringify(mine) !== JSON.stringify(ln.questions || []) && $(`#thread-${i}`)) {
       ln.questions = mine;
       $(`#thread-${i}`).innerHTML = threadHtml(ln);
       wireThread(i);
@@ -835,7 +872,7 @@ function openApply() {
 function applyBody() {
   return {
     scene: S.scene.id, note: $('#scene-note').value,
-    lines: lines().map(l => {
+    lines: lines().filter(l => !collapsed(l)).map(l => {
       const d = decisionOf(l);
       const own = S.decisions[l.ref] || {};
       return { ref: l.ref, choice: d.choice, text: textFor(l, d.choice), note: own.note || '', copies: tickedOf(l) };
