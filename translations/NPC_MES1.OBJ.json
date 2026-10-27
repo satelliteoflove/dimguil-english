@@ -1511,7 +1511,7 @@
                 {
                     "length": 21,
                     "source": "NA",
-                    "translation": "Alstron\n\"Let me see...\"",
+                    "translation": "Alstron\n\"Oh, about me? Let me think...\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1589,7 +1589,7 @@
                 {
                     "length": 42,
                     "source": "NA",
-                    "translation": "Alstron\n\"Why, such a thing......\n Hmm, how very fortunate for you.\"",
+                    "translation": "Alstron\n\"Why, imagine that......\n Hmm, that's fortunate for you.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1679,7 +1679,7 @@
                 {
                     "length": 34,
                     "source": "NA",
-                    "translation": "Alstron\n\"Then you know everything, don't you.\"",
+                    "translation": "Alstron\n\"Then you must know the whole story by now.\"",
                     "addStringTerminator": true
                 },
                 {
