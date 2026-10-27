@@ -839,6 +839,116 @@ ARRAY_WORDS = {'chat': 'Talk', 'greeting': 'Greeting', 'farewell': 'Leaving', 'i
                'healing': 'Healing offer', 'sale': 'Sale offer', 'rescue': 'Rescue offer', 'fight': 'Fight'}
 
 
+# The code map's conditions (docs/re/C-talk-lines.md) in a player's words. A party's
+# story stage moves on the first time you reach a deeper area (MAZE 0x800a45b0); Zaril's
+# leaving (Fontana handler 20) moves Fontana to 3 and Balbo to 2, and the control-room
+# battle (handler 25) moves Cresson to 2 (docs/re/C-talk.md, npc_stage).
+STAGES = {
+    'Guy': {'1': 'before you reach the Underground Shrine',
+            '2': 'after you reach the Underground Shrine, before Area B',
+            '3': 'after you reach Area B',
+            '12': 'before you reach Area B', '23': 'after you reach the Underground Shrine'},
+    'Balbo': {'1': 'before you reach Area B or see Zaril leave Fontana\'s party',
+              '2': 'after you reach Area B or see Zaril leave Fontana\'s party, before Area C',
+              '3': 'after you reach Area C',
+              '12': 'before you reach Area C', '23': 'after you reach Area B or see Zaril leave'},
+    'Fontana': {'1': 'before you reach Area A',
+                '2': 'after you reach Area A, before Area B or Zaril leaving',
+                '3': 'after you reach Area B or Zaril leaves the party',
+                '12': 'before you reach Area B or Zaril leaves', '23': 'after you reach Area A'},
+    'scholars': {'1': 'before the control-room battle', '2': 'after the control-room battle'},
+}
+TABLET = "while the matching stone isn't set in the Tablet of the Sun yet"
+PLAIN = {
+    # healing offers
+    'healthy': "when you pick someone who doesn't need healing",
+    'cancelled': 'when you turn the offer down',
+    "can't treat": "when they can't treat what's wrong",
+    'out of magic (20%)': "when they're out of magic, a 1-in-5 chance each time",
+    'out of magic, or stage 1 stone/dead': "when they're out of magic, or when someone is stoned or dead {1}",
+    'stage 1 HP': 'when someone is hurt, {1}',
+    'stage 2 HP': 'when someone is hurt, {2}',
+    'stage 3 HP': 'when someone is hurt, {3}',
+    'stages 1-2 HP': 'when someone is hurt, {12}',
+    'stage 1, any status': 'when someone has a status ailment, {1}',
+    'stage 1, paralysis': 'when someone is paralyzed, {1}',
+    'stage 1, poison': 'when someone is poisoned, {1}',
+    'stage 1, stone/dead': 'when someone is stoned or dead, {1}',
+    'stage 2, dead': 'when someone is dead, {2}',
+    'stage 2, paralysis': 'when someone is paralyzed, {2}',
+    'stage 2, stone/dead/poison': 'when someone is stoned, dead or poisoned, {2}',
+    'stage 3, paralysis': 'when someone is paralyzed, {3}',
+    'stage 3, poison': 'when someone is poisoned, {3}',
+    'stage 3, stone/dead': 'when someone is stoned or dead, {3}',
+    'stage 3, poison/paralysis/stone': 'when someone is poisoned, paralyzed or stoned, {3}',
+    'stage 3, dead or ashes: Kadorto (always works)': 'when someone is dead or ashes, {3}; they cast Kadorto, which always works',
+    'stage 2, dead or ashes: Kadorto (always works)': 'when someone is dead or ashes, {2}; they cast Kadorto, which always works',
+    'stages 1-2, dead or ashes': 'when someone is dead or ashes, {12}',
+    'stages 1-2, paralysis': 'when someone is paralyzed, {12}',
+    'stages 1-2, poison': 'when someone is poisoned, {12}',
+    'paralysis (stages 2-3)': 'when someone is paralyzed, {23}',
+    'HP: Madi': 'when someone is hurt; they cast Madi',
+    'status: Madi': 'when someone has a status ailment; they cast Madi',
+    'poison/paralysis/stone: Madi': 'when someone is poisoned, paralyzed or stoned; they cast Madi',
+    'dead or ashes: Kadorto (always works)': 'when someone is dead or ashes; they cast Kadorto, which always works',
+    'never (needs stages 2 and 3 at once)': ('when someone is poisoned, paralyzed or stoned, {23}. The original game '
+                                              'never played it, because its check could never pass; the patch fixed that'),
+    'stage 3 HP in the original game (bug: 2:135 with Madi; 2:134 meant; the patch plays 2:134 there, 54596b4)':
+        ('when someone was hurt {3}, in the original game only, by mistake; '
+         'the patch plays the right line (2:134) there'),
+    # greetings
+    'first meeting': 'the first time you meet them',
+    'first meeting, Guy Good': 'the first time you meet them, while Guy is Good',
+    'first meeting, Guy Evil': 'the first time you meet them, while Guy is Evil',
+    'first meeting, compatible': "the first time you meet them, if your party's alignments sit well with Balbo's",
+    'first meeting, incompatible': "the first time you meet them, if your party's alignments don't sit well with Balbo's",
+    'Guy turned Evil, compatible, met before': ("after Guy turns Evil, if you've met before and your party's "
+                                                "alignments sit well with his"),
+    'Balbo turned Good': 'after Balbo turns Good',
+    'Balbo back to Evil': 'after Balbo turns back to Evil',
+    'maze changed': 'after the maze changes',
+    'maze changed, introduced': "after the maze changes, if they've introduced themselves",
+    'maze changed, not introduced': "after the maze changes, if they haven't introduced themselves",
+    'not introduced': "before they've introduced themselves",
+    'seen, not introduced': "if you've seen them before but they haven't introduced themselves",
+    'first visit': 'your first visit',
+    'stage 2, Cresson alone, met': "{2}, when Cresson is alone and you've met him",
+    'stage 2, Cresson alone, not met': "{2}, when Cresson is alone and you haven't met him",
+    'Zaril greets': 'when Zaril is the one who greets you',
+    'Gaura or Fritillaria greets': 'when Gaura or Fritillaria is the one who greets you',
+    'Fritillaria introduces himself': 'when Fritillaria introduces himself',
+    'Lilia introduces herself': 'when Lilia introduces herself',
+    'the reward: gave the Ruby Slippers, not yet rewarded (+10,000 G)':
+        'the first time you meet them after giving Guy the Ruby Slippers; they pay you 10,000 G',
+    'never picked': 'the game never picks this one',
+    # chat
+    'stage 1 special (90%)': '{1}; a special topic, picked 9 times in 10 when it comes up',
+    'stage 1, progress_bits < 0x200, outside the location areas': '{1}, anywhere without a topic of its own',
+    'progress_bits & 0x200 and a member with flag +0xc5 bit 0':
+        "after the ending, when someone in your party has the King's title",
+    'areas 1-4 before the walls change': 'in the Shrine Interior, before the walls change',
+    'areas 0x13-0x16 after the maze changes': 'in Area A, after the maze changes',
+    "areas 0x17-0x1b without the Tablet's stone bit 2": f'in Area B, {TABLET}',
+    'areas 0x20-0x23 before the maze changes': 'in Area D, before the maze changes',
+    'stage 3, areas 5-8, Tablet stone bit 4 missing': f'{{3}}, in the Underground Shrine, {TABLET}',
+    'stage 3, areas 0x13-0x16, stone bit 0x20 missing': f'{{3}}, in Area A, {TABLET}',
+    'stage 3, areas 0x1c-0x1f, stone bit 0x80 missing': f'{{3}}, in Area C, {TABLET}',
+}
+# Blocks the original game never picked and the patch opened up (bugs.md).
+REOPENED = {'h2 Fontana chat [8]': 'The original game never picked this topic; the patch adds it at Fontana\'s '
+                                   'last stage (bugs.md 2.5)'}
+
+
+def plain(note, key):
+    """A code-map condition in a player's words, or the note itself if it isn't in PLAIN."""
+    text = PLAIN.get(note)
+    if text is None:
+        return note
+    who = next((p for p in STAGES if f' {p} ' in key), None)
+    stages = STAGES.get(who, {})
+    return re.sub(r'\{(\d+)\}', lambda m: stages.get(m.group(1), f'at stage {m.group(1)}'), text)
+
+
 RUN_TIME = [('farewell', 'When you leave them'),
             ('introduced greeting', 'A greeting once you know them, picked by who is in your party'),
             ('greetings by speaker', 'A greeting when you meet them')]
@@ -892,12 +1002,31 @@ def auto_plays(ref):
         elif '(shifted' in note:   # Cephala's healing blocks, one off in the original (34cd45c)
             text += ('. The original game played this one case off, for the next situation along; '
                      'the patch fixed that, so it plays where its words say')
+        elif key in REOPENED:
+            text += '. ' + REOPENED[key]
+        elif note in PLAIN:
+            p = plain(note, key)
+            text += f'. {p[0].upper()}{p[1:]}' if said else f', {p}'
         elif note and 'run time' not in note:
             text += f' ({note})'
         if text not in seen:
             seen.add(text)
             out.append(text)
-    return '. '.join(out[:2]) + '.' if out else ''
+    never = [t for t in out if t.endswith(', ' + PLAIN['never picked'])]
+    if len(never) < len(out):   # another block plays it, so the unpicked copy says nothing
+        out = [t for t in out if t not in never]
+    out.sort(key=lambda t: 'original game' in t)   # the usual case first, the bug note after
+    merged = []   # "Healing offer, when A" and "Healing offer, when B" read as one
+    for t in out:
+        kind, sep, cond = t.partition(', ')
+        prev = next((i for i, m in enumerate(merged) if sep and (m.startswith(kind + ', ') or m == kind)), None)
+        if prev is None:
+            merged.append(t)
+        elif merged[prev] == kind:   # a block with no condition, and one with
+            merged[prev] += f'; also {cond}'
+        else:
+            merged[prev] += f'; or {cond}'
+    return '. '.join(merged[:2]) + '.' if merged else ''
 
 
 def moments():
