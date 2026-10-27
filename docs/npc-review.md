@@ -219,3 +219,16 @@ Code questions the agents raised, not yet checked in the code or emulator:
   ordinary feminine ones; Alstron's entry misses the lines where his manners drop (1:58,
   1:63, 1:64, 1:161); Fritillaria's says one confession line is stiff, but all his talk
   lines in Guy's party are. Update the sheet as Chris settles each voice.
+
+More from the moments map (docs/re/moments.json, 2026-10-26; read in the MCARD
+decompiles, not yet run; details in rips/agents/moments/STATUS.md):
+
+- May never play: Fontana's 3:109-110 (every path in 0x800d3bd8 overwrites them with
+  3:7 or 3:8, the same missing-return slip as Zaril's 3:36-38); Linaria's 1:50 (her
+  alignment loop tests Good twice, never Evil, 0x800bd948); 2:8, 2:9, 2:11, 2:19 (never
+  stored by greet_balbo; at stage 1 Reiran's slot plays Gaura's 2:20); 4:3 and 4:6
+  (Cleo's greeting and Cresson's farewell never store them); 3:50 ("granny": an older
+  all-women party gets Lilia's "gramps" line).
+- Wrong portrait or speaker: 1:15 plays with Lilia's portrait over a line tagged
+  "Artemisia"; Guy's farewell block 53 plays Lychee's 1:44 where Lilia should speak
+  (so 1:45 never plays), and block 27 shows Lilia's 1:34 over Fritillaria's portrait.

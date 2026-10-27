@@ -900,23 +900,48 @@ def auto_plays(ref):
     return '. '.join(out[:2]) + '.' if out else ''
 
 
+def moments():
+    """docs/re/moments.json: greetings, farewells and services grouped by the game moment
+    they play in, across all five files: {key: {label, refs}}. Read once."""
+    if not hasattr(moments, 'by_ref'):
+        data = read_json(os.path.join(ROOT, 'docs/re/moments.json'), {}).get('moments', {})
+        moments.data, moments.by_ref = data, {}
+        for key, m in data.items():
+            for r in m.get('refs', []):
+                moments.by_ref.setdefault(r, []).append(key)
+    return moments.data, moments.by_ref
+
+
 def others_asked(ref):
-    """The other party members' answers in the same talk exchange (a chat topic or the
-    introductions), for reading a line by character without losing the round: [{ref,
-    speaker, current}]. Narration and the speaker's own other lines are left out."""
+    """How the other characters speak at the same point, so a line can be read against its
+    siblings: [{title, lines: [{ref, speaker, party, current}]}]. The rest of the party's
+    answers in the same talk exchange (a chat topic or the introductions), and the other
+    characters' lines in the same moment (moments()), in any party. Narration and the
+    speaker's own other lines are left out."""
     by_ref, by_block = talk_blocks()
-    me, out, seen = person(ref), [], {ref}
+    me, groups, seen = person(ref), [], {ref}
+
+    def item(r):
+        cur = current(r)
+        who = cur.split('\n', 1)[0] if '\n' in cur and cur.split('\n', 1)[1].startswith('"') else None
+        if r in seen or (me and person(r) == me):
+            return None
+        seen.add(r)
+        n, _ = parse_ref(r)
+        return {'ref': r, 'speaker': who or '(no speaker line)', 'party': FILE_PARTY.get(n), 'current': cur}
+
+    talk = []
     for key, _ in by_ref.get(ref, []):
-        if not key or not any(f' {w} [' in key for w in ('chat', 'introductions')):
-            continue
-        for r in by_block.get(key, []):
-            cur = current(r)
-            who = cur.split('\n', 1)[0] if '\n' in cur and cur.split('\n', 1)[1].startswith('"') else None
-            if r in seen or not who or (me and person(r) == me):
-                continue
-            seen.add(r)
-            out.append({'ref': r, 'speaker': who, 'current': cur})
-    return out
+        if key and any(f' {w} [' in key for w in ('chat', 'introductions')):
+            talk += [x for x in (item(r) for r in by_block.get(key, []) if '"' in current(r)) if x]
+    if talk:
+        groups.append({'title': 'Others asked the same', 'lines': talk})
+    data, mby = moments()
+    for key in mby.get(ref, []):
+        lines = [x for x in (item(r) for r in data[key]['refs']) if x]
+        if lines:
+            groups.append({'title': 'Same moment, other characters', 'about': data[key].get('label', ''), 'lines': lines})
+    return groups
 
 
 FILE_PARTY = {1: "Guy's party", 2: "Balbo's party", 3: "Fontana's party", 4: 'The scholars', 5: "Zaril's party"}

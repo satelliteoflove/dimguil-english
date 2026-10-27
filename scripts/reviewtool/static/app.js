@@ -224,14 +224,15 @@ function doneHtml(ln, i) {
   </article>`;
 }
 
-// The rest of the party's answers to the same question, so a voice scene keeps the round.
+// How the others speak at the same point: the rest of the party's answers to the same
+// question, and other characters' lines in the same moment (greetings, farewells, services).
 function othersHtml(ln) {
-  const os = ln.others || [];
-  if (!os.length) return '';
-  return `<details class="others"><summary>Others asked the same (${os.length})</summary><ul>${os.map(o => {
+  return (ln.others || []).map(g => `<details class="others"><summary>${esc(g.title)} (${g.lines.length})</summary>
+    ${g.about ? `<p class="o-about">${esc(g.about)}</p>` : ''}<ul>${g.lines.map(o => {
     const who = personForTag(o.speaker);
-    return `<li style="--c:${lighten(who ? who.color : '#5a6170')}"><span class="o-who">${esc(o.speaker)}</span> <span class="o-ref">${esc(o.ref)}</span><br>${esc(readable(o.current))}</li>`;
-  }).join('')}</ul></details>`;
+    const party = o.party && o.ref.split(':')[0] !== ln.ref.split(':')[0] ? `, ${esc(o.party)}` : '';
+    return `<li style="--c:${lighten(who ? who.color : '#5a6170')}"><span class="o-who">${esc(o.speaker)}</span> <span class="o-ref">${esc(o.ref)}${party}</span><br>${esc(readable(o.current))}</li>`;
+  }).join('')}</ul></details>`).join('');
 }
 
 function lineHtml(ln, i) {

@@ -97,6 +97,7 @@ main { padding: 2.4rem clamp(1.5rem, 4vw, 4rem) 0; max-width: 70rem; min-width: 
 .others ul { list-style: none; margin: 0.5rem 0 0; padding: 0; }
 .others li { margin: 0 0 0.6rem; padding-left: 0.7rem; border-left: 2px solid var(--c); white-space: pre-line; }
 .others .o-who { color: var(--text); font-style: italic; }
+.others .o-about { margin: 0.4rem 0 0; color: var(--faint); font-style: italic; }
 .others .o-ref { color: var(--faint); font-size: 0.8rem; }
 .w.fixed .gl { text-decoration: underline dotted 1px; text-underline-offset: 3px; }
 .fixed-note { color: var(--propose); font-size: 0.85em; }

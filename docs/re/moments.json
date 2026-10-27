@@ -1,0 +1,680 @@
+{
+  "_about": "Moments map for the NPC dialogue in NPC_MES1-5. Each key is a game situation that plays out the same way across parties (greetings, farewells, healing, rescue, item sales, fights, and the cut identify service), so the review tool can show under one line how the other characters speak in the same moment. Refs are 'n:i', string i of NPC_MESn (Japanese in rips/stage/out/dumps, English in translations). Chat topics, introductions, menu prompts, option lists and narration are left out. A ref is in two moments only where it plays in both. 'By the code' means the condition was read in the decompiled MCARD code (docs/re/C-talk.md, C-talk-lines.md, bugs.md, and the greeting-variant and farewell functions in rips/re/decomp/MCARD); '(inferred)' means it wasn't. Built 2026-10-26; open questions are in rips/agents/moments/STATUS.md.",
+  "moments": {
+    "greeting:first-meeting": {
+      "label": "Greeting the very first time anyone in your party meets them (by the code: a per-character flag the greeting sets). Guy's line depends on his own alignment, Balbo's on whether your alignment suits his.",
+      "refs": [
+        "1:0",
+        "1:1",
+        "2:0",
+        "2:1",
+        "3:0",
+        "4:0",
+        "5:0"
+      ]
+    },
+    "greeting:not-introduced": {
+      "label": "Greeting when you've met them before but nobody in your party has been introduced to them yet; the leader speaks, sometimes with one of the others (by the code). Guy's and Balbo's parties pick friendlier lines when your alignment suits theirs.",
+      "refs": [
+        "1:2",
+        "1:3",
+        "1:4",
+        "1:5",
+        "1:6",
+        "1:7",
+        "1:8",
+        "1:9",
+        "1:10",
+        "1:11",
+        "1:12",
+        "1:13",
+        "1:14",
+        "1:15",
+        "2:1",
+        "2:2",
+        "2:7",
+        "2:12",
+        "2:13",
+        "2:14",
+        "2:15",
+        "2:16",
+        "3:1",
+        "3:2",
+        "3:3",
+        "3:4",
+        "3:5",
+        "3:6",
+        "3:9",
+        "4:1",
+        "4:152",
+        "5:1"
+      ]
+    },
+    "greeting:new-member": {
+      "label": "Greeting in which a member of their party you haven't met yet speaks up or introduces themselves, while you know the rest (by the code: Fritillaria and Lilia in Guy's party, Artemisia in Balbo's, Fritillaria and Gaura in Zaril's).",
+      "refs": [
+        "1:12",
+        "1:13",
+        "1:121",
+        "1:123",
+        "1:140",
+        "1:141",
+        "2:271",
+        "5:122",
+        "5:123"
+      ]
+    },
+    "greeting:usual": {
+      "label": "The everyday greeting from someone you've been introduced to, when nothing about your party catches their eye (by the code: each speaker's fallback line). With the patch, Cresson's wording follows whether your party is all men, all women or mixed.",
+      "refs": [
+        "1:16",
+        "1:17",
+        "1:46",
+        "1:47",
+        "1:48",
+        "1:53",
+        "1:54",
+        "1:55",
+        "1:65",
+        "1:66",
+        "1:67",
+        "1:73",
+        "1:290",
+        "1:291",
+        "1:293",
+        "1:294",
+        "2:3",
+        "2:4",
+        "2:47",
+        "2:48",
+        "2:52",
+        "2:53",
+        "2:58",
+        "2:59",
+        "2:65",
+        "2:66",
+        "2:67",
+        "2:68",
+        "2:69",
+        "3:7",
+        "3:8",
+        "3:33",
+        "3:34",
+        "3:35",
+        "3:39",
+        "3:40",
+        "3:41",
+        "3:44",
+        "3:45",
+        "3:46",
+        "3:51",
+        "3:52",
+        "3:53",
+        "3:60",
+        "3:61",
+        "4:2",
+        "4:4",
+        "4:18",
+        "4:19",
+        "4:20",
+        "4:56",
+        "4:134",
+        "4:153",
+        "5:2",
+        "5:13",
+        "5:14",
+        "5:15",
+        "5:18",
+        "5:19"
+      ]
+    },
+    "greeting:alignment-mismatch": {
+      "label": "Greeting when you've been introduced but your party's alignment doesn't suit theirs: the curt version (by the code; Guy's and Balbo's parties only). Reiran's 2:19 is never picked; her slot plays Gaura's line (inferred from the line sets).",
+      "refs": [
+        "1:14",
+        "1:15",
+        "1:18",
+        "1:19",
+        "1:20",
+        "1:21",
+        "1:22",
+        "2:6",
+        "2:10",
+        "2:17",
+        "2:18",
+        "2:19",
+        "2:20"
+      ]
+    },
+    "greeting:new-face": {
+      "label": "Greeting when someone in your party hasn't met the speaker but the others have, so the lineup has changed (by the code: a member without that character's met bit; Alstron has one line for one newcomer and one for several).",
+      "refs": [
+        "1:56",
+        "1:57",
+        "1:113",
+        "2:94",
+        "3:109"
+      ]
+    },
+    "greeting:tavern-acquaintance": {
+      "label": "Greeting that treats a member of your party as someone they know from the tavern (by the code: a member with a special portrait rather than their class's own; Linaria's needs every member to have one).",
+      "refs": [
+        "1:49",
+        "1:58",
+        "1:114",
+        "3:110"
+      ]
+    },
+    "greeting:all-boys": {
+      "label": "Greeting when everyone in your party is a boy aged 10 to 19 (by the code).",
+      "refs": [
+        "1:51",
+        "2:62",
+        "3:64"
+      ]
+    },
+    "greeting:all-girls": {
+      "label": "Greeting when everyone in your party is a girl aged 10 to 19 (by the code).",
+      "refs": [
+        "1:52",
+        "2:61",
+        "3:63"
+      ]
+    },
+    "greeting:aged-20-39": {
+      "label": "Greeting when everyone in your party is aged 20 to 39 (by the code; Cephala's two lines also need everyone to be men, or everyone women).",
+      "refs": [
+        "1:63",
+        "3:56",
+        "3:57"
+      ]
+    },
+    "greeting:older-men": {
+      "label": "Greeting when everyone in your party is a man aged 40 to 59 (by the code).",
+      "refs": [
+        "1:70",
+        "1:76",
+        "3:49"
+      ]
+    },
+    "greeting:older-women": {
+      "label": "Greeting when everyone in your party is a woman aged 40 to 59 (by the code; Lilia in Fontana's party says her 'gramps' line here too, so her 'granny' line never plays).",
+      "refs": [
+        "1:71",
+        "1:77",
+        "3:49",
+        "3:50"
+      ]
+    },
+    "greeting:older-party": {
+      "label": "Greeting when everyone in your party is aged 40 to 59, men or women (by the code; Bergamot's needs everyone to be 50 or older).",
+      "refs": [
+        "2:51",
+        "2:63",
+        "3:65",
+        "4:9"
+      ]
+    },
+    "greeting:rude-name": {
+      "label": "Greeting when a member's name is on the game's list of rude words (by the code).",
+      "refs": [
+        "1:72",
+        "2:56"
+      ]
+    },
+    "greeting:joke-name": {
+      "label": "Greeting set off by one particular name: a tavern regular, a grave, a god, or a missing pair of adventurers (by the code; each speaker checks their own name, and the tavern checks can't match, bugs.md 2.9).",
+      "refs": [
+        "1:60",
+        "1:68",
+        "1:75",
+        "2:50",
+        "3:48",
+        "4:12",
+        "4:14"
+      ]
+    },
+    "greeting:ninja": {
+      "label": "Greeting that singles out the Ninjas in your party (by the code: Reiran's needs a Ninja aged 10 to 19, Zaril's two or more Ninjas).",
+      "refs": [
+        "2:64",
+        "3:66",
+        "3:37"
+      ]
+    },
+    "greeting:money": {
+      "label": "Greeting that reacts to your party's gold (by the code: Alstron's when a member below level 10 carries more than 99,999 G, Cephala's when the party has no gold at all; she then gives 100 G).",
+      "refs": [
+        "1:64",
+        "3:54"
+      ]
+    },
+    "greeting:gear": {
+      "label": "Greeting that reacts to the equipment your party carries (by the code: Cephala's when someone carries a cursed item or a Muramasa; Alba's Evil-gear test and Zaril's gear test probably never match, inferred).",
+      "refs": [
+        "2:49",
+        "3:36",
+        "3:58",
+        "3:59"
+      ]
+    },
+    "greeting:young-admirer": {
+      "label": "Greeting that admires a young member of the other sex (by the code: Alstron's when a woman aged 10 to 19 is in the party, Rosea's when a man aged 16 to 25 is).",
+      "refs": [
+        "1:59",
+        "2:57"
+      ]
+    },
+    "greeting:knows-every-spell": {
+      "label": "Greeting when a member knows every spell in all four schools (by the code; Alstron's also needs that member to be aged 10 to 19).",
+      "refs": [
+        "1:62",
+        "4:10"
+      ]
+    },
+    "greeting:superhuman": {
+      "label": "Greeting that reacts to absurdly high numbers in your party (by the code: Cresson's when a member's max HP passes 9,999 or everyone is level 100 or more, Fritillaria's when a member has more than 10,000 kills).",
+      "refs": [
+        "1:78",
+        "4:15",
+        "4:16",
+        "5:16"
+      ]
+    },
+    "greeting:maze-changed": {
+      "label": "The first greeting after the maze changes (the metal walls, after mimicry mode is released): the party reacts to the new maze (by the code: story_flags bit 10, once per party).",
+      "refs": [
+        "1:98",
+        "1:99",
+        "1:100",
+        "1:101",
+        "1:102",
+        "1:103",
+        "2:90",
+        "2:91",
+        "3:72",
+        "3:73",
+        "4:22",
+        "4:23"
+      ]
+    },
+    "greeting:alignment-flip": {
+      "label": "Greeting where the leader tells you their party's alignment has changed since you last met (by the code: Guy's and Balbo's alignment flags; when the flips happen isn't traced).",
+      "refs": [
+        "1:94",
+        "1:95",
+        "1:96",
+        "1:97",
+        "2:92",
+        "2:93"
+      ]
+    },
+    "farewell:not-introduced": {
+      "label": "You choose Leave before anyone in your party has been introduced to them; one member says goodbye under their unnamed tag (by the code).",
+      "refs": [
+        "1:23",
+        "1:24",
+        "1:25",
+        "1:26",
+        "1:27",
+        "1:28",
+        "2:21",
+        "2:22",
+        "2:23",
+        "2:24",
+        "2:25",
+        "2:26",
+        "3:12",
+        "3:13",
+        "3:14",
+        "3:15",
+        "3:16",
+        "3:17",
+        "4:5",
+        "4:6",
+        "4:154",
+        "5:5",
+        "5:6",
+        "5:7"
+      ]
+    },
+    "farewell:alignment-mismatch": {
+      "label": "You choose Leave after being introduced, while your party has no Evil member and their leader is Evil: the curt farewell (by the code; Guy's and Balbo's parties).",
+      "refs": [
+        "1:29",
+        "1:30",
+        "1:31",
+        "1:32",
+        "1:33",
+        "1:34",
+        "2:27",
+        "2:28",
+        "2:29",
+        "2:30",
+        "2:31",
+        "2:32"
+      ]
+    },
+    "farewell:plain": {
+      "label": "You choose Leave after being introduced and nobody in your party is dead (by the code). Fritillaria's and the scholars' farewells are the same either way.",
+      "refs": [
+        "1:35",
+        "1:36",
+        "1:37",
+        "1:38",
+        "1:39",
+        "1:40",
+        "2:33",
+        "2:36",
+        "2:38",
+        "2:40",
+        "2:42",
+        "2:44",
+        "2:45",
+        "3:21",
+        "3:23",
+        "3:25",
+        "3:26",
+        "3:28",
+        "3:30",
+        "3:32",
+        "4:7",
+        "4:8",
+        "4:155",
+        "5:9",
+        "5:10",
+        "5:12"
+      ]
+    },
+    "farewell:member-dead": {
+      "label": "You choose Leave after being introduced while one of your party is dead, ashes or lost; most lines name that member (by the code).",
+      "refs": [
+        "1:41",
+        "1:42",
+        "1:43",
+        "1:44",
+        "1:45",
+        "2:34",
+        "2:35",
+        "2:37",
+        "2:39",
+        "2:41",
+        "2:43",
+        "2:46",
+        "3:18",
+        "3:19",
+        "3:20",
+        "3:22",
+        "3:24",
+        "3:27",
+        "3:29",
+        "3:31",
+        "5:8",
+        "5:11"
+      ]
+    },
+    "healing:offer": {
+      "label": "A healer in their party offers to heal you, because someone in your party has a status ailment or is at a fifth of their HP or less (by the code).",
+      "refs": [
+        "1:142",
+        "1:152",
+        "2:114",
+        "2:124",
+        "3:124",
+        "3:132",
+        "4:64",
+        "4:71",
+        "5:35"
+      ]
+    },
+    "healing:healthy": {
+      "label": "The member you picked for healing has full HP and no ailment; the healer says so and lets you pick again (by the code).",
+      "refs": [
+        "1:143",
+        "1:153",
+        "2:115",
+        "2:125",
+        "3:125",
+        "3:133",
+        "4:65",
+        "4:72",
+        "5:36"
+      ]
+    },
+    "healing:out-of-magic": {
+      "label": "The healer turns out to be out of magic (by the code: a 20% roll after you pick a member, for most healers).",
+      "refs": [
+        "1:147",
+        "1:159",
+        "2:119",
+        "2:131",
+        "3:128",
+        "3:140",
+        "4:68",
+        "4:75",
+        "5:40"
+      ]
+    },
+    "healing:cant-treat": {
+      "label": "The member you picked has a condition this healer can't cure at their party's current stage, most often being stoned or dead (by the code).",
+      "refs": [
+        "1:144",
+        "1:154",
+        "2:116",
+        "2:126",
+        "3:126",
+        "3:134",
+        "3:138",
+        "4:75",
+        "5:37"
+      ]
+    },
+    "healing:cure-paralysis": {
+      "label": "The healer cures a paralyzed member with Dialko (by the code).",
+      "refs": [
+        "1:145",
+        "1:155",
+        "2:117",
+        "2:127",
+        "3:127",
+        "3:135",
+        "5:38"
+      ]
+    },
+    "healing:cure-poison": {
+      "label": "The healer cures a poisoned member with Latumofis (by the code).",
+      "refs": [
+        "1:146",
+        "1:156",
+        "2:118",
+        "2:128",
+        "3:136",
+        "5:39"
+      ]
+    },
+    "healing:cure-ailments": {
+      "label": "The healer casts Madi, which clears poison, paralysis and stoning at once (by the code).",
+      "refs": [
+        "1:157",
+        "2:129",
+        "3:137",
+        "4:66",
+        "4:73"
+      ]
+    },
+    "healing:revive": {
+      "label": "The member you picked is dead or ashes and the healer casts Kadorto. The lines warn that the Temple is safer, but the NPCs' Kadorto always works, for free (by the code).",
+      "refs": [
+        "1:158",
+        "2:130",
+        "3:139",
+        "4:67",
+        "4:74"
+      ]
+    },
+    "healing:heal-hp": {
+      "label": "The healer restores a hurt member's HP with Dios, Dial, Dialma or Madi, depending on their party's stage (by the code).",
+      "refs": [
+        "1:148",
+        "1:149",
+        "1:150",
+        "1:160",
+        "1:161",
+        "2:120",
+        "2:121",
+        "2:122",
+        "2:132",
+        "2:133",
+        "2:134",
+        "3:129",
+        "3:130",
+        "3:141",
+        "3:142",
+        "3:143",
+        "4:69",
+        "4:76",
+        "5:41"
+      ]
+    },
+    "healing:declined": {
+      "label": "You cancel at the member picker, turning down the healing (by the code).",
+      "refs": [
+        "1:151",
+        "1:162",
+        "2:123",
+        "2:135",
+        "3:131",
+        "3:144",
+        "4:70",
+        "4:77",
+        "5:42"
+      ]
+    },
+    "rescue:offer": {
+      "label": "Their party offers to carry one of your wiped-out parties back to town (by the code: another party of yours whose members are all paralyzed, stoned, dead, ashes or lost).",
+      "refs": [
+        "1:163",
+        "2:142",
+        "3:151"
+      ]
+    },
+    "rescue:accepted": {
+      "label": "You accept the rescue and they take their fee: Guy's party all the gold, Balbo's every item, Fontana's half the gold and some items (by the code).",
+      "refs": [
+        "1:165",
+        "2:144",
+        "3:153"
+      ]
+    },
+    "rescue:declined": {
+      "label": "You turn down the rescue offer (by the code).",
+      "refs": [
+        "1:166",
+        "2:145",
+        "3:154"
+      ]
+    },
+    "sale:offer": {
+      "label": "Their party offers to sell you one of three unidentified items (by the code: someone in your party has a free pack slot, plus conditions that vary by party).",
+      "refs": [
+        "1:167",
+        "2:146",
+        "3:155",
+        "5:43"
+      ]
+    },
+    "sale:price": {
+      "label": "You agree to look, and they name the one price for any of the three items (by the code).",
+      "refs": [
+        "1:169",
+        "2:148",
+        "3:157",
+        "5:45"
+      ]
+    },
+    "sale:too-poor": {
+      "label": "You pick an item but nobody can pay, even with the party's gold pooled (by the code).",
+      "refs": [
+        "1:172",
+        "2:151",
+        "3:160",
+        "5:48"
+      ]
+    },
+    "sale:declined": {
+      "label": "You turn down the item sale (by the code).",
+      "refs": [
+        "1:173",
+        "2:152",
+        "3:161",
+        "5:49"
+      ]
+    },
+    "fight:offer": {
+      "label": "You choose Fight from the menu; they react, then ask whether you really want to fight (by the code).",
+      "refs": [
+        "1:174",
+        "2:153",
+        "3:163",
+        "5:51"
+      ]
+    },
+    "fight:declined": {
+      "label": "You back out at the 'Fight anyway?' question (by the code).",
+      "refs": [
+        "1:176",
+        "2:155",
+        "3:165",
+        "5:53"
+      ]
+    },
+    "identify:offer": {
+      "label": "A Bishop in their party offers to identify an item for you (inferred from the text) (never plays in the original; the patch leaves it unused too)",
+      "refs": [
+        "2:137",
+        "3:145",
+        "4:78"
+      ]
+    },
+    "identify:nothing": {
+      "label": "The member you picked has nothing unidentified (inferred from the text) (never plays in the original; the patch leaves it unused too)",
+      "refs": [
+        "2:136",
+        "3:146",
+        "4:79"
+      ]
+    },
+    "identify:declined": {
+      "label": "You turn down the identify offer (inferred from the text) (never plays in the original; the patch leaves it unused too)",
+      "refs": [
+        "2:138",
+        "3:147",
+        "4:80"
+      ]
+    },
+    "identify:cursed": {
+      "label": "The identify attempt fails and the item curses its owner (inferred from the text) (never plays in the original; the patch leaves it unused too)",
+      "refs": [
+        "2:139",
+        "3:148",
+        "4:81"
+      ]
+    },
+    "identify:failed": {
+      "label": "The identify attempt fails, with no harm done (inferred from the text) (never plays in the original; the patch leaves it unused too)",
+      "refs": [
+        "2:140",
+        "3:149",
+        "4:82"
+      ]
+    },
+    "identify:success": {
+      "label": "The item is identified (inferred from the text) (never plays in the original; the patch leaves it unused too)",
+      "refs": [
+        "2:141",
+        "3:150",
+        "4:83"
+      ]
+    }
+  }
+}
