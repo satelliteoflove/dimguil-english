@@ -223,6 +223,16 @@ function doneHtml(ln, i) {
   </article>`;
 }
 
+// The rest of the party's answers to the same question, so a voice scene keeps the round.
+function othersHtml(ln) {
+  const os = ln.others || [];
+  if (!os.length) return '';
+  return `<details class="others"><summary>Others asked the same (${os.length})</summary><ul>${os.map(o => {
+    const who = personForTag(o.speaker);
+    return `<li style="--c:${lighten(who ? who.color : '#5a6170')}"><span class="o-who">${esc(o.speaker)}</span> <span class="o-ref">${esc(o.ref)}</span><br>${esc(readable(o.current))}</li>`;
+  }).join('')}</ul></details>`;
+}
+
 function lineHtml(ln, i) {
   if (collapsed(ln)) return doneHtml(ln, i);
   const { tag, who } = speakerFor(ln);
@@ -238,6 +248,7 @@ function lineHtml(ln, i) {
       <span class="ref">${esc(ln.ref)} · NPC_MES${esc(ln.ref.split(':')[0])}</span>
     </div>
     ${ln.plays || ln.plays_auto ? `<p class="plays${ln.plays ? '' : ' auto'}"><span>When it plays</span> ${jpx(ln.plays || ln.plays_auto)}</p>` : ''}
+    ${othersHtml(ln)}
     <div class="jp" lang="ja" id="jp-${i}"><p class="jp-plain">${esc(jpPlain(ln.jp))}</p></div>
     <dl class="meaning">
       ${ln.literal ? `<dt>Literally</dt><dd class="literal">${jpx(quoteLiteral(ln.literal))}</dd>` : ''}

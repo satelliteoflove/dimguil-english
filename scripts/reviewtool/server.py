@@ -804,6 +804,7 @@ def scene(sid):
         line['copies'] = copies_of(line['ref'])
         if not line.get('plays'):
             line['plays_auto'] = auto_plays(line['ref'])
+        line['others'] = others_asked(line['ref'])
         if s.get('kind') == 'readthrough':   # Chris reads the lines as they are, unless a
             line.setdefault('faithful', line['current'])   # lesson proposes a fix (lessons.py)
             line.setdefault('literal', '')
@@ -885,6 +886,25 @@ def auto_plays(ref):
             seen.add(text)
             out.append(text)
     return '. '.join(out[:2]) + '.' if out else ''
+
+
+def others_asked(ref):
+    """The other party members' answers in the same talk exchange (a chat topic or the
+    introductions), for reading a line by character without losing the round: [{ref,
+    speaker, current}]. Narration and the speaker's own other lines are left out."""
+    by_ref, by_block = talk_blocks()
+    me, out, seen = person(ref), [], {ref}
+    for key, _ in by_ref.get(ref, []):
+        if not key or not any(f' {w} [' in key for w in ('chat', 'introductions')):
+            continue
+        for r in by_block.get(key, []):
+            cur = current(r)
+            who = cur.split('\n', 1)[0] if '\n' in cur and cur.split('\n', 1)[1].startswith('"') else None
+            if r in seen or not who or (me and person(r) == me):
+                continue
+            seen.add(r)
+            out.append({'ref': r, 'speaker': who, 'current': cur})
+    return out
 
 
 FILE_PARTY = {1: "Guy's party", 2: "Balbo's party", 3: "Fontana's party", 4: 'The scholars', 5: "Zaril's party"}
