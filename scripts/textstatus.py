@@ -92,7 +92,7 @@ def approved():
         if name.endswith('.json'):
             dec = json.load(open(os.path.join(d, name), encoding='utf-8'))
             out |= {key(ln['ref']) for ln in dec.get('lines', [])}
-            out |= {key(r) for ln in dec.get('lines', []) for r in ln.get('copies', [])}
+            out |= {key(r) for ln in dec.get('lines', []) for r in ln.get('copies', []) + ln.get('carried', [])}
     return out
 
 

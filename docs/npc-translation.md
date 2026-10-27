@@ -128,8 +128,11 @@ What marks each one in the Japanese, and what that becomes in English:
   (A few reaction lines are stiffly polite and sarcastic in the source; keep those.)
 - **Balbo**. 俺様, 〜ねぇ, 知らねぇぞ, 〜っつう. Rough-mouthed Evil dwarf Lord, a
   swaggering tough. Coarse English: dropped g's, "ain't", "ya", "don't come cryin' to me".
-- **Gaura**. オレ, stammers, no grammar: オレ,ガウラ. The timid gentle giant. Broken,
-  halting English, dropped articles and verbs, stutters: "M-me... Gaura. H-hello."
+- **Gaura**. オレ in katakana, stammers, ンー and humming, short comma-broken sentences,
+  but mostly grammatical Japanese (only オレ,ガウラ drops its だ). The shy, kind giant, a
+  Mook Mage who dreams of being a Samurai. Short, slow, stammering English with "I" and
+  the verbs kept: "I-I'm Gaura. N-nice to meet you." Not caveman English: no "Me, Gaura"
+  (Chris, 2026-10-20; see `docs/work/gaura-character.html` and review-lessons.md L10).
 - **Reiran**. あたし, ヤンなっちゃう, バイト, ハマっちゃって, なーんか偉そう. A ninja
   who talks like a late-90s high-school girl. Teen slang: "like", "totally", "so
   over it", "whatever", "ugh", "I'm kinda hooked on...".
