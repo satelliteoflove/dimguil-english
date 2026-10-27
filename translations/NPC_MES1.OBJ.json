@@ -59,7 +59,7 @@
                 {
                     "length": 20,
                     "source": "NA",
-                    "translation": "Tall man\n\"Have you some business with us?\"",
+                    "translation": "Tall man\n\"Do you have business with us?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -269,7 +269,7 @@
                 {
                     "length": 67,
                     "source": "NA",
-                    "translation": "Alstron\n\"Now, as regards {ff12}...\n I do hope they come back to life...\n\r Well then, until we meet again.\"",
+                    "translation": "Alstron\n\"Now, as for {ff12}...\n I do hope they come back to life...\n\r Well then, until we meet again.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -347,13 +347,13 @@
                 {
                     "length": 53,
                     "source": "NA",
-                    "translation": "Alstron\n\"Oh my? I see someone I don't know.\n Whatever became of the one from before?\"",
+                    "translation": "Alstron\n\"Oh? I see someone I don't know.\n Whatever became of the one from before?\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 37,
                     "source": "NA",
-                    "translation": "Alstron\n\"Oh my? Has your party had a change of lineup?\"",
+                    "translation": "Alstron\n\"Oh? Has your party had a change of lineup?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -383,7 +383,7 @@
                 {
                     "length": 65,
                     "source": "NA",
-                    "translation": "Alstron\n\"Such strength, and at so young an age.\n Splendid. But if you'll pardon my saying,\n\r could you do something about\n that smell of the stables?\"",
+                    "translation": "Alstron\n\"Such strength, and at so young an age.\n Splendid. But if you'll pardon my saying,\n\r could you do something about\n smelling like the stables?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -719,7 +719,7 @@
                 {
                     "length": 47,
                     "source": "NA",
-                    "translation": "Alstron\n\"The one here in the hood\n is our Mage, Lychee.\"",
+                    "translation": "Alstron\n\"The one here in the hood is our Mage, Lychee.\"",
                     "addStringTerminator": true
                 },
                 {

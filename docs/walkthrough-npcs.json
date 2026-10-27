@@ -1610,13 +1610,13 @@
           ],
           "strings": "NPC_MES1 56-64",
           "placement": "Generic: Alstron's reactions to your party.",
-          "blurb": "Alstron has remarks for all kinds of parties. A strong young one gets a compliment and a polite request, \"could you do something about that smell of the stables?\" Another greeting is a lot less genteel: \"You thieving scum! Where the hell'd you get all that money?!\"",
+          "blurb": "Alstron has remarks for all kinds of parties. A strong young one gets a compliment and a polite request, \"could you do something about smelling like the stables?\" Another greeting is a lot less genteel: \"You thieving scum! Where the hell'd you get all that money?!\"",
           "quotes": [
             {
               "file": "NPC_MES1",
               "idx": 62,
               "speaker": "Alstron",
-              "text": "could you do something about that smell of the stables?"
+              "text": "could you do something about smelling like the stables?"
             },
             {
               "file": "NPC_MES1",

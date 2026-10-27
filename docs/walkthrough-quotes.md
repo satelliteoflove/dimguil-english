@@ -199,7 +199,7 @@ with the chapter and the string's new wording, to carry over to the site.
 | Alstron | NPC_MES1 125 | Sure. We'll leave it at that. |
 | Linaria | NPC_MES1 258 | Hey, do you think monsters taste good? |
 | Fritillaria | NPC_MES1 254 | When I fail, they hit me. |
-| Alstron | NPC_MES1 62 | could you do something about that smell of the stables? |
+| Alstron | NPC_MES1 62 | could you do something about smelling like the stables? |
 | Alstron | NPC_MES1 64 | You thieving scum! Where the hell'd you get all that money?! |
 | Lychee | NPC_MES1 68 | I think their name was 'Mule' or something. |
 | Guy | NPC_MES1 165 | We'll just help ourselves to our fee. |
