@@ -34,6 +34,12 @@ to give us a shout" became "give us a shout" (2:155). "Do" + verb politeness bel
 the genteel characters (Alba, Alstron, Rosea), not to Balbo's crew. *Check:*
 `do (feel free|be|come)`, flagged only for speakers who aren't formal.
 
+**L4a. Genteel isn't stuffy.** Even Alstron, the most mannered speaker, went from "as
+regards {name}" to "as for {name}" (1:43), and from "that smell of the stables" to
+"smelling like the stables" (1:62): polite, in words an American still says. His おや?
+became "Oh?", not "Oh my?" (1:56, 1:57; 1:4 kept "Oh my?" as a greeting).
+*Check:* `as regards`.
+
 **L5. Match the register to the speaker, both ways.** Polite speakers can go more formal
 than a first draft: Artemisia's "How odd... Nobody knows your age?" became "How curious...
 Your age is unknown?" (2:70). Rough ones lose formality. Read each line against the

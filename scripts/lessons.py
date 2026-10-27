@@ -24,6 +24,7 @@ CHECKS = [
     ('L2', 'connotation', r'\bcomrades?\b'),
     ('L3', 'coy address', r'\bgirlies\b|\blittle (boys|girls)\b|\bmissy\b'),
     ('L4', 'stiff filler', r'\bdo (feel free|be|come)\b'),
+    ('L4a', 'stuffy', r'\bas regards\b'),
     ('L7', 'pointing, not naming', r'\bthis (sort|kind) of thing\b'),
     ('L10', 'caveman "Me"', r'(?:^|"|\n )Me, (?!I\b|I\')'),
     ('L14', 'line ends on a small word', r' (?:to|a|an|the|of)\n'),
