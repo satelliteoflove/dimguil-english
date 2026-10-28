@@ -45,9 +45,13 @@ function toEditor(text) {
   const b = splitBox(text);
   return (b.name !== null ? b.name + '\n' : '') + b.pages.map(p => p.join('\n')).join('\n\n');
 }
+// Phones and Macs type curly quotes and a one-character ellipsis; the game font has
+// neither, so they become the straight forms the rest of the text uses.
+const plainPunct = t => t.replace(/[\u2018\u2019]/g, "'").replace(/[\u201c\u201d]/g, '"').replace(/\u2026/g, '...');
+
 function fromEditor(ed, like) {
   const orig = splitBox(like);
-  let rows = ed.replace(/\r/g, '').split('\n');
+  let rows = plainPunct(ed).replace(/\r/g, '').split('\n');
   let name = null;
   if (orig.name !== null) { name = rows[0].trim(); rows = rows.slice(1); }
   const pages = rows.join('\n').split(/\n[ \t]*\n/).map(p => p.split('\n').map(l => l.trim()).filter(Boolean)).filter(p => p.length);
@@ -431,7 +435,15 @@ function wireLine(i) {
     saveDraft();
   });
   const ta = $('.edit', el);
-  ta.addEventListener('input', () => onEdit(i));
+  ta.addEventListener('input', () => {
+    const fixed = plainPunct(ta.value);
+    if (fixed !== ta.value) {   // keep the caret where it was
+      const at = plainPunct(ta.value.slice(0, ta.selectionStart)).length;
+      ta.value = fixed;
+      ta.setSelectionRange(at, at);
+    }
+    onEdit(i);
+  });
   $$('.editor-actions button', el).forEach(b => b.addEventListener('click', async () => {
     if (b.dataset.act === 'rewrap') {
       const r = await api('/api/rewrap', { ref: ln.ref, text: textFor(ln, 'edited') });

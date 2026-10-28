@@ -193,8 +193,16 @@ def layout(text):
     return pages
 
 
+def plain_punct(text):
+    """Curly quotes and the one-character ellipsis (phones and Macs type them) as the
+    straight forms the game font has."""
+    return (text.replace('\u2018', "'").replace('\u2019', "'").replace('\u201c', '"')
+            .replace('\u201d', '"').replace('\u2026', '...'))
+
+
 def fit(ref, text):
     n, i = parse_ref(ref)
+    text = plain_punct(text)
     text = npcquotes.close(text, SOURCES[n][i])  # as apply() will write it
     problems = npcfit.string_problems(text, SOURCES[n][i])
     hard = [p for p in problems if 'fine if intended' not in p]
@@ -1154,7 +1162,7 @@ def apply(body):
             text = before if ln['choice'] == 'current' else ln['text']
             if ln['choice'] != 'current':
                 n, i = parse_ref(ln['ref'])
-                text = npcquotes.close(text, SOURCES[n][i])
+                text = npcquotes.close(plain_punct(text), SOURCES[n][i])
             if text != before:
                 for r in refs:
                     changes[r] = as_copy(text, r) if r != ln['ref'] else text
@@ -1270,7 +1278,7 @@ class Handler(BaseHTTPRequestHandler):
                 text = as_copy(body['text'], body['ref']) if body.get('as_copy') else body['text']
                 return self.send(200, {**fit(body['ref'], text), 'text': text})
             if u.path == '/api/rewrap':
-                text = rewrap(body['text'])
+                text = rewrap(plain_punct(body['text']))
                 return self.send(200, {'text': text, **fit(body['ref'], text)})
             if u.path == '/api/apply':
                 return self.send(200, apply(body))
