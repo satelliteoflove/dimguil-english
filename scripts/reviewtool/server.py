@@ -145,6 +145,21 @@ def person(ref):
     return person.tags.get(current(ref).split('\n', 1)[0])
 
 
+def voice_mode(ref):
+    """'Voice here' for characters whose voice shifts with the story (modes.json), or None:
+    {label, text}."""
+    if not hasattr(voice_mode, 'rules'):
+        voice_mode.rules = {k: v for k, v in read_json(os.path.join(HERE, 'modes.json'), {}).items()
+                            if not k.startswith('_')}
+    n, _ = parse_ref(ref)
+    by_ref, _ = talk_blocks()
+    talk = any(k and ' chat [' in k for k, _ in by_ref.get(ref, []))
+    for rule in voice_mode.rules.get(person(ref), []):
+        if rule['file'] == n and rule.get('talk', talk) == talk:
+            return {'label': rule['label'], 'text': rule['text']}
+    return None
+
+
 def copies_of(ref):
     """Refs with the same Japanese, or the same lines from the same person under another tag."""
     n, i = parse_ref(ref)
@@ -825,6 +840,7 @@ def scene(sid):
         if not line.get('plays'):
             line['plays_auto'] = auto_plays(line['ref'])
         line['others'] = others_asked(line['ref'])
+        line['mode'] = voice_mode(line['ref'])
         if s.get('kind') == 'readthrough':   # Chris reads the lines as they are, unless a
             line.setdefault('faithful', line['current'])   # lesson proposes a fix (lessons.py)
             line.setdefault('literal', '')

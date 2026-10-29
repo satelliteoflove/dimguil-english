@@ -166,6 +166,7 @@ body.no-rd .w .rd { visibility: hidden; }
 /* When it plays, diff */
 .plays { margin: 0.6rem 0 0; color: var(--soft); max-width: 52rem; font-size: 0.95rem; }
 .plays span { color: var(--faint); font-style: italic; margin-right: 0.4rem; }
+.plays.mode b { color: var(--text); font-weight: 600; }
 .diff { margin: 0.5rem 0 0; font-size: 0.95rem; color: var(--soft); max-width: 44rem; }
 .diff ins { text-decoration: none; color: var(--text); background: rgba(127, 191, 138, 0.22); border-radius: 3px; padding: 0 0.15rem; }
 .diff del { color: var(--faint); text-decoration: line-through; text-decoration-color: rgba(220, 110, 100, 0.8); }

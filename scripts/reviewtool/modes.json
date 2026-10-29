@@ -1,0 +1,11 @@
+{
+ "_about": "Characters whose voice changes with where they are in the story. Each line of theirs gets the first rule that matches: file (the NPC_MES number) and talk (true: a Talk exchange in the code map; false: greetings, introductions, farewells and scenes). The review tool shows the label and text as 'Voice here' under 'When it plays'.",
+ "fritillaria": [
+  {"file": 1, "talk": false, "label": "Guy's party, facing you: cheeky",
+   "text": "He's in Guy's party (from the Underground Shrine to Area A, and again from Guy's rescue to Area B). Greeting you, introducing himself or saying goodbye, he puts on the cheeky kid: おいら, ヤァ!, じゃあなっ!."},
+  {"file": 1, "talk": true, "label": "Guy's party, talking among them: cowed",
+   "text": "He's in Guy's party, the same stretch of the game. When you Talk and the party answers together, he goes timid: stammers, stiff politeness (です, 了解しました) and a child's ごめんなさい. This is the party that hits him when he botches a trap (1:254)."},
+  {"file": 5, "label": "Zaril's party: cheeky again",
+   "text": "He's in Zaril's party, from their rescue in Area B on. Zaril saved him when he was left paralyzed and alone (5:84), and the cheek is back everywhere, Talk included: おいら, rough casual endings, no stammer."}
+ ]
+}

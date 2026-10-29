@@ -254,6 +254,7 @@ function lineHtml(ln, i) {
       <span class="ref">${esc(ln.ref)} · NPC_MES${esc(ln.ref.split(':')[0])}</span>
     </div>
     ${ln.plays || ln.plays_auto ? `<p class="plays${ln.plays ? '' : ' auto'}"><span>When it plays</span> ${jpx(ln.plays || ln.plays_auto)}</p>` : ''}
+    ${ln.mode ? `<p class="plays mode"><span>Voice here</span> <b>${esc(ln.mode.label)}.</b> ${jpx(ln.mode.text)}</p>` : ''}
     ${othersHtml(ln)}
     <div class="jp" lang="ja" id="jp-${i}"><p class="jp-plain">${esc(jpPlain(ln.jp))}</p></div>
     <dl class="meaning">
