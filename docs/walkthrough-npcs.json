@@ -2182,13 +2182,13 @@
           ],
           "strings": "NPC_MES5 16 (and 24)",
           "placement": "A greeting that depends on the player's kill count, not on time.",
-          "blurb": "Run up a big enough body count and Fritillaria greets you accordingly: \"Hey! It's the murder squad. You guys kill way too much!\" Zaril gets prim about it in his own version, wishing you'd learn a little more about the sanctity of life.",
+          "blurb": "Run up a big enough body count and Fritillaria greets you accordingly: \"Hey! If it ain't the murder squad. You guys are kill-crazy!\" Zaril gets prim about it in his own version, wishing you'd learn a little more about the sanctity of life.",
           "quotes": [
             {
               "file": "NPC_MES5",
               "idx": 16,
               "speaker": "Fritillaria",
-              "text": "Hey! It's the murder squad. You guys kill way too much!"
+              "text": "Hey! If it ain't the murder squad. You guys are kill-crazy!"
             }
           ],
           "source": "NPC_MES5"

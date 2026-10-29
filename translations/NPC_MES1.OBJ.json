@@ -479,7 +479,7 @@
                 {
                     "length": 34,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"Hey! It's the murder squad.\n You guys kill way too much!\"",
+                    "translation": "Fritillaria\n\"Hey! If it ain't the murder squad.\n You guys are kill-crazy!\"",
                     "addStringTerminator": true
                 },
                 {
@@ -737,7 +737,7 @@
                 {
                     "length": 68,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"Hiya! Fritillaria the Thief, that's me!\n\r Ehehe, these guys scouted me special!\n Nice to meetcha!\"",
+                    "translation": "Fritillaria\n\"Hiya! I'm Fritillaria the Thief!\n\r Ehehe, these guys scouted me special!\n Nice to meetcha!\"",
                     "addStringTerminator": true
                 },
                 {
@@ -803,7 +803,7 @@
                 {
                     "length": 37,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"Hiya! Fritillaria the Thief, that's me!\n Nice to meetcha!\"",
+                    "translation": "Fritillaria\n\"Hiya! I'm Fritillaria the Thief!\n Nice to meetcha!\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1169,7 +1169,7 @@
                 {
                     "length": 38,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"Huh!\n\r Yes!\n Understood.\n Probably.\"",
+                    "translation": "Fritillaria\n\"Huh?\n\r Oh, yes!\n I understand!\n ...Probably.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1379,7 +1379,7 @@
                 {
                     "length": 27,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"Y-yes.\n Understood.\"",
+                    "translation": "Fritillaria\n\"O-okay.\n Got it.\"",
                     "addStringTerminator": true
                 },
                 {
