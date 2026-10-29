@@ -1026,6 +1026,32 @@ turns 12): "Dick" and "RETARD" got 1:72 on 12 of 12, naming them; "Dickens", "di
 didn't come up for a party member named Mule, a tavern character named Mule or a member
 named アイテムもち, as before. [emu] Sheet: `rosea/lychee_sheet.png`.
 
+### 2.10 Zaril's chat: replies that don't fit the topic (NPC_MES5 74-94)
+
+Found in the NPC review (Chris's question on 5:93, 2026-10-28). Each of Zaril's chat
+blocks (array 0x3d8, `rand_upto(0xd)` with 1 rerolled) is one script: the bottom-bar
+line ('bar' op, 5:98-102), then Zaril, Fritillaria and Gaura in turn. The block data
+pairs them like this, by the Japanese [code, from the script dump
+`rips/re/work/C/scripts.json`; which reply fits which topic is a reading]:
+
+| Block | Bar line | Zaril | Fritillaria | Gaura |
+|---|---|---|---|---|
+| 6 | 99 told them | 74 no info (news) | 75 don't know anything (news) | 76 "that way... maybe?" (news) |
+| 7 | 102 personal | 77 good at nothing in particular (about) | 78 wants to be a Ninja | 79 not picky (about) |
+| 8 | 102 personal | 80 "you're greenhorns too" (reaction) | 81 "amazing for how you look" (reaction) | 82 slow, the rest great (about) |
+| 9 | 99 told them | 83 no new info (news) | 84 how Zaril saved him (personal) | 85 knows nothing (news) |
+| 10 | 102 personal | 86 likes Balbo's style (personal) | 87 nothing new (news) | 88 will be a Samurai (personal) |
+| 12 | 100 about themselves | 92 "why should I tell you?" (about) | 93 "Awesome! You're good!" (reaction) | 94 Muramasa (about) |
+
+Blocks 0-5, 11 and 13 fit. The rest look shuffled: Fritillaria's 84 and 87 fit each
+other's blocks (9 is news from Zaril and Gaura, 10 is personal), block 6 is all news
+under "told them", 7 is all about themselves under "personal", and 8's first two are
+reactions to what you told them. Block 12's 93 is a reaction in an "about themselves"
+topic. The other parties' chat tables don't show this.
+
+Question for Chris: fix (swap 84 and 87, and correct the bar lines of 6-9), or leave
+as the original shipped? Not yet checked in the emulator.
+
 ## Group 3: fixes that would change how the game plays
 
 ### 3.1 A wipe destroys only one character's items
