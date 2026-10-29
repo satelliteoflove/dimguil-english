@@ -238,7 +238,7 @@ with the chapter and the string's new wording, to carry over to the site.
 | Zaril | NPC_MES5 51 | What, you calling me chicken? |
 | Zaril | NPC_MES5 53 | So you're the chicken, then. |
 | Zaril | NPC_MES5 89 | I wanna be like that Balbo, so I've been picking fights with every monster I come across, but... |
-| Fritillaria | NPC_MES5 90 | I like Zaril just the way he is. |
+| Fritillaria | NPC_MES5 90 | I hope Zaril stays just the way he is. |
 | Fritillaria | NPC_MES5 16 | Hey! If it ain't the murder squad. You guys are kill-crazy! |
 | Zaril | NPC_MES5 43 | No Bishop in our party, see. |
 | Otaka | EVENTMES 311 | one of the programmers |

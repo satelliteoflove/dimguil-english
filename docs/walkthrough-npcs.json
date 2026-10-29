@@ -2157,7 +2157,7 @@
           ],
           "strings": "NPC_MES5 63-66, 84, 86, 89, 90",
           "placement": "Any meeting with Zaril's party; these are news/talk lines that assume you've met Balbo (chapter 4), and Zaril's party only exists from chapter 8. Not tied to a chapter.",
-          "blurb": "Zaril has met Balbo, an Evil Lord, and likes what he sees: \"I wanna be like that Balbo, so I've been picking fights with every monster I come across, but...\" Fritillaria, who owes Zaril for rescuing him when he was left paralyzed, would rather he stayed put: \"I like Zaril just the way he is.\"",
+          "blurb": "Zaril has met Balbo, an Evil Lord, and likes what he sees: \"I wanna be like that Balbo, so I've been picking fights with every monster I come across, but...\" Fritillaria, who owes Zaril for rescuing him when he was left paralyzed, would rather he stayed put: \"I hope Zaril stays just the way he is.\"",
           "quotes": [
             {
               "file": "NPC_MES5",
@@ -2169,7 +2169,7 @@
               "file": "NPC_MES5",
               "idx": 90,
               "speaker": "Fritillaria",
-              "text": "I like Zaril just the way he is."
+              "text": "I hope Zaril stays just the way he is."
             }
           ],
           "flags": "84 says 'they ditched me', inventing a 'they' the Japanese leaves unnamed (置いてけぼりくらってた, 'got left behind'), and 86's 'a guy like that's all right' loses the 'I'd like to be like him' sense of ああいうのもイイな. Both paraphrased, not quoted. 86 is the same string as NPC_MES3 231.",
