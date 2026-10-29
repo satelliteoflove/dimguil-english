@@ -1043,7 +1043,10 @@ pairs them like this, by the Japanese [code, from the script dump
 | 10 | 102 personal | 86 likes Balbo's style (personal) | 87 nothing new (news) | 88 will be a Samurai (personal) |
 | 12 | 100 about themselves | 92 "why should I tell you?" (about) | 93 "Awesome! You're good!" (reaction) | 94 Muramasa (about) |
 
-Blocks 0-5, 11 and 13 fit. The rest look shuffled: Fritillaria's 84 and 87 fit each
+Blocks 0-5 and 11 fit. Block 13 is borderline: bar 98 "asked if they had any news",
+with Zaril 95 "nothing new" (news) but Gaura 97 "that, heard it" and Fritillaria 96
+"aw, that again", the replies the other parties give after "We told them everything we
+knew" (Guy 1:268-273, Fontana 3:260-264). The rest look shuffled: Fritillaria's 84 and 87 fit each
 other's blocks (9 is news from Zaril and Gaura, 10 is personal), block 6 is all news
 under "told them", 7 is all about themselves under "personal", and 8's first two are
 reactions to what you told them. Block 12's 93 is a reaction in an "about themselves"
