@@ -150,6 +150,10 @@ wrong length. The English names need choosing too, since 'Richguy' and 'Appraise
 fit their compares. Lychee's rude-name line (1:72), which had the same signed load, was
 fixed 2026-10-20.
 
+To fix, decided 2026-10-28 (`bugs.md` 2.10): Zaril's chat topics, where the narration
+and the replies don't match in six of the fourteen. The lines are translated as they
+are; the fix will rework the whole table at once.
+
 ### Quality passes (to reach 0.9)
 
 1. NPC dialogue cultural review (NPC_MES1-5). In progress; tracked in

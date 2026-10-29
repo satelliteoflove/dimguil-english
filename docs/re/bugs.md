@@ -1049,8 +1049,13 @@ under "told them", 7 is all about themselves under "personal", and 8's first two
 reactions to what you told them. Block 12's 93 is a reaction in an "about themselves"
 topic. The other parties' chat tables don't show this.
 
-Question for Chris: fix (swap 84 and 87, and correct the bar lines of 6-9), or leave
-as the original shipped? Not yet checked in the emulator.
+Nobody on the emonoya board or the 5ch Dimguil threads mentions it: the topic is random
+and one plays per meeting, so a player never sees them side by side.
+
+**Decided (Chris, 2026-10-28): a bug, to be fixed, and fixed as a whole.** The lines are
+translated as they are for now. The fix looks at the whole table together (which bar
+line and which replies belong in each topic), not one swap at a time. Not started; not
+yet checked in the emulator.
 
 ## Group 3: fixes that would change how the game plays
 

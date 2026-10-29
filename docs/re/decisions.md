@@ -277,3 +277,11 @@ of their own, on top of gear, but tests the class in a register it never loads (
 **Decided (Chris, 2026-10-17): fix it**, "and let's clearly document and disclose it when
 we release, as that is a game balance change." `asm/bugfix_class_hit_effect.asm`; on the
 release notes' disclosure list (waiting-on-chris.md, Release).
+
+**32. Zaril's chat topics with replies that don't fit** (`bugs.md` 2.10). In blocks 6-10
+and 12 of Zaril's chat, the bottom-bar line and the three replies don't match: "We asked
+them about themselves" gets Fritillaria's "Awesome! You're good!", and his 5:84 and
+5:87 look swapped between two topics. Original data; nobody online mentions it.
+**Decided (Chris, 2026-10-28): fix it, holistically.** "I don't like it, but we should
+translate these lines as they are. We should absolutely file this as a bug (or bugs) to
+be fixed, and we should address this holistically when we do." Not started.
