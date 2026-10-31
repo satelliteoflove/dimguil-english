@@ -491,13 +491,13 @@
                 {
                     "length": 189,
                     "source": "NA",
-                    "translation": "Guy\n\"Y-you are...?\n\r I see, you took down that big green brute.\n We very nearly ended up as its lunch.\n Thank you.\n\r By the way, would you have any Ruby Slippers?\n As you can see, I'm the only one still alive,\n and I've been poisoned.\n\r If you don't mind, could I have them?\"",
+                    "translation": "Guy\n\"Y-you guys...?\n\r I see, you took down that big green brute.\n We very nearly ended up as its lunch.\n Thank you.\n\r By the way, would you have any Ruby Slippers?\n As you can see, I'm the only one still alive,\n and I've been poisoned.\n\r If you don't mind, could I have them?\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 201,
                     "source": "NA",
-                    "translation": "Man with a greatsword\n\"Y-you are...?\n\r I see, you took down that big green brute.\n We very nearly ended up as its lunch.\n Thank you.\n\r By the way, would you have any Ruby Slippers?\n As you can see, I'm the only one still alive,\n and I've been poisoned.\n\r If you don't mind, could I have them?\"",
+                    "translation": "Man with a greatsword\n\"Y-you guys...?\n\r I see, you took down that big green brute.\n We very nearly ended up as its lunch.\n Thank you.\n\r By the way, would you have any Ruby Slippers?\n As you can see, I'm the only one still alive,\n and I've been poisoned.\n\r If you don't mind, could I have them?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -581,7 +581,7 @@
                 {
                     "length": 70,
                     "source": "NA",
-                    "translation": "Guy\n\"There was this cute little critter, so\n Lychee went and made friends with it.\n\r So now we're Good again.\"",
+                    "translation": "Guy\n\"There was this cute little critter, so\n Lychee went and made friends with it.\n\r And now we're Good again.\"",
                     "addStringTerminator": true
                 },
                 {
