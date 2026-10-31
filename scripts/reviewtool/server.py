@@ -1231,7 +1231,7 @@ TYPES = {'.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8',
 
 class Handler(BaseHTTPRequestHandler):
     def log_message(self, fmt, *args):
-        if '/api/' in (args[0] if args else '') and ' 200 ' not in fmt % args:
+        if '/api/' in str(args[0] if args else '') and ' 200 ' not in fmt % args:
             sys.stderr.write(fmt % args + '\n')
 
     def send(self, code, body, ctype='application/json'):
