@@ -989,7 +989,7 @@
                 {
                     "length": 132,
                     "source": "NA",
-                    "translation": "Guy\n\"I believe these are friends of yours.\n We came across a party that was wiped out.\n\r Should you wish it, we would be pleased\n to return them safely to the Temple,\n as a favor to you. What do you say?\"",
+                    "translation": "Guy\n\"These folks are friends of yours, I think.\n We found their whole party wiped out back there.\n\r If you like, we'll do you a favor and get them\n back to the Temple safe and sound.\n How about it?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1007,13 +1007,13 @@
                 {
                     "length": 57,
                     "source": "NA",
-                    "translation": "Guy\n\"I see. You don't need our help?\n Well, good luck finding them.\"",
+                    "translation": "Guy\n\"I see. You'd rather handle it yourselves?\n All right. Make sure you find them, okay?\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 136,
                     "source": "NA",
-                    "translation": "Guy\n\"Hey, how's the exploring going?\n\r We just pulled some items out of a chest,\n but we haven't identified them yet.\n\r So how about it? Want to buy\n one of these three items\n we found?\"",
+                    "translation": "Guy\n\"Hey, how's the exploring going?\n\r We just pulled some items out of a chest,\n but we haven't identified them yet.\n\r So how about it? Want to buy\n one of the three items we found?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1043,13 +1043,13 @@
                 {
                     "length": 42,
                     "source": "NA",
-                    "translation": "Guy\n\"What, you don't have the cash?\n Let's talk about this another time.\"",
+                    "translation": "Guy\n\"What, you don't have the cash?\n Well, maybe another time.\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 67,
                     "source": "NA",
-                    "translation": "Guy\n\"I see. Can't be helped.\n\r My gut said at least one of them\n was something valuable, though.\"",
+                    "translation": "Guy\n\"I see. Nothing we can do about it.\n\r My gut said at least one of them\n was something valuable, though.\"",
                     "addStringTerminator": true
                 },
                 {

@@ -981,3 +981,8 @@ Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
   the names still read.
 - **Monster names run together in battle text** (found 2026-10-14). Fixed 2026-10-16
   except Goblin Assassin (see "Four more slips, and spaces in two-word monster names").
+- **Guy's 1:124, "Just so we're clear, the leader here is me. The hero."** Kept for now
+  (Chris, 2026-10-31, voice-guy-2): "it isn't terrible, but something about it just
+  doesn't seem to convey Guy's petulance." The Japanese is 念のために言っておくが,
+  リーダーは勇者の俺だぞ。 It's his reply after Alstron has introduced Lilia (1:122-123),
+  and Alstron's comeback is 1:125.
