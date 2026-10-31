@@ -843,6 +843,9 @@ function keepPlace(change) {
 document.addEventListener('visibilitychange', () => { if (!document.hidden) poll(); });
 
 // --- focus and place -----------------------------------------------------------------------
+// The tool puts you back on your line itself; the browser restoring an old scroll position
+// on top of that only fights it.
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
 function markFocus() { $$('#lines .line').forEach(el => el.classList.toggle('focused', +el.dataset.i === S.focus)); }
 function scrollToLine(i, smooth = true) {
@@ -862,6 +865,7 @@ function focusLine(i) {
 function updatePlace() {
   if (!S.scene) return;
   const h = `s=${encodeURIComponent(S.scene.id)}&l=${S.focus}`;
+  if (location.hash === '#' + h) return;   // iOS Safari can jump on a needless replaceState
   history.replaceState(null, '', '#' + h);
   localStorage.setItem('dimguil-review:place', h);   // some phone browsers reload an older address
 }

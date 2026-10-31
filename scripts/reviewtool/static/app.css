@@ -277,6 +277,9 @@ dialog h2 { font-size: var(--step-2); margin: 0 0 0.6rem; }
 @media (max-width: 900px) {
   /* iOS Safari zooms in on any text field under 16px when it's tapped, and stays zoomed. */
   input, textarea, select { font-size: 16px !important; }
+  /* A thread that scrolls inside its own box traps a swipe on a phone: the box is already at
+     the bottom, so it bounces back and the page doesn't move. Let threads run with the page. */
+  .thread .items { max-height: none; overflow: visible; overscroll-behavior: auto; }
   .ask { grid-template-columns: 1fr; } .ask > h5 { margin-bottom: 0.4rem; }
   .shell { grid-template-columns: 1fr; }
   .rail { border: 0; }
