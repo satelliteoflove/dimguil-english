@@ -1109,7 +1109,7 @@
                 {
                     "length": 23,
                     "source": "NA",
-                    "translation": "Guy\n\"Nope, nothing else to tell you.\"",
+                    "translation": "Guy\n\"There's nothing much to tell you.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1145,7 +1145,7 @@
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Guy\n\"......\n Huh, I see. And?\"",
+                    "translation": "Guy\n\"......\n Huh, I see. What else?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1211,7 +1211,7 @@
                 {
                     "length": 54,
                     "source": "NA",
-                    "translation": "Guy\n\"We met a party with a foul-mouthed guy.\n He might be a decent sort, though.\"",
+                    "translation": "Guy\n\"We met a party with a foul-mouthed guy.\n He might be nicer than he sounds, though.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1235,7 +1235,7 @@
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "Guy\n\"Don't forget it!\"",
+                    "translation": "Guy\n\"Glad we cleared that up!\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1253,7 +1253,7 @@
                 {
                     "length": 65,
                     "source": "NA",
-                    "translation": "Guy\n\"The Dracon so-and-so from the young Samurai's\n party split off to form a party of his own.\"",
+                    "translation": "Guy\n\"Remember the young Samurai's Dracon, whatsisname?\n Looks like he split off to start his own party.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1277,7 +1277,7 @@
                 {
                     "length": 62,
                     "source": "NA",
-                    "translation": "Guy\n\"Have you met the scholars?\n They know a lot, so\n\r it's worth asking them about all sorts of things.\"",
+                    "translation": "Guy\n\"Have you met the scholars?\n They know a lot,\n\r so it's worth asking them about all sorts of things.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1319,7 +1319,7 @@
                 {
                     "length": 58,
                     "source": "NA",
-                    "translation": "Guy\n\"We met a pretty shady-looking man.\n He went off somewhere without a word......\"",
+                    "translation": "Guy\n\"We met a pretty shady-looking man.\n Then he left without saying a word......\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1355,7 +1355,7 @@
                 {
                     "length": 52,
                     "source": "NA",
-                    "translation": "Guy\n\"......\n\r Huh, is that so.\n You guys have it rougher than I thought.\"",
+                    "translation": "Guy\n\"......Huh, no kidding.\n\r Guess you guys have it tough too, huh?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1427,7 +1427,7 @@
                 {
                     "length": 57,
                     "source": "NA",
-                    "translation": "Guy\n\"Just 'cause gear's pricey in this country\n doesn't mean it's any stronger, huh.\"",
+                    "translation": "Guy\n\"Just 'cause gear's pricey in this country\n doesn't mean it's any stronger, I guess.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1553,7 +1553,7 @@
                 {
                     "length": 101,
                     "source": "NA",
-                    "translation": "Guy\n\"We don't have a Thief right now,\n so things are going to get tough.\n\r We need to scout someone from another party.\n I hear there's a good fit out there.\n Know who it might be?\"",
+                    "translation": "Guy\n\"We don't have a Thief right now,\n so things are going to get tough.\n\r We need to scout someone from another party.\n I hear there's a good fit out there.\n Do you know anyone?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1577,7 +1577,7 @@
                 {
                     "length": 58,
                     "source": "NA",
-                    "translation": "Guy\n\"......\n\r Say, not that it matters, but isn't\n this dungeon way too big?\"",
+                    "translation": "Guy\n\"......\n\r Hey, random thought, but isn't\n this dungeon way too big?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1685,7 +1685,7 @@
                 {
                     "length": 81,
                     "source": "NA",
-                    "translation": "Guy\n\"No, we'll try to manage on our own.\n\r After all, we haven't heard anything\n about the Priestess coming back.\"",
+                    "translation": "Guy\n\"No, we'll try to figure it out ourselves.\n\r After all, we haven't heard anything\n about the Priestess coming back.\"",
                     "addStringTerminator": true
                 },
                 {
