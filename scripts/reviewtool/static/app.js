@@ -120,7 +120,9 @@ function setChoice(i, choice, { advance = false } = {}) {
   renderApplyBar();
   if (choice === 'edited') { openEditor(i); return; }
   if (advance) {
-    const next = lines().findIndex((l, k) => k > i && !decisionOf(l));
+    // The very next line, "no change" ones included (Chris reads and sometimes edits those);
+    // only lines already settled in an earlier scene are skipped.
+    const next = lines().findIndex((l, k) => k > i && !collapsed(l));
     if (next >= 0) focusLine(next);
   }
 }
