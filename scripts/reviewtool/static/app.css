@@ -275,6 +275,8 @@ dialog h2 { font-size: var(--step-2); margin: 0 0 0.6rem; }
 /* Narrow screens and phones */
 .mobilebar { display: none; }
 @media (max-width: 900px) {
+  /* iOS Safari zooms in on any text field under 16px when it's tapped, and stays zoomed. */
+  input, textarea, select { font-size: 16px !important; }
   .ask { grid-template-columns: 1fr; } .ask > h5 { margin-bottom: 0.4rem; }
   .shell { grid-template-columns: 1fr; }
   .rail { border: 0; }
