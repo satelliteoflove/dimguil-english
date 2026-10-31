@@ -41,7 +41,7 @@
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Green-haired elf\n\"Hey there. Something you want from me?\"",
+                    "translation": "Green-haired elf\n\"Well, hi there. Can I help you with something?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -173,7 +173,7 @@
                 {
                     "length": 71,
                     "source": "NA",
-                    "translation": "Lilia\n\"Looks like little {ff12}\n has gone and died on you.\n\r Be a dear and bring them back, 'kay?\n Now, that's a promise.\"",
+                    "translation": "Lilia\n\"Aww, looks like little {ff12}\n didn't make it.\n\r Be sure to bring them back, 'kay?\n You promise?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -293,25 +293,25 @@
                 {
                     "length": 45,
                     "source": "NA",
-                    "translation": "Lilia\n\"It seems one of your number is a bit...\n slow. Will you be quite all right?\"",
+                    "translation": "Lilia\n\"One of you seems a little slow,\n bless their heart. Will you be all right?\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 94,
                     "source": "NA",
-                    "translation": "Lilia\n\"That 'Richguy' of yours at the tavern\n\r was looking sooo lonely.\n Maybe I'll ask him out on a date.\n I mean, he must be positively loaded.\"",
+                    "translation": "Lilia\n\"That 'Richguy' of yours at the tavern\n was looking sooo lonely.\n\r Maybe I'll ask him out on a date.\n I mean, he must be positively loaded.\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 21,
                     "source": "NA",
-                    "translation": "Lilia\n\"Don't overdo it, gramps.\"",
+                    "translation": "Lilia\n\"You must be worn out, grandpa.\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 21,
                     "source": "NA",
-                    "translation": "Lilia\n\"Don't overdo it, granny.\"",
+                    "translation": "Lilia\n\"You must be worn out, grandma.\"",
                     "addStringTerminator": true
                 },
                 {
