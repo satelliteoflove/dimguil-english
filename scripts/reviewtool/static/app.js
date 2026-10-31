@@ -825,10 +825,20 @@ async function poll() {
     const mine = all.filter(q => refs.includes(q.ref));
     if (JSON.stringify(mine) !== JSON.stringify(ln.questions || []) && $(`#thread-${i}`)) {
       ln.questions = mine;
-      $(`#thread-${i}`).innerHTML = threadHtml(ln);
-      wireThread(i);
+      keepPlace(() => { $(`#thread-${i}`).innerHTML = threadHtml(ln); wireThread(i); });
     }
   });
+}
+// An answer that arrives for a line above the one you're reading makes the page taller above
+// you. Firefox and Chrome keep your place on their own; iOS Safari doesn't, and the page
+// seemed to jump back. Hold the first line whose top is on screen where it was.
+function keepPlace(change) {
+  const anchor = $$('#lines .line').find(el => el.getBoundingClientRect().top >= 0);
+  const before = anchor && anchor.getBoundingClientRect().top;
+  change();
+  if (!anchor) return;
+  const moved = anchor.getBoundingClientRect().top - before;
+  if (Math.abs(moved) > 1) window.scrollBy(0, moved);
 }
 document.addEventListener('visibilitychange', () => { if (!document.hidden) poll(); });
 
