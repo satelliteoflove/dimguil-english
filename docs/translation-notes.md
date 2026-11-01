@@ -818,6 +818,12 @@ only).
   equipping it. Its hidden power raises Strength itself. It truly lives up to its name."
 - 118 Golden Axe: "Strength and accuracy rise too." → "It also hits harder and truer."
 
+Guy's 1:289 (2026-10-31). あの祭壇の場所か? それが答えなのか? has Guy recalling where he
+saw the glyphs, then asking whether the glyphs answer Area D's god-name altar. The first
+draft's "That altar room? Is that the answer?" was ambiguous, and the voice-guy-4 edit
+"Does it have the answer?" moved the answer onto the room. Now "Was it in that altar
+room? Could those glyphs be the answer?"
+
 ### Text check of bot runs (2026-10-15)
 
 Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
