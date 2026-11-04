@@ -759,7 +759,8 @@ def settled(sid, scenes, index=None):
     instead: {scene, title, index, as, pending, here}. A line is read elsewhere when
     another scene's decision has it, or has a copy of it (same Japanese, same speaker)
     whose English is the same; when a voice scene still to come has it (pending); or
-    when it's a copy of a line above it in this scene (here), whose choice covers it."""
+    when it's a copy of a line above it in this scene (here), whose choice covers it.
+    A line marked "revisit": true is always read here, even if decided before."""
     done, voice = index or review_index(scenes)
     s = scenes[sid]
     own = read_json(os.path.join(DECISIONS, f'{sid}.json'))
@@ -777,7 +778,7 @@ def settled(sid, scenes, index=None):
     out, above = [], {}
     for k, ln in enumerate(s['lines']):
         ref, res = ln['ref'], None
-        if ref not in own_refs:
+        if ref not in own_refs and not ln.get('revisit'):   # revisit: reopened on purpose
             copies = copies_of(ref)
             if ref in done and done[ref][0] != sid:
                 res = where(done[ref][0], done[ref][1])

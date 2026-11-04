@@ -53,7 +53,7 @@ written by `scripts/nptnames.py`).
 | リナリア | Linaria | fighter, frank, big-sisterly |
 | ライチ | Lychee | mage, childish, calls herself "Lychee" |
 | フリチラリア | Fritillaria | thief, cheeky kid voice (おいら) |
-| リリア / リリアセウス | Lilia / Liliaceus | bard, flirty |
+| リリア / リリアセウス | Lilia / Liliaceus | bard, 17, flirty |
 | アルテミシア | Artemisia | cheerful, digs up lost spells |
 | セファラ / サファラ | Cephala | bishop, polite and earnest (サファラ appears once; same person) |
 | ザリル | Zaril | leader, gruff but decent |
@@ -118,9 +118,14 @@ What marks each one in the Japanese, and what that becomes in English:
 - **Fritillaria**. おいら, 〜だよ, 〜な! Scrappy kid thief, hero-worships Zaril.
   Street-urchin English: "ain't", "gonna", "me and Zaril", brags then deflates. (One
   confession line is deliberately stiff and formal; that's the joke.)
-- **Lilia (Liliaceus)**. あたし, なぁに?, ふぅん, 〜ねぇ, 〜わよ. The flirt: a
-  teasing, worldly older-sister bard who toys with people. "Hmm? Want to know about me?",
-  "darling", sighs and purrs, mock-bored "Oh, really?"
+- **Lilia (Liliaceus)**. あたし, ハァイ, なぁに?, ふぅん, 〜ねぇ, 〜わよぉ, a katakana ネ.
+  A seventeen-year-old elf Bard, the oldest in Fontana's party of kids (3:227). A playful
+  flirt who fishes for attention ("Interested in me?", "don't you want to scout me?",
+  then "Kidding!"), rates the men she meets, and likes them older and suave (Alba, the
+  elf scholar). Catty when it amuses her (the mock keigo of 1:74). Her drawl is in
+  stretched vowels: "Hiii!", "Sorryyy!", "sooo", "'kay?", a flat "Hmm". No terms of
+  endearment ("darling", "sweetie"): none of her Japanese has them, and the older-woman
+  voice they came from was a misreading (docs/translation-notes.md, 2026-11-03).
 - **Artemisia**. あたし, 〜のよ / 〜ね, bubbly. Energetic research girl who digs up lost
   spells and gets them wrong; cheerful, quick to exasperation ("Honestly, these two!").
 - **Zaril**. オレ, 〜ぜ, 知らんと言ったら知らん. Gruff Dracon Lord, tough guy with a
