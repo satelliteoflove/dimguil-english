@@ -101,7 +101,7 @@ with the chapter and the string's new wording, to carry over to the site.
 | Who | String | Quote |
 |---|---|---|
 | Guy | NPC_MES1 288 | Three animals... it's on the tip of my tongue... |
-| Lilia | NPC_MES1 223 | Positively oozing killing intent... |
+| Lilia | NPC_MES1 223 | He was sooo menacing... |
 | Balbo | NPC_MES2 89 | This strange door just won't open. |
 | Balbo | NPC_MES2 89 | There's gotta be a clue around here somewhere. |
 | Mysterious figure | NPC_MES5 105 | Beyond lies the holy ground of the Opener of the Door! |

@@ -824,6 +824,15 @@ draft's "That altar room? Is that the answer?" was ambiguous, and the voice-guy-
 "Does it have the answer?" moved the answer onto the room. Now "Was it in that altar
 room? Could those glyphs be the answer?"
 
+Lilia's age and voice (2026-11-03, voice-lilia-2). The first draft read ピチピチの17才よ
+(1:241, 3:227) as a fake age, "seventeen and holding," and built her voice on an older
+woman's "darling" and "sweetie." Nothing in the game supports that. Her party at 3:227
+is 13-year-olds, so she's really seventeen and the oldest. None of her Japanese has a
+term of endearment, either: her drawl is in stretched vowels (ごめーん, わよぉ). Now
+"fresh and seventeen," "Sorryyy!," "Hiii!"; 1:73/3:46 and 3:240 still say "darling."
+docs/joke-check.md
+has the wider check this prompted.
+
 ### Text check of bot runs (2026-10-15)
 
 Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.

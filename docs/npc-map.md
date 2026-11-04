@@ -102,7 +102,7 @@ long ago (2:228). Alba lost his comrades in another dungeon (2:231). Roster:
 
 **Fontana's party** (NPC_MES3). Fontana, 13, Samurai, real name Kikunoshin, whom Zaril
 renamed after a hero from his homeland (3:221); Zaril, Dracon Lord; Artemisia, Valkyrie;
-Lilia, Bard, "seventeen and holding", the oldest; Cephala (Euphorbia Leuco Cephala), 13,
+Lilia, Bard, seventeen ("fresh and seventeen", 1:241), the oldest; Cephala (Euphorbia Leuco Cephala), 13,
 Bishop. Artemisia, Fontana and Cephala are childhood friends (3:224). Roster:
 - N10, level 3: first met at Shrine 4F E11 N10 (Inferred: the first-meeting speech,
   3:74); until you enter Area A.
@@ -152,8 +152,8 @@ Links: 1:12 = 5:4, 1:11 = 3:5, 1:14 = 1:291 = 5:14, 1:15 = 2:10 = 3:40.
 Guy 16-19 (19 is a bare "......", trigger unknown), Linaria 20, Alstron 21, Lychee 22.
 
 **1.3 Farewells (23-40).** Not flagged.
-Unnamed 23-28, named 29-34, longer named farewells 35-40 (Lilia's 40 "It's a date",
-same as 3:28). Links: 1:27 = 5:7, 1:39 = 5:12.
+Unnamed 23-28, named 29-34, longer named farewells 35-40 (Lilia's 40 "Promise?"; its
+copy 3:28 became "That's a promise." in voice-lilia-2). Links: 1:27 = 5:7, 1:39 = 5:12.
 
 **1.4 Farewells when one of yours is dead or lost (41-45).** Not flagged.
 Each hopes {ff12} comes back to life; Lilia's 45 is shared with 3:27.
@@ -275,10 +275,10 @@ without a word, oozing killing intent; Alstron starts to guess and stops himself
 Links: the shadow thread (end of file); 1:223 = 3:213.
 
 **1.24 Talk: about themselves and personal (236-241, 248-260).** Flagged J (done).
-Which block is "about themselves" and which "personal" isn't known. 236-241: Guy on gear
+Guy's topic per block is in talk_guy (MCARD 0x800b5694; scripts/reviewtool/server.py GUY_CHAT_BAR): 24-26 and 30-32 are "something personal", 33 "about themselves". 236-241: Guy on gear
 prices, Linaria a great cook, Alstron and the Book of Satori (238, the Dragon Quest III
-reference), Lychee into summoning, Fritillaria wants his own party, Lilia "seventeen and
-holding". 248-260: Guy good with fire and lightning (a hero's spells), Linaria starving
+reference), Lychee into summoning, Fritillaria wants his own party, Lilia "fresh and
+seventeen". 248-260: Guy good with fire and lightning (a hero's spells), Linaria starving
 in dungeons (249) and "do you think monsters taste good?" (258), Alstron best at death
 curses, Lychee's broom and her Greater Demon (260), Fritillaria bad at disarming traps
 and hit when he fails (254), Lilia also dances, Guy needs a Thief (257), Alstron found a
@@ -902,8 +902,8 @@ notices your meowing cat-people (3:55).
 **Cards.** Alstron found a "card" (1:259); Reiran: the Card Master's complete set (2:60,
 3:62).
 
-**Ages.** Fontana and Cephala are 13 (3:111, 115), Lilia "seventeen and holding" and the
-oldest of hers (1:241, 3:227), Reiran 18 (2:207). Old-party greetings: 1:70-71, 76-77,
+**Ages.** Fontana and Cephala are 13 (3:111, 115), Lilia 17 and the
+oldest of hers (1:241, 3:227; not an age joke, see docs/joke-check.md), Reiran 18 (2:207). Old-party greetings: 1:70-71, 76-77,
 2:63, 3:49-50.
 
 **Services.** Healing, identify, body recovery, item sale and practice fight exist in

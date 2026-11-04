@@ -804,7 +804,7 @@
           ],
           "strings": "NPC_MES1 288, 218-223",
           "placement": "Game for 288: Guy is stuck on the three-ring disc \"here\" in this area (the FAQ also says Guy tells you about the discs in Area B). Inferred for 218-223: the stranger who left without a word, full of killing intent, matches the shadowy figure harano meets behind the north door at x17y10 (NPC5 103-105).",
-          "blurb": "Guy's party has found the three-ring disc too and can't line it up, though Guy half-remembers the clue: \"Three animals... it's on the tip of my tongue...\" Ask about other parties and they describe a stranger who walked off without a word, which sounds a lot like the figure at x17y10. Lilia, their newest member, says he was \"Positively oozing killing intent...\"",
+          "blurb": "Guy's party has found the three-ring disc too and can't line it up, though Guy half-remembers the clue: \"Three animals... it's on the tip of my tongue...\" Ask about other parties and they describe a stranger who walked off without a word, which sounds a lot like the figure at x17y10. Lilia, their newest member, says he was \"sooo menacing...\"",
           "quotes": [
             {
               "file": "NPC_MES1",
@@ -816,7 +816,7 @@
               "file": "NPC_MES1",
               "idx": 223,
               "speaker": "Lilia",
-              "text": "Positively oozing killing intent..."
+              "text": "He was sooo menacing..."
             }
           ],
           "source": "NPC_MES1"
