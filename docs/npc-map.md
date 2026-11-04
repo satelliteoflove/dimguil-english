@@ -152,8 +152,8 @@ Links: 1:12 = 5:4, 1:11 = 3:5, 1:14 = 1:291 = 5:14, 1:15 = 2:10 = 3:40.
 Guy 16-19 (19 is a bare "......", trigger unknown), Linaria 20, Alstron 21, Lychee 22.
 
 **1.3 Farewells (23-40).** Not flagged.
-Unnamed 23-28, named 29-34, longer named farewells 35-40 (Lilia's 40 "Promise?"; its
-copy 3:28 became "That's a promise." in voice-lilia-2). Links: 1:27 = 5:7, 1:39 = 5:12.
+Unnamed 23-28, named 29-34, longer named farewells 35-40 (Lilia's 40 "That's a promise.",
+same as 3:28). Links: 1:27 = 5:7, 1:39 = 5:12.
 
 **1.4 Farewells when one of yours is dead or lost (41-45).** Not flagged.
 Each hopes {ff12} comes back to life; Lilia's 45 is shared with 3:27.
