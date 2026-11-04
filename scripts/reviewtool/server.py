@@ -978,6 +978,17 @@ RUN_TIME = [('farewell', 'When you leave them'),
             ('greetings by speaker', 'A greeting when you meet them')]
 
 
+# Guy's chat blocks take their bottom-bar topic line from talk_topic_str at run time, so the
+# dump has no narration line in them. talk_guy (MCARD 0x800b5694) sets it per topic:
+# 0x119-0x11d are 1:281 news, 282 told them, 283 about themselves, 284 other parties,
+# 285 something personal. Block -> narration ref.
+GUY_CHAT_BAR = {**{b: '1:281' for b in (*range(0, 6), *range(21, 24), *range(27, 30), 40, 41, 42, 43)},
+                **{b: '1:282' for b in (*range(6, 9), *range(18, 21), *range(34, 40), 44)},
+                33: '1:283',
+                **{b: '1:284' for b in range(9, 18)},
+                **{b: '1:285' for b in (*range(24, 27), *range(30, 33))}}
+
+
 def talk_blocks():
     """ref -> [(block key, note)] and block key -> [refs], from docs/re/C-talk-lines.md
     (scripts/re/talklines.py), read once. A block key is like "h1 Balbo chat [6]"."""
@@ -1019,6 +1030,9 @@ def auto_plays(ref):
             continue
         narr = [r for r in by_block.get(key, []) if r != ref and '"' not in current(r)
                 and '\n' not in current(r).strip()]
+        m = re.match(r'h0 Guy chat \[(\d+)\]$', key)
+        if not narr and m and int(m.group(1)) in GUY_CHAT_BAR:
+            narr = [GUY_CHAT_BAR[int(m.group(1))]]
         said = ''.join(f'"{current(r).strip()}" ({r}), then this line' for r in narr[:1])
         text = (f'When you Talk: {said}' if kind == 'Talk' else f'{kind}: {said}') if said else kind
         if 'rerolled' in note:
