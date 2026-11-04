@@ -25,12 +25,12 @@ isn't committed.
 
 ## Added, and not yet settled
 
-| Ref | Speaker | Japanese | Current English | Proposed |
+| Ref | Speaker | Japanese | Current English | Change |
 |---|---|---|---|---|
 | 1:241, 3:227 | Lilia | ピチピチの17才よ ("a fresh, bouncy seventeen") | "seventeen and holding" | Open in review (questions 53-55) |
-| 2:166, 3:266 | Reiran | それで? ("And?") | "And your point is...?" | "And?" |
-| 4:9 | Bergamot | 同じ年代かな? ("about the same age?") | "about our vintage?" | "about our age?" |
-| SISETU 144 | Boltac's clerk | それは武器じゃないのよ ("That isn't a weapon.") | "That isn't a weapon, dear." | "That isn't a weapon." |
+| 2:166, 3:266 | Reiran | それで? ("And?") | "And your point is...?" | Done: "And?" |
+| 4:9 | Bergamot | 同じ年代かな? ("about the same age?") | "about our vintage?" | Done: "about our age?" |
+| SISETU 144 | Boltac's clerk | それは武器じゃないのよ ("That isn't a weapon.") | "That isn't a weapon, dear." | Done: "That isn't a weapon." |
 
 Notes on the table:
 - 1:241: the first draft's rationale (commit aa257f1) called the line an "obvious,

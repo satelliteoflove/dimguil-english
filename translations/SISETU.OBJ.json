@@ -975,7 +975,7 @@
                 {
                     "length": 15,
                     "source": "NA",
-                    "translation": "That isn't a weapon, dear.",
+                    "translation": "That isn't a weapon.",
                     "compress": true,
                     "addStringTerminator": true
                 },
