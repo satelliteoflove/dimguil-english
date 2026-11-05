@@ -590,9 +590,9 @@ Links: 1:207-210.
 
 **3.19 Other parties: the scholars (201-206).** Not flagged.
 Fontana: very kind; Zaril: saw them in the archives (= 5:67); Artemisia: "old scholar
-guy... Cleo?"; Lilia liked the elf (204) but not the gnome, a sourpuss, nor the human,
-who was scared of something (205); Cephala: Cleo studies the Shrine more than he
-searches for the Priestess (206).
+guy... Cleo?"; Lilia liked the elf (204), but the gnome and the human are "not my
+type": the gnome was unfriendly, and the human was scared of something (205); Cephala:
+Cleo studies the Shrine more than he searches for the Priestess (206).
 Links: 4:111-113, 143 (Cresson's fear), 4:121-123.
 
 **3.20 Other parties: the stranger (207-214).** Not flagged.

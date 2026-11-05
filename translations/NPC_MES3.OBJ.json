@@ -41,7 +41,7 @@
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Green-haired elf\n\"Well, hi there. Can I help you with something?\"",
+                    "translation": "Green-haired elf\n\"Hiii. Something you want from me?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -287,19 +287,19 @@
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "Lilia\n\"Hey there, darling. How's it going?\n Working hard, I hope?\"",
+                    "translation": "Lilia\n\"Hiii! How's it going?\n Working hard?\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 45,
                     "source": "NA",
-                    "translation": "Lilia\n\"One of you seems a little slow,\n bless their heart. Will you be all right?\"",
+                    "translation": "Lilia\n\"Looks like one of you is a teeny bit slow.\n Are you gonna be okay?\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 94,
                     "source": "NA",
-                    "translation": "Lilia\n\"That 'Richguy' of yours at the tavern\n was looking sooo lonely.\n\r Maybe I'll ask him out on a date.\n I mean, he must be positively loaded.\"",
+                    "translation": "Lilia\n\"That 'Richguy' of yours at the tavern\n was looking sooo lonely.\n\r Maybe I'll ask him out on a date.\n I mean, he's gotta be totally loaded.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -731,7 +731,7 @@
                 {
                     "length": 39,
                     "source": "NA",
-                    "translation": "Lilia\n\"...You've... forgotten me...\n How cruel!\"",
+                    "translation": "Lilia\n\"...You've... forgotten me...\n How could you!\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1085,7 +1085,7 @@
                 {
                     "length": 43,
                     "source": "NA",
-                    "translation": "Lilia\n\"Hmm? Interested in me, are you?\n .........Naughty.\"",
+                    "translation": "Lilia\n\"Hmm? What, are you interested in me?\n .........You perv.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1133,7 +1133,7 @@
                 {
                     "length": 39,
                     "source": "NA",
-                    "translation": "Lilia\n\"That man is sooo hot-blooded.\n Honestly, it was stifling...\"",
+                    "translation": "Lilia\n\"That man is sooo hot-headed.\n Honestly, he was a bit much...\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1241,7 +1241,7 @@
                 {
                     "length": 126,
                     "source": "NA",
-                    "translation": "Lilia\n\"There was a human and a gnome too,\n but those two? Not a chance.\n\r The gnome was a sourpuss, and the\n human was scared of something,\n though I couldn't tell what.\n\r Is someone in our party scary, I wonder?\"",
+                    "translation": "Lilia\n\"There was a human guy and a gnome guy too,\n but those two? Not my type.\n\r The gnome was super unfriendly,\n and the human was scared of something,\n though I couldn't tell what.\n\r Do we have someone scary in our party?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1451,7 +1451,7 @@
                 {
                     "length": 78,
                     "source": "NA",
-                    "translation": "Lilia\n\"If you're friends with Artemisia,\n\r take it from me, darling. Stay out of\n that girl's magic experiments...\"",
+                    "translation": "Lilia\n\"If you're friends with Artemisia,\n\r try not to get dragged into\n her magic experiments...\"",
                     "addStringTerminator": true
                 },
                 {

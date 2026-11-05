@@ -77,7 +77,7 @@
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Green-haired elf\n\"Well, hi there. Can I help you with something?\"",
+                    "translation": "Green-haired elf\n\"Hiii. Something you want from me?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -89,7 +89,7 @@
                 {
                     "length": 52,
                     "source": "NA",
-                    "translation": "Green-haired elf\n\"...Why, hello.\n Don't be mean just 'cause our alignments differ, 'kay?\"",
+                    "translation": "Green-haired elf\n\"...Hi.\n Don't be mean just 'cause our alignments differ, 'kay?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -215,7 +215,7 @@
                 {
                     "length": 14,
                     "source": "NA",
-                    "translation": "Lilia\n\"Bye, now.\"",
+                    "translation": "Lilia\n\"Seeya!\"",
                     "addStringTerminator": true
                 },
                 {
@@ -449,19 +449,19 @@
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "Lilia\n\"Hey there, darling. How's it going?\n Working hard, I hope?\"",
+                    "translation": "Lilia\n\"Hiii! How's it going?\n Working hard?\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 45,
                     "source": "NA",
-                    "translation": "Lilia\n\"One of you seems a little slow,\n bless their heart. Will you be all right?\"",
+                    "translation": "Lilia\n\"Looks like one of you is a teeny bit slow.\n Are you gonna be okay?\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 94,
                     "source": "NA",
-                    "translation": "Lilia\n\"That 'Richguy' of yours at the tavern\n was looking sooo lonely.\n\r Maybe I'll ask him out on a date.\n I mean, he must be positively loaded.\"",
+                    "translation": "Lilia\n\"That 'Richguy' of yours at the tavern\n was looking sooo lonely.\n\r Maybe I'll ask him out on a date.\n I mean, he's gotta be totally loaded.\"",
                     "addStringTerminator": true
                 },
                 {

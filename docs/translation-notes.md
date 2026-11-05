@@ -829,9 +829,15 @@ Lilia's age and voice (2026-11-03, voice-lilia-2). The first draft read ピチ�
 woman's "darling" and "sweetie." Nothing in the game supports that. Her party at 3:227
 is 13-year-olds, so she's really seventeen and the oldest. None of her Japanese has a
 term of endearment, either: her drawl is in stretched vowels (ごめーん, わよぉ). Now
-"fresh and seventeen," "Sorryyy!," "Hiii!"; 1:73/3:46 and 3:240 still say "darling."
-docs/joke-check.md
-has the wider check this prompted.
+"fresh and seventeen," "Sorryyy!," "Hiii!" docs/joke-check.md has the wider check this
+prompted. voice-lilia-3 (2026-11-04) took out the last "darling" (1:73/3:46, 3:240)
+and reopened the part 1 lines that still had the older-woman voice: "Well, hi there"
+(1:11), "Why, hello" (1:13), "Bye, now" (1:34), "bless their heart" (1:74), "positively
+loaded" (1:75). 3:205's "sourpuss" (愛想がない) became "super unfriendly", and her あれはダメね
+on the scholars is man-rating, so "Not my type." 3:240's ほうがいいわよ is soft advice, not
+a warning: "try not to get dragged into," which sets up Cephala's weary "...That's
+right" (3:241). Her "kidding" (3:258, 1:267) plays in the same turn as the scout
+question, with only a face change between.
 
 ### Text check of bot runs (2026-10-15)
 

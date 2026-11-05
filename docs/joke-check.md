@@ -63,6 +63,8 @@ chose it. They're listed so the choice is on record, not as errors.
 - **1:74 and 3:47 Lilia, "bless their heart."** The mock-politeness is real. This is
   her only use of いらっしゃる, and it's laid over 頭の弱そうな ("weak in the head").
   The Southern formula carries the same irony (question 50).
+  voice-lilia-3 replaced it with "a teeny bit slow. Are you gonna be okay?", because
+  "bless their heart" is a Southern matron's phrase and she's seventeen.
 - **2:144 Balbo, "Finders keepers, right?"** からな gives away their motive for
   hauling the bodies. Chris asked for it to be clear to Western readers (question 3). The
   catchphrase states it outright.
