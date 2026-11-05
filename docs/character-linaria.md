@@ -56,8 +56,9 @@ attitude holds, and only the tone of the words needs to change.
   おじょうちゃんたち (1:51, 1:52), "boys" or "little ones" said from above. She laughs
   at your blunders, アハハッ! ドジねー, then warns you to be careful (1:262). She calls
   Fontana 若様, "the young master", the word a retainer uses for a lord's son, said
-  half in fun (1:208). She's an adult among kids: Lychee is a child, Fritillaria is a
-  kid, Lilia is seventeen, and the parties she teases include Fontana's 13-year-olds.
+  half in fun (1:208). She's the grown woman of the party: Lychee is a cutesy teenager
+  (`docs/character-lychee.md`), Lilia is seventeen, and the parties she teases include
+  Fontana's 13-year-olds.
 - **Frank, not crude.** She calls the grave robbers what they are and is shocked that
   one is a Lord "same as our leader", in a Shrine of all places (1:201). That's moral
   bluntness. She has no slang, no insults, and no rough grammar.
