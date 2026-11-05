@@ -51,7 +51,7 @@ written by `scripts/nptnames.py`).
 | ガイ / ガイラルディア | Guy / Gaillardia | self-proclaimed hero, party leader |
 | アルストロン | Alstron | priest, polite, dry, flirts; asks to be called "Al-chan" (アルちゃん), the one honorific kept, because the cutesy -chan on a tall formal priest is the joke and anime-literate players know it. His battle record (NPT files) says アルストン, the site's "Alston"; the patch uses Alstron there too, as the dialogue does 59 times. The party is named for plants: Gaillardia, Linaria (toadflax), Lychee, and Alstron from Alstroemeria (アルストロメリア), so the dialogue's spelling is the meaningful one and アルストン looks like a shortening |
 | リナリア | Linaria | fighter, big, cool, big-sisterly |
-| ライチ | Lychee | mage, childish, calls herself "Lychee" |
+| ライチ | Lychee | mage, cutesy teenage witch girl, calls herself "Lychee" |
 | フリチラリア | Fritillaria | thief, cheeky kid voice (おいら) |
 | リリア / リリアセウス | Lilia / Liliaceus | bard, 17, flirty |
 | アルテミシア | Artemisia | cheerful, digs up lost spells |
@@ -119,10 +119,17 @@ What marks each one in the Japanese, and what that becomes in English:
   she isn't a tomboy: no "ya", "'em", "Dunno", "Lemme" or "folks". Plain contractions
   carry her casualness. Short sentences, no drawl, no endearments. Profile:
   `docs/character-linaria.md`.
-- **Lychee**. Calls herself ライチ, ねぇねぇねぇ, 聞いて聞いて〜, すごいっしょ〜.
-  The airheaded child-mage. Refers to herself in the third person ("Lychee summoned a
-  Greater Demon!"), run-on excitement ("and then, and then"), "Listen, listen!",
-  "Isn't that amazing? Isn't it?", stretched vowels ("Byeee!").
+- **Lychee**. ライチ as "I" (and あたし, 私), あのね, ねぇねぇねぇ, 聞いて聞いて〜,
+  すごいっしょ〜, キャハッ, えへ, 〜モン. The cutesy teenage witch girl (魔女っ子) played as
+  a ぶりっ子, a girl who acts cute on purpose, not a small child: her tag is
+  フードをかぶった女, her portrait is a teenager in a red hood with a star wand, she's
+  boy-crazy ("a party of cute boys"), and she's polite with strangers (何かご用ですか?).
+  Also the party's soft-hearted airhead. Her name goes only where the Japanese has
+  ライチ ("Lychee doesn't know him!"); where she says あたし, "I" ("I summoned a Greater
+  Demon!"). Giggles ("Hehe", "Ehehe", "Tee-hee"), doubled openers ("Guess what, guess
+  what?", "Listen, listen!"), and stretches only where the Japanese stretches
+  ("bye-byeee" for バイバーイ, not for バイバイ). No folksy-kid spellings: no "meetcha",
+  "y'know", "wanna" or "s'posed". Profile: `docs/character-lychee.md`.
 - **Fritillaria**. おいら, 〜だよ, 〜な! Scrappy kid thief, hero-worships Zaril.
   Street-urchin English: "ain't", "gonna", "me and Zaril", brags then deflates. (One
   confession line is deliberately stiff and formal; that's the joke.)
