@@ -172,9 +172,9 @@ Already in her voice, as far as this profile goes: 1:5, 9, 22, 65, 66, 69, 70, 7
 ## Something to check later
 
 Alstron introduces Fritillaria as こっちの小柄な男性 (1:120), "this small man". 男性 is
-the adult word for a man, and his tag is "Short man". The voice sheet and the Linaria
-profile call him a kid. That may be another misread. It belongs to his own profile,
-not this one.
+the adult word for a man, and his tag is "Short man". The voice sheet called him a kid.
+His own profile, `docs/character-fritillaria.md`, finds he's a small grown man,
+probably a Hobbit.
 
 ## Sources
 
