@@ -52,7 +52,7 @@ written by `scripts/nptnames.py`).
 | アルストロン | Alstron | priest, polite, dry, flirts; asks to be called "Al-chan" (アルちゃん), the one honorific kept, because the cutesy -chan on a tall formal priest is the joke and anime-literate players know it. His battle record (NPT files) says アルストン, the site's "Alston"; the patch uses Alstron there too, as the dialogue does 59 times. The party is named for plants: Gaillardia, Linaria (toadflax), Lychee, and Alstron from Alstroemeria (アルストロメリア), so the dialogue's spelling is the meaningful one and アルストン looks like a shortening |
 | リナリア | Linaria | fighter, big, cool, big-sisterly |
 | ライチ | Lychee | mage, cutesy teenage witch girl, calls herself "Lychee" |
-| フリチラリア | Fritillaria | thief, cheeky kid voice (おいら) |
+| フリチラリア | Fritillaria | thief, a small man (likely a Hobbit), cheeky (おいら) |
 | リリア / リリアセウス | Lilia / Liliaceus | bard, 17, flirty |
 | アルテミシア | Artemisia | cheerful, digs up lost spells |
 | セファラ / サファラ | Cephala | bishop, polite and earnest (サファラ appears once; same person) |
@@ -130,9 +130,16 @@ What marks each one in the Japanese, and what that becomes in English:
   what?", "Listen, listen!"), and stretches only where the Japanese stretches
   ("bye-byeee" for バイバーイ, not for バイバイ). No folksy-kid spellings: no "meetcha",
   "y'know", "wanna" or "s'posed". Profile: `docs/character-lychee.md`.
-- **Fritillaria**. おいら, 〜だよ, 〜な! Scrappy kid thief, hero-worships Zaril.
-  Street-urchin English: "ain't", "gonna", "me and Zaril", brags then deflates. (One
-  confession line is deliberately stiff and formal; that's the joke.)
+- **Fritillaria**. おいら, あんたたち, 〜だよ, 〜な!, ヤァ!, スッゲー! A small grown man,
+  almost certainly a Hobbit (tag 背の低い男, Alstron's 小柄な男性, a stocky portrait), not
+  a kid, and touchy about being called little or a brat (5:29, 5:65). Cheeky with
+  outsiders and in Zaril's party, whom he follows since Zaril saved him (5:84).
+  Nervous, stammering and apologetic in Guy's party's group talk, a party that hits him
+  when he fails a trap (1:254). Casual English with "gonna", "wanna" and plain
+  contractions. No "ain't", no double negatives and no street-kid spellings
+  ("whaddaya", "meetcha", "ya", dropped g's), because his Japanese is casual but
+  grammatical (settled with Chris 2026-11-05). No "when I grow up": 将来 is "someday".
+  Profile: `docs/character-fritillaria.md`.
 - **Lilia (Liliaceus)**. あたし, ハァイ, なぁに?, ふぅん, 〜ねぇ, 〜わよぉ, a katakana ネ.
   A seventeen-year-old elf Bard, the oldest in Fontana's party of kids (3:227). A playful
   flirt who fishes for attention ("Interested in me?", "don't you want to scout me?",
