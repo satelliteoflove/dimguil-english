@@ -50,7 +50,7 @@ written by `scripts/nptnames.py`).
 |---|---|---|
 | ガイ / ガイラルディア | Guy / Gaillardia | self-proclaimed hero, party leader |
 | アルストロン | Alstron | priest, polite, dry, flirts; asks to be called "Al-chan" (アルちゃん), the one honorific kept, because the cutesy -chan on a tall formal priest is the joke and anime-literate players know it. His battle record (NPT files) says アルストン, the site's "Alston"; the patch uses Alstron there too, as the dialogue does 59 times. The party is named for plants: Gaillardia, Linaria (toadflax), Lychee, and Alstron from Alstroemeria (アルストロメリア), so the dialogue's spelling is the meaningful one and アルストン looks like a shortening |
-| リナリア | Linaria | fighter, frank, big-sisterly |
+| リナリア | Linaria | fighter, big, cool, big-sisterly |
 | ライチ | Lychee | mage, childish, calls herself "Lychee" |
 | フリチラリア | Fritillaria | thief, cheeky kid voice (おいら) |
 | リリア / リリアセウス | Lilia / Liliaceus | bard, 17, flirty |
@@ -109,8 +109,16 @@ What marks each one in the Japanese, and what that becomes in English:
   lecherous priest who plays straight man to Guy and needles him with perfect manners
   ("Oh my, oh my", "Quite so", "if you'll pardon my saying"). Fawns over pretty women.
   Once Evil, and says so without embarrassment.
-- **Linaria**. あたし, わよ / なんだ, アハハッ! Tomboyish big-sister fighter: blunt,
-  breezy, laughs at people's blunders, proud of her cooking. Casual, direct, short.
+- **Linaria**. あたし, わ / わよ / わね, かしら, あら, ハイハイ, アハハッ! The big woman warrior
+  (大柄な女, "big-framed", not tall) of a DQ3 party: the female Soldier in bikini armor.
+  Cool and unbothered ("Oh yeah? So?", "Yeah, yeah...", "Not that I care much"), the
+  straight man to Guy's hero talk, food-minded ("do you think monsters taste good?"), a
+  good cook "though I may not look it", and a teasing older sister to the kids ("Well,
+  hey there, boys"). Polite with strangers (1:49, 1:50, 1:117), casual with people she
+  knows. Her Japanese is ordinary adult women's speech, with no rough or boyish forms, so
+  she isn't a tomboy: no "ya", "'em", "Dunno", "Lemme" or "folks". Plain contractions
+  carry her casualness. Short sentences, no drawl, no endearments. Profile:
+  `docs/character-linaria.md`.
 - **Lychee**. Calls herself ライチ, ねぇねぇねぇ, 聞いて聞いて〜, すごいっしょ〜.
   The airheaded child-mage. Refers to herself in the third person ("Lychee summoned a
   Greater Demon!"), run-on excitement ("and then, and then"), "Listen, listen!",
