@@ -707,7 +707,7 @@
                 {
                     "length": 105,
                     "source": "NA",
-                    "translation": "Tall man\n\"I am Alstron, a Priest.\n A pleasure to make your acquaintance.\n\r I'll introduce the rest of us as well.\n The taller lady here is our Fighter, Linaria.\"",
+                    "translation": "Tall man\n\"I am Alstron, a Priest.\n A pleasure to make your acquaintance.\n\r I'll introduce the rest of us as well.\n The larger lady here is our Fighter, Linaria.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1433,7 +1433,7 @@
                 {
                     "length": 33,
                     "source": "NA",
-                    "translation": "Linaria\n\"I may not look it, but I'm a great cook.\"",
+                    "translation": "Linaria\n\"I may not look it, but I'm good at cooking.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1469,7 +1469,7 @@
                 {
                     "length": 41,
                     "source": "NA",
-                    "translation": "Linaria\n\"Hmm... nothing new, really.\n Sorry 'bout that.\"",
+                    "translation": "Linaria\n\"Hmm... there's nothing especially new.\n Sorry!\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1505,7 +1505,7 @@
                 {
                     "length": 74,
                     "source": "NA",
-                    "translation": "Linaria\n\"Hey, when you're down in the dungeon,\n don't you ever just get starving hungry?\n\r Well, not that it matters.\"",
+                    "translation": "Linaria\n\"Hey, when you're down in the dungeon,\n don't you ever get unbearably hungry?\n\r Well, not that it matters.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1583,7 +1583,7 @@
                 {
                     "length": 68,
                     "source": "NA",
-                    "translation": "Linaria\n\"What's that?\n\r Ahaha! What a klutz!\n If you're not careful, one day\n you'll be in real trouble.\"",
+                    "translation": "Linaria\n\"What's that?\n\r Ahaha!\n What a klutz!\n If you're not careful, one day you'll be in real trouble.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1625,7 +1625,7 @@
                 {
                     "length": 22,
                     "source": "NA",
-                    "translation": "Linaria\n\"You already told me that.\"",
+                    "translation": "Linaria\n\"I've heard that before.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1661,7 +1661,7 @@
                 {
                     "length": 17,
                     "source": "NA",
-                    "translation": "Linaria\n\"Lemme see, lemme see!\"",
+                    "translation": "Linaria\n\"Show me, show me!\"",
                     "addStringTerminator": true
                 },
                 {
