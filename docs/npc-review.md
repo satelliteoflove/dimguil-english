@@ -17,6 +17,9 @@ scene was reworked with Chris.
 4. Run `scripts/wtquotes.py check` after applying a scene. The website walkthrough quotes
    NPC lines (`docs/walkthrough-npcs.json`, ledger in `docs/walkthrough-quotes.md`); any
    quote that changed is listed with its chapter, to carry over to the site.
+5. Run `scripts/pubquotes.py` too. It flags any quote in the README, CHANGELOG or the
+   release and announcement outlines that the translation used to have but doesn't any
+   more, so a changed line can't linger in public writing.
 
 The reviewers' reports quote the Japanese at length, so they stay out of the repo
 (same policy as the redacted `source` fields). They live in `rips/review/` on the

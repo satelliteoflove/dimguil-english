@@ -305,9 +305,9 @@ Decided "leave it", that a player might notice:
    [decisions 19]
 2. Training Maze sign doesn't say a wipe there still halves gold and costs the front
    member's items (box full; the site documents it). [decisions 20]
-3. Compendium lore: Smoke Demon "swords barely harm it" and Venus Man Trap "burns well
-   with fire spells" have no support in the code (the site gives real resistances).
-   [decisions 21]
+3. Compendium lore: Venus Man Trap "burns well with fire spells" has no support in the
+   code (the site gives real resistances). The Smoke Demon's text was corrected instead
+   (formerly "swords barely harm it"): it "shrugs off alchemy but not a sword". [decisions 21; e5fe68b]
 4. Madalqua's battle lines "in freezing cold" (FIGHTMSG 179/185); its element is
    Tiltowait's, not cold. [decisions 22]
 5. "Hits 1 times!" (FIGHTMSG 118): one string serves every count. Kept as a Wizardry

@@ -27,7 +27,7 @@ isn't committed.
 
 | Ref | Speaker | Japanese | Current English | Change |
 |---|---|---|---|---|
-| 1:241, 3:227 | Lilia | ピチピチの17才よ ("a fresh, bouncy seventeen") | "seventeen and holding" | Open in review (questions 53-55) |
+| 1:241, 3:227 | Lilia | ピチピチの17才よ ("a fresh, bouncy seventeen") | "seventeen and holding" | Done: "fresh and seventeen" |
 | 2:166, 3:266 | Reiran | それで? ("And?") | "And your point is...?" | Done: "And?" |
 | 4:9 | Bergamot | 同じ年代かな? ("about the same age?") | "about our vintage?" | Done: "about our age?" |
 | SISETU 144 | Boltac's clerk | それは武器じゃないのよ ("That isn't a weapon.") | "That isn't a weapon, dear." | Done: "That isn't a weapon." |
@@ -42,12 +42,10 @@ Notes on the table:
 - SISETU 144: the clerk never addresses the player in lines 139-145. "dear" came in with
   576334d, with no note.
 
-The "seventeen and holding" description is also in:
-- `docs/npc-map.md` (lines 105, 280 and 905);
-- `docs/announcement-outline.md` (line 27);
-- the voice-lilia-1 scene summary.
-
-The summaries for the voice-lilia-2 and voice-lilia-3 scenes have been corrected.
+The "seventeen and holding" description has been taken out of `docs/npc-map.md`, the
+announcement outline and the review scene summaries. `scripts/pubquotes.py` now flags
+any quote in the README, CHANGELOG or release outlines that the translation used to have
+but no longer does.
 
 ## Idioms Chris chose on purpose
 
@@ -76,9 +74,8 @@ chose it. They're listed so the choice is on record, not as errors.
 
 ## Already in hand
 
-3:28, Lilia's "It's a date." It's the copy of 1:40, which became "Promise?" in
-voice-lilia-1. The voice-lilia-2 scene proposes the same change for 3:28. It's waiting
-to be applied.
+3:28, Lilia's "It's a date." It's the copy of 1:40. Both now read "We'll meet again.
+.........That's a promise." (voice-lilia-2).
 
 ## Cleared
 

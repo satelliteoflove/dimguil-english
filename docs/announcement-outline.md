@@ -23,9 +23,8 @@ first.
 3. **Translation approach.** The English sticks to the intent and phrasing of the
    Japanese where possible, and adapts where it has to so the game reads pleasantly and
    is easy to follow. Give examples of both:
-   - Care with the language and culture: Guy and Alstron's introduction; Lilia lying
-     about her age (ピチピチの17才, a stock gag, rendered "seventeen and holding"); the town board modeled on
-     the chalkboards at pre-cellphone Japanese train stations; Alstron's Dragon Quest III
+   - Care with the language and culture: Guy and Alstron's introduction; the town board
+     modeled on the chalkboards at pre-cellphone Japanese train stations; Alstron's Dragon Quest III
      Sage/Bishop class-change reference; other inside jokes kept. From the catalog
      sweep: the Fire Rock's 「焼け石に水」, a proverb for futility, kept word for word as
      'water on a hot stone' because the monster literally is one.
@@ -42,6 +41,12 @@ first.
      and why. Candidates so far:
      - Murphy's Ghost (Catalog 9:24): the English adds "over and over" to spell out the
        joke. He was Wizardry I's famous experience farm, and the Japanese only implies it.
+   - Corrections, if Chris wants one: Lilia's ピチピチの17才よ (1:241). An early draft read
+     it as a lie about her age (formerly "seventeen and holding"), but nothing in the game
+     supports that: her party is 13-year-olds, so she really is seventeen and the oldest.
+     It now reads "fresh and seventeen", and a check of every joke in the English
+     against the Japanese followed (`docs/joke-check.md`). Don't use the old reading as
+     a culture example; it was the translation's mistake, not the game's.
 
 4. **What the game is.** Two or three sentences: Wizardry Gaiden, PS1, 2000, ASCII,
    never released in English. Developed by Access, published by ASCII, 20 April 2000
