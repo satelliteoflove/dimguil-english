@@ -33,7 +33,7 @@ known trigger, and those are marked as such.
   position in the file, which is consistent: each block runs one line per member in
   party order. Where a block's topic is a guess, it says so.
 - Unnamed speaker tags (before you learn a name) and who they are, from the Japanese:
-  - Man with a greatsword = Guy; Tall woman = Linaria; Tall man = Alstron; Hooded woman =
+  - Man with a greatsword = Guy; Brawny woman = Linaria (大柄な女); Tall man = Alstron; Hooded woman =
     Lychee; Short man = Fritillaria; Green-haired elf = Lilia.
   - Man in armor = Balbo; Wolfish man = Alba; Cat-eared woman = Rosea; Faerie with a
     katana = Reiran; Shaggy man = Gaura; Woman with a spear = Artemisia.

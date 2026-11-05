@@ -29,7 +29,7 @@
                 {
                     "length": 35,
                     "source": "NA",
-                    "translation": "Tall woman\n\"Haven't seen you around. Need something from us?\"",
+                    "translation": "Brawny woman\n\"Haven't seen you around. Need something from us?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -53,7 +53,7 @@
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Tall woman\n\"Haven't seen you around. Want something?\"",
+                    "translation": "Brawny woman\n\"Haven't seen you around. Want something?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -131,7 +131,7 @@
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "Linaria\n\"Yeah? What's up?\"",
+                    "translation": "Linaria\n\"Hm? What is it?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -155,7 +155,7 @@
                 {
                     "length": 16,
                     "source": "NA",
-                    "translation": "Tall woman\n\"Bye.\"",
+                    "translation": "Brawny woman\n\"Bye.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -191,7 +191,7 @@
                 {
                     "length": 14,
                     "source": "NA",
-                    "translation": "Linaria\n\"See ya.\"",
+                    "translation": "Linaria\n\"See you.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -227,7 +227,7 @@
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "Linaria\n\"Okay then, see ya later.\"",
+                    "translation": "Linaria\n\"Okay then, see you later.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -263,7 +263,7 @@
                 {
                     "length": 41,
                     "source": "NA",
-                    "translation": "Linaria\n\"See ya...\n I really hope {ff12}\n\r comes back to life.\"",
+                    "translation": "Linaria\n\"See you...\n I really hope {ff12} comes back to life.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -287,13 +287,13 @@
                 {
                     "length": 16,
                     "source": "NA",
-                    "translation": "Linaria\n\"Oh, hey. How ya doing?\"",
+                    "translation": "Linaria\n\"Oh, hi. How are you doing?\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 12,
                     "source": "NA",
-                    "translation": "Linaria\n\"Yeah? What's up?\"",
+                    "translation": "Linaria\n\"Hm? What is it?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -305,7 +305,7 @@
                 {
                     "length": 65,
                     "source": "NA",
-                    "translation": "Linaria\n\"Didn't we meet you all at the tavern?\n Imagine the odd ones out teaming up together.\"",
+                    "translation": "Linaria\n\"Didn't we meet you all at the tavern?\n\r To think the ones left out\n would form a party together.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -317,13 +317,13 @@
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "Linaria\n\"Well, if it isn't the little boys.\n Long time no see.\"",
+                    "translation": "Linaria\n\"Well, hey there, boys.\n Long time no see.\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "Linaria\n\"Well, if it isn't the little girls.\n Long time no see.\"",
+                    "translation": "Linaria\n\"Well, hey there, girls.\n Long time no see.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -785,7 +785,7 @@
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Linaria\n\"I'm Linaria. Fighter, born and bred.\"",
+                    "translation": "Linaria\n\"I'm Linaria. A Fighter to the core.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -827,7 +827,7 @@
                 {
                     "length": 47,
                     "source": "NA",
-                    "translation": "Linaria\n\"We did this already! You forgot?\n That's cold. Eh, whatever.\"",
+                    "translation": "Linaria\n\"We did this before, didn't we? Did you forget?\n That's cold. Oh well.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1151,7 +1151,7 @@
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": "Linaria\n\".........\n Oh yeah? So?\"",
+                    "translation": "Linaria\n\".........\n Oh really? And so?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1217,7 +1217,7 @@
                 {
                     "length": 92,
                     "source": "NA",
-                    "translation": "Linaria\n\"We met some folks who were grave robbing,\n plain as day.\n\r And one of 'em's a Lord, same as our leader?\n Can't believe it. This is a Shrine...\"",
+                    "translation": "Linaria\n\"We met some people who were grave robbers\n if I ever saw one.\n\r And one of them's a Lord, same as our leader?\n Can't believe it. In a Shrine, of all places...\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1259,7 +1259,7 @@
                 {
                     "length": 67,
                     "source": "NA",
-                    "translation": "Linaria\n\"Dunno why, but I heard the young master's\n Dracon left and started his own party.\"",
+                    "translation": "Linaria\n\"I don't know why, but I heard the young master's\n Dracon left and started his own party.\"",
                     "addStringTerminator": true
                 },
                 {

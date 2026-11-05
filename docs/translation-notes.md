@@ -839,6 +839,17 @@ a warning: "try not to get dragged into," which sets up Cephala's weary "...That
 right" (3:241). Her "kidding" (3:258, 1:267) plays in the same turn as the scout
 question, with only a face change between.
 
+Linaria's voice (2026-11-04, voice-linaria-1; profile in docs/character-linaria.md). The
+voice sheet called her tomboyish, and the English gave her a folksy register ("ya",
+"'em", "folks", "Dunno") that her Japanese doesn't have: it's ordinary adult women's
+speech, cool and short, polite with strangers. Her tag 大柄な女 is "big-framed", not
+tall, so "Tall woman" became "Brawny woman" (1:3, 1:7, 1:24). 1:201 had her catching
+grave robbers in the act ("grave robbing, plain as day"); いかにも盗掘してます,って人たち
+is people who looked the part, so now "grave robbers if I ever saw one". 1:49 plays only
+when every member is a tavern recruit (special portrait, MCARD 0x800bd898), so 仲間はずれ
+同志 is "the ones left out" at the tavern. 1:51/1:52 play for all-male or all-female
+parties aged 10-19, so "boys" and "girls".
+
 ### Text check of bot runs (2026-10-15)
 
 Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
