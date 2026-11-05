@@ -107,7 +107,54 @@ function textFor(ln, choice) {
   if (choice === 'edited') return (S.decisions[ln.ref] && S.decisions[ln.ref].edited) || ln.faithful;
   return ln.current;
 }
-function saveDraft() { localStorage.setItem(draftKey(), JSON.stringify(S.decisions)); }
+// The page's choices and edits are kept twice: on this device at once, and on the server a
+// moment later (phones drop local storage, and the phone and the desktop don't share it).
+let draftTimer = null, pendingDraft = null;
+function saveDraft({ now = false } = {}) {
+  const sid = S.scene.id;
+  const d = { saved_at: Date.now(), decisions: S.decisions, note: $('#scene-note').value };
+  localStorage.setItem(draftKey(), JSON.stringify(d));
+  pendingDraft = { scene: sid, ...d };
+  clearTimeout(draftTimer);
+  S.saveState = 'saving'; renderSaved();
+  if (now) return sendDraft();
+  draftTimer = setTimeout(sendDraft, 600);
+}
+async function sendDraft() {
+  const body = pendingDraft;
+  if (!body) return;
+  try {
+    await api('/api/draft', body);
+    if (pendingDraft === body) { pendingDraft = null; S.saveState = 'saved'; }
+  } catch (e) {
+    if (pendingDraft === body) S.saveState = 'failed';
+  }
+  renderSaved();
+}
+// Leaving the page or switching apps: send what's waiting now, not in 600 ms.
+function flushDraft() {
+  if (!pendingDraft) return;
+  clearTimeout(draftTimer);
+  navigator.sendBeacon('/api/draft', JSON.stringify(pendingDraft));
+}
+addEventListener('pagehide', flushDraft);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushDraft(); });
+function renderSaved() {
+  const el = $('#save-state');
+  if (!el) return;
+  el.textContent = { saving: 'Saving…', saved: 'Your progress is saved.',
+    failed: 'Not saved to the server yet; kept on this device.' }[S.saveState] || '';
+  el.classList.toggle('warn', S.saveState === 'failed');
+}
+// The newer of this device's draft and the server's.
+function loadDraft(sc) {
+  let local = null;
+  try { local = JSON.parse(localStorage.getItem(`dimguil-review:${sc.id}`) || 'null'); } catch (e) { local = null; }
+  if (local && !('saved_at' in local && 'decisions' in local)) local = { saved_at: 0, decisions: local, note: '' };   // older drafts: the choices alone
+  const server = sc.draft;
+  const pick = [local, server].filter(Boolean).sort((a, b) => (b.saved_at || 0) - (a.saved_at || 0))[0];
+  return { draft: pick || { saved_at: 0, decisions: {}, note: '' }, push: !!pick && pick === local && Object.keys(local.decisions).length > 0 };
+}
 
 function setChoice(i, choice, { advance = false } = {}) {
   const ln = lines()[i];
@@ -151,7 +198,7 @@ function renderSceneList() {
     <p class="party">${esc((partyOf(f) || { name: `NPC_MES${f}` }).name)}</p>
     <ol>${list.map(sc => `<li><button type="button" class="scene-link${sc.status === 'open' ? ' todo' : ''}" data-id="${esc(sc.id)}"
       title="${esc(sc.status === 'open' ? 'To review' : STATUS[sc.status] || sc.status)}${count(sc)}"
-      ${S.scene && S.scene.id === sc.id ? 'aria-current="true"' : ''}>${esc(sc.title)}${sc.status === 'applied' ? ' <span class="wait">· applied</span>' : sc.status === 'moved' ? ' <span class="wait">· in voice scenes</span>' : ''}</button></li>`).join('')}</ol>`).join('')
+      ${S.scene && S.scene.id === sc.id ? 'aria-current="true"' : ''}>${esc(sc.title)}${sc.status === 'applied' ? ' <span class="wait">· applied</span>' : sc.partial ? ' <span class="wait">· part applied</span>' : sc.status === 'moved' ? ' <span class="wait">· in voice scenes</span>' : ''}</button></li>`).join('')}</ol>`).join('')
     || `<p class="none">${S.scenes.length ? 'Nothing left to review.' : 'No scenes prepared yet.'}</p>`;
   $$('.scene-link').forEach(b => b.addEventListener('click', () => { setNav(false); openScene(b.dataset.id); }));
 }
@@ -167,7 +214,11 @@ function setNav(open) {
 
 async function openScene(id, { line = 0, top = null } = {}) {
   S.scene = await api(`/api/scene?id=${encodeURIComponent(id)}`);
-  S.decisions = JSON.parse(localStorage.getItem(draftKey()) || '{}');
+  const { draft, push } = loadDraft(S.scene);
+  S.decisions = draft.decisions || {};
+  $('#scene-note').value = draft.note || '';
+  S.saveState = draft.saved_at && !push ? 'saved' : '';
+  if (push) saveDraft({ now: true });   // a draft only this device had: put it on the server too
   S.opened = {};
   S.glosses = [];
   const sc = S.scene;
@@ -888,25 +939,53 @@ window.addEventListener('scroll', () => {
 
 // --- apply ---------------------------------------------------------------------------------
 
+// A line decided here that the last apply didn't already write.
+function freshChoice(l) {
+  const d = S.decisions[l.ref];
+  return !!(d && d.choice) && !collapsed(l) && (!alreadyApplied(l) || textFor(l, d.choice) !== l.current);
+}
+// For applying an unfinished page: every decided line, and the lines with no proposed change
+// above the last one you decided (read on the way down). Lines below it aren't read yet.
+function partialLines() {
+  const ls = lines();
+  let last = -1;
+  ls.forEach((l, k) => { if (!collapsed(l) && (S.decisions[l.ref] || {}).choice) last = k; });
+  return ls.filter((l, k) => k <= last && !collapsed(l) && decisionOf(l));
+}
 function renderApplyBar() {
   const ls = lines();
   const open = ls.filter(l => !decisionOf(l)).length;
   const changes = ls.filter(l => { const d = decisionOf(l); return d && textFor(l, d.choice) !== l.current; }).length;
   const prior = S.scene.decision;
-  const nothingNew = !open && !changes && prior;
+  const nothingNew = !open && !changes && prior && !prior.partial;
+  const fresh = ls.filter(freshChoice).length;
+  S.partial = open > 0;
   let msg = open ? `${open} proposed ${open === 1 ? 'change needs' : 'changes need'} your decision.`
     : changes ? `Ready: ${changes} ${changes === 1 ? 'line changes' : 'lines change'}.`
     : nothingNew ? 'Nothing new to apply.' : 'Ready: no lines change.';
-  if (prior) msg += prior.status === 'committed' ? ` Committed as ${prior.commit || 'a commit'}.` : ` Applied ${prior.applied_at.slice(0, 16).replace('T', ' ')}; Claude commits next.`;
+  if (prior) {
+    const when = prior.applied_at.slice(0, 16).replace('T', ' ');
+    msg += prior.partial
+      ? (prior.status === 'committed' ? ` Part committed as ${prior.commit || 'a commit'}.` : ` Part applied ${when}; Claude commits next.`)
+      : (prior.status === 'committed' ? ` Committed as ${prior.commit || 'a commit'}.` : ` Applied ${when}; Claude commits next.`);
+  }
   $('#apply-status').textContent = msg;
-  $('#apply-open').disabled = open > 0 || !!nothingNew;
-  $('#apply-open').textContent = !open && !changes && !prior ? 'Mark as reviewed' : 'Review and apply';
+  $('#apply-open').disabled = open > 0 ? fresh === 0 : !!nothingNew;
+  $('#apply-open').textContent = open > 0 ? 'Apply what\'s decided'
+    : !changes && !prior ? 'Mark as reviewed' : 'Review and apply';
+  renderSaved();
 }
 
 function openApply() {
-  const changed = lines().filter(l => { const d = decisionOf(l); return d && textFor(l, d.choice) !== l.current; });
-  $('#apply-summary').textContent = changed.length
-    ? `${changed.length} ${changed.length === 1 ? 'line changes' : 'lines change'}. Everything else stays as it is.`
+  const pool = S.partial ? partialLines() : lines();
+  const changed = pool.filter(l => { const d = decisionOf(l); return d && textFor(l, d.choice) !== l.current; });
+  const open = lines().filter(l => !decisionOf(l)).length;
+  const n = changed.length, lc = n === 1 ? 'line changes' : 'lines change';
+  $('#apply-h').textContent = S.partial ? 'Apply what\'s decided' : 'Apply this scene';
+  $('#apply-confirm').textContent = S.partial ? 'Apply these changes' : 'Apply changes';
+  $('#apply-summary').textContent = S.partial
+    ? `${n ? `${n} ${lc}.` : 'No lines change yet.'} ${open} ${open === 1 ? 'line still needs' : 'lines still need'} your decision; the scene stays open for them, and what you've done on them is saved.`
+    : n ? `${n} ${lc}. Everything else stays as it is.`
     : 'No lines change. Applying records that the scene was reviewed.';
   $('#apply-list').innerHTML = changed.map(l => {
     const d = decisionOf(l);
@@ -920,8 +999,8 @@ function openApply() {
 // The body is the same as before the redesign, so decisions/<scene>.json is unchanged.
 function applyBody() {
   return {
-    scene: S.scene.id, note: $('#scene-note').value,
-    lines: lines().filter(l => !collapsed(l)).map(l => {
+    scene: S.scene.id, note: $('#scene-note').value, partial: !!S.partial,
+    lines: (S.partial ? partialLines() : lines().filter(l => !collapsed(l))).map(l => {
       const d = decisionOf(l);
       const own = S.decisions[l.ref] || {};
       return { ref: l.ref, choice: d.choice, text: textFor(l, d.choice), note: own.note || '', copies: tickedOf(l) };
@@ -933,8 +1012,19 @@ async function confirmApply() {
   const btn = $('#apply-confirm');
   btn.disabled = true;
   try {
-    await api('/api/apply', applyBody());
-    localStorage.removeItem(draftKey());
+    const body = applyBody();
+    await api('/api/apply', body);
+    if (body.partial) {   // keep the work on the lines still open; the rest is written now
+      for (const l of body.lines) {
+        const own = S.decisions[l.ref];
+        if (own && own.choice) delete S.decisions[l.ref];
+      }
+      $('#scene-note').value = '';
+      await saveDraft({ now: true });
+    } else {
+      clearTimeout(draftTimer); pendingDraft = null;
+      localStorage.removeItem(draftKey());
+    }
     $('#apply-dialog').close();
     ({ scenes: S.scenes, progress: S.progress } = await api('/api/state'));
     await openScene(S.scene.id, { line: S.focus, top: scrollY });
@@ -995,6 +1085,7 @@ async function main() {
   $('#hide-done').addEventListener('change', e => { localStorage.setItem('dimguil-review:hide-done', e.target.checked ? '1' : ''); renderSceneList(); });
   $('#apply-open').addEventListener('click', openApply);
   $('#apply-confirm').addEventListener('click', confirmApply);
+  $('#scene-note').addEventListener('input', () => { if (S.scene) saveDraft(); });
   $('#nav-toggle').addEventListener('click', () => setNav(!document.body.classList.contains('nav-open')));
   $('#help').addEventListener('click', e => { if (e.target.id === 'help') e.target.hidden = true; });
 

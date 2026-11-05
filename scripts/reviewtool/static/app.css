@@ -235,6 +235,8 @@ body.no-rd .w .rd { visibility: hidden; }
 .sources a { color: var(--soft); }
 .applybar { position: sticky; bottom: 0; margin: 2.4rem calc(-1 * clamp(1.5rem, 4vw, 4rem)) 0; padding: 0.8rem clamp(1.5rem, 4vw, 4rem); background: var(--night); border-top: 1px solid var(--rule); display: flex; align-items: center; gap: 1rem; justify-content: space-between; z-index: 5; }
 .applybar p { margin: 0; color: var(--soft); }
+.applybar .save-state { color: var(--faint); font-size: var(--step--1); }
+.applybar .save-state.warn { color: #e0a060; }
 button.primary { background: var(--text); color: var(--night); border: 1px solid var(--text); border-radius: 6px; padding: 0.45rem 1rem; cursor: pointer; }
 button.primary:disabled { background: transparent; color: var(--faint); border: 1px dashed var(--rule); cursor: not-allowed; }
 

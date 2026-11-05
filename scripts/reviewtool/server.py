@@ -89,6 +89,7 @@ from reviewpage import load as load_commented  # noqa: E402  (some translation f
 SCENES = os.path.join(ROOT, 'rips/review/scenes')
 DECISIONS = os.path.join(ROOT, 'rips/review/decisions')
 QUESTIONS = os.path.join(ROOT, 'rips/review/questions.json')
+DRAFTS = os.path.join(ROOT, 'rips/review/drafts')   # work in progress, saved as Chris goes
 FONT = os.path.join(ROOT, 'rips/review/font')
 FACES = os.path.join(ROOT, 'rips/review/faces')
 DICT = os.path.join(ROOT, 'rips/dict/dict.sqlite')
@@ -748,8 +749,14 @@ def review_index(scenes):
                 for r in ln.get('copies', []) + ln.get('carried', []):
                     done.setdefault(r, (d['scene'], ln['ref']))
     for sid, s in scenes.items():
-        if s.get('kind') == 'voice' and not os.path.exists(os.path.join(DECISIONS, f'{sid}.json')):
-            for ln in s['lines']:
+        if s.get('kind') != 'voice':
+            continue
+        d = read_json(os.path.join(DECISIONS, f'{sid}.json'))
+        if d and not d.get('partial'):
+            continue
+        applied = {ln['ref'] for rec in ([d, *d.get('earlier', [])] if d else []) for ln in rec.get('lines', [])}
+        for ln in s['lines']:   # a partly applied voice scene still holds the lines it hasn't
+            if ln['ref'] not in applied:   # decided yet
                 voice.setdefault(ln['ref'], sid)
     return done, voice
 
@@ -813,14 +820,16 @@ def scene_list():
     for sid, s in scenes.items():
         d = read_json(os.path.join(DECISIONS, f'{sid}.json'), {})
         where = settled(sid, scenes, index)
-        left = sum(1 for x in where if not x)
-        status = d.get('status', 'open')
+        applied = {ln['ref'] for rec in ([d, *d.get('earlier', [])] if d else []) for ln in rec.get('lines', [])}
+        left = sum(1 for x, ln in zip(where, s['lines']) if not x and ln['ref'] not in applied)
+        status = 'open' if d.get('partial') else d.get('status', 'open')
         if status == 'open' and not left:   # nothing to read here: every line was read
             status = 'moved' if any(x['pending'] for x in where) else 'covered'   # or waits in a voice scene
         out.append({'id': s['id'], 'file': s['file'], 'number': s.get('number'), 'title': s['title'],
                     'kind': s.get('kind', 'scene'),
                     'priority': s.get('priority'), 'order': s.get('order', 999),
-                    'status': status, 'lines': len(s['lines']), 'left': left})
+                    'status': status, 'lines': len(s['lines']), 'left': left,
+                    'partial': bool(d.get('partial')), 'waiting': d.get('status') == 'applied'})
     # within a party: voice scenes (each character's parts together), then scenes, then read-throughs
     rank = {'voice': 0, 'readthrough': 2}
     return sorted(out, key=lambda s: (s['file'], rank.get(s['kind'], 1), s['id'] if s['kind'] == 'voice' else '',
@@ -846,6 +855,7 @@ def scene(sid):
             line.setdefault('faithful', line['current'])   # lesson proposes a fix (lessons.py)
             line.setdefault('literal', '')
     s['decision'] = read_json(os.path.join(DECISIONS, f'{sid}.json'))
+    s['draft'] = read_json(os.path.join(DRAFTS, f'{sid}.json'))
     qs = read_json(QUESTIONS, [])
     s['questions'] = [q for q in qs if q.get('scene') == sid]
     for line in s['lines']:   # a line's thread: questions on it or on its copies, from any scene
@@ -1180,8 +1190,36 @@ def fontpack():
             'width': npcfit.WIDTH, 'lines': npcfit.LINES}
 
 
+def save_draft(body):
+    """Keep the page's choices and edits on the server as Chris works, so a phone that
+    drops its storage, or a switch between phone and desktop, loses nothing. An empty
+    draft removes the file."""
+    sid = body['scene']
+    if not read_json(os.path.join(SCENES, f'{sid}.json')):
+        raise ValueError('no such scene')
+    path = os.path.join(DRAFTS, f'{sid}.json')
+    with LOCK:
+        if not body.get('decisions') and not body.get('note'):
+            if os.path.exists(path):
+                os.remove(path)
+            return {'saved_at': None}
+        prior = read_json(path) or {}
+        if prior.get('saved_at', 0) > body.get('saved_at', 0):
+            return prior   # an older tab's save; the newer one wins
+        os.makedirs(DRAFTS, exist_ok=True)
+        draft = {'scene': sid, 'saved_at': body.get('saved_at', 0), 'decisions': body.get('decisions', {}),
+                 'note': body.get('note', '')}
+        tmp = path + '.tmp'
+        json.dump(draft, open(tmp, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+        os.replace(tmp, path)
+    return draft
+
+
 def apply(body):
+    """Write the decided lines. With "partial", the page isn't finished: only the lines
+    sent are recorded, the scene stays open, and the rest wait in the draft."""
     sid, lines, note = body['scene'], body['lines'], body.get('note', '')
+    partial = bool(body.get('partial'))
     if not read_json(os.path.join(SCENES, f'{sid}.json')):
         raise ValueError('no such scene')
     with LOCK:
@@ -1207,7 +1245,8 @@ def apply(body):
                 rec['carried'] = [r for r in refs[1:] if current(r) == as_copy(text, r)]
             record.append(rec)
         prior = read_json(os.path.join(DECISIONS, f'{sid}.json'))
-        if prior and not changes:
+        before_refs = {ln['ref'] for rec in ([prior, *prior.get('earlier', [])] if prior else []) for ln in rec.get('lines', [])}
+        if prior and not changes and {r['ref'] for r in record} <= before_refs and partial == bool(prior.get('partial')):
             return prior  # nothing new; keep the earlier record (and its commit)
         files = {}
         for r, text in changes.items():
@@ -1219,10 +1258,15 @@ def apply(body):
         decision = {'scene': sid, 'status': 'applied' if changes else 'kept',
                     'applied_at': time.strftime('%Y-%m-%dT%H:%M:%S%z'), 'note': note,
                     'changed': sorted(changes), 'lines': record}
+        if partial:
+            decision['partial'] = True
         if prior:  # a follow-up apply: keep what came before
             decision['earlier'] = [{k: v for k, v in prior.items() if k != 'earlier'}] + prior.get('earlier', [])
         json.dump(decision, open(os.path.join(DECISIONS, f'{sid}.json'), 'w', encoding='utf-8'),
                   ensure_ascii=False, indent=2)
+        dpath = os.path.join(DRAFTS, f'{sid}.json')
+        if not partial and os.path.exists(dpath):
+            os.remove(dpath)   # the page is done; a partial apply leaves the page to update it
     return decision
 
 
@@ -1315,6 +1359,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send(200, apply(body))
             if u.path == '/api/ask':
                 return self.send(200, ask(body))
+            if u.path == '/api/draft':
+                return self.send(200, save_draft(body))
             self.send(404, {'error': 'not found'})
         except (ValueError, KeyError) as e:
             self.send(400, {'error': str(e)})
