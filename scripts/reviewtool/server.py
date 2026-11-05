@@ -1208,7 +1208,7 @@ def save_draft(body):
             return prior   # an older tab's save; the newer one wins
         os.makedirs(DRAFTS, exist_ok=True)
         draft = {'scene': sid, 'saved_at': body.get('saved_at', 0), 'decisions': body.get('decisions', {}),
-                 'note': body.get('note', '')}
+                 'note': body.get('note', ''), 'built': body.get('built')}
         tmp = path + '.tmp'
         json.dump(draft, open(tmp, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
         os.replace(tmp, path)

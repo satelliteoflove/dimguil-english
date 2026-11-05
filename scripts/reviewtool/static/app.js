@@ -112,7 +112,7 @@ function textFor(ln, choice) {
 let draftTimer = null, pendingDraft = null;
 function saveDraft({ now = false } = {}) {
   const sid = S.scene.id;
-  const d = { saved_at: Date.now(), decisions: S.decisions, note: $('#scene-note').value };
+  const d = { saved_at: Date.now(), decisions: S.decisions, note: $('#scene-note').value, built: S.scene.built || null };
   localStorage.setItem(draftKey(), JSON.stringify(d));
   pendingDraft = { scene: sid, ...d };
   clearTimeout(draftTimer);
@@ -216,6 +216,12 @@ async function openScene(id, { line = 0, top = null } = {}) {
   S.scene = await api(`/api/scene?id=${encodeURIComponent(id)}`);
   const { draft, push } = loadDraft(S.scene);
   S.decisions = draft.decisions || {};
+  // A scene rebuilt since the draft was made (new proposals): choices made on the old
+  // proposals don't carry over, but your own edits and notes do.
+  if ((draft.built || null) !== (S.scene.built || null) && Object.keys(S.decisions).length) {
+    for (const d of Object.values(S.decisions)) if (d.choice && d.choice !== 'edited') delete d.choice;
+    draft.saved_at = 0;
+  }
   $('#scene-note').value = draft.note || '';
   S.saveState = draft.saved_at && !push ? 'saved' : '';
   if (push) saveDraft({ now: true });   // a draft only this device had: put it on the server too
