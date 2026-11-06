@@ -160,7 +160,7 @@ function setChoice(i, choice, { advance = false } = {}) {
   const ln = lines()[i];
   if (collapsed(ln) || (choice === 'faithful' && !needsDecision(ln))) return;
   const prev = S.decisions[ln.ref] || {};
-  S.decisions[ln.ref] = { ...prev, choice };
+  S.decisions[ln.ref] = { ...prev, choice, on: ln.faithful || '' };   // the proposal you chose on
   if (choice === 'edited' && !prev.edited) S.decisions[ln.ref].edited = ln.faithful;
   saveDraft();
   renderChoice(i);
@@ -212,19 +212,29 @@ function setNav(open) {
 
 // --- opening a scene -----------------------------------------------------------------------
 
-async function openScene(id, { line = 0, top = null } = {}) {
+async function openScene(id, { line = 0, top = null, updated = false } = {}) {
+  S.updatedFlag = updated;
   S.scene = await api(`/api/scene?id=${encodeURIComponent(id)}`);
   const { draft, push } = loadDraft(S.scene);
   S.decisions = draft.decisions || {};
-  // A scene rebuilt since the draft was made (new proposals): choices made on the old
-  // proposals don't carry over, but your own edits and notes do.
-  if ((draft.built || null) !== (S.scene.built || null) && Object.keys(S.decisions).length) {
-    for (const d of Object.values(S.decisions)) if (d.choice && d.choice !== 'edited') delete d.choice;
-    draft.saved_at = 0;
+  // A proposal Claude changed since you chose on it: that choice doesn't carry over, but your
+  // own edits and notes do. A choice remembers its proposal ("on"); older drafts fall back on
+  // the scene's build date.
+  const changed = [], underEdit = [];
+  for (const ln of S.scene.lines) {
+    const d = S.decisions[ln.ref];
+    if (!d || !d.choice) continue;
+    const stale = 'on' in d ? d.on !== (ln.faithful || '') : (draft.built || null) !== (S.scene.built || null);
+    if (!stale) continue;
+    if (d.choice === 'edited') { underEdit.push(ln.ref); continue; }
+    delete d.choice; changed.push(ln.ref);
   }
+  if (changed.length) draft.saved_at = 0;
+  showUpdated(changed, underEdit);
   $('#scene-note').value = draft.note || '';
   S.saveState = draft.saved_at && !push ? 'saved' : '';
   if (push) saveDraft({ now: true });   // a draft only this device had: put it on the server too
+  else if (changed.length) saveDraft({ now: true });   // the cleared choices, so other devices see them too
   S.opened = {};
   S.glosses = [];
   const sc = S.scene;
@@ -580,7 +590,7 @@ function openEditor(i) {
 const editTimers = {};
 function onEdit(i) {
   const ln = lines()[i];
-  S.decisions[ln.ref] = { ...(S.decisions[ln.ref] || {}), choice: 'edited', edited: fromEditor($(`#editor-${i} .edit`).value, ln.current) };
+  S.decisions[ln.ref] = { ...(S.decisions[ln.ref] || {}), choice: 'edited', on: ln.faithful || '', edited: fromEditor($(`#editor-${i} .edit`).value, ln.current) };
   saveDraft();
   renderLive(i, { quick: true });
   clearTimeout(editTimers[i]);
@@ -846,7 +856,7 @@ function wireThread(i) {
   $$(`#thread-${i} .use`).forEach(b => b.addEventListener('click', () => {
     const ln = lines()[i];
     const prev = S.decisions[ln.ref] || {};
-    S.decisions[ln.ref] = { ...prev, choice: 'edited', edited: b.dataset.text.trim() };
+    S.decisions[ln.ref] = { ...prev, choice: 'edited', on: ln.faithful || '', edited: b.dataset.text.trim() };
     saveDraft();
     renderChoice(i); renderApplyBar(); openEditor(i);
   }));
@@ -875,6 +885,7 @@ async function poll() {
   const waiting = lines().some(l => (l.questions || []).some(q => !q.answer));
   pollTimer = setTimeout(poll, waiting ? 5000 : 20000);
   if (!S.scene || document.hidden) return;
+  if (await sceneChanged()) { refreshScene(); return; }
   const all = await api('/api/questions').catch(() => null);
   if (!all) return;
   lines().forEach((ln, i) => {
@@ -886,6 +897,40 @@ async function poll() {
     }
   });
 }
+// Claude may change a page's proposals while it's open. The page checks the scene's
+// fingerprint and reloads with them, keeping your place, edits and notes. While you're typing
+// it waits, and says so.
+async function sceneChanged() {
+  if (!S.scene || !S.scene.version) return false;
+  const v = await api(`/api/scene-version?id=${encodeURIComponent(S.scene.id)}`).catch(() => null);
+  return !!(v && v.version && v.version !== S.scene.version);
+}
+async function refreshScene() {
+  const typing = document.activeElement && /^(TEXTAREA|INPUT)$/.test(document.activeElement.tagName);
+  if (typing || $('#apply-dialog').open) {
+    showUpdated(null);
+    return;
+  }
+  await saveDraft({ now: true });
+  await openScene(S.scene.id, { line: S.focus, top: scrollY, updated: true });
+}
+function showUpdated(changed, underEdit = []) {
+  const el = $('#scene-updated');
+  if (changed === null) {
+    el.innerHTML = 'Claude has changed the proposals on this page. <button type="button" class="linkish" id="scene-reload">Reload it now</button> (your edits and notes are kept).';
+    el.hidden = false;
+    $('#scene-reload').addEventListener('click', () => { el.hidden = true; openScene(S.scene.id, { line: S.focus, top: scrollY, updated: true }); });
+    return;
+  }
+  const parts = [];
+  if (changed.length) parts.push(`New proposals on ${changed.join(', ')}: your choice there was cleared, so read ${changed.length === 1 ? 'it' : 'them'} again.`);
+  if (underEdit.length) parts.push(`The proposal changed on ${underEdit.join(', ')}, where you'd written your own edit; your edit is kept.`);
+  if (S.updatedFlag === 'apply') parts.push('Claude changed this page just now, so it reloaded instead of applying. Read it over, then apply again.');
+  else if (S.updatedFlag && !parts.length) parts.push('Claude updated this page.');
+  el.textContent = parts.join(' ');
+  el.hidden = !parts.length;
+}
+
 // An answer that arrives for a line above the one you're reading makes the page taller above
 // you. Firefox and Chrome keep your place on their own; iOS Safari doesn't, and the page
 // seemed to jump back. Hold the first line whose top is on screen where it was.
@@ -1012,7 +1057,8 @@ function cutChoices() {
   const from = Math.max(0, lastDecided());
   return lines().map((l, k) => ({ l, k })).filter(({ l, k }) => k >= from && !collapsed(l));
 }
-function openApply(part = false) {
+async function openApply(part = false) {
+  if (await sceneChanged()) { await saveDraft({ now: true }); await openScene(S.scene.id, { line: S.focus, top: scrollY, updated: 'apply' }); return; }
   S.cut = null;
   S.partial = part === true || lines().some(l => !decisionOf(l));
   const sel = $('#apply-cut');
@@ -1057,7 +1103,7 @@ function renderApplyDialog() {
 // The body is the same as before the redesign, so decisions/<scene>.json is unchanged.
 function applyBody() {
   return {
-    scene: S.scene.id, note: $('#scene-note').value, partial: !!S.partial && !S.whole,
+    scene: S.scene.id, version: S.scene.version, note: $('#scene-note').value, partial: !!S.partial && !S.whole,
     lines: (S.partial && !S.whole ? partialLines() : lines().filter(l => !collapsed(l))).map(l => {
       const d = decisionOf(l);
       const own = S.decisions[l.ref] || {};

@@ -58,6 +58,13 @@ guesses that from where the page is scrolled, so looking ahead marks nothing. Th
 decision is recorded with `"partial": true` and the scene stays open for the rest. Claude
 commits each partial apply like any other, as "part N" of the scene.
 
+If Claude changes a page's proposals while you have it open, the page notices within
+about 20 seconds and reloads with them, keeping your place, edits and notes. A choice
+remembers the proposal it was made on, so a choice on a proposal that changed is cleared
+and the page names those lines; your own edits stay. While you're typing it waits and
+offers a reload instead. An apply sent from a page that's out of date is refused, so
+nothing gets written on top of proposals you haven't seen.
+
 Each speaker gets a fixed marker, the same across every scene (the terminal can't color
 text). Shape is the home party, color is the person. Unnamed tags use the person's
 marker.

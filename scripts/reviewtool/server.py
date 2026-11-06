@@ -73,6 +73,7 @@ each, and the dictionary entries looked up on hover and click.
 Needs fugashi and unidic-lite for the word splitter (rips/venv has them); without
 them the Japanese still shows, just not split into words.
 """
+import hashlib
 import json, os, re, sqlite3, sys, threading, time
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
@@ -836,11 +837,19 @@ def scene_list():
                                       s['order'], s['number'] or 0))
 
 
+def scene_version(sid):
+    """A fingerprint of the scene file, so an open page can tell when Claude has changed
+    its proposals and an apply made on the old ones can be refused."""
+    path = os.path.join(SCENES, f'{sid}.json')
+    return hashlib.sha1(open(path, 'rb').read()).hexdigest()[:12] if os.path.isfile(path) else None
+
+
 def scene(sid):
     scenes = all_scenes()
     s = scenes.get(sid)
     if not s:
         return None
+    s['version'] = scene_version(sid)
     for line, where in zip(s['lines'], settled(sid, scenes)):
         line['done_in'] = where
         n, i = parse_ref(line['ref'])
@@ -1222,6 +1231,9 @@ def apply(body):
     partial = bool(body.get('partial'))
     if not read_json(os.path.join(SCENES, f'{sid}.json')):
         raise ValueError('no such scene')
+    if body.get('version') and body['version'] != scene_version(sid):
+        raise ValueError('Claude changed the proposals on this page since you opened it. '
+                         'Go back, and the page will reload with them; your edits and notes are kept.')
     with LOCK:
         changes, record = {}, []
         for ln in lines:
@@ -1330,6 +1342,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send(200, {'cast': cast(), 'voices': voices(),
                                        'scenes': scene_list(), 'progress': progress(), 'splitter': bool(TAGGER), 'dictionary': bool(DB),
                                        'role_sources': ROLE['sources'], 'role_about': ROLE['about']})
+            if u.path == '/api/scene-version':
+                return self.send(200, {'version': scene_version(q.get('id', ''))})
             if u.path == '/api/scene':
                 s = scene(q.get('id', ''))
                 return self.send(200, s) if s else self.send(404, {'error': 'no such scene'})
