@@ -927,6 +927,11 @@ rest" keeps it open, where "everything else" had sounded boastful. "Yo!" is "Hey
 (5:32). Every repeat of an edited line (2:112, 5:69, 5:79, 5:82, 5:85, 5:88, 5:91,
 5:94, 5:97) changed with it.
 
+Alba's voice, part 1 (voice-alba-1): 2:196 is "I met a man with a fearsome, murderous
+air... I know not who he is, but he is no ordinary man." 殺気 is the air of someone who
+means to kill, and "bloodlust" is a craving. 誰かは知らぬが,ただ者ではないと思う is one
+full sentence, so "Who, I know not. But no ordinary man." became one too.
+
 ### Text check of bot runs (2026-10-15)
 
 Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.

@@ -431,7 +431,7 @@ scholar guy... Cleo?" (= 3:203).
 Links: 4 (the reveal); 2:192 = 5:69.
 
 **2.26 Other parties: the stranger (195-202).** Flagged 8 (199; open).
-Balbo: a stuck-up loner, no adventurer; Alba: fearsome bloodlust, no ordinary man;
+Balbo: a stuck-up loner, no adventurer; Alba: a fearsome, murderous air, no ordinary man;
 Rosea: came into the Shrine alone; Gaura: scary man, grumbling; Reiran: he goes
 "Begone!" (200, the shadow's own word, 5:105); Artemisia: creepy (201-202 = 3:211-212).
 Links: the shadow thread; 2:199 = 5:73.
