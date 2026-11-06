@@ -779,7 +779,7 @@
               "file": "NPC_MES5",
               "idx": 29,
               "speaker": "Fritillaria",
-              "text": "Ya didn't have to say 'little'!"
+              "text": "You didn't have to say 'little'!"
             }
           ],
           "flags": "The meeting itself is EVENTMES 150 (or 194, 'another party', if you never met Zaril's). That the reappearance follows the Chimera comes from the event map's reading of Enc. ('Zaril party rescue'); I didn't verify it in play.",

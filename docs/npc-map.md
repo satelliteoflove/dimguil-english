@@ -771,7 +771,7 @@ Links: 1:78-79 = 5:16-17; 3:33-38.
 **5.4 Introductions (26-34, 117, 122-123).** Flagged 2 (open).
 26 Big Dracon; 27 "I am Zaril, leader of this party", or 28 "starting now I'm gonna be
 the leader" for a player who knew him in Fontana's party; "this little one's
-Fritillaria" ("Ya didn't have to say 'little'!"), Gaura "Yo!"; "Friendly-like, if we can
+Fritillaria" ("You didn't have to say 'little'!"), Gaura "Yo!"; "Friendly-like, if we can
 manage it." 122-123 alternates.
 When: after the Area B rescue (Roster N14; WT ch. 9).
 

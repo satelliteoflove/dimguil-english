@@ -864,6 +864,15 @@ corpse... catch you" (1:79, 5:17). Its second apply took "scouted me special" ba
 the Japanese, "this party scouted me!" (1:121), and "Nice to meetcha/meet ya" to "Nice
 to meet you" (1:121, 1:132, 1:140, 5:30, 5:122). His stammer in Guy's party's group
 turns (な,何も, the written stutter) stays, as in 1:187 "I-I don't know anything."
+Part 2 (voice-fritillaria-5) made the same cuts: "Whaddaya want with me?" (1:290, 5:13),
+"You doin' good? ... as ya can see ... whaddaya need" (1:292, 5:15), "Ya didn't have to
+say 'little'!" (5:29), "somethin'" (5:58), "I got nothin' new" (5:87) and "I don't know
+nothin'" (5:75). "'Cause he keeps callin' me a brat" lost the added "keeps" (5:65), the
+two "ain't"s and the double negative went from the strange-man story (5:72), and "When I
+grow up, I wanna be a Ninja" became "Someday" for 将来 (5:78). "Gonna", "wanna", "sorta",
+"See ya" and "Hiya" stay: they're ordinary casual speech, not the street-kid grammar.
+5:84 keeps Chris's "stiff as a board": it came from the street-kid reading, but it's plain
+English and paralysis is being frozen stiff, so it doesn't change what he says.
 
 ### Text check of bot runs (2026-10-15)
 

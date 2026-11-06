@@ -94,7 +94,7 @@ with the chapter and the string's new wording, to carry over to the site.
 | Zaril | NPC_MES5 119 | Whoa!! |
 | Fritillaria | NPC_MES5 120 | Help!! |
 | Zaril | NPC_MES5 28 | Well, I say party, but there's only two others. |
-| Fritillaria | NPC_MES5 29 | Ya didn't have to say 'little'! |
+| Fritillaria | NPC_MES5 29 | You didn't have to say 'little'! |
 
 ## 10. Area B: the red stone
 
