@@ -689,7 +689,7 @@
                 {
                     "length": 50,
                     "source": "NA",
-                    "translation": "Artemisia\n\"Hi, nice to meet you!\n\r I'm Artemisia.\n Hope we get along!\"",
+                    "translation": "Artemisia\n\"Hi, nice to meet you!\n I'm Artemisia. Hope we get along!\"",
                     "addStringTerminator": true
                 },
                 {
@@ -725,7 +725,7 @@
                 {
                     "length": 57,
                     "source": "NA",
-                    "translation": "Artemisia\n\"Again? Oh, honestly. Fine.\n\r I'm Artemisia.\n Don't forget it this time!\"",
+                    "translation": "Artemisia\n\"Again? Oh, honestly, I guess it can't be helped.\n\r I'm Artemisia.\n Don't forget it, okay?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1229,7 +1229,7 @@
                 {
                     "length": 87,
                     "source": "NA",
-                    "translation": "Artemisia\n\"I met this old scholar guy.\n\r His name was... um...?\n Let's see... Cleo? Was that it?\n Yeah, I'm pretty sure that's it!\"",
+                    "translation": "Artemisia\n\"I met this old scholar guy.\n\r His name was... um...?\n Let's see... Cleo? Was that it?\n Yeah, I think that's probably right.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1277,7 +1277,7 @@
                 {
                     "length": 51,
                     "source": "NA",
-                    "translation": "Artemisia\n\"I met someone with a really creepy vibe.\n It was kinda scary...\"",
+                    "translation": "Artemisia\n\"I met someone who gave me a bad feeling.\n It was a little scary...\"",
                     "addStringTerminator": true
                 },
                 {

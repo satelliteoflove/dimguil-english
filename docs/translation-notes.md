@@ -939,6 +939,17 @@ magic" (3:233 had "old tomes"); Zaril's greeting is one line, as in the Japanese
 had broken it); and 3:172's ten dots are nine, as the Japanese has. Every repeated line
 now reads the same as its twin.
 
+Artemisia's voice, part 1 (voice-artemisia-1). She's bubbly and a little scatterbrained,
+and she gets flustered easily (ヤダ). The English keeps the Japanese's own strength:
+なんかヤな感じのする人…ちょっとだけ怖かった is "someone who gave me a bad feeling... It was
+a little scary" (2:201, Chris's wording; "a really creepy vibe" was stronger). たぶん
+あってると思う is "I think that's probably right" (2:194), since the line is about her not
+being sure of Cleo's name. もう,しかたがないわね is one sentence, "Oh, honestly, I guess it
+can't be helped", and 忘れないでね is "Don't forget it, okay?" without an added "this
+time" (2:113). Her first-meeting line is on one page, as in the stranger's copy 2:271
+(2:107, 3:113). Her plain greetings keep their exclamation marks ("Hi, {ff12}!", "Long
+time no see!"); Chris left those as they were.
+
 ### Text check of bot runs (2026-10-15)
 
 Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
