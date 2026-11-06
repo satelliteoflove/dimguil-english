@@ -239,6 +239,9 @@ body.no-rd .w .rd { visibility: hidden; }
 .applybar .save-state.warn { color: #e0a060; }
 button.primary { background: var(--text); color: var(--night); border: 1px solid var(--text); border-radius: 6px; padding: 0.45rem 1rem; cursor: pointer; }
 button.primary:disabled { background: transparent; color: var(--faint); border: 1px dashed var(--rule); cursor: not-allowed; }
+.applyacts { display: flex; gap: 0.6rem; flex-wrap: wrap; justify-content: flex-end; }
+button.quiet { background: none; color: var(--text); border: 1px solid var(--rule); border-radius: 6px; padding: 0.45rem 1rem; cursor: pointer; }
+button.quiet:disabled { color: var(--faint); border-style: dashed; cursor: not-allowed; }
 
 dialog { border: 1px solid var(--rule); border-radius: 10px; background: var(--panel); color: var(--text); padding: 1.4rem 1.6rem; max-width: min(46rem, 92vw); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); }
 dialog::backdrop { background: rgba(10, 12, 16, 0.7); }

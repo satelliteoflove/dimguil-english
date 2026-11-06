@@ -904,7 +904,10 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) poll
 // on top of that only fights it.
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
-function markFocus() { $$('#lines .line').forEach(el => el.classList.toggle('focused', +el.dataset.i === S.focus)); }
+function markFocus() {
+  $$('#lines .line').forEach(el => el.classList.toggle('focused', +el.dataset.i === S.focus));
+  if (S.scene && $('#apply-part')) renderApplyBar();   // "Apply up to" follows your place
+}
 function scrollToLine(i, smooth = true) {
   const el = $(`#line-${i}`);
   if (!el) return;
@@ -950,13 +953,25 @@ function freshChoice(l) {
   const d = S.decisions[l.ref];
   return !!(d && d.choice) && !collapsed(l) && (!alreadyApplied(l) || textFor(l, d.choice) !== l.current);
 }
-// For applying an unfinished page: every decided line, and the lines with no proposed change
-// above the last one you decided (read on the way down). Lines below it aren't read yet.
-function partialLines() {
-  const ls = lines();
+// How far down an unfinished page you've read: the last line you decided, or the line
+// you're on, whichever is lower down.
+function readTo() {
   let last = -1;
-  ls.forEach((l, k) => { if (!collapsed(l) && (S.decisions[l.ref] || {}).choice) last = k; });
-  return ls.filter((l, k) => k <= last && !collapsed(l) && decisionOf(l));
+  lines().forEach((l, k) => { if (!collapsed(l) && (S.decisions[l.ref] || {}).choice) last = k; });
+  return Math.max(last, S.focus || 0);
+}
+// For applying an unfinished page: every decided line, and the lines with no proposed change
+// down to where you've read. Lines below that, and proposals still undecided, stay open.
+// The same on every kind of page; a read-through has no proposals at all.
+function partialLines() {
+  const cut = readTo();
+  return lines().filter((l, k) => k <= cut && !collapsed(l) && decisionOf(l));
+}
+// Lines a partial apply would record that no earlier apply has.
+function newInPart() { return partialLines().filter(l => freshChoice(l) || !alreadyApplied(l)).length; }
+function leftAfterPart() {
+  const pool = new Set(partialLines());
+  return lines().filter(l => !collapsed(l) && !alreadyApplied(l) && !pool.has(l)).length;
 }
 function renderApplyBar() {
   const ls = lines();
@@ -964,8 +979,8 @@ function renderApplyBar() {
   const changes = ls.filter(l => { const d = decisionOf(l); return d && textFor(l, d.choice) !== l.current; }).length;
   const prior = S.scene.decision;
   const nothingNew = !open && !changes && prior && !prior.partial;
-  const fresh = ls.filter(freshChoice).length;
-  S.partial = open > 0;
+  const fresh = newInPart();
+  const left = leftAfterPart();
   let msg = open ? `${open} proposed ${open === 1 ? 'change needs' : 'changes need'} your decision.`
     : changes ? `Ready: ${changes} ${changes === 1 ? 'line changes' : 'lines change'}.`
     : nothingNew ? 'Nothing new to apply.' : 'Ready: no lines change.';
@@ -979,18 +994,27 @@ function renderApplyBar() {
   $('#apply-open').disabled = open > 0 ? fresh === 0 : !!nothingNew;
   $('#apply-open').textContent = open > 0 ? 'Apply what\'s decided'
     : !changes && !prior ? 'Mark as reviewed' : 'Review and apply';
+  // No proposals left open, but lines below where you are not read yet: apply just the part
+  // you've read, as on a page with proposals still open.
+  const part = $('#apply-part'), upto = lines()[readTo()];
+  part.hidden = open > 0 || !left || !!nothingNew;
+  part.disabled = fresh === 0;
+  part.textContent = `Apply up to ${upto ? upto.ref : 'here'}`;
   renderSaved();
 }
 
-function openApply() {
+function openApply(part = false) {
+  S.partial = part === true || lines().some(l => !decisionOf(l));
   const pool = S.partial ? partialLines() : lines();
   const changed = pool.filter(l => { const d = decisionOf(l); return d && textFor(l, d.choice) !== l.current; });
   const open = lines().filter(l => !decisionOf(l)).length;
+  const left = leftAfterPart(), upto = (lines()[readTo()] || {}).ref;
   const n = changed.length, lc = n === 1 ? 'line changes' : 'lines change';
-  $('#apply-h').textContent = S.partial ? 'Apply what\'s decided' : 'Apply this scene';
-  $('#apply-confirm').textContent = S.partial ? 'Apply these changes' : 'Apply changes';
+  $('#apply-h').textContent = !S.partial ? 'Apply this scene' : open ? 'Apply what\'s decided' : `Apply up to ${upto}`;
+  $('#apply-confirm').textContent = !S.partial ? 'Apply changes' : n ? 'Apply these changes' : 'Record what I\'ve read';
   $('#apply-summary').textContent = S.partial
-    ? `${n ? `${n} ${lc}.` : 'No lines change yet.'} ${open} ${open === 1 ? 'line still needs' : 'lines still need'} your decision; the scene stays open for them, and what you've done on them is saved.`
+    ? `${n ? `${n} ${lc}.` : 'No lines change yet.'} This records the page as read through ${upto}. `
+      + `${left} ${left === 1 ? 'line stays' : 'lines stay'} open${open ? `, ${open} of them ${open === 1 ? 'a proposal' : 'proposals'} still needing your decision` : ''}; the scene stays open for them, and what you've done on them is saved.`
     : n ? `${n} ${lc}. Everything else stays as it is.`
     : 'No lines change. Applying records that the scene was reviewed.';
   $('#apply-list').innerHTML = changed.map(l => {
@@ -1089,7 +1113,8 @@ async function main() {
   if (localStorage.getItem('dimguil-review:no-rd')) document.body.classList.add('no-rd');
   renderSceneList();
   $('#hide-done').addEventListener('change', e => { localStorage.setItem('dimguil-review:hide-done', e.target.checked ? '1' : ''); renderSceneList(); });
-  $('#apply-open').addEventListener('click', openApply);
+  $('#apply-open').addEventListener('click', () => openApply());
+  $('#apply-part').addEventListener('click', () => openApply(true));
   $('#apply-confirm').addEventListener('click', confirmApply);
   $('#scene-note').addEventListener('input', () => { if (S.scene) saveDraft(); });
   $('#nav-toggle').addEventListener('click', () => setNav(!document.body.classList.contains('nav-open')));
