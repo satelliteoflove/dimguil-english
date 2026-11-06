@@ -54,7 +54,8 @@ function fromEditor(ed, like) {
   let rows = plainPunct(ed).replace(/\r/g, '').split('\n');
   let name = null;
   if (orig.name !== null) { name = rows[0].trim(); rows = rows.slice(1); }
-  const pages = rows.join('\n').split(/\n[ \t]*\n/).map(p => p.split('\n').map(l => l.trim()).filter(Boolean)).filter(p => p.length);
+  // Spaces typed before a line are kept: narration boxes are centered by hand (1:303).
+  const pages = rows.join('\n').split(/\n[ \t]*\n/).map(p => p.split('\n').map(l => l.trimEnd()).filter(l => l.trim())).filter(p => p.length);
   const lead = orig.body.startsWith(' ') ? ' ' : '';
   const body = pages.map((ls, k) => ls.map((l, j) => (k === 0 && j === 0 ? lead : ' ') + l).join('\n')).join('\n\r');
   return (name !== null ? name + '\n' : '') + body;
