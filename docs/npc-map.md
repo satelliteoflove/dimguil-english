@@ -814,6 +814,13 @@ melts away. 106 the Mysterious man later, if you go on: "You have scorned my war
 Who: not named. **Inferred** that it is Cleo or the heretics: the control room opens
 with the same narration and "by now the shadow was a familiar sight" (4:44), and Cleo
 says he warned you firmly (4:46, 忠告). harano guessed Cresson (event map).
+**Code** (talk handler 26, docs/re/C-talk.md): one script plays 103, then ONE of 105, 106,
+107 or 108-111 under the same character portrait, then 104; the maze event that starts
+the talk picks which. So the Area Z survivor's speech (5.12) comes from the same shadow
+and figure as the heretic-sounding warning, which weakens the Cleo inference: either
+several voices speak through the shadow, or the survivor was behind the warning too.
+Agan (5.13, handler 27) also comes out of the shadow (103), under his own portrait, with
+no 104. 104's そう叫び ("cried out like that") follows every speech, the calm 108-111 too.
 Links: 4:44-55; 1:218-223, 2:195-202 (2:200 "Begone!"), 3:207-214, 4:111-113; S43.
 
 **5.11 The mysterious man's warning (107).** Not flagged.
