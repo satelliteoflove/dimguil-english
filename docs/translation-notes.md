@@ -957,6 +957,12 @@ not "they must be connected", and また,お会いしましょう is "Well, unti
 Chris's wording). Her Training Maze question (3:251) takes 2:254's wording, which kept
 "the" from ending a page. Her rumor stays a question: the Training Maze has no chests or
 drops, but B8's Priestess's Door opens for only one race, class and sex (Q80).
+Part 3 (voice-artemisia-3): 3:239 gets 2:256's "but it seems to be an attack spell",
+with its lines rewrapped so the sentences don't break across them (Chris). "Hero" is
+capitalized where she repeats Guy's claim that it's his class (3:184, as in 1:202),
+on one page. へー・・・・・・。そう・・・。 is one long pause, "Huh...... Really..." (3:173).
+何言ってるのよ (3:178) is "What are you even saying?", aimed at the party, who just asked
+about her: 2:45's 何言ってんだろあたし is the version about herself (Q81).
 
 ### Text check of bot runs (2026-10-15)
 

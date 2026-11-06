@@ -1049,7 +1049,7 @@
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "Artemisia\n\"Huh... ...Really...\"",
+                    "translation": "Artemisia\n\"Huh...... Really...\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1115,7 +1115,7 @@
                 {
                     "length": 85,
                     "source": "NA",
-                    "translation": "Artemisia\n\"I met this guy called Gaillardia,\n and he kept insisting he's not a Lord,\n\r he's a hero.\"",
+                    "translation": "Artemisia\n\"I met this guy called Gaillardia,\n and he kept insisting he's not a Lord, he's a Hero.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1445,7 +1445,7 @@
                 {
                     "length": 148,
                     "source": "NA",
-                    "translation": "Artemisia\n\"I found one of the lost spells the other\n day! It looks like a Priest spell,\n\r and an attack spell, too!\n I'm getting Cephala to help me\n restore it soon.\n\r If it works, I'll teach it\n to you too, okay?\"",
+                    "translation": "Artemisia\n\"I found one of the lost spells the other day!\n It looks like a Priest spell,\n\r but it seems to be an attack spell.\n I'm getting Cephala to help me restore it soon.\n\r If it works, I'll teach it to you too, okay?\"",
                     "addStringTerminator": true
                 },
                 {
