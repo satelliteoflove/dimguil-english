@@ -50,10 +50,11 @@ the answer into `rips/review/questions.json`.
 Work in progress is saved on the server as you go (`rips/review/drafts/<id>.json`), so a
 phone that clears its storage, or a switch between phone and desktop, loses nothing. A
 long scene doesn't have to be finished in one sitting, on any kind of page. While
-proposals are still open, "Apply what's decided" writes the lines decided so far, plus the
-no-change lines down to the line you're on or the last one you decided. On a page with
-nothing left to decide (every read-through, or a scene whose proposals are all settled),
-"Apply up to 3:89" does the same for the lines down to where you are. Either way the
+proposals are still open, "Apply what's decided" writes the lines decided so far. On a page
+with nothing left to decide (every read-through, or a scene whose proposals are all settled),
+"Apply part of the page" does the same. Either way the apply window asks which line you've
+read down to, and the no-change lines down to it are recorded as reviewed. The tool never
+guesses that from where the page is scrolled, so looking ahead marks nothing. The
 decision is recorded with `"partial": true` and the scene stays open for the rest. Claude
 commits each partial apply like any other, as "part N" of the scene.
 

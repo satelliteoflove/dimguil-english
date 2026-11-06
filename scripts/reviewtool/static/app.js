@@ -906,7 +906,6 @@ if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
 function markFocus() {
   $$('#lines .line').forEach(el => el.classList.toggle('focused', +el.dataset.i === S.focus));
-  if (S.scene && $('#apply-part')) renderApplyBar();   // "Apply up to" follows your place
 }
 function scrollToLine(i, smooth = true) {
   const el = $(`#line-${i}`);
@@ -953,13 +952,16 @@ function freshChoice(l) {
   const d = S.decisions[l.ref];
   return !!(d && d.choice) && !collapsed(l) && (!alreadyApplied(l) || textFor(l, d.choice) !== l.current);
 }
-// How far down an unfinished page you've read: the last line you decided, or the line
-// you're on, whichever is lower down.
-function readTo() {
+// The last line you decided on this page, or -1. Decided lines always go in a partial apply.
+function lastDecided() {
   let last = -1;
   lines().forEach((l, k) => { if (!collapsed(l) && (S.decisions[l.ref] || {}).choice) last = k; });
-  return Math.max(last, S.focus || 0);
+  return last;
 }
+// How far down an unfinished page you've read. The tool can't see that, so it never guesses
+// from where the page is scrolled: you pick the line in the apply window (S.cut). Until you
+// do, it's the last line you decided.
+function readTo() { return S.cut != null ? Math.max(S.cut, lastDecided()) : lastDecided(); }
 // For applying an unfinished page: every decided line, and the lines with no proposed change
 // down to where you've read. Lines below that, and proposals still undecided, stay open.
 // The same on every kind of page; a read-through has no proposals at all.
@@ -979,8 +981,7 @@ function renderApplyBar() {
   const changes = ls.filter(l => { const d = decisionOf(l); return d && textFor(l, d.choice) !== l.current; }).length;
   const prior = S.scene.decision;
   const nothingNew = !open && !changes && prior && !prior.partial;
-  const fresh = newInPart();
-  const left = leftAfterPart();
+  const notYet = ls.filter(l => !collapsed(l) && !alreadyApplied(l)).length;
   let msg = open ? `${open} proposed ${open === 1 ? 'change needs' : 'changes need'} your decision.`
     : changes ? `Ready: ${changes} ${changes === 1 ? 'line changes' : 'lines change'}.`
     : nothingNew ? 'Nothing new to apply.' : 'Ready: no lines change.';
@@ -991,46 +992,73 @@ function renderApplyBar() {
       : (prior.status === 'committed' ? ` Committed as ${prior.commit || 'a commit'}.` : ` Applied ${when}; Claude commits next.`);
   }
   $('#apply-status').textContent = msg;
-  $('#apply-open').disabled = open > 0 ? fresh === 0 : !!nothingNew;
+  // With proposals open, the window lets you pick how far you've read, so there's always
+  // something to apply as long as some line isn't recorded yet.
+  $('#apply-open').disabled = open > 0 ? notYet === 0 : !!nothingNew;
   $('#apply-open').textContent = open > 0 ? 'Apply what\'s decided'
     : !changes && !prior ? 'Mark as reviewed' : 'Review and apply';
-  // No proposals left open, but lines below where you are not read yet: apply just the part
-  // you've read, as on a page with proposals still open.
-  const part = $('#apply-part'), upto = lines()[readTo()];
-  part.hidden = open > 0 || !left || !!nothingNew;
-  part.disabled = fresh === 0;
-  part.textContent = `Apply up to ${upto ? upto.ref : 'here'}`;
+  // No proposals left open, but you may not have read the whole page: apply just the part
+  // you have, as on a page with proposals still open.
+  const part = $('#apply-part');
+  part.hidden = open > 0 || notYet < 2 || !!nothingNew;
+  part.disabled = false;
+  part.textContent = 'Apply part of the page';
   renderSaved();
 }
 
+// Lines you can say you've read down to: from the last one you decided (those go in anyway)
+// to the end of the page.
+function cutChoices() {
+  const from = Math.max(0, lastDecided());
+  return lines().map((l, k) => ({ l, k })).filter(({ l, k }) => k >= from && !collapsed(l));
+}
 function openApply(part = false) {
+  S.cut = null;
   S.partial = part === true || lines().some(l => !decisionOf(l));
-  const pool = S.partial ? partialLines() : lines();
-  const changed = pool.filter(l => { const d = decisionOf(l); return d && textFor(l, d.choice) !== l.current; });
+  const sel = $('#apply-cut');
+  const last = lastDecided();
+  sel.innerHTML = (last < 0 ? '<option value="" selected>Pick the last line you\'ve read</option>' : '')
+    + cutChoices().map(({ l, k }) => {
+      const words = readable(l.current);
+      return `<option value="${k}"${k === last ? ' selected' : ''}>${esc(l.ref)}: ${esc(words.length > 60 ? words.slice(0, 58) + '…' : words)}</option>`;
+    }).join('');
+  if (last >= 0) S.cut = last;
+  renderApplyDialog();
+  $('#apply-dialog').showModal();
+}
+function renderApplyDialog() {
+  const picked = S.cut != null;
   const open = lines().filter(l => !decisionOf(l)).length;
+  // Picking the page's last line on a page with nothing left to decide is the whole page.
+  const whole = S.partial && !open && picked && leftAfterPart() === 0;
+  const partial = S.partial && !whole;
+  $('#apply-cut-wrap').hidden = !S.partial;
+  const pool = !partial ? lines() : picked ? partialLines() : [];
+  const changed = pool.filter(l => { const d = decisionOf(l); return d && textFor(l, d.choice) !== l.current; });
   const left = leftAfterPart(), upto = (lines()[readTo()] || {}).ref;
   const n = changed.length, lc = n === 1 ? 'line changes' : 'lines change';
-  $('#apply-h').textContent = !S.partial ? 'Apply this scene' : open ? 'Apply what\'s decided' : `Apply up to ${upto}`;
-  $('#apply-confirm').textContent = !S.partial ? 'Apply changes' : n ? 'Apply these changes' : 'Record what I\'ve read';
-  $('#apply-summary').textContent = S.partial
-    ? `${n ? `${n} ${lc}.` : 'No lines change yet.'} This records the page as read through ${upto}. `
-      + `${left} ${left === 1 ? 'line stays' : 'lines stay'} open${open ? `, ${open} of them ${open === 1 ? 'a proposal' : 'proposals'} still needing your decision` : ''}; the scene stays open for them, and what you've done on them is saved.`
-    : n ? `${n} ${lc}. Everything else stays as it is.`
-    : 'No lines change. Applying records that the scene was reviewed.';
+  $('#apply-h').textContent = !partial ? 'Apply this scene' : open ? 'Apply what\'s decided' : 'Apply part of the page';
+  $('#apply-confirm').textContent = !partial ? 'Apply changes' : n ? 'Apply these changes' : 'Record what I\'ve read';
+  $('#apply-confirm').disabled = partial && !picked;
+  $('#apply-summary').textContent = !partial
+    ? (n ? `${n} ${lc}. Everything else stays as it is.` : 'No lines change. Applying records that the scene was reviewed.')
+    : !picked ? 'Pick the last line you\'ve read. Lines down to it are recorded as reviewed; the rest of the page stays open.'
+    : `${n ? `${n} ${lc}.` : 'No lines change yet.'} This records the page as read through ${upto}. `
+      + `${left} ${left === 1 ? 'line stays' : 'lines stay'} open${open ? `, ${open} of them ${open === 1 ? 'a proposal' : 'proposals'} still needing your decision` : ''}; the scene stays open for them, and what you've done on them is saved.`;
   $('#apply-list').innerHTML = changed.map(l => {
     const d = decisionOf(l);
     return `<li><span class="cref">${esc(l.ref)}, ${d.choice === 'edited' ? 'your edit' : 'the proposed line'}${tickedOf(l).length ? `, also ${tickedOf(l).map(esc).join(', ')}` : ''}</span><br>
       <span class="before">${esc(readable(l.current))}</span><br>${esc(readable(textFor(l, d.choice)))}</li>`;
   }).join('');
   $('#apply-error').hidden = true;
-  $('#apply-dialog').showModal();
+  S.whole = whole;
 }
 
 // The body is the same as before the redesign, so decisions/<scene>.json is unchanged.
 function applyBody() {
   return {
-    scene: S.scene.id, note: $('#scene-note').value, partial: !!S.partial,
-    lines: (S.partial ? partialLines() : lines().filter(l => !collapsed(l))).map(l => {
+    scene: S.scene.id, note: $('#scene-note').value, partial: !!S.partial && !S.whole,
+    lines: (S.partial && !S.whole ? partialLines() : lines().filter(l => !collapsed(l))).map(l => {
       const d = decisionOf(l);
       const own = S.decisions[l.ref] || {};
       return { ref: l.ref, choice: d.choice, text: textFor(l, d.choice), note: own.note || '', copies: tickedOf(l) };
@@ -1116,6 +1144,7 @@ async function main() {
   $('#apply-open').addEventListener('click', () => openApply());
   $('#apply-part').addEventListener('click', () => openApply(true));
   $('#apply-confirm').addEventListener('click', confirmApply);
+  $('#apply-cut').addEventListener('change', e => { S.cut = e.target.value === '' ? null : +e.target.value; renderApplyDialog(); });
   $('#scene-note').addEventListener('input', () => { if (S.scene) saveDraft(); });
   $('#nav-toggle').addEventListener('click', () => setNav(!document.body.classList.contains('nav-open')));
   $('#help').addEventListener('click', e => { if (e.target.id === 'help') e.target.hidden = true; });

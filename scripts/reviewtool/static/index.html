@@ -40,7 +40,7 @@
       <div class="applybar" id="applybar">
         <div class="applymsg"><p id="apply-status"></p><p id="save-state" class="save-state" aria-live="polite"></p></div>
         <div class="applyacts">
-          <button type="button" class="quiet" id="apply-part" hidden>Apply up to here</button>
+          <button type="button" class="quiet" id="apply-part" hidden>Apply part of the page</button>
           <button type="button" class="primary" id="apply-open">Review and apply</button>
         </div>
       </div>
@@ -68,6 +68,8 @@
 <dialog id="apply-dialog" aria-labelledby="apply-h">
   <form method="dialog">
     <h2 id="apply-h">Apply this scene</h2>
+    <label class="cut-pick" id="apply-cut-wrap" hidden>I've read down to
+      <select id="apply-cut"></select></label>
     <p id="apply-summary"></p>
     <ol class="changes" id="apply-list"></ol>
     <label class="line-note">Note for Claude on the scene (optional)
