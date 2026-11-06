@@ -917,6 +917,16 @@ line and 16 before the second, which centers both lines on the box's middle (x 1
 4 px a space. The review editor had been stripping leading spaces, so it couldn't be
 centered from there until dd1d522 and 2ea9e34.
 
+Gaura's voice (2026-11-06, npc-gaura-voice), following the style entry settled on
+2026-10-20: short and stammering, with "I" and the verbs kept, not caveman English.
+"Me, Gaura" is "I-I'm Gaura", "Me, know nothing" is "I don't know anything", "Kid,
+but he leader" is "Just a kid, but he's the leader", and the stammer stays where the
+Japanese has it. 2:229 (= 5:82) is "B-but the rest, great": ほかは can be the rest of
+him or the rest of the party, and the Japanese doesn't settle it (Q78, Q79), so "the
+rest" keeps it open, where "everything else" had sounded boastful. "Yo!" is "Hey!"
+(5:32). Every repeat of an edited line (2:112, 5:69, 5:79, 5:82, 5:85, 5:88, 5:91,
+5:94, 5:97) changed with it.
+
 ### Text check of bot runs (2026-10-15)
 
 Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.

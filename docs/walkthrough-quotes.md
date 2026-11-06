@@ -203,7 +203,7 @@ with the chapter and the string's new wording, to carry over to the site.
 | Alstron | NPC_MES1 64 | You thieving scum! Where the hell'd you get all that money?! |
 | Lychee | NPC_MES1 68 | I think their name was 'Mule' or something. |
 | Guy | NPC_MES1 165 | We'll just help ourselves to our fee. |
-| Gaura | NPC_MES2 100 | Uuu, mmm, everyone, scary. |
+| Gaura | NPC_MES2 100 | Uuu, mmm... everybody's scary. |
 | Reiran | NPC_MES2 105 | Shall I lop your head off for you? |
 | Balbo | NPC_MES2 92 | Oh, what terrible things I have done! |
 | Balbo | NPC_MES2 93 | right back to my old ways |

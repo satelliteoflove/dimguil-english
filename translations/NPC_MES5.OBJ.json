@@ -203,7 +203,7 @@
                 {
                     "length": 11,
                     "source": "NA",
-                    "translation": "Gaura\n\"Yo!\"",
+                    "translation": "Gaura\n\"Hey!\"",
                     "addStringTerminator": true
                 },
                 {
@@ -407,7 +407,7 @@
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Gaura\n\"Balbo, scary. Ran away.\"",
+                    "translation": "Gaura\n\"Balbo's scary. I ran away.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -425,7 +425,7 @@
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Gaura\n\"There, lots of books. Studying.\"",
+                    "translation": "Gaura\n\"Over there, lots of books.\n They were studying.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -485,7 +485,7 @@
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": "Gaura\n\"M-me, not picky.\n Good guy.\"",
+                    "translation": "Gaura\n\"I-I'm not picky.\n I'm a good guy.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -503,7 +503,7 @@
                 {
                     "length": 41,
                     "source": "NA",
-                    "translation": "Gaura\n\"M-me, s-slow.\n B-but, everything else, great.\"",
+                    "translation": "Gaura\n\"I-I'm s-slow.\n B-but the rest, great.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -521,7 +521,7 @@
                 {
                     "length": 36,
                     "source": "NA",
-                    "translation": "Gaura\n\"Me, know nothing.\n Mmm...... Sorry.\"",
+                    "translation": "Gaura\n\"I don't know anything.\n Mmm...... Sorry.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -539,7 +539,7 @@
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "Gaura\n\"M-me, g-gonna be Samurai. Someday.\"",
+                    "translation": "Gaura\n\"I-I'm g-gonna be a Samurai. Someday.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -557,7 +557,7 @@
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "Gaura\n\"M-me, g-gonna be Samurai. Someday.\"",
+                    "translation": "Gaura\n\"I-I'm g-gonna be a Samurai. Someday.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -575,7 +575,7 @@
                 {
                     "length": 40,
                     "source": "NA",
-                    "translation": "Gaura\n\"M-me, when Samurai,\n g-gonna get Muramasa.\"",
+                    "translation": "Gaura\n\"W-when I'm a Samurai,\n I'm g-gonna get a Muramasa.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -593,7 +593,7 @@
                 {
                     "length": 18,
                     "source": "NA",
-                    "translation": "Gaura\n\"Th-that, heard it.\"",
+                    "translation": "Gaura\n\"Th-that... I heard it already.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -749,7 +749,7 @@
                 {
                     "length": 31,
                     "source": "NA",
-                    "translation": "Gaura\n\"Heyyy. H-hello.\n Me, Gaura.\"",
+                    "translation": "Gaura\n\"Heyyy. H-hello.\n I'm Gaura.\"",
                     "addStringTerminator": true
                 }
             ]

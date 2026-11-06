@@ -1679,13 +1679,13 @@
           ],
           "strings": "NPC_MES2 96-113",
           "placement": "Anytime: introductions when you ask who they are.",
-          "blurb": "Ask Balbo's party who they are and you get a roll call. Gaura, the big shaggy one, manages \"Uuu, mmm, everyone, scary.\" Reiran the Ninja is friendlier, in her way: \"Shall I lop your head off for you?\"",
+          "blurb": "Ask Balbo's party who they are and you get a roll call. Gaura, the big shaggy one, manages \"Uuu, mmm... everybody's scary.\" Reiran the Ninja is friendlier, in her way: \"Shall I lop your head off for you?\"",
           "quotes": [
             {
               "file": "NPC_MES2",
               "idx": 100,
               "speaker": "Gaura",
-              "text": "Uuu, mmm, everyone, scary."
+              "text": "Uuu, mmm... everybody's scary."
             },
             {
               "file": "NPC_MES2",
