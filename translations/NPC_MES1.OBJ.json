@@ -515,13 +515,13 @@
                 {
                     "length": 45,
                     "source": "NA",
-                    "translation": "\"Ah, you don't have them. That's a shame.\n Be sure to bring some next time!\"",
+                    "translation": "\"Ah, you don't have them. That's a shame.\n Be sure to bring them next time!\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 61,
                     "source": "NA",
-                    "translation": "\"Thank you so much.\n If anything happens to you, we'll lend a hand.\n Until later, then.\"",
+                    "translation": "\"Thank you so much.\n If you ever need anything, we'll lend a hand.\n See you later, then.\"",
                     "addStringTerminator": true
                 },
                 {

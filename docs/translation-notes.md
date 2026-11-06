@@ -903,6 +903,12 @@ Chris kept: "nothiiing at all~" (1:233), "but~ ... news~" (1:245), "Listen, list
 "I heard that already!" (1:271) plain. すごいっしょ is "Amazing, right?" (Q75). Her name
 stays where she says ライチ; "I" where she says あたし (1:260).
 
+Read-through read1-04 (2026-11-06), Guy at the Jail Ogre rescue: 次は必ず持ってきてくれ is
+"Be sure to bring them next time!" (1:84). The slippers he asked for are a particular
+pair, so "some" was wrong. もし,君たちに何かあれば手助けするぞ is "If you ever need
+anything, we'll lend a hand", since "If anything happens to you" sounded like a
+warning, and それでは,また,のちほど is "See you later, then" (1:85).
+
 ### Text check of bot runs (2026-10-15)
 
 Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
