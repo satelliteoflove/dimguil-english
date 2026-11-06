@@ -879,6 +879,21 @@ Japanese as part 1 did with "scouted me special": "real nice" became "kind" for 
 stays just the way he is" became "I like Zaril just the way he is now" for
 今のままのザリルさんがイイな (5:90).
 
+Lychee's voice, part 1 (2026-11-06, voice-lychee-1; profile in docs/character-lychee.md).
+The voice sheet called her an airheaded child-mage, and the English wrote her as a folksy
+little kid ("meetcha", "y'know", "wanna", "s'posed"). She's a cutesy teenage witch girl
+who acts cute on purpose: her tag is 女, she's polite with strangers, and she coos over
+Fontana's party of kids as "cute boys" (1:198). The profile first called her boy-crazy on
+that one line; Guy's "nothing but kids" (1:195) says otherwise. Her name stays only where
+she says ライチ: "I'm not telling!" for 教えてあげないモン (1:186), which has no subject, as
+everywhere a line has none (Q73). Stretches went where the Japanese has none ("Who are
+youuu", 1:5, 1:9; "anythiiing", 1:180; "Bye-byeee" for a plain バイバイ, 1:26, 1:44). For a
+sing-song ending Chris chose a tilde: "Lychee's a Mage~!" for 魔法使いなのー (1:131), and
+"Hello~!" (1:67). Her polite lines are polite again (1:68, 1:72). Added color came out:
+"a teeny little rock" is "I just gave a pebble a little kick" for 石ころをちょっと,けとばした
+(1:99, 1:102), "all alone, all sad" is "looking lonely" (1:68), and "Jealous?" is "isn't
+that nice?" for いいでしょー (1:198, Chris's wording). えへ is "Ehe" (1:96).
+
 ### Text check of bot runs (2026-10-15)
 
 Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.

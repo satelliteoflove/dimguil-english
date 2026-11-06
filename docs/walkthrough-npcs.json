@@ -423,7 +423,7 @@
           ],
           "strings": "NPC_MES1 195-199",
           "placement": "Inferred: they talk about Fontana's party with Zaril still in it, so it's before the quarrel in chapter 8, and after you can first meet Fontana's party at the STAFF statue in Area X (NPC3 67-71). Harano also mentions Guy here, telling you to buy Ruby Slippers before Area A. Moved to area-x 2026-10-02: Emonoya's NPC tables have Guy's party gone from the maze from the moment you enter Area A until his rescue.",
-          "blurb": "Guy's party has run into Fontana's group, \"a party that was nothing but kids,\" and Alstron thinks the young Samurai is level-headed for his age. Lychee mostly remembers the presents: \"they gave me an item! Heheee, jealous?\"",
+          "blurb": "Guy's party has run into Fontana's group, \"a party that was nothing but kids,\" and Alstron thinks the young Samurai is level-headed for his age. Lychee mostly remembers the presents: \"they gave me an item! Heheee, isn't that nice?\"",
           "quotes": [
             {
               "file": "NPC_MES1",
@@ -435,7 +435,7 @@
               "file": "NPC_MES1",
               "idx": 198,
               "speaker": "Lychee",
-              "text": "they gave me an item! Heheee, jealous?"
+              "text": "they gave me an item! Heheee, isn't that nice?"
             }
           ],
           "source": "NPC_MES1"
@@ -1026,7 +1026,7 @@
           ],
           "strings": "NPC_MES1 289, 98-103",
           "placement": "Game: 289 is about a word needed from glyphs in an altar room on a higher floor, the god's-name altar on B3F (event map S45); 98-103 react to the maze changing, which happens when mimicry mode is released at the end of this chapter (S47).",
-          "blurb": "Before the release, Guy is turning over \"a string of baffling ancient glyphs somewhere on a higher floor\" and wondering if it's the answer, which it is. Once the walls have changed, he wants to know what happened to the maze, and Lychee answers before anyone accuses her: \"It wasn't Lychee! I only kicked a teeny little rock, that's all!\"",
+          "blurb": "Before the release, Guy is turning over \"a string of baffling ancient glyphs somewhere on a higher floor\" and wondering if it's the answer, which it is. Once the walls have changed, he wants to know what happened to the maze, and Lychee answers before anyone accuses her: \"It wasn't Lychee! I just gave a pebble a little kick, that's all!\"",
           "quotes": [
             {
               "file": "NPC_MES1",
@@ -1038,7 +1038,7 @@
               "file": "NPC_MES1",
               "idx": 102,
               "speaker": "Lychee",
-              "text": "It wasn't Lychee! I only kicked a teeny little rock, that's all!"
+              "text": "It wasn't Lychee! I just gave a pebble a little kick, that's all!"
             }
           ],
           "flags": "98-103 can come up any time after the release; harano's chapter 13 (area-c-movefloor) is itself set after the release, so it could sit there instead.",
@@ -2282,7 +2282,7 @@
               "file": "NPC_MES1",
               "idx": 96,
               "speaker": "Lychee",
-              "text": "I didn't wanna kill the cute little Magical Rabbit."
+              "text": "I didn't want to kill the cute little Magical Rabbit."
             }
           ],
           "source": "NPC_MES1"

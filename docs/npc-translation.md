@@ -126,9 +126,11 @@ What marks each one in the Japanese, and what that becomes in English:
   coos over a party of kids as "cute boys", and she's polite with strangers (何かご用ですか?).
   Also the party's soft-hearted airhead. Her name goes only where the Japanese has
   ライチ ("Lychee doesn't know him!"); where she says あたし, "I" ("I summoned a Greater
-  Demon!"). Giggles ("Hehe", "Ehehe", "Tee-hee"), doubled openers ("Guess what, guess
+  Demon!"). Giggles ("Ehe", "Ehehe", "Tee-hee"), doubled openers ("Guess what, guess
   what?", "Listen, listen!"), and stretches only where the Japanese stretches
-  ("bye-byeee" for バイバーイ, not for バイバイ). No folksy-kid spellings: no "meetcha",
+  ("bye-byeee" for バイバーイ, not for バイバイ). A sing-song sentence ending (なのー) is a
+  tilde, not a stretched word: Chris chose "Lychee's a Mage~!" (1:131) and "Hello~!"
+  (1:67). No folksy-kid spellings: no "meetcha",
   "y'know", "wanna" or "s'posed". Profile: `docs/character-lychee.md`.
 - **Fritillaria**. おいら, あんたたち, 〜だよ, 〜な!, ヤァ!, スッゲー! A small grown man,
   almost certainly a Hobbit (tag 背の低い男, Alstron's 小柄な男性, a stocky portrait), not

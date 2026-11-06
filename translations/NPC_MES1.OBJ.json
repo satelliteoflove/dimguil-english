@@ -41,7 +41,7 @@
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "Hooded woman\n\"Who are youuu?\"",
+                    "translation": "Hooded woman\n\"Who are you?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -65,7 +65,7 @@
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "Hooded woman\n\"Who are youuu?\"",
+                    "translation": "Hooded woman\n\"Who are you?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -167,7 +167,7 @@
                 {
                     "length": 23,
                     "source": "NA",
-                    "translation": "Hooded woman\n\"Bye-byeee!\"",
+                    "translation": "Hooded woman\n\"Bye-bye.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -203,7 +203,7 @@
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "Lychee\n\"Seeee ya!\"",
+                    "translation": "Lychee\n\"See youuu!\"",
                     "addStringTerminator": true
                 },
                 {
@@ -239,7 +239,7 @@
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "Lychee\n\"Okay, see ya, bye-byeee, see you again!\"",
+                    "translation": "Lychee\n\"Okay, well then, bye-byeee! See you!\"",
                     "addStringTerminator": true
                 },
                 {
@@ -275,7 +275,7 @@
                 {
                     "length": 44,
                     "source": "NA",
-                    "translation": "Lychee\n\"I hope {ff12}\n comes back to life!\n\r Okay, bye-byeee!\"",
+                    "translation": "Lychee\n\"I hope {ff12}\n comes back to life.\n\r Okay then, bye-bye.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -401,7 +401,7 @@
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "Lychee\n\"What, what? Do you need Lychee for something?\"",
+                    "translation": "Lychee\n\"What is it, what is it?\n Do you need Lychee for something?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -413,13 +413,13 @@
                 {
                     "length": 14,
                     "source": "NA",
-                    "translation": "Lychee\n\"Hellooo!\"",
+                    "translation": "Lychee\n\"Hello~!\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 100,
                     "source": "NA",
-                    "translation": "Lychee\n\"Y'know, at the tavern the other day there was\n somebody drinking all alone, all sad.\n\r Isn't that one of your friends?\n I think their name was 'Mule' or something.\"",
+                    "translation": "Lychee\n\"Lately, at the tavern, there's been someone\n drinking and looking lonely.\n\r Isn't that one of your companions?\n I think their name was 'Mule' or something.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -443,7 +443,7 @@
                 {
                     "length": 85,
                     "source": "NA",
-                    "translation": "Lychee\n\"I don't really wanna talk to you guys.\n What's Lychee s'posed to call you?\n\r It's too embarrassing to say out loud!\n {ff12}... eek!\"",
+                    "translation": "Lychee\n\"I don't really want to talk with you.\n What am I supposed to call you?\n\r It's too embarrassing to say!\n {ff12}... eek!\"",
                     "addStringTerminator": true
                 },
                 {
@@ -587,7 +587,7 @@
                 {
                     "length": 36,
                     "source": "NA",
-                    "translation": "Lychee\n\"Ehehe.\n I didn't wanna kill the cute little Magical Rabbit.\"",
+                    "translation": "Lychee\n\"Ehe. I didn't want to kill the cute\n little Magical Rabbit.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -605,7 +605,7 @@
                 {
                     "length": 53,
                     "source": "NA",
-                    "translation": "Hooded woman\n\"It wasn't Lychee!\n I only kicked a teeny little rock, that's all!\"",
+                    "translation": "Hooded woman\n\"It wasn't Lychee!\n I just gave a pebble a little kick, that's all!\"",
                     "addStringTerminator": true
                 },
                 {
@@ -623,7 +623,7 @@
                 {
                     "length": 44,
                     "source": "NA",
-                    "translation": "Lychee\n\"It wasn't Lychee!\n I only kicked a teeny little rock, that's all!\"",
+                    "translation": "Lychee\n\"It wasn't Lychee!\n I just gave a pebble a little kick, that's all!\"",
                     "addStringTerminator": true
                 },
                 {
@@ -725,7 +725,7 @@
                 {
                     "length": 20,
                     "source": "NA",
-                    "translation": "Lychee\n\"I'm Lychee. Nice to meetcha!\"",
+                    "translation": "Lychee\n\"I'm Lychee. Nice to meet you!\"",
                     "addStringTerminator": true
                 },
                 {
@@ -797,7 +797,7 @@
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "Lychee\n\"Lychee's a Maaage, y'know!\"",
+                    "translation": "Lychee\n\"Lychee's a Mage~!\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1091,7 +1091,7 @@
                 {
                     "length": 21,
                     "source": "NA",
-                    "translation": "Lychee\n\"Lychee doesn't know anythiiing.\"",
+                    "translation": "Lychee\n\"Lychee doesn't know anything.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1127,7 +1127,7 @@
                 {
                     "length": 19,
                     "source": "NA",
-                    "translation": "Lychee\n\"Lychee's not telling!\"",
+                    "translation": "Lychee\n\"I'm not telling!\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1199,7 +1199,7 @@
                 {
                     "length": 72,
                     "source": "NA",
-                    "translation": "Lychee\n\"Y'know what? We met a party of cute boys!\n And then, and then, they gave me an item!\n\r Heheee, jealous?\"",
+                    "translation": "Lychee\n\"You know what? We met a party of cute boys!\n And they gave me an item!\n\r Heheee, isn't that nice?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1247,7 +1247,7 @@
                 {
                     "length": 42,
                     "source": "NA",
-                    "translation": "Lychee\n\"Y'know, y'know,\n there was this guy who looked like a pirate!\"",
+                    "translation": "Lychee\n\"Guess what, guess what? There was\n someone who looked kind of like a pirate!\"",
                     "addStringTerminator": true
                 },
                 {

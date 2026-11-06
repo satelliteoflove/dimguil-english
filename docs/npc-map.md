@@ -201,7 +201,7 @@ Links: mirrors Balbo's flips (2:92-93, 203) and Zaril's wish to turn Evil (3:231
 
 **1.10 The maze changes (98-103).** Flagged C (done).
 When: after mimicry mode is released (S47, Game). Guy asks what happened to the maze;
-Lychee: "It wasn't Lychee! I only kicked a teeny little rock." 98-100 unnamed, 101-103
+Lychee: "It wasn't Lychee! I just gave a pebble a little kick." 98-100 unnamed, 101-103
 named.
 Links: S47; 2:90-91, 3:72-73, 4:22-23, 4:42-43 (everyone reacts).
 

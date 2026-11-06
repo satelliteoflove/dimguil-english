@@ -136,9 +136,9 @@ name where she uses it. Change the rest:
   (ライチねぇ, ...), use nothing or a comma, as in "Lychee's a Mage, you know~" only where
   the stretch is there.
 - **Stretch only what the Japanese stretches.** A stretched sentence ending (なのー,
-  ないよぉ~) goes on the last word of the English sentence: "Lychee's a Maaage!" (1:131),
-  "nothing at aaall" (1:233). An earlier draft of this note said not "Maaage"; the scene
-  follows the 1:233 rule instead.
+  ないよぉ~) is a tilde at the end of the English sentence, not a stretched word: Chris
+  chose "Lychee's a Mage~!" over "Maaage" (1:131), and "Hello~!" for the bright
+  こんにちはっ! (1:67).
 - **Keep her polite lines polite** (1:22, 1:66, 1:68, 1:72), so the switch shows, as
   with Linaria.
 - **Don't double what she says once.** 1:198 has それでね once, not "And then, and then".

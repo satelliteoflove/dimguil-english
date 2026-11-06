@@ -56,7 +56,7 @@ with the chapter and the string's new wording, to carry over to the site.
 | Who | String | Quote |
 |---|---|---|
 | Guy | NPC_MES1 195 | a party that was nothing but kids |
-| Lychee | NPC_MES1 198 | they gave me an item! Heheee, jealous? |
+| Lychee | NPC_MES1 198 | they gave me an item! Heheee, isn't that nice? |
 | Balbo | NPC_MES2 85 | Sorry, but this is a strategy meeting. Don't interrupt. |
 | Fontana | NPC_MES3 68 | I have a feeling these ancient glyphs are some kind of key. |
 | Artemisia | NPC_MES3 71 | That little tablet we saw earlier had the same glyphs as these! |
@@ -133,7 +133,7 @@ with the chapter and the string's new wording, to carry over to the site.
 | Who | String | Quote |
 |---|---|---|
 | Guy | NPC_MES1 289 | a string of baffling ancient glyphs somewhere on a higher floor |
-| Lychee | NPC_MES1 102 | It wasn't Lychee! I only kicked a teeny little rock, that's all! |
+| Lychee | NPC_MES1 102 | It wasn't Lychee! I just gave a pebble a little kick, that's all! |
 | Balbo | NPC_MES2 264 | The treasure up ahead? You won't get your hands on it, I'm warning ya. |
 | Balbo | NPC_MES2 264 | Alba went in a while back, and the second he came out, he turned to ashes. |
 | Fontana | NPC_MES3 278 | I'm sure it isn't the god Kadorto. |
@@ -250,7 +250,7 @@ with the chapter and the string's new wording, to carry over to the site.
 |---|---|---|
 | Guy | NPC_MES1 91 | Nah, nothing's wrong! Just taking a breather! |
 | Guy | NPC_MES1 94 | Approach as a friend... then strike. |
-| Lychee | NPC_MES1 96 | I didn't wanna kill the cute little Magical Rabbit. |
+| Lychee | NPC_MES1 96 | I didn't want to kill the cute little Magical Rabbit. |
 | Guy | NPC_MES1 257 | We need to scout someone from another party. |
 | Alstron | NPC_MES1 120 | the ever-handy Thief, Fritillaria. |
 | Balbo | NPC_MES2 263 | You guys go on ahead and look it over. |
