@@ -909,6 +909,14 @@ pair, so "some" was wrong. もし,君たちに何かあれば手助けするぞ 
 anything, we'll lend a hand", since "If anything happens to you" sounded like a
 warning, and それでは,また,のちほど is "See you later, then" (1:85).
 
+Read-through read1-07: 1:303, the narration after Guy takes the slippers, is centered
+again. The narration box draws from a fixed left edge (talk_narration, MCARD 0x800bf94c),
+and the Japanese centers itself with spaces on both sides. Our earlier English kept some
+of the leading spaces, which only indented it. It now has 18 spaces before the first
+line and 16 before the second, which centers both lines on the box's middle (x 160) at
+4 px a space. The review editor had been stripping leading spaces, so it couldn't be
+centered from there until dd1d522 and 2ea9e34.
+
 ### Text check of bot runs (2026-10-15)
 
 Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
