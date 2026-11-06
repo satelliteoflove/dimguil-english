@@ -31,9 +31,9 @@ Each is original code, present on the Japanese disc. Commit hashes from `git log
    help has arrived. If you'll excuse us, we'll go on ahead." (3:95-96, 99-100) never
    played. Now: played before the rescuer arrives. Disassembly only.
    [bugs.md 1.5; asm/bugfix_pit_scene.asm; 5b565b9]
-6. **Fritillaria's "walkin' corpse" (5:17).** Before: the name was found by kill count
+6. **Fritillaria's "walking corpse" (5:17).** Before: the name was found by kill count
    instead of deaths, so it named the wrong member (usually roster character 0), and when
-   both of her greetings applied, 5:17 never showed. Now: names the member with 10+
+   both of his greetings applied, 5:17 never showed. Now: names the member with 10+
    deaths, and the coin flip works. Disassembly only.
    [bugs.md 1.6; asm/bugfix_fritillaria_corpse.asm; fc6158f]
 7. **Cresson's speech after the control room (4:24-29).** Before: skipped for good by any

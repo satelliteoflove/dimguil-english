@@ -35,7 +35,7 @@
                 {
                     "length": 45,
                     "source": "NA",
-                    "translation": "Short man\n\"Hey, I've heard all about you guys.\n Ain't you ever heard of me?\"",
+                    "translation": "Short man\n\"Hey, I've heard all about you guys.\n Don't you know who I am?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -95,7 +95,7 @@
                 {
                     "length": 36,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"Oh, it's just you guys!\n Whaddaya want with me?\"",
+                    "translation": "Fritillaria\n\"Oh, it's just you guys!\n What do you want with me?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -107,13 +107,13 @@
                 {
                     "length": 34,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"Hey! If it ain't the murder squad.\n You guys are kill-crazy!\"",
+                    "translation": "Fritillaria\n\"Hey! If it isn't the murder squad.\n You guys are kill-crazy!\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 47,
                     "source": "NA",
-                    "translation": "Fritillaria\n\"Hey! It's {ff12}, the walkin' corpse!\n Nice to catch ya alive this time.\"",
+                    "translation": "Fritillaria\n\"Hey! It's {ff12}, the walking corpse!\n Nice to catch you alive this time.\"",
                     "addStringTerminator": true
                 },
                 {

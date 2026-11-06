@@ -572,7 +572,7 @@ The full triage is `docs/re/bugs.md`; each fix is its own `asm/bugfix_*.asm`.
   (1976612).
 - **The pit scene** now plays its middle block, the rescuer's voice and "Looks like help
   has arrived" (3:95-96, 99-100) (5b565b9).
-- **Fritillaria's "walkin' corpse"** (5:17) tested kills instead of deaths, named the
+- **Fritillaria's "walking corpse"** (5:17) tested kills instead of deaths, named the
   wrong member, and never showed when both of his lines applied (fc6158f).
 - **Cresson's speech after the control room** (4:24-29) was skipped by any party that
   had finished the Decipher table, because both used the same flag (3e36a06).
@@ -849,6 +849,18 @@ is people who looked the part, so now "grave robbers if I ever saw one". 1:49 pl
 when every member is a tavern recruit (special portrait, MCARD 0x800bd898), so 仲間はずれ
 同志 is "the ones left out" at the tavern. 1:51/1:52 play for all-male or all-female
 parties aged 10-19, so "boys" and "girls".
+
+Fritillaria re-read (2026-11-05, voice-fritillaria-4 and -5; profile in
+docs/character-fritillaria.md). The voice sheet called him a "scrappy kid thief", but
+he's a small grown man, likely a Hobbit: his tag is 背の低い男, Alstron calls him
+小柄な男性, and he resents being called little or a brat. His Japanese is casual (おいら)
+but grammatical, so the street-kid grammar came out and casual contractions stayed.
+Part 1 (applied in two parts): Alstron's "little fellow" became "small gentleman"
+(1:120); "Whaddaya want with me?" became "What do you want with me?" (1:10, 1:14, 1:291,
+5:14); "Ain't you ever heard of me?" became "Don't you know who I am?" for
+おいらのことは,知らないのかい? (1:12, 5:4); "If it ain't the murder squad" became "If it
+isn't" (1:78, 5:16), keeping Chris's idiom; "walkin' corpse... catch ya" became "walking
+corpse... catch you" (1:79, 5:17).
 
 ### Text check of bot runs (2026-10-15)
 
