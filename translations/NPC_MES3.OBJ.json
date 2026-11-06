@@ -1043,7 +1043,7 @@
                 {
                     "length": 33,
                     "source": "NA",
-                    "translation": "Zaril\n\"..........\n And? So what?\"",
+                    "translation": "Zaril\n\".........\n And? So what?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1403,13 +1403,13 @@
                 {
                     "length": 21,
                     "source": "NA",
-                    "translation": "Artemisia\n\"Huh, me? Umm,",
+                    "translation": "Artemisia\n\"Huh, me? Um,",
                     "addStringTerminator": true
                 },
                 {
                     "length": 59,
                     "source": "NA",
-                    "translation": "Artemisia\n\"I love hunting down and reading old\n tomes of lost magic and ancient texts.\"",
+                    "translation": "Artemisia\n\"I love hunting down and reading\n books of lost magic and ancient texts.\"",
                     "addStringTerminator": true
                 },
                 {

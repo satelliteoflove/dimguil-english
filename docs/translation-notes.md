@@ -932,6 +932,13 @@ air... I know not who he is, but he is no ordinary man." 殺気 is the air of so
 means to kill, and "bloodlust" is a craving. 誰かは知らぬが,ただ者ではないと思う is one
 full sentence, so "Who, I know not. But no ordinary man." became one too.
 
+Repeated lines that had drifted apart (2026-11-06). A check of every line whose Japanese
+appears more than once found four pairs worded differently, all from the first draft:
+Artemisia's えっと is "Um," in both places (3:232 had "Umm,"); 書物 is "books of lost
+magic" (3:233 had "old tomes"); Zaril's greeting is one line, as in the Japanese (5:20
+had broken it); and 3:172's ten dots are nine, as the Japanese has. Every repeated line
+now reads the same as its twin.
+
 ### Text check of bot runs (2026-10-15)
 
 Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
