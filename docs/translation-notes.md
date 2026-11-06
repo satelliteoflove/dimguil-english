@@ -873,6 +873,11 @@ grow up, I wanna be a Ninja" became "Someday" for 将来 (5:78). "Gonna", "wanna
 "See ya" and "Hiya" stay: they're ordinary casual speech, not the street-kid grammar.
 5:84 keeps Chris's "stiff as a board": it came from the street-kid reading, but it's plain
 English and paralysis is being frozen stiff, so it doesn't change what he says.
+Three more, agreed after part 2 and applied by Claude, take added color back to the
+Japanese as part 1 did with "scouted me special": "real nice" became "kind" for 優しい
+(5:68), "was in a big hurry" became "seemed busy" for 忙しそう (5:72), and "I hope Zaril
+stays just the way he is" became "I like Zaril just the way he is now" for
+今のままのザリルさんがイイな (5:90).
 
 ### Text check of bot runs (2026-10-15)
 

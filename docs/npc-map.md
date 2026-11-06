@@ -789,7 +789,7 @@ back out, "So you're the chicken, then."
 - News, nothing (54-56); told them (57-62).
 - Other parties: Balbo (63-66: Zaril's first Evil Lord, Fritillaria won't like him
   because he calls him a brat, Gaura ran away from him); the scholars (67-69,
-  Fritillaria: the elf is real nice); the stranger (70-73: Zaril's strange garb;
+  Fritillaria: the elf is kind); the stranger (70-73: Zaril's strange garb;
   Fritillaria met a busy Fighter- or Lord-like man, long before Zaril, "maybe he ain't
   from this world?", possibly Agan, 72; Gaura: scary man).
 - News, nothing (74-76); about themselves (77-79: Fritillaria wants to be a Ninja, a
