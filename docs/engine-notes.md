@@ -970,6 +970,35 @@ patches in `asm/`.
   rule and reports a blank line (two breaks in a row); 106 and 188 were the only strings
   that could leave one (2026-10-15).
 
+### The tilde (code 0xc3)
+
+The large font's code 0xc3 is the Japanese wave dash 〜, 11 px wide in the VWF table
+(font sheet graphics/SYSCG_000001_04b_01c.png, x 72, y 188). On 2026-11-06 we tried a
+narrow English tilde for sing-song endings: 5 px in two rows, then 6-8 px in three
+(mock-ups in rips/review/tilde/). None read as well as the wide wave, so Chris kept the
+original. Before any change, every way the code reaches the screen was checked, and the
+results hold for any later change to the glyph:
+
+- Text files: of the 15 in sections.json, eight strings ship a tilde, all on purpose: the
+  two dreamland doors (EVENTMES 190, 192), Otaka (EVENTMES 311, 312, 315) and Lychee
+  (NPC_MES1 67, 131, 227). The Japanese uses 〜 in 37 more strings (spell damage ranges in
+  STATUS, Gaura's オ~), and none of their English has one. No string ships untranslated.
+- Hard-coded text: a scan of every other file on the disc for a 0xc3 with Japanese on both
+  sides found none in the executables or overlays (MAIN, CMAIN, BATTLE, MAZE, MCARD,
+  JOUKA, HAZURE, CMENU); the hits were all graphics, map data and movies. In a two-byte
+  kanji code (f7-ff xx), c3 is a second byte and isn't the glyph.
+- Our asm: no string uses the code (the card game's strings are ASCII, another font).
+- Names: none of the three name-entry grids (MAIN 0x8005e120) has it, so a name can't.
+- Code: five instructions in the original load 0xc3, and none is a glyph. MAZE
+  FUN_800a5d50 passes it as FUN_800a8948's first argument, which that function never
+  reads; MAZE square_examine calls event_show(0xc3), EVENTMES string 195; MCARD
+  talk_chat_builder sets message 0xc3 in a chat script; JOUKA training_create prints
+  SISETU string 0xc3 + n through town_print.
+- The small font has its own tilde in another cell, untouched.
+
+A narrower glyph would only shorten lines, so no fit could break; centered lines (the
+dreamland doors) would move by the difference.
+
 ### Text buffer
 
 - Dialogue, event and castle strings are expanded whole (every page) by 0x8001dfc0 into
