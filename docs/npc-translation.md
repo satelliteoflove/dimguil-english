@@ -158,8 +158,14 @@ What marks each one in the Japanese, and what that becomes in English:
 - **Zaril**. オレ, 〜ぜ, 知らんと言ったら知らん. Gruff Dracon Lord, tough guy with a
   soft centre, stubborn. Clipped and plain: "I said I don't know. So I don't."
   (A few reaction lines are stiffly polite and sarcastic in the source; keep those.)
-- **Balbo**. 俺様, 〜ねぇ, 知らねぇぞ, 〜っつう. Rough-mouthed Evil dwarf Lord, a
-  swaggering tough. Coarse English: dropped g's, "ain't", "ya", "don't come cryin' to me".
+- **Balbo**. 俺様, 〜ねぇ, 知らねぇぞ, 〜っつう. Rough-mouthed dwarf Lord, a swaggering
+  tough with a soft streak: he heals, sells, offers to haul your dead to the Temple, and
+  catches himself "goin' all soft" (2:35). He's Evil by accident, not by nature (2:203):
+  sparing a friendly monster turned him Good for a while (2:92), and killing one turned
+  him back (2:93). Coarse English: dropped g's, "ain't", "ya", "don't come cryin' to
+  me". His maze reports turn stiff and lordly in the Japanese (君たち, 〜たまえ); there
+  the English keeps his words with complete grammar (translation-notes, "The leaders'
+  maze-encounter voice").
 - **Gaura**. オレ in katakana, stammers, ンー and humming, short comma-broken sentences,
   but mostly grammatical Japanese (only オレ,ガウラ drops its だ). The shy, kind giant, a
   Mook Mage who dreams of being a Samurai. Short, slow, stammering English with "I" and
