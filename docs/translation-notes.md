@@ -949,6 +949,14 @@ can't be helped", and 忘れないでね is "Don't forget it, okay?" without an 
 time" (2:113). Her first-meeting lines are on one page, as in the stranger's copy 2:271
 (2:101, 2:107, 3:113). Her plain greetings keep their exclamation marks ("Hi, {ff12}!", "Long
 time no see!"); Chris left those as they were.
+Part 2 (voice-artemisia-2): 僧侶系の魔法らしいんだけど,攻撃呪文っぽいの has a "but" in it,
+"It looks like a Priest spell, but it seems to be an attack spell" (2:256); "and an attack
+spell, too!" lost the surprise. 新しい情報はないの is a full sentence, "I don't have any new
+information" (2:257, 3:244). 何か関連性がありそうだね is "there seems to be some connection",
+not "they must be connected", and また,お会いしましょう is "Well, until next time" (3:71,
+Chris's wording). Her Training Maze question (3:251) takes 2:254's wording, which kept
+"the" from ending a page. Her rumor stays a question: the Training Maze has no chests or
+drops, but B8's Priestess's Door opens for only one race, class and sex (Q80).
 
 ### Text check of bot runs (2026-10-15)
 

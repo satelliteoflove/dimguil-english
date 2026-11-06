@@ -1547,13 +1547,13 @@
                 {
                     "length": 148,
                     "source": "NA",
-                    "translation": "Artemisia\n\"I found one of the lost spells the other day!\n\r It looks like a Priest spell,\n and an attack spell, too!\n\r I'm getting Cephala to help me\n restore it soon.\n\r If it works, I'll teach it to you too, okay?\"",
+                    "translation": "Artemisia\n\"I found one of the lost spells the other day!\n\r It looks like a Priest spell,\n but it seems to be an attack spell.\n\r I'm getting Cephala to help me\n restore it soon.\n\r If it works, I'll teach it to you too, okay?\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Artemisia\n\"No new information. Sorry!\"",
+                    "translation": "Artemisia\n\"I don't have any new information. Sorry!\"",
                     "addStringTerminator": true
                 },
                 {

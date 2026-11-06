@@ -437,7 +437,7 @@
                 {
                     "length": 120,
                     "source": "NA",
-                    "translation": "Artemisia\n\"That little tablet we saw earlier had\n the same glyphs as these!\n\r Yes, they must be connected somehow.\n Excuse us, but we'll be hurrying on ahead.\n Let's meet again.\"",
+                    "translation": "Artemisia\n\"That little tablet we saw earlier had\n the same glyphs as these!\n\r Yes, there seems to be some connection.\n Excuse us, but we'll be hurrying on ahead.\n Well, until next time.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1475,7 +1475,7 @@
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Artemisia\n\"No new information. Sorry!\"",
+                    "translation": "Artemisia\n\"I don't have any new information. Sorry!\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1517,7 +1517,7 @@
                 {
                     "length": 71,
                     "source": "NA",
-                    "translation": "Artemisia\n\"Hey, is it true that deep below the\n\r Training Maze there's ancient gear\n only certain races and classes can use?\"",
+                    "translation": "Artemisia\n\"Hey, is it true that deep in the Training Maze\n there's old gear only some races and classes can use?\"",
                     "addStringTerminator": true
                 },
                 {
