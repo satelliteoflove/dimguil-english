@@ -946,8 +946,8 @@ a little scary" (2:201, Chris's wording; "a really creepy vibe" was stronger). �
 あってると思う is "I think that's probably right" (2:194), since the line is about her not
 being sure of Cleo's name. もう,しかたがないわね is one sentence, "Oh, honestly, I guess it
 can't be helped", and 忘れないでね is "Don't forget it, okay?" without an added "this
-time" (2:113). Her first-meeting line is on one page, as in the stranger's copy 2:271
-(2:107, 3:113). Her plain greetings keep their exclamation marks ("Hi, {ff12}!", "Long
+time" (2:113). Her first-meeting lines are on one page, as in the stranger's copy 2:271
+(2:101, 2:107, 3:113). Her plain greetings keep their exclamation marks ("Hi, {ff12}!", "Long
 time no see!"); Chris left those as they were.
 
 ### Text check of bot runs (2026-10-15)
