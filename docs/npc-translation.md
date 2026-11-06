@@ -138,8 +138,11 @@ What marks each one in the Japanese, and what that becomes in English:
   when he fails a trap (1:254). Casual English with "gonna", "wanna" and plain
   contractions. No "ain't", no double negatives and no street-kid spellings
   ("whaddaya", "meetcha", "ya", dropped g's), because his Japanese is casual but
-  grammatical (settled with Chris 2026-11-05). No "when I grow up": 将来 is "someday".
-  Profile: `docs/character-fritillaria.md`.
+  grammatical (settled with Chris 2026-11-05). "See ya" and "Hiya" stay as set
+  phrases. No "when I grow up": 将来 is "someday". Keep to what he says and don't add
+  color the Japanese doesn't have ("scouted me special", "in a big hurry", "real
+  nice"); "stiff as a board" (5:84) was kept because it only pictures 動けなくて.
+  Stammers only where the Japanese stutters. Profile: `docs/character-fritillaria.md`.
 - **Lilia (Liliaceus)**. あたし, ハァイ, なぁに?, ふぅん, 〜ねぇ, 〜わよぉ, a katakana ネ.
   A seventeen-year-old elf Bard, the oldest in Fontana's party of kids (3:227). A playful
   flirt who fishes for attention ("Interested in me?", "don't you want to scout me?",
