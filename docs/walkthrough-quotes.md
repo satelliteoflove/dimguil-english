@@ -30,7 +30,7 @@ with the chapter and the string's new wording, to carry over to the site.
 | Who | String | Quote |
 |---|---|---|
 | Guy | NPC_MES1 217 | If you're interested, try heading down to the underground library. |
-| Lychee | NPC_MES1 214 | He knows lots and lots of things, I guess, but I couldn't understand a word he said. |
+| Lychee | NPC_MES1 214 | I guess he knows all kinds of things, but I couldn't understand what he was saying. |
 | Balbo | NPC_MES2 261 | We saw a frozen man back there, and I can't shake the feeling it's a trap. |
 | Balbo | NPC_MES2 261 | Ain't there a bridge or something? |
 | Cleo | NPC_MES4 57 | I'm a Bishop, believe it or not |
@@ -87,7 +87,7 @@ with the chapter and the string's new wording, to carry over to the site.
 | Who | String | Quote |
 |---|---|---|
 | Alstron | NPC_MES1 209 | Young Zaril had a mere two companions with him. My, my. How very reckless of him. |
-| Lychee | NPC_MES1 210 | But Lychee said no, just like she should! |
+| Lychee | NPC_MES1 210 | But Lychee turned him down, just like she's supposed to! |
 | Reiran | NPC_MES3 9 | I helped these kids out as a part-time gig, and my alignment totally went and changed on me. |
 | Cephala | NPC_MES3 200 | Grown-ups are so complicated. |
 | Bergamot | NPC_MES4 109 | one of 'em, what's-his-name, came back this time with a different crowd |

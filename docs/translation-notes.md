@@ -893,6 +893,15 @@ sing-song ending Chris chose a tilde: "Lychee's a Mage~!" for 魔法使いなの
 "a teeny little rock" is "I just gave a pebble a little kick" for 石ころをちょっと,けとばした
 (1:99, 1:102), "all alone, all sad" is "looking lonely" (1:68), and "Jealous?" is "isn't
 that nice?" for いいでしょー (1:198, Chris's wording). えへ is "Ehe" (1:96).
+Part 2 (voice-lychee-2): ちゃーんと断わった is pride in doing the proper thing, so "But Lychee
+turned him down, just like she's supposed to!" (1:210; Chris chose the literal sense over
+"made suuure to say no", Q74). After a name used as "I", "she" is how English carries on,
+so the profile's objection to "she" didn't hold. 1:214 is "what he was saying" for
+言ってる意味, and "all kinds of things" for いろいろ. Tildes went only on stretched endings
+Chris kept: "nothiiing at all~" (1:233), "but~ ... news~" (1:245), "Listen, listen~!" and
+"Amazing, right~?" (1:260), "can't believe it~!" (1:264); he left "Really?" (1:264) and
+"I heard that already!" (1:271) plain. すごいっしょ is "Amazing, right?" (Q75). Her name
+stays where she says ライチ; "I" where she says あたし (1:260).
 
 ### Text check of bot runs (2026-10-15)
 

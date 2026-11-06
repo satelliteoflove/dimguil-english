@@ -181,7 +181,7 @@
           ],
           "strings": "NPC_MES1 211-217",
           "placement": "Inferred: when asked about other parties they talk about the scholars and point you to the underground library, which harano reaches in this chapter.",
-          "blurb": "Guy's party has already met the scholars, and Guy sends you their way: \"If you're interested, try heading down to the underground library.\" Lychee came away less impressed with Cleo. \"He knows lots and lots of things, I guess, but I couldn't understand a word he said.\"",
+          "blurb": "Guy's party has already met the scholars, and Guy sends you their way: \"If you're interested, try heading down to the underground library.\" Lychee came away less impressed with Cleo. \"I guess he knows all kinds of things, but I couldn't understand what he was saying.\"",
           "quotes": [
             {
               "file": "NPC_MES1",
@@ -193,7 +193,7 @@
               "file": "NPC_MES1",
               "idx": 214,
               "speaker": "Lychee",
-              "text": "He knows lots and lots of things, I guess, but I couldn't understand a word he said."
+              "text": "I guess he knows all kinds of things, but I couldn't understand what he was saying."
             }
           ],
           "source": "NPC_MES1"
@@ -682,7 +682,7 @@
           ],
           "strings": "NPC_MES1 207-210",
           "placement": "Game: they report that the Dracon left the young Samurai's party with only two companions, which is the quarrel harano sees at x6y11 in chapter 8. Inferred: this chapter, where Zaril's party turns up at x12y11.",
-          "blurb": "Word has gotten around that Zaril walked out on Fontana, and Alstron doesn't think much of how he did it: \"Young Zaril had a mere two companions with him. My, my. How very reckless of him.\" Lychee adds that Zaril asked her to join, \"But Lychee said no, just like she should!\"",
+          "blurb": "Word has gotten around that Zaril walked out on Fontana, and Alstron doesn't think much of how he did it: \"Young Zaril had a mere two companions with him. My, my. How very reckless of him.\" Lychee adds that Zaril asked her to join, \"But Lychee turned him down, just like she's supposed to!\"",
           "quotes": [
             {
               "file": "NPC_MES1",
@@ -694,7 +694,7 @@
               "file": "NPC_MES1",
               "idx": 210,
               "speaker": "Lychee",
-              "text": "But Lychee said no, just like she should!"
+              "text": "But Lychee turned him down, just like she's supposed to!"
             }
           ],
           "source": "NPC_MES1"
