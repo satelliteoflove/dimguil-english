@@ -857,7 +857,7 @@ function wireThread(i) {
   $$(`#thread-${i} .use`).forEach(b => b.addEventListener('click', () => {
     const ln = lines()[i];
     const prev = S.decisions[ln.ref] || {};
-    S.decisions[ln.ref] = { ...prev, choice: 'edited', on: ln.faithful || '', edited: b.dataset.text.trim() };
+    S.decisions[ln.ref] = { ...prev, choice: 'edited', on: ln.faithful || '', edited: b.dataset.text };
     saveDraft();
     renderChoice(i); renderApplyBar(); openEditor(i);
   }));
