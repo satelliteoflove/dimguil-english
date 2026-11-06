@@ -508,7 +508,11 @@ class Run(chapter1.Run):
             self._goal_walk = k < HEALER_TRIPS
             self._dest = tuple(dest)
             self._walk_trips = k
-            short = self._goal_walk and self.roamer_short((g_area(self.g), dest[0]))
+            # (snakefail) not for a step or two on the floor the party is on: f1v3g, one
+            # square from the snake's machine after its fight, walked home for heals
+            here = (g_area(self.g),) + self.g.pos()
+            near = here[0] == dest[0] and abs(here[1] - dest[1]) + abs(here[2] - dest[2]) <= ROAMER_NEAR
+            short = self._goal_walk and not near and self.roamer_short((g_area(self.g), dest[0]))
             if short and self.town_helps():
                 # (agent 16) the roamers' door: short for the type-2 parties on the way
                 self._goal_walk = False
@@ -1066,6 +1070,10 @@ class Run(chapter1.Run):
         """After a fight that counts: everyone alive (a town trip raises the dead); False
         if the temple couldn't."""
         g = self.g
+        if chapter1.anyone_dead(g) and g.overlay() not in ('JOUKA', 'HAZURE'):
+            # the camp's cures first, as needs_town does: f1v3g's snake fight left Lu
+            # poisoned and the walk home and back ran the case out of frames (2026-11-06)
+            chapter1.cure_in_camp(g, self.log, on_int=self.on_int)
         if chapter1.anyone_dead(g):
             self.trip_home()
             self.raise_all()
@@ -1720,6 +1728,7 @@ OUT_HOME = True             # (nodead) a member dead, stoned, ashed, lost, paral
 HOME_RUN_ALL = True         # (nodead) a goal's walk home may run as a training trip's does (Run.homeward_run)
 HEALER_TRIPS = 2             # ... a goal walk goes home and back at most this many times
 WALK_TRIPS_PER_TRY = True    # (ch17) ... counted over a goal try, not each go() call
+ROAMER_NEAR = 2              # ... but not for a walk of this many squares or fewer on the floor it's on
 ROAMER_DOOR = True           # (agent 16) a goal walk short for the floor's type-2 parties goes home first (Run.roamer_short)
 TYPE2_ROUNDS = 2             # ... the standing HP must cover this many rounds of the worst one's threat
 TYPE2_TOKENS = 0x8005e654    # npc_tokens_per_area: 2 bytes an area, the second the type-2 tokens placed
