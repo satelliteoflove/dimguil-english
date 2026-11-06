@@ -81,7 +81,7 @@ Roster:
 - N0, the four, level 4: from first meeting until you enter the Underground Shrine. Guy
   says they have no Thief and need to scout one (1:257).
 - N1, plus Fritillaria, level 7: Underground until you enter Area A, and again from
-  Guy's rescue until you enter Area B. Fritillaria was "scouted special" (1:121).
+  Guy's rescue until you enter Area B. Fritillaria was scouted (1:121).
 - Absent from entering Area A until the Jail Ogre rescue (WT ch. 6, ch. 8): they are in
   the ogre's cage, and Guy is the only one alive (1:80).
 - N2, Lilia replacing Fritillaria, level 9: Area B entry until mimicry mode is released.

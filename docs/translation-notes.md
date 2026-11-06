@@ -860,7 +860,10 @@ Part 1 (applied in two parts): Alstron's "little fellow" became "small gentleman
 5:14); "Ain't you ever heard of me?" became "Don't you know who I am?" for
 おいらのことは,知らないのかい? (1:12, 5:4); "If it ain't the murder squad" became "If it
 isn't" (1:78, 5:16), keeping Chris's idiom; "walkin' corpse... catch ya" became "walking
-corpse... catch you" (1:79, 5:17).
+corpse... catch you" (1:79, 5:17). Its second apply took "scouted me special" back to
+the Japanese, "this party scouted me!" (1:121), and "Nice to meetcha/meet ya" to "Nice
+to meet you" (1:121, 1:132, 1:140, 5:30, 5:122). His stammer in Guy's party's group
+turns (な,何も, the written stutter) stays, as in 1:187 "I-I don't know anything."
 
 ### Text check of bot runs (2026-10-15)
 
