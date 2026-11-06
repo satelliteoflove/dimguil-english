@@ -13,7 +13,8 @@ committed, like the other review files.
 Lychee is the party's Mage, but her type isn't "little kid". She's the cutesy teenage
 witch girl, a 魔女っ子, played as a ぶりっ子: a girl who acts cute on purpose. She calls
 herself "Lychee" as an affectation, giggles (キャハッ!, えへ, エヘヘ), pouts (教えてあげない
-モン), is boy-crazy ("we met a party of cute boys... they gave me an item, lucky me"),
+モン), coos over a party of "cute boys" who gave her an item (Guy calls them "nothing but
+kids"),
 and makes things up and takes them back ("I can fly on a broom! ...Kidding, kidding!
 Sorry"). She's also the party's soft-hearted airhead: she can't bring herself to kill a
 cute rabbit, she says she didn't understand a word the scholar said, and she forgets
@@ -57,8 +58,11 @@ The game never says. The evidence points to a teenager acting cute, not a small 
 
 - Her portrait is a teenage girl or young woman, the same age range as Lilia's.
 - Her tag says 女, not 女の子 (1:5).
-- She's boy-crazy about "a party of cute boys" (1:198), and they're Fontana's
-  13-year-olds (Linaria and Alstron describe the same party at 1:196 and 1:197).
+- She calls Fontana's party "cute boys" (かわいい男の子, 1:198). Guy says the same party
+  was "nothing but kids" (1:195), and Linaria and Alstron call its leader little and young
+  (1:196, 1:197). She's cooing over children, not crushing on boys, which puts her older
+  than them. (The first version of this profile called her "boy-crazy" on this one line;
+  in context it doesn't hold.)
 - She speaks polite Japanese with strangers (1:22, 1:66, 1:68, 1:72) and says お久しぶり
   ね to old parties (1:70, 1:71). A little girl in fiction doesn't talk that way.
 - She doesn't always use her name. She says あたし twice (1:137, 1:260) and 私 once
@@ -79,7 +83,7 @@ is a child"). That line is corrected along with this profile.
   Rabbit", made friends with it, and that turned the whole party back to Good (1:95,
   1:96). She was so scared of the creepy stranger that she never wants to see him again
   (1:221).
-- **Airhead and klutz.** She kicked "a teeny little rock" and the maze walls changed,
+- **Airhead and klutz.** She gave a pebble "a little kick" and the maze walls changed,
   and she insists it wasn't her (1:99, 1:102). She didn't understand a word Cleo said
   (1:214). She doesn't think there's any big news, "though I don't really know" (1:245).
   She forgot she'd already introduced herself (1:138, 1:139).
@@ -131,8 +135,10 @@ name where she uses it. Change the rest:
   "You know what?" or "Guess what?" works. For a trailing ね/ねぇ after her name
   (ライチねぇ, ...), use nothing or a comma, as in "Lychee's a Mage, you know~" only where
   the stretch is there.
-- **Stretch only what the Japanese stretches,** and stretch the same word: なのー stretches
-  the end of the sentence, not "Maaage".
+- **Stretch only what the Japanese stretches.** A stretched sentence ending (なのー,
+  ないよぉ~) goes on the last word of the English sentence: "Lychee's a Maaage!" (1:131),
+  "nothing at aaall" (1:233). An earlier draft of this note said not "Maaage"; the scene
+  follows the 1:233 rule instead.
 - **Keep her polite lines polite** (1:22, 1:66, 1:68, 1:72), so the switch shows, as
   with Linaria.
 - **Don't double what she says once.** 1:198 has それでね once, not "And then, and then".

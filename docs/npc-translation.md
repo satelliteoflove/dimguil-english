@@ -122,8 +122,8 @@ What marks each one in the Japanese, and what that becomes in English:
 - **Lychee**. ライチ as "I" (and あたし, 私), あのね, ねぇねぇねぇ, 聞いて聞いて〜,
   すごいっしょ〜, キャハッ, えへ, 〜モン. The cutesy teenage witch girl (魔女っ子) played as
   a ぶりっ子, a girl who acts cute on purpose, not a small child: her tag is
-  フードをかぶった女, her portrait is a teenager in a red hood with a star wand, she's
-  boy-crazy ("a party of cute boys"), and she's polite with strangers (何かご用ですか?).
+  フードをかぶった女, her portrait is a teenager in a red hood with a star wand, she
+  coos over a party of kids as "cute boys", and she's polite with strangers (何かご用ですか?).
   Also the party's soft-hearted airhead. Her name goes only where the Japanese has
   ライチ ("Lychee doesn't know him!"); where she says あたし, "I" ("I summoned a Greater
   Demon!"). Giggles ("Hehe", "Ehehe", "Tee-hee"), doubled openers ("Guess what, guess
