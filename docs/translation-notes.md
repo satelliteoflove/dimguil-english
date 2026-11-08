@@ -978,6 +978,11 @@ in Cephala's 3:134. 癒してやってもいいんだが。悪いな is "I'd pat
 何を勘違いしたのか is "Dunno who he thinks he is" (2:174), and "three" is spelled out
 (2:185). "You met the scholars yet?" (2:188) and "things've been slim lately" for 不景気
 (2:210) are Chris's wording.
+Part 2 (voice-balbo-2), the pit trap: "You lot" is "you guys" and サムライの坊やたち is
+"the samurai kids" (3:103, 3:105); "kiddies" overdid it, and "kids" sounds like him
+(Chris). 先ほどのフォンタナならば解るが is "I'd expect it from Fontana, but you guys?" and
+フォンタナたち is "Fontana's bunch" (3:104). またどっかのマヌケが落ちるといけねぇからな is
+the more literal "Some other idiot might fall in" (3:104, 3:107, Chris).
 
 ### Text check of bot runs (2026-10-15)
 
