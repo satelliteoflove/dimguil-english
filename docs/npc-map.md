@@ -314,7 +314,7 @@ told-them set).
 
 **2.1 Greetings (0-20).** Flagged 7 (13, 22).
 Man in armor 0-2 (1 "brother" for a same-alignment party, Inferred), Balbo 3-6 (5 "ain't
-got no business with you lot"), Woman with a spear 7-8 and Artemisia 9-12 (late game),
+got no business with you guys"), Woman with a spear 7-8 and Artemisia 9-12 (late game),
 Wolfish man 13 (Alba), Cat-eared woman 14 (Rosea), Faerie with a katana 15 (Reiran),
 Shaggy man 16 (Gaura), named 17-20.
 Links: 2:7 = 3:4, 2:15 = 3:10, 2:16 = 5:3.
