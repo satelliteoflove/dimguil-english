@@ -68,7 +68,7 @@ main { padding: 2.4rem clamp(1.5rem, 4vw, 4rem) 0; max-width: 70rem; min-width: 
 .linkish { background: none; border: 0; padding: 0; font: inherit; color: var(--gloss); text-decoration: underline; cursor: pointer; }
 .line.focused::before { content: ""; position: absolute; left: -1.4rem; top: 1.4rem; bottom: 0; width: 3px; border-radius: 2px; background: var(--c); }
 /* Lines an earlier apply already recorded: a slightly different ground, a little quieter. */
-.line.reviewed { background: #1b1f26; margin-inline: -1rem; padding: 1.4rem 1rem 1.2rem; border-radius: 6px; }
+.line.reviewed { background: #1a2620; margin-inline: -1rem; padding: 1.4rem 1rem 1.2rem; border-radius: 6px; }
 .line.reviewed.focused::before { left: -0.4rem; }
 .line.reviewed > :not(.line-head) { opacity: 0.82; }
 .status.done { color: var(--faint); }
