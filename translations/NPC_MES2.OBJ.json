@@ -725,7 +725,7 @@
                 {
                     "length": 57,
                     "source": "NA",
-                    "translation": "Balbo\n\"I'd patch ya up, sure I would.\n Sorry. I'm plumb outta healin' spells.\"",
+                    "translation": "Balbo\n\"I'd patch ya up, but... sorry.\n I'm all outta healin' spells.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1055,7 +1055,7 @@
                 {
                     "length": 48,
                     "source": "NA",
-                    "translation": "Balbo\n\"Dunno what's got into his head, but there's\n some champion-of-justice type runnin' around.\"",
+                    "translation": "Balbo\n\"Dunno who he thinks he is, but there's some\n champion-of-justice type runnin' around.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1121,7 +1121,7 @@
                 {
                     "length": 79,
                     "source": "NA",
-                    "translation": "Balbo\n\"Ya hear there's a party of just 3 now?\n\r And get this, one of 'em used to be\n in our party.\"",
+                    "translation": "Balbo\n\"Ya hear there's a party of just three now?\n\r And get this, one of 'em used to be\n in our party.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1139,7 +1139,7 @@
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "Balbo\n\"You met them scholars yet?\"",
+                    "translation": "Balbo\n\"You met the scholars yet?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1271,7 +1271,7 @@
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Balbo\n\"Sorry, pickin's been slim lately.\"",
+                    "translation": "Balbo\n\"Sorry, things've been slim lately.\"",
                     "addStringTerminator": true
                 },
                 {
