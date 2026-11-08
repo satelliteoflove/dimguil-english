@@ -171,9 +171,16 @@ What marks each one in the Japanese, and what that becomes in English:
   Mook Mage who dreams of being a Samurai. Short, slow, stammering English with "I" and
   the verbs kept: "I-I'm Gaura. N-nice to meet you." Not caveman English: no "Me, Gaura"
   (Chris, 2026-10-20; see `docs/work/gaura-character.html` and review-lessons.md L10).
-- **Reiran**. あたし, ヤンなっちゃう, バイト, ハマっちゃって, なーんか偉そう. A ninja
-  who talks like a late-90s high-school girl. Teen slang: "like", "totally", "so
-  over it", "whatever", "ugh", "I'm kinda hooked on...".
+- **Reiran**. あたし, わよ/わね/かしら, ヤンなっちゃう, ハマっちゃって, なーんか, カスよ,カス.
+  A Faerie Ninja, 18 though she looks younger, and touchy about it (2:207). A cheeky
+  kunoichi: sharp-tongued, bored, after thrills and easy money, with a playful menace that
+  turns mock-polite (2:105). She plays big sister to young parties and teases old ones.
+  Her soft side shows when she scolds you to rescue your friend (2:41) and when helping
+  the kids turns her Good (3:9). Casual, confident young-woman English: contractions,
+  "ugh", "'kay", "ew", stretched words where the Japanese stretches them. "Like" and
+  "totally" only where the Japanese has slang to match, not as a habit: her Japanese has
+  no verbal tic, none of the late-90s kogal markers (チョー, マジ, じゃん), and its feminine
+  endings make her a little older and sharper than a Valley girl (Chris, 2026-11-08).
 - **Fontana**. 僕, polite ですよ. Earnest young samurai, polite and a bit
   unsure of himself; real name Kikunoshin, renamed by Zaril. Proper, eager, a little
   stiff, "sir"/"ma'am" optional.
