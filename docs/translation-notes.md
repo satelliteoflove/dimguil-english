@@ -964,6 +964,11 @@ on one page. へー・・・・・・。そう・・・。 is one long pause, "H
 何言ってるのよ (3:178) is "What are you even saying?", aimed at the party, who just asked
 about her: 2:45's 何言ってんだろあたし is the version about herself (Q81).
 
+Read-through read5-03: the shadow's narration in the control room (4:44) uses plain
+"appeared", not "had appeared". 現れた is the same moment as the first page, and the past
+perfect pushed it earlier (Q82). Cresson's history of Ganess (4:150-151) is reflowed onto
+fewer lines; its second box has no name line, and "the king" there is Ganess III (Q83).
+
 ### Text check of bot runs (2026-10-15)
 
 Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
