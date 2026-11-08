@@ -67,6 +67,13 @@ main { padding: 2.4rem clamp(1.5rem, 4vw, 4rem) 0; max-width: 70rem; min-width: 
 .done-why { margin: 0.3rem 0 0; color: var(--faint); font-size: 0.85rem; }
 .linkish { background: none; border: 0; padding: 0; font: inherit; color: var(--gloss); text-decoration: underline; cursor: pointer; }
 .line.focused::before { content: ""; position: absolute; left: -1.4rem; top: 1.4rem; bottom: 0; width: 3px; border-radius: 2px; background: var(--c); }
+/* Lines an earlier apply already recorded: a slightly different ground, a little quieter. */
+.line.reviewed { background: #1b1f26; margin-inline: -1rem; padding: 1.4rem 1rem 1.2rem; border-radius: 6px; }
+.line.reviewed.focused::before { left: -0.4rem; }
+.line.reviewed > :not(.line-head) { opacity: 0.82; }
+.status.done { color: var(--faint); }
+.read-marker { margin: 2.4rem 0 0; display: flex; align-items: center; gap: 0.8rem; color: var(--propose); font-size: var(--step--1); font-style: italic; }
+.read-marker::before, .read-marker::after { content: ""; flex: 1; border-top: 1px dashed var(--propose); opacity: 0.6; }
 .line-head { display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
 .who { font-size: var(--step-2); font-style: italic; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; color: var(--text); }
 .face { width: 3rem; height: 3rem; border-radius: 6px; image-rendering: pixelated; box-shadow: 0 0 0 2px var(--c); align-self: center; background: #000; flex: none; }
@@ -344,3 +351,4 @@ dialog h2 { font-size: var(--step-2); margin: 0 0 0.6rem; }
 
 .scene-updated { margin: 0 0 1.2rem; padding: 0.6rem 0.9rem; border-left: 3px solid var(--propose); background: var(--panel); color: var(--text); font-size: var(--step--1); border-radius: 0 6px 6px 0; }
 button.linkish { background: none; border: 0; padding: 0; color: inherit; text-decoration: underline; cursor: pointer; font: inherit; }
+.read-marker + .line { margin-top: 1.2rem; }

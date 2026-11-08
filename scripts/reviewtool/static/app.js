@@ -97,6 +97,22 @@ function alreadyApplied(ln) {
   if (!prior) return false;
   return [prior, ...(prior.earlier || [])].some(rec => (rec.lines || []).some(p => p.ref === ln.ref));
 }
+// What an earlier apply of this page recorded for the line: { line, committed }, or null.
+function appliedRecord(ln) {
+  const prior = S.scene && S.scene.decision;
+  if (!prior) return null;
+  for (const rec of [prior, ...(prior.earlier || [])]) {
+    const line = (rec.lines || []).find(p => p.ref === ln.ref);
+    // Commits are cumulative, so a committed latest apply covers the earlier ones too.
+    if (line) return { line, committed: prior.status === 'committed' || rec.status === 'committed' };
+  }
+  return null;
+}
+// Reviewed in an earlier apply and not reopened by a new choice here.
+function reviewedBefore(ln) {
+  const own = S.decisions[ln.ref];
+  return !collapsed(ln) && alreadyApplied(ln) && !(own && own.choice);
+}
 function decisionOf(ln) {
   if (collapsed(ln)) return { choice: 'current', auto: true };
   const d = S.decisions[ln.ref];
@@ -249,7 +265,11 @@ async function openScene(id, { line = 0, top = null, updated = false } = {}) {
   $('#scene-notes').hidden = !(sc.notes || []).length;
   $('#scene-notes-body').innerHTML = (sc.notes || []).map(n => `<div class="note"><h4>${esc(n.title)}</h4><p>${jpx(n.text)}</p>${sourcesHtml(n.sources)}</div>`).join('');
   renderSceneList();
-  $('#lines').innerHTML = sc.lines.map(lineHtml).join('');
+  // Where an earlier apply stopped: the first unread line after a reviewed one gets a marker.
+  const firstOpen = sc.lines.findIndex(l => !collapsed(l) && !alreadyApplied(l));
+  const marker = firstOpen > 0 && sc.lines.slice(0, firstOpen).some(alreadyApplied)
+    ? '<p class="read-marker" id="read-marker">Not reviewed yet from here on</p>' : '';
+  $('#lines').innerHTML = sc.lines.map((ln, i) => (i === firstOpen ? marker : '') + lineHtml(ln, i)).join('');
   sc.lines.forEach((ln, i) => wireLine(i));
   renderApplyBar();
   S.focus = Math.max(0, Math.min(line, sc.lines.length - 1));
@@ -315,7 +335,7 @@ function lineHtml(ln, i) {
   const color = who ? who.color : '#5a6170';
   const prop = needsDecision(ln);
   const elsewhere = (ln.elsewhere || []).length;
-  return `<article class="line" id="line-${i}" data-i="${i}" style="--c:${lighten(color)}" tabindex="-1" aria-label="${esc(ln.ref)}, ${esc(tag || 'Narration')}">
+  return `<article class="line${reviewedBefore(ln) ? ' reviewed' : ''}" id="line-${i}" data-i="${i}" style="--c:${lighten(color)}" tabindex="-1" aria-label="${esc(ln.ref)}, ${esc(tag || 'Narration')}">
     <div class="line-head">
       ${who && who.face ? `<img class="face" src="${esc(who.face)}" alt="">` : '<span class="face none"></span>'}
       <span class="who">${esc(tag || 'Narration')}</span>
@@ -568,7 +588,14 @@ function renderChoice(i) {
   const pill = $(`#pill-${i}`);
   const prop = needsDecision(ln);
   const label = { current: "Keeping the game's line", faithful: 'Using the proposed line', edited: 'Using your edit' };
-  if (d && d.choice === 'edited') { pill.className = 'status prop'; pill.textContent = label.edited; }
+  const rec = reviewedBefore(ln) && appliedRecord(ln);
+  el.classList.toggle('reviewed', !!rec);
+  if (rec) {
+    const kept = rec.line.choice === 'current';
+    pill.className = 'status done';
+    pill.textContent = kept ? 'Reviewed, kept' : `Reviewed, changed${rec.committed ? ' (committed)' : ' (waiting for commit)'}`;
+  }
+  else if (d && d.choice === 'edited') { pill.className = 'status prop'; pill.textContent = label.edited; }
   else if (!prop) { pill.className = 'status keep'; pill.textContent = 'No change proposed'; }
   else if (!d || d.auto) { pill.className = 'status prop'; pill.textContent = 'Change proposed'; }
   else { pill.className = `status ${d.choice === 'current' ? 'keep' : 'prop'}`; pill.textContent = label[d.choice]; }
