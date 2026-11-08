@@ -563,7 +563,7 @@
                 {
                     "length": 168,
                     "source": "NA",
-                    "translation": "Balbo\n\"Got poisoned the other day, so I wasn't up\n for a fight. Let a friendly monster walk.\n\r Next thing I know, my alignment's changed.\n\r These days I'm at the Temple repentin' my sins.\n Oh, what terrible things I have done!\n So that's the deal. Let's keep gettin' along, eh?\"",
+                    "translation": "Balbo\n\"Got poisoned the other day, so I ended up\n lettin' a friendly monster go.\n\r Next thing I know, my alignment's changed.\n\r These days I'm at the Temple repentin' my sins.\n Oh, what terrible things I have done!\n So that's the deal. Let's keep gettin' along, eh?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -707,7 +707,7 @@
                 {
                     "length": 43,
                     "source": "NA",
-                    "translation": "Balbo\n\"Hmm...\n Sorry, don't think I can fix that.\"",
+                    "translation": "Balbo\n\"Hmm...\n Sorry, don't think I can treat that.\"",
                     "addStringTerminator": true
                 },
                 {
