@@ -969,6 +969,16 @@ Read-through read5-03: the shadow's narration in the control room (4:44) uses pl
 perfect pushed it earlier (Q82). Cresson's history of Ganess (4:150-151) is reflowed onto
 fewer lines; its second box has no name line, and "the king" there is Ganess III (Q83).
 
+Balbo's voice, part 1 (voice-balbo-1). His voice sheet now says what his lines show: a
+rough tough with a soft streak, Evil by accident rather than by nature. 毒を受けたものだから
+...見逃しちまった is one cause and its result, "Got poisoned the other day, so I ended up
+lettin' a friendly monster go" (2:92); the old line added "I wasn't up for a fight" and
+ended on a fragment. 治療できそうもねぇ is "don't think I can treat that" (2:116, Chris), as
+in Cephala's 3:134. 癒してやってもいいんだが。悪いな is "I'd patch ya up, but... sorry" (2:119),
+何を勘違いしたのか is "Dunno who he thinks he is" (2:174), and "three" is spelled out
+(2:185). "You met the scholars yet?" (2:188) and "things've been slim lately" for 不景気
+(2:210) are Chris's wording.
+
 ### Text check of bot runs (2026-10-15)
 
 Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
