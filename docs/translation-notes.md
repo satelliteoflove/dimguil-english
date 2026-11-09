@@ -984,6 +984,17 @@ Part 2 (voice-balbo-2), the pit trap: "You lot" is "you guys" and サムライ�
 フォンタナたち is "Fontana's bunch" (3:104). またどっかのマヌケが落ちるといけねぇからな is
 the more literal "Some other idiot might fall in" (3:104, 3:107, Chris).
 
+Reiran's voice, part 1 (voice-reiran-1). Her voice sheet was a late-90s Valley girl, and
+"like" had crept into 13 of her lines and "totally" into four more. Her Japanese has no
+verbal tic and none of the kogal markers (チョー, マジ, じゃん); its feminine endings (わよ,
+わね, かしら) make her a cheeky kunoichi who plays big sister. The filler is gone (2:41,
+2:178, 2:184, 2:193, 2:200, 2:207, 2:214), and a few lines move toward the Japanese: the
+Card Master "was thrilled" (喜んでいました, 2:60), "You old-timers shouldn't push
+yourselves" (無理しない, 2:63), "That's impressive" for 素晴らしいですね as the senior Ninja
+(2:64), "I did meet this crazy guy" (危ない人になら, 2:178), "Looks like you're the same as
+ever" (あいかわらず, 2:19). Her introduction is "Hi~, nice to meet you" (2:105, 3:116,
+Chris). "Ew. Creepy." (2:172) stays; Chris kept it.
+
 ### Text check of bot runs (2026-10-15)
 
 Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
