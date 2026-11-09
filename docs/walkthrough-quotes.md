@@ -214,7 +214,7 @@ with the chapter and the string's new wording, to carry over to the site.
 | Balbo | NPC_MES2 231 | but the guy's too damn gloomy for his own good. |
 | Rosea | NPC_MES2 54 | It was once a safe way to get home, but now every item you carry vanishes. |
 | Balbo | NPC_MES2 179 | Must be nice, bein' born with a silver spoon. |
-| Reiran | NPC_MES2 184 | kinda sketchy... In, like, more ways than one. |
+| Reiran | NPC_MES2 184 | kinda sketchy... In more ways than one. |
 | Artemisia | NPC_MES2 255 | I was sure 'Likaton' would be fine... |
 | Fontana | NPC_MES3 111 | I'm only 13, but I'm a Samurai |
 | Cephala | NPC_MES3 115 | It's long, so Cephala is fine. |

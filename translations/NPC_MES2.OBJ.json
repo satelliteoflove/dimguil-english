@@ -125,7 +125,7 @@
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "Reiran\n\"...Same old, same old with you guys, huh.\"",
+                    "translation": "Reiran\n\"...Looks like you're the same as ever.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -257,7 +257,7 @@
                 {
                     "length": 65,
                     "source": "NA",
-                    "translation": "Reiran\n\"Hey, you guys. {ff12} is, like,\n technically your friend, right?\n\r So you'd better save them for real, 'kay?\"",
+                    "translation": "Reiran\n\"Hey, you guys. {ff12} is technically\n your friend, right?\n\r So you'd better save them for real, 'kay?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -371,7 +371,7 @@
                 {
                     "length": 58,
                     "source": "NA",
-                    "translation": "Reiran\n\"The Card Master at the tavern is, like,\n totally thrilled. I heard you got the whole set!\"",
+                    "translation": "Reiran\n\"The Card Master at the tavern was thrilled.\n I heard you got the whole set!\"",
                     "addStringTerminator": true
                 },
                 {
@@ -389,13 +389,13 @@
                 {
                     "length": 56,
                     "source": "NA",
-                    "translation": "Reiran\n\"You old-timers should, like, take it easy.\n It's not like there's a fountain of youth or whatever.\"",
+                    "translation": "Reiran\n\"You old-timers shouldn't push yourselves.\n It's not like there's a fountain of youth.\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 59,
                     "source": "NA",
-                    "translation": "Reiran\n\"Whoa, is that a Thieves Dagger?\n {ff12},\n\r you're a Ninja already? At your age?\n That's, like, so cool.\"",
+                    "translation": "Reiran\n\"Whoa, is that a Thieves Dagger?\n {ff12},\n\r you're a Ninja already? At your age?\n That's impressive.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -641,7 +641,7 @@
                 {
                     "length": 73,
                     "source": "NA",
-                    "translation": "Reiran\n\"Hiya, nice to meetcha. I'm Reiran.\n\r Believe it or not, I'm a Ninja.\n Shall I lop your head off for you?\"",
+                    "translation": "Reiran\n\"Hi~, nice to meet you. I'm Reiran.\n\r Believe it or not, I'm a Ninja.\n Shall I lop your head off for you?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1007,7 +1007,7 @@
                 {
                     "length": 13,
                     "source": "NA",
-                    "translation": "Reiran\n\"And?\"",
+                    "translation": "Reiran\n\"And your point is...?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1079,7 +1079,7 @@
                 {
                     "length": 45,
                     "source": "NA",
-                    "translation": "Reiran\n\"Well, I met this, like, total weirdo\n who kept calling himself a hero.\"",
+                    "translation": "Reiran\n\"Well, I did meet this crazy guy\n who kept calling himself a hero.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1115,7 +1115,7 @@
                 {
                     "length": 68,
                     "source": "NA",
-                    "translation": "Reiran\n\"Not like I'm one to talk, but\n that party's kinda sketchy...\n\r In, like, more ways than one.\"",
+                    "translation": "Reiran\n\"Not like I'm one to talk, but\n that party's kinda sketchy...\n\r In more ways than one.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1169,7 +1169,7 @@
                 {
                     "length": 24,
                     "source": "NA",
-                    "translation": "Reiran\n\"They were, like, sooo gloomy.\"",
+                    "translation": "Reiran\n\"They were kind of a gloomy bunch.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1211,7 +1211,7 @@
                 {
                     "length": 67,
                     "source": "NA",
-                    "translation": "Reiran\n\"I met this, like, seriously weird guy.\n\r He goes 'Begone!' and stuff,\n all high and mighty.\"",
+                    "translation": "Reiran\n\"I met this seriously weird guy.\n\r He goes 'Begone!' and stuff,\n acting all high and mighty.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1253,7 +1253,7 @@
                 {
                     "length": 25,
                     "source": "NA",
-                    "translation": "Reiran\n\"I don't look it, but I'm totally 18.\"",
+                    "translation": "Reiran\n\"I know I don't look it, but I'm 18, okay?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1295,7 +1295,7 @@
                 {
                     "length": 21,
                     "source": "NA",
-                    "translation": "Reiran\n\"Isn't there, like, anything fun to do?\"",
+                    "translation": "Reiran\n\"Isn't there anything fun to do around here?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1325,7 +1325,7 @@
                 {
                     "length": 40,
                     "source": "NA",
-                    "translation": "Reiran\n\"......\n Hmmm... Wow, everybody's really trying, huh.\"",
+                    "translation": "Reiran\n\"......\n Hmmm... Everybody's working so hard, huh.\"",
                     "addStringTerminator": true
                 },
                 {

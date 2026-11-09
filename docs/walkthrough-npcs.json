@@ -1818,7 +1818,7 @@
           ],
           "strings": "NPC_MES2 174-184",
           "placement": "Anytime: gossip about Guy's and Fontana's parties.",
-          "blurb": "Ask about other parties and Balbo isn't impressed by Fontana, the boy samurai: \"Must be nice, bein' born with a silver spoon.\" Reiran thinks Fontana's party is \"kinda sketchy... In, like, more ways than one.\"",
+          "blurb": "Ask about other parties and Balbo isn't impressed by Fontana, the boy samurai: \"Must be nice, bein' born with a silver spoon.\" Reiran thinks Fontana's party is \"kinda sketchy... In more ways than one.\"",
           "quotes": [
             {
               "file": "NPC_MES2",
@@ -1830,7 +1830,7 @@
               "file": "NPC_MES2",
               "idx": 184,
               "speaker": "Reiran",
-              "text": "kinda sketchy... In, like, more ways than one."
+              "text": "kinda sketchy... In more ways than one."
             }
           ],
           "flags": "Reiran joins Fontana's party after chapter 8 (NPC3 9), which makes 184 funnier in hindsight. The blurb doesn't say so.",
