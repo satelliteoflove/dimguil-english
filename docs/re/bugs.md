@@ -1147,7 +1147,8 @@ slot, expression, position); Fritillaria's expressions are 0 a mild smile, 1 a g
 only 0. In the original table every Fritillaria line has the expression that suits its
 own words (84 grins, 87 looks sorry, 55, 58 and 61 scowl), so a moved line takes its
 expression along: the fix changes the face op's second operand too (84, 87, 80, and
-93/58 if approved). The one odd one is 93, an excited line with the mild smile. [emu,
+93/58 if approved). Chris (2026-11-09): 58 with the scowl and 93 with the mild smile both fit; no expression
+needs changing. [emu,
 captures in docs/work/zaril-chat-compare.html]
 
 The table is plain data: MCARD 0x800a8988 + 200 x block (file offset 0x7988), halfword
