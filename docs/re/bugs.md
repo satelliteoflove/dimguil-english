@@ -1135,6 +1135,21 @@ reply still plays somewhere. Reusing a line is what the table already does (57 =
 83 = 95, 88 = 91). Without reuse it can't be done: Gaura has only three "told them"
 replies (59, 62, 97) for four "told them" blocks (1, 2, 8, 13).
 
+**Blocks 8 and 11 approved (Chris, 2026-11-09).** Proposed next (open): Fritillaria's 93
+("Whoa, awesome! You guys are good!") to block 1 ("told them") and his 58 ("Whaaat? You
+got business with me?") to block 12 ("about themselves"). Nothing in the code picks a
+chat block by the party's state: the roll is random, and Zaril's talk checks only the
+sale, the heal offer and the second press. [code, the emulator check above]
+
+**Expressions move with their lines.** Each reply has a 'face' op before it (character
+slot, expression, position); Fritillaria's expressions are 0 a mild smile, 1 a grin,
+2 a scowl, 3 a pained, sorry look; Zaril's 0, 2 and 3 differ only slightly; Gaura has
+only 0. In the original table every Fritillaria line has the expression that suits its
+own words (84 grins, 87 looks sorry, 55, 58 and 61 scowl), so a moved line takes its
+expression along: the fix changes the face op's second operand too (84, 87, 80, and
+93/58 if approved). The one odd one is 93, an excited line with the mild smile. [emu,
+captures in docs/work/zaril-chat-compare.html]
+
 The table is plain data: MCARD 0x800a8988 + 200 x block (file offset 0x7988), halfword
 ops; the bar operand is the second halfword of a block, each say operand follows its
 opcode 2. The handler copies it to the stack (sp+0x3d8) each frame.

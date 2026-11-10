@@ -8,8 +8,9 @@ import base64, glob, html, io, json, re, sys
 from PIL import Image
 OUT = sys.argv[1]
 ONLY = [int(x) for x in sys.argv[2:]]     # indexes into COMPARES to show; default all
-INTRO2 = ('Blocks 6, 9, 10 and 13 are approved and left off this page, and blocks 7 and 12 stay as they are. '
-          'Open: blocks 8 and 11, which go together.') if ONLY else ''
+INTRO2 = ('Open: blocks 1 and 12, which go together. Below them, blocks 9, 10 and 13 as approved, now with each '
+          'moved line keeping the expression its own block gave it. Blocks 6, 8 and 11 change no expressions and '
+          'are left off; block 7 stays as it is.') if ONLY else ''
 BAR = {98: 'We asked if they had any news.', 99: 'We told them everything we knew.',
        100: 'We asked them about themselves.', 101: 'We asked about other parties.',
        102: 'We asked them something personal.'}
@@ -42,15 +43,16 @@ def b64(f):
 
 def column(var, b):
     """bar index, and per speaker: (line index, [(shot, page lines)])."""
-    order, d, prefix = runs[(var, b)]
-    chat = [o for o in order if tuple(o['chat'] or ()) == (1, b)]
+    press = 2 if b == 1 else 1          # block 1 is the second Talk press of a block-0 run
+    order, d, prefix = runs[(var, 0 if b == 1 else b)]
+    chat = [o for o in order if tuple(o['chat'] or ()) == (press, b)]
     bar = next(o['n'] for o in chat if o['op'] == 'bar')
     rows = {}
     for o in chat:
         if o['op'] != 'say':
             continue
         shots = []
-        for f in sorted(glob.glob(f'{d}/{prefix}_p1_b{b}_*_{o["n"]}.png')):
+        for f in sorted(glob.glob(f'{d}/{prefix}_p{press}_b{b}_*_{o["n"]}.png')):
             im = Image.open(f).convert('RGB')
             if sum(1 for p in im.crop((8, 14, 300, 62)).getdata() if min(p) > 185) > 40:
                 shots.append(f)
@@ -85,6 +87,19 @@ COMPARES = [
     ('Block 11', "Gaura's line from block 8 replaces his \u201cI'm gonna be a Samurai. Someday.\u201d, which is word for "
      "word the same line as his reply in block 10, so it still plays there.",
      [('Now', 'now', 11), ('Proposed', 'v3', 11)]),
+    ('Block 1', "Fritillaria's \u201cWhoa, awesome! You guys are good!\u201d comes here from block 12, under \u201cWe told "
+     "them everything we knew\u201d. Block 1 is what the second Talk press always plays.",
+     [('Now', 'now', 1), ('Proposed', 'v4f', 1)]),
+    ('Block 12', "Fritillaria's \u201cWhaaat? You got business with me or something?\u201d comes here from block 1, "
+     "a brush-off beside Zaril's \u201cWhy should I have to tell you that?\u201d.",
+     [('Now', 'now', 12), ('Proposed', 'v4f', 12)]),
+    ('Block 9, approved', "As approved, with the fix now moving each line's expression with it: Fritillaria's "
+     "\u201cnothing new to spill, sorry\u201d brings his sorry look from block 10.",
+     [('Now', 'now', 9), ('Approved', 'final', 9)]),
+    ('Block 10, approved', "Fritillaria's story of how Zaril saved him brings his grin from block 9.",
+     [('Now', 'now', 10), ('Approved', 'final', 10)]),
+    ('Block 13, approved', "Zaril's line from block 8 brings its expression (Zaril's expressions differ only slightly).",
+     [('Now', 'now', 13), ('Approved', 'final', 13)]),
 ]
 
 css = """

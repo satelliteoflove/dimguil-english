@@ -46,21 +46,44 @@ VARIANTS = {
     # and Gaura reuses his block-1 "Mmm..." (59); his 82 replaces 91 in block 11 (91 is the
     # same Japanese as 88 in block 10).
     'v3': {8: {'bar': 99, 82: 59}, 11: {91: 82}, 13: {'bar': 99, 95: 80}},
+    # Fritillaria's 93 ("Whoa, awesome! You guys are good!") to block 1 ("told them"), and
+    # his 58 ("You got business with me?") to block 12 ("about themselves"). Block 1 is the
+    # second Talk press: capture it with block 0 forced and TALKS=2.
+    'v4': {1: {58: 93}, 12: {93: 58}},
+    # what's approved so far (2026-11-09), expressions moving with their lines
+    'final': {6: {'bar': 98}, 8: {'bar': 99, 82: 59}, 9: {'bar': 98, 84: 87}, 10: {87: 84},
+              11: {91: 82}, 13: {'bar': 99, 95: 80}},
+    'v4f': {6: {'bar': 98}, 8: {'bar': 99, 82: 59}, 9: {'bar': 98, 84: 87}, 10: {87: 84},
+            11: {91: 82}, 13: {'bar': 99, 95: 80}, 1: {58: 93}, 12: {93: 58}},
 }
 VARIANT = os.environ.get('VARIANT', 'now')
+def walk(blk):
+    """(position, op, args) for each op of a block in mc."""
+    p = TABLE + blk * 200; end = p + 200
+    while p < end:
+        op = struct.unpack_from('<h', mc, p)[0]
+        if op == -1: return
+        yield p, op, [struct.unpack_from('<h', mc, p + 2 + 2 * k)[0] for k in range(OPN[op])]
+        p += 2 + 2 * OPN[op]
+ORIG_FACE = {}          # line -> the expression its own block shows it with (face op arg 2)
+for _b in range(14):
+    _f = None
+    for _p, _op, _a in walk(_b):
+        if _op == 3: _f = _a[1]
+        if _op == 2: ORIG_FACE[_a[0]] = _f
 def patch_table(changes):
+    """bar and say operands; a moved line takes its expression along (the face op before it)."""
     for blk, ch in changes.items():
-        p = TABLE + blk * 200; end = p + 200
-        while p < end:
-            op = struct.unpack_from('<h', mc, p)[0]
-            if op == -1: break
+        face_at = None
+        for p, op, a in list(walk(blk)):
             if op == 7 and 'bar' in ch:
                 struct.pack_into('<h', mc, p + 2, ch['bar'])
-            if op == 2:
-                n = struct.unpack_from('<h', mc, p + 2)[0]
-                if n in ch:
-                    struct.pack_into('<h', mc, p + 2, ch[n])
-            p += 2 + 2 * OPN[op]
+            if op == 3:
+                face_at = p
+            if op == 2 and a[0] in ch:
+                struct.pack_into('<h', mc, p + 2, ch[a[0]])
+                if os.environ.get('FACES', '1') == '1':
+                    struct.pack_into('<h', mc, face_at + 4, ORIG_FACE[ch[a[0]]])
 patch_table(VARIANTS[VARIANT])
 mc = bytes(mc)
 mes5 = open('rips/iso/dimguil/DATA06/NPC_MES5.OBJ', 'rb').read()
