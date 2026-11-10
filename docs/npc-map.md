@@ -62,7 +62,7 @@ introductions, services (healing, identify, recovering bodies, selling an uniden
 item, a practice fight), the five talk topics, "you told me that already", and the menu
 labels. The talk topics, from the labels (1:281-285 and the same in every file):
 
-- **News:** "We asked if they had any news" (何か新しい情報はないか).
+- **News:** "We asked if they had any new information" (何か新しい情報はないか).
 - **Told them:** "We told them everything we knew" (知っている限りの情報を伝えた). The
   replies are reactions, usually opening with a pause ("......").
 - **About themselves:** "We asked them about themselves" (彼ら自身のこと).

@@ -995,6 +995,17 @@ yourselves" (無理しない, 2:63), "That's impressive" for 素晴らしいで�
 ever" (あいかわらず, 2:19). Her introduction is "Hi~, nice to meet you" (2:105, 3:116,
 Chris). "Ew. Creepy." (2:172) stays; Chris kept it.
 
+The "news" Talk topic (topic-news, 2026-11-09). The bottom-bar line 何か新しい情報はないかと
+尋ねてみた was "We asked if they had any news." 情報 is "information", wider than news, and
+the replies under it answer a request for information: tips and directions as well as
+"I don't know anything" (Gaura's "That way... maybe?", Bergamot's Training Maze codes).
+It's now "We asked if they had any new information." in all five files (1:281, 2:248,
+3:273, 4:156, 5:98), and Artemisia's "I don't have any information at all." (2:161,
+3:168) matches. Cresson's 4:131 has the same change proposed in his voice scene. Found
+while working out Zaril's chat table (bugs.md 2.10): under "news", block 6's replies
+read like answers to a different question. The line is 214 px, against 204 for the
+longest topic line before it; still to be seen on the bar in the game.
+
 ### Text check of bot runs (2026-10-15)
 
 Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.

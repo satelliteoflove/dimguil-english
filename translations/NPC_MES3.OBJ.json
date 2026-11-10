@@ -1019,7 +1019,7 @@
                 {
                     "length": 26,
                     "source": "NA",
-                    "translation": "Artemisia\n\"I don't have any news at all.\"",
+                    "translation": "Artemisia\n\"I don't have any information at all.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1649,7 +1649,7 @@
                 {
                     "length": 28,
                     "source": "NA",
-                    "translation": "We asked if they had any news.",
+                    "translation": "We asked if they had any new information.",
                     "addStringTerminator": true
                 },
                 {
