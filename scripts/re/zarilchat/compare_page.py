@@ -7,6 +7,9 @@ them now and with a proposed table change, each captured in the emulator (zpages
 import base64, glob, html, io, json, re, sys
 from PIL import Image
 OUT = sys.argv[1]
+ONLY = [int(x) for x in sys.argv[2:]]     # indexes into COMPARES to show; default all
+INTRO2 = ('Blocks 6, 9 and 10 are approved and left off this page, and blocks 7 and 12 stay as they are. '
+          'Only block 13 is open, and the choice there also decides block 8.') if ONLY else ''
 BAR = {98: 'We asked if they had any news.', 99: 'We told them everything we knew.',
        100: 'We asked them about themselves.', 101: 'We asked about other parties.',
        102: 'We asked them something personal.'}
@@ -68,8 +71,9 @@ COMPARES = [
      [('Now', 'now', 10), ('Proposed', 'prop', 10)]),
     ('Block 13', "Proposed: the topic line becomes “We told them everything we knew”, and the replies stay.",
      [('Now', 'now', 13), ('Proposed', 'prop', 13)]),
-    ('Block 13: which Zaril line?', "The alternative to the proposal above swaps Zaril's lines between blocks 8 and 13. "
-     "Left, block 13 as proposed. Right, block 13 with Zaril's line from block 8.",
+    ('Block 13: which Zaril line?', "Block 13's topic line becomes \u201cWe told them everything we knew\u201d either way; "
+     "Fritillaria's and Gaura's replies fit it. Left, Zaril keeps his own line. Right, he gets his line from "
+     "block 8, and the swap changes block 8 too (below).",
      [('Proposed', 'prop', 13), ('Alternative', 'alt', 13)]),
     ('Block 8 under the alternative', "What the alternative does to block 8: Zaril's line from block 13 replaces his "
      "own; the topic stays “something personal”.",
@@ -112,8 +116,12 @@ H = ['<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">',
      'played with the table edit laid into MCARD in RAM; no disc was built. Rows line up by speaker, and '
      'every page of a reply has its own shot with the text below it. Whatever differs from the left '
      'column is marked in gold.</p>',
-     '<nav>' + ''.join(f'<a href="#c{i}">{html.escape(t)}</a>' for i, (t, _, _) in enumerate(COMPARES)) + '</nav>']
+     '<p class="intro">' + INTRO2 + '</p>',
+     '<nav>' + ''.join(f'<a href="#c{i}">{html.escape(t)}</a>' for i, (t, _, _) in enumerate(COMPARES)
+                       if not ONLY or i in ONLY) + '</nav>']
 for i, (title, note, cols) in enumerate(COMPARES):
+    if ONLY and i not in ONLY:
+        continue
     data = [column(v, b) for _, v, b in cols]
     H.append(f'<section id="c{i}"><h2>{html.escape(title)}</h2><p class="note">{html.escape(note)}</p><div class="grid">')
     for label, _, b in cols:
