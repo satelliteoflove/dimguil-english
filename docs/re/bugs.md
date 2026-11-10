@@ -1060,6 +1060,43 @@ translated as they are for now. The fix looks at the whole table together (which
 line and which replies belong in each topic), not one swap at a time. Not started; not
 yet checked in the emulator.
 
+**Proposed fix (2026-11-09, for Chris's approval).** The roll is `rand_upto(0xd)` (0-13
+inclusive) with 1 rerolled, so the 13 blocks 0 and 2-13 are equally likely; block 1 is
+the second Talk press's "So what?". Blocks 0-5 and 11 stay as they are. Most of the
+shuffled blocks hold three replies that agree with each other under the wrong bar line,
+so the fix is mostly bar lines, plus two swaps of Fritillaria's lines. Every line stays
+with its speaker, so the portraits and the order (Zaril, Fritillaria, Gaura) don't change.
+
+| Block | Bar line now | Bar line after | Replies after (Zaril, Fritillaria, Gaura) | Change |
+|---|---|---|---|---|
+| 6 | 99 told them | 98 news | 74 "Got nothing", 75 "don't know anything", 76 "That way... maybe?" | bar |
+| 7 | 102 personal | 100 about themselves | 77 good at nothing in particular, 78 wants to be a Ninja, 79 not picky | bar |
+| 8 | 102 personal | 99 told them | 80 "you're greenhorns too", 81 "tougher than you look", 82 slow, the rest great | bar |
+| 9 | 99 told them | 98 news | 83 nothing new, **87 nothing new to spill**, 85 knows nothing | bar; 87 from block 10 |
+| 10 | 102 personal | 102 personal | 86 likes Balbo's style, **84 how Zaril saved him**, 88 will be a Samurai | 84 from block 9 |
+| 12 | 100 about themselves | 100 about themselves | 92 "why should I tell you?", **96 "Aw, that again..."**, 94 Muramasa | 96 from block 13 |
+| 13 | 98 news | 99 told them | 95 nothing new, **93 "Awesome! You're good!"**, 97 "heard it already" | bar; 93 from block 12 |
+
+After it the random topics are news 3 (0, 6, 9), told them 3 (2, 8, 13), other parties 3
+(3, 4, 5), personal 2 (10, 11) and about themselves 2 (7, 12).
+
+Why each part:
+- Blocks 6, 7 and 8 already agree inside: 6 is three no-news replies, 7 three
+  self-descriptions, 8 three reactions to what you told them. Only the bar line is wrong.
+- Fritillaria has three reactions (81, 93, 96) and only one about-himself line (78), so
+  no table makes every block perfect from his lines alone. 96, なーんだ,またそれか, reads
+  as a groan at being asked about himself again, beside Zaril's refusal (92); 93, the
+  impressed reaction, goes to block 13, where Zaril has nothing to give back (95) and
+  Gaura has heard it (97). Three reactions to the same news, each in character.
+- 84 and 87 are each in the other's block (9 is news from Zaril and Gaura, 10 personal).
+
+Translation follow-ups: under "told them", Gaura's 82 ほかはすごい reads as "but you
+others are great", one of the two readings from Q78; "the rest, great" still fits both.
+13's Zaril line 95 becomes "we've nothing new for you in return"; the English "Sorry.
+Nothing new to tell." fits. The data is in MCARD's script table for handler 4 (array
+0x3d8, 200 bytes a block): bar and say operands only, no size or code change. Then the
+emulator check of each block and a suite round.
+
 ## Group 3: fixes that would change how the game plays
 
 ### 3.1 A wipe destroys only one character's items
