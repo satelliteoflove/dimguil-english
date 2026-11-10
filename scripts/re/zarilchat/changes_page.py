@@ -9,7 +9,7 @@ import base64, glob, html, io, json, re, struct, sys
 from PIL import Image
 OUT = sys.argv[1]
 SPEAKERS = ['Zaril', 'Fritillaria', 'Gaura']
-RUNS = {'orig': ('rips/zarilfix/orig', 'orig'), 'fix': ('rips/zarilfix/verify2', 'force')}
+RUNS = {'orig': ('rips/zarilfix/orig3', 'orig'), 'fix': ('rips/zarilfix/verify3', 'force')}
 CHANGED = [6, 9, 10, 13]
 TABLE = 0x800a8988
 FACE = {0: 'mild smile', 1: 'grin', 2: 'scowl', 3: 'pained, sorry look'}
@@ -80,9 +80,11 @@ for blk in range(14):
             a, v = struct.unpack_from('<h', cl, q)[0], struct.unpack_from('<h', mc, q)[0]
             if a != v:
                 what = {7: 'topic line', 2: 'line spoken', 3: 'expression'}[op]
-                diffs.append((blk, 0x800a1000 + q, what, a, v))
+                who = {10: 'Zaril', 14: 'Fritillaria', 8: 'Gaura'}[struct.unpack_from('<h', cl, p + 2)[0]] \
+                    if op == 3 else en[a]['translation'].split('\n', 1)[0] if op == 2 else ''
+                diffs.append((blk, 0x800a1000 + q, what, a, v, who))
         p += 2 + 2 * OPN[op]
-assert len(diffs) == 7, diffs
+assert len(diffs) == 8, diffs
 
 
 def describe(what, a, v):
@@ -101,9 +103,12 @@ NOTES = {
        'Zaril’s and Gaura’s replies are copies of their lines under “new information”.',
     10: 'The other half of the swap: Fritillaria’s story of how Zaril saved him comes here from '
         'block 9, with its grin, in place of “nothing new to spill”. The topic stays.',
-    13: 'The topic line changes; the three replies stay. Gaura’s “I heard it already” is a '
-        'copy of his line under “told them” in Balbo’s table, and Fritillaria’s '
-        '“Aw, that again” goes with it.',
+    13: 'The topic line changes, and Zaril says his own “told them” reply, “.........And? So '
+        'what?”, which also plays in blocks 1 and 2, with the same expression. Gaura’s “I heard it '
+        'already” is a copy of his line under “told them” in Balbo’s table, and '
+        'Fritillaria’s “Aw, that again” goes with it. Zaril’s original “Sorry. Nothing new '
+        'to tell.” answers only “new information”; the line the writers most likely meant, his '
+        '“Heard that one before” from Fontana’s table, isn’t in his text file.',
 }
 
 css = """
@@ -142,31 +147,41 @@ H = ['<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">',
      '<meta name="viewport" content="width=device-width, initial-scale=1">',
      "<title>Zaril's chat: exactly what the fix changes</title>", f'<style>{css}</style></head><body><main>',
      "<h1>Zaril's chat: exactly what the fix changes</h1>",
-     '<p>The fix as rebuilt today (commit b38255a, disc ba971011). It changes four of the fourteen chat '
+     '<p>The fix as rebuilt today (commit 6691153, disc 97b6d91f). It changes four of the fourteen chat '
      'blocks and nothing else: blocks 0-5, 7, 8, 11 and 12 play exactly as the game shipped them. No text '
      'changes here; only which line plays where. Every line stays with its own speaker.</p>',
      '<p class="soft">The one related text change is separate and already reviewed: the topic line 5:98 now reads '
      '“We asked if they had any new information.” (it was “We asked if they had any news.”). It '
      'shows on both sides below, since both were captured on the current disc.</p>',
      '<h2>Every value the fix changes</h2>',
-     '<p class="soft">Seven numbers in the chat table in MCARD, read from the original and the built file. '
-     'A topic line or spoken line is an NPC_MES5 index; an expression picks Fritillaria’s portrait.</p>',
+     '<p class="soft">Eight numbers in the chat table in MCARD, read from the original and the built file. '
+     'A topic line or spoken line is an NPC_MES5 index; an expression picks the speaker’s portrait.</p>',
      '<table><tr><th>Block</th><th>What</th><th>Original</th><th>Now</th></tr>']
-for blk, addr, what, a, v in diffs:
+for blk, addr, what, a, v, who in diffs:
     fa, fv = describe(what, a, v)
-    H.append(f'<tr><td>{blk}</td><td>{E(what)}{" (Fritillaria)" if what != "topic line" else ""}</td>'
+    H.append(f'<tr><td>{blk}</td><td>{E(what)}{f" ({who})" if who else ""}</td>'
              f'<td>{E(fa)}</td><td class="to">{E(fv)}</td></tr>')
 H.append('</table>')
-H.append('<nav>' + ''.join(f'<a href="#b{b}">Block {b}</a>' for b in CHANGED) + '</nav>')
+H.append('<nav>' + ''.join(f'<a href="#origfix{b}">Block {b}</a>' for b in CHANGED)
+         + '</nav>')
 H.append('<p class="soft">Each block below: left, the original table; right, the fixed one. Both captured in the '
          'emulator on the same disc, the left with the original table laid back into memory. Every page of '
          'every reply has its own shot, with the text below it. Whatever differs from the left is marked in '
          'gold.</p>')
 
-for b in CHANGED:
-    data = [column('orig', b), column('fix', b)]
-    H.append(f'<section id="b{b}"><h2>Block {b}</h2><p>{E(NOTES[b])}</p>'
-             '<div class="grid"><div class="head">The original game</div><div class="head">With the fix</div>')
+PROPOSED = ('Proposed for block 13 (not built)',
+            'You found that Zaril\u2019s \u201cSorry. Nothing new to tell.\u201d fits only \u201cnew information\u201d, '
+            'while Fritillaria\u2019s and Gaura\u2019s fit \u201ctold them\u201d. No Zaril line in his own text file fits '
+            'both. The line the writers most likely meant, his \u201cHeard that one before\u201d '
+            '(\u524d\u306b\u3082\u805e\u3044\u305f\u305c,\u305d\u308c\u3002) from Fontana\u2019s table, isn\u2019t in '
+            'Zaril\u2019s file. The closest he has is his own \u201ctold them\u201d reply, \u201c.........And? So what?\u201d, '
+            'which already plays twice under that topic (blocks 1 and 2) with the same expression. Left: the fix as '
+            'built. Right: block 13 with that line. One value changes.')
+SHOW = [(b, NOTES[b], 'orig', 'fix', 'The original game', 'With the fix', f'Block {b}') for b in CHANGED]
+for b, note, lv, rv, lh, rh, title in SHOW:
+    data = [column(lv, b), column(rv, b)]
+    H.append(f'<section id="{lv}{rv}{b}"><h2>{E(title)}</h2><p>{E(note)}</p>'
+             f'<div class="grid"><div class="head">{E(lh)}</div><div class="head">{E(rh)}</div>')
     for k, ((bn, btxt), _) in enumerate(data):
         chg = ' changed' if k and bn != data[0][0][0] else ''
         H.append(f'<div class="topic{chg}"><span class="lab">Topic line on the bottom bar (5:{bn})</span>{E(btxt)}'

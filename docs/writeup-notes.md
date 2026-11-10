@@ -1044,8 +1044,11 @@ save, the game stopped on the town logo over six "Empty" boxes, every time.
   writers meant them. Portrait expressions turned out to match each of Fritillaria's
   lines in its original block, so a moved line takes its expression along.
 - Fix: operand edits in the table (MCARD 0x800a8988, plain data): three topic lines
-  (blocks 6, 9 and 13) and a swap of Fritillaria's 84 and 87 between blocks 9 and 10,
-  seven halfwords in all. Chris chose block by block from side-by-side emulator
+  (blocks 6, 9 and 13), a swap of Fritillaria's 84 and 87 between blocks 9 and 10, and
+  Zaril's own "told them" reply ("And? So what?") reused in block 13, where his "Sorry.
+  Nothing new to tell." answered only the old topic: eight halfwords in all. The line
+  the writers likely meant there, his "Heard that one before" in Fontana's table, isn't
+  in his file. Chris chose block by block from side-by-side emulator
   captures (`docs/work/zaril-chat-compare.html`).
 - Overshoot, and how it was caught: the first fix (066762c) also changed blocks 8 and 11
   and moved Zaril's "greenhorns" line into 13, on a reading of what each line answers.
@@ -1058,7 +1061,7 @@ save, the game stopped on the town logo over six "Empty" boxes, every time.
   writers' topic; reading alone doesn't override it.
 - Side change: the "news" topic line became "We asked if they had any new
   information." (新しい情報), since the replies answer a request for information.
-- Commits 066762c and the narrowing; checked on disc ba9710114fc2f9472d0d72ecc80de59f,
-  all 14 blocks (`rips/zarilfix/verify2/`); the original table on the same disc in
-  `rips/zarilfix/orig/` (zpreview.py VARIANT=orig). The first fix's shots are in
+- Commits 066762c, b38255a (narrowed) and 6691153 (block 13's Zaril line); checked on
+  disc 97b6d91f9ba982e18e722dfb0ae2cd61, all 14 blocks (`rips/zarilfix/verify3/`); the
+  original table on the same disc in `rips/zarilfix/orig3/` (zpreview.py VARIANT=orig). The first fix's shots are in
   `rips/zarilfix/verify/`.

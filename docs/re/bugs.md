@@ -1167,6 +1167,13 @@ stays and only the topic changes. The fix is now seven halfwords: topic lines in
 expressions. Checked in the emulator on disc ba9710114fc2f9472d0d72ecc80de59f: every
 block 0-13 plays the intended topic and replies. Page: docs/work/zaril-chat-changes.html.
 
+**Block 13's Zaril line (Chris, 2026-11-10).** On the narrowed disc, Zaril's 95 ("Sorry.
+Nothing new to tell.") read as an answer to "new information" only, under the new "told
+them" topic. With 3:261 out of reach, block 13 now uses his own "told them" reply 57
+(".........And? So what?", already in blocks 1 and 2, same expression 3). Eight
+halfwords in all. Checked on disc 97b6d91f9ba982e18e722dfb0ae2cd61: every block 0-13
+plays the intended topic and replies (rips/zarilfix/verify3).
+
 The table is plain data: MCARD 0x800a8988 + 200 x block (file offset 0x7988), halfword
 ops; the bar operand is the second halfword of a block, each say operand follows its
 opcode 2. The handler copies it to the stack (sp+0x3d8) each frame.
