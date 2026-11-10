@@ -1108,6 +1108,27 @@ Nothing new to tell." fits. The data is in MCARD's script table for handler 4 (a
 0x3d8, 200 bytes a block): bar and say operands only, no size or code change. Then the
 emulator check of each block and a suite round.
 
+**Revised with Chris (2026-11-09).** Approved: block 6's topic line, and block 9 (topic line, and
+Fritillaria's 87 from block 10, so 84 goes to 10). Block 7 stays "something personal" and
+block 8 stays as it is (Gaura's 82 is about himself). Open: block 13.
+
+Where the other parties' tables put the same Japanese lines (copies in NPC_MES2/3, from
+the script dump) [code]: Zaril's 74, 83 and 95 sit under "news" in Fontana's table; his 77,
+80 and 86 under "something personal". Gaura's 76 and 85 sit under "news" in Balbo's, 82 and
+94 under "something personal", 79 and 88 under "about themselves", 97 under "told them".
+The writers used "about themselves" and "something personal" interchangeably: in the
+Balbo, Fontana and scholar tables both get self-descriptions, and both get brush-offs.
+
+Why block 13 can't be perfect: Gaura has three news replies (blocks 0, 6, 9) and Zaril four,
+so one of Zaril's news lines has to sit outside a news block. Under "told them", 96 and 97
+fit and Zaril's 95 reads as having nothing new to give back. The alternative swaps Zaril's
+80 into 13 (all three then react to stale news) and his 95 into block 8, where it fits
+worse. Side-by-side emulator captures: docs/work/zaril-chat-compare.html.
+
+The table is plain data: MCARD 0x800a8988 + 200 x block (file offset 0x7988), halfword
+ops; the bar operand is the second halfword of a block, each say operand follows its
+opcode 2. The handler copies it to the stack (sp+0x3d8) each frame.
+
 ## Group 3: fixes that would change how the game plays
 
 ### 3.1 A wipe destroys only one character's items
