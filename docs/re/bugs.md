@@ -1060,6 +1060,17 @@ translated as they are for now. The fix looks at the whole table together (which
 line and which replies belong in each topic), not one swap at a time. Not started; not
 yet checked in the emulator.
 
+**Checked in the emulator (2026-11-09, disc 756d4fb02c5f2334932096ec4fae9517, main 4a53dc4;
+worktree zarilchat, rips/agents/zarilchat/).** Every block 0-13, forced one at a time by
+replacing the `jal rand_upto` at MCARD 0x800dab0c with `addiu v0, zero, B`, plays exactly
+the bar line and replies the dump gives, in that order (Zaril, Fritillaria, Gaura). The
+bar line stays on screen while the replies play, so a player does see "We asked them
+something personal." under "you guys are still greenhorns too". `rand_upto(n)`
+(0x8001cb18) returns 0..n inclusive; 150 real presses rolled 0-13, and a 1 was always
+rerolled. Each Talk press goes sale (50% when it can fire), then the heal offer, then
+block 1 on the second press, else the roll; so a sale or heal on press 2 skips block 1.
+Talk never runs out.
+
 **Proposed fix (2026-11-09, for Chris's approval).** The roll is `rand_upto(0xd)` (0-13
 inclusive) with 1 rerolled, so the 13 blocks 0 and 2-13 are equally likely; block 1 is
 the second Talk press's "So what?". Blocks 0-5 and 11 stay as they are. Most of the
