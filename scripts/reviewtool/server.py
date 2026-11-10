@@ -76,7 +76,7 @@ them the Japanese still shows, just not split into words.
 import hashlib
 import json, os, re, sqlite3, sys, threading, time
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import unquote, urlparse, parse_qs
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CODE_ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
@@ -1328,6 +1328,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self.file(STATIC, 'index.html')
             if u.path.startswith('/static/'):
                 return self.file(STATIC, u.path[len('/static/'):])
+            if u.path.startswith('/work/'):     # pages made for Chris (docs/work), over the LAN
+                return self.file(os.path.join(ROOT, 'docs/work'), unquote(u.path[len('/work/'):]))
             if u.path.startswith('/font/'):
                 return self.file(FONT, u.path[len('/font/'):])
             if u.path.startswith('/faces/'):
