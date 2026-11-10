@@ -8,9 +8,9 @@ import base64, glob, html, io, json, re, sys
 from PIL import Image
 OUT = sys.argv[1]
 ONLY = [int(x) for x in sys.argv[2:]]     # indexes into COMPARES to show; default all
-INTRO2 = ('Open: blocks 1 and 12, which go together. Below them, blocks 9, 10 and 13 as approved, now with each '
-          'moved line keeping the expression its own block gave it. Blocks 6, 8 and 11 change no expressions and '
-          'are left off; block 7 stays as it is.') if ONLY else ''
+INTRO2 = ('Nothing is open. These are blocks 9, 10 and 13 as approved, where a line moves and keeps the '
+          'expression its own block gave it. The left column is the game as it is now; the right is after the fix. '
+          'Blocks 6, 8 and 11 move no expressions and are left off; blocks 1, 7 and 12 stay as they are.') if ONLY else ''
 BAR = {98: 'We asked if they had any news.', 99: 'We told them everything we knew.',
        100: 'We asked them about themselves.', 101: 'We asked about other parties.',
        102: 'We asked them something personal.'}
@@ -95,11 +95,11 @@ COMPARES = [
      [('Now', 'now', 12), ('Proposed', 'v4f', 12)]),
     ('Block 9, approved', "As approved, with the fix now moving each line's expression with it: Fritillaria's "
      "\u201cnothing new to spill, sorry\u201d brings his sorry look from block 10.",
-     [('Now', 'now', 9), ('Approved', 'final', 9)]),
+     [('Now, as the game plays it', 'now', 9), ('After the approved fix', 'final', 9)]),
     ('Block 10, approved', "Fritillaria's story of how Zaril saved him brings his grin from block 9.",
-     [('Now', 'now', 10), ('Approved', 'final', 10)]),
+     [('Now, as the game plays it', 'now', 10), ('After the approved fix', 'final', 10)]),
     ('Block 13, approved', "Zaril's line from block 8 brings its expression (Zaril's expressions differ only slightly).",
-     [('Now', 'now', 13), ('Approved', 'final', 13)]),
+     [('Now, as the game plays it', 'now', 13), ('After the approved fix', 'final', 13)]),
 ]
 
 css = """

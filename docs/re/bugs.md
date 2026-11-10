@@ -1135,7 +1135,8 @@ reply still plays somewhere. Reusing a line is what the table already does (57 =
 83 = 95, 88 = 91). Without reuse it can't be done: Gaura has only three "told them"
 replies (59, 62, 97) for four "told them" blocks (1, 2, 8, 13).
 
-**Blocks 8 and 11 approved (Chris, 2026-11-09).** Proposed next (open): Fritillaria's 93
+**Blocks 8 and 11 approved (Chris, 2026-11-09).** Proposed next, and declined (Chris: both
+correct as they are, 58's scowl under "told them" and 93's smile under "about themselves"): Fritillaria's 93
 ("Whoa, awesome! You guys are good!") to block 1 ("told them") and his 58 ("Whaaat? You
 got business with me?") to block 12 ("about themselves"). Nothing in the code picks a
 chat block by the party's state: the roll is random, and Zaril's talk checks only the
