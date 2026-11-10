@@ -19,7 +19,11 @@
 ;   block 10: Fritillaria's 87 -> 84, with the grin
 ;   block 13: topic "new information" (98) -> "told them" (99); Gaura's 97 ("I heard it
 ;             already") comes from a "told them" block, and Fritillaria's 96 ("Aw, that
-;             again") goes with it
+;             again") goes with it. Zaril's 95 ("Sorry. Nothing new to tell", the same
+;             Japanese as 83 in block 9) answers only "new information"; the line the
+;             writers likely meant, his 3:261 "Heard that one before" in Fontana's table,
+;             isn't in NPC_MES5, so he says his own "told them" reply 57 (".........And?
+;             So what?", blocks 1 and 2, the same expression, 3)
 ;
 ; The table is plain data in MCARD at 0x800a8988, 200 bytes a block, in halfwords; only
 ; operands change. Original values are in the comments.
@@ -43,4 +47,6 @@
 
 .org 0x800a93b2                 ; block 13 bar: 98
     .halfword 99
+.org 0x800a93c8                 ; block 13 Zaril say: 95 (face 3, unchanged)
+    .halfword 57
 .close

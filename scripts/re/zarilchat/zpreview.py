@@ -92,6 +92,9 @@ RAW = {
     # (bar 102 and Gaura's 82 in 8, his 91 in 11); 13 keeps "told them" but Zaril says his
     # own 95 again, with its own expression (3).
     'rec': [(0x800a8fca, 102), (0x800a9018, 82), (0x800a9270, 91), (0x800a93c2, 3), (0x800a93c8, 95)],
+    # 2026-11-10, against disc ba971011 (block 13 already "told them"): Zaril says his own
+    # "told them" reply 57 (".........And? So what?", blocks 1 and 2; same expression, 3)
+    'b13': [(0x800a93c8, 57)],
 }
 if VARIANT == 'orig':            # the original table, from the clean MCARD, on the fixed disc
     _cl = open('rips/clean/dimguil/MCARD.BIN', 'rb').read()
