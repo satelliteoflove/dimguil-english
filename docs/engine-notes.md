@@ -271,6 +271,12 @@ glance". By subsystem:
   through `talk_script_run` (0x800b8ccc), a small interpreter of 13 opcodes (say,
   bar, show and hide a portrait, cure, gold, close...). `scripts/re/talkscripts.py`
   dumps them, and `C-talk-lines.md` says when each NPC_MES string plays.
+- **Where the scripts come from.** "Built on the stack" is mostly a copy: Zaril's chat
+  table (handler 4, sp+0x3d8, 14 blocks of 200 bytes) is plain halfword data in MCARD at
+  0x800a8988, copied in every frame, so a block's topic and replies are changed by
+  editing operands there (asm/bugfix_zaril_chat_topics.asm). The 'face' op (3: slot,
+  expression, position) before each 'say' sets the portrait's expression; Fritillaria
+  has four (smile, grin, scowl, pained), Zaril three that barely differ, Gaura one.
 - **A Talk press.** Introductions first, while no member has met the leader. After
   that, half the time a service is tried, in order: healing (when someone is hurt or
   has a status), a sale (when someone has an empty pack slot), a rescue (when another

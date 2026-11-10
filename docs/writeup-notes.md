@@ -1030,3 +1030,24 @@ save, the game stopped on the town logo over six "Empty" boxes, every time.
   On the built disc "Dick" and "RETARD" got 1:72 naming them on 12 of 12 of Lychee's
   turns; "Dickens", "dick", ちんこ and a plain party got her usual lines.
   Suite 342/344 on 817a156dbdd249c5c8ea016556948603, the two known snake cases.
+
+### Zaril's chat: topics that didn't match (2026-11-09)
+
+- Cause: six of the 14 blocks in Zaril's chat table show a bottom-bar topic their
+  replies don't answer ("We asked them something personal." over "you guys are still
+  greenhorns too"), and two of Fritillaria's lines sit in each other's blocks. Found
+  in the NPC review (Chris's question on 5:93, 2026-10-28). Nobody on the Japanese
+  boards mentions it: one block plays per Talk, at random.
+- Evidence: every block forced in the emulator (the roll's `jal rand_upto` replaced by
+  `addiu v0, zero, N`) played exactly what the dump gave. The other parties' tables
+  carry many of the same Japanese lines under their topics, which showed where the
+  writers meant them. Portrait expressions turned out to match each of Fritillaria's
+  lines in its original block, so a moved line takes its expression along.
+- Fix: operand edits in the table (MCARD 0x800a8988, plain data): four topic lines, a
+  swap of Fritillaria's 84 and 87, Gaura's 82 to block 11 in place of a duplicate, and
+  two reused lines, as the original already reuses three. Chris chose block by block
+  from side-by-side emulator captures (`docs/work/zaril-chat-compare.html`).
+- Side change: the "news" topic line became "We asked if they had any new
+  information." (新しい情報), since the replies answer a request for information.
+- Commit 066762c; checked on disc adc20dddf08da772cd4e42c1c93fb503, all 14 blocks.
+  Before/after shots: `rips/zarilfix/verify/` and the worktree's `preview/` captures.
