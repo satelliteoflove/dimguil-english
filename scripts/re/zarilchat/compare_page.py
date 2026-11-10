@@ -8,8 +8,8 @@ import base64, glob, html, io, json, re, sys
 from PIL import Image
 OUT = sys.argv[1]
 ONLY = [int(x) for x in sys.argv[2:]]     # indexes into COMPARES to show; default all
-INTRO2 = ('Blocks 6, 9 and 10 are approved and left off this page, and blocks 7 and 12 stay as they are. '
-          'Only block 13 is open, and the choice there also decides block 8.') if ONLY else ''
+INTRO2 = ('Blocks 6, 9, 10 and 13 are approved and left off this page, and blocks 7 and 12 stay as they are. '
+          'Open: blocks 8 and 11, which go together.') if ONLY else ''
 BAR = {98: 'We asked if they had any news.', 99: 'We told them everything we knew.',
        100: 'We asked them about themselves.', 101: 'We asked about other parties.',
        102: 'We asked them something personal.'}
@@ -78,6 +78,13 @@ COMPARES = [
     ('Block 8 under the alternative', "What the alternative does to block 8: Zaril's line from block 13 replaces his "
      "own; the topic stays “something personal”.",
      [('Now', 'now', 8), ('Alternative', 'alt', 8)]),
+    ('Block 8', "Proposed: the topic line becomes \u201cWe told them everything we knew\u201d, which Zaril's and "
+     "Fritillaria's replies answer. Gaura's line about himself moves to block 11, and he says \u201cMmm...\u201d, his reply "
+     "from block 1. Zaril's line also plays in block 13 now, as you chose.",
+     [('Now', 'now', 8), ('Proposed', 'v3', 8)]),
+    ('Block 11', "Gaura's line from block 8 replaces his \u201cI'm gonna be a Samurai. Someday.\u201d, which is word for "
+     "word the same line as his reply in block 10, so it still plays there.",
+     [('Now', 'now', 11), ('Proposed', 'v3', 11)]),
 ]
 
 css = """

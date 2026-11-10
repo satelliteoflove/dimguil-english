@@ -42,6 +42,10 @@ VARIANTS = {
     'now': {},
     'prop': {6: {'bar': 98}, 9: {'bar': 98, 84: 87}, 10: {87: 84}, 13: {'bar': 99}},
     'alt': {8: {80: 95}, 13: {'bar': 99, 95: 80}},
+    # 2026-11-09, after Chris: 13 takes Zaril's 80; 8 becomes "told them", keeps 80 and 81,
+    # and Gaura reuses his block-1 "Mmm..." (59); his 82 replaces 91 in block 11 (91 is the
+    # same Japanese as 88 in block 10).
+    'v3': {8: {'bar': 99, 82: 59}, 11: {91: 82}, 13: {'bar': 99, 95: 80}},
 }
 VARIANT = os.environ.get('VARIANT', 'now')
 def patch_table(changes):

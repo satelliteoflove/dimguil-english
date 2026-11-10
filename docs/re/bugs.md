@@ -1125,6 +1125,16 @@ fit and Zaril's 95 reads as having nothing new to give back. The alternative swa
 80 into 13 (all three then react to stale news) and his 95 into block 8, where it fits
 worse. Side-by-side emulator captures: docs/work/zaril-chat-compare.html.
 
+**Block 13 decided (Chris, 2026-11-09):** topic "told them", with Zaril's 80 ("you guys are
+still greenhorns too") in place of 95. Chris on block 8: none of Zaril's lines fit
+"something personal"; 80 and Fritillaria's 81 answer being told about the party, and
+Gaura's 82 answers a personal question. Proposed for it (open): block 8 becomes "told
+them", keeps 80 and 81, and Gaura says his block-1 "Mmm..." (59); his 82 replaces 91 in
+block 11, which is the same Japanese as 88 in block 10. Nothing is lost: every distinct
+reply still plays somewhere. Reusing a line is what the table already does (57 = 60,
+83 = 95, 88 = 91). Without reuse it can't be done: Gaura has only three "told them"
+replies (59, 62, 97) for four "told them" blocks (1, 2, 8, 13).
+
 The table is plain data: MCARD 0x800a8988 + 200 x block (file offset 0x7988), halfword
 ops; the bar operand is the second halfword of a block, each say operand follows its
 opcode 2. The handler copies it to the stack (sp+0x3d8) each frame.
