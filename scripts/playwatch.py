@@ -307,7 +307,7 @@ class Session:
         self.record_pending = False if a.no_record else 'check'
         self.screen_armed = False   # seen the game's code loaded, its screen not yet set
         self.exe_sig = build_files(self.play, self.build)[EXE][0x800:0x820]
-        self.status_of = textstatus.table()
+        self.status_of = textstatus.table(a.bin)
         self.last_head = None
         self.last_id = None
         self.first = True           # what's in the buffer at the start was already shown

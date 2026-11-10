@@ -12,6 +12,10 @@ Statuses, and whether the monitor pauses on them:
   open         in an NPC scene still to review with Chris            -> pause
   check        reviewed, but its wording depends on what the player
                sees; confirm in play                                 -> pause
+  proposed     a change is proposed for it in a review-tool scene not
+               yet applied, so the wording may still change          -> pause
+  behind       the repo's wording differs from the build being
+               played: rebuild and publish before recording it       -> pause
   first-pass   menus, castle and battle text: translated fresh in
                September, screen-checked, no line-by-line second look
 
@@ -22,11 +26,14 @@ first ';'. Lines applied one at a time with Chris (rips/review/approved.json, on
 build machine) and every line of a scene or read-through applied in the review tool
 (rips/review/decisions/) count as reviewed too.
 """
-import json, os, re, sys
+import json, os, re, sys, time
 from collections import Counter, defaultdict
 
 ROOT = os.path.join(os.path.dirname(__file__), '..')
-PAUSE = {'open', 'check', 'ai-reviewed'}
+PAUSE = {'open', 'check', 'ai-reviewed', 'proposed', 'behind'}
+REVIEW = os.path.join(ROOT, 'rips/review')
+PUBLISHED = os.path.join(ROOT, '../Wizardry - Dimguil (English WIP).bin')
+TRACKED = ['EVENTMES.BIN', 'SISETU.OBJ', 'STATUS.OBJ', 'FIGHTMSG.OBJ'] + [f'NPC_MES{n}.OBJ' for n in range(1, 6)]
 
 # Lines to confirm in play (docs/event-review.md, "To check in play or in the code").
 CHECK = {
@@ -96,13 +103,122 @@ def approved():
     return out
 
 
-def table():
-    """status(file, index) -> (status, why); file is the bare name, e.g. 'NPC_MES3.OBJ'."""
-    sc, done = scenes(), approved()
+def review_server():
+    """The review tool's server module, for current wording and copies of a line."""
+    import importlib.util
+    argv, sys.argv = sys.argv, ['server.py']
+    try:
+        spec = importlib.util.spec_from_file_location('reviewserver', os.path.join(ROOT, 'scripts/reviewtool/server.py'))
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+    finally:
+        sys.argv = argv
+    return mod
+
+
+def proposed(done):
+    """{(file, index): why} for lines with a change proposed in a review-tool scene that
+    isn't finished (no decision yet, or only part of it applied), and their copies. A line
+    already reviewed in another scene counts only if the scene reopened it ("revisit"):
+    otherwise the tool folds it away and Chris never sees the proposal."""
+    d = os.path.join(REVIEW, 'scenes')
+    if not os.path.isdir(d):
+        return {}
+    srv = review_server()
+
+    def key(ref):
+        n, i = ref.split(':')
+        return f'NPC_MES{n}.OBJ', int(i)
+    out = {}
+    for name in sorted(os.listdir(d)):
+        if not name.endswith('.json'):
+            continue
+        sc = json.load(open(os.path.join(d, name), encoding='utf-8'))
+        dp = os.path.join(REVIEW, 'decisions', name)
+        dec = json.load(open(dp, encoding='utf-8')) if os.path.exists(dp) else None
+        if dec and not dec.get('partial'):
+            continue
+        settled = {ln['ref'] for rec in ([dec, *dec.get('earlier', [])] if dec else []) for ln in rec.get('lines', [])}
+        for ln in sc.get('lines', []):
+            ref, faithful = ln['ref'], ln.get('faithful')
+            if not faithful or ref in settled or (key(ref) in done and not ln.get('revisit')):
+                continue
+            try:
+                if faithful.strip() == srv.current(ref).strip():
+                    continue
+                copies = srv.copies_of(ref)
+            except (IndexError, KeyError, ValueError):
+                continue
+            why = f'change proposed in review scene {name[:-5]}'
+            for r in [ref, *copies]:
+                out.setdefault(key(r), why)
+    return out
+
+
+def behind(image):
+    """{(file, index): why} for strings whose wording in the repo differs from the build
+    being played, by the commit in the image's .version.txt (publish_test.sh writes it)."""
+    import subprocess
+    vf = re.sub(r'\.bin$', '.version.txt', image or PUBLISHED)
+    if not os.path.exists(vf):
+        return {}
+    commit = open(vf).read().split()[0]
+    out = {}
+    for f in TRACKED:
+        path = f'translations/{f}.json'
+        try:
+            then = json.loads(subprocess.run(['git', '-C', ROOT, 'show', f'{commit}:{path}'],
+                                             capture_output=True, check=True).stdout)
+        except (subprocess.CalledProcessError, ValueError):
+            continue
+        now = json.load(open(os.path.join(ROOT, path), encoding='utf-8'))
+        for sec_then, sec_now in zip(then.get('sections', []), now.get('sections', [])):
+            a, b = sec_then.get('strings', []), sec_now.get('strings', [])
+            for i, (x, y) in enumerate(zip(a, b)):
+                if x.get('translation') != y.get('translation'):
+                    out[(f, sec_now.get('base', 0) + i if 'base' in sec_now else i)] = \
+                        f'reworded since the build ({commit}): rebuild and publish'
+    return out
+
+
+def table(image=None):
+    """status(file, index) -> (status, why); file is the bare name, e.g. 'NPC_MES3.OBJ'.
+    image is the disc being played (default the published one), for "behind". The
+    table rebuilds itself when the review decisions, scenes or translations change, so a
+    long session sees lines reviewed while it runs."""
+    watch = [os.path.join(REVIEW, 'decisions'), os.path.join(REVIEW, 'scenes'),
+             os.path.join(ROOT, 'translations'), os.path.join(ROOT, 'docs/npc-review.md')]
+
+    def stamp():
+        out = []
+        for w in watch:
+            if os.path.isdir(w):
+                out += [(e.name, e.stat().st_mtime) for e in os.scandir(w)]
+            elif os.path.exists(w):
+                out.append((w, os.stat(w).st_mtime))
+        return sorted(out)
+    st = {'stamp': None, 'next': 0}
+
+    def refresh():
+        now = time.time()
+        if now < st['next']:
+            return
+        st['next'] = now + 5
+        s = stamp()
+        if s != st['stamp']:
+            st['stamp'] = s
+            st['sc'], st['done'] = scenes(), approved()
+            st['prop'], st['behind'] = proposed(st['done']), behind(image)
 
     def status(f, i):
+        refresh()
+        sc, done = st['sc'], st['done']
         if (f, i) in CHECK:
             return 'check', CHECK[(f, i)]
+        if (f, i) in st['behind']:
+            return 'behind', st['behind'][(f, i)]
+        if (f, i) in st['prop']:
+            return 'proposed', st['prop'][(f, i)]
         if (f, i) in done:   # a decision in the review tool settles it, ticked in the list or not
             return 'reviewed', 'reviewed with Chris in the review tool'
         if (f, i) in sc:
