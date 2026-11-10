@@ -84,7 +84,23 @@ def patch_table(changes):
                 struct.pack_into('<h', mc, p + 2, ch[a[0]])
                 if os.environ.get('FACES', '1') == '1':
                     struct.pack_into('<h', mc, face_at + 4, ORIG_FACE[ch[a[0]]])
-patch_table(VARIANTS[VARIANT])
+# RAW: halfwords written straight into MCARD (address, value), for variants taken against
+# a disc that already carries the fix (asm/bugfix_zaril_chat_topics.asm), whose table
+# ORIG_FACE can't read the original expressions from.
+RAW = {
+    # 2026-11-10 recommendation against disc adc20ddd: blocks 8 and 11 back to the original
+    # (bar 102 and Gaura's 82 in 8, his 91 in 11); 13 keeps "told them" but Zaril says his
+    # own 95 again, with its own expression (3).
+    'rec': [(0x800a8fca, 102), (0x800a9018, 82), (0x800a9270, 91), (0x800a93c2, 3), (0x800a93c8, 95)],
+}
+if VARIANT == 'orig':            # the original table, from the clean MCARD, on the fixed disc
+    _cl = open('rips/clean/dimguil/MCARD.BIN', 'rb').read()
+    mc[TABLE:TABLE + 14 * 200] = _cl[TABLE:TABLE + 14 * 200]
+elif VARIANT in RAW:
+    for _a, _v in RAW[VARIANT]:
+        struct.pack_into('<h', mc, _a - 0x800a1000, _v)
+else:
+    patch_table(VARIANTS[VARIANT])
 mc = bytes(mc)
 mes5 = open('rips/iso/dimguil/DATA06/NPC_MES5.OBJ', 'rb').read()
 T_ADDR, T_SIZE = struct.unpack_from('<II', exe, 0x18)

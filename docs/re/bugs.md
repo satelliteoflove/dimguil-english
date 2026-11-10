@@ -1152,6 +1152,21 @@ expression along: the fix changes the face op's second operand too (84, 87, 80, 
 needs changing. [emu,
 captures in docs/work/zaril-chat-compare.html]
 
+**Narrowed (Chris, 2026-11-10).** Blocks 8 and 11 go back to the original, and block 13
+keeps the "told them" topic but Zaril says his own 95 again. The evidence that decides it
+is the copies above: Zaril's 80 sits under "something personal" in Fontana's table, right
+after Fontana's 「僕は剣ぐらいしか取り柄がないですよ。」 ("A sword is about all I'm good
+for"), and Gaura's 82 under "something personal" in Balbo's, beside Balbo's swimming and
+Reiran's swordwork: block 8 is a talk about what each of them is good at, as shipped.
+Block 11 only changed to take 82. In block 13, Zaril's 95 comes from a "new information"
+block and Gaura's 97 from a "told them" one; Fontana's table has an unused Zaril line for
+"told them", 3:261 「前にも聞いたぜ,それ。」 ("Heard that one before"), so the writers
+most likely meant that and copied the neighboring 3:243. It isn't in NPC_MES5, so 95
+stays and only the topic changes. The fix is now seven halfwords: topic lines in blocks
+6, 9 and 13, and Fritillaria's 84 and 87 swapped between 9 and 10 with their
+expressions. Checked in the emulator on disc ba9710114fc2f9472d0d72ecc80de59f: every
+block 0-13 plays the intended topic and replies. Page: docs/work/zaril-chat-changes.html.
+
 The table is plain data: MCARD 0x800a8988 + 200 x block (file offset 0x7988), halfword
 ops; the bar operand is the second halfword of a block, each say operand follows its
 opcode 2. The handler copies it to the stack (sp+0x3d8) each frame.

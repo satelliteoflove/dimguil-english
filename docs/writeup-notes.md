@@ -1033,9 +1033,9 @@ save, the game stopped on the town logo over six "Empty" boxes, every time.
 
 ### Zaril's chat: topics that didn't match (2026-11-09)
 
-- Cause: six of the 14 blocks in Zaril's chat table show a bottom-bar topic their
-  replies don't answer ("We asked them something personal." over "you guys are still
-  greenhorns too"), and two of Fritillaria's lines sit in each other's blocks. Found
+- Cause: three of the 14 blocks in Zaril's chat table show a bottom-bar topic their
+  replies don't answer (block 6: "We told them everything we knew." over "Info? Nope.
+  Got nothing."), and two of Fritillaria's lines sit in each other's blocks. Found
   in the NPC review (Chris's question on 5:93, 2026-10-28). Nobody on the Japanese
   boards mentions it: one block plays per Talk, at random.
 - Evidence: every block forced in the emulator (the roll's `jal rand_upto` replaced by
@@ -1043,11 +1043,22 @@ save, the game stopped on the town logo over six "Empty" boxes, every time.
   carry many of the same Japanese lines under their topics, which showed where the
   writers meant them. Portrait expressions turned out to match each of Fritillaria's
   lines in its original block, so a moved line takes its expression along.
-- Fix: operand edits in the table (MCARD 0x800a8988, plain data): four topic lines, a
-  swap of Fritillaria's 84 and 87, Gaura's 82 to block 11 in place of a duplicate, and
-  two reused lines, as the original already reuses three. Chris chose block by block
-  from side-by-side emulator captures (`docs/work/zaril-chat-compare.html`).
+- Fix: operand edits in the table (MCARD 0x800a8988, plain data): three topic lines
+  (blocks 6, 9 and 13) and a swap of Fritillaria's 84 and 87 between blocks 9 and 10,
+  seven halfwords in all. Chris chose block by block from side-by-side emulator
+  captures (`docs/work/zaril-chat-compare.html`).
+- Overshoot, and how it was caught: the first fix (066762c) also changed blocks 8 and 11
+  and moved Zaril's "greenhorns" line into 13, on a reading of what each line answers.
+  Rechecked on 2026-11-10 against the strongest evidence: Zaril's and Gaura's lines are
+  word-for-word copies of their lines in Fontana's and Balbo's tables (they used to be in
+  those parties), and those tables give each line's topic. Block 8's two copied lines
+  both sit under "something personal" there (Fontana's block is a talk about what each
+  of them is good at), so block 8 was right as shipped, and 11 only changed to make room.
+  Rule kept: where a block's Zaril and Gaura lines agree on a source topic, that's the
+  writers' topic; reading alone doesn't override it.
 - Side change: the "news" topic line became "We asked if they had any new
   information." (新しい情報), since the replies answer a request for information.
-- Commit 066762c; checked on disc adc20dddf08da772cd4e42c1c93fb503, all 14 blocks.
-  Before/after shots: `rips/zarilfix/verify/` and the worktree's `preview/` captures.
+- Commits 066762c and the narrowing; checked on disc ba9710114fc2f9472d0d72ecc80de59f,
+  all 14 blocks (`rips/zarilfix/verify2/`); the original table on the same disc in
+  `rips/zarilfix/orig/` (zpreview.py VARIANT=orig). The first fix's shots are in
+  `rips/zarilfix/verify/`.
