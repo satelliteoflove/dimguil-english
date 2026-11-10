@@ -1103,6 +1103,14 @@ Findings from `docs/textcheck-c13-15.md`, reviewed with Chris one at a time.
 
 ## To revisit
 
+- **Zaril's chat placements (bugs.md 2.10; Chris, 2026-11-10).** The table fix is a
+  best effort and may still need review or corrections. Zaril's and Gaura's placements
+  rest on their copies in Fontana's and Balbo's tables; Fritillaria's on reading alone.
+  Left as shipped: his 5:93 ("Whoa, awesome! You guys are good!") under "We asked them
+  about themselves", which reads like a reaction to being told something. Watch the
+  chat in the play-through; the compare pages are docs/work/zaril-chat-changes.html
+  and zaril-chat-table.html.
+
 - **"Searching" and the game's first dot (SISETU 441; Chris, 2026-10-17: polish later).**
   With its own dots gone, the animation's first dot lands 1 px after the "g", so it can
   read as "Searching." before the rest of the row. Tiny; a leading or trailing space, or

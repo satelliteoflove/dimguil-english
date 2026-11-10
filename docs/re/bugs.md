@@ -1174,6 +1174,15 @@ them" topic. With 3:261 out of reach, block 13 now uses his own "told them" repl
 halfwords in all. Checked on disc 97b6d91f9ba982e18e722dfb0ae2cd61: every block 0-13
 plays the intended topic and replies (rips/zarilfix/verify3).
 
+**Settled (Chris, 2026-11-10): blocks 1 and 12 stay as shipped.** Rechecked on request:
+Fritillaria's 58 (scowl) under "told them" reads as a grumble at being told things, like
+Zaril's "And? So what?" beside it; his 93 (「スッゲー! ヤルじゃん!」, mild smile) under "about
+themselves" has nothing from the party to praise, and would fit "told them". The only
+fix without new text is the 58/93 swap, declined again. Published on disc 97b6d91f
+(round 2026-11-10T09:02:56, 344/344). The fix is a best effort: Fritillaria's lines have
+no copies in other tables, so his placements rest on reading alone, and more review or
+corrections may still be needed. Listed in the release-notes outline's known issues.
+
 The table is plain data: MCARD 0x800a8988 + 200 x block (file offset 0x7988), halfword
 ops; the bar operand is the second halfword of a block, each say operand follows its
 opcode 2. The handler copies it to the stack (sp+0x3d8) each frame.

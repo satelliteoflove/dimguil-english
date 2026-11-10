@@ -383,6 +383,12 @@ patch. Nothing is decided about whether that happens. [ROADMAP "Maybe later"]
    "arachne"; Anointed Mace; Demon's Staff; Amulet of Matokani; other uses of "comrade";
    Fontana's maze-encounter voice; events 234/236; event 288 (confirm in play).
    [tn "To revisit"; event-review.md "Still open", "To check in play"]
+8. **Zaril's party chat: some replies may still sit under the wrong topic.** The game
+   shipped several chat blocks whose topic line the replies didn't answer. The patch
+   moves three topic lines and three lines (bugs.md 2.10), a best effort from the
+   Japanese and the other parties' tables; more review or corrections may still be
+   needed. Fritillaria's "Whoa, awesome! You guys are good!" under "We asked them about
+   themselves" stays as shipped (Chris, 2026-11-10). [bugs.md 2.10; tn "To revisit"]
 8. **Event page 309** ends on a page break with no wait, so the box clears at once; the
    Japanese is built the same way. [event-review.md "Real event box sweep"]
 9. **English-only** is now stated in README.md, docs/release-readme.txt and CHANGELOG.md
