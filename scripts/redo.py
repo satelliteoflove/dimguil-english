@@ -276,10 +276,17 @@ def main():
     open(cfg, 'w').write(REDO_CFG)
     cue = os.path.splitext(a.bin)[0] + '.cue'
     ralog = os.path.join(play, 'logs', f'{stamp}-retroarch.log')
-    subprocess.Popen(['retroarch', f'--appendconfig={play}/retroarch-dimguil.cfg|{cfg}',
-                      '-L', CORE, cue], stdout=open(ralog, 'w'), stderr=subprocess.STDOUT,
-                     stdin=subprocess.DEVNULL, start_new_session=True)
+    rap = subprocess.Popen(['retroarch', f'--appendconfig={play}/retroarch-dimguil.cfg|{cfg}',
+                            '-L', CORE, cue], stdout=open(ralog, 'w'), stderr=subprocess.STDOUT,
+                           stdin=subprocess.DEVNULL, start_new_session=True)
     if not wait_status(ra, ('PLAYING', 'PAUSED'), 60):
+        if rap.poll() is not None:
+            # RetroArch 1.20 segfaults a few seconds in when player 1 is reserved for a
+            # device that isn't connected (input_player1_device_reservation_type "1" in
+            # retroarch-dimguil.cfg; found 2026-11-09, rips/agents/redotest)
+            sys.exit(f'RetroArch quit at launch (exit {rap.returncode}); see {ralog}. If the '
+                     'Xbox controller is off, turn it on and run this again: RetroArch crashes '
+                     'with player 1 reserved for a controller that is not there.')
         sys.exit(f'RetroArch did not come up; see {ralog}')
     if ra.status() == 'PLAYING':
         ra.send('PAUSE_TOGGLE')

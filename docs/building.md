@@ -83,6 +83,14 @@ The tools:
   conversation, on the new build (with the file tables in RAM brought up to date), and
   records the replay; `splice.py` then finds the frame where the replay joins the old
   recording, matching the sound sample for sample, and keeps the cut in `cuts.json`.
+  Tested for real on 2026-11-09 (`rips/agents/redotest` in its worktree): a state on
+  disc A before Guy's party, a fix that grew NPC_MES1 by a sector, and the replay showed
+  the new greeting on screen and in the recording, with all 11 sectors loaded through
+  the rewritten tables. Two things it depends on: RetroArch 1.20 segfaults at launch
+  when player 1 is reserved for the Xbox controller and the controller is off, and
+  recording needs the image named `Wizardry - Dimguil (English WIP)`, whose per-game
+  core options pick the software renderer (with the hardware renderer RetroArch
+  refuses to record: "Libretro core is hardware rendered").
 - Playtesting in DuckStation: `mktestsave.py` makes a memory card with a ready party
   (`rips/testsave.mcd`), `use_testsave.sh` swaps it into DuckStation's slot (and
   `--restore` puts your own card back), and `publish_test.sh` copies the build next to
