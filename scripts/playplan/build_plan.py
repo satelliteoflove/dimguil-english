@@ -3,7 +3,10 @@
 import json, os, re, sys, glob, collections
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 sys.path.insert(0, os.path.join(ROOT, 'scripts'))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import textstatus
+import review_scenes
+WHERE, TITLES = review_scenes.where()
 from textbuf import strings
 
 PAUSE = textstatus.PAUSE
@@ -164,11 +167,15 @@ for (f, i), e in evid.items():
             e['note'] += f"; moved to ch. {pf}, where the party first appears"
 out = collections.defaultdict(list)
 unplaced = []
+behind = []
 allpaused = 0
 for f in SIZES:
     for i in range(SIZES[f]):
         st, why = status(f, i)
         if st not in PAUSE: continue
+        if st == 'behind':          # reviewed and committed; the next build carries it
+            behind.append(f'{f}:{i}')
+            continue
         allpaused += 1
         sid = SEC.get((f, i))
         si = SECINFO.get(sid, {})
@@ -176,7 +183,10 @@ for f in SIZES:
         party = si.get('party', PARTY[f])
         if f == 'EVENTMES.BIN': scene = 'Event script: ' + why
         row = dict(file=f, index=i, status=st, scene=scene, party=party)
-        if st == 'open': row['review_scene'] = why
+        ref = f'{f[7]}:{i}' if f.startswith('NPC_MES') else None
+        if ref in WHERE:
+            row['review_scene'] = WHERE[ref]
+            row['review_title'] = TITLES[WHERE[ref]]
         e = evid.get((f, i))
         if e:
             row.update(chapter=e['chapter'], evidence=e['evidence'])
@@ -195,6 +205,7 @@ for f in SIZES:
 
 res = {str(c): out.get(str(c), []) for c in PLAY}
 res['unplaced'] = unplaced
+res['behind'] = behind
 json.dump(res, open(os.path.join(ROOT, 'rips/playplan/npc-by-chapter.json'), 'w'), indent=1, ensure_ascii=False)
 print('runs scanned', runs_seen, 'paused total', allpaused, 'unplaced', len(unplaced))
 for c in PLAY:

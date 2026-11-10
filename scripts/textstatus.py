@@ -98,8 +98,9 @@ def approved():
     for name in sorted(os.listdir(d)) if os.path.isdir(d) else []:
         if name.endswith('.json'):
             dec = json.load(open(os.path.join(d, name), encoding='utf-8'))
-            out |= {key(ln['ref']) for ln in dec.get('lines', [])}
-            out |= {key(r) for ln in dec.get('lines', []) for r in ln.get('copies', []) + ln.get('carried', [])}
+            for rec in [dec, *dec.get('earlier', [])]:   # earlier: the parts applied before
+                out |= {key(ln['ref']) for ln in rec.get('lines', [])}
+                out |= {key(r) for ln in rec.get('lines', []) for r in ln.get('copies', []) + ln.get('carried', [])}
     return out
 
 
@@ -114,6 +115,29 @@ def review_server():
     finally:
         sys.argv = argv
     return mod
+
+
+def with_copies(done):
+    """done, plus the copies of its NPC lines (same Japanese, or the same person under
+    another tag) whose wording is the reviewed line's word for word: reviewing one reviews
+    them all, though the decision may not name every copy."""
+    if not os.path.isdir(os.path.join(REVIEW, 'scenes')):
+        return done
+    srv = review_server()
+    out = set(done)
+    for f, i in done:
+        if not f.startswith('NPC_MES'):
+            continue
+        ref = f'{f[7]}:{i}'
+        try:
+            cur = srv.current(ref)
+            for c in srv.copies_of(ref):
+                n, j = c.split(':')
+                if (f'NPC_MES{n}.OBJ', int(j)) not in out and srv.as_copy(cur, c) == srv.current(c):
+                    out.add((f'NPC_MES{n}.OBJ', int(j)))
+        except (IndexError, KeyError, ValueError):
+            continue
+    return out
 
 
 def proposed(done):
@@ -207,7 +231,7 @@ def table(image=None):
         s = stamp()
         if s != st['stamp']:
             st['stamp'] = s
-            st['sc'], st['done'] = scenes(), approved()
+            st['sc'], st['done'] = scenes(), with_copies(approved())
             st['prop'], st['behind'] = proposed(st['done']), behind(image)
 
     def status(f, i):
