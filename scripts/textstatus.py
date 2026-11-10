@@ -19,6 +19,10 @@ Statuses, and whether the monitor pauses on them:
   first-pass   menus, castle and battle text: translated fresh in
                September, screen-checked, no line-by-line second look
 
+Separately, ZARIL_CHAT lists the Zaril chat blocks touched by the topic fix (bugs.md
+2.10); the monitor pauses once at the start of each of those chats, whatever the lines'
+status, and says what changed in that block.
+
 The NPC scenes come from the items under "Remaining scenes" in docs/npc-review.md:
 unticked ones are open, ticked ones reviewed, so ticking a scene there is what marks it
 reviewed. A scene's indices are taken from the parenthesis after its title, up to the
@@ -39,6 +43,21 @@ TRACKED = ['EVENTMES.BIN', 'SISETU.OBJ', 'STATUS.OBJ', 'FIGHTMSG.OBJ'] + [f'NPC_
 CHECK = {
     ('EVENTMES.BIN', 288): 'which switch this is: "set into the wall" is wrong if it is the frog statue',
 }
+# Zaril's chat blocks that bugs.md 2.10 changed or looked at (Chris, 2026-11-10: tell me
+# when one plays, so I watch it closely). Lines as the fixed table plays them; 5:57 is in
+# blocks 1 and 13, so the monitor reads the block number from the game.
+ZARIL_CHAT = {
+    1: ((57, 58, 59), 'as shipped; Fritillaria\'s "You got business with me?" under "told them" was looked at and kept'),
+    6: ((74, 75, 76), 'topic changed: "told them" -> "new information"'),
+    8: ((80, 81, 82), 'as shipped; a change was built and then reverted (all about what they\'re good at)'),
+    9: ((83, 87, 85), 'topic changed to "new information"; Fritillaria\'s "nothing new to spill" moved here from block 10'),
+    10: ((86, 84, 88), 'Fritillaria\'s story of Zaril saving him moved here from block 9'),
+    11: ((89, 90, 91), 'as shipped; a change was built and then reverted'),
+    12: ((92, 93, 94), 'as shipped; Fritillaria\'s "Whoa, awesome! You guys are good!" under "about themselves" was kept'),
+    13: ((57, 96, 97), 'topic changed to "told them"; Zaril\'s "And? So what?" reused from block 1'),
+}
+WATCH = {('NPC_MES5.OBJ', i) for lines, _ in ZARIL_CHAT.values() for i in lines}
+
 # Reviewed scenes that the list names only in prose.
 EXTRA_REVIEWED = {('NPC_MES3.OBJ', i): 'NPC_MES3 scene 5: Lilia wants out' for i in (257, 258)}
 # Open lines that the scene list names only in a note ("17 shared with NPC_MES1 79").

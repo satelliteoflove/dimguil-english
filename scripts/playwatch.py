@@ -31,7 +31,9 @@ played (read from the disc image itself, so it always matches what's on screen) 
 textstatus.py says it's open or to be checked, pauses RetroArch and says why. Unpause
 to carry on. Text it can't match is logged; if it has Japanese in it, that pauses too,
 and so does text from an earlier build that this one has changed (after a redo, a line
-the state already had in memory).
+the state already had in memory). It also pauses once at the start of each Zaril chat
+block on textstatus.ZARIL_CHAT's watch list (the blocks bugs.md 2.10 changed or looked
+at) and says what changed in that block, so Chris can watch it closely.
 
 After a fix, redo.py restarts the game from a save state on the new build; it runs this
 with --from-state.
@@ -50,6 +52,7 @@ SCREEN = 0x793ec                          # the game's 320x240 screen setup (two
                                           # written as the ASCII logo starts to fade in;
                                           # 0xff filler before that
 CODE_AT = 0x10000                         # where the executable's code is loaded
+TALK_PARTY, TALK_BLOCK, TALK_COUNT = 0x79797, 0x79bb4, 0x79be8   # Zaril = party 4; chat block; Talk presses
 LAYER_USED = 0x79938                      # glyph sprites in use per text layer (4 x s16)
 LAYER_SIZE = 0x8b390                      # per layer: first sprite, size, offset (4 x 3 s16)
 FILES = ['DATA06/EVENTMES.BIN'] + [f'DATA06/NPC_MES{n}.OBJ' for n in range(1, 6)] + \
@@ -310,6 +313,7 @@ class Session:
         self.status_of = textstatus.table(a.bin)
         self.last_head = None
         self.last_id = None
+        self.last_chat = None       # (block, Talk press) of the last Zaril chat flagged
         self.first = True           # what's in the buffer at the start was already shown
         self.staged = None          # what the staging area holds, as staged_name() says
         self.full = set()           # text layers at their size at the last check
@@ -389,6 +393,13 @@ class Session:
                     break
         self.last_id = f'{f}:{i}' if hit else None
         pause = (st in textstatus.PAUSE or st in ('japanese', 'stale')) and not self.first
+        watch = self.zaril_chat(f, i) if hit else None
+        if not hit or (f, i) not in textstatus.WATCH:
+            self.last_chat = None           # any other line ends the chat
+        if watch:
+            why = f'{why}; {watch}' if pause else watch
+            st = st if pause else 'watch'
+            pause = not self.first
         self.log('text', file=f, index=i, status=st, staged=self.staged_name(staged),
                  frame=self.frame(), text=shown,
                  paused=pause and not self.a.no_pause, **({'already_shown': True} if self.first else {}))
@@ -399,6 +410,19 @@ class Session:
         self.check_layers(shown)
         if pause:
             self.stop(f'{tag} {st}: {why}', shown)
+
+    def zaril_chat(self, f, i):
+        """A note when a line of a Zaril chat block on the watch list starts a new chat."""
+        if (f, i) not in textstatus.WATCH:
+            return None
+        m = self.ra.read(TALK_PARTY, 1), self.ra.read(TALK_BLOCK, 1), self.ra.read(TALK_COUNT, 1)
+        if None in m or m[0][0] != 4 or m[1][0] not in textstatus.ZARIL_CHAT:
+            return None
+        blk, press = m[1][0], m[2][0]
+        if i not in textstatus.ZARIL_CHAT[blk][0] or (blk, press) == self.last_chat:
+            return None
+        self.last_chat = (blk, press)
+        return f'Zaril chat block {blk} (bugs.md 2.10): {textstatus.ZARIL_CHAT[blk][1]}. Watch it closely.'
 
     def stop(self, reason, shown):
         if not self.a.no_pause and self.ra.status() == 'PLAYING':
