@@ -509,7 +509,10 @@ Links: 3:13 = 5:5, 3:23 = 5:9 (Zaril), 3:22 vs 5:8.
 Zaril 33-38 (wants your splendid equipment 36; the sanctity of life 37, for a party with a
 high kill count (Inferred); "Hey there, comrade" 38, trigger unknown); Artemisia 39-43; Lilia
 44-50; Cephala 51-59 (gives a broke party 100 Gp 54, the meowing of your cat-people 55,
-big brothers and sisters, items love you, the Muramasa for Fontana 59); Reiran 60-66.
+big brothers and sisters, items love you, the Muramasa for Fontana 59; conditions read in
+the code, FUN_800d4da4: 54 when the party has no gold at all, else 55 when every member
+is a Felpurr, 56 when every member is male and 20-39, 57 when every member is female and
+20-39); Reiran 60-66.
 Links: 3:33-38 ~ 5:20-25 (Zaril's versions); 3:39-43 = 2:67-71; 3:44-50 = 1:293-294,
 73-77; 3:60-66 = 2:58-64.
 
