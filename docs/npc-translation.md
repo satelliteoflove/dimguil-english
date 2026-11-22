@@ -184,8 +184,15 @@ What marks each one in the Japanese, and what that becomes in English:
 - **Fontana**. 僕, polite ですよ. Earnest young samurai, polite and a bit
   unsure of himself; real name Kikunoshin, renamed by Zaril. Proper, eager, a little
   stiff, "sir"/"ma'am" optional.
-- **Cephala**. わたし, polite ですね, clumsy (えいっ! あいたーっ). Sweet, earnest
-  bishop girl, a little ditzy, sometimes a sly giggle. Polite and soft, trailing "...".
+- **Cephala**. わたし, です/ます, humble forms (差し上げます, 我がリーダー), ・・・ pauses;
+  plain speech only with friends (冷たいね,アルテミシアは) or when flustered (ごめんね). A
+  13-year-old elf Bishop, prim and well-mannered, shy and terse with strangers. Under the
+  manners she's dry and a little sly: the クックッ chuckle, a kid's blunt verdicts on
+  grown-ups, the "I'm just a girl of 13" card, keeping score ("You owe me one"). Kind, a
+  bit from above ("you poor things"). Clumsy only when an identify goes wrong; not ditzy,
+  since she knows her magic and the Temple's odds. Polite, soft-spoken English in full
+  sentences, contractions fine, the deadpan left dry rather than explained (Chris,
+  2026-11-21).
 - **Rosea**. わたし, かしら, gentle feminine. The kind healer. Soft, warm, refined,
   worries about others.
 - **Alba**. 私 / 俺, terse, ・・・. Ranger with a dark past. Few words, weary, pauses
