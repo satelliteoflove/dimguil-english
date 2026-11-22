@@ -1006,6 +1006,13 @@ is "there's something about it"; "crazy dangerous" keeps ヤバイ's slang. In 3
 imagines the party asking. "Hello? You already told me that." (2:247) and "know any good
 ways to score some cash?" (2:242) stay.
 
+Rosea's voice, part 1 (voice-rosea-1). Her service lines move toward the Japanese:
+"Forgive me if I get it wrong. Well, let me have a look." for 失敗したらごめんなさい。
+とりあえず,見てみますね。 (2:137), and "Oh? But that person doesn't seem to have any
+unidentified items." for the trailing だけど? (2:136). Her introduction (2:104) and her
+failed cure (2:126, "Oh... It's no good... I'm sorry.") are one page each now, where the
+Japanese had two (Chris).
+
 The "news" Talk topic (topic-news, 2026-11-09). The bottom-bar line 何か新しい情報はないかと
 尋ねてみた was "We asked if they had any news." 情報 is "information", wider than news, and
 the replies under it answer a request for information: tips and directions as well as

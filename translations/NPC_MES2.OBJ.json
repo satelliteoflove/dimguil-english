@@ -635,7 +635,7 @@
                 {
                     "length": 59,
                     "source": "NA",
-                    "translation": "Rosea\n\"I'm Rosea, a Bishop.\n\r Leave identifying to me!\n Pleased to meet you.\"",
+                    "translation": "Rosea\n\"I'm Rosea, a Bishop. Leave identifying to me!\n Pleased to meet you.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -767,7 +767,7 @@
                 {
                     "length": 61,
                     "source": "NA",
-                    "translation": "Rosea\n\"Oh... It's no good...\n\r I'm sorry.\n I don't have a spell that can cure them.\"",
+                    "translation": "Rosea\n\"Oh... It's no good... I'm sorry.\n I don't have a spell that can cure them.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -827,13 +827,13 @@
                 {
                     "length": 42,
                     "source": "NA",
-                    "translation": "Rosea\n\"That person doesn't seem to have\n any unidentified items, though?\"",
+                    "translation": "Rosea\n\"Oh? But that person doesn't seem\n to have any unidentified items.\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 76,
                     "source": "NA",
-                    "translation": "Rosea\n\"Identify an item?\n\r Sorry in advance if I fail.\n Anyway, let me have a look.\n Whose is it?\"",
+                    "translation": "Rosea\n\"Identify an item?\n\r Forgive me if I get it wrong.\n Well, let me have a look.\n Whose is it?\"",
                     "addStringTerminator": true
                 },
                 {
