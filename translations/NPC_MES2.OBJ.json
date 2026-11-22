@@ -1193,7 +1193,7 @@
                 {
                     "length": 85,
                     "source": "NA",
-                    "translation": "Rosea\n\"I met someone who felt rather frightening.\n\r Coming into this Shrine all alone...\n I can hardly believe it......\"",
+                    "translation": "Rosea\n\"I met someone with a rather frightening air.\n\r Coming into this Shrine all alone...\n I can hardly believe it......\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1241,7 +1241,7 @@
                 {
                     "length": 30,
                     "source": "NA",
-                    "translation": "Rosea\n\"Are there no half-bloods in this\n country, I wonder?\"",
+                    "translation": "Rosea\n\"Are there no other half-bloods in\n this country, I wonder?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1313,7 +1313,7 @@
                 {
                     "length": 46,
                     "source": "NA",
-                    "translation": "Rosea\n\"......\n I see, so that happened.\n\r Do be careful.\"",
+                    "translation": "Rosea\n\"......\n I see... So that's what happened.\n\r Do be careful.\"",
                     "addStringTerminator": true
                 },
                 {

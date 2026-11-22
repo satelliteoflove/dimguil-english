@@ -1012,6 +1012,11 @@ Rosea's voice, part 1 (voice-rosea-1). Her service lines move toward the Japanes
 unidentified items." for the trailing だけど? (2:136). Her introduction (2:104) and her
 failed cure (2:126, "Oh... It's no good... I'm sorry.") are one page each now, where the
 Japanese had two (Chris).
+Part 2 (voice-rosea-2), her chat lines. 怖い感じのする人 is "someone with a rather
+frightening air" (2:197), not one who "felt" frightening. そう,そんなことがあったの is the
+sympathetic "I see... So that's what happened." (2:217), not the deadpan "so that
+happened". ハーフの人 stays "half-bloods", and "Are there no other half-bloods in this
+country" makes it plain she means people like herself (2:205, Chris).
 
 The "news" Talk topic (topic-news, 2026-11-09). The bottom-bar line 何か新しい情報はないかと
 尋ねてみた was "We asked if they had any news." 情報 is "information", wider than news, and
