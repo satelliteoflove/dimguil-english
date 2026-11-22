@@ -88,7 +88,7 @@ with the chapter and the string's new wording, to carry over to the site.
 |---|---|---|
 | Alstron | NPC_MES1 209 | Young Zaril had a mere two companions with him. My, my. How very reckless of him. |
 | Lychee | NPC_MES1 210 | But Lychee turned him down, just like she's supposed to! |
-| Reiran | NPC_MES3 9 | I helped these kids out as a part-time gig, and my alignment totally went and changed on me. |
+| Reiran | NPC_MES3 9 | I helped these kids out as a part-time gig, and my alignment went and changed on me. |
 | Cephala | NPC_MES3 200 | Grown-ups are so complicated. |
 | Bergamot | NPC_MES4 109 | one of 'em, what's-his-name, came back this time with a different crowd |
 | Zaril | NPC_MES5 119 | Whoa!! |
@@ -210,7 +210,7 @@ with the chapter and the string's new wording, to carry over to the site.
 | Balbo | NPC_MES2 142 | Us Evil types don't usually go in for good deeds |
 | Balbo | NPC_MES2 144 | Besides, those guys had some mighty fine gear on 'em. |
 | Balbo | NPC_MES2 226 | Not that there's anyplace to swim down here. |
-| Reiran | NPC_MES2 235 | Lately I'm, like, totally hooked on setting off teleporter traps on purpose. |
+| Reiran | NPC_MES2 235 | Lately I've been hooked on getting caught in teleporter traps on purpose. |
 | Balbo | NPC_MES2 231 | but the guy's too damn gloomy for his own good. |
 | Rosea | NPC_MES2 54 | It was once a safe way to get home, but now every item you carry vanishes. |
 | Balbo | NPC_MES2 179 | Must be nice, bein' born with a silver spoon. |

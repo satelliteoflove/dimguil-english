@@ -994,6 +994,17 @@ yourselves" (無理しない, 2:63), "That's impressive" for 素晴らしいで�
 (2:64), "I did meet this crazy guy" (危ない人になら, 2:178), "Looks like you're the same as
 ever" (あいかわらず, 2:19). Her introduction is "Hi~, nice to meet you" (2:105, 3:116,
 Chris). "Ew. Creepy." (2:172) stays; Chris kept it.
+Part 2 (voice-reiran-2), her chat lines and her Fontana's-party greeting. The last
+"like"s and "totally"s go (2:230, 3:9, 3:11). あたしもがんばろっと is just "I'll do my best
+too." (2:220, Chris). なーんの収穫もないの。ヤンなっちゃう。 is "Haven't found a single
+thing. It's getting me down." (2:225, 3:270, Chris), not "I'm so over it". The teleporter
+hobby is "Lately I've been hooked on getting caught in teleporter traps on purpose. I
+know it's crazy dangerous, but there's something about the feeling of getting sucked
+in." (2:235, Chris): ひっかかる is getting caught, not "setting off", and なんかいいのよね
+is "there's something about it"; "crazy dangerous" keeps ヤバイ's slang. In 3:9 なんで
+あたしがここにいるかって? is "What, why am I with these guys?", the question she
+imagines the party asking. "Hello? You already told me that." (2:247) and "know any good
+ways to score some cash?" (2:242) stay.
 
 The "news" Talk topic (topic-news, 2026-11-09). The bottom-bar line 何か新しい情報はないかと
 尋ねてみた was "We asked if they had any news." 情報 is "information", wider than news, and

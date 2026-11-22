@@ -707,13 +707,13 @@
           ],
           "strings": "NPC_MES3 9, 11, 197-200",
           "placement": "Inferred: Reiran (Balbo's ninja in NPC_MES2) joins Fontana's party in Zaril's place after the quarrel (harano: the parties change after chapter 8). This is the first chapter after it, and the one where you meet Zaril's new party (x12y11), which Cephala's gossip refers to.",
-          "blurb": "Fontana's party has a new ninja: Reiran, late of Balbo's party. Ask her why and she shrugs it off: \"I helped these kids out as a part-time gig, and my alignment totally went and changed on me.\" Cephala, who is thirteen, has heard Zaril left because he wanted to lead, and doesn't see the point: \"Grown-ups are so complicated.\"",
+          "blurb": "Fontana's party has a new ninja: Reiran, late of Balbo's party. Ask her why and she shrugs it off: \"I helped these kids out as a part-time gig, and my alignment went and changed on me.\" Cephala, who is thirteen, has heard Zaril left because he wanted to lead, and doesn't see the point: \"Grown-ups are so complicated.\"",
           "quotes": [
             {
               "file": "NPC_MES3",
               "idx": 9,
               "speaker": "Reiran",
-              "text": "I helped these kids out as a part-time gig, and my alignment totally went and changed on me."
+              "text": "I helped these kids out as a part-time gig, and my alignment went and changed on me."
             },
             {
               "file": "NPC_MES3",
@@ -1755,7 +1755,7 @@
           ],
           "strings": "NPC_MES2 226-242",
           "placement": "Anytime: personal questions.",
-          "blurb": "Ask them something personal and Balbo brags that he's a strong swimmer, then admits, \"Not that there's anyplace to swim down here.\" Reiran confesses a hobby: \"Lately I'm, like, totally hooked on setting off teleporter traps on purpose.\"",
+          "blurb": "Ask them something personal and Balbo brags that he's a strong swimmer, then admits, \"Not that there's anyplace to swim down here.\" Reiran confesses a hobby: \"Lately I've been hooked on getting caught in teleporter traps on purpose.\"",
           "quotes": [
             {
               "file": "NPC_MES2",
@@ -1767,7 +1767,7 @@
               "file": "NPC_MES2",
               "idx": 235,
               "speaker": "Reiran",
-              "text": "Lately I'm, like, totally hooked on setting off teleporter traps on purpose."
+              "text": "Lately I've been hooked on getting caught in teleporter traps on purpose."
             }
           ],
           "source": "NPC_MES2"

@@ -65,7 +65,7 @@
                 {
                     "length": 137,
                     "source": "NA",
-                    "translation": "Reiran\n\"Long time no see!\n Get any stronger?\n\r ......\n Why am I here?\n\r Like, what was I supposed to do? I helped\n these kids out as a part-time gig, and my\n alignment totally went and changed on me.\"",
+                    "translation": "Reiran\n\"Long time no see!\n Get any stronger?\n\r ......\n What, why am I with these guys?\n\r What was I supposed to do? I helped\n these kids out as a part-time gig, and my\n alignment went and changed on me.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -77,7 +77,7 @@
                 {
                     "length": 34,
                     "source": "NA",
-                    "translation": "Reiran\n\"I've heard, like, all kinds of stuff\n about you guys. Nice to meetcha.\"",
+                    "translation": "Reiran\n\"I've heard all kinds of stuff about\n you guys. Nice to meetcha.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -1631,7 +1631,7 @@
                 {
                     "length": 29,
                     "source": "NA",
-                    "translation": "Reiran\n\"Haven't found a thing. Ugh, I'm so over it.\"",
+                    "translation": "Reiran\n\"Haven't found a single thing. It's getting me down.\"",
                     "addStringTerminator": true
                 },
                 {
