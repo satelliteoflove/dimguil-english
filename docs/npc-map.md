@@ -534,7 +534,7 @@ Priestess too, still green, no leads; let's trade information.
 Where: Area A B2F x6y11 (Walkthrough, WT ch. 8). 75 the unnamed version (Zaril says he's
 quitting). 76-87 the quarrel: Artemisia has had it, "You're not fit to be leader", Zaril
 leaves; Lilia agrees he'd do fine alone and suggests making Zaril leader; Artemisia's
-"Well, take care!" and Cephala's "That's cold of you". 88-89 Fontana, embarrassed: the
+"Well, take care!" and Cephala's "You're ice cold, Artemisia". 88-89 Fontana, embarrassed: the
 party will split up for now.
 Links: the Roster change (Who moves where); 1:207-210, 2:185-187, 3:197-200, 4:108-110;
 5:27-28; S28.

@@ -1940,13 +1940,13 @@
           ],
           "strings": "NPC_MES3 55",
           "placement": "Generic: a reaction to the player's party's race (cat-folk in the party, presumably).",
-          "blurb": "Bring enough cat-people into the maze and Cephala notices: \"So it's you, is it? The reason this maze has been so full of meowing lately.\"",
+          "blurb": "Bring a party of nothing but Felpurrs and Cephala notices: \"Is it you, then? The reason this maze has been so noisy with meowing lately?\"",
           "quotes": [
             {
               "file": "NPC_MES3",
               "idx": 55,
               "speaker": "Cephala",
-              "text": "So it's you, is it? The reason this maze has been so full of meowing lately."
+              "text": "Is it you, then? The reason this maze has been so noisy with meowing lately?"
             }
           ],
           "flags": "The trigger isn't in the text. I'm assuming Felpurrs (the patch's spelling) in the party; check before the site says so.",

@@ -222,7 +222,7 @@ with the chapter and the string's new wording, to carry over to the site.
 | Fontana | NPC_MES3 248 | But by the next day it had gone back... |
 | Cephala | NPC_MES3 253 | I suppose it was lost for a reason. |
 | Artemisia | NPC_MES3 256 | I was sure 'Likaton' would be fine... |
-| Cephala | NPC_MES3 55 | So it's you, is it? The reason this maze has been so full of meowing lately. |
+| Cephala | NPC_MES3 55 | Is it you, then? The reason this maze has been so noisy with meowing lately? |
 | Cresson | NPC_MES4 138 | You ate them yesterday, with Cleo. Don't you remember? |
 | Bergamot | NPC_MES4 127 | Ancient tongues, magic circles... writin', in short. |
 | Bergamot | NPC_MES4 11 | I can't make head nor tail of these ancient glyphs meself. |

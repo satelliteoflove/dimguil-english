@@ -341,7 +341,7 @@
                 {
                     "length": 56,
                     "source": "NA",
-                    "translation": "Cephala\n\"So it's you, is it? The reason this maze\n has been so full of meowing lately.\"",
+                    "translation": "Cephala\n\"Is it you, then? The reason this maze\n has been so noisy with meowing lately?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -359,13 +359,13 @@
                 {
                     "length": 57,
                     "source": "NA",
-                    "translation": "Cephala\n\"Heh heh. Items seem awfully fond of you.\n What a funny person you are,\n\r {ff12}.\"",
+                    "translation": "Cephala\n\"Heh heh. To have an item so attached to you...\n What an amusing person you are, {ff12}.\"",
                     "addStringTerminator": true
                 },
                 {
                     "length": 80,
                     "source": "NA",
-                    "translation": "Cephala\n\"What a splendid katana. Is that the\n legendary Muramasa?\n\r Would you please give it to\n our leader, Fontana?\"",
+                    "translation": "Cephala\n\"What a splendid katana.\n Is that the legendary Muramasa?\n\r Would you please give it\n to our leader, Fontana?\"",
                     "addStringTerminator": true
                 },
                 {
@@ -533,7 +533,7 @@
                 {
                     "length": 22,
                     "source": "NA",
-                    "translation": "Cephala\n\"That's cold of you, Artemisia.\"",
+                    "translation": "Cephala\n\"You're ice cold, Artemisia.\"",
                     "addStringTerminator": true
                 },
                 {
@@ -803,7 +803,7 @@
                 {
                     "length": 67,
                     "source": "NA",
-                    "translation": "Cephala\n\"It seems some of you are hurt.\n\r That's fine. Who shall I heal?\"",
+                    "translation": "Cephala\n\"It seems some of you are hurt.\n\r Of course. Who should I heal?\"",
                     "addStringTerminator": true
                 },
                 {

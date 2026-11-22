@@ -1018,6 +1018,15 @@ sympathetic "I see... So that's what happened." (2:217), not the deadpan "so tha
 happened". ハーフの人 stays "half-bloods", and "Are there no other half-bloods in this
 country" makes it plain she means people like herself (2:205, Chris).
 
+Cephala's voice, part 1 (voice-cephala-1). 3:55 plays only for a party of nothing but
+Felpurrs (read in the code), so ミャアミャアと騒がしい stays "noisy with meowing": "Is it
+you, then? The reason this maze has been so noisy with meowing lately?", a question as
+in the Japanese, not the British "So it's you, is it?". 3:58 plays when someone carries
+a cursed item, so そんなにアイテムに好かれている is "To have an item so attached to you...",
+and 面白い方 is "amusing". 冷たいね,アルテミシアは describes Artemisia, not her goodbye:
+"You're ice cold, Artemisia." rather than "That's cold of you" (3:87, Chris). 3:132's
+いいですよ is "Of course." (Chris).
+
 The "news" Talk topic (topic-news, 2026-11-09). The bottom-bar line 何か新しい情報はないかと
 尋ねてみた was "We asked if they had any news." 情報 is "information", wider than news, and
 the replies under it answer a request for information: tips and directions as well as
